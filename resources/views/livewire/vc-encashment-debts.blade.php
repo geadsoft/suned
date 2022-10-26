@@ -1,0 +1,49 @@
+<div>
+    <table class="table table-borderless align-middle mb-0">
+        <thead class="table-light text-muted">
+            <tr>
+                <th scope="col" style="width: 50px;">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="checkAll"
+                            value="option">
+                    </div>
+                </th>
+                <th style="width: 60px; display:none;" scope="col">id</th>
+                <th style="width: 180px;" scope="col">Referencia</th>
+                <th scope="col">Descripción</th>
+                <th style="width: 90px;" scope="col" class="text-end">Descuento</th>
+                <th style="width: 120px;" scope="col" class="text-end">Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach ($tbldeudas as $deuda)  
+        <tr id="{{$fila}}" class="deudas">
+            <th scope="row">
+                <div class="form-check form-check-success">
+                    <input class="form-check-input" type="checkbox" id="chkpago-{{$fila}}" onchange="chkpago()">
+                </div>
+            </th>
+            <td class="text-dark" style="display:none;">
+                <input type="text" class="form-control product-price bg-white border-0 text-end" id="id-{{$fila}}" value="{{$deuda->id}}" />
+            </td>
+            <td class="text-dark">{{$deuda->referencia}}</td>
+            <td class="text-dark">
+                <input type="text" class="form-control product-price bg-white border-0" id="detalle-{{$fila}}" value="{{$deuda->glosa}}" />
+            </td>
+            <td class="text-end">
+                <input type="number" class="form-control product-price bg-light border-0 text-end" id="desc-{{$fila}}" step="0.01" 
+                placeholder="0.00" value="{{$deuda->descuento}}" />
+            </td>
+            <td class="text-end">
+                <input type="number" class="form-control product-price bg-white border-0 text-end" id="saldo-{{$fila}}" step="0.01" 
+                    placeholder="0.00" value="{{$deuda->saldo}}" readonly/>
+            </td>
+        </tr>
+        <script>
+            {{$fila++}}
+        </script>
+        @endforeach
+        </tbody>
+    </table>
+
+</div>
