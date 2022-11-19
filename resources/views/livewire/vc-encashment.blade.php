@@ -46,8 +46,8 @@
                                 <div class="d-flex align-items-center flex-wrap gap-2">
                                     <div class="flex-grow-1">
                                         <div>
-                                            <h5 class="mb-1">Generality Information</h5>
-                                            <p class="text-muted mb-4">Please fill all information below</p>
+                                            <h5 class="mb-1 text-danger">Recibo No. {{$record['documento']}}</h5>
+                                            <p class="text-success mb-4 ">{{$record['concepto']}}</p>
                                         </div>
                                     </div>
                                     <div class="flex-shrink-0">
@@ -64,59 +64,47 @@
                                                     <li><a class="dropdown-item remove-list" href="" data-bs-toggle="modal" data-bs-target="#removeItemModal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li></ul>
                                             </div>
                                             <div class="mb-3 p-2">
-                                                <a class="btn btn-info add-btn btn-sm" href="/financial/encashment-add"><i class="ri-add-fill me-1 align-bottom"></i> Add Students</a>
+                                                <a class="btn btn-info add-btn btn-sm" href="/financial/encashment-add"><i class="ri-add-fill me-1 align-bottom"></i> New Record</a>
                                             </div>    
                                         </div>
                                     </div>
                                 </div>
                                         
-
+                                <div class="mb-3">
+                                    <div class="card-header">
+                                        <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
+                                            class="mdi mdi-account-tie align-middle me-1 text-success"></i>
+                                            Personal Data</h5>
+                                    </div>
+                                </div>
                                 <div class="mt-4">
                                     <div class="d-flex align-items-center">
                                         <div class="">
                                             <div class="mb-3">
                                                 <label for="txtfecha" class="form-label">Date Emisión</label>
-                                                <input type="date" class="form-control" id="txtfecha"
-                                                    placeholder="Enter first name" wire:model.defer="record.fecha">
+                                                <input type="date" class="form-control border-0" id="txtfecha"
+                                                    placeholder="Enter first name" value="{{date('Y-m-d', strtotime($record->fecha))}}" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <div class="mb-3 p-2">
+                                                <label for="cmbperiodo" class="form-label">Identificación</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control border-0" id="billinginfo-firstName" placeholder="Enter ID" value={{$record->estudiante->identificacion}} disabled>
+                                                    <a id="btnstudents" class ="input-group-text btn btn-soft-secondary disabled" wire:click="search(1)"><i class="ri-user-search-fill me-1"></i></a>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
                                             <div class="mb-3 p-2">
-                                                <label for="cmbperiodo" class="form-label">Periodo Lectivo</label>
-                                                <select type="select" class="form-select" data-trigger name="cmbnivel" wire:model.defer="record.periodo_id">
-                                                    @foreach ($tblperiodos as $periodo) 
-                                                    <option value="{{$periodo->id}}">{{$periodo->periodo}}</option>
-                                                    @endforeach 
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center">
-                                        <div class="mb-3">
-                                            <div class="card-header">
-                                                <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
-                                                    class="mdi mdi-account-tie align-middle me-1 text-success"></i>
-                                                    Personal Data</h5>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="mb-3">
-                                                <!--<input type="text" class="form-control" id="billinginfo-firstName"
-                                                    placeholder="Enter Identification" value="">-->
+                                                <label for="cmbperiodo" class="form-label">Estudents</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="billinginfo-firstName" placeholder="Enter ID" wire:model="idbuscar">
-                                                    <a id="btnstudents" class ="input-group-text btn btn-soft-secondary" wire:click="search(1)"><i class="ri-user-search-fill me-1"></i></a>
+                                                    <input type="text" class="form-control border-0" id="billinginfo-lastName" placeholder="Enter names" value={{$record->estudiante->apellidos." ".$record->estudiante->nombres}} disabled>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-8">
-                                            <div class="mb-3">
-                                                <input type="text" class="form-control" id="billinginfo-lastName" placeholder="Enter names" wire:model="nombre">
-                                            </div>
-                                        </div>
-                                        
                                     </div>
-
+                                    
                                     <div class="row gy-3">
                                         <div class="col-lg-12 col-sm-6">
                                             <div class="form-check card-radio">
@@ -131,76 +119,18 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card">
+                                    <br>
+                                    <div class="mb-3 sm-3">
                                         <div class="card-header">
-                                            <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
-                                                <li class="nav-item">
-                                                    <a class="nav-link active" data-bs-toggle="tab" href="#addpagos" role="tab">
-                                                        <h5 class="card-title flex-grow-1 mb-0 text-primary fs-14">
-                                                            <i class="mdi mdi-account-cash align-middle me-1 text-success"></i>
-                                                                Payment Method</h5>
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" data-bs-toggle="tab" href="#addproduct-metadata" role="tab">
-                                                        <h5 class="card-title flex-grow-1 mb-0 text-primary fs-14">
-                                                            <i class="mdi mdi-cash-multiple align-middle me-1 text-success"></i>
-                                                                Payments</h5>
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                            <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
+                                                class="mdi mdi-cash-multiple align-middle me-1 text-success"></i>
+                                                Payments</h5>
                                         </div>
-                                        <!-- end card header -->
+                                    </div>
+                                    <div class="card">
                                         <div class="card-body">
-                                            <div class="tab-content">
-                                                <div class="tab-pane active" id="addpagos" role="tabpanel">
-                                                    <div class="row">
-                                                        <div class="col-lg-3 col-sm-6">
-                                                            <div class="mb-3">
-                                                                <label class="form-label" for="stocks-input">Payment Method</label>
-                                                                <select type="select" class="form-select" name="cmbtipopago" id="cmbtipopago">
-                                                                <option value="EFE">Efectivo</option>
-                                                                <option value="CHQ">Cheque</option>
-                                                                <option value="TCR">Tarjeta</option>
-                                                                <option value="DEP">Depósito</option>
-                                                                <option value="TRA">Transferencia</option>
-                                                                <option value="CON">Convenio</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-5 col-sm-6">
-                                                            <div class="mb-3">
-                                                                <label class="form-label" for="txtentidad">Entidad</label>
-                                                                <input type="text" class="form-control  product-price" id="txtentidad" placeholder="">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-2 col-sm-6">
-                                                            <div class="mb-3">
-                                                                <label class="form-label" for="txtvalor">Value</label>
-                                                                <input type="number" class="form-control  product-price" id="txtvalor" step="0.01" placeholder="0.00">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-2 col-sm-6 text-center">
-                                                            <div class="mb-3">
-                                                            <label class="form-label">-</label>                                     
-                                                                <a href="javascript:new_link()" id="add-pago" class ="form-control btn btn-soft-secondary"><i class="ri-add-fill me-1"></i> Agregar</a>
-                                                                <!--<a href="javascript:new_link()" id="add-item" class="btn btn-soft-secondary fw-medium"><i class="ri-add-fill me-1 align-bottom"></i> Add Item</a>-->
-                                                            </div>
-                                                        </div>
-                                                        <!-- end col -->
-                                                        
-                                                    </div>
-                                                    <div class="row align-items-center sm-3">
-                                                        <div class="col-lg-12 col-sm-6">
-                                                            <label class="form-label" for="txtreferencia">Reference</label>
-                                                            <input type="text" class="form-control  product-price" id="txtreferencia" placeholder="">
-                                                        </div>
-                                                    </div>   
-                                                    <!-- end row -->
-                                                </div>
-                                                <!-- end tab-pane -->
-                                                
-                                                <div class="tab-pane" id="addproduct-metadata" role="tabpanel">
+                                            <div class="tab-content">                                              
+                                                <div class="tab-pane active" id="addproduct-metadata" role="tabpanel">
                                                     
                                                         <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3">
                                                         </ul>
@@ -208,25 +138,56 @@
                                                             <table class="table table-nowrap align-middle" id="orderTable">
                                                                 <thead class="text-muted table-light">
                                                                     <tr class="text-uppercase">
-                                                                        <th>Id</th>
                                                                         <th style="width: 180px;">Tipo Pago</th>
+                                                                        <th style="">Entidad</th>
+                                                                        <th>Numero</th>
                                                                         <th>Referencia</th>
-                                                                        <th style="display:none;">Entidad</th>
-                                                                        <th style="width: 150px;">Valor</th>
-                                                                        <th>Acción</th>
+                                                                        <th style="width: 120px;">Valor</th>
                                                                     </tr>
                                                                 </thead>
-                                                                <tbody id="newlink">
-
-                                                                </tbody>    
                                                                 <tbody>
-                                                                    <tr id="newForm" style="display: none;">
-                                                                        <td class="d-none" colspan="5">
-                                                                            <p>Add New Form</p>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
+                                                                @foreach ($tblcobrodet as $cobrodet)
+                                                                <tr>   
+                                                                    <td>
+                                                                        <select type="select" class="form-select-sm border-0" id="cmbtipopago" disabled>
+                                                                        @switch($cobrodet->tipopago)
+                                                                            @case('EFE')
+                                                                            <option value="EFE">Efectivo</option>
+                                                                            @case('CHQ')
+                                                                            <option value="CHQ">Cheque</option>
+                                                                            @case('TCR')
+                                                                            <option value="TCR">Tarjeta</option>
+                                                                            @case('DEP')
+                                                                            <option value="DEP">Depósito</option>
+                                                                            @case('TRA')
+                                                                            <option value="TRA">Transferencia</option>
+                                                                            @case('CON')
+                                                                            <option value="CON">Convenio</option>
+                                                                        @endswitch
+                                                                        </select>
+                                                                    </td> 
+                                                                    <td>
+                                                                        <select type="select" class="form-select-sm border-0" disabled>
+                                                                            <option value="{{$cobrodet->entidadId}}">{{$cobrodet->entidad->descripcion}}</option>
+                                                                        </select>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <input type="number" class="form-control-sm product-price bg-light border-0 text-end" id="desc" step="0.01" 
+                                                                        placeholder="0.00" value="{{$cobrodet->numero}}" disabled/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" class="form-control-sm bg-light border-0 text-end" value="{{$cobrodet->referencia}}" disabled/>
+                                                                    </td> 
+                                                                    <td>
+                                                                        <input type="text" class="form-control-sm bg-light border-0 text-end" value="{{number_format($cobrodet->valor,2)}}" disabled/>
+                                                                    </td>
+                                                                </tr>
+                                                                @endforeach
+                                                                </tbody>    
                                                             </table>
+                                                            <br>
+                                                            <br>
+                                                            <br>
                                                         </div>
                                                 </div>
 
@@ -365,7 +326,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive table-card">
-                        <!--<table class="table table-borderless align-middle mb-0">
+                        <table class="table table-borderless align-middle mb-0">
                             <thead class="table-light text-muted">
                                 <tr>
                                     <th scope="col" style="width: 50px;">
@@ -374,50 +335,50 @@
                                                 value="option">
                                         </div>
                                     </th>
-                                    <th style="width: 180px;" scope="col">Product</th>
-                                    <th scope="col">Product Info</th>
-                                    <th style="width: 90px;" scope="col" class="text-end">Descuento</th>
+                                    <th style="width: 60px; display:none;" scope="col">id</th>
+                                    <th style="width: 180px;" scope="col">Referencia</th>
                                     <th style="width: 120px;" scope="col" class="text-end">Valor</th>
+                                    <th style="width: 120px;" scope="col" class="text-end">Descuento</th>
+                                    <th style="width: 120px;" scope="col" class="text-end">Cancelado</th>
                                 </tr>
                             </thead>
-                            <tbody>-->
-                                
-                                @livewire('vc-encashment-debts')
-                               
-                                
-                               <!-- @foreach ($tbldeudas as $record)  
-                                <tr id="{{$fila}}" class="deudas">
+                            <tbody>
+                                @foreach ($tbldeudas as $record)  
+                                <tr class="deudas">
                                     <th scope="row">
                                         <div class="form-check form-check-success">
-                                            <input class="form-check-input" type="checkbox" id="chkpago-{{$fila}}" onchange="chkpago()">
+                                            <input class="form-check-input" type="checkbox" id="chkpago" checked>
                                         </div>
                                     </th>
-                                    <td class="text-dark">{{$record->referencia}}</td>
-                                    <td class="text-dark">{{$record->glosa}}</td>
+                                    <td class="text-dark">{{$record->deudacab->referencia}}</td>
                                     <td class="text-end">
-                                        <input type="number" class="form-control product-price bg-light border-0 text-end" id="desc-{{$fila}}" step="0.01" 
-                                        placeholder="0.00" value="{{$record->descuento}}" />
+                                        <input type="number" class="form-control product-price bg-white border-0 text-end" id="saldo" step="0.01" 
+                                            placeholder="0.00" value="{{number_format($record->deudacab->saldo+$record->valor,2)}}" readonly/>
                                     </td>
                                     <td class="text-end">
-                                        <input type="number" class="form-control product-price bg-white border-0 text-end" id="saldo-{{$fila}}" step="0.01" 
-                                            placeholder="0.00" value="{{$record->saldo}}" readonly/>
+                                        <input type="number" class="form-control product-price bg-light border-0 text-end" id="desc" step="0.01" 
+                                        placeholder="0.00" value="{{number_format($record->deudacab->descuento,2)}}" />
+                                    </td>
+                                    <td class="text-end">
+                                        <input type="number" class="form-control product-price bg-white border-0 text-end" id="saldo" step="0.01" 
+                                            placeholder="0.00" value="{{number_format($record->valor,2)}}" readonly/>
                                     </td>
                                 </tr>
                                 <script>
-                                    {{$fila++}}
+                                    $this->subtotal += $record->deudacab->saldo+$record->valor
                                 </script>
                                 @endforeach
                             </tbody>
-                        </table>-->
+                        </table>
                         <hr/>
                         <div class="card-body">
                             <div class="d-flex">
                                 <label for="cart-subtotal" class="form-label fw-semibold p-1">Subtotal:</label>
-                                <input type="text" class="form-control bg-white border-0 text-end fw-semibold mb-0" id="cart-subtotal" placeholder="$0.00" readonly />
+                                <input type="text" class="form-control bg-white border-0 text-end fw-semibold mb-0" id="cart-subtotal" placeholder="$0.00" value="${{number_format($subtotal,2)}}" readonly />
                             </div>
                             <div class="d-flex">
                                 <label for="cart-descuento" class="form-label p-1">Discount:</label>
-                                <input type="text" class="form-control bg-white border-0 text-end" id="cart-descuento" placeholder="$0.00" readonly />
+                                <input type="text" class="form-control bg-white border-0 text-end" id="cart-descuento" placeholder="$0.00" value="${{number_format($descuento,2)}}" readonly />
                             </div>
                             <div class="d-flex">
                                 <div class="input-group">
@@ -428,14 +389,14 @@
                             <div class="table-active bg-light">
                                 <div class="input-group">
                                     <label for="cart-impuesto" class="form-label fw-semibold p-2">Total (USD):</label>
-                                    <input type="text" class="form-control bg-light border-0 text-end fw-semibold" id="cart-total" placeholder="$0.00" readonly />
+                                    <input type="text" class="form-control bg-light border-0 text-end fw-semibold" id="cart-total" value="${{number_format($total,2)}}" placeholder="$0.00" readonly />
                                 </div>
                             </div>
                             <hr/>
                             <div class="d-flex">
                                 <div class="input-group">
                                     <label for="cart-impuesto" class="form-label fw-semibold p-1">TOTAL TO CANCEL:</label>
-                                    <input type="text" class="form-control bg-white border-0 text-end" id="cart-pago" placeholder="$0.00" readonly />
+                                    <input type="text" class="form-control bg-white border-0 text-end fw-semibold fs-15" id="cart-pago" placeholder="$0.00" value="${{number_format($totalpago,2)}}" readonly />
                                 </div>
                             </div>
 

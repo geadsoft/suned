@@ -155,6 +155,11 @@
                         <i class="las la-archive"></i> <span>@lang('translation.statement-of-account')</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/financial/create-invoice">
+                        <i class="las la-archive"></i> <span>@lang('translation.create_invoice')</span>
+                    </a>
+                </li>
                               
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.reports')</span></li>
                 <li class="nav-item">

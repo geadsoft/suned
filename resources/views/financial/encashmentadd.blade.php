@@ -21,29 +21,24 @@
 @endsection
 
 @section('script')
-    <!--
-    <script src="{{ URL::asset('assets/libs/list.js/list.js.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>-->
-    
-
     <!--ecommerce-customer init js -->
-    <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ URL::asset('assets/js/pages/financial-encashment.js') }}"></script>
+    <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
     <script>
         
         window.addEventListener('save-det', event => {
-            
-            /*var pagos  = document.getElementsByClassName("pagos");*/
-            var deudas = document.getElementsByClassName("deudas");
 
-            var count = 1;
+            var count=0;
+                          
+            /*Pagos*/
+            count = 1;
+            var pagos  = document.getElementsByClassName("pagos");
             var new_pago_obj = [];
-            var new_deuda_obj = [];
+            var deuda_list;
             
-
-            /*pagos.forEach(element => {
+            pagos.forEach(element => {
                 var col_tipopago = element.querySelector("#cmbtipopago-"+count).value;
                 var col_entidad = element.querySelector("#cmbentidad-"+count).value;
                 var col_valor = element.querySelector("#txtvalor-"+count).value;
@@ -58,25 +53,11 @@
                 }
                 new_pago_obj.push(pago_obj);
                 count++;
-            });*/
+            });
 
+            deuda_list = JSON.parse(localStorage.getItem('deuda-list'));
 
-                deudas.forEach(element => {
-                    var col_desc = element.querySelector("#desc-"+count).value;
-                    var col_saldo = element.querySelector("#saldo-"+count).value;
-                
-                                    
-                    var deuda_obj = {
-                        descuento: col_desc,
-                        saldo: col_desc,
-                    }
-                    new_deuda_obj.push(deuda_obj);
-                    count++;
-                });
-
-            
-
-            Livewire.emit('postAdded',new_deuda_obj);
+            Livewire.emit('postAdded',deuda_list,new_pago_obj);
         
         })
 

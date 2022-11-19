@@ -10,10 +10,10 @@ class TrCobrosDets extends Model
     protected $table = 'tr_cobros_dets';
     protected $primaryKey = "id";
     protected $fillable = [
-        'cobroscab_id',
+        'cobrocab_id',
         'tipopago',
         'entidad_id',
-        'intitucion',
+        'institucion',
         'numero',
         'cuenta',
         'valor',
@@ -21,8 +21,8 @@ class TrCobrosDets extends Model
         'usuario',
     ];
 
-    public function estudiante(){
-        return $this->belongsTo('App\Models\TmPersonas');
+    public function entidad(){
+        return $this->belongsTo('App\Models\TmGeneralidades');
     }
 
 }

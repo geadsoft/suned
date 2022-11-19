@@ -37,6 +37,7 @@ class VcPersonadd extends Component
         $this->record['etnia']= "";
         $this->record['tipopersona']= "E";
         $this->record['estado']= 'A';
+        dd($this->record);
 
     }
 

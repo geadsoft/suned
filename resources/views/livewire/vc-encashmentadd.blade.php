@@ -3,8 +3,7 @@
         <div class="col-xl-7">
             <div class="card">
                 <div class="card-body checkout-tab">
-
-                    <form autocomplete="off" wire:submit.prevent="{{ 'createData' }}">
+                    <form autocomplete="off" wire:submit.prevent="{{ 'createData' }}" id="encashment_form">
                         <div class="step-arrow-nav mt-n3 mx-n3 mb-3">
 
                             <ul class="nav nav-pills nav-justified custom-nav" id="tabencashment" role="tablist">
@@ -83,7 +82,7 @@
                                         <div class="flex-grow-1">
                                             <div class="mb-3 p-2">
                                                 <label for="cmbperiodo" class="form-label">Periodo Lectivo</label>
-                                                <select type="select" class="form-select" data-trigger name="cmbnivel" wire:model.defer="record.periodo_id" required>
+                                                <select type="select" class="form-select" data-trigger name="cmbnivel" wire:model="periodo">
                                                     @foreach ($tblperiodos as $periodo) 
                                                     <option value="{{$periodo->id}}">{{$periodo->periodo}}</option>
                                                     @endforeach 
@@ -172,8 +171,7 @@
                                                             <div class="mb-3">
                                                                 <label class="form-label" for="txtentidad">Entidad</label>
                                                                 <!--<input type="text" class="form-control  product-price" id="txtentidad" placeholder="">-->
-                                                                <select type="select" class="form-select" data-trigger id="cmbentidad">
-                                                                <option value="0"></option>
+                                                                <select type="select" class="form-select" data-trigger id="cmbentidad" value = "15">
                                                                 @foreach ($tblentidads as $entidad) 
                                                                 <option value="{{$entidad->id}}">{{$entidad->descripcion}}</option>
                                                                 @endforeach
@@ -358,6 +356,7 @@
         <!-- end col -->
 
         <div class="col-xl-5">
+            
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex ">
@@ -403,7 +402,7 @@
                             <div class="d-flex">
                                 <div class="input-group">
                                     <label for="cart-impuesto" class="form-label fw-semibold p-1">TOTAL TO CANCEL:</label>
-                                    <input type="text" class="form-control bg-white border-0 text-end" id="cart-pago" placeholder="$0.00"  wire:model.defer="record.monto"  required />
+                                    <input type="text" class="form-control bg-white border-0 text-end fw-semibold fs-15" id="cart-pago" placeholder="$0.00" wire:model.defer="monto" readonly />
                                 </div>
                             </div>
 
@@ -422,6 +421,7 @@
                 <!-- end card body -->
             </div>
             <!-- end card -->
+            
         </div>
         <!-- end col -->
     </div>

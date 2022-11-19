@@ -246,6 +246,7 @@ return [
     "headquarter"=>"Headquarters",
     "charges"=>"Charges for Services",
     "services"=>"Educational Services",
+    "create_invoice"=>"Create Invoice",
 
 ];
 ?>

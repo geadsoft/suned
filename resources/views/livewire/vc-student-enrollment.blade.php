@@ -7,7 +7,7 @@
                     <form action="#">
                         <div class="step-arrow-nav mt-n3 mx-n3 mb-3">
 
-                            <ul class="nav nav-pills nav-justified custom-nav" role="tablist">
+                            <ul class="nav nav-pills nav-justified custom-nav nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3 active" id="pills-bill-info-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-info" type="button" role="tab"

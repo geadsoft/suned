@@ -112,7 +112,7 @@
         <div class="col-xxl-9">
             <div class="card mt-xxl-n5">
                 <div class="card-header">
-                    <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                    <ul class="nav nav-tabs-custom rounded card-header-tabs card-header-tabs border-bottom-0" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" data-bs-toggle="tab" href="#personalDetails" role="tab">
                                 <i class="fas fa-home"></i>

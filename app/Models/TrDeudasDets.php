@@ -22,5 +22,8 @@ class TrDeudasDets extends Model
         'usuario',
     ];
 
+    public function deudacab(){
+        return $this->belongsTo('App\Models\TrDeudasCabs');
+    }
 
 }

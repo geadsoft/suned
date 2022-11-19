@@ -6,23 +6,31 @@ use Livewire\Component;
 use App\Models\TmPersonas;
 use App\Models\TrCobrosCabs;
 use App\Models\TrCobrosDets;
+use App\Models\TrDeudasCabs;
 use App\Models\TrDeudasDets;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmGeneralidades;
 
 class VcEncashmentadd extends Component
 {
-    public $selectId;
-    public $fila=1;
+    public $selectId=0;
     public $documento;
     public $record;
     public $persona;
     public $idbuscar="";
     public $nombre="";
+    public $periodo;
     public $fecha;
-    public $monto=0;
+    public $secuencia=0;
+    public $tblCobro;
+    public $estudiante_id=0;
 
+    public $totalPago = 0;
+    public $valpago   = 0;
+    public $despago   = 0;
+    
     protected $listeners = ['postAdded'];
+
 
     public function render()
     {   
@@ -48,7 +56,7 @@ class VcEncashmentadd extends Component
 
         $this->reset(['record']);
         $this->record['fecha']= $this->fecha;
-        $this->record['estudiante_id']= 1;
+        $this->record['estudiante_id']= $this->estudiante_id;;
         $this->record['documento']= "";
         $this->record['concepto']= "";
         $this->record['monto']= 0;  
@@ -58,6 +66,19 @@ class VcEncashmentadd extends Component
 
 
     public function createData(){
+               
+        $this->dispatchBrowserEvent('save-det');
+    }
+
+    public function postAdded($objDeuda=null,$objPago=null)
+    {
+        
+        foreach ($objPago as $pago)
+        {
+            $this->totalPago += $pago['valor'];
+        }    
+
+        $this->record['monto']= $this->totalPago;
         
         $this ->validate([
             'record.fecha' => 'required',
@@ -65,82 +86,108 @@ class VcEncashmentadd extends Component
             'record.monto' => 'required',
         ]);
         
-        $this->dispatchBrowserEvent('save-det');
-  
-    }
 
+        $comentario = "";
+        $this->tblCobro = TrCobrosCabs::orderBy('id', 'desc')->first();
 
-    public function postAdded($objPago=Null)
-    {
-        dd($objPago);
+        if ($this->tblCobro==null){
+            $this->secuencia = 1;  
+        } else {  
+            $this->secuencia = intval($this->tblCobro['documento'])+1;
+        }
 
+        $this->document = str_pad($this->secuencia, 7, "0", STR_PAD_LEFT);
+        
         TrCobrosCabs::Create([
             'fecha' => $this -> fecha,
-            'periodo_id' => $this -> record['periodo_id'],
             'estudiante_id' => $this -> record['estudiante_id'],
+            'documento' => $this -> document,
+            'concepto' => 'Gestión de Cobro - Recibo No. '.$this -> document, 
             'monto' => $this -> record['monto'],
             'usuario' => auth()->user()->name,
             'estado' => "P",
         ]);
 
-        $tblrecibo = TrCobrosCabs::orderBy('id', 'desc')->first();
-        $this->selectId = $tblrecibo['id'];
-        $this->monto = $tblrecibo['monto'];
-
-        foreach ($objPago as $detalle)
+        $this->tblCobro = TrCobrosCabs::orderBy("id", "desc")->first();
+        $this->selectId = $this->tblCobro['id'];
+                
+        foreach ($objPago as $pago)
         {
             
             TrCobrosDets::Create([
             'cobrocab_id' =>  $this->selectId,  
-            'tipopago' => $detalle['tipopago'],
-            'entidad_id' => $detalle['entidadid'],
-            'numero' => $detalle['numero'],
-            'valor' => $detalle['valor'],
+            'tipopago' => $pago['tipopago'],
+            'entidad_id' => $pago['entidadid'],
+            'institucion' => "",
+            'numero' => $pago['numero'],
+            'cuenta' => "",
+            'valor' => $pago['valor'],
             'estado' => "P",
             'usuario' => auth()->user()->name,
             ]);
             
         } 
-        
-        /*foreach ($objDeuda as $detalle)
+       
+        foreach ($objDeuda as $deuda)
         {
-            $valor = $detalle['saldo'];
+            $this->valpago = floatval($deuda['saldo']);
+            $this->despago = floatval($deuda['desct']);
            
-            if ($this->monto>$valor){
-                $this->monto = $this->monto-$valor;
+            if ($this->totalPago>$this->valpago){
+                $this->totalPago = $this->totalPago-$this->valpago;
             }else{
-                $valor = $this->monto;
+                $this->valpago = $this->totalPago;
             }
 
-            TrCobrosDets::Create([
-                'deudacab_id' =>  $detalle ['deudaid'],  
-                'cobrocab_id' => $this->selectId,
+            TrDeudasDets::Create([
+                'deudacab_id' =>  $deuda ['id'],  
+                'cobro_id' => $this->selectId,
                 'fecha' => $this -> fecha,
-                'detalle' => $detalle['detalle'],
+                'detalle' => $deuda['detalle'],
                 'tipo' => "PAG",
-                'referencia' => "",
+                'referencia' => $this->document,
                 'tipovalor' => "CR",
-                'valor' => $this->valor,
+                'valor' => $this->valpago,
                 'estado' => "P",
                 'usuario' => auth()->user()->name,
-                ]);   
-        }*/
+                ]);
+            
+            if ($this->despago>0){
+
+                TrDeudasDets::Create([
+                    'deudacab_id' =>  $deuda['id'],  
+                    'cobro_id' => $this->selectId,
+                    'fecha' => $this -> fecha,
+                    'detalle' => $deuda['detalle'],
+                    'tipo' => "DES",
+                    'referencia' => $this->document,
+                    'tipovalor' => "CR",
+                    'valor' => $this->despago,
+                    'estado' => "P",
+                    'usuario' => auth()->user()->name,
+                    ]);
+            }
+
+            $tbldeuda = TrDeudasCabs::find($deuda['id']);
+            $tbldeuda->update([
+                'credito' => $tbldeuda['credito']+($this->valpago+$this->despago),
+                'saldo' => $tbldeuda['saldo']-($this->valpago+$this->despago),
+            ]); 
+        
+        }
         
         return redirect()->to('/financial/encashment');
-
     }
 
-
+    
     public function search($tipo){
 
         if ($tipo=1){
             
             $this->persona   = TmPersonas::where('identificacion',$this->idbuscar)->first();     
-            $this->nombre = $this->persona['nombres'].' '.$this->persona['apellidos'];
-
-            $this->record['estudiante_id'] = $this->persona['id'];
-            $this->record['monto'] = 100;
-           
+            $this->nombre    = $this->persona['nombres'].' '.$this->persona['apellidos'];
+            $this->estudiante_id = $this->persona['id'];
+                                               
             $this->emitTo('vc-encashment-debts','deudas',$this->persona['id']);
 
         }else{

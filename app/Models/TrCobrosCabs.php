@@ -12,7 +12,6 @@ class TrCobrosCabs extends Model
     protected $fillable = [
         'fecha',
         'estudiante_id',
-        'periodo_id',
         'documento',
         'concepto',
         'monto',

@@ -7,7 +7,7 @@ File: Invoice create init Js File
 */
 
 var paymentSign = "$";
-document.getElementsByClassName("product-line-price").forEach(function (item) {
+Array.from(document.getElementsByClassName("product-line-price")).forEach(function (item) {
 	item.value = paymentSign +"0.00"
 });
 function otherPayment() {
@@ -15,9 +15,7 @@ function otherPayment() {
 	paymentSign = paymentType;
 
 
-	document
-		.getElementsByClassName("product-line-price")
-		.forEach(function (item) {
+	Array.from(document.getElementsByClassName("product-line-price")).forEach(function (item) {
 			isUpdate = item.value.slice(1);
 			item.value = paymentSign + isUpdate;
 		});
@@ -62,7 +60,7 @@ function isData() {
 		minus = document.getElementsByClassName("minus");
 
 	if (plus) {
-		plus.forEach(function (e) {
+		Array.from(plus).forEach(function (e) {
 			e.onclick = function (event) {
 				if (parseInt(e.previousElementSibling.value) < 10) {
 					event.target.previousElementSibling.value++;
@@ -81,7 +79,7 @@ function isData() {
 	}
 
 	if (minus) {
-		minus.forEach(function (e) {
+		Array.from(minus).forEach(function (e) {
 			e.onclick = function (event) {
 				if (parseInt(e.nextElementSibling.value) > 1) {
 					event.target.nextElementSibling.value--;
@@ -111,34 +109,12 @@ function new_link() {
 		"</th>" +
 		'<td class="text-start">' +
 		'<div class="mb-2">' +
-		'<input class="form-control bg-light border-0" type="text" id="productName-' + count + '" placeholder="Product Name">' +
-		'<table class="invoice-table table table-borderless table-nowrap mb-0">'+
-                '<thead class="align-middle">'+
-                '<tr class="table-active">'+
-                '<th scope="col" style="width: 50px;">#</th>'+
-                '<th scope="col">Nivel</th>'+
-                '<th scope="col" style="width: 120px;">Matricula</th>'+
-                '<th scope="col" class="text-end" style="width: 150px;">Pension</th>'+
-                '<th scope="col" class="text-end" style="width: 105px;">Plataforma</th>'+
-                "</tr>"+
-                "</thead>"+
-                "<tbody>"+
-                "<tr>"+
-                "<td>"+ 
-                '<input type="text" class="form-control product-price bg-light border-0" id="productRate-1" placeholder="Inicial 1" required />'+
-                "</td>"+
-                "<td>" +
-                '<input type="number" class="form-control product-price bg-light border-0" id="productRate-1" step="0.01" placeholder="0.00" value="149.00" required />'+
-                "</td>"+
-                "<td>"+
-                '<input type="number" class="form-control product-price bg-light border-0" id="productRate-1" step="0.01" placeholder="0.00" value="119.00" required />'+
-                "</td>"+
-                "<td>"+ 
-                '<input type="number" class="form-control product-price bg-light border-0" id="productRate-1" step="0.01" placeholder="0.00" value="99.00" required />'+
-                "</td>"+
-                "</tr>"+
-                "</tbody>"+
-                "</table>"+
+		'<select class="form-select bg-light border-0" type="text" id="productName-' + count + '" placeholder="Product Name">' +
+		'@foreach ($tblpersonas as $tblpersona)'+ 
+			'<option value="{{$tblpersona->id}}">{{$tblpersona->apellidos}} {{$tblpersona->nombres}}</option>'+
+		'@endforeach'+
+		"</select>" +
+		'</div>' +
 		"</td>" +
 		"<td>" +
 		'<input class="form-control bg-light border-0 product-price" type="number" id="productRate-' + count + '" step="0.01" placeholder="$0.00">' +
@@ -164,7 +140,7 @@ function new_link() {
 
 	document.getElementById("newlink").appendChild(tr1);
 	var genericExamples = document.querySelectorAll("[data-trigger]");
-	genericExamples.forEach(function (genericExamp) {
+	Array.from(genericExamples).forEach(function (genericExamp) {
 		var element = genericExamp;
 		new Choices(element, {
 			placeholderValue: "This is a placeholder set in the config",
@@ -185,7 +161,7 @@ var shippingRate = 65.0;
 var discountRate = 0.15;
 
 function remove() {
-	document.querySelectorAll(".product-removal a").forEach(function (el) {
+	Array.from(document.querySelectorAll(".product-removal a")).forEach(function (el) {
 		el.addEventListener("click", function (e) {
 			removeItem(e);
 			resetRow()
@@ -195,7 +171,7 @@ function remove() {
 
 function resetRow() {
 
-	document.getElementById("newlink").querySelectorAll("tr").forEach(function (subItem, index) {
+	Array.from(document.getElementById("newlink").querySelectorAll("tr")).forEach(function (subItem, index) {
 		var incid = index + 1;
 		subItem.querySelector('.product-id').innerHTML = incid;
 
@@ -206,8 +182,8 @@ function resetRow() {
 function recalculateCart() {
 	var subtotal = 0;
 
-	document.getElementsByClassName("product").forEach(function (item) {
-		item.getElementsByClassName("product-line-price").forEach(function (e) {
+	Array.from(document.getElementsByClassName("product")).forEach(function (item) {
+		Array.from(item.getElementsByClassName("product-line-price")).forEach(function (e) {
 			if (e.value) {
 				subtotal += parseFloat(e.value.slice(1));
 			}
@@ -240,7 +216,7 @@ function amountKeyup() {
 	// var listArray = [];
 
 	// listArray.push(document.getElementsByClassName('product-price'));
-	document.getElementsByClassName('product-price').forEach(function (item) {
+	Array.from(document.getElementsByClassName('product-price')).forEach(function (item) {
 		item.addEventListener('keyup', function (e) {
 
 			var priceselection = item.parentElement.nextElementSibling.nextElementSibling.querySelector('.product-line-price');
@@ -274,7 +250,7 @@ function removeItem(removeButton) {
 
 //Choise Js
 var genericExamples = document.querySelectorAll("[data-trigger]");
-genericExamples.forEach(function (genericExamp) {
+Array.from(genericExamples).forEach(function (genericExamp) {
 	var element = genericExamp;
 	new Choices(element, {
 		placeholderValue: "This is a placeholder set in the config",
@@ -308,7 +284,7 @@ var cleaveBlocks = new Cleave('#cardNumber', {
 });
 
 var genericExamples = document.querySelectorAll('[data-plugin="cleave-phone"]');
-genericExamples.forEach(function (genericExamp) {
+Array.from(genericExamples).forEach(function (genericExamp) {
 	var element = genericExamp;
 	new Cleave(element, {
 		delimiters: ['(', ')', '-'],
@@ -386,7 +362,7 @@ if ((viewobj != '') && (options == "edit-invoice")) {
 	var counter_1 = 1;
 
 	setTimeout(() => {
-		paroducts_list.forEach(function (element) {
+		Array.from(paroducts_list).forEach(function (element) {
 			document.getElementById("productName-" + counter_1).value = element.product_name;
 			document.getElementById("productDetails-" + counter_1).value = element.product_details;
 			document.getElementById("productRate-" + counter_1).value = element.rates;
@@ -461,7 +437,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		var products = document.getElementsByClassName("product");
 		var count = 1;
 		var new_product_obj = [];
-		products.forEach(element => {
+		Array.from(products).forEach(element => {
 			var product_name = element.querySelector("#productName-"+count).value;
 			var product_details = element.querySelector("#productDetails-"+count).value;
 			var product_rate = parseInt(element.querySelector("#productRate-"+count).value);

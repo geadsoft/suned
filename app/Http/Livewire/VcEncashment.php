@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\TmPersonas;
 use App\Models\TrCobrosCabs;
 use App\Models\TrCobrosDets;
-use App\Models\TrDeudasCabs;
+use App\Models\TrDeudasDets;
 use App\Models\TmPeriodosLectivos;
 
 
@@ -19,23 +19,30 @@ class VcEncashment extends Component
     public $persona;
     public $idbuscar="";
     public $nombre="";
+    public $selectpago = false;
+
+    public $subtotal = 0;
+    public $descuento = 0;
+    public $total = 0;
+    public $totalpago = 0;
 
     public function render()
     { 
         
-        $record  = TrCobrosCabs::orderBy('id', 'desc')->first();
-        if ($record['id']=null){
+        $this->record  = TrCobrosCabs::orderBy('id', 'desc')->first();
+        if ($this->record['id']==null){
             $this->selectId = 0;
         }else{
-            $this->selectId = $record['id'];
-        }
+            $this->selectId = $this->record['id'];
+        }      
 
         $tblcobrodet = TrCobrosDets::where('cobrocab_id',$this->selectId)->get();
-        $tbldeudas   = TrDeudasCabs::where('id',0)->get();
+        $tbldeudas   = TrDeudasDets::where('cobro_id',$this->selectId)->get();
         $tblperiodos = TmPeriodosLectivos::all();
+        
+        $this->calculatotal($tbldeudas);
 
         return view('livewire.vc-encashment',[
-            'record' => $record,
             'tblcobrodet' => $tblcobrodet,
             'tbldeudas' => $tbldeudas,
             'tblperiodos' => $tblperiodos,
@@ -44,45 +51,17 @@ class VcEncashment extends Component
         
     }
 
-    public function add(){
-
-        /*$this->documento = $this -> record['documento'];*/
-        $ldate = date('Y-m-d H:i:s');
-
-        $this->idbuscar = "";
-        $this->reset(['record']);
-        $this->record['fecha']= date('d/m/Y',strtotime($ldate));
-        $this->record['estudiante_id']= 0;
-        $this->record['documento']= "";
-        $this->record['concepto']= "";
-        $this->record['monto']= 0;
-        $this->record['estado']= "A";
-
-        $this->search(1);
+    public function calculatotal($tblDeuda){
         
-        /*$this->loadDetalle($tblniveles);*/
-        /*$this->dispatchBrowserEvent('show-form');*/
-
-    }
-
-    public function search($tipo){
-
-        if ($tipo=1){
-            
-            $this->persona   = TmPersonas::where('identificacion',$this->idbuscar)->first();     
-            $tbldeudas = TrDeudasCabs::where('estudiante_id',$this->persona['id'])->get();
-            $this->nombre = $this->persona['nombres'].' '.$this->persona['apellidos'];
-
-           
-            $this->emitTo('vc-encashment-debts','deudas',$this->persona['id']);
-
-        }else{
-
+        foreach ($tblDeuda as $deudas)
+        {
+            $this->subtotal += $deudas->deudacab->saldo+$deudas['valor'];
+            $this->descuento += 0.00;
+            $this->totalpago += $deudas['valor'];
         }
+        $this->total = $this->subtotal-$this->descuento;
 
     }
-
-
 
 
 }

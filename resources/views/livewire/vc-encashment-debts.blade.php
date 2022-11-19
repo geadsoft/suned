@@ -1,6 +1,6 @@
 <div>
-    <table class="table table-borderless align-middle mb-0">
-        <thead class="table-light text-muted">
+    <table class="table table-borderless align-middle mb-0" id="tbldeudas">
+        <thead class="table-light text-muted thead-dark">
             <tr>
                 <th scope="col" style="width: 50px;">
                     <div class="form-check">
@@ -10,7 +10,7 @@
                 </th>
                 <th style="width: 60px; display:none;" scope="col">id</th>
                 <th style="width: 180px;" scope="col">Referencia</th>
-                <th scope="col">Descripción</th>
+                <th scope="col">Descripcion</th>
                 <th style="width: 90px;" scope="col" class="text-end">Descuento</th>
                 <th style="width: 120px;" scope="col" class="text-end">Valor</th>
             </tr>
@@ -18,9 +18,9 @@
         <tbody>
         @foreach ($tbldeudas as $deuda)  
         <tr id="{{$fila}}" class="deudas">
-            <th scope="row">
+            <th scope="row" class="deuda-id-{{$fila}}">
                 <div class="form-check form-check-success">
-                    <input class="form-check-input" type="checkbox" id="chkpago-{{$fila}}" onchange="chkpago()">
+                    <input class="form-check-input" type="checkbox" id="chkpago-{{$fila}}" onchange="chkpago()"/>  
                 </div>
             </th>
             <td class="text-dark" style="display:none;">

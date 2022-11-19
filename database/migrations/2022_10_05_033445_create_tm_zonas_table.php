@@ -13,15 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tr_cobros_cabs', function (Blueprint $table) {
+        Schema::create('tm_zonas', function (Blueprint $table) {
             $table->id();
-            $table->datetime('fecha');
-            $table->bigInteger('estudiante_id')->unsigned();
-            $table->foreign('estudiante_id')->references('id')->on('tm_personas');
-            $table->string('documento',10)->nullable();
-            $table->string('concepto',100);
-            $table->double('monto',14,6);
+            $table->integer('codigo');
+            $table->string('descripcion',150);
+            $table->integer('superior');
             $table->string('estado',1);
+            $table->string('root',150);
             $table->string('usuario');
             $table->timestamps();
         });
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tr_cobros_cabs');
+        Schema::dropIfExists('tm_zonas');
     }
 };
