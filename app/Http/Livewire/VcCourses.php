@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 use App\Models\TmGeneralidades;
+use App\Models\TmPeriodosLectivos;
 use App\Models\TmCursos;
 
 use Livewire\Component;
@@ -13,15 +14,18 @@ class VcCourses extends Component
     public $showEditModal = false;
     public $selectId;
     public $record;
+    public $nivelId;
 
     public function render()
     {   
         $tblrecords = TmCursos::paginate(10);
         $tblgenerals = TmGeneralidades::all();
+        $tblperiodos = TmPeriodosLectivos::all();
 
         return view('livewire.vc-courses',[
             'tblrecords' => $tblrecords,
-            'tblgenerals' => $tblgenerals
+            'tblgenerals' => $tblgenerals,
+            'tblperiodos' => $tblperiodos,
         ]);
         
     }
@@ -29,6 +33,7 @@ class VcCourses extends Component
     public function paginationView(){
         return 'vendor.livewire.bootstrap'; 
     }
+    
 
     /* Accion */
     public function add(){

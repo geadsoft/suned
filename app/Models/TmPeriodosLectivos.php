@@ -10,6 +10,7 @@ class TmPeriodosLectivos extends Model
     protected $table = 'tm_periodos_lectivos';
     protected $primaryKey = "id";
     protected $fillable = [
+        'descripcion',
         'sede_id',
         'periodo',
         'rector_id',

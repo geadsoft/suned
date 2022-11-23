@@ -9,12 +9,16 @@ use Livewire\Component;
 class VcPersonadd extends Component
 {
     public $record;
+    public $search_nui;
+
+    public $nombres, $apellidos, $tipoident, $identificacion, $genero, $fechanace, $nacionalidad, $telefono, $etnia;
+    public $tipodiscapacidad, $discapacidad, $email, $direccion;
+
 
     public function render()
     {   
 
         $record = TmPersonas::find(0);
-        $this->add();
 
         return view('livewire.vc-personadd',[
             'record' => $record
@@ -38,6 +42,25 @@ class VcPersonadd extends Component
         $this->record['tipopersona']= "E";
         $this->record['estado']= 'A';
         dd($this->record);
+
+    }
+
+    public function searchPerson(){
+        
+        dd('ingresa');
+
+        $records = TmPersonas::where("",$this->search_nui)->get();
+        $this->nombres = $records->nombre;
+        $this->apellidos = $records->apellidos;
+        $this->tipoident = $records->tipoidentificacion;
+        $this->identificacion = $record->identificacion;
+        $this->fechanace = date('Y-m-d',strtotime($record->fechanacimiento));
+        $this->nacionalidad = $record->nacionalidad;
+        $this->genero = $record->genero;
+        $this->nacionalidad = $record->telefono;
+        $this->emial = $record->email;
+        $this->etnia = $record->etnia;
+        $this->direccion = $record->direccion;
 
     }
 

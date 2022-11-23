@@ -146,9 +146,9 @@ class VcCreateinvoice extends Component
         ]);
 
         TrFacturasCabs::Create([
-            'periodo' => 0;
-            'mes' => 0;
-            'tipo' => 'FE';
+            'periodo' => 0,
+            'mes' => 0,
+            'tipo' => 'FE',
             'fecha' => $this -> fecha,
             'establecimiento' => $this -> establecimiento,
             'puntoemision' => $this -> puntoemision,

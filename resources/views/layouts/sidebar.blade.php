@@ -89,12 +89,12 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="widgets">
+                    <a class="nav-link menu-link" href="">
                         <i class="las la-school"></i> <span>@lang('translation.subjects')</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="widgets">
+                    <a class="nav-link menu-link" href="">
                         <i class="las la-clock"></i> <span>@lang('translation.schedules')</span>
                     </a>
                 </li>
@@ -102,7 +102,7 @@
                 <!--Sedes-->
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.headquarters')</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/headquarters/company">
+                    <a class="nav-link menu-link" href="/headquarters/headquarters-add">
                         <i class="las la-address-card"></i> <span>@lang('translation.headquarter')</span>
                     </a>    
                 </li>

@@ -18,9 +18,12 @@ class TmPersonas extends Model
         'nacionalidad',
         'genero',
         'telefono',
+        'direccion',
         'email',
         'etnia',
+        'parentesco',
         'tipopersona',
+        'relacion_id',
         'estado',
         'usuario',
     ];

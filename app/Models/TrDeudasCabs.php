@@ -10,6 +10,7 @@ class TrDeudasCabs extends Model
     protected $table = 'tr_deudas_cabs';
     protected $primaryKey = "id";
     protected $fillable = [
+        'matricula_id',
         'estudiante_id',
         'periodo_id',
         'referencia',

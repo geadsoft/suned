@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('tr_deudas_cabs', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('matricula_id')->unsigned();
+            $table->foreign('matricula_id')->references('id')->on('tm_matriculas');
             $table->bigInteger('estudiante_id')->unsigned();
             $table->foreign('estudiante_id')->references('id')->on('tm_personas');
             $table->bigInteger('periodo_id')->unsigned();

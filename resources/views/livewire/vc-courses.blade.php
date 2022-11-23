@@ -164,9 +164,9 @@
                                             @endif
                                         </div>
                                         <div class="mb-3">
-                                            <label for="record.grupo_id" class="form-label">Cluster</label>
+                                            <label for="record.grupo_id" class="form-label">Group</label>
                                             <select type="select" class="form-select" data-trigger name="record.grupo_id" wire:model.defer="record.grupo_id">
-                                            <option value=""></option>
+                                            <option value="">Select Group</option>
                                             @foreach ($tblgenerals as $general)
                                                 @if ($general->superior == 1)
                                                 <option value="{{$general->id}}">{{$general->descripcion}}</option>
@@ -177,7 +177,7 @@
                                         <div class="mb-3">
                                             <label for="record.nivel_id" class="form-label">Level</label>
                                             <select type="select" class="form-select" data-trigger name="record.nivel_id" wire:model.defer="record.nivel_id">
-                                            <option value=""></option>
+                                            <option value="">Select Level</option>
                                             @foreach ($tblgenerals as $general)
                                                 @if ($general->superior == 5)
                                                 <option value="{{$general->id}}">{{$general->descripcion}}</option>
@@ -226,8 +226,8 @@
                                             <label for="record.periodo_id" class="form-label">Lective Period</label>
                                             <select type="select" class="form-select" data-trigger name="record.periodo_id" wire:model.defer="record.periodo_id">
                                             <option value="0">Select Lective Period</option>
-                                            @foreach ($tblgenerals as $general)
-                                                <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                            @foreach ($tblperiodos as $periodo)
+                                                <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
                                             @endforeach
                                             </select>
                                         </div>

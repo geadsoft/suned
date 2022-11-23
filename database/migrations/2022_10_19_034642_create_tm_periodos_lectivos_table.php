@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('tm_periodos_lectivos', function (Blueprint $table) {
             $table->id();
+            $table->string('descripcion',80);
             $table->bigInteger('sede_id')->unsigned();
             $table->foreign('sede_id')->references('id')->on('tm_empresas');
             $table->integer('periodo');

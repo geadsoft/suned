@@ -22,10 +22,13 @@ return new class extends Migration
             $table->datetime('fechanacimiento');
             $table->integer('nacionalidad');
             $table->string('genero',1);
-            $table->string('telefono',20);
-            $table->string('email',50);
+            $table->string('telefono',30);
+            $table->string('direccion',150);
+            $table->string('email',80);
             $table->string('etnia',2);
+            $table->string('parentesco',2);
             $table->string('tipopersona',1);
+            $table->integer('relacion_id');
             $table->string('estado',1);
             $table->string('usuario',50);
             $table->unique(['identificacion'],'uq_identificacion');

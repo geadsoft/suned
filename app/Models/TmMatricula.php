@@ -5,18 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TmMatriculaEstudiante extends Model
+class TmMatricula extends Model
 {
     protected $table = 'tm_matriculas';
     protected $primaryKey = "id";
     protected $fillable = [
+        'documento',
         'fecha',
-        'persona_id',
-        'periodo_id',
+        'estudiante_id',
         'nivel_id',
         'modalidad_id',
         'grado_id',
-        'seccion_id',
+        'periodo_id',
+        'curso_id',
+        'representante_id',
         'estado',
         'usuario',
     ];
