@@ -151,7 +151,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="widgets">
+                    <a class="nav-link menu-link" href="">
                         <i class="las la-archive"></i> <span>@lang('translation.statement-of-account')</span>
                     </a>
                 </li>
@@ -163,27 +163,27 @@
                               
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.reports')</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="widgets">
+                    <a class="nav-link menu-link" href="">
                         <i class="las la-cash-register"></i> <span>@lang('translation.cash-receipt')</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="widgets">
+                    <a class="nav-link menu-link" href="">
                         <i class="las la-file-invoice-dollar"></i> <span>@lang('translation.daily-cobros')</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="widgets">
+                    <a class="nav-link menu-link" href="">
                         <i class="las la-chart-pie"></i> <span>@lang('translation.debt-analysis')</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="widgets">
+                    <a class="nav-link menu-link" href="">
                         <i class="las la-sliders-h"></i> <span>@lang('translation.generic')</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="widgets">
+                    <a class="nav-link menu-link" href="">
                         <i class="lab la-internet-explorer"></i> <span>@lang('translation.platform')</span>
                     </a>
                 </li>
@@ -191,7 +191,7 @@
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.config')</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="widgets">
+                    <a class="nav-link menu-link" href="/config/generality">
                         <i class="las la-flask"></i> <span>@lang('translation.generality')</span>
                     </a>
                 </li>

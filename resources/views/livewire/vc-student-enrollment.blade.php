@@ -177,7 +177,14 @@
                                                 <label for="cmbnacionalidad" class="form-label">Nationality</label>
                                                 <select class="form-select" data-choices data-choices-search-false id="cmbnacionalidad" wire:model.defer="nacionalidad" required {{$eControl}}>
                                                     <option value="1">Ecuatoriana</option>
-                                                    <option value="2">Venezolana</option>
+                                                    <option value="2">China</option>
+                                                    <option value="3">Colombiana</option>
+                                                    <option value="4">Cubana</option>
+                                                    <option value="5">Española</option>
+                                                    <option value="6">EstadoUnidense</option>
+                                                    <option value="7">Italiana</option>
+                                                    <option value="8">Peruana</option>
+                                                    <option value="9">Venezolana</option>
                                                 </select>
                                             </div>
                                         </div>
