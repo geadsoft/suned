@@ -21,7 +21,7 @@
         <select type="select" class="form-select" data-trigger name="nivel_id" id="cmbnivelId" wire:model="nivelId">
         <option value="">Select Level</option>
         @foreach ($tblgenerals as $general)
-            @if ($general->superior == 5)
+            @if ($general->superior == 2)
             <option value="{{$general->id}}">{{$general->descripcion}}</option>
             @endif
         @endforeach
