@@ -121,7 +121,7 @@ class VcServicesCourse extends Component
     } 
 
     public function deleteData(){
-        TmCursos::find($this->selectId)->delete();
+        TmCursos::find($this->selectCurso)->delete();
         $this->dispatchBrowserEvent('hide-delete');
     }
 
