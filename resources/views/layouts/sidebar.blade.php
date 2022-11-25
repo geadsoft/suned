@@ -200,8 +200,8 @@
         </div>
         <!-- Sidebar -->
     </div>
-    <div class="sidebar-background"></div>
+    <!--<div class="sidebar-background"></div>-->
 </div>
 <!-- Left Sidebar End -->
 <!-- Vertical Overlay-->
-<div class="vertical-overlay"></div>
+<!--<div class="vertical-overlay"></div>
