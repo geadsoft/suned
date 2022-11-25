@@ -65,6 +65,7 @@ class VcSelectedCourse extends Component
         $this->datos['gradoId'] =  $id; 
 
         $this->tblcursos = TmCursos::where([
+                ['periodo_id',$this->periodoId],
                 ['servicio_id',$id],
             ])->get();
 
