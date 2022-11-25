@@ -42,7 +42,7 @@ class VcPension extends Component
     public function add(){
 
         $date = new \DateTime();
-        $tblniveles  = TmGeneralidades::where('superior',5)->get();
+        $tblniveles  = TmGeneralidades::where('superior',2)->get();
                 
         $this->showEditModal = false;
         $this->reset(['record']);

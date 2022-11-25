@@ -26,12 +26,11 @@ class VcHeadquarters extends Component
 
     public function render()
     {   
-        $tblsede  = TmSedes::where('id', 1)->get()->toArray();       
+        $tblsedes  = TmSedes::where('id', 1)->get()->toArray();       
         
-        if ($this->record=null){
-            //$this->add();
-        }else{
-            $this->load($tblsede);
+        if ($tblsedes!=null){
+            $this->existsrecord = true; 
+            $this->load($tblsedes);
         }
 
         return view('livewire.vc-headquarters');
@@ -39,8 +38,6 @@ class VcHeadquarters extends Component
     }
 
     public function load($tblsede){
-
-        $this->existsrecord = true;
 
         foreach ($tblsede as $dato)
         {
@@ -88,7 +85,7 @@ class VcHeadquarters extends Component
 
     public function add(){
 
-        $this->existsrecord = true;
+        $this->formestado = 'enabled';
         
         $this->reset(['record']);
         $this->record['representante']= "prueba";

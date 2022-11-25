@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 use App\Models\TmPeriodosLectivos;
+use App\Models\TmGeneralidades;
 use App\Models\TmPersonas;
 use App\Models\TmMatricula;
 use App\Models\TmSedes;
@@ -50,11 +51,14 @@ class VcStudentEnrollment extends Component
         }
         
         $this->sede = TmSedes::where('id',1)->first();
+        $tblgenerals = TmGeneralidades::where('superior',7)->get();
 
         $ldate = date('Y-m-d H:i:s');
         $this->fecha = date('Y-m-d',strtotime($ldate));
        
-        return view('livewire.vc-student-enrollment');
+        return view('livewire.vc-student-enrollment',[
+            'tblgenerals' => $tblgenerals,
+        ]);
        
     }
 

@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('tm_cursos', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('servicio_id')->unsigned();
+            $table->foreign('servicio_id')->references('id')->on('tm_servicios');
             $table->bigInteger('nivel_id')->unsigned();
             $table->foreign('nivel_id')->references('id')->on('tm_generalidades');
             $table->bigInteger('grado_id')->unsigned();

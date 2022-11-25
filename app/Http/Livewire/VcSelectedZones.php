@@ -23,6 +23,7 @@ class VcSelectedZones extends Component
     public function render()
     {
         $tblprovincias = TmZonas::where('superior',0)->get();
+
         return view('livewire.vc-selected-zones',[
             'tblprovincias' => $tblprovincias,
         ]);
@@ -30,15 +31,20 @@ class VcSelectedZones extends Component
 
     public function updatedselectedProvincia($id){
 
-        $provincia = TmZonas::where('id',$id)->first();      
-        $this->tblcantones = TmZonas::where('superior',$provincia['codigo'])->get();
+        if($id!=null){     
+            $provincia = TmZonas::where('id',$id)->first();      
+            $this->tblcantones = TmZonas::where('superior',$provincia['codigo'])->get();
+        }
 
     }
 
     public function updatedselectedCanton($id){
 
-        $canton = TmZonas::where('id',$id)->first(); 
-        $this->tblparroquias = TmZonas::where('superior',$canton['codigo'])->get();
+
+        if($id!=null){
+            $canton = TmZonas::where('id',$id)->first(); 
+            $this->tblparroquias = TmZonas::where('superior',$canton['codigo'])->get();
+        }
 
     }
 

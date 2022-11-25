@@ -26,11 +26,9 @@
                                 <div>
                                     <select class="form-select" data-choices data-choices-search-false
                                         name="choices-single-default" id="idStatus">
-                                        <option value="">Lective Period</option>
-                                        <option value="all">2018 - 2019</option>
-                                        <option value="Pending">2019 - 2020</option>
-                                        <option value="Inprogress">2021 - 2022</option>
-                                        <option value="Cancelled" selected>2022 - 2023</option>
+                                        @foreach ($tblperiodos as $periodo)
+                                            <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -52,7 +50,7 @@
                                     <select class="form-select" data-choices data-choices-search-false
                                         name="choices-single-default" id="idPayment">
                                         @foreach ($tblgenerals as $general)
-                                            @if ($general->superior == 5)
+                                            @if ($general->superior == 2)
                                             <option value="{{$general->id}}">{{$general->descripcion}}</option>
                                             @endif
                                         @endforeach
@@ -179,7 +177,7 @@
                                             <select type="select" class="form-select" data-trigger name="record.nivel_id" wire:model.defer="record.nivel_id">
                                             <option value="">Select Level</option>
                                             @foreach ($tblgenerals as $general)
-                                                @if ($general->superior == 5)
+                                                @if ($general->superior == 2)
                                                 <option value="{{$general->id}}">{{$general->descripcion}}</option>
                                                 @endif
                                             @endforeach
@@ -193,7 +191,7 @@
                                                     <select type="select" class="form-select" data-trigger name="record.grado_id" wire:model.defer="record.grado_id">
                                                     <option value=""></option>
                                                     @foreach ($tblgenerals as $general)
-                                                        @if ($general->superior == 6)
+                                                        @if ($general->superior == 3)
                                                         <option value="{{$general->id}}">{{$general->descripcion}}</option>
                                                         @endif
                                                     @endforeach
@@ -211,7 +209,7 @@
                                             <select type="select" class="form-select" data-trigger name="record.especializacion_id" wire:model.defer="record.especializacion_id">
                                             <option value="0">Select Specialization</option>
                                             @foreach ($tblgenerals as $general)
-                                                @if ($general->superior == 3)
+                                                @if ($general->superior == 4)
                                                 <option value="{{$general->id}}">{{$general->descripcion}}</option>
                                                 @endif
                                             @endforeach

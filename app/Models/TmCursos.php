@@ -11,6 +11,7 @@ class TmCursos extends Model
     protected $table = 'tm_cursos';
     protected $primaryKey = "id";
     protected $fillable = [
+        'servicio_id',
         'nivel_id',
         'grado_id',
         'paralelo',

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Livewire;
+use App\Models\TmPeriodosLectivos;
 use App\Models\TmGeneralidades;
 use App\Models\TmServicios;
 
@@ -13,15 +14,37 @@ class VcServices extends Component
     public $showEditModal = false;
     public $selectId;
     public $record;
+    public $periodoId,$grupoId,$nivelId;
+
+    public $filters = [
+        'srv_grupo' => '',
+        'srv_nivel' => '',
+        'srv_estado' => 'A',
+    ];
+
 
     public function render()
     {   
-        $tblrecords = TmServicios::paginate(10);
+
+        $tblrecords = TmServicios::query()
+        ->when($this->filters['srv_grupo'],function($query){
+            return $query->where('modalidad_id',"{$this->filters['srv_grupo']}");
+        })
+        ->when($this->filters['srv_nivel'],function($query){
+            return $query->where('nivel_id',"{$this->filters['srv_nivel']}");
+        })
+        ->when($this->filters['srv_estado'],function($query){
+            return $query->where('estado',"{$this->filters['srv_estado']}");
+        })
+        ->paginate(10);
+
         $tblgenerals = TmGeneralidades::all();
+        $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
 
         return view('livewire.vc-services',[
             'tblrecords' => $tblrecords,
-            'tblgenerals' => $tblgenerals
+            'tblgenerals' => $tblgenerals,
+            'tblperiodos' => $tblperiodos
         ]);
         
     }
@@ -118,6 +141,14 @@ class VcServices extends Component
     public function deleteData(){
         TmServicios::find($this->selectId)->delete();
         $this->dispatchBrowserEvent('hide-delete');
+    }
+
+    public function deleteFilters(){
+        
+        $this->filters['srv_grupo'] = "";
+        $this->filters['srv_nivel'] = "";
+        $this->filters['srv_estado'] = "A";
+
     }
 
 

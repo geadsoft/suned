@@ -17,6 +17,11 @@ class TmCursosController extends Controller
         return view('academic/course');
     }
 
+    public function course()
+    {
+        return view('academic/servicescourse');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

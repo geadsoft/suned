@@ -5,24 +5,32 @@
                 <div class="card-header  border-0">
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1">Records </h5>
-                        <div class="flex-shrink-0">
+                        <!--<div class="flex-shrink-0">
                             <button type="button" wire:click.prevent="add()" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn"
                                 data-bs-target=""><i class="ri-add-line align-bottom me-1"></i> Create
                             </button>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
                         <div class="row g-3">
-                            <div class="col-xxl-5 col-sm-6">
+                            <!--<div class="col-xxl-5 col-sm-6">
                                 <div class="search-box">
                                     <input type="text" class="form-control search"
                                         placeholder="Search for order ID, customer, order status or something...">
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
-                            </div>
-                            <!--end col-->
+                            </div>-->
+                            <div class="col-xxl-2 col-sm-4">
+                                <div>
+                                    <select class="form-select" name="cmbperiodo" wire:model="filters.srv_periodo">
+                                        @foreach ($tblperiodos as $periodo)
+                                            <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>                            
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
@@ -79,9 +87,10 @@
                                         <th class="sort" data-sort="id"> ID</th>
                                         <th class="sort" data-sort="description">Description</th>
                                         <th class="sort" data-sort="modality">Modality</th>
-                                        <th class="sort" data-sort="level" style="width: 100px;">Nivel</th>
+                                        <th class="sort" data-sort="level">Nivel</th>
                                         <th class="sort" data-sort="degree">Degree</th>
                                         <th class="sort" data-sort="">Status</th>
+                                        <th class="sort" data-sort="">Course</th>
                                         <th class="sort" data-sort="">Action</th>
                                         
                                     </tr>
@@ -97,19 +106,36 @@
                                         <td class="status">
                                             <span class="badge badge-soft-success text-uppercase">@lang('status.'.($record->estado))</span>
                                         </td>
-                                        <td>
+
+                                        <td style="width: 100px;">
+                                            <table>
+                                                <tbody>
+                                                @foreach ($tblcursos as $curso) 
+                                                @if ($curso->servicio_id == $record->id)
+                                                <tr>
+                                                     <td>{{$curso->paralelo}} - </td>
+                                                     <td>{{$curso->vistaplataforma}}</td>
+                                                     <td> 
+                                                        <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                            data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                            <a class="text-danger d-inline-block remove-item-btn"
+                                                                data-bs-toggle="modal" href="" wire:click.prevent="delete({{ $curso->id }})">
+                                                                <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                            </a>
+                                                        </li>
+                                                    </td>
+                                                </tr>
+                                                @endIf
+                                                 @endforeach
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td style="width: 100px;">
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                    <a href="" wire:click.prevent="edit({{ $record }})">
-                                                        <i class="ri-pencil-fill fs-16"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                    <a class="text-danger d-inline-block remove-item-btn"
-                                                        data-bs-toggle="modal" href="" wire:click.prevent="delete({{ $record->id }})">
-                                                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Add Course">
+                                                    <a href=""  wire:click.prevent="add({{ $record }})">
+                                                        <i class="ri-play-list-add-line fs-16"></i>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -158,14 +184,9 @@
                                             @endif
                                         </div>
                                         <div class="mb-3">
-                                            <label for="txtnombre" class="form-label">Description</label>
-                                            <input type="text" wire:model.defer="record.descripcion" class="form-control" name="txtnombre"
-                                                placeholder="Enter name" required />
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="cmbmodalidad" class="form-label">Cluster</label>
-                                            <select type="select" class="form-select" data-trigger name="cmbmodalidad" wire:model.defer="record.modalidad_id" required>
-                                            <option value=""></option>
+                                            <label for="record.grupo_id" class="form-label">Group</label>
+                                            <select type="select" class="form-select" data-trigger wire:model.defer="grupoId">
+                                            <option value="">Select Group</option>
                                             @foreach ($tblgenerals as $general)
                                                 @if ($general->superior == 1)
                                                 <option value="{{$general->id}}">{{$general->descripcion}}</option>
@@ -174,9 +195,9 @@
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="cmbnivel" class="form-label">Level</label>
-                                            <select type="select" class="form-select" data-trigger name="cmbnivel" wire:model.defer="record.nivel_id" required>
-                                            <option value=""></option>
+                                            <label for="record.nivel_id" class="form-label">Level</label>
+                                            <select type="select" class="form-select" data-trigger wire:model.defer="nivelId">
+                                            <option value="">Select Level</option>
                                             @foreach ($tblgenerals as $general)
                                                 @if ($general->superior == 2)
                                                 <option value="{{$general->id}}">{{$general->descripcion}}</option>
@@ -186,24 +207,47 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="cmbgrado" class="form-label">Course</label>
-                                            <select type="select" class="form-select" data-trigger name="cmbgrado" wire:model.defer="record.grado_id" required>
-                                            <option value=""></option>
+                                            <div class="row">
+                                                <div class="col-lg-8 col-sm-6">
+                                                    <label for="record.grado_id" class="form-label">Course</label>
+                                                    <select type="select" class="form-select" data-trigger wire:model.defer="gradoId">
+                                                    <option value=""></option>
+                                                    @foreach ($tblgenerals as $general)
+                                                        @if ($general->superior == 3)
+                                                        <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-4 col-sm-6">
+                                                    <label for="record.paralelo" class="form-label">Paralell</label>
+                                                    <input type="text" class="form-control" wire:model.defer="paralelo"
+                                                        placeholder="Enter name" required />
+                                                </div>
+                                            </div>    
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="record.especializacion_id" class="form-label">Specialization</label>
+                                            <select type="select" class="form-select" data-trigger wire:model.defer="carreraId">
+                                            <option value="0">Select Specialization</option>
                                             @foreach ($tblgenerals as $general)
-                                                @if ($general->superior == 3)
+                                                @if ($general->superior == 4)
                                                 <option value="{{$general->id}}">{{$general->descripcion}}</option>
                                                 @endif
                                             @endforeach
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="cmbespecialidad" class="form-label">Specialization</label>
-                                            <select type="select" class="form-select" data-trigger name="cmbcmbespecialidad" wire:model.defer="record.especializacion_id" required>
-                                            <option value=""></option>
-                                            @foreach ($tblgenerals as $general)
-                                                @if ($general->superior == 4)
-                                                <option value="{{$general->id}}">{{$general->descripcion}}</option>
-                                                @endif
+                                            <label for="record.vistaplataforma" class="form-label">Platform Label</label>
+                                            <input type="text" class="form-control" wire:model.defer="plataforma"
+                                                placeholder="Enter name" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="record.periodo_id" class="form-label">Lective Period</label>
+                                            <select type="select" class="form-select" data-trigger wire:model.defer="periodoId">
+                                            <option value="0">Select Lective Period</option>
+                                            @foreach ($tblperiodos as $periodo)
+                                                <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
                                             @endforeach
                                             </select>
                                         </div>
@@ -228,7 +272,7 @@
                                         colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px">
                                     </lord-icon>
                                     <div class="mt-4 text-center">
-                                        <h4>You are about to delete the record ? {{ $selectId }}</h4>
+                                        <h4>You are about to delete the course ? {{ $nomSeccion }}</h4>
                                         <p class="text-muted fs-15 mb-4">Deleting the record will remove
                                             all of
                                             your information from our database.</p>
@@ -244,8 +288,8 @@
                             </div>
                         </div>
                     </div>
-
                     <!--end modal -->
+                    
                 </div>
             </div>
 
@@ -255,4 +299,5 @@
     <!--end row-->
 
 </div>
+
 
