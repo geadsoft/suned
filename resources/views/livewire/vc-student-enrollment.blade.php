@@ -175,10 +175,14 @@
                                         <div class="col-lg-4">
                                             <div class="mb-3">
                                                 <label for="cmbnacionalidad" class="form-label">Nationality</label>
-                                                <option value="">Select Nationality</option>
-                                                @foreach ($tblgenerals as $general)
-                                                    <option value="{{$general->id}}">{{$general->descripcion}}</option>
-                                                @endforeach
+                                                <select class="form-select" data-choices data-choices-search-false id="cmbnacionalidad" wire:model.defer="nacionalidad" required {{$eControl}}>
+                                                    <option value="">Select Nationality</option>
+                                                    @foreach ($tblgenerals as $general)
+                                                        @if ($general->superior == 7)
+                                                        <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
 
