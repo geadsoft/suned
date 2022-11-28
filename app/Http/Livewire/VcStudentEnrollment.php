@@ -20,7 +20,7 @@ class VcStudentEnrollment extends Component
     public $chkoptnui="si",$eControl="disabled";
 
     public $estudiante_id=0,$persona_id=0;
-    public $codigo, $nombres, $apellidos, $nombrecompleto, $tipoident, $identificacion, $genero, $fechanace, $nacionalidad, $telefono, $etnia;
+    public $codigo, $nombres, $apellidos, $nombrecompleto, $tipoident="C", $identificacion, $genero="H", $fechanace, $nacionalidad=35, $telefono, $etnia="ME";
     public $tipodiscapacidad, $discapacidad, $email, $direccion;
     public $periodoId, $grupoId, $nivelId, $gradoId, $cursoId;
     public $fecha,$crearperson;
@@ -47,7 +47,6 @@ class VcStudentEnrollment extends Component
         
         if ($this->chkoptnui=="no"){
             $this->eControl = "";
-            $this->estudiante_id = 0;
         }
         
         $this->sede = TmSedes::where('id',1)->first();
@@ -101,48 +100,16 @@ class VcStudentEnrollment extends Component
     }
 
 
-    public function validateData(){
-
-        if ($this->estudiante_id==0) {
-            
-            $this ->validate([
-                'nombres' => 'required',
-                'apellidos' => 'required',
-                'tipoident' => 'required',
-                'identificacion' => 'required',
-                'fechanace' => 'required',
-                'nacionalidad' => 'required',
-                'genero' => 'required',
-                'telefono' => 'required',
-                'email' => 'required',
-                'etnia' => 'required',
-                'direccion' => 'required',
-            ]);
-        } else {
-
-            $this ->validate([
-                'fecha' => 'required',
-                'periodoId' => 'required',
-                'grupoId' => 'required',
-                'nivelId' => 'required',
-                'gradoId' => 'required',
-                'cursoId' => 'required',
-                'persona_id' => 'required',
-                'estudiante_id' => 'required',
-            ]);
-
-        }
-
-    }
-
-
     public function createData(){
+
+        if ($this->nombrecompleto==""){
+            return;
+        }
                
         if ($this->estudiante_id==0){
             
             $this->grabaEstudiante();
-            $this->emitTo('vc-person-enrollment','grabar',$this->estudiante_id);
-
+            
         }
 
         $this->dispatchBrowserEvent('get-data');
@@ -182,8 +149,13 @@ class VcStudentEnrollment extends Component
             'persona_id' => 'required',
         ]);
 
+        $pLectivo = TmPeriodosLectivos::find($this->periodoId);
+        $codperiodo   = $pLectivo['periodo'];
+        $nomperiodo   = $pLectivo['descripcion'];
+        $nummatricula = $pLectivo['num_matricula']+1;
+
         TmMatricula::Create([
-            'documento' => '0000001',
+            'documento' => substr($codperiodo, -2).str_pad($nummatricula, 4, "0", STR_PAD_LEFT),
             'fecha' => $this -> fecha,
             'estudiante_id' => $this -> estudiante_id,
             'nivel_id' => $this -> nivelId,
@@ -212,9 +184,6 @@ class VcStudentEnrollment extends Component
         $cuotas = 10;
         
         //Matricula
-        $pLectivo = TmPeriodosLectivos::find($this->periodoId);
-        $codperiodo = $pLectivo['periodo'];
-        $nomperiodo = $pLectivo['descripcion'];
         $mes = date('m',strtotime($this->fecha));
         $año = date('Y',strtotime($this->fecha));
 
@@ -222,7 +191,7 @@ class VcStudentEnrollment extends Component
             'matricula_id' => $matriculaId,
             'estudiante_id' => $this -> estudiante_id,
             'periodo_id' => $this -> periodoId,
-            'referencia' => 'MAT-PER'.substr($codperiodo, -2).str_pad($this -> estudiante_id, 6, "0", STR_PAD_LEFT),
+            'referencia' => 'MAT-PER'.substr($codperiodo, -2).str_pad($nummatricula, 4, "0", STR_PAD_LEFT),
             'fecha' => $this->fecha,
             'basedifgravada' => $valorMatricula,
             'basegravada' =>0.00,
@@ -258,7 +227,7 @@ class VcStudentEnrollment extends Component
             'matricula_id' => $matriculaId,
             'estudiante_id' => $this -> estudiante_id,
             'periodo_id' => $this -> periodoId,
-            'referencia' => 'PLA-PER'.substr($codperiodo, -2).str_pad($this -> estudiante_id, 6, "0", STR_PAD_LEFT),
+            'referencia' => 'PLA-PER'.substr($codperiodo, -2).str_pad($nummatricula, 4, "0", STR_PAD_LEFT),
             'fecha' => $this->fecha,
             'basedifgravada' => $valorPlataforma,
             'basegravada' =>0.00,
@@ -303,7 +272,7 @@ class VcStudentEnrollment extends Component
                 'matricula_id' => $matriculaId,
                 'estudiante_id' => $this -> estudiante_id,
                 'periodo_id' => $this -> periodoId,
-                'referencia' => 'PEN-'.$this->meses[$mes].substr($codperiodo, -2).str_pad($this -> estudiante_id, 6, "0", STR_PAD_LEFT),
+                'referencia' => 'PEN-'.$this->meses[$mes].substr($codperiodo, -2).str_pad($nummatricula, 4, "0", STR_PAD_LEFT),
                 'fecha' =>  strval($año)."-".str_pad($mes, 2, "0", STR_PAD_LEFT).'-01',
                 'basedifgravada' => $valorPension,
                 'basegravada' =>0.00,
@@ -334,6 +303,11 @@ class VcStudentEnrollment extends Component
                 'usuario' => auth()->user()->name,
             ]);
         }
+
+        /*Actualiza secuencia de matricula*/
+        $pLectivo->update([
+            'num_matricula' => $nummatricula,
+        ]);
         
     }
 
@@ -374,8 +348,6 @@ class VcStudentEnrollment extends Component
 
     }    
 
-    
-
     public function grabaEstudiante(){
 
         TmPersonas::Create([
@@ -397,7 +369,10 @@ class VcStudentEnrollment extends Component
             'estado' => "P",
         ]);
 
-        $newRecno = TmPersonas::orderBy("id", "desc")->first();
+        $newRecno = TmPersonas::where("tipopersona","E")
+        ->orderBy("id", "desc")
+        ->first();
+
         $this->estudiante_id = $newRecno['id'];
 
     }

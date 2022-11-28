@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 use App\Models\TmPersonas;
+use App\Models\TmGeneralidades;
 
 use Livewire\Component;
 
@@ -11,7 +12,7 @@ class VcPersonEnrollment extends Component
     public $search_nui;
     public $chkoption="si";
     public $persona_id=0;
-    public $nombres, $apellidos, $tipoident, $identificacion, $genero, $fechanace, $nacionalidad, $telefono, $etnia="ME";
+    public $nombres, $apellidos, $tipoident="C", $identificacion, $genero="F", $fechanace, $nacionalidad=35, $telefono, $etnia="ME";
     public $email, $direccion, $parenteso, $eControl;
     
     public function render()
@@ -22,8 +23,12 @@ class VcPersonEnrollment extends Component
             $this->eControl = "";
             $this->persona_id = 0;
         }
+
+        $tblgenerals = TmGeneralidades::where("superior",7)->get();
         
-        return view('livewire.vc-person-enrollment');
+        return view('livewire.vc-person-enrollment',[
+            'tblgenerals' => $tblgenerals,
+        ]);
     }
 
     //protected $listeners = ['grabar' => 'saveperson'];

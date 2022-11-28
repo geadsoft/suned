@@ -10,6 +10,7 @@ use App\Models\TrDeudasCabs;
 use App\Models\TrDeudasDets;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmGeneralidades;
+use App\Models\TmMatricula;
 
 class VcEncashmentadd extends Component
 {
@@ -23,7 +24,7 @@ class VcEncashmentadd extends Component
     public $fecha;
     public $secuencia=0;
     public $tblCobro;
-    public $estudiante_id=0;
+    public $estudiante_id=0, $grupo, $curso, $concepto;
 
     public $totalPago = 0;
     public $valpago   = 0;
@@ -36,8 +37,11 @@ class VcEncashmentadd extends Component
     {   
                 
         $record  = TrCobrosCabs::find(0);
-        $tblperiodos = TmPeriodosLectivos::all();
-        $tblentidads = TmGeneralidades::where('superior',4)->get();
+        $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
+        $tblentidads = TmGeneralidades::where('superior',6)->get();
+                
+        $periodoActual = TmPeriodosLectivos::orderBy("periodo","desc")->first();        
+        $this->periodo = $periodoActual['id'];
 
         $this->add();
 
@@ -66,8 +70,9 @@ class VcEncashmentadd extends Component
 
 
     public function createData(){
-               
+
         $this->dispatchBrowserEvent('save-det');
+
     }
 
     public function postAdded($objDeuda=null,$objPago=null)
@@ -78,6 +83,12 @@ class VcEncashmentadd extends Component
             $this->totalPago += $pago['valor'];
         }    
 
+        if ($this->totalPago==0){
+            
+            return;
+
+        }
+        
         $this->record['monto']= $this->totalPago;
         
         $this ->validate([
@@ -130,7 +141,7 @@ class VcEncashmentadd extends Component
        
         foreach ($objDeuda as $deuda)
         {
-            $this->valpago = floatval($deuda['saldo']);
+            $this->valpago = floatval($deuda['valpago']);
             $this->despago = floatval($deuda['desct']);
            
             if ($this->totalPago>$this->valpago){
@@ -170,6 +181,7 @@ class VcEncashmentadd extends Component
 
             $tbldeuda = TrDeudasCabs::find($deuda['id']);
             $tbldeuda->update([
+                'descuento' => $tbldeuda['credito']+($this->despago), 
                 'credito' => $tbldeuda['credito']+($this->valpago+$this->despago),
                 'saldo' => $tbldeuda['saldo']-($this->valpago+$this->despago),
             ]); 
@@ -184,11 +196,34 @@ class VcEncashmentadd extends Component
 
         if ($tipo=1){
             
-            $this->persona   = TmPersonas::where('identificacion',$this->idbuscar)->first();     
-            $this->nombre    = $this->persona['nombres'].' '.$this->persona['apellidos'];
-            $this->estudiante_id = $this->persona['id'];
-                                               
-            $this->emitTo('vc-encashment-debts','deudas',$this->persona['id']);
+            $this->persona   = TmPersonas::where('identificacion',$this->idbuscar)->first(); 
+            
+            if (  $this->persona != null) {
+
+                $this->nombre    = $this->persona['nombres'].' '.$this->persona['apellidos'];
+                $this->estudiante_id = $this->persona['id'];
+
+                $matricula = TmMatricula::join("tm_cursos","tm_matriculas.curso_id","=","tm_cursos.id")
+                ->join("tm_servicios","tm_cursos.servicio_id","=","tm_servicios.id")
+                ->join("tm_generalidades","tm_servicios.modalidad_id","=","tm_generalidades.id")
+                ->where([
+                        ['tm_matriculas.periodo_id',$this->periodo],
+                        ['tm_matriculas.estudiante_id',$this->estudiante_id],
+                        ['tm_cursos.periodo_id',$this->periodo],
+                    ])
+                ->select('tm_generalidades.descripcion AS nomGrupo', 'tm_servicios.descripcion AS nomGrado', 'tm_cursos.paralelo')
+                ->first();
+
+                $this->grupo = $matricula['nomGrupo'];
+                $this->curso = $matricula['nomGrado']." - ".$matricula['paralelo'];
+                                                
+                $this->emitTo('vc-encashment-debts','deudas',$this->persona['id']);
+
+            } else {
+
+                $this->dispatchBrowserEvent('show-message');
+
+            }
 
         }else{
 

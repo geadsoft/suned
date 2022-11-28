@@ -4,6 +4,7 @@
             <div class="card">
                 <div class="card-body checkout-tab">
                     <form autocomplete="off" wire:submit.prevent="{{ 'createData' }}">
+                        @csrf
                         <div class="step-arrow-nav mt-n3 mx-n3 mb-3">
 
                             <ul class="nav nav-pills nav-justified custom-nav nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
@@ -92,8 +93,7 @@
                                                 <a id="btnstudents" class ="input-group-text btn btn-soft-info" wire:click="searchPerson(2)"><i class="ri-search-line me-1"></i>Search</a>
                                             </div>
                                         </div>
-                                        <div class="col-xl-3">
-                                        </div> 
+                                       
                                     </div> 
                                     <div class="d-flex align-items-start gap-3 mt-3">
                                         <button type="button" class="btn btn-primary btn-label right ms-auto nexttab"
@@ -128,6 +128,7 @@
                                                 Names</label>
                                                 <input type="text" class="form-control" id="txtnombres"
                                                     placeholder="Enter your Names" wire:model.defer="nombres" required {{$eControl}}>
+                                                @error('nombres') <span class="error">{{ $message }}</span> @enderror
                                             </div>
                                         </div>
                                         <!--end col-->
@@ -159,8 +160,8 @@
                                             <div class="mb-3">
                                                 <label for="cmbgenero" class="form-label">Gender</label>
                                                 <select class="form-select" data-choices data-choices-search-false id="cmbgenero" wire:model.defer="genero" required {{$eControl}}>
-                                                    <option value="H">Male</option>
-                                                    <option value="M">Female</option>
+                                                    <option value="M">Male</option>
+                                                    <option value="F">Female</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -429,7 +430,7 @@
                                                             <div class="flex-shrink-0 mt-sm-0 mt-3">
                                                                 <h6><span class="text-muted fw-normal">Legal Registration No:</span><span id="legal-register-no">{{$sede->codigo}}</span></h6>
                                                                 <h6><span class="text-muted fw-normal">Email:</span><span id="email">{{$sede->email_sede}}</span></h6>
-                                                                <h6><span class="text-muted fw-normal">Website:</span> <a href="https://themesbrand.com/" class="link-primary" target="_blank" id="website">{{$sede->website}}
+                                                                <h6><span class="text-muted fw-normal">Website:</span>{{$sede->website}}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -471,24 +472,29 @@
                                                     <!--end card-body-->
                                                 </div>
                                                 <div class="col-lg-12">
-                                                    <div class="card-body p-4 border-top border-top-dashed">
+                                                    <div class="card-body p-4">
                                                         <div class="row g-3">
                                                             <div class="col-6">
                                                                 <h6 class="text-muted text-uppercase fw-semibold mb-3">Representative</h6>
-                                                                <p class="fw-medium mb-2" id="billing-name">David Nichols</p>
-                                                                <p class="text-muted mb-1" id="billing-address-line-1">Madre</p>
-                                                                <p class="text-muted mb-1" id="billing-address-line-1">305 S San Gabriel Blvd</p>
-                                                                <p class="text-muted mb-1"><span>Phone: +</span><span id="billing-phone-no">(123)
-                                                                        456-7890</span></p>
-                                                                <p class="text-muted mb-0"><span>Tax: </span><span id="billing-tax-no">12-3456789</span> </p>
+                                                                <input type="text" class="bg-white border-0 fw-medium mb-2" id="infoname" disabled />
+                                                                <p class="text-muted mb-1">
+                                                                <input type="text" class="bg-white border-0" id="inforelacion" disabled /></p>
+                                                                <p class="text-muted mb-1">
+                                                                <input type="text" class="bg-white border-0" id="infodireccion" disabled /></p>
+                                                                <p class="text-muted mb-1"><span>Phone: +</span><span>(593)
+                                                                <input type="text" class="bg-white border-0" id="infotelefono" disabled /></span></p>
                                                             </div>
                                                             <!--end col-->
                                                             <div class="col-6">
                                                                 <h6 class="text-muted text-uppercase fw-semibold mb-3">Section</h6>
-                                                                <p class="fw-medium mb-2" id="shipping-name">Bachillerato</p>
-                                                                <p class="text-muted mb-1"><span>Modalidad: </span><span id="shipping-phone-no">Presencial</span></p>
-                                                                <p class="text-muted mb-1" id="billing-address-line-1">3ERO Bachillerato General Unificado</p>
-                                                                <p class="text-muted mb-1"><span>Sección: </span><span id="shipping-phone-no">3ERO-A</span></p>
+                                                                <input type="text" class="bg-white border-0 fw-medium mb-2" id="infogrupo" disabled />
+                                                                <p class="text-muted mb-1"><span>Nivel: 
+                                                                    <input type="text" class="bg-white border-0" id="infonivel" disabled />
+                                                                </span></p>                                                                
+                                                                <input type="text" class="form-control bg-white border-0" id="infogrado" disabled />
+                                                                <input type="text" class="form-control bg-white border-0" id="infocurso" disabled />
+                                                                
+                                                                
                                                             </div>
                                                             <!--end col-->
                                                         </div>

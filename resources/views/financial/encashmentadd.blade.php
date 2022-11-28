@@ -28,6 +28,10 @@
 
     <script>
         
+        window.addEventListener('show-message', event => {
+            $('#messageModal').modal('show');
+        })
+        
         window.addEventListener('save-det', event => {
 
             var count=0;

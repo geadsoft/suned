@@ -168,6 +168,7 @@ function chkpago() {
 		var deuda_desct  = element.querySelector("#desc-"+lineadeuda).value;
 		var deuda_saldo = element.querySelector("#saldo-"+lineadeuda).value;
 		var deuda_select = element.querySelector("#chkpago-"+lineadeuda).checked;
+		var valor_pago = parseFloat(deuda_saldo)-parseFloat(deuda_desct);
 		
 		var deuda_id = element.querySelector("#id-"+lineadeuda).value;
 		var deuda_detalle = element.querySelector("#detalle-"+lineadeuda).value;
@@ -181,6 +182,7 @@ function chkpago() {
 				desct: deuda_desct,
 				detalle: deuda_detalle,
 				saldo: deuda_saldo,
+				valpago: valor_pago,
 			}
 			new_deudas_obj.push(deuda_obj);
 		}
@@ -215,6 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			var deuda_saldo = element.querySelector("#saldo-"+count).value;
 			var deuda_detalle = element.querySelector("#detalle-"+count).value;
 			var deuda_select = element.querySelector("#chkpago-"+count).checked;
+			
 			
 			var deuda_obj = {
 				id: deuda_id,

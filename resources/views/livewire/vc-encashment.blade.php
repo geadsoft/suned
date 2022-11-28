@@ -46,8 +46,8 @@
                                 <div class="d-flex align-items-center flex-wrap gap-2">
                                     <div class="flex-grow-1">
                                         <div>
-                                            <h5 class="mb-1 text-danger">Recibo No. {{$record['documento']}}</h5>
-                                            <p class="text-success mb-4 ">{{$record['concepto']}}</p>
+                                            <h5 class="mb-1 text-danger">Recibo No. {{$documento}}</h5>
+                                            <p class="text-success mb-4 ">{{$concepto}}</p>
                                         </div>
                                     </div>
                                     <div class="flex-shrink-0">
@@ -83,14 +83,14 @@
                                             <div class="mb-3">
                                                 <label for="txtfecha" class="form-label">Date Emisión</label>
                                                 <input type="date" class="form-control border-0" id="txtfecha"
-                                                    placeholder="Enter first name" value="{{date('Y-m-d', strtotime($record->fecha))}}" disabled>
+                                                    placeholder="Enter first name" value="{{$fecha}}" disabled>
                                             </div>
                                         </div>
                                         <div class="">
                                             <div class="mb-3 p-2">
                                                 <label for="cmbperiodo" class="form-label">Identificación</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control border-0" id="billinginfo-firstName" placeholder="Enter ID" value={{$record->estudiante->identificacion}} disabled>
+                                                    <input type="text" class="form-control border-0" id="billinginfo-firstName" placeholder="Enter ID" value="{{$identificacion}}" disabled>
                                                     <a id="btnstudents" class ="input-group-text btn btn-soft-secondary disabled" wire:click="search(1)"><i class="ri-user-search-fill me-1"></i></a>
                                                 </div>
                                             </div>
@@ -99,7 +99,7 @@
                                             <div class="mb-3 p-2">
                                                 <label for="cmbperiodo" class="form-label">Estudents</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control border-0" id="billinginfo-lastName" placeholder="Enter names" value={{$record->estudiante->apellidos." ".$record->estudiante->nombres}} disabled>
+                                                    <input type="text" class="form-control border-0" id="billinginfo-lastName" placeholder="Enter names" value="{{$estudiante}}" disabled>
                                                 </div>
                                             </div>
                                         </div>
@@ -146,43 +146,45 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                @foreach ($tblcobrodet as $cobrodet)
-                                                                <tr>   
-                                                                    <td>
-                                                                        <select type="select" class="form-select-sm border-0" id="cmbtipopago" disabled>
-                                                                        @switch($cobrodet->tipopago)
-                                                                            @case('EFE')
-                                                                            <option value="EFE">Efectivo</option>
-                                                                            @case('CHQ')
-                                                                            <option value="CHQ">Cheque</option>
-                                                                            @case('TCR')
-                                                                            <option value="TCR">Tarjeta</option>
-                                                                            @case('DEP')
-                                                                            <option value="DEP">Depósito</option>
-                                                                            @case('TRA')
-                                                                            <option value="TRA">Transferencia</option>
-                                                                            @case('CON')
-                                                                            <option value="CON">Convenio</option>
-                                                                        @endswitch
-                                                                        </select>
-                                                                    </td> 
-                                                                    <td>
-                                                                        <select type="select" class="form-select-sm border-0" disabled>
-                                                                            <option value="{{$cobrodet->entidadId}}">{{$cobrodet->entidad->descripcion}}</option>
-                                                                        </select>
-                                                                    </td>
-                                                                    <td class="text-end">
-                                                                        <input type="number" class="form-control-sm product-price bg-light border-0 text-end" id="desc" step="0.01" 
-                                                                        placeholder="0.00" value="{{$cobrodet->numero}}" disabled/>
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="text" class="form-control-sm bg-light border-0 text-end" value="{{$cobrodet->referencia}}" disabled/>
-                                                                    </td> 
-                                                                    <td>
-                                                                        <input type="text" class="form-control-sm bg-light border-0 text-end" value="{{number_format($cobrodet->valor,2)}}" disabled/>
-                                                                    </td>
-                                                                </tr>
-                                                                @endforeach
+                                                                @if(!is_null($tblcobrodet))
+                                                                    @foreach ($tblcobrodet as $cobrodet)
+                                                                    <tr>   
+                                                                        <td>
+                                                                            <select type="select" class="form-select-sm border-0" id="cmbtipopago" disabled>
+                                                                            @switch($cobrodet->tipopago)
+                                                                                @case('EFE')
+                                                                                <option value="EFE">Efectivo</option>
+                                                                                @case('CHQ')
+                                                                                <option value="CHQ">Cheque</option>
+                                                                                @case('TCR')
+                                                                                <option value="TCR">Tarjeta</option>
+                                                                                @case('DEP')
+                                                                                <option value="DEP">Depósito</option>
+                                                                                @case('TRA')
+                                                                                <option value="TRA">Transferencia</option>
+                                                                                @case('CON')
+                                                                                <option value="CON">Convenio</option>
+                                                                            @endswitch
+                                                                            </select>
+                                                                        </td> 
+                                                                        <td>
+                                                                            <select type="select" class="form-select-sm border-0" disabled>
+                                                                                <option value="{{$cobrodet->entidadId}}">{{$cobrodet->entidad->descripcion}}</option>
+                                                                            </select>
+                                                                        </td>
+                                                                        <td class="text-end">
+                                                                            <input type="number" class="form-control-sm product-price bg-light border-0 text-end" id="desc" step="0.01" 
+                                                                            placeholder="0.00" value="{{$cobrodet->numero}}" disabled/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" class="form-control-sm bg-light border-0 text-end" value="{{$cobrodet->referencia}}" disabled/>
+                                                                        </td> 
+                                                                        <td>
+                                                                            <input type="text" class="form-control-sm bg-light border-0 text-end" value="{{number_format($cobrodet->valor,2)}}" disabled/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                                 @endif
                                                                 </tbody>    
                                                             </table>
                                                             <br>
@@ -343,31 +345,33 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($tbldeudas as $record)  
-                                <tr class="deudas">
-                                    <th scope="row">
-                                        <div class="form-check form-check-success">
-                                            <input class="form-check-input" type="checkbox" id="chkpago" checked>
-                                        </div>
-                                    </th>
-                                    <td class="text-dark">{{$record->deudacab->referencia}}</td>
-                                    <td class="text-end">
-                                        <input type="number" class="form-control product-price bg-white border-0 text-end" id="saldo" step="0.01" 
-                                            placeholder="0.00" value="{{number_format($record->deudacab->saldo+$record->valor,2)}}" readonly/>
-                                    </td>
-                                    <td class="text-end">
-                                        <input type="number" class="form-control product-price bg-light border-0 text-end" id="desc" step="0.01" 
-                                        placeholder="0.00" value="{{number_format($record->deudacab->descuento,2)}}" />
-                                    </td>
-                                    <td class="text-end">
-                                        <input type="number" class="form-control product-price bg-white border-0 text-end" id="saldo" step="0.01" 
-                                            placeholder="0.00" value="{{number_format($record->valor,2)}}" readonly/>
-                                    </td>
-                                </tr>
-                                <script>
-                                    $this->subtotal += $record->deudacab->saldo+$record->valor
-                                </script>
-                                @endforeach
+                                @if(!is_null($tbldeudas))
+                                    @foreach ($tbldeudas as $record)  
+                                    <tr class="deudas">
+                                        <th scope="row">
+                                            <div class="form-check form-check-success">
+                                                <input class="form-check-input" type="checkbox" id="chkpago" checked>
+                                            </div>
+                                        </th>
+                                        <td class="text-dark">{{$record->deudacab->referencia}}</td>
+                                        <td class="text-end">
+                                            <input type="number" class="form-control product-price bg-white border-0 text-end" id="saldo" step="0.01" 
+                                                placeholder="0.00" value="{{number_format($record->deudacab->saldo+$record->valor+$record->deudacab->descuento,2)}}" readonly/>
+                                        </td>
+                                        <td class="text-end">
+                                            <input type="number" class="form-control product-price bg-light border-0 text-end" id="desc" step="0.01" 
+                                            placeholder="0.00" value="{{number_format($record->deudacab->descuento,2)}}" />
+                                        </td>
+                                        <td class="text-end">
+                                            <input type="number" class="form-control product-price bg-white border-0 text-end" id="saldo" step="0.01" 
+                                                placeholder="0.00" value="{{number_format($record->valor,2)}}" readonly/>
+                                        </td>
+                                    </tr>
+                                    <script>
+                                        $this->subtotal += $record->deudacab->saldo+$record->valor
+                                    </script>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                         <hr/>

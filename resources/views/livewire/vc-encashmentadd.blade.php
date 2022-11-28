@@ -3,7 +3,11 @@
         <div class="col-xl-7">
             <div class="card">
                 <div class="card-body checkout-tab">
+                    @foreach($errors->all() as $error)
+                        {{$error}}
+                    @endforeach
                     <form autocomplete="off" wire:submit.prevent="{{ 'createData' }}" id="encashment_form">
+                        @csrf
                         <div class="step-arrow-nav mt-n3 mx-n3 mb-3">
 
                             <ul class="nav nav-pills nav-justified custom-nav" id="tabencashment" role="tablist">
@@ -84,7 +88,7 @@
                                                 <label for="cmbperiodo" class="form-label">Periodo Lectivo</label>
                                                 <select type="select" class="form-select" data-trigger name="cmbnivel" wire:model="periodo">
                                                     @foreach ($tblperiodos as $periodo) 
-                                                    <option value="{{$periodo->id}}">{{$periodo->periodo}}</option>
+                                                    <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
                                                     @endforeach 
                                                 </select>
                                             </div>
@@ -103,14 +107,14 @@
                                                 <!--<input type="text" class="form-control" id="billinginfo-firstName"
                                                     placeholder="Enter Identification" value="">-->
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="billinginfo-firstName" placeholder="Enter ID" wire:model="idbuscar">
+                                                    <input type="text" class="form-control" name="identidad" id="billinginfo-firstName" placeholder="Enter ID" wire:model="idbuscar" required>
                                                     <a id="btnstudents" class ="input-group-text btn btn-soft-secondary" wire:click="search(1)"><i class="ri-user-search-fill me-1"></i></a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-8">
                                             <div class="mb-3">
-                                                <input type="text" class="form-control" id="billinginfo-lastName" placeholder="Enter names" wire:model="nombre">
+                                                <input type="text" class="form-control" name="name" id="billinginfo-lastName" placeholder="Enter names" wire:model="nombre">
                                             </div>
                                         </div>
                                         
@@ -122,8 +126,8 @@
                                                 
                                                     <label class="form-check-label" for="shippingAddress01">
                                                     <span class="fw-semibold  text-muted text-uppercase">Tuition</span>
-                                                    <span class="fs-15  d-block">Modalidad: Presencial</span>
-                                                    <span class="text-muted fw-normal text-wrap mb-1 d-block">Segundo Bach. C</span>
+                                                    <span class="fs-15  d-block">Modalidad: {{$grupo}}</span>
+                                                    <span class="text-muted fw-normal text-wrap mb-1 d-block">{{$curso}}</span>
                                                     <span class="text-muted fw-normal d-block">PAGO MATRICULA Y MAYO EN OTRO COLEGIO ACEPTADO POR MR ANDRES MATRICULAR SIN PAGO DE MAYO
                                                     </span>
                                                 </label>
@@ -427,25 +431,31 @@
     </div>
     <!-- end row -->
 
-    <!-- removeItemModal -->
-    <div id="removeItemModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+    <div wire.ignore.self id="messageModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-confirm modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mt-2 text-center">
-                        <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
-                            colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
+                        
+                        <!--<lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                            colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>-->
+                        
+                        <lord-icon
+                            src="https://cdn.lordicon.com/dnmvmpfk.json"
+                            trigger="loop"
+                            colors="primary:#f7b84b,secondary:#f06548"
+                            style="width:100px;height:100px">
+                        </lord-icon>
                         <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                            <h4>Are you sure ?</h4>
-                            <p class="text-muted mx-4 mb-0">Are you sure you want to remove this Address ?</p>
+                            <h4>Record not found</h4>
+                            <p class="text-muted mx-4 mb-0">Verify the data entered.</p>
                         </div>
                     </div>
                     <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
-                        <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn w-sm btn-danger ">Yes, Delete It!</button>
+                        <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">OK</button>
                     </div>
                 </div>
 

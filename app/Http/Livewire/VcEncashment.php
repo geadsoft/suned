@@ -14,12 +14,13 @@ class VcEncashment extends Component
 {
     public $selectId;
     public $fila=1;
-    public $documento;
     public $record;
     public $persona;
     public $idbuscar="";
     public $nombre="";
     public $selectpago = false;
+
+    public $documento, $concepto, $fecha, $identificacion, $estudiante, $grupo, $grado, $comentario;
 
     public $subtotal = 0;
     public $descuento = 0;
@@ -30,14 +31,19 @@ class VcEncashment extends Component
     { 
         
         $this->record  = TrCobrosCabs::orderBy('id', 'desc')->first();
-        if ($this->record['id']==null){
+        if ($this->record==null){
             $this->selectId = 0;
         }else{
             $this->selectId = $this->record['id'];
+            $this->loadData();
         }      
 
         $tblcobrodet = TrCobrosDets::where('cobrocab_id',$this->selectId)->get();
-        $tbldeudas   = TrDeudasDets::where('cobro_id',$this->selectId)->get();
+        $tbldeudas   = TrDeudasDets::where([
+            ['cobro_id',$this->selectId],
+            ['tipovalor',"CR"],
+            ['tipo',"PAG"],
+        ])->get();
         $tblperiodos = TmPeriodosLectivos::all();
         
         $this->calculatotal($tbldeudas);
@@ -49,6 +55,16 @@ class VcEncashment extends Component
 
         ]);
         
+    }
+
+    public function loadData(){
+
+        $this->fecha = date('Y-m-d',strtotime($this->record['fecha']));
+        $this->documento =  $this->record['documento'];
+        $this->concepto = $this->record['concepto'];
+        $this->identificacion = $this->record->estudiante->identificacion;
+        $this->estudiante = $this->record->estudiante->apellidos." ".$this->record->estudiante->nombres;
+
     }
 
     public function calculatotal($tblDeuda){

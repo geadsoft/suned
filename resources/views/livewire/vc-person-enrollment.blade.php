@@ -85,8 +85,10 @@
                 <div class="mb-3">
                     <label for="pernacionalidad" class="form-label">Nationality</label>
                     <select class="form-select" data-choices data-choices-search-false id="pernacionalidad" wire:model.defer="nacionalidad" require {{$eControl}}>
-                        <option value="1">Ecuatoriana</option>
-                        <option value="2">Venezolana</option>
+                        <option value="">Select Nationality</option>
+                        @foreach ($tblgenerals as $general)
+                            <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -118,13 +120,13 @@
 
     </div>
     <div class="row">
-        <div class="card-header">
+        <!--<div class="card-header">
             <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
                 class="mdi mdi-phone-sync align-middle me-1 text-success"></i>
                 Contact Details</h5>
-        </div>
+        </div>-->
         <div class="card-body row">
-            <div class="col-lg-12">
+            <div class="col-lg-6">
                 <div class="mb-3">
                     <label for="peremail" class="form-label">Email
                         Address</label>
@@ -132,10 +134,17 @@
                         placeholder="Enter your email" wire:model.defer="email" required {{$eControl}}>
                 </div>
             </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label class="label" for="perdireccion">Address</label>
+                    <input type="text" class="form-control" id="perdireccion"
+                        placeholder="Enter your adress" wire:model.defer="direccion" required {{$eControl}}>
+                </div>
+            </div>
         </div>
     </div>
     <!--Residencia-->
-    <div class="row">
+    <!--<div class="row">
         <div class="card-header">
         <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
                 class="mdi mdi-map-marker-radius-outline align-middle me-1 text-success"></i>
@@ -152,5 +161,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 </div>

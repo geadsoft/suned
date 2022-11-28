@@ -15,6 +15,35 @@ function selecTab(SelectTab) {
             break
         case 'pills-bill-finish':
             document.getElementById('pills-bill-finish-tab').click()
+
+            var pernombres   =  document.getElementById("pernombres").value
+            var perapellidos =  document.getElementById("perapellidos").value
+            var pertelefono  = document.getElementById("pertelefono").value
+            var perrelacion  = document.getElementById("perrelacion")
+            var perdireccion = document.getElementById("perdireccion").value
+
+            var textrel = perrelacion.options[perrelacion.selectedIndex].text;
+
+            var cmbgrupo = document.getElementById("cmbgrupoId")
+            var cmbnivel = document.getElementById("cmbnivelId")
+            var cmbgrado = document.getElementById("cmbgradoId")
+            var cmbcurso = document.getElementById("cmbcursoId")
+
+            var textgrupo = cmbgrupo.options[cmbgrupo.selectedIndex].text;
+            var textnivel = cmbnivel.options[cmbnivel.selectedIndex].text;
+            var textgrado = cmbgrado.options[cmbgrado.selectedIndex].text;
+            var textcurso = cmbcurso.options[cmbcurso.selectedIndex].text;
+
+            document.getElementById("infoname").value = pernombres + ' '+ perapellidos
+            document.getElementById("inforelacion").value = textrel
+            document.getElementById("infotelefono").value = pertelefono
+            document.getElementById("infodireccion").value = perdireccion
+
+            document.getElementById("infogrupo").value = textgrupo
+            document.getElementById("infonivel").value = textnivel
+            document.getElementById("infogrado").value = textgrado
+            document.getElementById("infocurso").value = "Curso/Paralelo: "+textcurso
+            
             break
     }
 
