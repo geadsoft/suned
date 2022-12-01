@@ -28,6 +28,7 @@
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
+                                        <option value="">Select Group</option>
                                         @foreach ($tblgenerals as $general)
                                             @if ($general->superior == 1)
                                             <option value="{{$general->id}}">{{$general->descripcion}}</option>
@@ -39,6 +40,7 @@
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" name="cmbnivel" wire:model="filters.srv_periodo">
+                                        <option value="">Select Period</option>
                                         @foreach ($tblperiodos as $periodo)
                                             <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
                                         @endforeach
@@ -86,7 +88,7 @@
                                         <td>{{$record->apellidos}} {{$record->nombres}}</td> 
                                         <td>{{$record->documento}}</td> 
                                         <td> {{date('d/m/Y',strtotime($record->fecha))}}</td> 
-                                        <td>{{$record->nomgrupo}}</td> 
+                                        <td>{{$record->nomgrupo}}</td>
                                         <td>{{$record->nomgrado}}</td>
                                         <td>{{$record->paralelo}}</td>
                                         <td>
