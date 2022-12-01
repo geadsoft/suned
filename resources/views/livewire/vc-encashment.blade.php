@@ -61,7 +61,8 @@
                                                     <li><a class="dropdown-item" href="apps-ecommerce-add-product.html"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Void/Retrieve Receipt</a></li>
                                                     <li><a class="dropdown-item" href="apps-ecommerce-product-details.html"><i class="ri-eye-fill align-bottom me-2 text-muted"></i> See invoice </a></li>
                                                     <li class="dropdown-divider"></li>
-                                                    <li><a class="dropdown-item remove-list" href="" data-bs-toggle="modal" data-bs-target="#removeItemModal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li></ul>
+                                                    <li><a class="dropdown-item remove-list" href="" data-bs-toggle="modal" data-bs-target="#removeItemModal">
+                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li></ul>
                                             </div>
                                             <div class="mb-3 p-2">
                                                 <a class="btn btn-info add-btn btn-sm" href="/financial/encashment-add"><i class="ri-add-fill me-1 align-bottom"></i> New Record</a>

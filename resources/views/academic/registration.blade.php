@@ -16,7 +16,7 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-student-enrollment')
+    @livewire('vc-student-enrollment',['tuition_id' => $id])
 
 @endsection
 @section('script')

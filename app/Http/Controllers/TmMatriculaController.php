@@ -14,8 +14,19 @@ class TmMatriculaController extends Controller
      */
     public function index()
     {
-        return view('academic/registration');
+        return view('academic/tuition');
     }
+
+    public function addtuition($identificacion)
+    {
+        return view('academic/registration',['id' => $identificacion]);
+    }
+
+    public function newtuition()
+    {
+        return view('academic/registration',['id' => ""]);
+    }
+
 
     /**
      * Show the form for creating a new resource.

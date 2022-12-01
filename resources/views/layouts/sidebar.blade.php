@@ -83,7 +83,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/academic/student-enrollment">
+                    <a class="nav-link menu-link" href="/academic/tuition">
                         <i class="las la-address-card"></i> <span>@lang('translation.tuition')</span>
                     </a>
                 </li>

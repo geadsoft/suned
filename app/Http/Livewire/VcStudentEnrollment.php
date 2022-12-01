@@ -42,6 +42,17 @@ class VcStudentEnrollment extends Component
     public $sede;
     protected $listeners = ['postAdded'];
 
+    public function mount($tuition_id){
+        
+        if ($tuition_id!=""){
+            $this->search_nui = $tuition_id;
+            $this->searchPerson(2);  
+        }else{
+            $this->chkoptnui="no";
+        }
+
+      }
+
     public function render()
     {
         
@@ -308,6 +319,8 @@ class VcStudentEnrollment extends Component
         $pLectivo->update([
             'num_matricula' => $nummatricula,
         ]);
+
+        return redirect()->to('/financial/tuition');
         
     }
 

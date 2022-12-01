@@ -9,16 +9,16 @@
 
                             <ul class="nav nav-pills nav-justified custom-nav nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link fs-15 p-3 active" id="pills-bill-info-tab" data-bs-toggle="pill"
+                                    <button class="nav-link fs-15 p-3" id="pills-bill-info-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-info" type="button" role="tab"
-                                        aria-controls="pills-bill-info" aria-selected="true"><i
+                                        aria-controls="pills-bill-info" aria-selected="false"><i
                                             class=" ri-open-source-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
                                             Student ID</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link fs-15 p-3" id="pills-bill-student-tab" data-bs-toggle="pill"
+                                    <button class="nav-link fs-15 p-3 active" id="pills-bill-student-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-students" type="button" role="tab"
-                                        aria-controls="pills-bill-students" aria-selected="false"><i
+                                        aria-controls="pills-bill-students" aria-selected="true"><i
                                             class="ri-user-2-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
                                             Student</button>
                                 </li>
@@ -46,7 +46,7 @@
                         </div>
 
                         <div class="tab-content">
-                            <div class="tab-pane fade show active" id="pills-bill-info" role="tabpanel"
+                            <div class="tab-pane fade" id="pills-bill-info" role="tabpanel"
                                 aria-labelledby="pills-bill-info-tab">
                                 <div class="mb-3">
                                     <br>
@@ -107,7 +107,7 @@
                             </div>
                             <!-- end tab pane -->
 
-                            <div class="tab-pane fade" id="pills-bill-students" role="tabpanel"
+                            <div class="tab-pane fade show active" id="pills-bill-students" role="tabpanel"
                                 aria-labelledby="pills-bill-address-tab">
                                 <div>
                                     <br>
@@ -230,7 +230,7 @@
                                             <div class="mb-3">
                                                 <label for="txtdiscapacidad" class="form-label">Disability</label>
                                                 <input type="email" class="form-control" id="txtdiscapacidad"
-                                                    placeholder="Enter your email" wire:model.defer="" {{$eControl}}>
+                                                    placeholder="Enter Disability" wire:model.defer="" {{$eControl}}>
                                             </div>
                                         </div>
 
@@ -507,7 +507,7 @@
                                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
                                                             <a href="javascript:window.print()" class="btn btn-danger"><i class="ri-printer-line align-bottom me-1"></i> Print</a>
                                                             <!--<a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download</a>-->
-                                                            <button type="submit" class="btn btn-success"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
+                                                            <button type="submit" class="btn btn-success"><i class="ri-printer-line align-bottom me-1"></i> Save Tuition</button>
                                                         </div>
                                                     </div>
                                                 </div>        
