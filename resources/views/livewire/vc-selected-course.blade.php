@@ -32,7 +32,7 @@
         <option value="">Select Course</option>
         @if(!is_null($tblservicios))
         @foreach ($tblservicios as $servicio)
-            <option value="{{$servicio->grado_id}}">{{$servicio->descripcion}}</option>
+            <option value="{{$servicio->id}}">{{$servicio->descripcion}}</option>
         @endforeach
         @endif
         </select>

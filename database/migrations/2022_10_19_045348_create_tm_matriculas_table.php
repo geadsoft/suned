@@ -24,7 +24,7 @@ return new class extends Migration
             $table->bigInteger('modalidad_id')->unsigned();
             $table->foreign('modalidad_id')->references('id')->on('tm_generalidades');
             $table->bigInteger('grado_id')->unsigned();
-            $table->foreign('grado_id')->references('id')->on('tm_generalidades');
+            $table->foreign('grado_id')->references('id')->on('tm_servicios');
             $table->bigInteger('periodo_id')->unsigned();
             $table->foreign('periodo_id')->references('id')->on('tm_periodos_lectivos');
             $table->bigInteger('curso_id')->unsigned();
