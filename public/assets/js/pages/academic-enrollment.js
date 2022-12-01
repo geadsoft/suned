@@ -16,12 +16,13 @@ function selecTab(SelectTab) {
         case 'pills-bill-finish':
             document.getElementById('pills-bill-finish-tab').click()
 
-            var pernombres   =  document.getElementById("pernombres").value
-            var perapellidos =  document.getElementById("perapellidos").value
+            var pernombres   = document.getElementById("pernombres").value
+            var perapellidos = document.getElementById("perapellidos").value
             var pertelefono  = document.getElementById("pertelefono").value
             var perrelacion  = document.getElementById("perrelacion")
             var perdireccion = document.getElementById("perdireccion").value
-            var inffullname  = document.getElementById("txtnombres").value + ' ' +  document.getElementById("txtapellidos").value
+            var inffullname1 = document.getElementById("txtnombres").value 
+            var inffullname2 = document.getElementById("txtapellidos").value
             var infnui       = document.getElementById("txtnui").value
             var infdireccion = document.getElementById("txtdireccion").value
 
@@ -37,7 +38,7 @@ function selecTab(SelectTab) {
             var textgrado = cmbgrado.options[cmbgrado.selectedIndex].text;
             var textcurso = cmbcurso.options[cmbcurso.selectedIndex].text;
 
-            document.getElementById("infofullname").value = inffullname
+            document.getElementById("infofullname").value = inffullname1 + ' ' + inffullname2
             document.getElementById("infonui").value = infnui
             document.getElementById("infoaddress").value = infdireccion
             

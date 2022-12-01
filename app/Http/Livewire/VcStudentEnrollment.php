@@ -316,11 +316,12 @@ class VcStudentEnrollment extends Component
         }
 
         /*Actualiza secuencia de matricula*/
+        $pLectivo = TmPeriodosLectivos::find($this -> periodoId);
         $pLectivo->update([
             'num_matricula' => $nummatricula,
         ]);
 
-        return redirect()->to('/financial/tuition');
+        return redirect()->to('/academic/tuition');
         
     }
 

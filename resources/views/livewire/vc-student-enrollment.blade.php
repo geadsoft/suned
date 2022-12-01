@@ -75,7 +75,7 @@
                                                     <input class="form-check-input" type="radio" name="inlineRadioOptions" id="WithoutinlineRadio2" wire:model="">
                                                     <label for="inlineRadioOptions" class="form-label">NO</label>
                                                 </div>
-                                                <input type="number" class="form-control" id="txtnombres" placeholder="Enter your Numers" wire:model="search_nur">
+                                                <input type="number" class="form-control" placeholder="Enter your Numers" wire:model="search_nur">
                                                 <a id="btnstudents" class ="input-group-text btn btn-soft-info" wire:click="searchPerson(1)"><i class="ri-search-line me-1"></i>Search</a>
                                             </div>
                                             <div class="input-group mb-3">
@@ -89,7 +89,7 @@
                                                     <input class="form-check-input" type="radio" id="chkstudent" wire:model="chkoptnui" value="no">
                                                     <label for="inlineRadioOptions" class="form-label">NO</label>
                                                 </div>
-                                                <input type="number" class="form-control" id="txtnombres" placeholder="Enter your Numers" wire:model="search_nui">
+                                                <input type="number" class="form-control" placeholder="Enter your Numers" wire:model="search_nui">
                                                 <a id="btnstudents" class ="input-group-text btn btn-soft-info" wire:click="searchPerson(2)"><i class="ri-search-line me-1"></i>Search</a>
                                             </div>
                                         </div>
