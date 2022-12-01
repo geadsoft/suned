@@ -23,7 +23,7 @@ class VcPension extends Component
     public function render()
     {
         
-        $tblrecords  = TmPensionesCab::paginate(10);
+        $tblrecords  = TmPensionesCab::orderBy("periodo_id","desc")->paginate(10);
         $tblgenerals = TmGeneralidades::all();
         $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         
