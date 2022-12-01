@@ -21,6 +21,9 @@ function selecTab(SelectTab) {
             var pertelefono  = document.getElementById("pertelefono").value
             var perrelacion  = document.getElementById("perrelacion")
             var perdireccion = document.getElementById("perdireccion").value
+            var inffullname  = document.getElementById("txtnombres").value + ' ' +  document.getElementById("txtapellidos").value
+            var infnui       = document.getElementById("txtnui").value
+            var infdireccion = document.getElementById("txtdireccion").value
 
             var textrel = perrelacion.options[perrelacion.selectedIndex].text;
 
@@ -34,6 +37,10 @@ function selecTab(SelectTab) {
             var textgrado = cmbgrado.options[cmbgrado.selectedIndex].text;
             var textcurso = cmbcurso.options[cmbcurso.selectedIndex].text;
 
+            document.getElementById("infofullname").value = inffullname
+            document.getElementById("infonui").value = infnui
+            document.getElementById("infoaddress").value = infdireccion
+            
             document.getElementById("infoname").value = pernombres + ' '+ perapellidos
             document.getElementById("inforelacion").value = textrel
             document.getElementById("infotelefono").value = pertelefono

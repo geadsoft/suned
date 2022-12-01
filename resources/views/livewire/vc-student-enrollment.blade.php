@@ -152,7 +152,7 @@
                                             <div class="mb-3">
                                                 <label for="txtidentificacion" class="form-label">
                                                 Identification</label>
-                                                <input type="text" class="form-control" id="txtidentificacion"
+                                                <input type="text" class="form-control" id="txtnui"
                                                     placeholder="Enter your firstname" wire:model.defer="identificacion" required {{$eControl}}>
                                             </div>
                                         </div>
@@ -447,12 +447,12 @@
                                                             <!--end col-->
                                                             <div class="col-lg-3 col-6">
                                                                 <p class="text-muted mb-2 text-uppercase fw-semibold">full name</p>
-                                                                <span class="fs-14 mb-0" id="payment-status">{{$nombrecompleto}}</span>
+                                                                <input class="bg-white border-0 fs-14 mb-0" id="infofullname" />
                                                             </div>
                                                             <!--end col-->
                                                             <div class="col-lg-3 col-6">
                                                                 <p class="text-muted mb-2 text-uppercase fw-semibold">NUI</p>
-                                                                <h5 class="fs-14 mb-0"><span id="total-amount">{{$identificacion}}</span></h5>
+                                                                <h5 class="fs-14 mb-0"><input class="bg-white border-0 fs-14 mb-0" id="infonui" /></h5>
                                                             </div>
                                                             <!--end col-->
                                                             <div class="col-lg-3 col-6">
@@ -464,7 +464,7 @@
                                                         <div class="row g-3">
                                                             <div class="col-lg-3 col-6 mb-3">
                                                                 <p class="text-muted mb-2 text-uppercase fw-semibold">Home Address</p>
-                                                                <h5 class="fs-14 mb-0"><span id="invoice-date">{{$direccion}}</span></h5>
+                                                                <h5 class="fs-14 mb-0"><input class="bg-white border-0 fs-14 mb-0" id="infoaddress" /></h5>
                                                             </div>
                                                         </div>
                                                         <!--end row-->

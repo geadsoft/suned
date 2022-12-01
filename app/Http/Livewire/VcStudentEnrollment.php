@@ -113,7 +113,7 @@ class VcStudentEnrollment extends Component
 
     public function createData(){
 
-        if ($this->$nombres=="" || $this->$apellidos==""){
+        if ($this->nombres=="" || $this->apellidos==""){
             return;
         }
                
