@@ -57,4 +57,8 @@ class VcTuitions extends Component
     public function paginationView(){
         return 'vendor.livewire.bootstrap'; 
     }
+
+        
 }
+
+

@@ -6,11 +6,8 @@
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1">Registration of Enrollments</h5>
                         <div class="flex-shrink-0">
-                            <!--<button type="button" wire:click="/academic/student-enrollment" class="btn btn-success add-btn" id="create-btn"
-                                data-bs-target=""><i class="ri-add-line align-bottom me-1"></i> Add Tuition
-                            </button>-->
                             <a class="btn btn-success add-btn" href="/academic/student-enrollment"><i
-                                    class="ri-add-line me-1 align-bottom"></i> Add Tuition</a> 
+                            class="ri-add-line me-1 align-bottom"></i> Add Tuition</a>
                         </div>
                     </div>
                 </div>

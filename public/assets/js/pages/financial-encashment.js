@@ -237,6 +237,15 @@ document.addEventListener("DOMContentLoaded", function () {
 });	
 
 
+var modal = $('#searchModal');
+
+$('#btnAdd').click(function(){
+	modal.show();
+});
+
+    
+
+
 
 
 

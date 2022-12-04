@@ -30,7 +30,7 @@ class VcEncashmentadd extends Component
     public $valpago   = 0;
     public $despago   = 0;
     
-    protected $listeners = ['postAdded'];
+    protected $listeners = ['postAdded','setCedula'];
 
 
     public function render()
@@ -191,6 +191,11 @@ class VcEncashmentadd extends Component
         return redirect()->to('/financial/encashment');
     }
 
+    public function setCedula($data){
+        
+        $this->idbuscar = $data;
+        $this->search(1);
+    }
     
     public function search($tipo){
 
@@ -213,9 +218,11 @@ class VcEncashmentadd extends Component
                     ])
                 ->select('tm_generalidades.descripcion AS nomGrupo', 'tm_servicios.descripcion AS nomGrado', 'tm_cursos.paralelo')
                 ->first();
-
-                $this->grupo = $matricula['nomGrupo'];
-                $this->curso = $matricula['nomGrado']." - ".$matricula['paralelo'];
+                    
+                if($matricula!=null){
+                    $this->grupo = $matricula['nomGrupo'];
+                    $this->curso = $matricula['nomGrado']." - ".$matricula['paralelo'];
+                }
                                                 
                 $this->emitTo('vc-encashment-debts','deudas',$this->persona['id']);
 

@@ -31,6 +31,12 @@
     <script src="{{ URL::asset('assets/js/pages/financial-encashment.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
     
+    <script>
+         window.addEventListener('search-form', event => {
+            $('#searchModal').modal('show');
+        })
+    </script>
+
     
     
 @endsection

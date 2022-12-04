@@ -30,6 +30,7 @@ Route::get('/financial/encashment',[App\Http\Controllers\TrCobrosCabsController:
 Route::get('/financial/encashment-add',[App\Http\Controllers\TrCobrosCabsController::class, 'addencashment'])->name('addescashment');
 Route::get('/financial/create-invoice',[App\Http\Controllers\TrFacturasCabsController::class, 'index'])->name('index');
 
+
 Auth::routes();
 //Language Translation
 Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);

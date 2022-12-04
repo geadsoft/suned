@@ -66,6 +66,7 @@
                                             </div>
                                             <div class="mb-3 p-2">
                                                 <a class="btn btn-info add-btn btn-sm" href="/financial/encashment-add"><i class="ri-add-fill me-1 align-bottom"></i> New Record</a>
+                                                <!--<button class="btn btn-info add-btn btn-sm" wire:click="add()">New Record</button>-->
                                             </div>    
                                         </div>
                                     </div>
@@ -423,6 +424,8 @@
         <!-- end col -->
     </div>
     <!-- end row -->
+
+     @livewire('search-dropdow')  
 
     <!-- removeItemModal -->
     <div id="removeItemModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">

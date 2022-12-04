@@ -8,6 +8,10 @@
                     @endforeach
                     <form autocomplete="off" wire:submit.prevent="{{ 'createData' }}" id="encashment_form">
                         @csrf
+                        <div class="row mb-3">
+                            @livewire('student-search-bar')
+                        </div>
+                        <br>
                         <div class="step-arrow-nav mt-n3 mx-n3 mb-3">
 
                             <ul class="nav nav-pills nav-justified custom-nav" id="tabencashment" role="tablist">
@@ -104,8 +108,6 @@
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="mb-3">
-                                                <!--<input type="text" class="form-control" id="billinginfo-firstName"
-                                                    placeholder="Enter Identification" value="">-->
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" name="identidad" id="billinginfo-firstName" placeholder="Enter ID" wire:model="idbuscar" required>
                                                     <a id="btnstudents" class ="input-group-text btn btn-soft-secondary" wire:click="search(1)"><i class="ri-user-search-fill me-1"></i></a>
@@ -119,7 +121,6 @@
                                         </div>
                                         
                                     </div>
-
                                     <div class="row gy-3">
                                         <div class="col-lg-12 col-sm-6">
                                             <div class="form-check card-radio">
