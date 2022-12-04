@@ -1,6 +1,6 @@
 <div class="relative">
 
-    <input
+    <input autofocus 
         type="text"
         class="form-control"
         placeholder="Search Students..."
@@ -20,7 +20,7 @@
             @if(!empty($students))
 
                 @foreach ($students as $i => $student)
-                    <a href="#" wire:click="selectStudent" class="list-item {{ $highlightIndex === $i ? 'highlight' : '' }}"
+                    <a href="#" wire:click="selectStudent" class="list-item {{ $highlightIndex === $i ? 'highlight bg-soft-primary' : '' }}"
                     >{{ $student['apellidos'] }} {{ $student['nombres'] }} </a>
                 @endforeach
                 
