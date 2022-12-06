@@ -293,7 +293,7 @@ class VcStudentEnrollment extends Component
                 'debito' => $valorPension,
                 'credito' =>0.00,
                 'saldo' => $valorPension,
-                'glosa' => 'Matricula Periodo '.$nomperiodo,
+                'glosa' => 'Pensión Cuota '.strval($i).' '.$nomperiodo,
                 'estado' => 'P',
                 'usuario' => auth()->user()->name,
             ]);

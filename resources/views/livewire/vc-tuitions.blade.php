@@ -44,6 +44,12 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-xxl-2 col-sm-4">
+                                 <select class="form-select" name="cmbdato" wire:model="filterdata">
+                                    <option value="M">Tuition</option>
+                                    <option value="E">Student</option>
+                                </select>
+                            </div>
                             <!--end col-->
                             <div class="col-xxl-1 col-sm-4">
                                 <div>
@@ -69,11 +75,13 @@
                                     <tr class="text-uppercase">
                                         <th class="sort" data-sort="id"> Identification</th>
                                         <th class="sort" data-sort="description">Nombres</th>
-                                        <th class="sort" data-sort="modality">Document</th>
-                                        <th class="sort" data-sort="level">Date Incripction</th>
-                                        <th class="sort" data-sort="degree">Group</th>
-                                        <th class="sort" data-sort="">Course</th>
-                                        <th class="sort" data-sort="">Paralel</th>
+                                        @if ($filterdata=='M')
+                                            <th class="sort" data-sort="modality">Document</th>
+                                            <th class="sort" data-sort="level">Date Incripction</th>
+                                            <th class="sort" data-sort="degree">Group</th>
+                                            <th class="sort" data-sort="">Course</th>
+                                            <th class="sort" data-sort="">Paralel</th>
+                                        @endif
                                         <th class="sort" data-sort="">Action</th>
                                         
                                     </tr>
@@ -83,11 +91,13 @@
                                     <tr>
                                         <td>{{$record->identificacion}}</td>
                                         <td>{{$record->apellidos}} {{$record->nombres}}</td> 
+                                         @if ($filterdata=='M')
                                         <td>{{$record->documento}}</td> 
                                         <td> {{date('d/m/Y',strtotime($record->fecha))}}</td> 
                                         <td>{{$record->nomgrupo}}</td>
                                         <td>{{$record->nomgrado}}</td>
                                         <td>{{$record->paralelo}}</td>
+                                        @endif
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">

@@ -76,8 +76,8 @@
                 <div class="mb-3">
                     <label for="pergenero" class="form-label">Gender</label>
                     <select class="form-select" data-choices data-choices-search-false id="pergenero" wire:model.defer="genero" required {{$eControl}}>
-                        <option value="H">Male</option>
-                        <option value="M">Female</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
                     </select>
                 </div>
             </div>
