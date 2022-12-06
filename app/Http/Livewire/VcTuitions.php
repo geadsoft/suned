@@ -51,7 +51,8 @@ class VcTuitions extends Component
             
             $tblrecords = TmPersonas::query()
             ->when($this->filters['srv_nombre'],function($query){
-                return $query->where('tm_personas.nombres','LIKE','%'."{$this->filters['srv_nombre']}".'%')
+                return $query->where('tm_personas.tipopersona','=','E')
+                            ->where('tm_personas.nombres','LIKE','%'."{$this->filters['srv_nombre']}".'%')
                             ->orWhere('tm_personas.apellidos','LIKE','%'."{$this->filters['srv_nombre']}".'%');
             })
             ->select('identificacion','nombres','apellidos')
