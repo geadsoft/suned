@@ -24,7 +24,7 @@ class VcEncashmentadd extends Component
     public $fecha;
     public $secuencia=0;
     public $tblCobro;
-    public $estudiante_id=0, $grupo, $curso, $concepto;
+    public $estudiante_id=0, $grupo, $curso, $concepto, $comentario;
 
     public $totalPago = 0;
     public $valpago   = 0;
@@ -39,6 +39,7 @@ class VcEncashmentadd extends Component
         $record  = TrCobrosCabs::find(0);
         $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         $tblentidads = TmGeneralidades::where('superior',6)->get();
+        $tbltarjetas = TmGeneralidades::where('superior',8)->get();
                 
         $periodoActual = TmPeriodosLectivos::orderBy("periodo","desc")->first();        
         $this->periodo = $periodoActual['id'];
@@ -49,6 +50,7 @@ class VcEncashmentadd extends Component
             'record' => $record,
             'tblperiodos' => $tblperiodos,
             'tblentidads' => $tblentidads,
+            'tbltarjetas' => $tbltarjetas,
         ]);
         
     }
@@ -129,7 +131,7 @@ class VcEncashmentadd extends Component
             'cobrocab_id' =>  $this->selectId,  
             'tipopago' => $pago['tipopago'],
             'entidad_id' => $pago['entidadid'],
-            'institucion' => "",
+            'referencia' => $pago['referencia'],
             'numero' => $pago['numero'],
             'cuenta' => "",
             'valor' => $pago['valor'],
@@ -216,12 +218,13 @@ class VcEncashmentadd extends Component
                         ['tm_matriculas.estudiante_id',$this->estudiante_id],
                         ['tm_cursos.periodo_id',$this->periodo],
                     ])
-                ->select('tm_generalidades.descripcion AS nomGrupo', 'tm_servicios.descripcion AS nomGrado', 'tm_cursos.paralelo')
+                ->select('tm_generalidades.descripcion AS nomGrupo', 'tm_servicios.descripcion AS nomGrado', 'tm_cursos.paralelo', 'tm_matriculas.comentario')
                 ->first();
                     
                 if($matricula!=null){
                     $this->grupo = $matricula['nomGrupo'];
                     $this->curso = $matricula['nomGrado']." - ".$matricula['paralelo'];
+                    $this->comentario = $matricula['comentario'];
                 }
                                                 
                 $this->emitTo('vc-encashment-debts','deudas',$this->persona['id']);

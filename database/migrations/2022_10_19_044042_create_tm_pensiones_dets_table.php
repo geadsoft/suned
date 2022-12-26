@@ -20,6 +20,7 @@ return new class extends Migration
             $table->bigInteger('nivel_id')->unsigned();
             $table->foreign('nivel_id')->references('id')->on('tm_generalidades');
             $table->double('matricula',14,6);
+            $table->double('matricula2',14,6);
             $table->double('pension',14,6);
             $table->double('plataforma',14,6);
             $table->string('estado',1);

@@ -19,6 +19,7 @@ class TmMatricula extends Model
         'periodo_id',
         'curso_id',
         'representante_id',
+        'comentario',
         'estado',
         'usuario',
     ];

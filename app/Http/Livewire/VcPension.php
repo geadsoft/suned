@@ -19,6 +19,12 @@ class VcPension extends Component
     public $record;
     public $count=1; 
     public array $tblvalores = []; 
+    public $fecha;
+
+    public function mount(){
+        $ldate = date('Y-m-d H:i:s');
+        $this->fecha = date('Y-m-d',strtotime($ldate));
+    }
     
     public function render()
     {
@@ -41,14 +47,13 @@ class VcPension extends Component
 
     public function add(){
 
-        $date = new \DateTime();
         $tblniveles  = TmGeneralidades::where('superior',2)->get();
-                
+
         $this->showEditModal = false;
         $this->reset(['record']);
         $this->reset(['tblvalores']);
         $this->record['descripcion']= "";
-        $this->record['fecha']=  "";
+        $this->record['fecha']= $this->fecha;
         $this->record['periodo_id']= 0;
         $this->record['modalidad_id']= 0;
         $this->record['estado']= "A";
@@ -97,7 +102,8 @@ class VcPension extends Component
         
         $this->showEditModal = true;
         $this->visible = "";
-        $this->record  = $tblrecords->toArray();      
+        $this->record  = $tblrecords->toArray();
+        $this->record['fecha'] = date('Y-m-d',strtotime($this->record['fecha']));
         $this->selectId = $this -> record['id'];
         $this->reset(['tblvalores']);
 
@@ -138,6 +144,7 @@ class VcPension extends Component
 
         $tblData = [];
         $matricula = 0.00;
+        $matricula2 = 0.00;
         $pension = 0.00;
         $plataforma = 0.00;
         
@@ -147,6 +154,7 @@ class VcPension extends Component
                 $id = $general->nivel_id;
                 $nombre = $general->nivel->descripcion;
                 $matricula = $general->matricula;
+                $matricula2 = $general->matricula2;
                 $pension = $general->pension;
                 $plataforma = $general->plataforma;
 
@@ -159,6 +167,7 @@ class VcPension extends Component
                 'nivel_id' => $id,
                 'descripcion' => $nombre,
                 'matricula' => $matricula,
+                'matricula2' => $matricula2,
                 'pension' => $pension,
                 'plataforma'  => $plataforma,
             ];

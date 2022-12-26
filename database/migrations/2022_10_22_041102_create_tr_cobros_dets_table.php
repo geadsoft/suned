@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('tipopago',3);
             $table->bigInteger('entidad_id')->unsigned();
             $table->foreign('entidad_id')->references('id')->on('tm_generalidades');
-            $table->string('institucion',50);
+            $table->string('referencia',100);
             $table->string('numero',15);
             $table->string('cuenta',15);
             $table->double('valor',14,6);

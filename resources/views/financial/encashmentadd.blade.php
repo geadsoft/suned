@@ -31,6 +31,34 @@
         window.addEventListener('show-message', event => {
             $('#messageModal').modal('show');
         })
+
+        $("#cmbtipopago").change(function(){
+            var tipo = document.getElementById('cmbtipopago').value
+
+            document.querySelector('label[name="lblentidad"]').style.display = "none";
+            document.querySelector('select[name="cmbentidad"]').style.display = "none";
+            document.querySelector('select[name="cmbtarjeta"]').style.display = "none";
+
+            switch(tipo) {
+            case 'CHQ':
+                document.querySelector('select[name="cmbentidad"]').style.display = "inline-block";
+                document.querySelector('label[name="lblentidad"]').style.display = "inline-block";
+                break;
+            case 'DEP':
+                document.querySelector('select[name="cmbentidad"]').style.display = "inline-block";
+                document.querySelector('label[name="lblentidad"]').style.display = "inline-block";
+                break;
+            case 'TRA':
+                document.querySelector('select[name="cmbentidad"]').style.display = "inline-block";
+                document.querySelector('label[name="lblentidad"]').style.display = "inline-block";
+                break;
+            case 'TAR':
+                document.querySelector('label[name="lblentidad"]').style.display = "inline-block";
+                document.querySelector('select[name="cmbtarjeta"]').style.display = "inline-block";
+                break;
+            }
+
+        })
         
         window.addEventListener('save-det', event => {
 
@@ -45,6 +73,9 @@
             pagos.forEach(element => {
                 var col_tipopago = element.querySelector("#cmbtipopago-"+count).value;
                 var col_entidad = element.querySelector("#cmbentidad-"+count).value;
+                if (col_tipopago=='TAR'){
+                    var col_entidad = element.querySelector("#cmbtarjeta-"+count).value;
+                }
                 var col_valor = element.querySelector("#txtvalor-"+count).value;
                 var col_referencia = element.querySelector("#txtreferencia-"+count).value;
                                 

@@ -192,7 +192,7 @@
                                                 <label for="txttelefono" class="form-label">Phone
                                                     Number</label>
                                                 <input type="text" class="form-control" id="txttelefono"
-                                                    placeholder="Enter your phone number" wire:model.defer="telefono" required {{$eControl}}>
+                                                    placeholder="Enter your phone number" wire:model.defer="telefono" {{$eControl}}>
                                             </div>
                                         </div>
                                         
@@ -211,7 +211,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4">
+                                        <!--<div class="col-lg-4">
                                             <div class="mb-3">
                                                 <label for="cmbetnia" class="form-label">Do you have a disability?</label>
                                                 <div class="form-control">
@@ -232,7 +232,7 @@
                                                 <input type="email" class="form-control" id="txtdiscapacidad"
                                                     placeholder="Enter Disability" wire:model.defer="" {{$eControl}}>
                                             </div>
-                                        </div>
+                                        </div>-->
 
                                     </div>    
 
@@ -249,7 +249,7 @@
                                                 <label for="txtemail" class="form-label">Email
                                                     Address</label>
                                                 <input type="email" class="form-control" id="txtemail"
-                                                    placeholder="Enter your email" wire:model.defer="email" required {{$eControl}}>
+                                                    placeholder="Enter your email" wire:model.defer="email" {{$eControl}}>
                                             </div>
                                         </div>
                                         <div class="card">
@@ -283,7 +283,7 @@
                                     </div>
                                 </div>
                                 <!--Residencia-->
-                                <div class="row">
+                                <div class="row" style="display:none">
                                     <div class="card-header">
                                         <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
                                             class="mdi mdi-map-marker-radius-outline align-middle me-1 text-success"></i>
@@ -296,7 +296,7 @@
                                             <div class="mb-3">
                                                 <label class="label" for="txtdireccion">Address</label>
                                                 <input type="text" class="form-control" id="txtdireccion"
-                                                    placeholder="Enter your adress" wire:model.defer="direccion" required {{$eControl}}>
+                                                    placeholder="Enter your adress" {{$eControl}}>
                                             </div>
                                         </div>
                                     </div>
@@ -384,13 +384,21 @@
                                                     <div class="mb-3">    
                                                         <label for="cmbseccion" class="form-label mt-2 me-5">Section</label>
                                                     </div>
+                                                    <div class="mb-3">    
+                                                        <label for="txtcomentario" class="form-label mt-2 me-5">Comentario</label>
+                                                    </div>
                                                 </div>
                                                 <div class="col-xl-9">
                                                     <div class="mb-3"> 
                                                         <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha">
                                                     </div> 
-                                                    @livewire('vc-selected-course')                                                       
+                                                    @livewire('vc-selected-course')
+                                                    <div class="mb-3">    
+                                                        <textarea type="text" class="form-control" id="txtcomentario" placeholder="Enter your Comment" wire:model.defer="comentario" {{$eControl}}>
+                                                        </textarea>
+                                                    </div>                                                       
                                                 </div>
+
                                             </div>                                          
                                         </div>
                                         <div class="col-xl-3">

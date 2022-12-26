@@ -22,6 +22,11 @@ class TmPersonasController extends Controller
         return view('academic/personadd');
     }
 
+    public function editperson($identificacion)
+    {
+        return view('academic/personadd',['id' => $identificacion]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

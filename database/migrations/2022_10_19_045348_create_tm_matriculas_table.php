@@ -31,7 +31,8 @@ return new class extends Migration
             $table->foreign('curso_id')->references('id')->on('tm_cursos');
             $table->bigInteger('representante_id')->unsigned();
             $table->foreign('representante_id')->references('id')->on('tm_personas');
-            $table->unique(['estudiante_id','modalidad_id','periodo_id'],'estudiante_periodo_modalidad_unique');
+            $table->string('comentario',255);
+            $table->unique(['estudiante_id','modalidad_id','nivel_id','periodo_id'],'estudiante_periodo_modalidad_nivel_unique');
             $table->string('estado',1);
             $table->string('usuario');
             $table->timestamps();

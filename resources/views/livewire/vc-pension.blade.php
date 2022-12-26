@@ -191,9 +191,17 @@
                                                             <tr class="table-active">
                                                                 <th scope="col" style="width: 65px;">ID</th>
                                                                 <th scope="col">Nivel</th>
-                                                                <th scope="col" class="text-end" style="width: 150px;">Matricula</th>
-                                                                <th scope="col" class="text-end" style="width: 150px;">Pension</th>
-                                                                <th scope="col" class="text-end" style="width: 150px;">Plataforma</th>
+                                                                <th scope="col" class="text-center" colspan="2">Matrícula</th>
+                                                                <th scope="col" class="text-end" style="width: 120px;">Pension</th>
+                                                                <th scope="col" class="text-end" style="width: 120px;">Plataforma</th>
+                                                            </tr>
+                                                            <tr class="table-active">
+                                                                <th scope="col" class="text-end"></th>
+                                                                <th scope="col" class="text-end"></th>
+                                                                <th scope="col" class="text-end" style="width: 120px;">Antiguos</th>
+                                                                <th scope="col" class="text-end" style="width: 120px;">Recientes</th>
+                                                                <th scope="col" class="text-end"></th>
+                                                                <th scope="col" class="text-end"></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -208,6 +216,9 @@
                                                             </td>
                                                             <td> 
                                                                 <input type="number" class="form-control product-price bg-light border-0 text-end" id="matricula-{{$count}}" step="0.01" placeholder="0.00" value="{{$valor['matricula']}}" />
+                                                            </td>
+                                                            <td> 
+                                                                <input type="number" class="form-control product-price bg-light border-0 text-end" id="matricula-{{$count}}" step="0.01" placeholder="0.00" value="{{$valor['matricula2']}}" />
                                                             </td>
                                                             <td> 
                                                                 <input type="number" class="form-control product-price bg-light border-0 text-end" id="pension-{{$count}}" step="0.01" placeholder="0.00" value="{{$valor['pension']}}" />

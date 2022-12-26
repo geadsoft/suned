@@ -13,7 +13,7 @@ class TrCobrosDets extends Model
         'cobrocab_id',
         'tipopago',
         'entidad_id',
-        'institucion',
+        'referencia',
         'numero',
         'cuenta',
         'valor',

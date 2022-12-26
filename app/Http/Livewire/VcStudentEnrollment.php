@@ -10,6 +10,7 @@ use App\Models\TrDeudasCabs;
 use App\Models\TrDeudasDets;
 use App\Models\TmPensionesCab;
 use App\Models\TmPensionesDet;
+use App\Models\TmFamiliarEstudiantes;
 
 use Livewire\Component;
 
@@ -20,10 +21,10 @@ class VcStudentEnrollment extends Component
     public $chkoptnui="si",$eControl="disabled";
 
     public $estudiante_id=0,$persona_id=0;
-    public $codigo, $nombres, $apellidos, $nombrecompleto, $tipoident="C", $identificacion, $genero="H", $fechanace, $nacionalidad=35, $telefono, $etnia="ME";
-    public $tipodiscapacidad, $discapacidad, $email, $direccion;
+    public $codigo, $nombres="", $apellidos="", $nombrecompleto, $tipoident="C", $identificacion="", $genero="H", $fechanace, $nacionalidad=35, $telefono="", $etnia="ME";
+    public $tipodiscapacidad, $discapacidad, $email="", $direccion="", $comentario="";
     public $periodoId, $grupoId, $nivelId, $gradoId, $cursoId;
-    public $fecha,$crearperson;
+    public $fecha,$crearperson, $estudentnew=0; 
     public $meses = [ 
         1 => 'ENE',
         2 => 'FEB',
@@ -51,7 +52,7 @@ class VcStudentEnrollment extends Component
             $this->chkoptnui="no";
         }
 
-      }
+    }
 
     public function render()
     {
@@ -99,6 +100,7 @@ class VcStudentEnrollment extends Component
             $this->email = $records->email;
             $this->etnia = $records->etnia;
             $this->direccion = $records->direccion;
+            $this->comentario = '';
 
             $this->dispatchBrowserEvent('searchData');
 
@@ -120,7 +122,7 @@ class VcStudentEnrollment extends Component
         if ($this->estudiante_id==0){
             
             $this->grabaEstudiante();
-            
+            $this->estudentnew=1;
         }
 
         $this->dispatchBrowserEvent('get-data');
@@ -160,13 +162,14 @@ class VcStudentEnrollment extends Component
             'persona_id' => 'required',
         ]);
 
+        /* -- Registro de Matricula */
         $pLectivo = TmPeriodosLectivos::find($this->periodoId);
         $codperiodo   = $pLectivo['periodo'];
         $nomperiodo   = $pLectivo['descripcion'];
-        $nummatricula = $pLectivo['num_matricula']+1;
+        $nromatricula = $pLectivo['num_matricula']+1;
 
         TmMatricula::Create([
-            'documento' => substr($codperiodo, -2).str_pad($nummatricula, 4, "0", STR_PAD_LEFT),
+            'documento' => substr($codperiodo, -2).str_pad($nromatricula, 4, "0", STR_PAD_LEFT),
             'fecha' => $this -> fecha,
             'estudiante_id' => $this -> estudiante_id,
             'nivel_id' => $this -> nivelId,
@@ -175,21 +178,58 @@ class VcStudentEnrollment extends Component
             'periodo_id' => $this ->periodoId,
             'curso_id' => $this -> cursoId,
             'representante_id' => $this -> persona_id,
+            'comentario' => $this-> comentario,
             'usuario' => auth()->user()->name,
             'estado' => "P",
         ]);
         $matricula = TmMatricula::orderBy("id", "desc")->first();
         $matriculaId = $matricula['id'];
 
+        /*Actualiza secuencia*/
+        $pLectivo['num_matricula'] = $nromatricula;
+        $pLectivo->update();
+        /* -- Fin Matricula*/
+
+        $familiares = TmFamiliarEstudiantes::where([
+            ['estudiante_id',$this->estudiante_id],
+            ['persona_id',$this->persona_id],
+            ])->get()->toArray();
+
+        if (empty($familiares)) {
+            TmFamiliarEstudiantes::Create([
+                'estudiante_id'=>$this -> estudiante_id,
+                'persona_id'=>$this -> persona_id,
+                'informacion'=>'',
+                'usuario' => auth()->user()->name,
+            ]);
+        }
+
+        $this->GrabaDeuda($matriculaId,$codperiodo,$nomperiodo,$nromatricula);
+
+        return redirect()->to('/academic/tuition');
+        
+    }
+
+    public function grabaDeuda($idactual,$codigo,$nombre,$secuencia){
+
+        $matriculaId = $idactual;
+        $codperiodo = $codigo;
+        $nomperiodo = $nombre;
+        $nromatricula = $secuencia;
+
+
+        /* Registro de Deuda */
         $pensiones = TmPensionesDet::join("tm_pensiones_cabs","tm_pensiones_cabs.id","=","tm_pensiones_dets.pension_id")
         ->where([
                 ['tm_pensiones_cabs.periodo_id',$this->periodoId],
                 ['tm_pensiones_cabs.modalidad_id',$this->grupoId],
                 ['tm_pensiones_dets.nivel_id',$this->nivelId],
             ])->first();
-
-       
+        
         $valorMatricula  = $pensiones['matricula'];
+        if ($this->estudentnew==1){
+            $valorMatricula  = $pensiones['matricula2'];
+        }
         $valorPension    = $pensiones['pension'];
         $valorPlataforma = $pensiones['plataforma'];
         $cuotas = 10;
@@ -202,7 +242,7 @@ class VcStudentEnrollment extends Component
             'matricula_id' => $matriculaId,
             'estudiante_id' => $this -> estudiante_id,
             'periodo_id' => $this -> periodoId,
-            'referencia' => 'MAT-PER'.substr($codperiodo, -2).str_pad($nummatricula, 4, "0", STR_PAD_LEFT),
+            'referencia' => 'MAT-PER'.substr($codperiodo, -2).str_pad($nromatricula, 4, "0", STR_PAD_LEFT),
             'fecha' => $this->fecha,
             'basedifgravada' => $valorMatricula,
             'basegravada' =>0.00,
@@ -238,7 +278,7 @@ class VcStudentEnrollment extends Component
             'matricula_id' => $matriculaId,
             'estudiante_id' => $this -> estudiante_id,
             'periodo_id' => $this -> periodoId,
-            'referencia' => 'PLA-PER'.substr($codperiodo, -2).str_pad($nummatricula, 4, "0", STR_PAD_LEFT),
+            'referencia' => 'PLA-PER'.substr($codperiodo, -2).str_pad($nromatricula, 4, "0", STR_PAD_LEFT),
             'fecha' => $this->fecha,
             'basedifgravada' => $valorPlataforma,
             'basegravada' =>0.00,
@@ -283,7 +323,7 @@ class VcStudentEnrollment extends Component
                 'matricula_id' => $matriculaId,
                 'estudiante_id' => $this -> estudiante_id,
                 'periodo_id' => $this -> periodoId,
-                'referencia' => 'PEN-'.$this->meses[$mes].substr($codperiodo, -2).str_pad($nummatricula, 4, "0", STR_PAD_LEFT),
+                'referencia' => 'PEN-'.$this->meses[$mes].substr($codperiodo, -2).str_pad($nromatricula, 4, "0", STR_PAD_LEFT),
                 'fecha' =>  strval($año)."-".str_pad($mes, 2, "0", STR_PAD_LEFT).'-01',
                 'basedifgravada' => $valorPension,
                 'basegravada' =>0.00,
@@ -293,7 +333,7 @@ class VcStudentEnrollment extends Component
                 'debito' => $valorPension,
                 'credito' =>0.00,
                 'saldo' => $valorPension,
-                'glosa' => 'Pensión Cuota '.strval($i).' '.$nomperiodo,
+                'glosa' => 'Pensión Cuota '.strval($i+1).' '.$nomperiodo,
                 'estado' => 'P',
                 'usuario' => auth()->user()->name,
             ]);
@@ -314,15 +354,6 @@ class VcStudentEnrollment extends Component
                 'usuario' => auth()->user()->name,
             ]);
         }
-
-        /*Actualiza secuencia de matricula*/
-        $pLectivo = TmPeriodosLectivos::find($this -> periodoId);
-        $pLectivo->update([
-            'num_matricula' => $nummatricula,
-        ]);
-
-        return redirect()->to('/academic/tuition');
-        
     }
 
     public function grabaPerson($data){

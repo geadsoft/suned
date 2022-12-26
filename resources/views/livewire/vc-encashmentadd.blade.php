@@ -129,7 +129,7 @@
                                                     <span class="fw-semibold  text-muted text-uppercase">Tuition</span>
                                                     <span class="fs-15  d-block">Modalidad: {{$grupo}}</span>
                                                     <span class="text-muted fw-normal text-wrap mb-1 d-block">{{$curso}}</span>
-                                                    <span class="text-muted fw-normal d-block">PAGO MATRICULA Y MAYO EN OTRO COLEGIO ACEPTADO POR MR ANDRES MATRICULAR SIN PAGO DE MAYO
+                                                    <span class="text-muted fw-normal d-block">{{$comentario}}
                                                     </span>
                                                 </label>
                                             </div>
@@ -162,10 +162,10 @@
                                                         <div class="col-lg-3 col-sm-6">
                                                             <div class="mb-3">
                                                                 <label class="form-label" for="stocks-input">Payment Method</label>
-                                                                <select type="select" class="form-select" id="cmbtipopago">
+                                                                <select type="select" class="form-select" id="cmbtipopago" name="cmbtipopago">
                                                                 <option value="EFE">Efectivo</option>
                                                                 <option value="CHQ">Cheque</option>
-                                                                <option value="TCR">Tarjeta</option>
+                                                                <option value="TAR">Tarjeta</option>
                                                                 <option value="DEP">Depósito</option>
                                                                 <option value="TRA">Transferencia</option>
                                                                 <option value="CON">Convenio</option>
@@ -173,12 +173,16 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-5 col-sm-6">
-                                                            <div class="mb-3">
-                                                                <label class="form-label" for="txtentidad">Entidad</label>
-                                                                <!--<input type="text" class="form-control  product-price" id="txtentidad" placeholder="">-->
-                                                                <select type="select" class="form-select" data-trigger id="cmbentidad" value = "15">
+                                                            <div class="mb-3" id="divEntidad">
+                                                                <label class="form-label" for="txtentidad" name="lblentidad" style="display:none">Entidad</label>
+                                                                <select type="select" class="form-select" name="cmbentidad" id="cmbentidad" value = "32" style="display:none">
                                                                 @foreach ($tblentidads as $entidad) 
-                                                                <option value="{{$entidad->id}}">{{$entidad->descripcion}}</option>
+                                                                    <option value="{{$entidad->id}}">{{$entidad->descripcion}}</option>
+                                                                @endforeach
+                                                                </select>
+                                                                <select type="select" class="form-select" name="cmbtarjeta" id="cmbtarjeta" value = "58" style="display:none">
+                                                                @foreach ($tbltarjetas as $tarjeta) 
+                                                                    <option value="{{$tarjeta->id}}">{{$tarjeta->descripcion}}</option>
                                                                 @endforeach
                                                                 </select>
                                                             </div>

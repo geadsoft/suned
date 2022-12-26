@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\VcEncashmentDebts;
+use App\Http\Livewire\VcReportCashReceints;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,7 @@ Route::get('/config/zone',[App\Http\Controllers\TmZonasController::class, 'index
 Route::get('/academic/course',[App\Http\Controllers\TmCursosController::class, 'course'])->name('course');
 Route::get('/academic/person',[App\Http\Controllers\TmPersonasController::class, 'index'])->name('index');
 Route::get('/academic/person-add',[App\Http\Controllers\TmPersonasController::class, 'addperson'])->name('addperson');
+Route::get('/academic/person-edit/{nui}',[App\Http\Controllers\TmPersonasController::class, 'editperson'])->name('editperson');
 Route::get('/academic/tuition',[App\Http\Controllers\TmMatriculaController::class, 'index'])->name('index');
 Route::get('/academic/student-enrollment/{id}',[App\Http\Controllers\TmMatriculaController::class, 'addtuition'])->name('addtuition');
 Route::get('/academic/student-enrollment',[App\Http\Controllers\TmMatriculaController::class, 'newtuition'])->name('newtuition');
@@ -29,7 +31,8 @@ Route::get('/headquarters/educational-services',[App\Http\Controllers\TmServicio
 Route::get('/financial/encashment',[App\Http\Controllers\TrCobrosCabsController::class, 'index'])->name('index');
 Route::get('/financial/encashment-add',[App\Http\Controllers\TrCobrosCabsController::class, 'addencashment'])->name('addescashment');
 Route::get('/financial/create-invoice',[App\Http\Controllers\TrFacturasCabsController::class, 'index'])->name('index');
-
+Route::get('/report/box-balance',[App\Http\Controllers\TrCobrosCabsController::class, 'cuadrecaja'])->name('cuadrecaja');
+Route::get('/download-pdf',[VcReportCashReceints::class, 'downloadPDF']);
 
 Auth::routes();
 //Language Translation

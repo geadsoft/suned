@@ -22,6 +22,13 @@ class TrCobrosCabsController extends Controller
         return view('financial/encashmentadd');
     }
 
+    public function cuadrecaja()
+    {
+        return view('reports/boxbalance');
+    }
+
+   
+
     /**
      * Show the form for creating a new resource.
      *

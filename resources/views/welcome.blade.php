@@ -128,5 +128,12 @@
                 </div>
             </div>
         </div>
+        <script>
+            Swal.fire{
+                'The internet',
+                'That this',
+                'quesions'
+            }
+        </script>
     </body>
 </html>

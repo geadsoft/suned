@@ -5,17 +5,31 @@ function selecTab(SelectTab) {
 	        document.getElementById('pills-bill-student-tab').click()
             break
         case 'pills-bill-responsible':
+
+            var nombres   = document.getElementById("txtnombres").value
+            var apellidos = document.getElementById("txtapellidos").value
+
+            if ((nombres == "") || (apellidos == "")) {  //COMPRUEBA CAMPOS VACIOS
+                swal("Error!", "Datos del estudiante no deben estar vacios..", "warning");
+                return true;
+            }
+
             document.getElementById('pills-bill-responsible-tab').click()
             break
         case 'pills-bill-registration':
             
+            var pernombres   = document.getElementById("pernombres").value
+            var perapellidos = document.getElementById("perapellidos").value
+
+            if ((pernombres == "") || (perapellidos == "")) {  //COMPRUEBA CAMPOS VACIOS
+                swal("Error!", "Datos del representante no deben estar vacios..", "warning");
+                return true;
+            }
            
-            
             document.getElementById('pills-bill-registration-tab').click()
             break
         case 'pills-bill-finish':
-            document.getElementById('pills-bill-finish-tab').click()
-
+            
             var pernombres   = document.getElementById("pernombres").value
             var perapellidos = document.getElementById("perapellidos").value
             var pertelefono  = document.getElementById("pertelefono").value
@@ -51,7 +65,13 @@ function selecTab(SelectTab) {
             document.getElementById("infonivel").value = textnivel
             document.getElementById("infogrado").value = textgrado
             document.getElementById("infocurso").value = "Curso/Paralelo: "+textcurso
+
+            if ((cmbgrupo.value == "") || (cmbnivel.value == "") || (cmbgrado.value == "") || (cmbcurso.value == "")) {  //COMPRUEBA CAMPOS VACIOS
+                swal("Error!", "Datos del registro de matrícula no deben estar vacios..", "warning");
+                return true;
+            }
             
+            document.getElementById('pills-bill-finish-tab').click()
             break
     }
 

@@ -101,7 +101,7 @@
                                                 </li>
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                    <a class="edit-item-btn" href="" wire:click.prevent="edit({{ $record }})" data-bs-toggle="modal"><i
+                                                    <a class="edit-item-btn" href="/academic/person-edit/{{$record->identificacion}}"><i
                                                             class="ri-pencil-fill align-bottom text-muted"></i></a>
                                                 </li>
                                                 <!--<li class="list-inline-item">
@@ -140,6 +140,7 @@
                                 @endforeach    
                                 </tbody>
                             </table>
+                            
                             <div class="noresult" style="display: none">
                                 <div class="text-center">
                                     <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
@@ -153,7 +154,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-end mt-3">
+                        <!--<div class="d-flex justify-content-end mt-3">
                             <div class="pagination-wrap hstack gap-2">
                                 <a class="page-item pagination-prev disabled" href="#">
                                     Previous
@@ -163,7 +164,8 @@
                                     Next
                                 </a>
                             </div>
-                        </div>
+                        </div>-->
+                        {{$tblrecords->links('')}}
                     </div>
                     
                     <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1"

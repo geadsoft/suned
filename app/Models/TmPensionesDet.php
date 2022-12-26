@@ -13,6 +13,7 @@ class TmPensionesDet extends Model
         'pension_id',
         'nivel_id',
         'matricula',
+        'matricula2',
         'pension',
         'plataforma',
         'estado',

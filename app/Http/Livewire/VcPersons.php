@@ -2,12 +2,14 @@
 
 namespace App\Http\Livewire;
 use App\Models\TmPersonas;
-use Livewire\WithPagination;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class VcPersons extends Component
-{
+{   
+    use WithPagination;
+  
     public function render()
     {
         
@@ -40,8 +42,6 @@ class VcPersons extends Component
         return redirect()->to('/academic/person-add');
 
     }
-
-
 
     
 }
