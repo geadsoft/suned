@@ -23,6 +23,15 @@
             $('#showModal').modal('hide');
         })
 
+        window.addEventListener('family-msg', event => {
+            swal("Error!", "Datos del familiar no deben estar vacios..", "warning");
+            document.getElementById('pills-bill-family-tab').click()
+        })
+
+        window.addEventListener('active-tab', event => {
+            document.getElementById('pills-bill-family-tab').click()
+        })
+        
     </script>
 
 @endsection

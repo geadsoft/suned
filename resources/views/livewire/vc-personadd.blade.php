@@ -277,7 +277,7 @@
                                         @else 
                                             <button class="btn btn-primary" wire:click="updateData()">Update Record</button>
                                         @endif
-                                        <button type="button" class="btn btn-soft-success">Cancel</button>
+                                        <a class="btn btn-secondary w-sm" href="/academic/person"><i class="me-1 align-bottom"></i>Cancel</a>
                                     </div>
                                 </div>
                                    
@@ -298,20 +298,20 @@
                                             <label for="pernombres" class="form-label">
                                             Names</label>
                                             <input type="text" class="form-control" id="txtpersonaid" wire:model.defer="persona_id" style="display:none">
-                                            <input type="text" class="form-control" id="pernombres" placeholder="Enter your Names" wire:model.defer="fnombres" required {{$eControl}}>
+                                            <input type="text" class="form-control" id="pernombres" placeholder="Enter your Names" wire:model.defer="familiar.nombres" {{$eControl2}}>
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="perapellidos" class="form-label">Surnames</label>
-                                            <input type="text" class="form-control" id="perapellidos" placeholder="Enter your Surnames" wire:model.defer="fapellidos" required {{$eControl}}>
+                                            <input type="text" class="form-control" id="perapellidos" placeholder="Enter your Surnames" wire:model.defer="familiar.apellidos" {{$eControl2}}>
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
                                         <div class="mb-3">
                                             <label for="pertipoident" class="form-label">Type of identification</label>
-                                            <select class="form-select" data-choices data-choices-search-false id="pertipoident" wire:model.defer="ftipoident" required {{$eControl}}>
+                                            <select class="form-select" data-choices data-choices-search-false id="pertipoident" wire:model.defer="familiar.tipoidentificacion" {{$eControl2}}>
                                                 <option value="C">Cédula</option>
                                                 <option value="P">Pasaporte</option>
                                             </select>
@@ -322,13 +322,13 @@
                                             <label for="perident" class="form-label">
                                             Identification</label>
                                             <input type="text" class="form-control" id="perident"
-                                                placeholder="Enter your firstname" wire:model.defer="fidentificacion" required {{$eControl}}>
+                                                placeholder="Enter your firstname" wire:model.defer="familiar.identificacion" {{$eControl2}}>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-3">
                                             <label for="pergenero" class="form-label">Gender</label>
-                                            <select class="form-select" data-choices data-choices-search-false id="pergenero" wire:model.defer="fgenero" required {{$eControl}}>
+                                            <select class="form-select" data-choices data-choices-search-false id="pergenero" wire:model.defer="familiar.genero" {{$eControl2}}>
                                                 <option value="M">Male</option>
                                                 <option value="F">Female</option>
                                             </select>
@@ -337,7 +337,7 @@
                                     <div class="col-lg-4">
                                         <div class="mb-3">
                                             <label for="pernacionalidad" class="form-label">Nationality</label>
-                                            <select class="form-select" data-choices data-choices-search-false id="pernacionalidad" wire:model.defer="fnacionalidad" require {{$eControl}}>
+                                            <select class="form-select" data-choices data-choices-search-false id="pernacionalidad" wire:model.defer="familiar.nacionalidad_id" {{$eControl2}}>
                                                 <option value="">Select Nationality</option>
                                                 @foreach ($tblgenerals as $general)
                                                     <option value="{{$general->id}}">{{$general->descripcion}}</option>
@@ -351,7 +351,7 @@
                                             <label for="pertelefono" class="form-label">Phone
                                                 Number</label>
                                             <input type="text" class="form-control" id="pertelefono"
-                                                placeholder="Enter your phone number" wire:model.defer="ftelefono" required {{$eControl}}>
+                                                placeholder="Enter your phone number" wire:model.defer="familiar.telefono" {{$eControl2}}>
                                         </div>
                                     </div>                                   
                                     <!--end col-->
@@ -359,7 +359,7 @@
                                     <div class="col-lg-4">
                                         <div class="mb-3">
                                             <label for="perrelacion" class="form-label">Relation</label>
-                                            <select class="form-select" data-choices data-choices-search-false id="perrelacion" wire:model.defer="fparentesco" required {{$eControl}}>
+                                            <select class="form-select" data-choices data-choices-search-false id="perrelacion" wire:model.defer="familiar.parentesco" {{$eControl2}}>
                                                 <option value="NN">Selecione Relacion</option>
                                                 <option value="MA">Madre</option>
                                                 <option value="PA">Padre</option>
@@ -368,20 +368,37 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-lg-10">
+                                    <div class="row g-3">
+                                        <div class="col-xxl-4">
                                             <div class="mb-3">
                                                 <label for="txtemail" class="form-label">Email</label>
                                                 <input type="email" class="form-control" id="txtemail"
-                                                    placeholder="Enter Email" wire:model.defer="femail" {{$eControl}}>
+                                                    placeholder="Enter Email" wire:model.defer="familiar.email" {{$eControl2}}>
                                             </div>
                                         </div>
-                                        <div class="col-lg-2">
+                                        <div class="col-xxl-6">
+                                            <div class="mb-3">
+                                                <label for="txtemail" class="form-label">Direction</label>
+                                                <input type="email" class="form-control" id="txtemail"
+                                                    placeholder="Enter Email" wire:model.defer="familiar.direccion" {{$eControl2}}>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-1">
                                             <div class="mb-3 text-center">
                                                 <label for="" class="form-label">-</label>
                                                 <div class="flex-shrink-0">
-                                                   <button type="button" wire:click="addFamiliars()" class="btn btn-soft-secondary" id="create-btn"
-                                                        data-bs-target=""><i class="ri-add-fill me-1"></i> Agregar
+                                                   <button type="button" wire:click="activeControl()" class="btn btn-soft-success" id="create-btn"
+                                                        data-bs-target=""><i class="ri-add-fill me-1"></i> New
+                                                        </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-1">
+                                            <div class="mb-3 text-center">
+                                                <label for="" class="form-label">-</label>
+                                                <div class="flex-shrink-0">
+                                                   <button type="button" wire:click="addFamiliar()" class="btn btn-soft-secondary" id="create-btn"
+                                                        data-bs-target="" {{$eControl2}}><i class="ri-add-fill me-1"></i> Agregar
                                                         </button>
                                                 </div>
                                             </div>
@@ -408,10 +425,10 @@
 
                                                 @foreach ($familiares as $recno)  
                                                 <tr>
-                                                    <td>{{$recno['identidad']}}</td>
+                                                    <td>{{$recno['identificacion']}}</td>
                                                     <td>{{$recno['apellidos']}}</td>
                                                     <td>{{$recno['nombres']}}</td>
-                                                    <td>{{$recno['relacion']}}</td>
+                                                    <td>{{$relacion[$recno['parentesco']]}}</td>
                                                     <td>{{$recno['email']}}</td>
                                                     <td>{{$recno['telefono']}}</td>
                                                     <td>
@@ -437,6 +454,17 @@
                                         </table>
                                     </div>
                                 </div>
+                                <div class="col-lg-12">
+                                    <div class="hstack gap-2 justify-content-end">
+                                        @if ($personaId==0)
+                                            <button type="submit" class="btn btn-primary" wire:click="createData()">Save Record</button>
+                                        @else 
+                                            <button class="btn btn-primary" wire:click="updateData()">Update Record</button>
+                                        @endif
+                                        <!--<button type="button" class="btn btn-secondary">Cancel</button>-->
+                                        <a class="btn btn-secondary w-sm" href="/academic/person"><i class="me-1 align-bottom"></i>Cancel</a>
+                                    </div>
+                                </div>
 
                             </div>
                             <!-- end tab pane -->
@@ -449,6 +477,7 @@
                             
                         </div>
                         <!-- end tab content -->
+                        
                     </form>
                 </div>
                 <!-- end card body -->

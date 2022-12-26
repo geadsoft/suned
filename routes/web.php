@@ -19,9 +19,10 @@ Route::get('/headquarters/campus',[App\Http\Controllers\TmEmpresasController::cl
 Route::get('/config/generality',[App\Http\Controllers\TmGeneralidadesController::class, 'index'])->name('index');
 Route::get('/config/zone',[App\Http\Controllers\TmZonasController::class, 'index'])->name('index');
 Route::get('/academic/course',[App\Http\Controllers\TmCursosController::class, 'course'])->name('course');
-Route::get('/academic/person',[App\Http\Controllers\TmPersonasController::class, 'index'])->name('index');
+Route::get('/academic/students',[App\Http\Controllers\TmPersonasController::class, 'index'])->name('index');
 Route::get('/academic/person-add',[App\Http\Controllers\TmPersonasController::class, 'addperson'])->name('addperson');
 Route::get('/academic/person-edit/{nui}',[App\Http\Controllers\TmPersonasController::class, 'editperson'])->name('editperson');
+Route::get('/academic/representatives',[App\Http\Controllers\TmPersonasController::class, 'agent'])->name('agent');
 Route::get('/academic/tuition',[App\Http\Controllers\TmMatriculaController::class, 'index'])->name('index');
 Route::get('/academic/student-enrollment/{id}',[App\Http\Controllers\TmMatriculaController::class, 'addtuition'])->name('addtuition');
 Route::get('/academic/student-enrollment',[App\Http\Controllers\TmMatriculaController::class, 'newtuition'])->name('newtuition');

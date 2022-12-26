@@ -6,19 +6,19 @@ use App\Models\TmPersonas;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class VcPersons extends Component
+class VcAgents extends Component
 {   
     use WithPagination;
   
     public function render()
     {
         
-        $tblrecords = TmPersonas::where('tipopersona','E')->orderBy('apellidos','asc')->paginate(10);
+        $tblrecords = TmPersonas::where('tipopersona','R')->orderBy('apellidos','asc')->paginate(10);
 
         $views = TmPersonas::find(1);
         $this->view = $views;
         
-        return view('livewire.vc-persons',[
+        return view('livewire.vc-agents',[
             'tblrecords' => $tblrecords
         ]);
 

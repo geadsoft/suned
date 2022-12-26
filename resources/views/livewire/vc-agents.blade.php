@@ -5,10 +5,10 @@
                 <div class="card-header border-0">
 
                         <div class="d-flex align-items-center">
-                            <h5 class="card-title mb-0 flex-grow-1">Student Registration</h5>
+                            <h5 class="card-title mb-0 flex-grow-1">Registration of Representatives</h5>
                             <div class="flex-shrink-0">
                                 <a class="btn btn-success add-btn" href="/academic/student-enrollment"><i
-                                class="ri-add-line me-1 align-bottom"></i> Add Students</a>
+                                class="ri-add-line me-1 align-bottom"></i> Add Representative</a>
                             </div>
                         </div>
 
@@ -102,7 +102,7 @@
                                         <th class="sort" data-sort="name" scope="col">Identification</th>
                                         <th class="sort" data-sort="company_name" scope="col">Names</th>
                                         <th class="sort" data-sort="email_id" scope="col">Surnames</th>
-                                        <th class="sort" data-sort="phone" scope="col">Date of Birth</th>
+                                        
                                         <th class="sort" data-sort="lead_score" scope="col">Nationality</th>
                                         <th class="sort" data-sort="tags" scope="col">Phone Number</th>
                                         <th scope="col">Action</th>
@@ -120,7 +120,7 @@
                                         <td class="name">{{$record->identificacion}}</td>
                                         <td class="company_name">{{$record->nombres}}</td>
                                         <td class="email_id">{{$record->apellidos}}</td>
-                                        <td class="phone">{{$record->fechanacimiento}}</td>
+                                        
                                         <td class="lead_score">{{$record->nacionalidad->descripcion}}</td>
                                         <td class="tags">{{$record->telefono}}</td>
                                         <td>
@@ -132,7 +132,7 @@
                                                 </li>
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                    <a class="edit-item-btn" href="/academic/person-edit/{{$record->identificacion}}"><i
+                                                    <a class="edit-item-btn" href="/academic/agent-edit/{{$record->identificacion}}"><i
                                                             class="ri-pencil-fill align-bottom text-muted"></i></a>
                                                 </li>
                                                 <!--<li class="list-inline-item">

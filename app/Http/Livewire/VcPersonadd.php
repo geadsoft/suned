@@ -14,6 +14,7 @@ class VcPersonadd extends Component
     public $record;
     public $search_nui;
     public $eControl="";
+    public $eControl2="disabled";
     public $showEditModal=false;
     public $directions = [];
     public $familiares = [];
@@ -39,7 +40,7 @@ class VcPersonadd extends Component
         'nombres' => '',
         'tipoidentificacion' => '',
         'identificacion' => '',
-        'nacionalidad' => '',
+        'nacionalidad_id' => 0,
         'genero' => '',
         'telefono' => '',
         'direccion' => '',
@@ -51,6 +52,12 @@ class VcPersonadd extends Component
         1 =>'Va',
         2 =>'Viene',
         3 =>'Viene/Va'
+    ];
+    public $relacion = [
+        'MA' => 'Madre',
+        'PA' => 'Padre',
+        'AP' => 'Apoderado',
+        'OT' => 'Otro',
     ];
 
     public $personaId, $nombres, $apellidos, $tipoident, $identificacion, $genero, $fechanace, $nacionalidad, $telefono, $etnia;
@@ -91,7 +98,7 @@ class VcPersonadd extends Component
         $this->record['identificacion']= "";
         $this->record['genero']= "";  
         $this->record['fechanacimiento']= "";
-        $this->record['nacionalidad']= 0; 
+        $this->record['nacionalidad_id']= 0; 
         $this->record['telefono']= "";
         $this->record['email']= "";
         $this->record['etnia']= "";
@@ -125,12 +132,11 @@ class VcPersonadd extends Component
         }
 
         $familys =  TmFamiliarEstudiantes::query()
-                       ->join("tm_personas as p","p.id","=","tm_familiar_estudiantes.estudiante_id")
-                       ->where('estudiante_id',"{$this->personaId}")
-                       ->select('tm_familiar_estudiantes.id','persona_id','apellidos','nombres','tipoidentificacion','identificacion','nacionalidad','genero','telefono','direccion','email','parentesco')
-                       ->get();
+                    ->join("tm_personas as p","p.id","=","tm_familiar_estudiantes.persona_id")
+                    ->where('estudiante_id',"{$this->personaId}")
+                    ->select('tm_familiar_estudiantes.id','persona_id','apellidos','nombres','tipoidentificacion','identificacion','nacionalidad_id','genero','telefono','direccion','email','parentesco')
+                    ->get()->toArray();
 
-        
         if (empty($familys)) {
             $this->newFamiliar();
         }else{
@@ -148,7 +154,7 @@ class VcPersonadd extends Component
             'record.identificacion' => 'required',
             'record.genero' => 'genero',
             'record.fechanacimiento' => 'required',
-            'record.nacionalidad' => 'required',
+            'record.nacionalidad_id' => 'required',
         ]);
 
         TmPersonas::Create([
@@ -158,7 +164,7 @@ class VcPersonadd extends Component
             'identificacion' => $this -> record['identificacion'],
             'genero' => $this -> record['genero'],
             'fechanacimiento' => $this -> record['fechanacimiento'],
-            'nacionalidad' => $this -> record['nacionalidad'],
+            'nacionalidad_id' => $this -> record['nacionalidad_id'],
             'telefono' => $this -> record['telefono'],
             'email' => $this -> record['email'],
             'etnia' => $this -> record['etnia'],
@@ -181,7 +187,7 @@ class VcPersonadd extends Component
                 'tipoidentificacion' => $this -> tipoident,
                 'identificacion' => $this->identificacion, 
                 'fechanacimiento' => $this ->fechanace,
-                'nacionalidad' => $this ->nacionalidad,
+                'nacionalidad_id' => $this ->nacionalidad,
                 'genero' => $this -> genero,
                 'telefono' => $this -> telefono,
                 'direccion' => $this -> direccion,
@@ -228,8 +234,57 @@ class VcPersonadd extends Component
             }
             
         }
-        
 
+        foreach ($this->familiares as $data){
+
+            if ($data['id']>0){
+
+                $record = TmPersonas::find($data['persona_id']);
+                $record->update([
+                    'nombres' => $data['nombres'],
+                    'apellidos' => $data['apellidos'],
+                    'identificacion' => $data['identificacion'],
+                    'nacionalidad_id' => $data['nacionalidad_id'],
+                    'genero' => $data['genero'],
+                    'telefono' => $data['telefono'],
+                    'direccion' => $data['direccion'],
+                    'email' => $data['email'],
+                    'parentesco' => $data['parentesco'],
+                ]);
+
+            }else{
+
+                TmPersonas::Create([
+                    'nombres' => $data['nombres'],
+                    'apellidos' => $data['apellidos'],
+                    'tipoidentificacion' => $data['tipoidentificacion'],
+                    'identificacion' => $data['identificacion'], 
+                    'fechanacimiento' => "1900-01-01",
+                    'nacionalidad_id' => $data['nacionalidad_id'],
+                    'genero' => $data['genero'],
+                    'telefono' => $data['telefono'],
+                    'direccion' => $data['direccion'],
+                    'email' => $data['email'],
+                    'etnia' => "",
+                    'parentesco' => $data['parentesco'],
+                    'tipopersona' => "R",
+                    'relacion_id' => 0,
+                    'usuario' => auth()->user()->name,
+                    'estado' => "A",
+                ]);
+                $newRecno = TmPersonas::orderBy("id", "desc")->first();
+
+                TmFamiliarEstudiantes::Create([
+                    'estudiante_id'=> $this->personaId,
+                    'persona_id'=> $newRecno['id'],
+                    'informacion'=>'',
+                    'usuario' => auth()->user()->name,
+                ]);
+
+            }
+
+        }
+        
     }
 
     public function newDirections(){
@@ -256,25 +311,48 @@ class VcPersonadd extends Component
         $this->newDirections();
     }
 
-    public function newRelacion(){
-        $this->relacion['id'] = 0;
-        $this->relacion['persona_Id']='';
-        $this->relacion['apellidos']='';
-        $this->relacion['nombres']='';
-        $this->relacion['tipoidentificacion']='';
-        $this->relacion['identificacion']='';
-        $this->relacion['nacionalidad']='';
-        $this->relacion['genero']='';
-        $this->relacion['telefono']='';
-        $this->relacion['direccion']='';
-        $this->relacion['email']='';
-        $this->relacion['parentesco']='';
+    public function activeControl(){
+        $this->eControl2 = "";
+        $this->dispatchBrowserEvent('active-tab');
     }
 
-    public function addRelacion()
+    public function newFamiliar(){
+        $this->familiar['id'] = 0;
+        $this->familiar['persona_Id']=0;
+        $this->familiar['apellidos']='';
+        $this->familiar['nombres']='';
+        $this->familiar['tipoidentificacion']='C';
+        $this->familiar['identificacion']='';
+        $this->familiar['nacionalidad_id']=0;
+        $this->familiar['genero']='M';
+        $this->familiar['telefono']='';
+        $this->familiar['direccion']='';
+        $this->familiar['email']='';
+        $this->familiar['parentesco']='MA';
+    }
+
+    public function addFamiliar()
     {
-        array_push($this->relacions,$this->relacion);
-        $this->newRelacion();
+        $ape = $this->familiar['apellidos'];
+        $nom = $this->familiar['nombres'];
+        $tip = $this->familiar['tipoidentificacion'];
+        $ide = $this->familiar['identificacion'];
+        $nac = $this->familiar['nacionalidad_id'];
+        $gen = $this->familiar['genero'];
+        $tel = $this->familiar['telefono'];
+        $dir = $this->familiar['direccion'];
+        $ema = $this->familiar['email'];
+        $par = $this->familiar['parentesco'];
+
+        if ($ape=='' || $nom=='' || $tip=='' || $ide=='' || $nac=='' || $gen=='' || $par==''){
+            $this->dispatchBrowserEvent('family-msg');
+            return;
+        }else{ 
+            array_push($this->familiares,$this->familiar);
+            $this->newFamiliar();
+            $this->eControl2 = "disabled";
+            $this->dispatchBrowserEvent('active-tab');
+        }
     }
 
 

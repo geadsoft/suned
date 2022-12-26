@@ -12,11 +12,11 @@
             Academic
         @endslot
         @slot('title')
-            Students
+            Representatives
         @endslot
     @endcomponent
 
-    @livewire('vc-persons')
+    @livewire('vc-agents')
 
 @endsection
 @section('script')

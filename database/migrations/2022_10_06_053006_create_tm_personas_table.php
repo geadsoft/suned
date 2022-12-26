@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('tipoidentificacion',1);
             $table->string('identificacion',15);
             $table->datetime('fechanacimiento');
-            $table->integer('nacionalidad');
+            $table->integer('nacionalidad_id');
             $table->string('genero',1);
             $table->string('telefono',30);
             $table->string('direccion',150);

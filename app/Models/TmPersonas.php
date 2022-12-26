@@ -15,7 +15,7 @@ class TmPersonas extends Model
         'tipoidentificacion',
         'identificacion',
         'fechanacimiento',
-        'nacionalidad',
+        'nacionalidad_id',
         'genero',
         'telefono',
         'direccion',
@@ -27,4 +27,9 @@ class TmPersonas extends Model
         'estado',
         'usuario',
     ];
+
+    public function nacionalidad(){
+        return $this->belongsTo('App\Models\TmGeneralidades');
+    }
+
 }

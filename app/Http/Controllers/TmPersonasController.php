@@ -27,6 +27,11 @@ class TmPersonasController extends Controller
         return view('academic/personadd',['id' => $identificacion]);
     }
 
+    public function agent()
+    {
+        return view('academic/agent');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

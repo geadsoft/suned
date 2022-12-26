@@ -21,7 +21,7 @@ class VcStudentEnrollment extends Component
     public $chkoptnui="si",$eControl="disabled";
 
     public $estudiante_id=0,$persona_id=0;
-    public $codigo, $nombres="", $apellidos="", $nombrecompleto, $tipoident="C", $identificacion="", $genero="H", $fechanace, $nacionalidad=35, $telefono="", $etnia="ME";
+    public $codigo, $nombres="", $apellidos="", $nombrecompleto, $tipoident="C", $identificacion="", $genero="M", $fechanace, $nacionalidad=35, $telefono="", $etnia="ME";
     public $tipodiscapacidad, $discapacidad, $email="", $direccion="", $comentario="";
     public $periodoId, $grupoId, $nivelId, $gradoId, $cursoId;
     public $fecha,$crearperson, $estudentnew=0; 
@@ -94,7 +94,7 @@ class VcStudentEnrollment extends Component
             $this->tipoident = $records->tipoidentificacion;
             $this->identificacion = $records->identificacion;
             $this->fechanace = date('Y-m-d',strtotime($records->fechanacimiento));
-            $this->nacionalidad = $records->nacionalidad;
+            $this->nacionalidad = $records->nacionalidad_id;
             $this->genero = $records->genero;
             $this->telefono = $records->telefono;
             $this->email = $records->email;
@@ -180,7 +180,7 @@ class VcStudentEnrollment extends Component
             'representante_id' => $this -> persona_id,
             'comentario' => $this-> comentario,
             'usuario' => auth()->user()->name,
-            'estado' => "P",
+            'estado' => "A",
         ]);
         $matricula = TmMatricula::orderBy("id", "desc")->first();
         $matriculaId = $matricula['id'];
@@ -375,7 +375,7 @@ class VcStudentEnrollment extends Component
             'tipoidentificacion' => $pertipoiden,
             'identificacion' => $peridentifi, 
             'fechanacimiento' => "1900-01-01",
-            'nacionalidad' => $pernacional,
+            'nacionalidad_id' => $pernacional,
             'genero' => $pergenero,
             'telefono' => $pertelefono,
             'direccion' => $perdirecc,
@@ -385,7 +385,7 @@ class VcStudentEnrollment extends Component
             'tipopersona' => "R",
             'relacion_id' => $this->estudiante_id,
             'usuario' => auth()->user()->name,
-            'estado' => "P",
+            'estado' => "A",
         ]);
 
         $newRecno = TmPersonas::orderBy("id", "desc")->first();
@@ -401,7 +401,7 @@ class VcStudentEnrollment extends Component
             'tipoidentificacion' => $this -> tipoident,
             'identificacion' => $this->identificacion, 
             'fechanacimiento' => $this ->fechanace,
-            'nacionalidad' => $this ->nacionalidad,
+            'nacionalidad_id' => $this ->nacionalidad,
             'genero' => $this -> genero,
             'telefono' => $this -> telefono,
             'direccion' => $this -> direccion,
@@ -411,7 +411,7 @@ class VcStudentEnrollment extends Component
             'tipopersona' => "E",
             'relacion_id' => 0,
             'usuario' => auth()->user()->name,
-            'estado' => "P",
+            'estado' => "A",
         ]);
 
         $newRecno = TmPersonas::where("tipopersona","E")
