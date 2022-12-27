@@ -96,12 +96,12 @@ class VcPersonadd extends Component
         $this->record['apellidos']= "";
         $this->record['tipoidentificacion']= "C";
         $this->record['identificacion']= "";
-        $this->record['genero']= "";  
+        $this->record['genero']= "M";  
         $this->record['fechanacimiento']= "";
         $this->record['nacionalidad_id']= 0; 
         $this->record['telefono']= "";
         $this->record['email']= "";
-        $this->record['etnia']= "";
+        $this->record['etnia']= "ME";
         $this->record['tipopersona']= "E";
         $this->record['estado']= 'A';
 
@@ -313,6 +313,7 @@ class VcPersonadd extends Component
 
     public function activeControl(){
         $this->eControl2 = "";
+        $this->newFamiliar();
         $this->dispatchBrowserEvent('active-tab');
     }
 
@@ -321,14 +322,14 @@ class VcPersonadd extends Component
         $this->familiar['persona_Id']=0;
         $this->familiar['apellidos']='';
         $this->familiar['nombres']='';
-        $this->familiar['tipoidentificacion']='C';
+        $this->familiar['tipoidentificacion']="C";
         $this->familiar['identificacion']='';
         $this->familiar['nacionalidad_id']=0;
-        $this->familiar['genero']='M';
+        $this->familiar['genero']="M";
         $this->familiar['telefono']='';
         $this->familiar['direccion']='';
         $this->familiar['email']='';
-        $this->familiar['parentesco']='MA';
+        $this->familiar['parentesco']="MA";
     }
 
     public function addFamiliar()

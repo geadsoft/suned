@@ -31,22 +31,18 @@
                                 <div class="">
                                         <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.srv_fecha"> 
                                 </div>
-                            </div>    
-                            <div class="col-xxl-1 col-sm-4">
-                                <div>
-                                    <button type="button" class="btn btn-primary w-100" wire:click="deleteFilters()"> <i
-                                            class="ri-delete-bin-5-line me-1 align-bottom"></i>
-                                        Consultar
-                                    </button>
-                                </div>
                             </div>
                             <div class="col-xxl-2 col-sm-4">
-                                <a href="/download-pdf" class="btn btn-success"><i class="ri-download-2-line align-bottom me-1"></i> Download</a>
+                                <button type="button" class="btn btn-primary w-100" wire:click=""><i
+                                        class="me-1 align-bottom"></i>Consultar
+                                </button>
                             </div>
-                             <div class="col-xxl-2 col-sm-4">
-                                <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Print</a>
+                            <div class="col-md-auto ms-auto">
+                                <div class="hstack text-nowrap gap-2">
+                                    <a href="/download-pdf" class="btn btn-success"><i class="ri-download-2-line align-bottom me-1"></i>Download PDF</a>
+                                    <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-printer-fill align-bottom me-1"></i> Print</a>
+                                </div>
                             </div>
-                            <!--end col-->
                         </div>
                         <!--end row-->
                     </form>

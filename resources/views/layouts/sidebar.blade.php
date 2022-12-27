@@ -163,7 +163,7 @@
                               
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.reports')</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="">
+                    <a class="nav-link menu-link" href="/report/box-balance">
                         <i class="las la-cash-register"></i> <span>@lang('translation.cash-receipt')</span>
                     </a>
                 </li>

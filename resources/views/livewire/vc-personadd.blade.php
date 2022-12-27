@@ -380,7 +380,7 @@
                                             <div class="mb-3">
                                                 <label for="txtemail" class="form-label">Direction</label>
                                                 <input type="email" class="form-control" id="txtemail"
-                                                    placeholder="Enter Email" wire:model.defer="familiar.direccion" {{$eControl2}}>
+                                                    placeholder="Enter Direction" wire:model.defer="familiar.direccion" {{$eControl2}}>
                                             </div>
                                         </div>
                                         <div class="col-xxl-1">

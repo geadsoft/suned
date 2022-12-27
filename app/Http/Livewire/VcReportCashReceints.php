@@ -66,7 +66,7 @@ class VcReportCashReceints extends Component
         
         ->select('tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 'tipopago', 'saldo','credito', 'descuento', 'tr_cobros_dets.valor as pago',  'tr_cobros_cabs.usuario')
         ->orderBy('tr_cobros_cabs.fecha')
-        ->paginate(10);
+        ->paginate(15);
 
         return $tblrecords;
     }
