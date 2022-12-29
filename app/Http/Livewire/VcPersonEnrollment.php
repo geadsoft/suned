@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 use App\Models\TmPersonas;
 use App\Models\TmGeneralidades;
+use App\Models\TmFamiliarEstudiantes;
 
 use Livewire\Component;
 
@@ -14,10 +15,17 @@ class VcPersonEnrollment extends Component
     public $persona_id=0;
     public $nombres, $apellidos, $tipoident="C", $identificacion, $genero="F", $fechanace, $nacionalidad=35, $telefono, $etnia="ME";
     public $email, $direccion, $parenteso, $eControl;
+    public $estudianteId;
+
+    public function mount($estudianteId){
+
+        $this->estudianteId = $estudianteId;
+
+    }
     
     public function render()
     {   
-        $this->eControl = "disabled";
+        $this->eControl = "";
 
         if ($this->chkoption=="no"){
             $this->eControl = "";
@@ -25,15 +33,20 @@ class VcPersonEnrollment extends Component
         }
 
         $tblgenerals = TmGeneralidades::where("superior",7)->get();
+        $tblfamilys  = TmFamiliarEstudiantes::query()
+                        ->join("tm_personas as p","p.id","=","tm_familiar_estudiantes.persona_id")
+                        ->where('estudiante_id',"{$this->estudianteId}")
+                        ->select('tm_familiar_estudiantes.id','persona_id','apellidos','nombres','tipoidentificacion','identificacion','nacionalidad_id','genero','telefono','direccion','email','parentesco')
+                        ->get();
         
         return view('livewire.vc-person-enrollment',[
             'tblgenerals' => $tblgenerals,
+            'tblfamilys'  => $tblfamilys,
         ]);
     }
 
     //protected $listeners = ['grabar' => 'saveperson'];
-    protected $listeners = ['savePerson'];
-
+    //protected $listeners = ['savePerson'];
     public function searchPerson(){
         
         $records = TmPersonas::where("identificacion",$this->search_nui)->first();

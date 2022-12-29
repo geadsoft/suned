@@ -105,8 +105,8 @@
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
                                                     <li><a class="dropdown-item" href="/academic/student-enrollment/{{$record->identificacion}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Add Tuition</a></li>
-                                                    <li><a class="dropdown-item" href="apps-ecommerce-product-details.html"><i class="ri-contacts-fill align-bottom me-2 text-muted"></i> Student Record </a></li>
-                                                    <li><a class="dropdown-item" href="apps-ecommerce-product-details.html"><i class="ri-hand-coin-fill align-bottom me-2 text-muted"></i> Amounts Owed </a></li>
+                                                    <li><a class="dropdown-item" href="/academic/person-edit/{{$record->identificacion}}"><i class="ri-contacts-fill align-bottom me-2 text-muted"></i> Student Record </a></li>
+                                                    <li><a class="dropdown-item" href=""><i class="ri-hand-coin-fill align-bottom me-2 text-muted"></i> Amounts Owed </a></li>
 
                                                     <li class="dropdown-divider"></li>
                                                     <li><a class="dropdown-item remove-list" href="" data-bs-toggle="modal" data-bs-target="#removeItemModal">
@@ -115,7 +115,7 @@
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Remove">
                                                     <a class="text-danger d-inline-block remove-item-btn"
-                                                        data-bs-toggle="modal" href="" wire:click.prevent="delete({{ $record->id }})">
+                                                        data-bs-toggle="modal" href="">
                                                         <i class="ri-delete-bin-5-fill fs-16"></i>
                                                     </a>
                                                 </li>

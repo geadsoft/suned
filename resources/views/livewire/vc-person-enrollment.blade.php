@@ -10,7 +10,13 @@
             </div> 
             <div class="col-xl-6">
                 <div class="input-group mb-3">
-                    <label for="" class="form-label fs-15 mt-2  me-5">NUI</label>
+                    <select class="form-select" data-choices data-choices-search-false id="pernacionalidad" wire:model="search_nui" wire:change="searchPerson('R')">
+                        <option value="">Select Representative</option>
+                        @foreach ($tblfamilys as $family)
+                            <option value="{{$family->identificacion}}">{{$family->apellidos}} {{$family->nombres}}</option>
+                        @endforeach
+                    </select>
+                    <!--<label for="" class="form-label fs-15 mt-2  me-5">NUI</label>
                     
                     <div class="form-check form-check-inline fs-15 mt-2">
                         <input class="form-check-input" type="radio" id="chkperson" wire:model="chkoption" value="si">
@@ -27,7 +33,7 @@
                         <label for="inlineRadioOptions" class="form-label">NO</label>
                     </div>
                     <input type="text" class="form-control" id="txtnombres" placeholder="Enter your Numers" wire:model="search_nui">
-                    <a id="btnstudents" class ="input-group-text btn btn-soft-info" wire:click="searchPerson('R')"><i class="ri-search-line me-1"></i>Search</a>
+                    <a id="btnstudents" class ="input-group-text btn btn-soft-info" wire:click="searchPerson('R')"><i class="ri-search-line me-1"></i>Search</a>-->
                 </div>
             </div>
             <div class="col-xl-3">
@@ -77,7 +83,7 @@
                     <label for="pergenero" class="form-label">Gender</label>
                     <select class="form-select" data-choices data-choices-search-false id="pergenero" wire:model.defer="genero" required {{$eControl}}>
                         <option value="M">Male</option>
-                        <option value="F">Female</option>
+                        <option value="F">Feminine</option>
                     </select>
                 </div>
             </div>
@@ -108,11 +114,11 @@
                 <div class="mb-3">
                     <label for="perrelacion" class="form-label">Relation</label>
                     <select class="form-select" data-choices data-choices-search-false id="perrelacion" wire:model.defer="parentesco" required {{$eControl}}>
-                        <option value="NN">Selecione Relacion</option>
-                        <option value="MA">Madre</option>
-                        <option value="PA">Padre</option>
-                        <option value="AP">Apoderado</option>
-                        <option value="OT">Otro</option>
+                        <option value="NN">Select Relation</option>
+                        <option value="MA">Mother</option>
+                        <option value="PA">Parent</option>
+                        <option value="AP">Proxy</option>
+                        <option value="OT">Other</option>
                     </select>
                 </div>
             </div>

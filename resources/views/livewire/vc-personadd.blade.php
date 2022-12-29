@@ -277,7 +277,7 @@
                                         @else 
                                             <button class="btn btn-primary" wire:click="updateData()">Update Record</button>
                                         @endif
-                                        <a class="btn btn-secondary w-sm" href="/academic/person"><i class="me-1 align-bottom"></i>Cancel</a>
+                                        <a class="btn btn-secondary w-sm" href="/academic/students"><i class="me-1 align-bottom"></i>Cancel</a>
                                     </div>
                                 </div>
                                    
@@ -462,7 +462,7 @@
                                             <button class="btn btn-primary" wire:click="updateData()">Update Record</button>
                                         @endif
                                         <!--<button type="button" class="btn btn-secondary">Cancel</button>-->
-                                        <a class="btn btn-secondary w-sm" href="/academic/person"><i class="me-1 align-bottom"></i>Cancel</a>
+                                        <a class="btn btn-secondary w-sm" href="/academic/students"><i class="me-1 align-bottom"></i>Cancel</a>
                                     </div>
                                 </div>
 

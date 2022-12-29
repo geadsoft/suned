@@ -195,9 +195,7 @@ class VcPersonadd extends Component
                 'etnia' => $this -> etnia,
                 'parentesco' => "",
                 'tipopersona' => "E",
-                'relacion_id' => 0,
-                'usuario' => auth()->user()->name,
-                'estado' => "P",
+                'relacion_id' => 0
                 ]);
             
         }

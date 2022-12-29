@@ -39,8 +39,8 @@ class VcTuitions extends Component
                 return $query->where('tm_matriculas.modalidad_id',"{$this->filters['srv_grupo']}");
             })
             ->when($this->filters['srv_nombre'],function($query){
-                return $query->where('tm_personas.nombres','LIKE','%'."{$this->filters['srv_nombre']}".'%')
-                            ->orWhere('tm_personas.apellidos','LIKE','%'."{$this->filters['srv_nombre']}".'%');
+                return $query->where('tm_personas.nombres','LIKE','%'.$this->filters['srv_nombre'].'%')
+                            ->orWhere('tm_personas.apellidos','LIKE','%'.$this->filters['srv_nombre'].'%');
             })
             ->select('identificacion','nombres','apellidos', 'documento', 'fecha', 'tm_generalidades.descripcion as nomgrupo', 'tm_servicios.descripcion as nomgrado','paralelo')
             ->orderBy('documento','desc')

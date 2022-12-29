@@ -13,19 +13,27 @@ use PDF;
 class VcReportCashReceints extends Component
 {   
     use WithPagination;
-    public $sede;
+    public $sede,$nomperiodo;
     public $dataPdf = [];
     public $filters = [
         'srv_periodo' => '',
         'srv_grupo' => '',
         'srv_fecha' => '',
     ];
-    public $neto=0, $descuento=0, $cancelado=0;
+
+
+
+    public $neto=0, $descuento=0, $cancelado=0, $pago=0;
 
     public function mount(){
         
         $ldate = date('Y-m-d H:i:s');
+        $periodo = TmPeriodosLectivos::orderBy("periodo","desc")->first();
+
         $this->filters['srv_fecha'] = date('Y-m-d',strtotime($ldate));
+        $this->filters['srv_periodo'] = $periodo['id'];
+        $this->filters['srv_grupo'] = '';
+
     }
     
     public function render()
@@ -63,50 +71,57 @@ class VcReportCashReceints extends Component
         ->when($this->filters['srv_grupo'],function($query){
             return $query->where('tm_matriculas.modalidad_id',"{$this->filters['srv_grupo']}");
         })
+        ->when($this->filters['srv_fecha'],function($query){
+            return $query->where('tr_cobros_cabs.fecha',"{$this->filters['srv_fecha']}");
+        })
         
-        ->select('tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 'tipopago', 'saldo','credito', 'descuento', 'tr_cobros_dets.valor as pago',  'tr_cobros_cabs.usuario')
+        ->select('tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario')
         ->orderBy('tr_cobros_cabs.fecha')
         ->paginate(15);
-
+        
         return $tblrecords;
     }
 
 
     public function downloadPDF()
     {   
+        
         $tblrecords = $this->consulta();
+        
         $sede    = TmSedes::where('id',1)->first();
         $filter  = $this->filters;
+        $tblTotal  = [];
         $resumen   = [
             'detalle' => '',
             'valor' => 0,
-        ];
-        $total   = [];
+        ];            
         
         foreach ($tblrecords as $record)
         {
-            $this->neto = $this->neto + floatval($record['saldo']);
-            $this->descuento =  $this->descuento + floatval($record['descuento']);
-            $this->pago = $this->pago = floatval($record['pago']);
+            
+            $this->neto = floatval($this->neto) + floatval($record['saldo']) + floatval($record['credito']);
+            $this->descuento =  floatval($this->descuento) + floatval($record['descuento']);
+            $this->pago = floatval($this->pago)+ floatval($record['pago']);
             
         }
+
         $resumen['detalle'] = 'Valor sin desc.';
         $resumen['valor'] = $this->neto;
-        array_push($total,$resumen);
+        array_push($tblTotal,$resumen);
 
         $resumen['detalle'] = 'Descuento';
         $resumen['valor'] = $this->descuento;
-        array_push($total,$resumen);
+        array_push($tblTotal,$resumen);
 
         $resumen['detalle'] = 'Cancelado';
         $resumen['valor'] = $this->pago;
-        array_push($total,$resumen);        
+        array_push($tblTotal,$resumen);        
 
         $pdf = PDF::loadView('reports/cuadre_caja',[
             'tblrecords' => $tblrecords,
             'sede' => $sede,
             'filter' => $filter,
-            'total' => $total,
+            'tblTotal' => $tblTotal,
         ]);
 
         return $pdf->download('cuadre de caja.pdf');

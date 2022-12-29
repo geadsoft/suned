@@ -18,7 +18,7 @@
                            <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
-                                        <option value="">Select Group</option>
+                                        <option value="">Todos</option>
                                         @foreach ($tblgenerals as $general)
                                             @if ($general->superior == 1)
                                             <option value="{{$general->id}}">{{$general->descripcion}}</option>
@@ -75,9 +75,9 @@
                                         <td>{{$record->descripcion}} {{$record->paralelo}}</td> 
                                         <td>{{$record->detalle}}</td>
                                         <td>{{$record->tipopago}}</td>
-                                        <td>{{$record->saldo + $record->credito}}</td>
-                                        <td>{{$record->descuento}}</td>
-                                        <td>{{$record->pago}}</td>
+                                        <td>{{number_format($record->saldo + $record->credito,2)}}</td>
+                                        <td>{{number_format($record->descuento,2)}}</td>
+                                        <td>{{number_format($record->pago,2)}}</td>
                                         <td>{{$record->usuario}}</td>
                                     </tr>
                                 @endforeach

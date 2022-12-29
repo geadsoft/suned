@@ -18,7 +18,7 @@ class VcStudentEnrollment extends Component
 {
     
     public $search_nui, $search_nur;
-    public $chkoptnui="si",$eControl="disabled";
+    public $chkoptnui="si",$eControl="";
 
     public $estudiante_id=0,$persona_id=0;
     public $codigo, $nombres="", $apellidos="", $nombrecompleto, $tipoident="C", $identificacion="", $genero="M", $fechanace, $nacionalidad=35, $telefono="", $etnia="ME";
@@ -102,7 +102,10 @@ class VcStudentEnrollment extends Component
             $this->direccion = $records->direccion;
             $this->comentario = '';
 
-            $this->dispatchBrowserEvent('searchData');
+            /*$this->dispatchBrowserEvent('searchData');*/
+            /*$this->emitTo('vc-person-enrollment','loadData',1);*/
+
+            
 
         }else{
             
@@ -120,9 +123,14 @@ class VcStudentEnrollment extends Component
         }
                
         if ($this->estudiante_id==0){
-            
+
             $this->grabaEstudiante();
             $this->estudentnew=1;
+
+        }else{
+
+            $this->updateEstudiante();
+        
         }
 
         $this->dispatchBrowserEvent('get-data');
@@ -147,6 +155,8 @@ class VcStudentEnrollment extends Component
             //Si no existe representante lo registra
             if($person['idpersona']==0){
                 $this->grabaPerson($person);
+            }else{
+                $this->updatePerson($person);
             }
 
         }
@@ -391,7 +401,27 @@ class VcStudentEnrollment extends Component
         $newRecno = TmPersonas::orderBy("id", "desc")->first();
         $this->persona_id = $newRecno['id'];
 
-    }    
+    }  
+
+    public function updatePerson($data){
+
+        $perId       =  $data['idpersona'];
+        $record = TmPersonas::find($perId);
+
+        $record->update([
+            'nombres' => $this -> $data['nombres'],
+            'apellidos' => $this -> $data['apellidos'],
+            'tipoidentificacion' => $data['tipo'],
+            'identificacion' => $data['identidad'], 
+            'nacionalidad_id' => $data['nacion'],
+            'genero' => $data['genero'],
+            'telefono' => $data['telefono'],
+            'direccion' => $data['direccion'],
+            'email' => $data['email'],
+            'parentesco' => $data['relacion']
+            ]);
+
+    } 
 
     public function grabaEstudiante(){
 
@@ -421,6 +451,25 @@ class VcStudentEnrollment extends Component
         $this->estudiante_id = $newRecno['id'];
 
     }
+
+    public function updateEstudiante(){
+
+        $record = TmPersonas::find($this->estudiante_id);
+        $record->update([
+            'nombres' => $this -> nombres,
+            'apellidos' => $this -> apellidos,
+            'tipoidentificacion' => $this -> tipoident,
+            'identificacion' => $this->identificacion, 
+            'fechanacimiento' => $this ->fechanace,
+            'nacionalidad_id' => $this ->nacionalidad,
+            'genero' => $this -> genero,
+            'telefono' => $this -> telefono,
+            'direccion' => $this -> direccion,
+            'email' => $this -> email,
+            'etnia' => $this -> etnia
+        ]);
+
+    }   
 
     
 

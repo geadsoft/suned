@@ -9,11 +9,24 @@ use Livewire\WithPagination;
 class VcPersons extends Component
 {   
     use WithPagination;
+
+    public $filters = [
+        'srv_nombre' => '',
+    ];
   
     public function render()
     {
         
-        $tblrecords = TmPersonas::where('tipopersona','E')->orderBy('apellidos','asc')->paginate(10);
+        /*$tblrecords = TmPersonas::where('tipopersona','E')->orderBy('apellidos','asc')->paginate(10);*/
+        $tblrecords = TmPersonas::query()
+        ->when($this->filters['srv_nombre'],function($query){
+            return $query->where('tm_personas.nombres','like','%'.$this->filters['srv_nombre'].'%')
+                        ->orWhere('tm_personas.apellidos','like','%'.$this->filters['srv_nombre'].'%');
+        })
+        ->where('tm_personas.tipopersona','=','E')
+        ->orderBy('apellidos','asc')
+        ->paginate(10);
+
 
         $views = TmPersonas::find(1);
         $this->view = $views;

@@ -321,7 +321,7 @@
                                     <p class="text-muted mb-4">Please fill all information below</p>
                                 </div>
                                 
-                                @livewire('vc-person-enrollment')
+                                @livewire('vc-person-enrollment',['estudianteId' => $estudiante_id])
 
                                 <div class="d-flex align-items-start gap-3 mt-4">
                                     <button type="button" class="btn btn-light btn-label previestab"
