@@ -10,7 +10,7 @@
             </div> 
             <div class="col-xl-6">
                 <div class="input-group mb-3">
-                    <select class="form-select" data-choices data-choices-search-false id="pernacionalidad" wire:model="search_nui" wire:change="searchPerson('R')">
+                    <select class="form-select" wire:model="search_nui" wire:change="searchPerson('R')">
                         <option value="">Select Representative</option>
                         @foreach ($tblfamilys as $family)
                             <option value="{{$family->identificacion}}">{{$family->apellidos}} {{$family->nombres}}</option>
@@ -91,7 +91,7 @@
                 <div class="mb-3">
                     <label for="pernacionalidad" class="form-label">Nationality</label>
                     <select class="form-select" data-choices data-choices-search-false id="pernacionalidad" wire:model.defer="nacionalidad" require {{$eControl}}>
-                        <option value="">Select Nationality</option>
+                        <option value="0">Select Nationality</option>
                         @foreach ($tblgenerals as $general)
                             <option value="{{$general->id}}">{{$general->descripcion}}</option>
                         @endforeach

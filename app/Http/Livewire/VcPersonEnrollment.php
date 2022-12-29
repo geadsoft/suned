@@ -59,7 +59,7 @@ class VcPersonEnrollment extends Component
             $this->tipoident = $records->tipoidentificacion;
             $this->identificacion = $records->identificacion;
             $this->fechanace = date('Y-m-d',strtotime($records->fechanacimiento));
-            $this->nacionalidad = $records->nacionalidad;
+            $this->nacionalidad = $records->nacionalidad_id;
             $this->genero = $records->genero;
             $this->nacionalidad = $records->telefono;
             $this->email = $records->email;

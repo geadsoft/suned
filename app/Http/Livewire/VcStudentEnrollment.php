@@ -115,6 +115,18 @@ class VcStudentEnrollment extends Component
     
     }
 
+    public function validaNui(){
+        $records = TmPersonas::where("identificacion",$this->identificacion)->first();
+        
+        if ($this->chkoptnui=="si"){
+            return;
+        }
+
+        if ($records != null){
+            $this->dispatchBrowserEvent('msg-validanui');
+        }
+    }
+
 
     public function createData(){
 
@@ -367,7 +379,7 @@ class VcStudentEnrollment extends Component
     }
 
     public function grabaPerson($data){
-
+        
         $pernombre   =  $data['nombres'];
         $perapellido =  $data['apellidos'];
         $pertipoiden =  $data['tipo'];

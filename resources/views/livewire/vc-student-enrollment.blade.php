@@ -153,7 +153,7 @@
                                                 <label for="txtidentificacion" class="form-label">
                                                 Identification</label>
                                                 <input type="text" class="form-control" id="txtnui"
-                                                    placeholder="Enter your firstname" wire:model.defer="identificacion" required {{$eControl}}>
+                                                    placeholder="Enter your firstname" wire:model.defer="identificacion" required {{$eControl}} wire:focusout='validaNui()'>
                                             </div>
                                         </div>
                                         <div class="col-lg-4">

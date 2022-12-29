@@ -33,6 +33,11 @@
             $('#messageModal').modal('show');
         })
 
+         window.addEventListener('msg-validanui', event => {
+            swal("Error!", "Número de identificación ya Existe...", "warning");
+             document.getElementById("txtnui").value = "";
+        })
+
         window.addEventListener('searchData', event => {
             selecTab('pills-bill-students');
         })    
