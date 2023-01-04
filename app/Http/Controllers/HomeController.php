@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 
+
 class HomeController extends Controller
 {
     /**
@@ -19,6 +20,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        
     }
 
     /**

@@ -33,9 +33,13 @@
             $('#messageModal').modal('show');
         })
 
-         window.addEventListener('msg-validanui', event => {
+        window.addEventListener('msg-validanui', event => {
             swal("Error!", "Número de identificación ya Existe...", "warning");
              document.getElementById("txtnui").value = "";
+        })
+
+        window.addEventListener('msg-grabar', event => {
+            swal("Good job!", "Record recorded successfully!", "success");
         })
 
         window.addEventListener('searchData', event => {

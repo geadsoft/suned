@@ -146,6 +146,7 @@ class VcStudentEnrollment extends Component
         }
 
         $this->dispatchBrowserEvent('get-data');
+
     }
 
     public function postAdded($objData, $objPers)
@@ -228,6 +229,8 @@ class VcStudentEnrollment extends Component
 
         $this->GrabaDeuda($matriculaId,$codperiodo,$nomperiodo,$nromatricula);
 
+        $this->dispatchBrowserEvent('msg-grabar');
+        
         return redirect()->to('/academic/tuition');
         
     }

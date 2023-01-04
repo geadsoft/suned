@@ -17,7 +17,7 @@
                 <div class="col-12">
                     <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                         <div class="flex-grow-1">
-                            <h4 class="fs-16 mb-1">Good Morning, Anna!</h4>
+                            <h4 class="fs-16 mb-1">Good Morning, {{auth()->user()->name}}</h4>
                             <!--<p class="text-muted mb-0">Here's what's happening with your store
                                 today.</p>-->
                         </div>
@@ -40,7 +40,7 @@
                                     <div class="col-auto">
                                         <button type="button" class="btn btn-soft-secondary"><i
                                                 class="ri-add-circle-line align-middle me-1"></i>
-                                            Add Staff</button>
+                                            Add Student</button>
                                     </div>
                                     <!--end col-->
                                     <!--<div class="col-auto">
@@ -68,7 +68,7 @@
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p
                                         class="text-uppercase fw-bold text-white-75 text-truncate mb-0">
-                                        Staff Total </p>
+                                        Students Total </p>
                                 </div>
                                 <div class="flex-shrink-0">
                                     <h5 class="text-white fs-14 mb-0">
@@ -83,7 +83,7 @@
                                             class="counter-value" data-target="93">0</span>
                                     </h4>
                                     <a href="" class="text-decoration-underline text-white-50">View
-                                        all staff</a>
+                                        all students</a>
                                 </div>
                                 <!--<div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-soft-light rounded fs-3">
@@ -103,7 +103,7 @@
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p
                                         class="text-uppercase fw-bold text-white-75 text-truncate mb-0">
-                                        Staff Women</p>
+                                        Women Students</p>
                                 </div>
                                 <div class="flex-shrink-0">
                                     <h5 class="text-white fs-14 mb-0">
@@ -117,7 +117,7 @@
                                     <h4 class="fs-22 fw-bold ff-secondary text-white mb-4"><span
                                             class="counter-value" data-target="21">0</span></h4>
                                     <a href="" class="text-decoration-underline text-white-50">View
-                                        Staff</a>
+                                        Students</a>
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-soft-light rounded fs-3">
@@ -137,7 +137,7 @@
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p
                                         class="text-uppercase fw-bold text-white-75 text-truncate mb-0">
-                                        Staff Men</p>
+                                        Men Students</p>
                                 </div>
                                 <div class="flex-shrink-0">
                                     <h5 class="text-white fs-14 mb-0">
@@ -152,7 +152,7 @@
                                             class="counter-value" data-target="72">0</span>
                                     </h4>
                                     <a href="" class="text-decoration-underline text-white-50">View
-                                        Staff</a>
+                                        Students</a>
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-soft-light rounded fs-3">
