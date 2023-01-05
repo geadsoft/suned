@@ -10,30 +10,37 @@
             </div> 
             <div class="col-xl-6">
                 <div class="input-group mb-3">
-                    <select class="form-select" wire:model="search_nui" wire:change="searchPerson('R')">
-                        <option value="">Select Representative</option>
-                        @foreach ($tblfamilys as $family)
-                            <option value="{{$family->identificacion}}">{{$family->apellidos}} {{$family->nombres}}</option>
-                        @endforeach
-                    </select>
-                    <!--<label for="" class="form-label fs-15 mt-2  me-5">NUI</label>
-                    
-                    <div class="form-check form-check-inline fs-15 mt-2">
-                        <input class="form-check-input" type="radio" id="chkperson" wire:model="chkoption" value="si">
-                        <script>
-                            $chkoption="si";
-                        </script>
-                        <label for="inlineRadioOptions" class="form-label">SI</label>
-                    </div>
-                    <div class="form-check form-check-inline fs-15 mt-2">
-                        <input class="form-check-input" type="radio" id="chkperson" wire:model="chkoption" value="no">
-                        <script>
-                            $chkoption="no";
-                        </script>
-                        <label for="inlineRadioOptions" class="form-label">NO</label>
-                    </div>
-                    <input type="text" class="form-control" id="txtnombres" placeholder="Enter your Numers" wire:model="search_nui">
-                    <a id="btnstudents" class ="input-group-text btn btn-soft-info" wire:click="searchPerson('R')"><i class="ri-search-line me-1"></i>Search</a>-->
+                    @if ($estudianteId>0)
+
+                        <select class="form-select" wire:model="search_nui" wire:change="searchPerson('R')">
+                            <option value="">Select Representative</option>
+                            @foreach ($tblfamilys as $family)
+                                <option value="{{$family->identificacion}}">{{$family->apellidos}} {{$family->nombres}}</option>
+                            @endforeach
+                        </select>
+
+                    @else
+
+                        <label for="" class="form-label fs-15 mt-2  me-5">NUI</label>
+                        
+                        <!--<div class="form-check form-check-inline fs-15 mt-2">
+                            <input class="form-check-input" type="radio" id="chkperson" wire:model="chkoption" value="si">
+                            <script>
+                                $chkoption="si";
+                            </script>
+                            <label for="inlineRadioOptions" class="form-label">SI</label>
+                        </div>
+                        <div class="form-check form-check-inline fs-15 mt-2">
+                            <input class="form-check-input" type="radio" id="chkperson" wire:model="chkoption" value="no">
+                            <script>
+                                $chkoption="no";
+                            </script>
+                            <label for="inlineRadioOptions" class="form-label">NO</label>
+                        </div>-->
+                        <input type="text" class="form-control" id="txtnombres" placeholder="Enter your Numers" wire:model="search_nui">
+                        <a id="btnstudents" class ="input-group-text btn btn-soft-info" wire:click="searchPerson('R')"><i class="ri-search-line me-1"></i>Search</a>
+
+                    @endif
                 </div>
             </div>
             <div class="col-xl-3">
