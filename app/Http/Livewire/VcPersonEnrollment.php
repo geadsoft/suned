@@ -15,11 +15,12 @@ class VcPersonEnrollment extends Component
     public $persona_id=0;
     public $nombres, $apellidos, $tipoident="C", $identificacion, $genero="F", $fechanace, $nacionalidad=35, $telefono, $etnia="ME";
     public $email, $direccion, $parenteso, $eControl;
-    public $estudianteId;
+    public $estudianteId, $datoFamiliar;
 
-    public function mount($estudianteId){
+    public function mount($estudianteId, $datoFamiliar){
 
         $this->estudianteId = $estudianteId;
+        $this->datoFamiliar  = $datoFamiliar;
 
     }
     

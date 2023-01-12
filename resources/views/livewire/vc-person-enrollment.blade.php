@@ -10,7 +10,7 @@
             </div> 
             <div class="col-xl-6">
                 <div class="input-group mb-3">
-                    @if ($estudianteId>0)
+                    @if ($datoFamiliar==1)
 
                         <select class="form-select" wire:model="search_nui" wire:change="searchPerson('R')">
                             <option value="">Select Representative</option>

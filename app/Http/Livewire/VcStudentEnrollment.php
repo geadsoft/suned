@@ -23,7 +23,7 @@ class VcStudentEnrollment extends Component
     public $estudiante_id=0,$persona_id=0;
     public $codigo, $nombres="", $apellidos="", $nombrecompleto, $tipoident="C", $identificacion="", $genero="M", $fechanace, $nacionalidad=35, $telefono="", $etnia="ME";
     public $tipodiscapacidad, $discapacidad, $email="", $direccion="", $comentario="";
-    public $periodoId, $grupoId, $nivelId, $gradoId, $cursoId;
+    public $periodoId, $grupoId, $nivelId, $gradoId, $cursoId, $datosFamiliar=0;
     public $fecha,$crearperson, $estudentnew=0, $fControl='disabled'; 
     public $familiares = [];
     public $meses = [ 
@@ -131,11 +131,12 @@ class VcStudentEnrollment extends Component
             ->where('estudiante_id',"{$this->estudiante_id}")
             ->select('tm_familiar_estudiantes.id','persona_id','apellidos','nombres','tipoidentificacion','identificacion','nacionalidad_id','genero','telefono','direccion','email','parentesco')
             ->get()->toArray();
-
+            
             if (empty($familys)) {
                 $this->newFamiliar();
             }else{
                 $this->familiares =  $familys;
+                $this->datosFamiliar = 1;
             }
 
         }else{
