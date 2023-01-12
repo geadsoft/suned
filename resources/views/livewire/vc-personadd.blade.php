@@ -13,21 +13,21 @@
                                         data-bs-target="#pills-bill-info" type="button" role="tab"
                                         aria-controls="pills-bill-info" aria-selected="true"><i
                                             class=" ri-open-source-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Data Person</button>
+                                            Person Data</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3" id="pills-bill-family-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-family" type="button" role="tab"
                                         aria-controls="pills-bill-family" aria-selected="false"><i
                                             class="ri-user-2-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Data Family</button>
+                                            Family Data</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3" id="pills-bill-responsible-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-responsible" type="button" role="tab"
                                         aria-controls="pills-bill-responsible" aria-selected="false"><i
                                             class="ri-bank-card-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Datos Medical</button>
+                                            Medical Data</button>
                                 </li>
                             </ul>
                         </div>
@@ -371,15 +371,15 @@
                                     <div class="row g-3">
                                         <div class="col-xxl-4">
                                             <div class="mb-3">
-                                                <label for="txtemail" class="form-label">Email</label>
-                                                <input type="email" class="form-control" id="txtemail"
+                                                <label for="peremail" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="peremail"
                                                     placeholder="Enter Email" wire:model.defer="familiar.email" {{$eControl2}}>
                                             </div>
                                         </div>
                                         <div class="col-xxl-6">
                                             <div class="mb-3">
-                                                <label for="txtemail" class="form-label">Direction</label>
-                                                <input type="email" class="form-control" id="txtemail"
+                                                <label for="perdireccion" class="form-label">Direction</label>
+                                                <input type="text" class="form-control" id="perdireccion"
                                                     placeholder="Enter Direction" wire:model.defer="familiar.direccion" {{$eControl2}}>
                                             </div>
                                         </div>
@@ -387,7 +387,7 @@
                                             <div class="mb-3 text-center">
                                                 <label for="" class="form-label">-</label>
                                                 <div class="flex-shrink-0">
-                                                   <button type="button" wire:click="activeControl()" class="btn btn-soft-success" id="create-btn"
+                                                   <button type="button" wire:click="activeControl()" class="btn btn-soft-success" id="newfamily-btn"
                                                         data-bs-target=""><i class="ri-add-fill me-1"></i> New
                                                         </button>
                                                 </div>
@@ -397,9 +397,12 @@
                                             <div class="mb-3 text-center">
                                                 <label for="" class="form-label">-</label>
                                                 <div class="flex-shrink-0">
-                                                   <button type="button" wire:click="addFamiliar()" class="btn btn-soft-secondary" id="create-btn"
-                                                        data-bs-target="" {{$eControl2}}><i class="ri-add-fill me-1"></i> Agregar
-                                                        </button>
+                                                   <button type="button" wire:click="addFamiliar('A')" class="btn btn-soft-secondary" id="addfamily-btn"
+                                                        data-bs-target="" {{$eControl2}}><i class="ri-add-fill me-1"></i> Add
+                                                    </button>
+                                                    <button type="button" wire:click="addFamiliar('U')" class="btn btn-soft-secondary" id="editfamily-btn" style="display:none"
+                                                        data-bs-target="" {{$eControl2}}><i class="ri-add-fill me-1"></i> Update
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -435,14 +438,15 @@
                                                         <ul class="list-inline hstack gap-2 mb-0">
                                                             <li class="list-inline-item edit" data-bs-toggle="tooltip"
                                                                 data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                                <a href="" wire:click.prevent="">
+                                                                <a href="javascript:editFamiliar({{$recno['id']}},{{$recno['persona_id']}},'{{$recno['nombres']}}','{{$recno['apellidos']}}','{{$recno['tipoidentificacion']}}','{{$recno['identificacion']}}','{{$recno['genero']}}',{{$recno['nacionalidad_id']}},'{{$recno['telefono']}}','{{$recno['parentesco']}}','{{$recno['email']}}','{{$recno['direccion']}}')">
                                                                     <i class="ri-pencil-fill fs-16"></i>
                                                                 </a>
                                                             </li>
+                                                            
                                                             <li class="list-inline-item" data-bs-toggle="tooltip"
                                                                 data-bs-trigger="hover" data-bs-placement="top" title="Remove">
                                                                 <a class="text-danger d-inline-block remove-item-btn"
-                                                                    data-bs-toggle="modal" href="" wire:click.prevent="">
+                                                                    data-bs-toggle="modal" href="">
                                                                     <i class="ri-delete-bin-5-fill fs-16"></i>
                                                                 </a>
                                                             </li>

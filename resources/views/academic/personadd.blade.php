@@ -11,6 +11,7 @@
 
     <script src="{{ URL::asset('assets/js/pages/profile-setting.init.js') }}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="{{ URL::asset('assets/js/pages/personal-add.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>    
 
     <script>
@@ -30,6 +31,14 @@
 
         window.addEventListener('active-tab', event => {
             document.getElementById('pills-bill-family-tab').click()
+        })
+
+        window.addEventListener('family-add', event => {
+           familyData();         
+        })
+
+        window.addEventListener('msg-actualizar', event => {
+            swal("Good job!", "Record updated successfully!", "success");
         })
         
     </script>

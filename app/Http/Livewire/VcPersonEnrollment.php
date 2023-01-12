@@ -78,7 +78,6 @@ class VcPersonEnrollment extends Component
 
     public function savePerson($relacionId)
     {   
-        dd($this->$chkoption);
 
         if($this->chkOption=="no"){
 

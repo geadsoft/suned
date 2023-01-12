@@ -1,3 +1,37 @@
+
+var perid = 0;
+var personaid = 0;
+var pernombres = "";
+var perapellidos = "";
+var pertipo = "";
+var perident = "";
+var pergenero = "";
+var pernacion = 0;
+var pertelefono = "";
+var perrelacion = "";
+var peremail = "";
+var perdireccion = "";
+
+function backTab(SelectTab) {
+    switch (SelectTab) {
+        case 'pills-bill-students':    
+	        document.getElementById('pills-bill-student-tab').click()
+            break
+        case 'pills-bill-responsible':
+            document.getElementById('pills-bill-responsible-tab').click()
+            break
+        case 'pills-bill-family':
+            document.getElementById('pills-bill-family-tab').click()
+            break
+        case 'pills-bill-registration':
+            document.getElementById('pills-bill-registration-tab').click()
+            break
+        case 'pills-bill-finish':
+            document.getElementById('pills-bill-finish-tab').click()
+            break
+    }
+}
+
 function selecTab(SelectTab) {
     
     switch (SelectTab) {
@@ -23,8 +57,8 @@ function selecTab(SelectTab) {
 
             document.getElementById('pills-bill-responsible-tab').click()
             break
-        case 'pills-bill-registration':
-            
+        case 'pills-bill-family':
+
             var pernombres   = document.getElementById("pernombres").value
             var perapellidos = document.getElementById("perapellidos").value
 
@@ -32,6 +66,12 @@ function selecTab(SelectTab) {
                 swal("Error!", "Datos del representante no deben estar vacios..", "warning");
                 return true;
             }
+
+            document.getElementById('pills-bill-family-tab').click()
+            break
+        case 'pills-bill-registration':
+            
+            
            
             document.getElementById('pills-bill-registration-tab').click()
             break
@@ -152,4 +192,94 @@ function validarfor(){
         return true;
     }
     
+}
+
+function editFamiliar(id,idpersona,nombres,apellidos,tipo,ident,genero,nacion,telefono,relacion,email,direccion){
+
+    perid = id
+    personaid = idpersona
+    pernombres = nombres
+    perapellidos = apellidos
+    pertipo = tipo 
+    perident = ident
+    pergenero = genero
+    pernacion = nacion
+    pertelefono = telefono
+    perrelacion = relacion
+    peremail = email
+    perdireccion = direccion
+    
+    document.getElementById("familiarid").value = personaid
+    document.getElementById("nomfamiliar").value = pernombres
+    document.getElementById("apefamiliar").value = perapellidos
+    document.getElementById("tipfamiliar").value = pertipo
+    document.getElementById("idefamiliar").value = perident
+    document.getElementById("genfamiliar").value = pergenero
+    document.getElementById("nacfamiliar").value = pernacion
+    document.getElementById("telfamiliar").value = pertelefono
+    document.getElementById("relfamiliar").value = perrelacion
+    document.getElementById("emafamiliar").value = peremail
+    document.getElementById("dirfamiliar").value = perdireccion
+    document.getElementById("addfamily-btn").style.display = 'none'
+    document.getElementById("editfamily-btn").style.display = ''
+    
+
+    document.getElementById("nomfamiliar").disabled = false
+    document.getElementById("apefamiliar").disabled = false
+    document.getElementById("tipfamiliar").disabled = false
+    document.getElementById("idefamiliar").disabled = false
+    document.getElementById("genfamiliar").disabled = false
+    document.getElementById("nacfamiliar").disabled = false
+    document.getElementById("telfamiliar").disabled = false
+    document.getElementById("relfamiliar").disabled = false
+    document.getElementById("emafamiliar").disabled = false
+    document.getElementById("dirfamiliar").disabled = false
+    document.getElementById("addfamily-btn").disabled = false
+    document.getElementById("editfamily-btn").disabled = false
+
+}
+
+function familyData() {
+
+    if (document.getElementById("nomfamiliar").value.length > 0){
+        pernombres = document.getElementById("nomfamiliar").value
+    }
+
+    if (document.getElementById("apefamiliar").value.length > 0){
+        perapellidos = document.getElementById("apefamiliar").value
+    }
+
+    if (document.getElementById("idefamiliar").value.length > 0){
+        perident = document.getElementById("idefamiliar").value
+    }
+
+    if (document.getElementById("telfamiliar").value.length > 0){
+        pertelefono = document.getElementById("telfamiliar").value
+    }
+
+    if (document.getElementById("emafamiliar").value.length > 0){
+        pertelefono = document.getElementById("emafamiliar").value
+    }
+
+    if (document.getElementById("dirfamiliar").value.length > 0){
+        perdireccion = document.getElementById("dirfamiliar").value
+    }
+   
+    var data_obj = {
+        id: perid,
+        persona_id: personaid,
+        apellidos: perapellidos,
+        nombres: pernombres,
+        tipoidentificacion: pertipo,
+        identificacion: perident,
+        nacionalidad_id: pernacion,
+        genero: pergenero,
+        telefono: pertelefono,
+        direccion: perdireccion,
+        email: peremail,
+        parentesco: perrelacion,        
+    }
+
+    Livewire.emit('updateFamiliar',data_obj); 
+
 }

@@ -7,8 +7,8 @@
                         <div class="d-flex align-items-center">
                             <h5 class="card-title mb-0 flex-grow-1">Student Registration</h5>
                             <div class="flex-shrink-0">
-                                <a class="btn btn-success add-btn" href="/academic/student-enrollment"><i
-                                class="ri-add-line me-1 align-bottom"></i> Add Students</a>
+                                <!--<a class="btn btn-success add-btn" href="/academic/student-enrollment"><i
+                                class="ri-add-line me-1 align-bottom"></i> Add Students</a>-->
                             </div>
                         </div>
 

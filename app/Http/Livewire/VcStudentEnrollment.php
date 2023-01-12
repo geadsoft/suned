@@ -24,7 +24,8 @@ class VcStudentEnrollment extends Component
     public $codigo, $nombres="", $apellidos="", $nombrecompleto, $tipoident="C", $identificacion="", $genero="M", $fechanace, $nacionalidad=35, $telefono="", $etnia="ME";
     public $tipodiscapacidad, $discapacidad, $email="", $direccion="", $comentario="";
     public $periodoId, $grupoId, $nivelId, $gradoId, $cursoId;
-    public $fecha,$crearperson, $estudentnew=0; 
+    public $fecha,$crearperson, $estudentnew=0, $fControl='disabled'; 
+    public $familiares = [];
     public $meses = [ 
         1 => 'ENE',
         2 => 'FEB',
@@ -38,10 +39,32 @@ class VcStudentEnrollment extends Component
         10 => 'OCT',
         11 => 'NOV',
         12 => 'DIC'];
-     
 
+    public $familiar = [
+        'id' => 0,
+        'persona_id' => 0,
+        'apellidos' => '',
+        'nombres' => '',
+        'tipoidentificacion' => 'C',
+        'identificacion' => '',
+        'nacionalidad_id' => 35,
+        'genero' => 'M',
+        'telefono' => '',
+        'direccion' => '',
+        'email' => '',
+        'parentesco' => 'MA',
+    ];
+    public $relacion = [
+        'MA' => 'Madre',
+        'PA' => 'Padre',
+        'AP' => 'Apoderado',
+        'OT' => 'Otro',
+        'NN' => 'Selecione Relacion',
+
+    ];
+     
     public $sede;
-    protected $listeners = ['postAdded'];
+    protected $listeners = ['postAdded','updateFamiliar'];
 
     public function mount($tuition_id){
         
@@ -50,6 +73,7 @@ class VcStudentEnrollment extends Component
             $this->searchPerson(2);  
         }else{
             $this->chkoptnui="no";
+            $this->newFamiliar();
         }
 
     }
@@ -102,10 +126,17 @@ class VcStudentEnrollment extends Component
             $this->direccion = $records->direccion;
             $this->comentario = '';
 
-            /*$this->dispatchBrowserEvent('searchData');*/
-            /*$this->emitTo('vc-person-enrollment','loadData',1);*/
+            $familys =  TmFamiliarEstudiantes::query()
+            ->join("tm_personas as p","p.id","=","tm_familiar_estudiantes.persona_id")
+            ->where('estudiante_id',"{$this->estudiante_id}")
+            ->select('tm_familiar_estudiantes.id','persona_id','apellidos','nombres','tipoidentificacion','identificacion','nacionalidad_id','genero','telefono','direccion','email','parentesco')
+            ->get()->toArray();
 
-            
+            if (empty($familys)) {
+                $this->newFamiliar();
+            }else{
+                $this->familiares =  $familys;
+            }
 
         }else{
             
@@ -229,8 +260,59 @@ class VcStudentEnrollment extends Component
 
         $this->GrabaDeuda($matriculaId,$codperiodo,$nomperiodo,$nromatricula);
 
+        /*-- Familiar --*/
+        foreach ($this->familiares as $data){
+
+            if ($data['id']>0){
+
+                $record = TmPersonas::find($data['persona_id']);
+                $record->update([
+                    'nombres' => $data['nombres'],
+                    'apellidos' => $data['apellidos'],
+                    'identificacion' => $data['identificacion'],
+                    'nacionalidad_id' => $data['nacionalidad_id'],
+                    'genero' => $data['genero'],
+                    'telefono' => $data['telefono'],
+                    'direccion' => $data['direccion'],
+                    'email' => $data['email'],
+                    'parentesco' => $data['parentesco'],
+                ]);
+
+            }else{
+
+                TmPersonas::Create([
+                    'nombres' => $data['nombres'],
+                    'apellidos' => $data['apellidos'],
+                    'tipoidentificacion' => $data['tipoidentificacion'],
+                    'identificacion' => $data['identificacion'], 
+                    'fechanacimiento' => "1900-01-01",
+                    'nacionalidad_id' => $data['nacionalidad_id'],
+                    'genero' => $data['genero'],
+                    'telefono' => $data['telefono'],
+                    'direccion' => $data['direccion'],
+                    'email' => $data['email'],
+                    'etnia' => "",
+                    'parentesco' => $data['parentesco'],
+                    'tipopersona' => "R",
+                    'relacion_id' => 0,
+                    'usuario' => auth()->user()->name,
+                    'estado' => "A",
+                ]);
+                $newRecno = TmPersonas::orderBy("id", "desc")->first();
+
+                TmFamiliarEstudiantes::Create([
+                    'estudiante_id'=> $this->estudiante_id,
+                    'persona_id'=> $newRecno['id'],
+                    'informacion'=>'',
+                    'usuario' => auth()->user()->name,
+                ]);
+
+            }
+
+        }
+        /* Fin Familiar--*/
+
         $this->dispatchBrowserEvent('msg-grabar');
-        
         return redirect()->to('/academic/tuition');
         
     }
@@ -424,8 +506,8 @@ class VcStudentEnrollment extends Component
         $record = TmPersonas::find($perId);
 
         $record->update([
-            'nombres' => $this -> $data['nombres'],
-            'apellidos' => $this -> $data['apellidos'],
+            'nombres' => $data['nombres'],
+            'apellidos' => $data['apellidos'],
             'tipoidentificacion' => $data['tipo'],
             'identificacion' => $data['identidad'], 
             'nacionalidad_id' => $data['nacion'],
@@ -484,8 +566,83 @@ class VcStudentEnrollment extends Component
             'etnia' => $this -> etnia
         ]);
 
-    }   
+    }
+    
+    public function activeControl(){
+        $this->fControl = "";
+        $this->newFamiliar();
+        $this->dispatchBrowserEvent('active-tab');
+    }
 
+    public function newFamiliar(){
+        $this->familiar['id'] = 0;
+        $this->familiar['persona_id']=0;
+        $this->familiar['apellidos']='';
+        $this->familiar['nombres']='';
+        $this->familiar['tipoidentificacion']="C";
+        $this->familiar['identificacion']='';
+        $this->familiar['nacionalidad_id']=35;
+        $this->familiar['genero']="M";
+        $this->familiar['telefono']='';
+        $this->familiar['direccion']='';
+        $this->familiar['email']='';
+        $this->familiar['parentesco']="MA";
+    }
+
+    public function addFamiliar($opcion)
+    {   
+
+        if ($opcion=="U"){
+
+            $this->dispatchBrowserEvent('family-add');
+
+        } else {
+        
+            $ape = $this->familiar['apellidos'];
+            $nom = $this->familiar['nombres'];
+            $tip = $this->familiar['tipoidentificacion'];
+            $ide = $this->familiar['identificacion'];
+            $nac = $this->familiar['nacionalidad_id'];
+            $gen = $this->familiar['genero'];
+            $tel = $this->familiar['telefono'];
+            $dir = $this->familiar['direccion'];
+            $ema = $this->familiar['email'];
+            $par = $this->familiar['parentesco'];
+
+            if ($ape=='' || $nom=='' || $tip=='' || $ide=='' || $gen=='' || $par=='' || $nac=0 ){
+                $this->dispatchBrowserEvent('family-msg');
+                $this->dispatchBrowserEvent('active-tab');
+                return;
+            }else{ 
+                array_push($this->familiares,$this->familiar);
+                $this->newFamiliar();
+                $this->eControl2 = "disabled";
+                $this->dispatchBrowserEvent('active-tab');
+            }
+
+        }
+    }
+
+    public function updateFamiliar($data=null){
+        
+        $familiarId = $data['id'];
+
+        $recnoToDelete = $this->familiares;
+        foreach ($recnoToDelete as $index => $recno)
+        {
+            if ($recno['id'] == $familiarId){
+                unset ($recnoToDelete[$index]);
+            } 
+        }
+
+        $this->reset(['familiares']);
+        $this->familiares = $recnoToDelete;
+        array_push($this->familiares,$data); 
+        $this->newFamiliar();
+        $this->eControl2 = "disabled";
+        $this->dispatchBrowserEvent('active-tab'); 
+        
+    }
     
 
 }

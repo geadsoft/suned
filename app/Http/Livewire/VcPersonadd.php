@@ -5,13 +5,13 @@ use App\Models\TmPersonas;
 use App\Models\TmGeneralidades;
 use App\Models\TmDomicilioEstudiantes;
 use App\Models\TmFamiliarEstudiantes;
-
+use Illuminate\Support\Arr;
 
 use Livewire\Component;
 
 class VcPersonadd extends Component
 {
-    public $record;
+    public $record, $addfamily=false;
     public $search_nui;
     public $eControl="";
     public $eControl2="disabled";
@@ -58,12 +58,16 @@ class VcPersonadd extends Component
         'PA' => 'Padre',
         'AP' => 'Apoderado',
         'OT' => 'Otro',
+        'NN' => 'Selecione Relacion',
+
     ];
 
     public $personaId, $nombres, $apellidos, $tipoident, $identificacion, $genero, $fechanace, $nacionalidad, $telefono, $etnia;
     public $tipodiscapacidad, $discapacidad, $email, $direccion;
 
     public $fnombres, $fapellidos, $ftipoident, $fidentificacion, $fgenero, $fnacionalidad, $ftelefono, $femail, $fdireccion, $fparentesco;
+
+    protected $listeners = ['updateFamiliar'];    
  
     public function mount($tuition_id){
         
@@ -79,7 +83,7 @@ class VcPersonadd extends Component
     public function render()
     {   
 
-        $record = TmPersonas::find(0);
+        $record      = TmPersonas::find(0);
         $tblgenerals = TmGeneralidades::where('superior',7)->get();
 
         return view('livewire.vc-personadd',[
@@ -116,7 +120,7 @@ class VcPersonadd extends Component
         $this->tipoident = $record->tipoidentificacion;
         $this->identificacion = $record->identificacion;
         $this->fechanace = date('Y-m-d',strtotime($record->fechanacimiento));
-        $this->nacionalidad = $record->nacionalidad;
+        $this->nacionalidad = $record->nacionalidad_id;
         $this->genero = $record->genero;
         $this->telefono = $record->telefono;
         $this->email = $record->email;
@@ -136,7 +140,7 @@ class VcPersonadd extends Component
                     ->where('estudiante_id',"{$this->personaId}")
                     ->select('tm_familiar_estudiantes.id','persona_id','apellidos','nombres','tipoidentificacion','identificacion','nacionalidad_id','genero','telefono','direccion','email','parentesco')
                     ->get()->toArray();
-
+        
         if (empty($familys)) {
             $this->newFamiliar();
         }else{
@@ -195,7 +199,7 @@ class VcPersonadd extends Component
                 'etnia' => $this -> etnia,
                 'parentesco' => "",
                 'tipopersona' => "E",
-                'relacion_id' => 0
+                'relacion_id' => 0,
                 ]);
             
         }
@@ -283,6 +287,9 @@ class VcPersonadd extends Component
 
         }
         
+        $this->dispatchBrowserEvent('msg-actualizar');
+        return redirect()->to('/academic/students');
+
     }
 
     public function newDirections(){
@@ -330,29 +337,63 @@ class VcPersonadd extends Component
         $this->familiar['parentesco']="MA";
     }
 
-    public function addFamiliar()
-    {
-        $ape = $this->familiar['apellidos'];
-        $nom = $this->familiar['nombres'];
-        $tip = $this->familiar['tipoidentificacion'];
-        $ide = $this->familiar['identificacion'];
-        $nac = $this->familiar['nacionalidad_id'];
-        $gen = $this->familiar['genero'];
-        $tel = $this->familiar['telefono'];
-        $dir = $this->familiar['direccion'];
-        $ema = $this->familiar['email'];
-        $par = $this->familiar['parentesco'];
+    public function addFamiliar($opcion)
+    {   
+        if ($opcion=="U"){
 
-        if ($ape=='' || $nom=='' || $tip=='' || $ide=='' || $nac=='' || $gen=='' || $par==''){
-            $this->dispatchBrowserEvent('family-msg');
-            return;
-        }else{ 
-            array_push($this->familiares,$this->familiar);
-            $this->newFamiliar();
-            $this->eControl2 = "disabled";
-            $this->dispatchBrowserEvent('active-tab');
+            $this->dispatchBrowserEvent('family-add');
+
+        } else {
+        
+            $ape = $this->familiar['apellidos'];
+            $nom = $this->familiar['nombres'];
+            $tip = $this->familiar['tipoidentificacion'];
+            $ide = $this->familiar['identificacion'];
+            $nac = $this->familiar['nacionalidad_id'];
+            $gen = $this->familiar['genero'];
+            $tel = $this->familiar['telefono'];
+            $dir = $this->familiar['direccion'];
+            $ema = $this->familiar['email'];
+            $par = $this->familiar['parentesco'];
+
+            if ($ape=='' || $nom=='' || $tip=='' || $ide=='' || $gen=='' || $par=='' || $nac=0 ){
+                $this->dispatchBrowserEvent('family-msg');
+                $this->eControl2 = "disabled";
+                $this->dispatchBrowserEvent('active-tab');
+                return;
+            }else{ 
+                array_push($this->familiares,$this->familiar);
+                $this->newFamiliar();
+                $this->eControl2 = "disabled";
+                $this->dispatchBrowserEvent('active-tab');
+            }
+
         }
     }
+
+    public function updateFamiliar($data=null){
+        
+        $familiarId = $data['id'];
+
+        $recnoToDelete = $this->familiares;
+        foreach ($recnoToDelete as $index => $recno)
+        {
+            if ($recno['id'] == $familiarId){
+                unset ($recnoToDelete[$index]);
+            } 
+        }
+
+        $this->reset(['familiares']);
+        $this->familiares = $recnoToDelete;
+        array_push($this->familiares,$data); 
+        $this->newFamiliar();
+        $this->dispatchBrowserEvent('active-tab'); 
+        
+    }
+
+
+
+
 
 
 

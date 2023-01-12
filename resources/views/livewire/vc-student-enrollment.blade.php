@@ -30,6 +30,13 @@
                                             Representative</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
+                                    <button class="nav-link fs-15 p-3" id="pills-bill-family-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-bill-family" type="button" role="tab"
+                                        aria-controls="pills-bill-family" aria-selected="false"><i
+                                            class="ri-parent-fill fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
+                                            Family Data</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3" id="pills-bill-registration-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-registration" type="button" role="tab"
                                         aria-controls="pills-bill-registration" aria-selected="false"><i
@@ -303,7 +310,7 @@
                                 </div>
                                 <div class="d-flex align-items-start gap-3 mt-4">
                                     <button type="button" class="btn btn-light btn-label previestab"
-                                        data-previous="pills-bill-students-tab" onclick="selecTab('pills-bill-students')"><i
+                                        data-previous="pills-bill-students-tab" onclick="backTab('pills-bill-students')"><i
                                             class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back Student ID</button>
                                     <button type="button" class="btn btn-primary btn-label right ms-auto nexttab"
                                         data-nexttab="pills-responsible-tab" onclick="selecTab('pills-bill-responsible')"><i
@@ -325,14 +332,198 @@
 
                                 <div class="d-flex align-items-start gap-3 mt-4">
                                     <button type="button" class="btn btn-light btn-label previestab"
-                                        data-previous="pills-bill-info-tab" onclick="selecTab('pills-bill-responsible')"><i
-                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back Responsible</button>
+                                        data-previous="pills-bill-info-tab" onclick="backTab('pills-bill-students')"><i
+                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back Student</button>
                                     <button type="button" class="btn btn-primary btn-label right ms-auto nexttab"
-                                        data-nexttab="pills-bill-registration-tab" onclick="selecTab('pills-bill-registration')"><i
-                                            class="ri-file-user-line label-icon align-middle fs-16 ms-2"></i>Continue to Registration</button>
+                                        data-nexttab="pills-bill-registration-tab" onclick="selecTab('pills-bill-family')"><i
+                                            class="ri-file-user-line label-icon align-middle fs-16 ms-2"></i>Continue to FamilyData</button>
                                 </div>    
                             </div>
                             <!-- end tab pane -->
+
+                            <div class="tab-pane fade" id="pills-bill-family" role="tabpanel" aria-labelledby="pills-bill-family-tab">
+                                <div class="row">
+                                    <div class="card-header">
+                                        <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
+                                            class="mdi mdi-account-tie align-middle me-1 text-success"></i>
+                                            Familiares</h5>
+                                    </div>
+                                </div>
+                                <div class="card-body row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="pernombres" class="form-label">
+                                            Names</label>
+                                            <input type="text" class="form-control" id="familiarid" wire:model.defer="persona_id" style="display:none">
+                                            <input type="text" class="form-control" id="nomfamiliar" placeholder="Enter your Names" wire:model.defer="familiar.nombres" {{$fControl}}>
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="perapellidos" class="form-label">Surnames</label>
+                                            <input type="text" class="form-control" id="apefamiliar" placeholder="Enter your Surnames" wire:model.defer="familiar.apellidos" {{$fControl}}>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="mb-3">
+                                            <label for="pertipoident" class="form-label">Type of identification</label>
+                                            <select class="form-select" data-choices data-choices-search-false id="tipfamiliar" wire:model.defer="familiar.tipoidentificacion" {{$fControl}}>
+                                                <option value="C">Cédula</option>
+                                                <option value="P">Pasaporte</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="perident" class="form-label">
+                                            Identification</label>
+                                            <input type="text" class="form-control" id="idefamiliar"
+                                                placeholder="Enter your firstname" wire:model.defer="familiar.identificacion" {{$fControl}}>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label for="pergenero" class="form-label">Gender</label>
+                                            <select class="form-select" data-choices data-choices-search-false id="genfamiliar" wire:model.defer="familiar.genero" {{$fControl}}>
+                                                <option value="M">Male</option>
+                                                <option value="F">Female</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label for="pernacionalidad" class="form-label">Nationality</label>
+                                            <select class="form-select" data-choices data-choices-search-false id="nacfamiliar" wire:model.defer="familiar.nacionalidad_id" {{$fControl}}>
+                                                <option value="">Select Nationality</option>
+                                                @foreach ($tblgenerals as $general)
+                                                    <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label for="pertelefono" class="form-label">Phone
+                                                Number</label>
+                                            <input type="text" class="form-control" id="telfamiliar"
+                                                placeholder="Enter your phone number" wire:model.defer="familiar.telefono" {{$fControl}}>
+                                        </div>
+                                    </div>                                   
+                                    <!--end col-->
+
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label for="perrelacion" class="form-label">Relation</label>
+                                            <select class="form-select" data-choices data-choices-search-false id="relfamiliar" wire:model.defer="familiar.parentesco" {{$fControl}}>
+                                                <option value="NN">Selecione Relacion</option>
+                                                <option value="MA">Madre</option>
+                                                <option value="PA">Padre</option>
+                                                <option value="AP">Apoderado</option>
+                                                <option value="OT">Otro</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-xxl-4">
+                                            <div class="mb-3">
+                                                <label for="peremail" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="emafamiliar"
+                                                    placeholder="Enter Email" wire:model.defer="familiar.email" {{$fControl}}>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-6">
+                                            <div class="mb-3">
+                                                <label for="perdireccion" class="form-label">Direction</label>
+                                                <input type="text" class="form-control" id="dirfamiliar"
+                                                    placeholder="Enter Direction" wire:model.defer="familiar.direccion" {{$fControl}}>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-1">
+                                            <div class="mb-3 text-center">
+                                                <label for="" class="form-label">-</label>
+                                                <div class="flex-shrink-0">
+                                                   <button type="button" wire:click="activeControl()" class="btn btn-soft-success" id="newfamily-btn"
+                                                        data-bs-target=""><i class="ri-add-fill me-1"></i> New
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xxl-1">
+                                            <div class="mb-3 text-center">
+                                                <label for="" class="form-label">-</label>
+                                                <div class="flex-shrink-0">
+                                                   <button type="button" wire:click="addFamiliar('A')" class="btn btn-soft-secondary" id="addfamily-btn"
+                                                        data-bs-target="" {{$fControl}}><i class="ri-add-fill me-1"></i> Add
+                                                    </button>
+                                                    <button type="button" wire:click="addFamiliar('U')" class="btn btn-soft-secondary" id="editfamily-btn" style="display:none"
+                                                        data-bs-target="" {{$fControl}}><i class="ri-add-fill me-1"></i> Update
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+
+                                </div>
+                                <div class="card-body row">
+                                    <div class="table-responsive table-card mb-3">
+                                        <table class="table align-middle table-nowrap mb-0" id="customerTable">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th scope="col">Identification</th>
+                                                    <th scope="col">Surname</th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Relation</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">Telephone</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="newlink">
+
+                                                @foreach ($familiares as $recno)  
+                                                <tr>
+                                                    <td>{{$recno['identificacion']}}</td>
+                                                    <td>{{$recno['apellidos']}}</td>
+                                                    <td>{{$recno['nombres']}}</td>
+                                                    <td>{{$relacion[$recno['parentesco']]}}</td>
+                                                    <td>{{$recno['email']}}</td>
+                                                    <td>{{$recno['telefono']}}</td>
+                                                    <td>
+                                                        <ul class="list-inline hstack gap-2 mb-0">
+                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip"
+                                                                data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                                <a href="javascript:editFamiliar({{$recno['id']}},{{$recno['persona_id']}},'{{$recno['nombres']}}','{{$recno['apellidos']}}','{{$recno['tipoidentificacion']}}','{{$recno['identificacion']}}','{{$recno['genero']}}',{{$recno['nacionalidad_id']}},'{{$recno['telefono']}}','{{$recno['parentesco']}}','{{$recno['email']}}','{{$recno['direccion']}}')">
+                                                                    <i class="ri-pencil-fill fs-16"></i>
+                                                                </a>
+                                                            </li>
+                                                            
+                                                            <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                                data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                <a class="text-danger d-inline-block remove-item-btn"
+                                                                    data-bs-toggle="modal" href="">
+                                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>    
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-start gap-3 mt-4">
+                                    <button type="button" class="btn btn-light btn-label previestab"
+                                        data-previous="pills-bill-info-tab" onclick="backTab('pills-bill-responsible')"><i
+                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back Representative</button>
+                                    <button type="button" class="btn btn-primary btn-label right ms-auto nexttab"
+                                        data-nexttab="pills-bill-registration-tab" onclick="selecTab('pills-bill-registration')"><i
+                                            class="ri-file-user-line label-icon align-middle fs-16 ms-2"></i>Continue to Registration</button>
+                                </div>
+                            </div>
                             
                             <div class="tab-pane fade" id="pills-bill-registration" role="tabpanel" aria-labelledby="pills-payment-tab">
                                 <div class="row">
@@ -408,8 +599,8 @@
 
                                 <div class="d-flex align-items-start gap-3 mt-4">
                                     <button type="button" class="btn btn-light btn-label previestab"
-                                        data-previous="pills-bill-registration-tab" onclick="selecTab('pills-bill-registration')"><i
-                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back to Registration</button>
+                                        data-previous="pills-bill-registration-tab" onclick="backTab('pills-bill-family')"><i
+                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back to Family Data</button>
                                     <button type="button" class="btn btn-primary btn-label right ms-auto nexttab"
                                         data-nexttab="pills-finish-tab" onclick="selecTab('pills-bill-finish')"><i
                                             class="ri-contacts-book-line label-icon align-middle fs-16 ms-2"></i>Complete Registration</button>
