@@ -79,6 +79,7 @@
                                             <th class="sort" data-sort="modality">Document</th>
                                             <th class="sort" data-sort="level">Date Incripction</th>
                                             <th class="sort" data-sort="degree">Group</th>
+                                            <th class="sort" data-sort="">Period</th>
                                             <th class="sort" data-sort="">Course</th>
                                             <th class="sort" data-sort="">Paralel</th>
                                         @endif
@@ -95,6 +96,7 @@
                                         <td>{{$record->documento}}</td> 
                                         <td> {{date('d/m/Y',strtotime($record->fecha))}}</td> 
                                         <td>{{$record->nomgrupo}}</td>
+                                        <td>{{$record->nomperiodo}}</td>
                                         <td>{{$record->nomgrado}}</td>
                                         <td>{{$record->paralelo}}</td>
                                         @endif
