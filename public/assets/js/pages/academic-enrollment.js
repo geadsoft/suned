@@ -265,6 +265,12 @@ function familyData() {
         perdireccion = document.getElementById("dirfamiliar").value
     }
    
+    var e = document.getElementById("perrelacion")
+    var relacion = e.options[e.selectedIndex].value
+    if (perrelacion="NN" && relacion!=perrelacion){
+        perrelacion = relacion
+    }
+
     var data_obj = {
         id: perid,
         persona_id: personaid,

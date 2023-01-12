@@ -117,12 +117,12 @@
                                             </div>
                                         </th>
                                         
-                                        <td class="name">{{$record->identificacion}}</td>
-                                        <td class="company_name">{{$record->nombres}}</td>
-                                        <td class="email_id">{{$record->apellidos}}</td>
-                                        <td class="phone">{{$record->fechanacimiento}}</td>
-                                        <td class="lead_score">{{$record->nacionalidad->descripcion}}</td>
-                                        <td class="tags">{{$record->telefono}}</td>
+                                        <td>{{$record->identificacion}}</td>
+                                        <td>{{$record->nombres}}</td>
+                                        <td>{{$record->apellidos}}</td>
+                                        <td>{{date('d/m/Y',strtotime($record->fechanacimiento))}}</td>
+                                        <td>{{$record->nacionalidad->descripcion}}</td>
+                                        <td>{{$record->telefono}}</td>
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
