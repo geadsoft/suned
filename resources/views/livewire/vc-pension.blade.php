@@ -193,15 +193,15 @@
                                                                 <th scope="col">Nivel</th>
                                                                 <th scope="col" class="text-center" colspan="2">Matrícula</th>
                                                                 <th scope="col" class="text-end" style="width: 120px;">Pension</th>
-                                                                <th scope="col" class="text-end" style="width: 120px;">Plataforma</th>
+                                                                <th scope="col" class="text-center" colspan="2">Plataforma</th>
                                                             </tr>
                                                             <tr class="table-active">
                                                                 <th scope="col" class="text-end"></th>
                                                                 <th scope="col" class="text-end"></th>
                                                                 <th scope="col" class="text-end" style="width: 120px;">Antiguos</th>
                                                                 <th scope="col" class="text-end" style="width: 120px;">Recientes</th>
-                                                                <th scope="col" class="text-end"></th>
-                                                                <th scope="col" class="text-end"></th>
+                                                                <th scope="col" class="text-end" style="width: 120px;">Español</th>
+                                                                <th scope="col" class="text-end" style="width: 120px;">Ingles</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -224,7 +224,10 @@
                                                                 <input type="number" class="form-control product-price bg-light border-0 text-end" id="pension-{{$count}}" step="0.01" placeholder="0.00" value="{{$valor['pension']}}" />
                                                             </td>
                                                             <td> 
-                                                                <input type="number" class="form-control product-price bg-light border-0 text-end" id="plataforma-{{$count}}" step="0.01" placeholder="0.00" value="{{$valor['plataforma']}}" />
+                                                                <input type="number" class="form-control product-price bg-light border-0 text-end" id="eplataforma-{{$count}}" step="0.01" placeholder="0.00" value="{{$valor['eplataforma']}}" />
+                                                            </td>
+                                                            <td> 
+                                                                <input type="number" class="form-control product-price bg-light border-0 text-end" id="iplataforma-{{$count}}" step="0.01" placeholder="0.00" value="{{$valor['iplataforma']}}" />
                                                             </td>
                                                             <!--<td> 
                                                                 <ul class="list-inline hstack gap-2 mb-0 ">

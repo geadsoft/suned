@@ -86,8 +86,10 @@ class VcPension extends Component
             'pension_id' =>  $tbldata['id'],  
             'nivel_id' => $detalle['id'],
             'matricula' => $detalle['matricula'],
+            'matricula2' => $detalle['matricula2'],
             'pension' => $detalle['pension'],
-            'plataforma' => $detalle['plataforma'],
+            'eplataforma' => $detalle['eplataforma'],
+            'iplataforma' => $detalle['iplataforma'],
             'estado' => "A",
             'usuario' => auth()->user()->name,
             ]);
@@ -146,7 +148,8 @@ class VcPension extends Component
         $matricula = 0.00;
         $matricula2 = 0.00;
         $pension = 0.00;
-        $plataforma = 0.00;
+        $eplataforma = 0.00;
+        $iplataforma = 0.00;
         
         foreach ($dataDet as $general)
         {   
@@ -156,7 +159,8 @@ class VcPension extends Component
                 $matricula = $general->matricula;
                 $matricula2 = $general->matricula2;
                 $pension = $general->pension;
-                $plataforma = $general->plataforma;
+                $eplataforma = $general->eplataforma;
+                $iplataforma = $general->iplataforma;
 
             }else{
                 $id = $general->id;
@@ -169,7 +173,8 @@ class VcPension extends Component
                 'matricula' => $matricula,
                 'matricula2' => $matricula2,
                 'pension' => $pension,
-                'plataforma'  => $plataforma,
+                'eplataforma'  => $eplataforma,
+                'iplataforma'  => $iplataforma,
             ];
 
             array_push($this->tblvalores,$arrayData);

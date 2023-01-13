@@ -53,15 +53,19 @@
                 var col_nivel = element.querySelector("#nivel-"+count).value;
                 var col_nombre = element.querySelector("#nombre-"+count).value;
                 var col_matricula = element.querySelector("#matricula-"+count).value;
+                var col_matricula2 = element.querySelector("#matricula-"+count).value;
                 var col_pension = element.querySelector("#pension-"+count).value;
-                var col_plataforma = element.querySelector("#plataforma-"+count).value;
+                var col_eplataforma = element.querySelector("#eplataforma-"+count).value;
+                var col_iplataforma = element.querySelector("#iplataforma-"+count).value;
                                 
                 var pension_obj = {
                     id: col_nivel,
                     nombre: col_nombre,
                     matricula: col_matricula,
+                    matricula2: col_matricula,
                     pension: col_pension,
-                    plataforma: col_plataforma,
+                    eplataforma: col_eplataforma,
+                    iplataforma: col_iplataforma,
                 }
                 new_pension_obj.push(pension_obj);
                 count++;
