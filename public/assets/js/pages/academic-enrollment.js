@@ -61,8 +61,9 @@ function selecTab(SelectTab) {
 
             var pernombres   = document.getElementById("pernombres").value
             var perapellidos = document.getElementById("perapellidos").value
+            var perdirecion  = document.getElementById("perdireccion").value
 
-            if ((pernombres == "") || (perapellidos == "")) {  //COMPRUEBA CAMPOS VACIOS
+            if ((pernombres == "") || (perapellidos == "") || (perdirecion == "")) {  //COMPRUEBA CAMPOS VACIOS
                 swal("Error!", "Datos del representante no deben estar vacios..", "warning");
                 return true;
             }
