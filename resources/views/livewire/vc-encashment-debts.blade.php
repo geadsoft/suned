@@ -9,7 +9,7 @@
                     </div>
                 </th>
                 <th style="width: 60px; display:none;" scope="col">id</th>
-                <th style="width: 180px;" scope="col">Referencia</th>
+                <th style="width: 150px;" scope="col">Referencia</th>
                 <th scope="col">Descripcion</th>
                 <th style="width: 90px;" scope="col" class="text-end">Descuento</th>
                 <th style="width: 120px;" scope="col" class="text-end">Valor</th>
@@ -32,11 +32,11 @@
             </td>
             <td class="text-end">
                 <input type="number" class="form-control product-price bg-light border-0 text-end" id="desc-{{$fila}}" step="0.01" 
-                placeholder="0.00" value="{{$deuda->descuento}}" />
+                placeholder="0.00" value="{{number_format($deuda->descuento,2)}}" />
             </td>
             <td class="text-end">
                 <input type="number" class="form-control product-price bg-white border-0 text-end" id="saldo-{{$fila}}" step="0.01" 
-                    placeholder="0.00" value="{{$deuda->saldo}}" readonly/>
+                    placeholder="0.00" value="{{number_format($deuda->saldo,2)}}" readonly/>
             </td>
         </tr>
         <script>

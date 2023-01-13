@@ -339,7 +339,8 @@ class VcStudentEnrollment extends Component
             $valorMatricula  = $pensiones['matricula2'];
         }
         $valorPension    = $pensiones['pension'];
-        $valorPlataforma = $pensiones['plataforma'];
+        $valorePlataforma = $pensiones['eplataforma'];
+        $valoriPlataforma = $pensiones['iplataforma'];
         $cuotas = 10;
         
         //Matricula
@@ -381,25 +382,26 @@ class VcStudentEnrollment extends Component
           ]);
 
 
-        //Plataforma
+        //Plataforma Español
         TrDeudasCabs::Create([
             'matricula_id' => $matriculaId,
             'estudiante_id' => $this -> estudiante_id,
             'periodo_id' => $this -> periodoId,
             'referencia' => 'PLA-PER'.substr($codperiodo, -2).str_pad($nromatricula, 4, "0", STR_PAD_LEFT),
             'fecha' => $this->fecha,
-            'basedifgravada' => $valorPlataforma,
+            'basedifgravada' => $valorePlataforma,
             'basegravada' =>0.00,
             'impuesto' =>0.00,
             'descuento' =>0.00,
-            'neto' => $valorPlataforma,
-            'debito' => $valorPlataforma,
+            'neto' => $valorePlataforma,
+            'debito' => $valorePlataforma,
             'credito' =>0.00,
-            'saldo' => $valorPlataforma,
-            'glosa' => 'Matricula Periodo '.$nomperiodo,
+            'saldo' => $valorePlataforma,
+            'glosa' => 'Plataforma Español Periodo '.$nomperiodo,
             'estado' => 'P',
             'usuario' => auth()->user()->name,
         ]);
+
         $deuda = TrDeudasCabs::orderBy("id", "desc")->first();
         $deudaId = $deuda['id'];
 
@@ -407,11 +409,47 @@ class VcStudentEnrollment extends Component
             'deudacab_id' => $deudaId,
             'cobro_id' => 0,
             'fecha' => $this->fecha,
-            'detalle' => 'Plataforma Periodo '.$nomperiodo,
+            'detalle' => 'Plataforma Español Periodo '.$nomperiodo,
             'tipo' => "",
             'referencia' => "",
             'tipovalor' => "DB",
-            'valor' => $valorPlataforma,
+            'valor' => $valorePlataforma,
+            'estado' => 'P',
+            'usuario' => auth()->user()->name,
+          ]);
+
+        //Plataforma Ingles
+        TrDeudasCabs::Create([
+            'matricula_id' => $matriculaId,
+            'estudiante_id' => $this -> estudiante_id,
+            'periodo_id' => $this -> periodoId,
+            'referencia' => 'PLA-PER'.substr($codperiodo, -2).str_pad($nromatricula, 4, "0", STR_PAD_LEFT),
+            'fecha' => $this->fecha,
+            'basedifgravada' => $valoriPlataforma,
+            'basegravada' =>0.00,
+            'impuesto' =>0.00,
+            'descuento' =>0.00,
+            'neto' => $valoriPlataforma,
+            'debito' => $valoriPlataforma,
+            'credito' =>0.00,
+            'saldo' => $valoriPlataforma,
+            'glosa' => 'Plataforma Ingles Periodo '.$nomperiodo,
+            'estado' => 'P',
+            'usuario' => auth()->user()->name,
+        ]);
+
+        $deuda = TrDeudasCabs::orderBy("id", "desc")->first();
+        $deudaId = $deuda['id'];
+
+        TrDeudasDets::Create([
+            'deudacab_id' => $deudaId,
+            'cobro_id' => 0,
+            'fecha' => $this->fecha,
+            'detalle' => 'Plataforma Ingles Periodo '.$nomperiodo,
+            'tipo' => "",
+            'referencia' => "",
+            'tipovalor' => "DB",
+            'valor' => $valoriPlataforma,
             'estado' => 'P',
             'usuario' => auth()->user()->name,
           ]);
