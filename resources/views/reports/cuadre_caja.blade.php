@@ -13,30 +13,41 @@
 <body>
     <section class="header" style ="top: -287px;">
         <table cellpadding="0" cellspancing="0" width="100%">
-            <tr>
+            <!--<tr>
                 <td colspan="2" class="text-center">
                     <span style="font-size: 18px; font-weight: bold;">Unidad Educativa American Schooll</span>
                 </td>
-            <tr>
+            <tr>-->
             <tr>
                 <td width="30%" style="vertical-align: top; padding-top: 10px; position: relative">
-                    <!--<img src="{{ URL::asset('assets/images/companies/American Schooll.png') }}" alt="" class="invoice-logo">-->
+                    <img src="../public/assets/images/AmericanSchooll.jpg" width="200px" height="60px">                  
                 </td>
-                <td width="70%" class="text-left" style="vertical-align: top; padding-top: 10px">
+                <td width="70%" class="text-center" style="vertical-align: top; padding-top: 10px">
                     <span style="font-size: 16px"><strong>Cuadre de Caja</strong></span>
-                    <tr>
-                        <span class="text-muted" style="font-size: 12px"><strong>Fecha: {{$filter['srv_fecha']}}</strong></span>
+                    <!--<tr>
+                        <span class="text-muted" style="font-size: 12px"><strong>Fecha: {{$filter['fecha']}}</strong></span>
                     </tr>
                     <tr>
-                        <span class="text-muted" style="font-size: 12px"><strong>Grupo: {{$filter['srv_grupo']}}</strong></span>
+                        <span class="text-muted" style="font-size: 12px"><strong>Grupo: {{$filter['grupo']}}</strong></span>
                     <tr>
                     <tr>
-                        <span class="text-muted" style="font-size: 12px"><strong>Periodo: {{$filter['srv_periodo']}}</strong></span>
-                    </tr>
+                        <span class="text-muted" style="font-size: 12px"><strong>Periodo: {{$filter['periodo']}}</strong></span>
+                    </tr>-->
+                    <table width="100%" cellpadding="0" cellspancing="0">
+                        <tr>
+                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Fecha: {{$filter['fecha']}}</strong></span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Grupo: {{$filter['grupo']}}</strong></span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Periodo: {{$filter['periodo']}}</strong></span></td>
+                        </tr>
+                    </table>
                 </td>           
             <tr>
         </table>
-
+        <br>
     </section>
 
     <section class="header" style ="top: -287px;">
@@ -44,17 +55,17 @@
 
     <section style ="margin-top: -110px;">
         <table cellpadding="0" cellspacing="0" class="table table-nowrap align-middle" style="font-size:10px">
-            <thead class="text-muted table-light">
+            <thead class="table-light" style="background-color:#222454">
                 <tr>
-                    <th>Recibo</th>
-                    <th>Alumno</th>
-                    <th>Curso</th>
-                    <th>Concepto</th>
-                    <th>F.P.</th>
-                    <th>Valor</th>
-                    <th>Desc.</th>
-                    <th>Canc.</th>
-                    <th>Usuario</th>
+                    <th style="color:#FFFFFF">Recibo</th>
+                    <th style="color:#FFFFFF">Alumno</th>
+                    <th style="color:#FFFFFF">Curso</th>
+                    <th style="color:#FFFFFF">Concepto</th>
+                    <th style="color:#FFFFFF">F.P.</th>
+                    <th style="color:#FFFFFF">Valor</th>
+                    <th style="color:#FFFFFF">Desc.</th>
+                    <th style="color:#FFFFFF">Canc.</th>
+                    <th style="color:#FFFFFF">Usuario</th>
                 </tr>
             <thead>
             <tbody class="list">
@@ -132,18 +143,17 @@
         </table>
     </section>
 
-
     <section class="footer">
         <table cellpadding="0" cellspacing="0" class="table table-nowrap align-middle" width="100%">
             <tr style="font-size:10px">
                 <td width="40%">
                     <span>SAMS | School and Administrative Management System</span>
                 </td>
-                <td width="40%" class="text-center">
-                    usuario:<span> </span>
+                <td width="30%" class="text-center">
+                    Usuario:<span> {{auth()->user()->name}} </span>
                 </td>
-                <td width="20%" class="text-center">
-                    página <span class="pagenum"></span>
+                <td width="30%" class="text-center">
+                    Página <span class="pagenum"></span>
                 </td>
             </tr>
         </table>

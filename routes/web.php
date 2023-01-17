@@ -33,7 +33,8 @@ Route::get('/financial/encashment',[App\Http\Controllers\TrCobrosCabsController:
 Route::get('/financial/encashment-add',[App\Http\Controllers\TrCobrosCabsController::class, 'addencashment'])->name('addescashment');
 Route::get('/financial/create-invoice',[App\Http\Controllers\TrFacturasCabsController::class, 'index'])->name('index');
 Route::get('/report/box-balance',[App\Http\Controllers\TrCobrosCabsController::class, 'cuadrecaja'])->name('cuadrecaja');
-Route::get('/download-pdf',[VcReportCashReceints::class, 'downloadPDF']);
+Route::get('/download-pdf/{grupo}/{periodo}/{fecha}',[VcReportCashReceints::class, 'downloadPDF']);
+Route::get('/liveWire-pdf/{grupo}/{periodo}/{fecha}',[VcReportCashReceints::class, 'liveWirePDF']);
 
 Auth::routes();
 //Language Translation

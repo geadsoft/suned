@@ -13,17 +13,24 @@ use PDF;
 class VcReportCashReceints extends Component
 {   
     use WithPagination;
-    public $sede,$nomperiodo;
+    public $sede,$nomperiodo, $tblgenerals, $tblperiodos, $nomgrupo='TODOS', $dfecha;
     public $dataPdf = [];
     public $filters = [
         'srv_periodo' => '',
         'srv_grupo' => '',
         'srv_fecha' => '',
     ];
+    public $datosfilters = [
+        'periodo' => '',
+        'grupo' => '',
+        'fecha' => '',
+    ];
 
 
 
     public $neto=0, $descuento=0, $cancelado=0, $pago=0;
+
+    protected $listeners = ['dataReport']; 
 
     public function mount(){
         
@@ -39,14 +46,14 @@ class VcReportCashReceints extends Component
     public function render()
     {
        
-        $tblgenerals = TmGeneralidades::where('superior',1)->get();
-        $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
+        $this->tblgenerals = TmGeneralidades::where('superior',1)->get();
+        $this->tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         $tblrecords  = $this->consulta();
 
         return view('livewire.vc-report-cash-receints',[
             'tblrecords' => $tblrecords,
-            'tblgenerals' => $tblgenerals,
-            'tblperiodos' => $tblperiodos,
+            'tblgenerals' => $this->tblgenerals,
+            'tblperiodos' => $this->tblperiodos,
         ]);
 
     }
@@ -56,7 +63,7 @@ class VcReportCashReceints extends Component
     }
 
     public function consulta(){
-        
+                
         $tblrecords = TrCobrosCabs::query()
         ->join("tr_cobros_dets","tr_cobros_cabs.id","=","tr_cobros_dets.cobrocab_id")
         ->join("tr_deudas_dets","tr_deudas_dets.cobro_id","=","tr_cobros_cabs.id")
@@ -74,34 +81,61 @@ class VcReportCashReceints extends Component
         ->when($this->filters['srv_fecha'],function($query){
             return $query->where('tr_cobros_cabs.fecha',"{$this->filters['srv_fecha']}");
         })
-        
+        ->where('tr_deudas_dets.tipo','<>','DES')
         ->select('tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario')
         ->orderBy('tr_cobros_cabs.fecha')
         ->paginate(15);
         
+        if ($this->tblgenerals != null){
+            foreach ($this->tblgenerals as $index => $recno)
+            {
+                if ($recno['id'] == $this->filters['srv_grupo']){
+                    $this->nomgrupo = $recno['descripcion'];
+                } 
+            }
+        }
+
+        if ($this->tblperiodos != null){
+            foreach ($this->tblperiodos as $index => $recno)
+            {
+                if ($recno['id'] == $this->filters['srv_periodo']){
+                    $this->nomperiodo = $recno['descripcion'];
+                } 
+            }
+        }
+
+        $this->dfecha = $this->filters['srv_fecha'];
         return $tblrecords;
     }
 
-
-    public function downloadPDF()
+    public function dataReport($objdata=null)
     {   
-        
-        $tblrecords = $this->consulta();
-        
+        $this->datosfilters['periodo'] = $objdata['periodo'];
+        $this->datosfilters['grupo'] = $objdata['grupo'];
+        $this->datosfilters['fecha'] = $objdata['fecha'];
+    }
+
+    public function downloadPDF($ngrupo,$nperiodo,$nfecha)
+    {   
+
+        $tblrecords = $this->consulta();        
         $sede    = TmSedes::where('id',1)->first();
-        $filter  = $this->filters;
+        //$filter  = $this->filters;
         $tblTotal  = [];
         $resumen   = [
             'detalle' => '',
             'valor' => 0,
-        ];            
-        
+        ]; 
+        $this->datosfilters['grupo']   =  $ngrupo; 
+        $this->datosfilters['periodo'] =  $nperiodo;
+        $this->datosfilters['fecha']   =  date('d/m/Y',strtotime($nfecha)) ;
+
         foreach ($tblrecords as $record)
         {
             
-            $this->neto = floatval($this->neto) + floatval($record['saldo']) + floatval($record['credito']);
-            $this->descuento =  floatval($this->descuento) + floatval($record['descuento']);
-            $this->pago = floatval($this->pago)+ floatval($record['pago']);
+            $this->neto      = floatval($this->neto) + floatval($record['saldo']) + floatval($record['credito']);
+            $this->descuento = floatval($this->descuento) + floatval($record['descuento']);
+            $this->pago      = floatval($this->pago)+ floatval($record['pago']);
             
         }
 
@@ -120,12 +154,59 @@ class VcReportCashReceints extends Component
         $pdf = PDF::loadView('reports/cuadre_caja',[
             'tblrecords' => $tblrecords,
             'sede' => $sede,
-            'filter' => $filter,
+            'filter' => $this->datosfilters,
             'tblTotal' => $tblTotal,
         ]);
 
         return $pdf->download('cuadre de caja.pdf');
     }
+
+    public function liveWirePDF($ngrupo,$nperiodo,$nfecha)
+    {   
+
+        $tblrecords = $this->consulta();        
+        $sede    = TmSedes::where('id',1)->first();
+        $tblTotal  = [];
+        $resumen   = [
+            'detalle' => '',
+            'valor' => 0,
+        ]; 
+        $this->datosfilters['grupo']   =  $ngrupo; 
+        $this->datosfilters['periodo'] =  $nperiodo;
+        $this->datosfilters['fecha']   =  date('d/m/Y',strtotime($nfecha)) ;
+
+        foreach ($tblrecords as $record)
+        {
+            
+            $this->neto      = floatval($this->neto) + floatval($record['saldo']) + floatval($record['credito']);
+            $this->descuento = floatval($this->descuento) + floatval($record['descuento']);
+            $this->pago      = floatval($this->pago)+ floatval($record['pago']);
+            
+        }
+
+        $resumen['detalle'] = 'Valor sin desc.';
+        $resumen['valor'] = $this->neto;
+        array_push($tblTotal,$resumen);
+
+        $resumen['detalle'] = 'Descuento';
+        $resumen['valor'] = $this->descuento;
+        array_push($tblTotal,$resumen);
+
+        $resumen['detalle'] = 'Cancelado';
+        $resumen['valor'] = $this->pago;
+        array_push($tblTotal,$resumen);        
+
+        $pdf = PDF::loadView('reports/cuadre_caja',[
+            'tblrecords' => $tblrecords,
+            'sede' => $sede,
+            'filter' => $this->datosfilters,
+            'tblTotal' => $tblTotal,
+        ]);
+
+        return $pdf->setPaper('a4', 'landscape')->stream('cuadre de caja.pdf');
+    }
+
+
 
 
 }

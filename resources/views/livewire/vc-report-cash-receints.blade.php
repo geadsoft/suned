@@ -7,7 +7,7 @@
                         <div class="row g-3">
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
-                                    <select class="form-select" name="cmbnivel" wire:model="filters.srv_periodo">
+                                    <select class="form-select" name="cmbperiodo" wire:model="filters.srv_periodo" id="cmbperiodo">
                                         <option value="">Select Period</option>
                                         @foreach ($tblperiodos as $periodo)
                                             <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
@@ -17,7 +17,7 @@
                             </div>
                            <div class="col-xxl-2 col-sm-4">
                                 <div>
-                                    <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
+                                    <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo" id="cmbgrupo">
                                         <option value="">Todos</option>
                                         @foreach ($tblgenerals as $general)
                                             @if ($general->superior == 1)
@@ -39,8 +39,8 @@
                             </div>
                             <div class="col-md-auto ms-auto">
                                 <div class="hstack text-nowrap gap-2">
-                                    <a href="/download-pdf" class="btn btn-success"><i class="ri-download-2-line align-bottom me-1"></i>Download PDF</a>
-                                    <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-printer-fill align-bottom me-1"></i> Print</a>
+                                    <a href="/download-pdf/{{$nomgrupo}}/{{$nomperiodo}}/{{$dfecha}}" class="btn btn-success"><i class="ri-download-2-line align-bottom me-1"></i>Download PDF</a>
+                                    <a href="/liveWire-pdf/{{$nomgrupo}}/{{$nomperiodo}}/{{$dfecha}}" class="btn btn-danger"><i class="ri-printer-fill align-bottom me-1"></i> Print</a>
                                 </div>
                             </div>
                         </div>
