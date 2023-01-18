@@ -384,7 +384,7 @@
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-3">
-                                            <label for="pergenero" class="form-label">Gender</label>
+                                            <label for="genfamiliar" class="form-label">Gender</label>
                                             <select class="form-select" data-choices data-choices-search-false id="genfamiliar" wire:model.defer="familiar.genero" {{$fControl}}>
                                                 <option value="M">Male</option>
                                                 <option value="F">Female</option>
@@ -393,7 +393,7 @@
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-3">
-                                            <label for="pernacionalidad" class="form-label">Nationality</label>
+                                            <label for="nacfamiliar" class="form-label">Nationality</label>
                                             <select class="form-select" data-choices data-choices-search-false id="nacfamiliar" wire:model.defer="familiar.nacionalidad_id" {{$fControl}}>
                                                 <option value="">Select Nationality</option>
                                                 @foreach ($tblgenerals as $general)
