@@ -23,16 +23,19 @@
                     <img src="../public/assets/images/AmericanSchooll.jpg" width="200px" height="60px">                  
                 </td>
                 <td width="70%" class="text-center" style="vertical-align: top; padding-top: 10px">
-                    <span style="font-size: 16px"><strong>Cuadre de Caja</strong></span>
+                    
                     <table width="100%" cellpadding="0" cellspancing="0">
                         <tr>
-                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Fecha: {{$filter['fecha']}}</strong></span></td>
+                            <td class="text-right"><span style="font-size: 16px"><strong>Recibo de Cobro No. {{$tblrecords['documento']}}</strong></span></td>
                         </tr>
                         <tr>
-                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Grupo: {{$filter['grupo']}}</strong></span></td>
+                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Fecha: {{date('d/m/Y',strtotime($tblrecords['fecha']))}} </strong></span></td>
                         </tr>
                         <tr>
-                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Periodo: {{$filter['periodo']}}</strong></span></td>
+                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Estudiante: {{$tblrecords->estudiante->apellidos}} {{$tblrecords->estudiante->nombres}}</strong></span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Recaudador: {{$tblrecords->usuario}} </strong></span></td>
                         </tr>
                     </table>
                 </td>           
@@ -48,44 +51,72 @@
         <table cellpadding="0" cellspacing="0" class="table table-nowrap align-middle" style="font-size:10px">
             <thead class="table-light" style="background-color:#222454">
                 <tr>
-                    <th style="color:#FFFFFF">Recibo</th>
-                    <th style="color:#FFFFFF">Alumno</th>
-                    <th style="color:#FFFFFF">Curso</th>
-                    <th style="color:#FFFFFF">Concepto</th>
-                    <th style="color:#FFFFFF">F.P.</th>
-                    <th style="color:#FFFFFF">Valor</th>
+                    <th style="color:#FFFFFF">Fecha</th>
+                    <th style="color:#FFFFFF">Glosa</th>
+                    <th style="color:#FFFFFF">Referencia</th>
+                    <th style="color:#FFFFFF">Neto</th>
                     <th style="color:#FFFFFF">Desc.</th>
-                    <th style="color:#FFFFFF">Canc.</th>
-                    <th style="color:#FFFFFF">Usuario</th>
+                    <th style="color:#FFFFFF">Cancela</th>
+                    <th style="color:#FFFFFF">Saldo</th>
                 </tr>
             <thead>
             <tbody class="list">
-            @foreach ($tblrecords as $record)    
+            @foreach ($tbldeudas as $record)    
                 <tr>
-                    <td class="">{{$record->documento}}</td>
-                    <td>{{$record->apellidos}} {{$record->nombres}}</td> 
-                    <td>{{$record->descripcion}} {{$record->paralelo}}</td> 
-                    <td>{{$record->detalle}}</td>
-                    <td>{{$record->tipopago}}</td>
-                    <td>{{number_format($record->saldo + $record->credito,2)}}</td>
+                    <td>{{date('d/m/Y',strtotime($record->fecha))}}</td>
+                    <td>{{$record->detalle}}</td> 
+                    <td>{{$record->referencia}}</td>
+                    <td>{{number_format($record->saldo+$record->valor,2)}}</td>
                     <td>{{number_format($record->descuento,2)}}</td>
-                    <td>{{number_format($record->pago,2)}}</td>
-                    <td>{{$record->usuario}}</td>
+                    <td>{{number_format($record->valor,2)}}</td>
+                    <td>{{number_format($record->saldo,2)}}</td>
                 </tr>
             @endforeach
             </tbody>
             <tfoot>
                 <tr>
-                    <td class="text-center">
-                        <span><b>TOTALES<b></span>
+                    <td colspan="2"></td>
+                    <td class="text-left">
+                        <span><b>SUBTOTAL<b></span>
                     </td> 
-                    <td colspan="6"></td>
+                    <td colspan="3"></td>
                     <td colspan="1">
-                        <span><strong>${{number_format($tblrecords->sum('pago'),2)}}<strong></span>
+                        <span><strong>${{number_format($tbldeudas->sum('saldo')+$tbldeudas->sum('valor'),2)}}<strong></span>
+                    </td> 
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td class="text-left">
+                        <span><b>DESCUENTO<b></span>
+                    </td> 
+                    <td colspan="3"></td>
+                    <td colspan="1">
+                        <span><strong>${{number_format($tbldeudas->sum('descuento'),2)}}<strong></span>
+                    </td> 
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td class="text-left">
+                        <span><b>TOTAL<b></span>
+                    </td> 
+                    <td colspan="3"></td>
+                    <td colspan="1">
+                        <span><strong>${{number_format($tbldeudas->sum('valor')-$tbldeudas->sum('descuento'),2)}}<strong></span>
+                    </td> 
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td class="text-left">
+                        <span><b>CANCELA<b></span>
+                    </td> 
+                    <td colspan="3"></td>
+                    <td colspan="1">
+                        <span><strong>${{number_format($tbldeudas->sum('valor'),2)}}<strong></span>
                     </td> 
                 </tr>
             </tfoot>
         </table>
+        
     </section>
 
     <section>
@@ -95,37 +126,30 @@
                     <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
                         <thead class="table-light">
                             <tr>
-                                <th colspan="2">Formas de Pagos</th>
+                                <th colspan="4">Formas de Pagos</th>
                             </tr>
                         <thead>
                         <tbody class="list"> 
+                            @foreach ($tblcobros as $record)    
                             <tr>
-                                <td class="">'Efectivo'</td>
-                                <td>{{number_format($record->pago,2)}}</td>
+                                <td>{{$fpago[$record->tipopago]}}</td>
+                                @if ($record->tipopago="EFE"){
+                                    <td></td>
+                                }@else{
+                                <td>{{$record->entidad->descripcion}}</td>
+                                }
+                                @endif
+                                <td>{{$record->referencia}}</td>
+                                <td>{{number_format($record->valor,2)}}</td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </td>
                 <td width="30%" class="text-left" style="vertical-align: top; padding-top: 10px">
                 </td> 
 
-                <td width="30%" class="text-left" style="vertical-align: top; padding-top: 10px">
-                    <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
-                        <thead class="table-light">
-                            <tr>
-                                <th colspan="2">Totales</th>
-                            </tr>
-                        <thead>
-                        @foreach ($tblTotal as $data) 
-                        <tbody class="list"> 
-                            <tr>
-                                <td class="">{{$data['detalle']}}</td>
-                                <td>{{number_format($data['valor'],2)}}</td>
-                            </tr>
-                        </tbody>
-                        @endforeach
-                    </table>
-                </td>           
+                         
             </tr>
             <tr>
                 
@@ -137,14 +161,11 @@
     <section class="footer">
         <table cellpadding="0" cellspacing="0" class="table table-nowrap align-middle" width="100%">
             <tr style="font-size:10px">
-                <td width="40%">
+                <td width="50%">
                     <span>SAMS | School and Administrative Management System</span>
                 </td>
-                <td width="30%" class="text-center">
+                <td width="50%" class="text-right">
                     Usuario:<span> {{auth()->user()->name}} </span>
-                </td>
-                <td width="30%" class="text-center">
-                    Página <span class="pagenum"></span>
                 </td>
             </tr>
         </table>

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\VcEncashmentDebts;
 use App\Http\Livewire\VcReportCashReceints;
+use App\Http\Livewire\VcEncashment;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,8 @@ Route::get('/financial/create-invoice',[App\Http\Controllers\TrFacturasCabsContr
 Route::get('/report/box-balance',[App\Http\Controllers\TrCobrosCabsController::class, 'cuadrecaja'])->name('cuadrecaja');
 Route::get('/download-pdf/{grupo}/{periodo}/{fecha}',[VcReportCashReceints::class, 'downloadPDF']);
 Route::get('/liveWire-pdf/{grupo}/{periodo}/{fecha}',[VcReportCashReceints::class, 'liveWirePDF']);
+Route::get('/preview-pdf/comprobante/{id}',[VcEncashment::class, 'liveWirePDF']);
+Route::get('/download-pdf/comprobante/{id}',[VcEncashment::class, 'downloadPDF']);
 
 Auth::routes();
 //Language Translation

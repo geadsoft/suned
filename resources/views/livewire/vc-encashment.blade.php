@@ -411,7 +411,8 @@
 
                         <div class="card-body">
                             <div class="justify-content-end">
-                                <a href="javascript:window.print()" class="btn btn-success"><i class="ri-printer-line align-bottom me-1"></i> Print</a>
+                                <a href="/preview-pdf/comprobante/{{$selectId}}" class="btn btn-danger"><i class="ri-printer-line align-bottom me-1"></i> Print</a>
+                                <a href="/download-pdf/comprobante/{{$selectId}}" class="btn btn-success"><i class="ri-download-2-line align-bottom me-1"></i>Download PDF</a>
                             </div>
                         </div>
                     </div>

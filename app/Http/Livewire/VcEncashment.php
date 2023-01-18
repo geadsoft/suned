@@ -8,6 +8,7 @@ use App\Models\TrCobrosCabs;
 use App\Models\TrCobrosDets;
 use App\Models\TrDeudasDets;
 use App\Models\TmPeriodosLectivos;
+use PDF;
 
 
 class VcEncashment extends Component
@@ -82,6 +83,74 @@ class VcEncashment extends Component
     public function add(){
         
         $this->dispatchBrowserEvent('search-form');
+    }
+
+
+    public function liveWirePDF($selectId)
+    {   
+
+        $fpago = [
+            'EFE' => 'Efectivo',
+            'CHQ' => 'Cheque',
+            'TAR' => 'Tarjeta',
+            'DEP' => 'Depósito',
+            'TRA' => 'Tarjeta',
+            'CON' => 'Convenio',
+        ];
+
+        $this->record = TrCobrosCabs::find($selectId);
+        $tblcobrodet  = TrCobrosDets::where('cobrocab_id',$selectId)->get();
+        $tbldeudas    = TrDeudasDets::query()
+        ->join("tr_deudas_cabs","tr_deudas_cabs.id","=","tr_deudas_dets.deudacab_id")
+        ->select('tr_deudas_cabs.referencia','tr_deudas_dets.fecha','tr_deudas_dets.detalle','tr_deudas_cabs.descuento','tr_deudas_dets.valor','tr_deudas_cabs.saldo')
+        ->where([
+            ['cobro_id',$selectId],
+            ['tipovalor',"CR"],
+            ['tipo',"PAG"],
+        ])->get();          
+        
+        $pdf = PDF::loadView('financial/comprobante_cobro',[
+            'tblrecords' => $this->record,
+            'tblcobros' => $tblcobrodet,
+            'tbldeudas' => $tbldeudas,
+            'fpago' => $fpago,
+        ]);
+
+        return $pdf->setPaper('a4')->stream('Comprobante.pdf');
+    }
+
+    public function downloadPDF($selectId)
+    {   
+
+        $fpago = [
+            'EFE' => 'Efectivo',
+            'CHQ' => 'Cheque',
+            'TAR' => 'Tarjeta',
+            'DEP' => 'Depósito',
+            'TRA' => 'Tarjeta',
+            'CON' => 'Convenio',
+        ];
+
+        $this->record = TrCobrosCabs::find($selectId);
+        $tblcobrodet  = TrCobrosDets::where('cobrocab_id',$selectId)->get();
+        $tbldeudas    = TrDeudasDets::query()
+        ->join("tr_deudas_cabs","tr_deudas_cabs.id","=","tr_deudas_dets.deudacab_id")
+        ->select('tr_deudas_cabs.referencia','tr_deudas_dets.fecha','tr_deudas_dets.detalle','tr_deudas_cabs.descuento','tr_deudas_dets.valor','tr_deudas_cabs.saldo')
+        ->where([
+            ['cobro_id',$selectId],
+            ['tipovalor',"CR"],
+            ['tipo',"PAG"],
+        ])->get();          
+        
+        $pdf = PDF::loadView('financial/comprobante_cobro',[
+            'tblrecords' => $this->record,
+            'tblcobros' => $tblcobrodet,
+            'tbldeudas' => $tbldeudas,
+            'fpago' => $fpago,
+        ]);
+
+        $documento = 'Comprobante_'.$this->record['documento'].'.pdf';
+        return $pdf->download($documento);
     }
 
 
