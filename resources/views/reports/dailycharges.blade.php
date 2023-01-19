@@ -9,34 +9,22 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Financial
+            Report
         @endslot
         @slot('title')
-        Register of Encashments
+            Cobros Diarios
         @endslot
     @endcomponent
 
-    @livewire('vc-encashment',['id' => $id])
+    @livewire('vc-report-daily-charges')
 
 @endsection
-
 @section('script')
-    <!--
     <script src="{{ URL::asset('assets/libs/list.js/list.js.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>-->
-    
+    <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>
 
     <!--ecommerce-customer init js -->
     <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/js/pages/financial-encashment.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
-    
-    <script>
-         window.addEventListener('search-form', event => {
-            $('#searchModal').modal('show');
-        })
-    </script>
-
-    
     
 @endsection

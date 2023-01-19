@@ -17,6 +17,16 @@ class TrCobrosCabsController extends Controller
         return view('/financial/encashment');
     }
 
+    public function viewtuition($id)
+    {
+        return view('financial/encashment',['id' => $id]);
+    }
+
+    public function loadtuition()
+    {
+        return view('financial/encashment',['id' => 0]);
+    }
+
     public function addencashment()
     {
         return view('financial/encashmentadd');
@@ -27,7 +37,10 @@ class TrCobrosCabsController extends Controller
         return view('reports/boxbalance');
     }
 
-   
+    public function cobrosdiarios()
+    {
+        return view('reports/dailycharges');
+    }   
 
     /**
      * Show the form for creating a new resource.

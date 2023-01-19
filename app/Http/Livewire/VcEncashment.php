@@ -28,10 +28,20 @@ class VcEncashment extends Component
     public $total = 0;
     public $totalpago = 0;
 
+    public function mount($id){
+
+        $this->selectId = $id;
+
+    }
+
     public function render()
     { 
-        
-        $this->record  = TrCobrosCabs::orderBy('id', 'desc')->first();
+        if ($this->selectId==0){
+            $this->record  = TrCobrosCabs::orderBy('id', 'desc')->first();
+        }else{
+            $this->record  = TrCobrosCabs::find($this->selectId);
+        }
+
         if ($this->record==null){
             $this->selectId = 0;
         }else{
@@ -94,7 +104,7 @@ class VcEncashment extends Component
             'CHQ' => 'Cheque',
             'TAR' => 'Tarjeta',
             'DEP' => 'Depósito',
-            'TRA' => 'Tarjeta',
+            'TRA' => 'Transferencia',
             'CON' => 'Convenio',
         ];
 
@@ -127,7 +137,7 @@ class VcEncashment extends Component
             'CHQ' => 'Cheque',
             'TAR' => 'Tarjeta',
             'DEP' => 'Depósito',
-            'TRA' => 'Tarjeta',
+            'TRA' => 'Transferencia',
             'CON' => 'Convenio',
         ];
 

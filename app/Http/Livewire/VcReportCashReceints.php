@@ -26,8 +26,6 @@ class VcReportCashReceints extends Component
         'fecha' => '',
     ];
 
-
-
     public $neto=0, $descuento=0, $cancelado=0, $pago=0;
 
     protected $listeners = ['dataReport']; 

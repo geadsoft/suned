@@ -168,7 +168,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="">
+                    <a class="nav-link menu-link" href="/report/daily-charges">
                         <i class="las la-file-invoice-dollar"></i> <span>@lang('translation.daily-cobros')</span>
                     </a>
                 </li>

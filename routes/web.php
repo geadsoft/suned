@@ -30,10 +30,13 @@ Route::get('/academic/student-enrollment',[App\Http\Controllers\TmMatriculaContr
 Route::get('/headquarters/headquarters-add',[App\Http\Controllers\TmSedesController::class, 'index'])->name('index');
 Route::get('/headquarters/pension',[App\Http\Controllers\TmPensionesCabController::class, 'index'])->name('index');
 Route::get('/headquarters/educational-services',[App\Http\Controllers\TmServiciosController::class, 'index'])->name('index');
-Route::get('/financial/encashment',[App\Http\Controllers\TrCobrosCabsController::class, 'index'])->name('index');
+Route::get('/financial/encashment/{id}',[App\Http\Controllers\TrCobrosCabsController::class, 'viewtuition'])->name('viewtuition');
+Route::get('/financial/encashment',[App\Http\Controllers\TrCobrosCabsController::class, 'loadtuition'])->name('loadtuition');
 Route::get('/financial/encashment-add',[App\Http\Controllers\TrCobrosCabsController::class, 'addencashment'])->name('addescashment');
 Route::get('/financial/create-invoice',[App\Http\Controllers\TrFacturasCabsController::class, 'index'])->name('index');
 Route::get('/report/box-balance',[App\Http\Controllers\TrCobrosCabsController::class, 'cuadrecaja'])->name('cuadrecaja');
+Route::get('/report/daily-charges',[App\Http\Controllers\TrCobrosCabsController::class, 'cobrosdiarios'])->name('cobrosdiarios');
+
 Route::get('/download-pdf/{grupo}/{periodo}/{fecha}',[VcReportCashReceints::class, 'downloadPDF']);
 Route::get('/liveWire-pdf/{grupo}/{periodo}/{fecha}',[VcReportCashReceints::class, 'liveWirePDF']);
 Route::get('/preview-pdf/comprobante/{id}',[VcEncashment::class, 'liveWirePDF']);
