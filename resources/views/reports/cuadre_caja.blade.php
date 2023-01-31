@@ -99,10 +99,14 @@
                             </tr>
                         <thead>
                         <tbody class="list"> 
-                            <tr>
-                                <td class="">'Efectivo'</td>
-                                <td>{{number_format($record->pago,2)}}</td>
-                            </tr>
+                        @foreach ($tblfpago as $fpago) 
+                            @if($fpago['valor']>0)
+                                <tr>
+                                    <td class="">{{$fpago['nombre']}}</td>
+                                    <td>{{number_format($fpago['valor'],2)}}</td>
+                                </tr>
+                            @endif
+                         @endforeach
                         </tbody>
                     </table>
                 </td>
@@ -127,9 +131,71 @@
                     </table>
                 </td>           
             </tr>
+        </table>
+    </section>
+    <section>
+        <table cellpadding="0" cellspancing="0" width="100%">
             <tr>
-                
-
+                <td width="40%" style="vertical-align: top; padding-top: 10px; position: relative">
+                    <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
+                        <thead class="table-light">
+                            <tr>
+                                <th colspan="4">Resumen de Depósitos</th>
+                            </tr>
+                            <tr style="background-color:#222454">
+                                <th style="color:#FFFFFF">Recibo</th>
+                                <th style="color:#FFFFFF">Referencia</th>
+                                <th style="color:#FFFFFF">Entidad</th>
+                                <th style="color:#FFFFFF">Valor</th>
+                            </tr>
+                        <thead>
+                        <tbody class="list"> 
+                        @foreach ($resumenpago as $resumen) 
+                            @if($resumen['tipo']=='DEP')
+                                <tr>
+                                    <td class="">{{$resumen['recibo']}}</td>
+                                    <td class="">{{$resumen['referencia']}}</td>
+                                    <td class="">{{$resumen['entidad']}}</td>
+                                    <td>{{number_format($resumen['valor'],2)}}</td>
+                                </tr>
+                            @endif
+                         @endforeach
+                        </tbody>
+                    </table>
+                </td>           
+            </tr>
+        </table>
+    </section>
+    <section>
+        <table cellpadding="0" cellspancing="0" width="100%">
+            <tr>
+                <td width="40%" style="vertical-align: top; padding-top: 10px; position: relative">
+                    <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
+                        <thead class="table-light">
+                            <tr>
+                                <th colspan="4">Resumen de Transferencias</th>
+                            </tr>
+                            <tr style="background-color:#222454">
+                                <th style="color:#FFFFFF">Recibo</th>
+                                <th style="color:#FFFFFF">Referencia</th>
+                                <th style="color:#FFFFFF">Entidad</th>
+                                <th style="color:#FFFFFF">Valor</th>
+                            </tr>
+                        <thead>
+                        <tbody class="list"> 
+                        @foreach ($resumenpago as $resumen) 
+                            @if($resumen['tipo']=='TRA')
+                                <tr>
+                                    <td class="">{{$resumen['recibo']}}</td>
+                                    <td class="">{{$resumen['referencia']}}</td>
+                                    <td class="">{{$resumen['entidad']}}</td>
+                                    <td>{{number_format($resumen['valor'],2)}}</td>
+                                </tr>
+                            @endif
+                         @endforeach
+                        </tbody>
+                    </table>
+                </td>           
             </tr>
         </table>
     </section>

@@ -55,6 +55,8 @@ function selecTab(SelectTab) {
                 return true;
             }
 
+
+
             document.getElementById('pills-bill-responsible-tab').click()
             break
         case 'pills-bill-family':
@@ -62,12 +64,19 @@ function selecTab(SelectTab) {
             var pernombres   = document.getElementById("pernombres").value
             var perapellidos = document.getElementById("perapellidos").value
             var perdirecion  = document.getElementById("perdireccion").value
+            var peremail     = document.getElementById("peremail").value
 
             if ((pernombres == "") || (perapellidos == "") || (perdirecion == "")) {  //COMPRUEBA CAMPOS VACIOS
                 swal("Error!", "Datos del representante no deben estar vacios..", "warning");
                 return true;
             }
-
+            
+            expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if ( !expr.test(peremail) ){
+                swal("Error!", "La dirección de correo " + peremail + " es incorrecta.", "warning");
+                return true;
+            }
+                
             document.getElementById('pills-bill-family-tab').click()
             break
         case 'pills-bill-registration':

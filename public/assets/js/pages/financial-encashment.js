@@ -26,22 +26,48 @@ function new_link() {
 	totalpago +=  parseFloat(valor);
 
     var nomentidad = "";
-
-
 	tr1.id = count;
 	tr1.className = "pagos";
 
+	var selectEFE = "";
+	var selectCHQ = "";
+	var selectTAR = "";
+	var selectDEP = "";
+	var selectTRA = "";
+	var selectCON = "";
+
+	switch(tipopago) {
+		case "EFE":
+			selectEFE = "selected"
+		  break;
+		case "CHQ":
+			selectCHQ = "selected"
+		  break;
+		case "TAR":
+			selectTAR = "selected"
+		  break;
+		case "DEP":
+			selectDEP = "selected"
+		  break;
+		case "TRA":
+			selectTRA = "selected"
+		  break;
+		case "CON":
+			selectCON = "selected"
+		  break;
+	  }
+	
 	var delLink =
 		'<tr id ="' + count  +'" class="pagos">' +
 	    '<th scope="row" class="pago-id">' + count + "</th>" +
 		"<td>" +
             '<select type="select" class="form-select disabled" name="cmbtipopago" id="cmbtipopago-' + count + '"value= "' +  tipopago + '">' +
-                '<option value="EFE">Efectivo</option>'+
-                '<option value="CHQ">Cheque</option>'+
-                '<option value="TCR">Tarjeta</option>'+
-                '<option value="DEP">Depósito</option>'+
-                '<option value="TRA">Transferencia</option>'+
-                '<option value="CON">Convenio</option>'+
+                '<option value="EFE"'+ selectEFE +'>Efectivo</option>'+
+                '<option value="CHQ"'+ selectCHQ +'>Cheque</option>'+
+                '<option value="TAR"'+ selectTAR +'>Tarjeta</option>'+
+                '<option value="DEP"'+ selectDEP +'>Depósito</option>'+
+                '<option value="TRA"'+ selectTRA +'>Transferencia</option>'+
+                '<option value="CON"'+ selectCON +'>Convenio</option>'+
             "</select>"+
 		"</td>" +
         "<td>" +

@@ -19,6 +19,8 @@ class VcReportCashReceints extends Component
         'srv_periodo' => '',
         'srv_grupo' => '',
         'srv_fecha' => '',
+        'srv_nombre' => '',
+
     ];
     public $datosfilters = [
         'periodo' => '',
@@ -27,6 +29,7 @@ class VcReportCashReceints extends Component
     ];
 
     public $neto=0, $descuento=0, $cancelado=0, $pago=0;
+    public $valorEfe=0, $valorChq=0, $valorTar=0, $valorDep=0, $valorTra=0, $valorCon=0;
 
     protected $listeners = ['dataReport']; 
 
@@ -38,6 +41,7 @@ class VcReportCashReceints extends Component
         $this->filters['srv_fecha'] = date('Y-m-d',strtotime($ldate));
         $this->filters['srv_periodo'] = $periodo['id'];
         $this->filters['srv_grupo'] = '';
+        $this->filters['srv_nombre'] = '';
 
     }
     
@@ -69,7 +73,11 @@ class VcReportCashReceints extends Component
         ->join("tm_matriculas","tm_matriculas.id","=","tr_deudas_cabs.matricula_id")
         ->join("tm_personas","tm_personas.id","=","tm_matriculas.estudiante_id")
         ->join("tm_cursos","tm_cursos.id","=","tm_matriculas.curso_id")
-        ->join("tm_servicios","tm_servicios.id","=","tm_cursos.grado_id")            
+        ->join("tm_servicios","tm_servicios.id","=","tm_cursos.grado_id")   
+        ->when($this->filters['srv_nombre'],function($query){
+            return $query->where('tm_personas.nombres','like','%'.$this->filters['srv_nombre'].'%')
+                        ->orWhere('tm_personas.apellidos','like','%'.$this->filters['srv_nombre'].'%');
+        })        
         ->when($this->filters['srv_periodo'],function($query){
             return $query->where('tm_matriculas.periodo_id',"{$this->filters['srv_periodo']}");
         })
@@ -78,11 +86,12 @@ class VcReportCashReceints extends Component
         })
         ->when($this->filters['srv_fecha'],function($query){
             return $query->where('tr_cobros_cabs.fecha',"{$this->filters['srv_fecha']}");
-        })
+        }) 
         ->where('tr_deudas_dets.tipo','<>','DES')
-        ->select('tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario')
+        ->select('tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario', 'tr_cobros_dets.referencia', 'entidad_id')
         ->orderBy('tr_cobros_cabs.fecha')
         ->paginate(15);
+
         
         if ($this->tblgenerals != null){
             foreach ($this->tblgenerals as $index => $recno)
@@ -115,15 +124,32 @@ class VcReportCashReceints extends Component
 
     public function downloadPDF($ngrupo,$nperiodo,$nfecha)
     {   
+        $this->filters['srv_fecha']=$nfecha;
 
         $tblrecords = $this->consulta();        
         $sede    = TmSedes::where('id',1)->first();
-        //$filter  = $this->filters;
+        
         $tblTotal  = [];
         $resumen   = [
             'detalle' => '',
             'valor' => 0,
-        ]; 
+        ];
+        
+        $formapago   = [];
+        $detallepago = [
+            'nombre' => '',
+            'valor' => 0,
+        ];
+
+        $resumenpago = [];
+        $detalle = [
+            'tipo'       => '',
+            'recibo'     => '',
+            'referencia' => '',
+            'entidad'    => '',
+            'valor'      => 0,
+        ];
+
         $this->datosfilters['grupo']   =  $ngrupo; 
         $this->datosfilters['periodo'] =  $nperiodo;
         $this->datosfilters['fecha']   =  date('d/m/Y',strtotime($nfecha)) ;
@@ -134,7 +160,48 @@ class VcReportCashReceints extends Component
             $this->neto      = floatval($this->neto) + floatval($record['saldo']) + floatval($record['credito']);
             $this->descuento = floatval($this->descuento) + floatval($record['descuento']);
             $this->pago      = floatval($this->pago)+ floatval($record['pago']);
+
+            if ($record['tipopago']=="EFE") {
+                $this->valorEfe = $this->valorEfe + floatval($record['pago']);
+            }
+
+            if ($record['tipopago']=="CHQ") {
+                $this->valorChq = $this->valorChq + floatval($record['pago']);
+            }
+            if ($record['tipopago']=="TAR") {
+                $this->valorTar = $this->valorTar + floatval($record['pago']);
+            }
+            if ($record['tipopago']=="DEP") {
+                
+                $this->valorDep = $this->valorDep + floatval($record['pago']);
+                $entidad = Tmgeneralidades::find($record['entidad_id']);
+
+                $detalle['tipo'] = "DEP";
+                $detalle['recibo'] = $record['documento'];
+                $detalle['referencia'] = $record['referencia'];
+                $detalle['entidad'] = $entidad['descripcion'];
+                $detalle['valor'] = $record['pago'];
+                array_push($resumenpago,$detalle);
+            }
+            if ($record['tipopago']=="TRA") {
+
+                $this->valorTra = $this->valorTra + floatval($record['pago']);
+                $entidad = Tmgeneralidades::find($record['entidad_id']);
+
+                $detalle['tipo'] = "TRA";
+                $detalle['recibo'] = $record['documento'];
+                $detalle['referencia'] = $record['referencia'];
+                $detalle['entidad'] = $entidad['descripcion'];
+                $detalle['valor'] = $record['pago'];
+                array_push($resumenpago,$detalle);
+
+            }
+            if ($record['tipopago']=="CON") {
+                $this->valorCon = $this->valorCon + floatval($record['pago']);
+            }
+
             
+
         }
 
         $resumen['detalle'] = 'Valor sin desc.';
@@ -147,13 +214,41 @@ class VcReportCashReceints extends Component
 
         $resumen['detalle'] = 'Cancelado';
         $resumen['valor'] = $this->pago;
-        array_push($tblTotal,$resumen);        
+        array_push($tblTotal,$resumen);   
+        
+        //Forma de Pago
+        $detallepago['nombre'] = 'Efectivo';
+        $detallepago['valor'] = $this->valorEfe;
+        array_push($formapago,$detallepago);
 
+        $detallepago['nombre'] = 'Cheque';
+        $detallepago['valor'] = $this->valorChq;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'Tarjeta de Crédito';
+        $detallepago['valor'] = $this->valorTar;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'Depósito';
+        $detallepago['valor'] = $this->valorDep;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'Transferencia';
+        $detallepago['valor'] = $this->valorTra;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'Convenio';
+        $detallepago['valor'] = $this->valorCon;
+        array_push($formapago,$detallepago);
+
+        //Vista
         $pdf = PDF::loadView('reports/cuadre_caja',[
             'tblrecords' => $tblrecords,
             'sede' => $sede,
             'filter' => $this->datosfilters,
             'tblTotal' => $tblTotal,
+            'tblfpago' => $formapago,
+            'resumenpago' => $resumenpago,
         ]);
 
         return $pdf->download('cuadre de caja.pdf');
@@ -161,7 +256,8 @@ class VcReportCashReceints extends Component
 
     public function liveWirePDF($ngrupo,$nperiodo,$nfecha)
     {   
-
+        $this->filters['srv_fecha']=$nfecha;
+        
         $tblrecords = $this->consulta();        
         $sede    = TmSedes::where('id',1)->first();
         $tblTotal  = [];
@@ -169,6 +265,22 @@ class VcReportCashReceints extends Component
             'detalle' => '',
             'valor' => 0,
         ]; 
+
+        $formapago   = [];
+        $detallepago = [
+            'nombre' => '',
+            'valor' => 0,
+        ];
+
+        $resumenpago = [];
+        $detalle = [
+            'tipo'       => '',
+            'recibo'     => '',
+            'referencia' => '',
+            'entidad'    => '',
+            'valor'      => 0,
+        ];
+
         $this->datosfilters['grupo']   =  $ngrupo; 
         $this->datosfilters['periodo'] =  $nperiodo;
         $this->datosfilters['fecha']   =  date('d/m/Y',strtotime($nfecha)) ;
@@ -180,6 +292,45 @@ class VcReportCashReceints extends Component
             $this->descuento = floatval($this->descuento) + floatval($record['descuento']);
             $this->pago      = floatval($this->pago)+ floatval($record['pago']);
             
+            if ($record['tipopago']=="EFE") {
+                $this->valorEfe = $this->valorEfe + floatval($record['pago']);
+            }
+
+            if ($record['tipopago']=="CHQ") {
+                $this->valorChq = $this->valorChq + floatval($record['pago']);
+            }
+            if ($record['tipopago']=="TAR") {
+                $this->valorTar = $this->valorTar + floatval($record['pago']);
+            }
+            if ($record['tipopago']=="DEP") {
+                
+                $this->valorDep = $this->valorDep + floatval($record['pago']);
+                $entidad = Tmgeneralidades::find($record['entidad_id']);
+
+                $detalle['tipo'] = "DEP";
+                $detalle['recibo'] = $record['documento'];
+                $detalle['referencia'] = $record['referencia'];
+                $detalle['entidad'] = $entidad['descripcion'];
+                $detalle['valor'] = $record['pago'];
+                array_push($resumenpago,$detalle);
+            }
+            if ($record['tipopago']=="TRA") {
+
+                $this->valorTra = $this->valorTra + floatval($record['pago']);
+                $entidad = Tmgeneralidades::find($record['entidad_id']);
+
+                $detalle['tipo'] = "TRA";
+                $detalle['recibo'] = $record['documento'];
+                $detalle['referencia'] = $record['referencia'];
+                $detalle['entidad'] = $entidad['descripcion'];
+                $detalle['valor'] = $record['pago'];
+                array_push($resumenpago,$detalle);
+
+            }
+            if ($record['tipopago']=="CON") {
+                $this->valorCon = $this->valorCon + floatval($record['pago']);
+            }
+
         }
 
         $resumen['detalle'] = 'Valor sin desc.';
@@ -192,13 +343,42 @@ class VcReportCashReceints extends Component
 
         $resumen['detalle'] = 'Cancelado';
         $resumen['valor'] = $this->pago;
-        array_push($tblTotal,$resumen);        
+        array_push($tblTotal,$resumen);   
+        
+        //Forma de Pago
+        $detallepago['nombre'] = 'Efectivo';
+        $detallepago['valor'] = $this->valorEfe;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'Cheque';
+        $detallepago['valor'] = $this->valorChq;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'Tarjeta de Crédito';
+        $detallepago['valor'] = $this->valorTar;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'Depósito';
+        $detallepago['valor'] = $this->valorDep;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'Transferencia';
+        $detallepago['valor'] = $this->valorTra;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'Convenio';
+        $detallepago['valor'] = $this->valorCon;
+        array_push($formapago,$detallepago);
+
+
 
         $pdf = PDF::loadView('reports/cuadre_caja',[
             'tblrecords' => $tblrecords,
             'sede' => $sede,
             'filter' => $this->datosfilters,
             'tblTotal' => $tblTotal,
+            'tblfpago' => $formapago,
+            'resumenpago' => $resumenpago,
         ]);
 
         return $pdf->setPaper('a4', 'landscape')->stream('cuadre de caja.pdf');

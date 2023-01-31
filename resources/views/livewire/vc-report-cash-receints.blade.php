@@ -43,7 +43,15 @@
                                     <a href="/liveWire-pdf/{{$nomgrupo}}/{{$nomperiodo}}/{{$dfecha}}" class="btn btn-danger"><i class="ri-printer-fill align-bottom me-1"></i> Print</a>
                                 </div>
                             </div>
+                            <div class="col-xxl-6 col-sm-4">
+                                <div class="search-box">
+                                    <input type="text" class="form-control search"
+                                        placeholder="Search for contact..." wire:model="filters.srv_nombre">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
                         </div>
+                        
                         <!--end row-->
                     </form>
                 </div>
