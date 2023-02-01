@@ -73,7 +73,7 @@ class VcReportCashReceints extends Component
         ->join("tm_matriculas","tm_matriculas.id","=","tr_deudas_cabs.matricula_id")
         ->join("tm_personas","tm_personas.id","=","tm_matriculas.estudiante_id")
         ->join("tm_cursos","tm_cursos.id","=","tm_matriculas.curso_id")
-        ->join("tm_generalidades","tm_generalidades.id","=","tm_cursos.grado_id")   
+        ->join("tm_servicios","tm_servicios.id","=","tm_cursos.servicio_id")   
         ->when($this->filters['srv_nombre'],function($query){
             return $query->where('tm_personas.nombres','like','%'.$this->filters['srv_nombre'].'%')
                         ->orWhere('tm_personas.apellidos','like','%'.$this->filters['srv_nombre'].'%');
