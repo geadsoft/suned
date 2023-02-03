@@ -106,7 +106,8 @@
                                                     <i class="ri-more-fill"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a class="dropdown-item" href="/academic/student-enrollment/{{$record->identificacion}}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Add Tuition</a></li>
+                                                    <li><a class="dropdown-item" href="/academic/student-enrollment/{{$record->identificacion}}"><i class="ri-add-box-fill align-bottom me-2 text-muted"></i>Add Tuition</a></li>
+                                                    <li><a class="dropdown-item" href="" wire:click.prevent="edit({{ $record }})"><i class="ri-repeat-line align-bottom me-2 text-muted"></i>Change of Section</a></li>
                                                     <li><a class="dropdown-item" href="/academic/person-edit/{{$record->identificacion}}"><i class="ri-contacts-fill align-bottom me-2 text-muted"></i> Student Record </a></li>
                                                     <li><a class="dropdown-item" href=""><i class="ri-hand-coin-fill align-bottom me-2 text-muted"></i> Amounts Owed </a></li>
 
@@ -142,80 +143,30 @@
                         </div>
                         {{$tblrecords->links('')}}
                     </div>
-
-                    <!--<div wire.ignore.self class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    
+                    <div wire.ignore.self class="modal fade" id="showModalSection" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" >
                             <div class="modal-content modal-content border-0">
                                 
                                 <div class="modal-header p-3" style="background-color:#222454">
                                     <h5 class="modal-title" id="exampleModalLabel"  style="color: #D4D4DD">
-                                        @if($showEditModal)
-                                            <span>Edit Course &nbsp;</span>
-
-                                            <span>Add Course  &nbsp;</span>
-                                        @endif
+                                        <span>Edit Section &nbsp;</span>
                                     </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
                                 </div>
-                                <form autocomplete="off" wire:submit.prevent="{{ $showEditModal ? 'updateData' : 'createData' }}">
+                                <form autocomplete="off" wire:submit.prevent="updateData">
                                     
                                     <div class="modal-body">
-                                        <div class="id" id="modal-id">
-                                            @if($showEditModal)
-                                                <label for="record.id" class="form-label">ID</label>
-                                                <input type="text" wire:model.defer="record.id" class="form-control" placeholder="ID" readonly />
-                                            @endif
+                                        <div class="card-header">
+                                            <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
+                                                class="ri-anticlockwise-fill align-middle me-1 text-success"></i>
+                                                Current Section</h5>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="txtnombre" class="form-label">Description</label>
-                                            <input type="text" wire:model.defer="record.descripcion" class="form-control" name="txtnombre"
-                                                placeholder="Enter name" required />
+                                            <input type="text" class="form-control bg-white border-0 fw-semibold" name="txtnombre" value="{{$nomnivel}}" readonly/>
+                                            <input type="text" class="form-control bg-white border-0 fw-semibold" name="txtnombre" value="{{$nomcurso}}" readonly/>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="cmbmodalidad" class="form-label">Cluster</label>
-                                            <select type="select" class="form-select" data-trigger name="cmbmodalidad" wire:model.defer="record.modalidad_id" required>
-                                            <option value=""></option>
-                                            @foreach ($tblgenerals as $general)
-                                                @if ($general->superior == 1)
-                                                <option value="{{$general->id}}">{{$general->descripcion}}</option>
-                                                @endif
-                                            @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="cmbnivel" class="form-label">Level</label>
-                                            <select type="select" class="form-select" data-trigger name="cmbnivel" wire:model.defer="record.nivel_id" required>
-                                            <option value=""></option>
-                                            @foreach ($tblgenerals as $general)
-                                                @if ($general->superior == 2)
-                                                <option value="{{$general->id}}">{{$general->descripcion}}</option>
-                                                @endif
-                                            @endforeach
-                                            </select>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="cmbgrado" class="form-label">Course</label>
-                                            <select type="select" class="form-select" data-trigger name="cmbgrado" wire:model.defer="record.grado_id" required>
-                                            <option value=""></option>
-                                            @foreach ($tblgenerals as $general)
-                                                @if ($general->superior == 3)
-                                                <option value="{{$general->id}}">{{$general->descripcion}}</option>
-                                                @endif
-                                            @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="cmbespecialidad" class="form-label">Specialization</label>
-                                            <select type="select" class="form-select" data-trigger name="cmbcmbespecialidad" wire:model.defer="record.especializacion_id" required>
-                                            <option value=""></option>
-                                            @foreach ($tblgenerals as $general)
-                                                @if ($general->superior == 4)
-                                                <option value="{{$general->id}}">{{$general->descripcion}}</option>
-                                                @endif
-                                            @endforeach
-                                            </select>
-                                        </div>
+                                        @livewire('vc-modal-sections')
                                     </div>
                                     <div class="modal-footer">
                                         <div class="hstack gap-2 justify-content-end">
@@ -226,7 +177,7 @@
                                 </form>
                             </div>
                         </div>
-                    </div>-->
+                    </div>
 
                     <!-- Modal -->
                     <div wire.ignore.self class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true" wire:model='selectId'>

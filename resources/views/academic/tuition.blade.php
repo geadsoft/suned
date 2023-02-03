@@ -26,4 +26,17 @@
     <!--ecommerce-customer init js -->
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>    
+
+    <script>
+       
+        window.addEventListener('show-form', event => {
+            $('#showModalSection').modal('show');
+        })
+
+        window.addEventListener('hide-form', event => {
+            $('#showModalSection').modal('hide');
+        })
+
+    </script>
+
 @endsection

@@ -91,8 +91,8 @@ function new_link() {
             "</ul>"+
         "</td>";
 
-	document.getElementById("cart-pago").value = paymentSign + totalpago;
-	document.getElementById("cart-totalfact").value = paymentSign + totalpago;
+	document.getElementById("cart-pago").value = paymentSign + totalpago.toFixed(2);
+	document.getElementById("cart-totalfact").value = paymentSign + totalpago.toFixed(2);
 	
 	tr1.innerHTML = document.getElementById("newForm").innerHTML + delLink;
 	document.getElementById("newlink").appendChild(tr1);
@@ -117,8 +117,12 @@ remove();
 var taxRate = 0.0;
 var shippingRate = 0.0;
 var discountRate = 0.0;
+var valorpago = 0.0;
 
 function remove() {
+	
+	valorpago = document.getElementById("txtvalor").value;
+
 	document.querySelectorAll(".pago-removal ul li a").forEach(function (el) {
 		el.addEventListener("click", function (e) {
 			removeItem(e);
@@ -144,19 +148,19 @@ function removeItem(removeButton) {
 
 /* Recalculate pago */
 function recalculateCart() {
-	var montopago = 0;
+	totalpago = totalpago-valorpago;
 
 	document.getElementsByClassName("pago").forEach(function (item) {
 		item.getElementsByClassName("pago-line-valor").forEach(function (e) {
 			if (e.value) {
-				montopago += parseFloat(e.value.slice(1));
+				totalpago += parseFloat(e.value.slice(1));
 			}
 		});
 	});
 
 	/* Calculate totals */
-	document.getElementById("cart-pago").value = paymentSign + montopago.toFixed(2);
-	document.getElementById("cart-totalfact").value = paymentSign + montopago.toFixed(2);
+	document.getElementById("cart-pago").value = paymentSign + totalpago.toFixed(2);
+	document.getElementById("cart-totalfact").value = paymentSign + totalpago.toFixed(2);
 	
 }
 
