@@ -21,9 +21,6 @@ function new_link() {
 	var tr1 = document.createElement("tr");
     var tipopago = document.getElementById("cmbtipopago").value;
     var entidad = document.getElementById("cmbentidad").value;
-	if (tipopago='TAR'){
-		entidad = document.getElementById("cmbtarjeta").value;
-	}
     var valor = document.getElementById("txtvalor").value;
     var referencia = document.getElementById("txtreferencia").value;
 	totalpago +=  parseFloat(valor);
@@ -49,6 +46,7 @@ function new_link() {
 		  break;
 		case "TAR":
 			selectTAR = "selected"
+			entidad   = document.getElementById("cmbtarjeta").value;
 		  break;
 		case "DEP":
 			selectDEP = "selected"
