@@ -141,8 +141,8 @@
                                                                 <thead class="text-muted table-light">
                                                                     <tr class="text-uppercase">
                                                                         <th style="width: 180px;">Tipo Pago</th>
-                                                                        <th style="">Entidad</th>
-                                                                        <th>Numero</th>
+                                                                        <th style="width: 180px;">Entidad</th>
+                                                                        <th style="width: 80px;">Numero</th>
                                                                         <th>Referencia</th>
                                                                         <th style="width: 120px;">Valor</th>
                                                                     </tr>
@@ -158,7 +158,7 @@
                                                                                 <option value="EFE">Efectivo</option>
                                                                                 @case('CHQ')
                                                                                 <option value="CHQ">Cheque</option>
-                                                                                @case('TCR')
+                                                                                @case('TAR')
                                                                                 <option value="TCR">Tarjeta</option>
                                                                                 @case('DEP')
                                                                                 <option value="DEP">Depósito</option>
@@ -166,6 +166,8 @@
                                                                                 <option value="TRA">Transferencia</option>
                                                                                 @case('CON')
                                                                                 <option value="CON">Convenio</option>
+                                                                                @case('OTR')
+                                                                                <option value="OTR">Convenio</option>
                                                                             @endswitch
                                                                             </select>
                                                                         </td> 

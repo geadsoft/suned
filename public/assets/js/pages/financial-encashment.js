@@ -20,7 +20,10 @@ function new_link() {
 	count++;
 	var tr1 = document.createElement("tr");
     var tipopago = document.getElementById("cmbtipopago").value;
-    var entidad = document.getElementById("cmbentidad").value; ;
+    var entidad = document.getElementById("cmbentidad").value;
+	if (tipopago='TAR'){
+		entidad = document.getElementById("cmbtarjeta").value;
+	}
     var valor = document.getElementById("txtvalor").value;
     var referencia = document.getElementById("txtreferencia").value;
 	totalpago +=  parseFloat(valor);
@@ -35,6 +38,7 @@ function new_link() {
 	var selectDEP = "";
 	var selectTRA = "";
 	var selectCON = "";
+	var selectOTR = "";
 
 	switch(tipopago) {
 		case "EFE":
@@ -55,6 +59,9 @@ function new_link() {
 		case "CON":
 			selectCON = "selected"
 		  break;
+		  case "OTR":
+			selectOTR = "selected"
+		  break;
 	  }
 	
 	var delLink =
@@ -68,6 +75,7 @@ function new_link() {
                 '<option value="DEP"'+ selectDEP +'>Depósito</option>'+
                 '<option value="TRA"'+ selectTRA +'>Transferencia</option>'+
                 '<option value="CON"'+ selectCON +'>Convenio</option>'+
+				'<option value="OTR"'+ selectOTR +'>Convenio</option>'+
             "</select>"+
 		"</td>" +
         "<td>" +

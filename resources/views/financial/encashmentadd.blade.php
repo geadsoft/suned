@@ -73,9 +73,7 @@
             pagos.forEach(element => {
                 var col_tipopago = element.querySelector("#cmbtipopago-"+count).value;
                 var col_entidad = element.querySelector("#cmbentidad-"+count).value;
-                if (col_tipopago=='TAR'){
-                    var col_entidad = element.querySelector("#cmbtarjeta-"+count).value;
-                }
+                
                 var col_valor = element.querySelector("#txtvalor-"+count).value;
                 var col_referencia = element.querySelector("#txtreferencia-"+count).value;
                                 

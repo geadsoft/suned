@@ -169,6 +169,7 @@
                                                                 <option value="DEP">Depósito</option>
                                                                 <option value="TRA">Transferencia</option>
                                                                 <option value="CON">Convenio</option>
+                                                                <option value="OTR">Otros</option>
                                                                 </select>
                                                             </div>
                                                         </div>

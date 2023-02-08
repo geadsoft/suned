@@ -85,10 +85,8 @@ class VcEncashmentadd extends Component
             $this->totalPago += $pago['valor'];
         }    
 
-        if ($this->totalPago==0){
-            
+        if ($this->totalPago==0){ 
             return;
-
         }
         
         $this->record['monto']= $this->totalPago;

@@ -53,6 +53,13 @@ class VcModalSections extends Component
         $this->cursoId = $cursoid;
     }
 
+    public function updatedperiodoId($id){
+        $this->grupoId = "";
+        $this->nivelId = "";
+        $this->gradoId = "";
+        $this->cursoId = "";
+    }
+
     public function updatedgrupoId($id){
         $this->datos['grupoId'] =  $id;
     }
