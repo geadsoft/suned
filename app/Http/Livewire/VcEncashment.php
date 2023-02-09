@@ -8,6 +8,7 @@ use App\Models\TrCobrosCabs;
 use App\Models\TrCobrosDets;
 use App\Models\TrDeudasDets;
 use App\Models\TmPeriodosLectivos;
+use App\Models\TmMatricula;
 use PDF;
 
 
@@ -54,7 +55,9 @@ class VcEncashment extends Component
             ['cobro_id',$this->selectId],
             ['tipovalor',"CR"],
             ['tipo',"PAG"],
-        ])->get();
+        ])
+        ->orWhere('tipo',"OTR")
+        ->get();
         $tblperiodos = TmPeriodosLectivos::all();
         
         $this->calculatotal($tbldeudas);
@@ -75,6 +78,24 @@ class VcEncashment extends Component
         $this->concepto = $this->record['concepto'];
         $this->identificacion = $this->record->estudiante->identificacion;
         $this->estudiante = $this->record->estudiante->apellidos." ".$this->record->estudiante->nombres;
+
+        $datacobro = TrCobrosCabs::join("tr_deudas_dets as dt","tr_cobros_cabs.id","=","dt.cobro_id")
+        ->join("tr_deudas_cabs as dc","dc.id","=","dt.deudacab_id")
+        ->where('tr_cobros_cabs.id',$this->selectId)
+        ->first();
+
+        $matricula = TmMatricula::join("tm_cursos","tm_matriculas.curso_id","=","tm_cursos.id")
+        ->join("tm_servicios","tm_cursos.servicio_id","=","tm_servicios.id")
+        ->join("tm_generalidades","tm_servicios.modalidad_id","=","tm_generalidades.id")
+        ->where('tm_matriculas.id',$datacobro['matricula_id'])
+        ->select('tm_generalidades.descripcion AS nomGrupo', 'tm_servicios.descripcion AS nomGrado', 'tm_cursos.paralelo', 'tm_matriculas.comentario')
+        ->first();
+            
+        if($matricula!=null){
+            $this->grupo = $matricula['nomGrupo'];
+            $this->curso = $matricula['nomGrado']." - ".$matricula['paralelo'];
+            $this->comentario = $matricula['comentario'];
+        }
 
     }
 

@@ -163,6 +163,7 @@
                                                 Current Section</h5>
                                         </div>
                                         <div class="mb-3">
+                                            <br>
                                             <input type="text" class="form-control bg-white border-0 fw-semibold" name="txtnombre" value="{{$nomnivel}}" readonly/>
                                             <input type="text" class="form-control bg-white border-0 fw-semibold" name="txtnombre" value="{{$nomcurso}}" readonly/>
                                         </div>

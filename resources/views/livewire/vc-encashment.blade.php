@@ -113,10 +113,9 @@
                                                 
                                                     <label class="form-check-label" for="shippingAddress01">
                                                     <span class="fw-semibold  text-muted text-uppercase">Tuition</span>
-                                                    <span class="fs-15  d-block">Modalidad: Presencial</span>
-                                                    <span class="text-muted fw-normal text-wrap mb-1 d-block">Segundo Bach. C</span>
-                                                    <span class="text-muted fw-normal d-block">PAGO MATRICULA Y MAYO EN OTRO COLEGIO ACEPTADO POR MR ANDRES MATRICULAR SIN PAGO DE MAYO
-                                                    </span>
+                                                    <span class="fs-15  d-block">Modalidad: {{$grupo}}</span>
+                                                    <span class="text-muted fw-normal text-wrap mb-1 d-block">{{$curso}}</span>
+                                                    <span class="text-muted fw-normal d-block">{{$comentario}}</span>
                                                 </label>
                                             </div>
                                         </div>
@@ -167,7 +166,7 @@
                                                                                 @case('CON')
                                                                                 <option value="CON">Convenio</option>
                                                                                 @case('OTR')
-                                                                                <option value="OTR">Convenio</option>
+                                                                                <option value="OTR">Otros</option>
                                                                             @endswitch
                                                                             </select>
                                                                         </td> 

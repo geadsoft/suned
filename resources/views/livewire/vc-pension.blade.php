@@ -200,6 +200,7 @@
                                                                 <th scope="col" class="text-end"></th>
                                                                 <th scope="col" class="text-end" style="width: 120px;">Antiguos</th>
                                                                 <th scope="col" class="text-end" style="width: 120px;">Recientes</th>
+                                                                <th scope="col" class="text-end"></th>
                                                                 <th scope="col" class="text-end" style="width: 120px;">Español</th>
                                                                 <th scope="col" class="text-end" style="width: 120px;">Ingles</th>
                                                             </tr>

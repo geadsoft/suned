@@ -62,11 +62,16 @@ class VcModalSections extends Component
 
     public function updatedgrupoId($id){
         $this->datos['grupoId'] =  $id;
+        $this->nivelId = "";
+        $this->gradoId = "";
+        $this->cursoId = "";
     }
 
     public function updatednivelId($id){
 
-        $this->datos['nivelId'] =  $id;        
+        $this->datos['nivelId'] =  $id; 
+        $this->gradoId = "";
+        $this->cursoId = "";      
         
         $this->tblservicios = TmServicios::where([
             ['nivel_id',$id],

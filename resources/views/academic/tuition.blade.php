@@ -37,6 +37,27 @@
             $('#showModalSection').modal('hide');
         })
 
+        window.addEventListener('msg-edit', event => {
+            swal("Good job!", "Record updated successfully!", "success");
+        })
+
+        window.addEventListener('get-data', event => {
+            
+            var grupoId = document.getElementById("cmbgrupoId").value;
+            var nivelId = document.getElementById("cmbnivelId").value;
+            var gradoId = document.getElementById("cmbgradoId").value;
+            var cursoId = document.getElementById("cmbcursoId").value;
+
+            var registro = {
+                grupoid: grupoId,
+                nivelid: nivelId,
+                gradoid: gradoId,
+                cursoid: cursoId,
+            }
+            Livewire.emit('setData',registro);
+
+        })
+
     </script>
 
 @endsection
