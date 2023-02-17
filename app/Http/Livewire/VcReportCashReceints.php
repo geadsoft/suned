@@ -370,8 +370,6 @@ class VcReportCashReceints extends Component
         $detallepago['valor'] = $this->valorCon;
         array_push($formapago,$detallepago);
 
-
-
         $pdf = PDF::loadView('reports/cuadre_caja',[
             'tblrecords' => $tblrecords,
             'sede' => $sede,

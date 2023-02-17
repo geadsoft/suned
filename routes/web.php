@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\VcEncashmentDebts;
 use App\Http\Livewire\VcReportCashReceints;
 use App\Http\Livewire\VcEncashment;
+use App\Http\Livewire\VcReportDailyCharges;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,10 @@ Route::get('/download-pdf/{grupo}/{periodo}/{fecha}',[VcReportCashReceints::clas
 Route::get('/liveWire-pdf/{grupo}/{periodo}/{fecha}',[VcReportCashReceints::class, 'liveWirePDF']);
 Route::get('/preview-pdf/comprobante/{id}',[VcEncashment::class, 'liveWirePDF']);
 Route::get('/download-pdf/comprobante/{id}',[VcEncashment::class, 'downloadPDF']);
+Route::get('/download-pdf/cobros/{data}',[VcReportDailyCharges::class, 'downloadPDF']);
+Route::get('/preview-pdf/cobros/{data}',[VcReportDailyCharges::class, 'liveWirePDF']);
+
+
 
 Auth::routes();
 //Language Translation

@@ -5,11 +5,26 @@
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
                         <div class="row g-3">
-                            <div class="col-xxl-3 col-sm-4">
-                                <div class="search-box">
-                                    <input type="text" class="form-control search"
-                                        placeholder="Search for student..." wire:model="filters.srv_nombre">
-                                    <i class="ri-search-line search-icon"></i>
+                            <div class="col-xxl-2 col-sm-4">
+                                <div>
+                                    <select class="form-select" name="cmbperiodo" wire:model="filters.srv_periodo" id="cmbperiodo">
+                                        <option value="">Select Period</option>
+                                        @foreach ($tblperiodos as $periodo)
+                                            <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                           <div class="col-xxl-2 col-sm-4">
+                                <div>
+                                    <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo" id="cmbgrupo">
+                                        <option value="">Todos</option>
+                                        @foreach ($tblgenerals as $general)
+                                            @if ($general->superior == 1)
+                                            <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-xxl-2 col-sm-4">
@@ -22,18 +37,26 @@
                                         <input type="date" class="form-control" id="fechafin" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.srv_fechafin"> 
                                 </div>
                             </div>
+                            <div class="col-md-auto ms-auto">
+                                <div class="hstack text-nowrap gap-2">
+                                    <a href="/download-pdf/cobros/{{$datos}}" class="btn btn-success"><i class="ri-download-2-line align-bottom me-1"></i>Download PDF</a>
+                                    <a href="/preview-pdf/cobros/{{$datos}}" class="btn btn-danger"><i class="ri-printer-fill align-bottom me-1"></i> Print</a>
+                                    <a class="btn btn-info add-btn" href="/financial/encashment-add"><i class="ri-add-fill me-1 align-bottom"></i> New Record</a>
+                                </div>
+                            </div>
+                            <div class="col-xxl-7 col-sm-4">
+                                <div class="search-box">
+                                    <input type="text" class="form-control search"
+                                        placeholder="Search for student..." wire:model="filters.srv_nombre">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
                             <div class="col-xxl-1 col-sm-4">
                                 <button type="button" class="btn btn-primary w-100" wire:click="consulta()"><i
                                         class="me-1 align-bottom"></i>Consultar
                                 </button>
                             </div>
-                            <div class="col-md-auto ms-auto">
-                                <div class="hstack text-nowrap gap-2">
-                                    <a href="" class="btn btn-success"><i class="ri-download-2-line align-bottom me-1"></i>Download PDF</a>
-                                    <a href="" class="btn btn-danger"><i class="ri-printer-fill align-bottom me-1"></i> Print</a>
-                                    <a class="btn btn-info add-btn" href="/financial/encashment-add"><i class="ri-add-fill me-1 align-bottom"></i> New Record</a>
-                                </div>
-                            </div>
+                            
                         </div>
                         <!--end row-->
                     </form>
