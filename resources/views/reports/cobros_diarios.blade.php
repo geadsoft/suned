@@ -75,7 +75,7 @@
                         <span><b>TOTALES<b></span>
                     </td> 
                     <td colspan="2"></td>
-                    <td colspan="1">
+                    <td colspan="1" class="text-right">
                         <span><strong>${{number_format($tblrecords->sum('pago'),2)}}<strong></span>
                     </td> 
                 </tr>
@@ -96,14 +96,14 @@
                         <tbody class="list"> 
                                 <tr>
                                     <td>Valor sin desc</td>
-                                    <td>{{number_format($tblrecords->sum('monto'),2)}}</td>
+                                    <td class="text-right">{{number_format($tblrecords->sum('monto'),2)}}</td>
                                 </tr>
                                 <tr>
                                     <td>Descuento</td>
-                                    <td>{{number_format($tblrecords->sum('descuento'),2)}}</td>
+                                    <td class="text-right">{{number_format($tblrecords->sum('descuento'),2)}}</td>
                                 </tr><tr>
                                     <td>Cancelado</td>
-                                    <td>{{number_format($tblrecords->sum('pago'),2)}}</td>
+                                    <td class="text-right">{{number_format($tblrecords->sum('pago'),2)}}</td>
                                 </tr>
                         </tbody>
                     </table>
