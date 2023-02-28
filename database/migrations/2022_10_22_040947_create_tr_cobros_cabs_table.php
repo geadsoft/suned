@@ -18,6 +18,7 @@ return new class extends Migration
             $table->datetime('fecha');
             $table->bigInteger('estudiante_id')->unsigned();
             $table->foreign('estudiante_id')->references('id')->on('tm_personas');
+            $table->string('tipo',2)->default('CP');
             $table->string('documento',10)->nullable();
             $table->string('concepto',100);
             $table->double('monto',14,6);

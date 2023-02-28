@@ -216,6 +216,7 @@ class VcTuitions extends Component
         TrCobrosCabs::Create([
             'fecha' => $this -> fecha,
             'estudiante_id' => $this -> record['estudiante_id'],
+            'tipo' => 'CM',
             'documento' => $docCobro,
             'concepto' => 'Se cancela deuda por cambio de Grupo/Sección en matrícula - Recibo No. '.$docCobro, 
             'monto' => $monto,

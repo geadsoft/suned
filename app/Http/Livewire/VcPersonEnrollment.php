@@ -10,10 +10,10 @@ use Livewire\Component;
 class VcPersonEnrollment extends Component
 {
     
-    public $search_nui;
+    public $search_nui="";
     public $chkoption="si";
     public $persona_id=0;
-    public $nombres, $apellidos, $tipoident="C", $identificacion, $genero="F", $fechanace, $nacionalidad=35, $telefono, $etnia="ME";
+    public $nombres, $apellidos, $tipoident="C", $identificacion="", $genero="F", $fechanace, $nacionalidad=35, $telefono, $etnia="ME";
     public $email, $direccion, $parenteso, $eControl;
     public $estudianteId, $datoFamiliar;
 
@@ -75,6 +75,21 @@ class VcPersonEnrollment extends Component
         }
 
     }
+
+    public function validaNui(){
+        
+        if ($this->search_nui==$this->identificacion){
+            return;
+        }
+
+        $records = TmPersonas::where("identificacion",$this->identificacion)->first();
+
+        if ($records != null){
+            $this->dispatchBrowserEvent('msg-validanui');
+        }
+
+    }
+
 
     public function savePerson($relacionId)
     {   

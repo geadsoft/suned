@@ -71,6 +71,7 @@ class VcReportDailyCharges extends Component
         //->whereBetween('tr_cobros_cabs.fecha',["'".date('Ymd',strtotime($this->filters['srv_fechaini']))."'","'".date('Ymd',strtotime($this->filters['srv_fechafin']))."'"])
         ->where('tr_cobros_cabs.fecha','>=',date('Ymd',strtotime($this->filters['srv_fechaini'])))
         ->where('tr_cobros_cabs.fecha','<=',date('Ymd',strtotime($this->filters['srv_fechafin'])))
+        ->where('tr_cobros_cabs.tipo','=','CP')
         ->select('tr_cobros_cabs.id','tr_cobros_cabs.fecha','tr_cobros_cabs.documento','tr_cobros_cabs.concepto','tr_cobros_cabs.monto','tr_cobros_cabs.estado','tr_cobros_cabs.usuario','tm_personas.nombres', 'tm_personas.apellidos')
         ->orderBy('tr_cobros_cabs.fecha','desc')
         ->paginate(15);
@@ -141,6 +142,7 @@ class VcReportDailyCharges extends Component
     { 
         $data = json_decode($objdata);
         $tblrecords = $this->print($data);
+        $dias = [0=>'Domingo',1=>'Lunes',2=>'Martes',3=>'Miercoles',4=>'Jueves',5=>'Viernes',6=>'Sabado'];
 
         $ldate = date('Y-m-d H:i:s');
         $this->fecha = date('Y-m-d',strtotime($ldate));
@@ -150,6 +152,7 @@ class VcReportDailyCharges extends Component
             'tblrecords' => $tblrecords,
             'data' => $this->data,
             'fecha' => $this->fecha,
+            'dias' => $dias,
         ]);
 
         return $pdf->download('Cobros diarios.pdf');

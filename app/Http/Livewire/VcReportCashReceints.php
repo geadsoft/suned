@@ -88,6 +88,7 @@ class VcReportCashReceints extends Component
             return $query->where('tr_cobros_cabs.fecha',"{$this->filters['srv_fecha']}");
         }) 
         ->where('tr_deudas_dets.tipo','<>','DES')
+        ->where('tr_cobros_cabs.tipo','=','CP')
         ->select('tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario', 'tr_cobros_dets.referencia', 'entidad_id')
         ->orderBy('tr_cobros_cabs.fecha')
         ->paginate(15);

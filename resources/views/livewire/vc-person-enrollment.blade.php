@@ -82,7 +82,7 @@
                     <label for="perident" class="form-label">
                     Identification</label>
                     <input type="text" class="form-control" id="perident"
-                        placeholder="Enter your identificacion" wire:model.defer="identificacion" required {{$eControl}}>
+                        placeholder="Enter your identificacion" wire:model.defer="identificacion" required {{$eControl}} wire:focusout='validaNui()'>
                 </div>
             </div>
             <div class="col-lg-4">
