@@ -35,7 +35,7 @@ class VcPersonadd extends Component
     ];
     public $familiar = [
         'id' => 0,
-        'persona_Id' => 0,
+        'persona_id' => 0,
         'apellidos' => '',
         'nombres' => '',
         'tipoidentificacion' => '',
