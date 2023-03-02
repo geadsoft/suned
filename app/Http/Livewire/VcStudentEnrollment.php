@@ -281,25 +281,31 @@ class VcStudentEnrollment extends Component
 
             }else{
 
-                TmPersonas::Create([
-                    'nombres' => $data['nombres'],
-                    'apellidos' => $data['apellidos'],
-                    'tipoidentificacion' => $data['tipoidentificacion'],
-                    'identificacion' => $data['identificacion'], 
-                    'fechanacimiento' => "1900-01-01",
-                    'nacionalidad_id' => $data['nacionalidad_id'],
-                    'genero' => $data['genero'],
-                    'telefono' => $data['telefono'],
-                    'direccion' => $data['direccion'],
-                    'email' => $data['email'],
-                    'etnia' => "",
-                    'parentesco' => $data['parentesco'],
-                    'tipopersona' => "R",
-                    'relacion_id' => 0,
-                    'usuario' => auth()->user()->name,
-                    'estado' => "A",
-                ]);
-                $newRecno = TmPersonas::orderBy("id", "desc")->first();
+                $familiar = TmPersonas::where('identificacion',$data['identificacion'])->first();
+
+                if ($familiar==null) {
+
+                    TmPersonas::Create([
+                        'nombres' => $data['nombres'],
+                        'apellidos' => $data['apellidos'],
+                        'tipoidentificacion' => $data['tipoidentificacion'],
+                        'identificacion' => $data['identificacion'], 
+                        'fechanacimiento' => "1900-01-01",
+                        'nacionalidad_id' => $data['nacionalidad_id'],
+                        'genero' => $data['genero'],
+                        'telefono' => $data['telefono'],
+                        'direccion' => $data['direccion'],
+                        'email' => $data['email'],
+                        'etnia' => "",
+                        'parentesco' => $data['parentesco'],
+                        'tipopersona' => "R",
+                        'relacion_id' => 0,
+                        'usuario' => auth()->user()->name,
+                        'estado' => "A",
+                    ]);
+                    $newRecno = TmPersonas::orderBy("id", "desc")->first();
+                    
+                }
 
                 TmFamiliarEstudiantes::Create([
                     'estudiante_id'=> $this->estudiante_id,

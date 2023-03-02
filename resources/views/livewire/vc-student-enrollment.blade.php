@@ -418,10 +418,10 @@
                                             <label for="perrelacion" class="form-label">Relation</label>
                                             <select class="form-select" data-choices data-choices-search-false id="relfamiliar" wire:model.defer="familiar.parentesco" {{$fControl}}>
                                                 <option value="NN">Selecione Relacion</option>
-                                                <option value="MA">Madre</option>
-                                                <option value="PA">Padre</option>
-                                                <option value="AP">Apoderado</option>
-                                                <option value="OT">Otro</option>
+                                                <option value="MA">Mother</option>
+                                                <option value="PA">Parent</option>
+                                                <option value="AP">Proxy</option>
+                                                <option value="OT">Other</option>
                                             </select>
                                         </div>
                                     </div>
