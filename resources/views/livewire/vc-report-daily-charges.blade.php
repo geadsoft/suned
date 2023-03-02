@@ -40,7 +40,7 @@
                             <div class="col-md-auto ms-auto">
                                 <div class="hstack text-nowrap gap-2">
                                     <a href="/download-pdf/cobros/{{$datos}}" class="btn btn-success"><i class="ri-download-2-line align-bottom me-1"></i>Download PDF</a>
-                                    <a href="/preview-pdf/cobros/{{$datos}}" class="btn btn-danger"><i class="ri-printer-fill align-bottom me-1"></i> Print</a>
+                                    <a href="/preview-pdf/cobros/{{$datos}}" class="btn btn-danger" target="_blank"><i class="ri-printer-fill align-bottom me-1"></i> Print</a>
                                     <a class="btn btn-info add-btn" href="/financial/encashment-add"><i class="ri-add-fill me-1 align-bottom"></i> New Record</a>
                                 </div>
                             </div>

@@ -40,7 +40,7 @@
                             <div class="col-md-auto ms-auto">
                                 <div class="hstack text-nowrap gap-2">
                                     <a href="/download-pdf/{{$nomgrupo}}/{{$nomperiodo}}/{{$dfecha}}" class="btn btn-success"><i class="ri-download-2-line align-bottom me-1"></i>Download PDF</a>
-                                    <a href="/liveWire-pdf/{{$nomgrupo}}/{{$nomperiodo}}/{{$dfecha}}" class="btn btn-danger"><i class="ri-printer-fill align-bottom me-1"></i> Print</a>
+                                    <a href="/liveWire-pdf/{{$nomgrupo}}/{{$nomperiodo}}/{{$dfecha}}" class="btn btn-danger" target="_blank"><i class="ri-printer-fill align-bottom me-1"></i> Print</a>
                                 </div>
                             </div>
                             <div class="col-xxl-6 col-sm-4">
