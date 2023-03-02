@@ -280,14 +280,24 @@ class VcPersonadd extends Component
                     ]);
                     $newRecno = TmPersonas::orderBy("id", "desc")->first();
 
+                    TmFamiliarEstudiantes::Create([
+                        'estudiante_id'=> $this->personaId,
+                        'persona_id'=> $newRecno['id'],
+                        'informacion'=>'',
+                        'usuario' => auth()->user()->name,
+                    ]);
+
+                } else {
+
+                    TmFamiliarEstudiantes::Create([
+                        'estudiante_id'=> $this->personaId,
+                        'persona_id'=> $familiar['id'],
+                        'informacion'=>'',
+                        'usuario' => auth()->user()->name,
+                    ]);
+
                 }
 
-                TmFamiliarEstudiantes::Create([
-                    'estudiante_id'=> $this->personaId,
-                    'persona_id'=> $newRecno['id'],
-                    'informacion'=>'',
-                    'usuario' => auth()->user()->name,
-                ]);
 
             }
 
