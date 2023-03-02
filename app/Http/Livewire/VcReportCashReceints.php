@@ -301,7 +301,17 @@ class VcReportCashReceints extends Component
                 $this->valorChq = $this->valorChq + floatval($record['pago']);
             }
             if ($record['tipopago']=="TAR") {
+                
                 $this->valorTar = $this->valorTar + floatval($record['pago']);
+                $entidad = Tmgeneralidades::find($record['entidad_id']);
+
+                $detalle['tipo'] = "TAR";
+                $detalle['recibo'] = $record['documento'];
+                $detalle['referencia'] = $record['referencia'];
+                $detalle['entidad'] = $entidad['descripcion'];
+                $detalle['valor'] = $record['pago'];
+                array_push($resumenpago,$detalle);
+
             }
             if ($record['tipopago']=="DEP") {
                 
