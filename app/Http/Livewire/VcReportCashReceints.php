@@ -127,6 +127,7 @@ class VcReportCashReceints extends Component
     public function downloadPDF($ngrupo,$nperiodo,$nfecha)
     {   
         $this->filters['srv_fecha']=$nfecha;
+        $this->filters['srv_periodo']=$nperiodo;
 
         $tblrecords = $this->consulta();        
         $sede    = TmSedes::where('id',1)->first();
@@ -408,3 +409,5 @@ class VcReportCashReceints extends Component
 
 
 }
+
+?>
