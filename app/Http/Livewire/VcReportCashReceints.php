@@ -77,7 +77,11 @@ class VcReportCashReceints extends Component
         ->where([
             ['tr_deudas_dets.tipo','PAG'],
             ['tr_cobros_cabs.tipo','CP'],
-        ])       
+        ])
+        ->when($this->filters['srv_nombre'],function($query){
+            return $query->where('tm_personas.nombres','like','%'.$this->filters['srv_nombre'].'%')
+                        ->orWhere('tm_personas.apellidos','like','%'.$this->filters['srv_nombre'].'%');
+        })       
         ->when($this->filters['srv_periodo'],function($query){
             return $query->where('tm_matriculas.periodo_id',"{$this->filters['srv_periodo']}");
         })
@@ -86,10 +90,6 @@ class VcReportCashReceints extends Component
         })
         ->when($this->filters['srv_fecha'],function($query){
             return $query->where('tr_cobros_cabs.fecha',"{$this->filters['srv_fecha']}");
-        })
-        ->when($this->filters['srv_nombre'],function($query){
-            return $query->where('tm_personas.nombres','like','%'.$this->filters['srv_nombre'].'%')
-                        ->orWhere('tm_personas.apellidos','like','%'.$this->filters['srv_nombre'].'%');
         })
         ->select('tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario', 'tr_cobros_dets.referencia', 'entidad_id')
         ->orderBy('tr_cobros_cabs.fecha')
