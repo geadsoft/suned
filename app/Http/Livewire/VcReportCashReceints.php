@@ -297,12 +297,16 @@ class VcReportCashReceints extends Component
         return $pdf->download('cuadre de caja.pdf');
     }
 
-    public function liveWirePDF($ngrupo,$nperiodo,$nfecha)
+    public function liveWirePDF($objdata)
     {   
-        $this->filters['srv_fecha']=$nfecha;
-        $this->filters['srv_periodo']=$nperiodo;
+
+        $data = json_decode($objdata);
+        $this->filters['srv_fecha']   = $data->srv_fecha;
+        $this->filters['srv_periodo'] = $data->srv_periodo;
+        $this->filters['srv_grupo']   = $data->srv_grupo;
+        $this->filters['srv_nombre']  = $data->srv_nombre;
         
-        $tblrecords = $this->consulta();        
+        $tblrecords = $this->imoresion();        
         $sede    = TmSedes::where('id',1)->first();
         $tblTotal  = [];
         $resumen   = [
@@ -325,9 +329,16 @@ class VcReportCashReceints extends Component
             'valor'      => 0,
         ];
 
-        $this->datosfilters['grupo']   =  $ngrupo; 
-        $this->datosfilters['periodo'] =  $nperiodo;
-        $this->datosfilters['fecha']   =  date('d/m/Y',strtotime($nfecha)) ;
+        $objgrupo = TmGeneralidades::find($this->filters['srv_grupo']);
+        $this->datosfilters['grupo']   = 'TODOS';
+        if ($objgrupo!=""){
+            $this->datosfilters['grupo']   =  $objgrupo['descripcion']; 
+        }
+
+        $objperiodo = TmPeriodosLectivos::find($this->filters['srv_periodo']);
+        $this->datosfilters['periodo'] =  $objperiodo['descripcion'];
+
+        $this->datosfilters['fecha']   =  date('d/m/Y',strtotime($this->filters['srv_fecha'])) ;
 
         foreach ($tblrecords as $record)
         {
