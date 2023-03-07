@@ -54,9 +54,8 @@ class VcEncashment extends Component
         $tbldeudas   = TrDeudasDets::where([
             ['cobro_id',$this->selectId],
             ['tipovalor',"CR"],
-            ['tipo',"PAG"],
         ])
-        ->orWhere('tipo',"OTR")
+        ->whereIn('tipo',["PAG","OTR"])
         ->get();
         $tblperiodos = TmPeriodosLectivos::all();
         
