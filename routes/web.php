@@ -38,8 +38,8 @@ Route::get('/financial/create-invoice',[App\Http\Controllers\TrFacturasCabsContr
 Route::get('/report/box-balance',[App\Http\Controllers\TrCobrosCabsController::class, 'cuadrecaja'])->name('cuadrecaja');
 Route::get('/report/daily-charges',[App\Http\Controllers\TrCobrosCabsController::class, 'cobrosdiarios'])->name('cobrosdiarios');
 
-Route::get('/download-pdf/{grupo}/{periodo}/{fecha}',[VcReportCashReceints::class, 'downloadPDF']);
-Route::get('/liveWire-pdf/{grupo}/{periodo}/{fecha}',[VcReportCashReceints::class, 'liveWirePDF']);
+Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
+Route::get('/liveWire-pdf/{data}',[VcReportCashReceints::class, 'liveWirePDF']);
 Route::get('/preview-pdf/comprobante/{id}',[VcEncashment::class, 'liveWirePDF']);
 Route::get('/download-pdf/comprobante/{id}',[VcEncashment::class, 'downloadPDF']);
 Route::get('/download-pdf/cobros/{data}',[VcReportDailyCharges::class, 'downloadPDF']);

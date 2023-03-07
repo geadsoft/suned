@@ -14,7 +14,7 @@ class VcReportCashReceints extends Component
 {   
     use WithPagination;
     public $sede,$nomperiodo, $tblgenerals, $tblperiodos, $nomgrupo='TODOS', $dfecha;
-    public $dataPdf = [];
+    public $dataPdf = [],$datos;
     public $filters = [
         'srv_periodo' => '',
         'srv_grupo' => '',
@@ -74,10 +74,6 @@ class VcReportCashReceints extends Component
         ->join("tm_personas","tm_personas.id","=","tm_matriculas.estudiante_id")
         ->join("tm_cursos","tm_cursos.id","=","tm_matriculas.curso_id")
         ->join("tm_servicios","tm_servicios.id","=","tm_cursos.servicio_id")
-        ->where([
-            ['tr_deudas_dets.tipo','PAG'],
-            ['tr_cobros_cabs.tipo','CP'],
-        ])
         ->when($this->filters['srv_nombre'],function($query){
             return $query->where('tm_personas.nombres','like','%'.$this->filters['srv_nombre'].'%')
                         ->orWhere('tm_personas.apellidos','like','%'.$this->filters['srv_nombre'].'%');
@@ -91,6 +87,10 @@ class VcReportCashReceints extends Component
         ->when($this->filters['srv_fecha'],function($query){
             return $query->where('tr_cobros_cabs.fecha',"{$this->filters['srv_fecha']}");
         })
+        ->where([
+            ['tr_deudas_dets.tipo','PAG'],
+            ['tr_cobros_cabs.tipo','CP'],
+        ])
         ->select('tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario', 'tr_cobros_dets.referencia', 'entidad_id')
         ->orderBy('tr_cobros_cabs.fecha')
         ->paginate(15);
@@ -114,6 +114,7 @@ class VcReportCashReceints extends Component
         }
 
         $this->dfecha = $this->filters['srv_fecha'];
+        $this->datos = json_encode($this->filters);
         return $tblrecords;
     }
 
@@ -124,10 +125,15 @@ class VcReportCashReceints extends Component
         $this->datosfilters['fecha'] = $objdata['fecha'];
     }
 
-    public function downloadPDF($ngrupo,$nperiodo,$nfecha)
+
+
+    public function downloadPDF($objdata)
     {   
-        $this->filters['srv_fecha']=$nfecha;
-        $this->filters['srv_periodo']=$nperiodo;
+        $data = json_decode($objdata);
+        $this->filters['srv_fecha']   = $data->srv_fecha;
+        $this->filters['srv_periodo'] = $data->srv_periodo;
+        $this->filters['srv_grupo']   = $data->srv_grupo;
+        $this->filters['srv_nombre']  = $data->srv_nombre;
 
         $tblrecords = $this->consulta();        
         $sede    = TmSedes::where('id',1)->first();
@@ -153,9 +159,16 @@ class VcReportCashReceints extends Component
             'valor'      => 0,
         ];
 
-        $this->datosfilters['grupo']   =  $ngrupo; 
-        $this->datosfilters['periodo'] =  $nperiodo;
-        $this->datosfilters['fecha']   =  date('d/m/Y',strtotime($nfecha)) ;
+        $objgrupo = TmGeneralidades::find($this->filters['srv_grupo']);
+        $this->datosfilters['grupo']   = 'TODOS';
+        if ($objgrupo!=""){
+            $this->datosfilters['grupo']   =  $objgrupo['descripcion']; 
+        }
+
+        $objperiodo = TmPeriodosLectivos::find($this->filters['srv_periodo']);
+        $this->datosfilters['periodo'] =  $objperiodo['descripcion'];
+
+        $this->datosfilters['fecha']   =  date('d/m/Y',strtotime($this->filters['srv_fecha'])) ;
 
         foreach ($tblrecords as $record)
         {
@@ -270,6 +283,7 @@ class VcReportCashReceints extends Component
     public function liveWirePDF($ngrupo,$nperiodo,$nfecha)
     {   
         $this->filters['srv_fecha']=$nfecha;
+        $this->filters['srv_periodo']=$nperiodo;
         
         $tblrecords = $this->consulta();        
         $sede    = TmSedes::where('id',1)->first();
