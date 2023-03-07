@@ -306,7 +306,7 @@ class VcReportCashReceints extends Component
         $this->filters['srv_grupo']   = $data->srv_grupo;
         $this->filters['srv_nombre']  = $data->srv_nombre;
         
-        $tblrecords = $this->imoresion();        
+        $tblrecords = $this->impresion();        
         $sede    = TmSedes::where('id',1)->first();
         $tblTotal  = [];
         $resumen   = [
