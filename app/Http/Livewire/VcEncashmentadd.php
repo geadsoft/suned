@@ -112,7 +112,7 @@ class VcEncashmentadd extends Component
         TrCobrosCabs::Create([
             'fecha' => $this -> fecha,
             'estudiante_id' => $this -> record['estudiante_id'],
-            'tipo' => "CP"
+            'tipo' => "CP",
             'documento' => $this -> document,
             'concepto' => 'Gestión de Cobro - Recibo No. '.$this -> document, 
             'monto' => $this -> record['monto'],
