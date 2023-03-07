@@ -108,7 +108,7 @@ class VcReportCashReceints extends Component
         $this->datosfilters['fecha'] = $objdata['fecha'];
     }
 
-    public function impresion($objdata){
+    public function impresion(){
 
         $tblrecords = TrCobrosCabs::query()
         ->join("tr_cobros_dets","tr_cobros_cabs.id","=","tr_cobros_dets.cobrocab_id")
