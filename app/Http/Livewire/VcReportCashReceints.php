@@ -208,6 +208,7 @@ class VcReportCashReceints extends Component
                 $detalle['entidad'] = $entidad['descripcion'];
                 $detalle['valor'] = $record['pago'];
                 array_push($resumenpago,$detalle);
+                
             }
             if ($record['tipopago']=="TRA") {
 
