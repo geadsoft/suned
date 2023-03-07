@@ -110,7 +110,7 @@ class VcEncashmentadd extends Component
         $this->document = str_pad($this->secuencia, 7, "0", STR_PAD_LEFT);
         
         TrCobrosCabs::Create([
-            'fecha' => $this -> fecha,
+            'fecha' => $this -> record['fecha'],
             'estudiante_id' => $this -> record['estudiante_id'],
             'tipo' => "CP",
             'documento' => $this -> document,
