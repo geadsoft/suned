@@ -32,6 +32,13 @@ class VcEncashmentadd extends Component
     
     protected $listeners = ['postAdded','setCedula'];
 
+    public function mount(){
+
+        $ldate = date('Y-m-d H:i:s');
+        $this->fecha = date('Y-m-d',strtotime($ldate));
+
+    }
+
 
     public function render()
     {   
@@ -57,9 +64,6 @@ class VcEncashmentadd extends Component
 
     public function add(){
         
-        $ldate = date('Y-m-d H:i:s');
-        $this->fecha = date('Y-m-d',strtotime($ldate));
-
         $this->reset(['record']);
         $this->record['fecha']= $this->fecha;
         $this->record['estudiante_id']= $this->estudiante_id;;
@@ -73,6 +77,7 @@ class VcEncashmentadd extends Component
 
     public function createData(){
 
+        $this->record['fecha'] = $this->fecha;
         $this->dispatchBrowserEvent('save-det');
 
     }
@@ -169,7 +174,7 @@ class VcEncashmentadd extends Component
                 TrDeudasDets::Create([
                     'deudacab_id' =>  $deuda['id'],  
                     'cobro_id' => $this->selectId,
-                    'fecha' => $this -> fecha,
+                    'fecha' => $this -> record['fecha'],
                     'detalle' => $deuda['detalle'],
                     'tipo' => "DES",
                     'referencia' => $this->document,

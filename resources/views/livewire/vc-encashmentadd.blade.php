@@ -84,7 +84,7 @@
                                         <div class="">
                                             <div class="mb-3">
                                                 <label for="txtfecha" class="form-label">Date Emisión</label>
-                                                <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="record.fecha" required> 
+                                                <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha" required> 
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
