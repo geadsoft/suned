@@ -15,6 +15,10 @@ class VcEncashmentDebts extends Component
 
     protected $listeners = ['deudas' => 'cargadeuda'];
 
+    public function mount($personaid){
+        $this->cargadeuda($personaid);
+    }    
+
     public function cargadeuda($idestudiante)
     {   
         $this->idestudiante = $idestudiante;

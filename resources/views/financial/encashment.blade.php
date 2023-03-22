@@ -32,9 +32,15 @@
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
     
     <script>
-         window.addEventListener('search-form', event => {
-            $('#searchModal').modal('show');
+
+        window.addEventListener('show-form', event => {
+            $('#showModalBuscar').modal('show');
         })
+
+        window.addEventListener('hide-form', event => {
+            $('#showModalBuscar').modal('hide');
+        })
+
     </script>
 
     

@@ -112,7 +112,8 @@ class VcEncashment extends Component
 
     public function add(){
         
-        $this->dispatchBrowserEvent('search-form');
+        //$this->dispatchBrowserEvent('search-form');
+        $this->dispatchBrowserEvent('show-form');
     }
 
 

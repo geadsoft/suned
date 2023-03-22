@@ -3,15 +3,9 @@
         <div class="col-xl-7">
             <div class="card">
                 <div class="card-body checkout-tab">
-                    @foreach($errors->all() as $error)
-                        {{$error}}
-                    @endforeach
+                    
                     <form autocomplete="off" wire:submit.prevent="{{ 'createData' }}" id="encashment_form">
-                        @csrf
-                        <div class="row mb-3">
-                            @livewire('student-search-bar')
-                        </div>
-                        <br>
+                       
                         <div class="step-arrow-nav mt-n3 mx-n3 mb-3">
 
                             <ul class="nav nav-pills nav-justified custom-nav" id="tabencashment" role="tablist">
@@ -21,28 +15,15 @@
                                         data-bs-target="#pills-bill-address" type="button" role="tab"
                                         aria-controls="pills-bill-address" aria-selected="true"><i
                                             class=" ri-hand-coin-fill fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Cobro Information</button>
+                                            Datos del Cobro</button>
                                 </li>
                                 <li class="nav-item" role="presentation" > 
                                     <button class="nav-link fs-15 p-3" id="pills-bill-info-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-info" type="button" role="tab"
                                         aria-controls="pills-bill-info" aria-selected="false"><i
                                             class="ri-user-2-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Billing</button>
+                                            Facturación</button>
                                 </li>
-                                <!--<li class="nav-item" role="presentation">
-                                    <button class="nav-link fs-15 p-3" id="pills-payment-tab" data-bs-toggle="pill"
-                                        data-bs-target="#pills-payment" type="button" role="tab"
-                                        aria-controls="pills-payment" aria-selected="false"><i
-                                            class="ri-bank-card-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                        Payment Info</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link fs-15 p-3" id="pills-finish-tab" data-bs-toggle="pill"
-                                        data-bs-target="#pills-finish" type="button" role="tab" aria-controls="pills-finish"
-                                        aria-selected="false"><i
-                                            class="ri-checkbox-circle-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>Finish</button>
-                                </li>-->
                             </ul>
                         </div>
 
@@ -53,8 +34,8 @@
                                 <div class="d-flex align-items-center flex-wrap gap-2">
                                     <div class="flex-grow-1">
                                         <div>
-                                            <h5 class="mb-1">Generality Information</h5>
-                                            <p class="text-muted mb-4">Please fill all information below</p>
+                                            <h5 class="mb-1">Información General</h5>
+                                            <p class="text-muted mb-4">Por favor complete toda la información a continuación</p>
                                         </div>
                                     </div>
                                     <div class="flex-shrink-0">
@@ -83,7 +64,7 @@
                                     <div class="d-flex align-items-center">
                                         <div class="">
                                             <div class="mb-3">
-                                                <label for="txtfecha" class="form-label">Date Emisión</label>
+                                                <label for="txtfecha" class="form-label">Fecha de Emisión</label>
                                                 <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha" required> 
                                             </div>
                                         </div>
@@ -103,7 +84,7 @@
                                             <div class="card-header">
                                                 <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
                                                     class="mdi mdi-account-tie align-middle me-1 text-success"></i>
-                                                    Personal Data</h5>
+                                                    Información Personal</h5>
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
@@ -126,7 +107,7 @@
                                             <div class="form-check card-radio">
                                                 
                                                     <label class="form-check-label" for="shippingAddress01">
-                                                    <span class="fw-semibold  text-muted text-uppercase">Tuition</span>
+                                                    <span class="fw-semibold  text-muted text-uppercase">Matricula</span>
                                                     <span class="fs-15  d-block">Modalidad: {{$grupo}}</span>
                                                     <span class="text-muted fw-normal text-wrap mb-1 d-block">{{$curso}}</span>
                                                     <span class="text-muted fw-normal d-block">{{$comentario}}
@@ -142,14 +123,14 @@
                                                     <a class="nav-link active" data-bs-toggle="tab" href="#addpagos" role="tab">
                                                         <h5 class="card-title flex-grow-1 mb-0 text-primary fs-14">
                                                             <i class="mdi mdi-account-cash align-middle me-1 text-success"></i>
-                                                                Payment Method</h5>
+                                                                Método de pago</h5>
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" data-bs-toggle="tab" href="#addproduct-metadata" role="tab">
                                                         <h5 class="card-title flex-grow-1 mb-0 text-primary fs-14">
                                                             <i class="mdi mdi-cash-multiple align-middle me-1 text-success"></i>
-                                                                Payments</h5>
+                                                                Pagos</h5>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -161,7 +142,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-3 col-sm-6">
                                                             <div class="mb-3">
-                                                                <label class="form-label" for="stocks-input">Payment Method</label>
+                                                                <label class="form-label" for="stocks-input">Tipo de pago</label>
                                                                 <select type="select" class="form-select" id="cmbtipopago" name="cmbtipopago">
                                                                 <option value="EFE">Efectivo</option>
                                                                 <option value="CHQ">Cheque</option>
@@ -190,7 +171,7 @@
                                                         </div>
                                                         <div class="col-lg-2 col-sm-6">
                                                             <div class="mb-3">
-                                                                <label class="form-label" for="txtvalor">Value</label>
+                                                                <label class="form-label" for="txtvalor">Valor</label>
                                                                 <input type="number" class="form-control  product-price" id="txtvalor" step="0.01" placeholder="0.00">
                                                             </div>
                                                         </div>
@@ -206,7 +187,7 @@
                                                     </div>
                                                     <div class="row align-items-center sm-3">
                                                         <div class="col-lg-12 col-sm-6">
-                                                            <label class="form-label" for="txtreferencia">Reference</label>
+                                                            <label class="form-label" for="txtreferencia">Referencia</label>
                                                             <input type="text" class="form-control  product-price" id="txtreferencia" placeholder="">
                                                         </div>
                                                     </div>   
@@ -263,8 +244,8 @@
                         
                             <div class="tab-pane fade" id="pills-bill-info" role="tabpanel" aria-labelledby="pills-bill-info-tab">
                                 <div>
-                                    <h5 class="mb-1">Billing Information</h5>
-                                    <p class="text-muted mb-4">Please fill all information below</p>
+                                    <h5 class="mb-1">Información de Facturación</h5>
+                                    <p class="text-muted mb-4">Por favor complete toda la información a continuación</p>
                                 </div>
 
                                 <div>
@@ -282,7 +263,7 @@
 
                                         <div class="col-sm-8">
                                             <div class="mb-3">
-                                                <label for="billinginfo-lastName" class="form-label">Customer</label>
+                                                <label for="billinginfo-lastName" class="form-label">Cliente</label>
                                                 <input type="text" class="form-control" id="billinginfo-lastName"
                                                     placeholder="Enter last name" value="">
                                             </div>
@@ -301,7 +282,7 @@
 
                                         <div class="col-sm-6">
                                             <div class="mb-3">
-                                                <label for="billinginfo-phone" class="form-label">Phone</label>
+                                                <label for="billinginfo-phone" class="form-label">Teléfono</label>
                                                 <input type="text" class="form-control" id="billinginfo-phone"
                                                     placeholder="Enter phone no.">
                                             </div>
@@ -309,7 +290,7 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="billinginfo-address" class="form-label">Address</label>
+                                        <label for="billinginfo-address" class="form-label">Dirección</label>
                                         <textarea class="form-control" id="billinginfo-address" placeholder="Enter address" rows="3"></textarea>
                                     </div>
 
@@ -371,12 +352,12 @@
                 <div class="card-header">
                     <div class="d-flex ">
                         <div class="flex-grow-1">
-                            <h5 class="card-title mb-0">Debts Summary</h5>
+                            <h5 class="card-title mb-0">Detalle de deudas</h5>
                         </div>
                         <div class="flex-shrink-0">
                             <div class="form-check form-check-success" >
                                 <input class="form-check-input" type="checkbox" name="chkbill" id="chkbill" onchange="chkbill()">
-                                <label class="form-check-label fs-15" for="chkbill">Bill</label>
+                                <label class="form-check-label fs-15" for="chkbill">Facturar</label>
                             </div>
                         </div>
                     </div>
@@ -384,7 +365,7 @@
                 <div class="card-body">
                     <div class="table-responsive table-card">
                         <!--Deudas-->
-                         @livewire('vc-encashment-debts')       
+                         @livewire('vc-encashment-debts',['personaid' => $estudiante_id])       
                             
                         <hr/>
                         <div class="card-body">
@@ -436,6 +417,8 @@
         <!-- end col -->
     </div>
     <!-- end row -->
+
+    
 
     <div wire.ignore.self id="messageModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-confirm modal-dialog-centered">

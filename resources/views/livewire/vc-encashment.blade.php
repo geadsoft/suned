@@ -58,14 +58,15 @@
                                                     <i class="ri-more-fill"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a class="dropdown-item" href="apps-ecommerce-add-product.html"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Void/Retrieve Receipt</a></li>
-                                                    <li><a class="dropdown-item" href="apps-ecommerce-product-details.html"><i class="ri-eye-fill align-bottom me-2 text-muted"></i> See invoice </a></li>
+                                                    <li><a class="dropdown-item" href="apps-ecommerce-add-product.html"><i class="ri-pencil-fill align-bottom me-2 text-muted fs-14"></i>Anular/Recuperar Recibo</a></li>
+                                                    <li><a class="dropdown-item" href="apps-ecommerce-product-details.html"><i class="ri-eye-fill align-bottom me-2 text-muted fs-14"></i> Ver Factura </a></li>
                                                     <li class="dropdown-divider"></li>
                                                     <li><a class="dropdown-item remove-list" href="" data-bs-toggle="modal" data-bs-target="#removeItemModal">
-                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li></ul>
+                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted fs-14"></i> Eliminar </a></li></ul>
                                             </div>
                                             <div class="mb-3 p-2">
-                                                <a class="btn btn-info add-btn btn-sm" href="/financial/encashment-add"><i class="ri-add-fill me-1 align-bottom"></i> New Record</a>
+                                                <!--<a class="btn btn-info add-btn btn-sm" href="/financial/encashment-add"><i class="ri-add-fill me-1 align-bottom"></i> New Record</a>-->
+                                                <a class="btn btn-info add-btn btn-sm" wire:click="add()"><i class="ri-add-fill me-1 align-bottom"></i> New Record</a>
                                                 <!--<button class="btn btn-info add-btn btn-sm" wire:click="add()">New Record</button>-->
                                             </div>    
                                         </div>
@@ -306,6 +307,11 @@
                             <!-- end tab pane -->
                         </div>
                         <!-- end tab content -->
+
+
+
+
+
                     </form>
                 </div>
                 <!-- end card body -->
@@ -427,7 +433,34 @@
     </div>
     <!-- end row -->
 
-     @livewire('search-dropdow')  
+     
+
+    <div wire.ignore.self class="modal fade" id="showModalBuscar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" >
+            <div class="modal-content modal-content border-0">
+                
+                <div class="modal-header p-3 bg-light">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <span> Registrar Cobro &nbsp;</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                </div>
+                
+                <form autocomplete="off" wire:submit.prevent="">
+                    <div class="modal-body">                                        
+                            @livewire('vc-modal-search')                                       
+                    </div>
+                    <div class="modal-footer">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <!--<button type="button" wire:click.prevent="add()" class="btn btn-success" id="add-btn">Continuar</button>-->
+                        </div>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
 
     <!-- removeItemModal -->
     <div id="removeItemModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">

@@ -16,7 +16,7 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-encashmentadd')
+    @livewire('vc-encashmentadd',['periodoid' => $periodoid,'personaid' => $personaid])
 
 @endsection
 

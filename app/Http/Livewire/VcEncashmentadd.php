@@ -32,11 +32,20 @@ class VcEncashmentadd extends Component
     
     protected $listeners = ['postAdded','setCedula'];
 
-    public function mount(){
+    public function mount($periodoid,$personaid){
 
         $ldate = date('Y-m-d H:i:s');
         $this->fecha = date('Y-m-d',strtotime($ldate));
 
+        $tblpersona    = TmPersonas::find($personaid);
+
+        $this->idbuscar = $tblpersona['identificacion'];
+        $this->periodo  = $periodoid;
+        $this->estudiante_id = $tblpersona['id'];
+
+        $this->add();
+        $this->search(1);
+          
     }
 
 
@@ -47,11 +56,6 @@ class VcEncashmentadd extends Component
         $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         $tblentidads = TmGeneralidades::where('superior',6)->get();
         $tbltarjetas = TmGeneralidades::where('superior',8)->get();
-                
-        $periodoActual = TmPeriodosLectivos::orderBy("periodo","desc")->first();        
-        $this->periodo = $periodoActual['id'];
-
-        $this->add();
 
         return view('livewire.vc-encashmentadd',[
             'record' => $record,
@@ -205,9 +209,11 @@ class VcEncashmentadd extends Component
     
     public function search($tipo){
 
+
         if ($tipo=1){
             
             $this->persona   = TmPersonas::where('identificacion',$this->idbuscar)->first(); 
+            
             
             if (  $this->persona != null) {
 
@@ -224,7 +230,7 @@ class VcEncashmentadd extends Component
                     ])
                 ->select('tm_generalidades.descripcion AS nomGrupo', 'tm_servicios.descripcion AS nomGrado', 'tm_cursos.paralelo', 'tm_matriculas.comentario')
                 ->first();
-                    
+                   
                 if($matricula!=null){
                     $this->grupo = $matricula['nomGrupo'];
                     $this->curso = $matricula['nomGrado']." - ".$matricula['paralelo'];
@@ -244,4 +250,7 @@ class VcEncashmentadd extends Component
         }
 
     }
+
+    
+
 }

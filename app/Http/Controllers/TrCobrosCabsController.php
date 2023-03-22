@@ -27,9 +27,9 @@ class TrCobrosCabsController extends Controller
         return view('financial/encashment',['id' => 0]);
     }
 
-    public function addencashment()
+    public function addencashment($periodoid,$personaid)
     {
-        return view('financial/encashmentadd');
+        return view('financial/encashmentadd',['periodoid' => $periodoid,'personaid' => $personaid]);
     }
 
     public function cuadrecaja()

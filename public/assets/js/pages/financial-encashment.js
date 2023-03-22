@@ -187,7 +187,7 @@ genericExamples.forEach(function (genericExamp) {
 });
 
 var lineadeuda = 0;
-function chkpago() {
+function chkpago(fila) {
 	
 	var deudas = document.getElementsByClassName("deudas");
 	localStorage.removeItem("deuda-list");
@@ -197,10 +197,21 @@ function chkpago() {
 	var descuento = 0;
 	var total = 0;
 	var new_deudas_obj = [];
+
+	var saldo  = document.getElementById("saldo-"+fila).value;
+	var desct  =  document.getElementById("desc-"+fila).value;
+	var chksel = document.getElementById("chkpago-"+fila).checked;
+
+	if (chksel){
+		var neto   = parseFloat(saldo)-parseFloat(desct);
+		document.getElementById("neto-"+fila).value = neto.toFixed(2);
+	}else{
+		document.getElementById("desc-"+fila).value = 0.00;
+		document.getElementById("neto-"+fila).value = parseFloat(saldo).toFixed(2);
+	}
 	
 	deudas.forEach(element => {
-
-		
+	
 		var deuda_desct  = element.querySelector("#desc-"+lineadeuda).value;
 		var deuda_saldo = element.querySelector("#saldo-"+lineadeuda).value;
 		var deuda_select = element.querySelector("#chkpago-"+lineadeuda).checked;
@@ -221,12 +232,22 @@ function chkpago() {
 				valpago: valor_pago,
 			}
 			new_deudas_obj.push(deuda_obj);
-		}
-				
+			/*if (lineadeuda==fila){
+				document.getElementById("neto-"+lineadeuda).value = valor_pago.toFixed(2);
+			}*/
+		} /*else {
+			if (lineadeuda==fila){
+				saldo = element.querySelector("#saldo-"+fila).value;
+				document.getElementById("desc-"+lineadeuda).value = 0.00;
+				document.getElementById("neto-"+lineadeuda).value = saldo.toFixed(2);
+			}
+		}*/
+		
 		lineadeuda++;
 	});
-	
+
 	total += subtotal+descuento;
+	
 	document.getElementById("cart-subtotal").value = paymentSign + subtotal.toFixed(2);
 	document.getElementById("cart-descuento").value = paymentSign + descuento.toFixed(2);
 	document.getElementById("cart-total").value = paymentSign + total.toFixed(2);
