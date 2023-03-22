@@ -232,17 +232,9 @@ function chkpago(fila) {
 				valpago: valor_pago,
 			}
 			new_deudas_obj.push(deuda_obj);
-			/*if (lineadeuda==fila){
-				document.getElementById("neto-"+lineadeuda).value = valor_pago.toFixed(2);
-			}*/
-		} /*else {
-			if (lineadeuda==fila){
-				saldo = element.querySelector("#saldo-"+fila).value;
-				document.getElementById("desc-"+lineadeuda).value = 0.00;
-				document.getElementById("neto-"+lineadeuda).value = saldo.toFixed(2);
-			}
-		}*/
-		
+
+		} 
+
 		lineadeuda++;
 	});
 
