@@ -23,4 +23,5 @@ class TmMatricula extends Model
         'estado',
         'usuario',
     ];
+
 }

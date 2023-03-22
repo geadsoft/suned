@@ -341,7 +341,6 @@ class VcStudentEnrollment extends Component
         $nomperiodo = $nombre;
         $nromatricula = $secuencia;
 
-
         /* Registro de Deuda */
         $pensiones = TmPensionesDet::join("tm_pensiones_cabs","tm_pensiones_cabs.id","=","tm_pensiones_dets.pension_id")
         ->where([
@@ -397,6 +396,42 @@ class VcStudentEnrollment extends Component
             'usuario' => auth()->user()->name,
           ]);
 
+        //Plataforma Ingles
+        TrDeudasCabs::Create([
+            'matricula_id' => $matriculaId,
+            'estudiante_id' => $this -> estudiante_id,
+            'periodo_id' => $this -> periodoId,
+            'referencia' => 'PLA-PER'.substr($codperiodo, -2).str_pad($nromatricula, 4, "0", STR_PAD_LEFT),
+            'fecha' => $this->fecha,
+            'basedifgravada' => $valoriPlataforma,
+            'basegravada' =>0.00,
+            'impuesto' =>0.00,
+            'descuento' =>0.00,
+            'neto' => $valoriPlataforma,
+            'debito' => $valoriPlataforma,
+            'credito' =>0.00,
+            'saldo' => $valoriPlataforma,
+            'glosa' => 'Plataforma Ingles Periodo '.$nomperiodo,
+            'estado' => 'P',
+            'usuario' => auth()->user()->name,
+        ]);
+
+        $deuda = TrDeudasCabs::orderBy("id", "desc")->first();
+        $deudaId = $deuda['id'];
+
+        TrDeudasDets::Create([
+            'deudacab_id' => $deudaId,
+            'cobro_id' => 0,
+            'fecha' => $this->fecha,
+            'detalle' => 'Plataforma Ingles Periodo '.$nomperiodo,
+            'tipo' => "",
+            'referencia' => "",
+            'tipovalor' => "DB",
+            'valor' => $valoriPlataforma,
+            'estado' => 'P',
+            'usuario' => auth()->user()->name,
+            ]);
+
 
         //Plataforma Español
         TrDeudasCabs::Create([
@@ -433,43 +468,6 @@ class VcStudentEnrollment extends Component
             'estado' => 'P',
             'usuario' => auth()->user()->name,
           ]);
-
-        //Plataforma Ingles
-        TrDeudasCabs::Create([
-            'matricula_id' => $matriculaId,
-            'estudiante_id' => $this -> estudiante_id,
-            'periodo_id' => $this -> periodoId,
-            'referencia' => 'PLA-PER'.substr($codperiodo, -2).str_pad($nromatricula, 4, "0", STR_PAD_LEFT),
-            'fecha' => $this->fecha,
-            'basedifgravada' => $valoriPlataforma,
-            'basegravada' =>0.00,
-            'impuesto' =>0.00,
-            'descuento' =>0.00,
-            'neto' => $valoriPlataforma,
-            'debito' => $valoriPlataforma,
-            'credito' =>0.00,
-            'saldo' => $valoriPlataforma,
-            'glosa' => 'Plataforma Ingles Periodo '.$nomperiodo,
-            'estado' => 'P',
-            'usuario' => auth()->user()->name,
-        ]);
-
-        $deuda = TrDeudasCabs::orderBy("id", "desc")->first();
-        $deudaId = $deuda['id'];
-
-        TrDeudasDets::Create([
-            'deudacab_id' => $deudaId,
-            'cobro_id' => 0,
-            'fecha' => $this->fecha,
-            'detalle' => 'Plataforma Ingles Periodo '.$nomperiodo,
-            'tipo' => "",
-            'referencia' => "",
-            'tipovalor' => "DB",
-            'valor' => $valoriPlataforma,
-            'estado' => 'P',
-            'usuario' => auth()->user()->name,
-          ]);
-
 
         //Pension
         for ($i=0; $i < $cuotas; $i++){

@@ -44,14 +44,14 @@ class VcModalSearch extends Component
 
         $tbldata = TmMatricula::query()
         ->join('tm_personas as p','p.id','=','tm_matriculas.estudiante_id')
-        ->when($this->filters['srv_nombre'],function($query){
-            return $query->where('p.apellidos','LIKE','%'.$this->filters['srv_nombre'].'%')
-                        ->orWhere('p.nombres','LIKE','%'.$this->filters['srv_nombre'].'%');
-        })
         ->when($this->filters['srv_periodo'],function($query){
             return $query->where('tm_matriculas.periodo_id',"{$this->filters['srv_periodo']}");
         })
         ->where('tm_matriculas.estado','A')
+        ->when($this->filters['srv_nombre'],function($query){
+            return $query->where('p.apellidos','LIKE','%'.$this->filters['srv_nombre'].'%')
+                        ->orWhere('p.nombres','LIKE','%'.$this->filters['srv_nombre'].'%');
+        })
         ->limit(10)
         ->get();
 
