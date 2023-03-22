@@ -199,14 +199,14 @@ function chkpago(fila) {
 	var new_deudas_obj = [];
 
 	var saldo  = document.getElementById("saldo-"+fila).value;
-	var desct  =  document.getElementById("desc-"+fila).value;
+	var desct  = document.getElementById("desc-"+fila).value;
 	var chksel = document.getElementById("chkpago-"+fila).checked;
 
 	if (chksel){
 		var neto   = parseFloat(saldo)-parseFloat(desct);
 		document.getElementById("neto-"+fila).value = neto.toFixed(2);
 	}else{
-		document.getElementById("desc-"+fila).value = 0.00;
+		document.getElementById("desc-"+fila).value = parseFloat(total);
 		document.getElementById("neto-"+fila).value = parseFloat(saldo).toFixed(2);
 	}
 	
