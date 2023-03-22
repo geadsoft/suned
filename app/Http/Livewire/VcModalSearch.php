@@ -47,11 +47,13 @@ class VcModalSearch extends Component
         ->when($this->filters['srv_periodo'],function($query){
             return $query->where('tm_matriculas.periodo_id',"{$this->filters['srv_periodo']}");
         })
-        ->where('tm_matriculas.estado','A')
+        ->when($this->filters['srv_grupo'],function($query){
+            return $query->where('tm_matriculas.modalidad_id',"{$this->filters['srv_grupo']}");
+        })        
         ->when($this->filters['srv_nombre'],function($query){
-            return $query->where('p.apellidos','LIKE','%'.$this->filters['srv_nombre'].'%')
-                        ->orWhere('p.nombres','LIKE','%'.$this->filters['srv_nombre'].'%');
+            return $query->whereRaw("concat(p.apellidos,' ',p.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
+        ->where('tm_matriculas.estado','A')
         ->limit(10)
         ->get();
 
