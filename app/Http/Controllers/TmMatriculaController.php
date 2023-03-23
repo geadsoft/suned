@@ -27,6 +27,10 @@ class TmMatriculaController extends Controller
         return view('academic/registration',['id' => ""]);
     }
 
+    public function estadocuenta()
+    {
+        return view('financial/accountstatus');
+    }
 
     /**
      * Show the form for creating a new resource.

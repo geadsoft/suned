@@ -107,11 +107,6 @@
                     </a>    
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/academic/course">
-                        <i class="las la-chalkboard"></i> <span>@lang('translation.course')</span>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link menu-link" href="/headquarters/educational-services">
                         <i class="las la-chalkboard"></i> <span>@lang('translation.services')</span>
                     </a>
@@ -119,6 +114,11 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/headquarters/pension">
                         <i class="las la-chalkboard"></i> <span>@lang('translation.charges')</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/academic/course">
+                        <i class="las la-chalkboard"></i> <span>@lang('translation.course')</span>
                     </a>
                 </li>
 
@@ -147,48 +147,59 @@
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.financial')</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/financial/encashment">
-                        <i class="las la-donate"></i> <span>@lang('translation.register-collection')</span>
+                        <i class="las la-donate"></i> <span>Registrar Cobro</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="">
+                    <a class="nav-link menu-link" href="/financial/account-status">
                         <i class="las la-archive"></i> <span>@lang('translation.statement-of-account')</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link menu-link" href="/financial/create-invoice">
                         <i class="las la-archive"></i> <span>@lang('translation.create_invoice')</span>
                     </a>
-                </li>
+                </li>-->
                               
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.reports')</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/report/box-balance">
-                        <i class="las la-cash-register"></i> <span>@lang('translation.cash-receipt')</span>
+                    <a class="nav-link menu-link" href="#sidebarreport" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarreport">
+                        <i class="ri-menu-add-line"></i> <span>Reportes</span>
                     </a>
+                    <div class="collapse menu-dropdown" id="sidebarreport">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/report/box-balance">
+                                    <i class="las la-cash-register"></i> <span>@lang('translation.cash-receipt')</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/report/daily-charges">
+                                    <i class="las la-file-invoice-dollar"></i> <span>@lang('translation.daily-cobros')</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="">
+                                    <i class="las la-chart-pie"></i> <span>@lang('translation.debt-analysis')</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="">
+                                    <i class="las la-sliders-h"></i> <span>@lang('translation.generic')</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/report/daily-charges">
-                        <i class="las la-file-invoice-dollar"></i> <span>@lang('translation.daily-cobros')</span>
+                    <a class="nav-link menu-link" href="#sidebarGrafico" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarGrafico">
+                        <i class="ri-menu-add-line"></i> <span>Gráficos</span>
                     </a>
+                    <div class="collapse menu-dropdown" id="sidebarGrafico">
+                        <ul class="nav nav-sm flex-column">
+                        </ul>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="">
-                        <i class="las la-chart-pie"></i> <span>@lang('translation.debt-analysis')</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="">
-                        <i class="las la-sliders-h"></i> <span>@lang('translation.generic')</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="">
-                        <i class="lab la-internet-explorer"></i> <span>@lang('translation.platform')</span>
-                    </a>
-                </li>
-
-
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.config')</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/config/generality">

@@ -211,7 +211,7 @@ return [
     "staff"=> "Staff",
     "form"=> "Form",
     "transactions"=> "Transactions",
-    "reports"=> "Reports",
+    "reports"=> "Consultas",
     "setting"=> "Setting",
     "management"=> "Management",
     "process"=> "Process",
