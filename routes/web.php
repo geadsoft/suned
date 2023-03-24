@@ -46,8 +46,9 @@ Route::get('/preview-pdf/comprobante/{id}',[VcEncashment::class, 'liveWirePDF'])
 Route::get('/download-pdf/comprobante/{id}',[VcEncashment::class, 'downloadPDF']);
 Route::get('/download-pdf/cobros/{data}',[VcReportDailyCharges::class, 'downloadPDF']);
 Route::get('/preview-pdf/cobros/{data}',[VcReportDailyCharges::class, 'liveWirePDF']);
-Route::get('/preview-pdf/account-status/{id}',[VcAccountStatus::class, 'liveWirePDF']);
-
+Route::get('/preview-pdf/account-status-det/{id}',[VcAccountStatus::class, 'liveWireDetPDF']);
+Route::get('/preview-pdf/account-status-gen/{id}',[VcAccountStatus::class, 'liveWireGenPDF']);
+Route::get('/download-pdf/account-status-gen/{id}',[VcAccountStatus::class, 'downloadGenPDF']);
 
 Auth::routes();
 //Language Translation

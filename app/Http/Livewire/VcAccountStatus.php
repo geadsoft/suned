@@ -6,6 +6,8 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TmGeneralidades;
 use App\Models\TrDeudasCabs;
 use App\Models\TmMatricula;
+use App\Models\TmCursos;
+
 use PDF;
 
 
@@ -71,22 +73,114 @@ class VcAccountStatus extends Component
         return 'vendor.livewire.bootstrap'; 
     }
 
-    public function consulta(){
+    public function genConsulta(){
 
         $tblrecords = TrDeudasCabs::query()
         ->join("tr_deudas_dets as d","tr_deudas_cabs.id","=","d.deudacab_id")
-        ->selectraw("d.*,tr_deudas_cabs.saldo, tr_deudas_cabs.referencia as documento")
+        ->leftJoin("tr_cobros_dets as p","p.cobrocab_id","=","d.cobro_id")
+        ->leftJoin("tm_generalidades as g","g.id","=","p.entidad_id")
+        ->selectraw("d.*,tr_deudas_cabs.saldo, tr_deudas_cabs.descuento, p.tipopago, p.referencia as refpago, g.descripcion, tr_deudas_cabs.referencia as documento")
+        ->where("tr_deudas_cabs.matricula_id",$this->consulta['idactual'])
+        ->where("tipo","<>","'DES'")
+        ->orderByRaw("d.tipovalor desc, d.fecha")
+        ->get();
+
+        return $tblrecords;                
+    }
+
+    public function detConsulta(){
+
+        $tblrecords = TrDeudasCabs::query()
+        ->join("tr_deudas_dets as d","tr_deudas_cabs.id","=","d.deudacab_id")
+        ->selectraw("d.*,tr_deudas_cabs.saldo, tr_deudas_cabs.descuento, tr_deudas_cabs.referencia as documento", )
         ->where("tr_deudas_cabs.matricula_id",$this->consulta['idactual'])
         ->get();
 
         return $tblrecords;                
     }
 
-    public function liveWirePDF($matriculaId)
+    //General 
+    public function liveWireGenPDF($matriculaId)
+    { 
+        $this->consulta['idactual'] = $matriculaId;
+    
+        $tblrecords = $this->genConsulta();
+        $matricula = TmMatricula::find($matriculaId);
+        $this->consulta['nombre'] = $matricula->estudiante->apellidos.' '.$matricula->estudiante->nombres;
+        $this->consulta['fecha'] = date('Y-m-d H:i:s');
+
+        $curso = TmCursos::query()
+        ->join("tm_servicios as s","s.id","=","tm_cursos.servicio_id")
+        ->join("tm_generalidades as g","g.id","=","s.grado_id")
+        ->select("s.descripcion","tm_cursos.paralelo")
+        ->where("tm_cursos.id",$matricula['curso_id'])
+        ->first();
+
+        $this->consulta['curso'] = $curso['descripcion'].' / '.$curso['paralelo'];
+
+        $grupo = TmGeneralidades::find($matricula['modalidad_id']);
+        $this->consulta['grupo'] = $grupo['descripcion']; 
+
+        $periodo = TmPeriodosLectivos::find($matricula['periodo_id']);
+        $this->consulta['periodo'] = $periodo['descripcion'];
+        
+        $dias = [0=>'Domingo',1=>'Lunes',2=>'Martes',3=>'Miercoles',4=>'Jueves',5=>'Viernes',6=>'Sabado'];
+
+        //Vista
+        $pdf = PDF::loadView('reports/estado_cuenta2',[
+            'tblrecords' => $tblrecords,
+            'data' => $this->consulta,
+            'dias' => $dias,
+        ]);
+
+        return $pdf->setPaper('a4')->stream('Estado de Cuenta.pdf');
+
+    }
+
+    public function downloadGenPDF($matriculaId)
+    {
+
+        $this->consulta['idactual'] = $matriculaId;
+    
+        $tblrecords = $this->genConsulta();
+        $matricula = TmMatricula::find($matriculaId);
+        $this->consulta['nombre'] = $matricula->estudiante->apellidos.' '.$matricula->estudiante->nombres;
+        $this->consulta['fecha'] = date('Y-m-d H:i:s');
+
+        $curso = TmCursos::query()
+        ->join("tm_servicios as s","s.id","=","tm_cursos.servicio_id")
+        ->join("tm_generalidades as g","g.id","=","s.grado_id")
+        ->select("s.descripcion","tm_cursos.paralelo")
+        ->where("tm_cursos.id",$matricula['curso_id'])
+        ->first();
+
+        $this->consulta['curso'] = $curso['descripcion'].' / '.$curso['paralelo'];
+
+        $grupo = TmGeneralidades::find($matricula['modalidad_id']);
+        $this->consulta['grupo'] = $grupo['descripcion']; 
+
+        $periodo = TmPeriodosLectivos::find($matricula['periodo_id']);
+        $this->consulta['periodo'] = $periodo['descripcion'];
+        
+        $dias = [0=>'Domingo',1=>'Lunes',2=>'Martes',3=>'Miercoles',4=>'Jueves',5=>'Viernes',6=>'Sabado'];
+
+        //Vista
+        $pdf = PDF::loadView('reports/estado_cuenta2',[
+            'tblrecords' => $tblrecords,
+            'data' => $this->consulta,
+            'dias' => $dias,
+        ]);
+
+        return $pdf->download('Estado de Cuenta.pdf');
+    }
+
+
+    //Detallado
+    public function liveWireDetPDF($matriculaId)
     {   
         $this->consulta['idactual'] = $matriculaId;
     
-        $tblrecords = $this->consulta();
+        $tblrecords = $this->detConsulta();
 
         $matricula = TmMatricula::find($matriculaId);
         $this->consulta['nombre'] = $matricula->estudiante->apellidos.' '.$matricula->estudiante->nombres;

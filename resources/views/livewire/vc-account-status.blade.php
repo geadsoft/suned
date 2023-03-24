@@ -90,14 +90,11 @@
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Imprimir">
-                                                <a href="/preview-pdf/account-status/{{$record->id}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle dropdown" target="_blank"><i class="ri-printer-fill align-bottom me-1 fs-16"></i></a>
+                                                <a href="/preview-pdf/account-status-gen/{{$record->id}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle dropdown" target="_blank"><i class="ri-printer-fill align-bottom me-1 fs-16"></i></a>
                                                 </li>
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top" title="Descargar">
-                                                    <a class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle dropdown"
-                                                        data-bs-toggle="modal" href="">
-                                                        <i class="ri-download-2-line fs-16"></i>
-                                                    </a>
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Imprimir">
+                                                <a href="/download-pdf/account-status-gen/{{$record->id}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle dropdown" target="_blank"><i class="ri-download-2-line fs-16 align-bottom me-1 fs-16"></i></a>
                                                 </li>
                                             </ul>
                                         </td>
