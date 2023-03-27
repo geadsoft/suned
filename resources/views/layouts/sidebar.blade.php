@@ -192,13 +192,15 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarGrafico" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarGrafico">
+                    <li class="nav-item">
+                    <a class="nav-link menu-link" href="/report/statistical-graphs">
                         <i class="ri-menu-add-line"></i> <span>Gráficos</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarGrafico">
+                    </li>
+                    <!--<div class="collapse menu-dropdown" id="sidebarGrafico">
                         <ul class="nav nav-sm flex-column">
                         </ul>
-                    </div>
+                    </div>-->
                 </li>
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.config')</span></li>
                 <li class="nav-item">

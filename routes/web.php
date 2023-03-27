@@ -6,6 +6,7 @@ use App\Http\Livewire\VcReportCashReceints;
 use App\Http\Livewire\VcEncashment;
 use App\Http\Livewire\VcReportDailyCharges;
 use App\Http\Livewire\VcAccountStatus;
+use App\Http\Livewire\VcPersons;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,9 @@ Route::get('/financial/create-invoice',[App\Http\Controllers\TrFacturasCabsContr
 Route::get('/report/box-balance',[App\Http\Controllers\TrCobrosCabsController::class, 'cuadrecaja'])->name('cuadrecaja');
 Route::get('/report/daily-charges',[App\Http\Controllers\TrCobrosCabsController::class, 'cobrosdiarios'])->name('cobrosdiarios');
 Route::get('/financial/account-status',[App\Http\Controllers\TmMatriculaController::class, 'estadocuenta'])->name('estadocuenta');
+Route::get('/report/statistical-graphs',[App\Http\Controllers\TrCobrosCabsController::class, 'graficos'])->name('graficos');
+
+
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
 Route::get('/liveWire-pdf/{data}',[VcReportCashReceints::class, 'liveWirePDF']);
@@ -49,6 +53,14 @@ Route::get('/preview-pdf/cobros/{data}',[VcReportDailyCharges::class, 'liveWireP
 Route::get('/preview-pdf/account-status-det/{id}',[VcAccountStatus::class, 'liveWireDetPDF']);
 Route::get('/preview-pdf/account-status-gen/{id}',[VcAccountStatus::class, 'liveWireGenPDF']);
 Route::get('/download-pdf/account-status-gen/{id}',[VcAccountStatus::class, 'downloadGenPDF']);
+Route::get('/preview-pdf/student-file/{data}',[VcPersons::class, 'printFichaPDF']);
+Route::get('/preview-pdf/list-student/{report},{data}',[VcPersons::class, 'listEstudiantesPDF']);
+Route::get('/preview-pdf/report-tuitions/{report},{data}',[VcPersons::class, 'listEstudiantesPDF']);
+Route::get('/preview-pdf/list-familys/{data}',[VcPersons::class, 'listFamiliarPDF']);
+Route::get('/download-pdf/student-file/{data}',[VcPersons::class, 'downloadFichaPDF']);
+Route::get('/download-pdf/list-student/{report},{data}',[VcPersons::class, 'downloadEstudiantesPDF']);
+Route::get('/download-pdf/report-tuitions/{report},{data}',[VcPersons::class, 'downloadEstudiantesPDF']);
+Route::get('/download-pdf/list-familys/{data}',[VcPersons::class, 'downloadFamiliarPDF']);
 
 Auth::routes();
 //Language Translation

@@ -12,19 +12,19 @@
             Report
         @endslot
         @slot('title')
-            Cobros Diarios
+            Gráficos Estadísticos
         @endslot
     @endcomponent
 
-    @livewire('vc-report-daily-charges')
+    @livewire('vc-statistical-graphs')
 
 @endsection
 @section('script')
-    <script src="{{ URL::asset('assets/libs/list.js/list.js.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script> 
+    <script src="{{ URL::asset('assets/js/pages/reports-graphs.js') }}"></script>
 
-    <!--ecommerce-customer init js -->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
-    <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
-    
+       
 @endsection

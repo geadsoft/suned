@@ -40,7 +40,12 @@ class TrCobrosCabsController extends Controller
     public function cobrosdiarios()
     {
         return view('reports/dailycharges');
-    }   
+    }  
+    
+    public function graficos()
+    {
+        return view('reports/statistical-graphs');
+    } 
 
     /**
      * Show the form for creating a new resource.

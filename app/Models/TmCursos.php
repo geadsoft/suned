@@ -23,6 +23,10 @@ class TmCursos extends Model
         'usuario',
     ];
 
+    public function servicio(){
+        return $this->belongsTo('App\Models\TmServicios');
+    }
+
     public function grado(){
         return $this->belongsTo('App\Models\TmGeneralidades');
     }

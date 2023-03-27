@@ -3,48 +3,17 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header border-0">
-
-                        <div class="d-flex align-items-center">
-                            <h5 class="card-title mb-0 flex-grow-1">Student Registration</h5>
-                            <div class="flex-shrink-0">
-                                <!--<a class="btn btn-success add-btn" href="/academic/student-enrollment"><i
-                                class="ri-add-line me-1 align-bottom"></i> Add Students</a>-->
-                            </div>
-                        </div>
-
-                    <!--<div class="d-flex align-items-center flex-wrap gap-2">
-                        <div class="flex-grow-1">
-                            <a class="btn btn-primary add-btn" href="/academic/person-add"><i
-                                    class="ri-add-fill me-1 align-bottom"></i> Add Students</a> 
-                        </div>
+                    <div class="d-flex align-items-center">
+                        <h5 class="card-title mb-0 flex-grow-1">Registros de Estudiantes</h5>
                         <div class="flex-shrink-0">
-                            <div class="hstack text-nowrap gap-2">
-                                <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                                <button class="btn btn-danger" data-bs-toggle="modal"
-                                    data-bs-target="#addmembers"><i
-                                        class="ri-filter-2-line me-1 align-bottom"></i> Filters</button>
-                                <button class="btn btn-soft-success">PDF</button>
-                                <button class="btn btn-soft-success">Excel</button>
-                                <button class="btn btn-soft-success">Print</button>
-                                <button type="button" id="dropdownMenuLink1" data-bs-toggle="dropdown"
-                                    aria-expanded="false" class="btn btn-soft-info"><i
-                                        class="ri-more-2-fill"></i></button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                    <li><a class="dropdown-item" href="#">All</a></li>
-                                    <li><a class="dropdown-item" href="#">Last Week</a></li>
-                                    <li><a class="dropdown-item" href="#">Last Month</a></li>
-                                    <li><a class="dropdown-item" href="#">Last Year</a></li>
-                                </ul>
-                            </div>
                         </div>
-                    </div>-->
+                    </div>
                 </div>
-            </div>
-        </div>
+            
         <!--end col-->
-        <div class="col-xxl-12">
-            <div class="card" id="contactList">
-                <div class="card-header">
+        <!--<div class="col-xxl-12">
+            <div class="card" id="contactList">-->
+                <div class="card-body border border-dashed border-end-0 border-start-0">
                     <div class="row g-3">
                         <div class="col-md-4">
                             <div class="search-box">
@@ -53,37 +22,64 @@
                                 <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
-                        <div class="col-md-auto ms-auto">
-                            <div class="hstack text-nowrap gap-2">
-                                <!--<button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                                <button class="btn btn-danger" data-bs-toggle="modal"
-                                    data-bs-target="#addmembers"><i
-                                        class="ri-filter-2-line me-1 align-bottom"></i> Filters</button>-->
-                                <button class="btn btn-soft-secondary">PDF</button>
-                                <button class="btn btn-soft-secondary">Excel</button>
-                                <button class="btn btn-soft-secondary">Print</button>
-                                <button type="button" id="dropdownMenuLink1" data-bs-toggle="dropdown"
-                                    aria-expanded="false" class="btn btn-soft-info"><i
-                                        class="ri-more-2-fill"></i></button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                    <li><a class="dropdown-item" href="#">All</a></li>
-                                    <li><a class="dropdown-item" href="#">Last Week</a></li>
-                                    <li><a class="dropdown-item" href="#">Last Month</a></li>
-                                    <li><a class="dropdown-item" href="#">Last Year</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!--<div class="col-md-auto ms-auto">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="text-muted">Sort by: </span>
-                                <select class="form-control mb-0" data-choices data-choices-search-false
-                                    id="choices-single-default">
-                                    <option value="Name">Name</option>
-                                    <option value="Company">Company</option>
-                                    <option value="Lead">Lead</option>
+                        <div class="col-xxl-2 col-sm-4">
+                            <div>
+                                <select class="form-select" name="cmbnivel" wire:model="filters.srv_periodo">
+                                    <option value="">Seleccione Periodo</option>
+                                    @foreach ($tblperiodos as $periodo)
+                                        <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
+                                    @endforeach
                                 </select>
                             </div>
-                        </div>-->
+                        </div>
+                        <div class="col-xxl-2 col-sm-4">
+                            <div>
+                                <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
+                                    <option value="">Todos Grupos</option>
+                                    @foreach ($tblgenerals as $general)
+                                        @if ($general->superior == 1)
+                                        <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xxl-2 col-sm-4">
+                                <div>
+                                    <select class="form-select" name="cmbgrupo" wire:model="filters.srv_curso">
+                                        <option value="">Todos Cursos</option>
+                                        @foreach ($tblcursos as $curso)
+                                            <option value="{{$curso->id}}">{{$curso->servicio->descripcion}} {{$curso->paralelo}} {{$curso->grupo->descripcion}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        <div class="col-md-auto ms-auto">
+                            <div class="hstack text-nowrap gap-2">
+                                <button type="button" data-bs-toggle="dropdown" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle dropdown">
+                                <i class="ri-printer-fill fs-22"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="/preview-pdf/list-student/LE,{{$datos}}" target="_blank"><i class="ri-article-line align-bottom me-2 text-muted"></i> Listado de Estudiantes </a></li>
+                                    <li><a class="dropdown-item" href="/preview-pdf/report-tuitions/RM,{{$datos}}" target="_blank"><i class="ri-stack-line align-bottom me-2 text-muted"></i> Reporte Matriculación </a></li>
+                                    <li><a class="dropdown-item" href="/preview-pdf/list-familys/{{$datos}}" target="_blank"><i class="ri-article-line align-bottom me-2 text-muted"></i> Listado de Representantes </a></li>
+                                    <li><a class="dropdown-item" href="/preview-pdf/student-file/{{$datos}}" target="_blank"><i class="ri-account-pin-circle-fill align-bottom me-2 text-muted"></i> Ficha de Estudiantes </a></li>
+                                </ul>
+
+                                <button type="button" data-bs-toggle="dropdown" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle dropdown">
+                                <i class="ri-download-2-line fs-22"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="/download-pdf/list-student/LE,{{$datos}}"><i class="ri-article-line align-bottom me-2 text-muted"></i> Listado de Estudiantes </a></li>
+                                    <li><a class="dropdown-item" href="/download-pdf/report-tuitions/RM,{{$datos}}"><i class="ri-stack-line align-bottom me-2 text-muted"></i> Reporte Matriculación </a></li>
+                                    <li><a class="dropdown-item" href="/download-pdf/list-familys/{{$datos}}"><i class="ri-article-line align-bottom me-2 text-muted"></i> Listado de Representantes </a></li>
+                                    <li><a class="dropdown-item" href="/download-pdf/student-file/{{$datos}}"><i class="ri-account-pin-circle-fill align-bottom me-2 text-muted"></i> Ficha de Estudiantes </a></li>
+                                </ul>
+                                <a href="" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-file-excel-2-line align-bottom fs-22"></i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -185,17 +181,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!--<div class="d-flex justify-content-end mt-3">
-                            <div class="pagination-wrap hstack gap-2">
-                                <a class="page-item pagination-prev disabled" href="#">
-                                    Previous
-                                </a>
-                                <ul class="pagination listjs-pagination mb-0"></ul>
-                                <a class="page-item pagination-next" href="#">
-                                    Next
-                                </a>
-                            </div>
-                        </div>-->
                         {{$tblrecords->links('')}}
                     </div>
                     
@@ -232,92 +217,11 @@
                     <!--end delete modal -->
 
                 </div>
-            </div>
+            <!--</div>-->
             <!--end card-->
-        </div>
-        <!--end col-->
-        <!--<div class="col-xxl-3">
-            <div class="card" id="contact-view-detail">
-                <div class="card-body text-center">
-                    <div class="position-relative d-inline-block">
-                        <img src="{{ URL::asset('assets/images/users/avatar-10.jpg') }}" alt=""
-                            class="avatar-lg rounded-circle img-thumbnail">
-                        <span class="contact-active position-absolute rounded-circle bg-success"><span
-                                class="visually-hidden"></span>
-                    </div>
-                    <h5 class="mt-4 mb-1">{{ $view->nombres }} {{ $view->apellidos }}</h5>
-                    <p class="text-muted">{{ $view->identificacion }}</p>
-
-                    <ul class="list-inline mb-0">
-                        <li class="list-inline-item avatar-xs">
-                            <a href="javascript:void(0);"
-                                class="avatar-title bg-soft-success text-success fs-15 rounded">
-                                <i class="ri-phone-line"></i>
-                            </a>
-                        </li>
-                        <li class="list-inline-item avatar-xs">
-                            <a href="javascript:void(0);"
-                                class="avatar-title bg-soft-danger text-danger fs-15 rounded">
-                                <i class="ri-mail-line"></i>
-                            </a>
-                        </li>
-                        <li class="list-inline-item avatar-xs">
-                            <a href="javascript:void(0);"
-                                class="avatar-title bg-soft-warning text-warning fs-15 rounded">
-                                <i class="ri-question-answer-line"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive table-card">
-                        <table class="table table-borderless mb-0">
-                            <tbody>
-                                <tr>
-                                    <td class="fw-medium" scope="row">Gender</td>
-                                    <td>{{ $view->genero }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium" scope="row">Nacionality</td>
-                                    <td>{{ $view->nacionalidad }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium" scope="row">Phone No</td>
-                                    <td>{{ $view->telefono }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium" scope="row">Email</td>
-                                    <td>{{ $view->email }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium" scope="row">Fecha Nacimiento</td>
-                                    <td> {{date('d/m/Y', strtotime($view->fechanacimiento))}} </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium" scope="row">Registration Date</td>
-                                    <td> {{date('d/m/Y', strtotime($view->created_at))}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium" scope="row">Registered by</td>
-                                    <td>{{ $view->usuario }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium" scope="row">Registration Number</td>
-                                    <td>{{ $view->id }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium" scope="row"></td>
-                                    <td></td>
-                                </tr>
-                                
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
-            
-        </div>-->
-        <!--end col-->
+        </div>
+                <!--end col-->
     </div>
     <!--end row-->
 </div>
