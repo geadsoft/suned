@@ -71,6 +71,7 @@ class VcTuitions extends Component
             ->when($this->filters['srv_grupo'],function($query){
                 return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
             })
+            ->where('m.estado','=','A')
             ->select('m.id','identificacion','nombres','apellidos', 'documento', 'fecha', 'g.descripcion as nomgrupo','p.descripcion as nomperiodo','s.descripcion as nomgrado','paralelo','m.periodo_id','m.modalidad_id','m.nivel_id','c.servicio_id','m.curso_id','m.estudiante_id')
             ->orderBy('documento','desc')
             ->paginate(10);
@@ -84,7 +85,6 @@ class VcTuitions extends Component
                             ->orWhere('tm_personas.apellidos','LIKE','%'."{$this->filters['srv_nombre']}".'%');
             })
             ->where('tm_personas.tipopersona','=','E')
-            ->where('m.estado','=','A')
             ->select('identificacion','nombres','apellidos')
             ->orderBy('apellidos','asc')
             ->paginate(10);            
