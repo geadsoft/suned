@@ -84,6 +84,7 @@ class VcTuitions extends Component
                             ->orWhere('tm_personas.apellidos','LIKE','%'."{$this->filters['srv_nombre']}".'%');
             })
             ->where('tm_personas.tipopersona','=','E')
+            ->where('m.estado','=','A')
             ->select('identificacion','nombres','apellidos')
             ->orderBy('apellidos','asc')
             ->paginate(10);            
