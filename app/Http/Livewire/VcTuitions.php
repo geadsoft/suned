@@ -63,7 +63,7 @@ class VcTuitions extends Component
             ->join("tm_periodos_lectivos as p","p.id","=","m.periodo_id")
             ->join("tm_generalidades as g","g.id","=","m.modalidad_id")
             ->when($this->filters['srv_nombre'],function($query){
-                return $query->whereRaw("concat(p.apellidos,' ',p.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
+                return $query->whereRaw("concat(tm_personas.apellidos,' ',tm_personas.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
             })
             ->when($this->filters['srv_periodo'],function($query){
                 return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
