@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire;
 use App\Models\TrCobrosCabs;
+use App\Models\TrCobrosDets;
 use App\Models\TmGeneralidades;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmSedes;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
+
 use Livewire\WithPagination;
 use PDF;
 
@@ -67,7 +70,13 @@ class VcReportCashReceints extends Component
     public function consulta(){
                 
         $tblrecords = TrCobrosCabs::query()
-        ->join("tr_cobros_dets","tr_cobros_cabs.id","=","tr_cobros_dets.cobrocab_id")
+        ->join(DB::raw('(select cobrocab_id,group_concat(distinct tipopago) as tipopago 
+        from tr_cobros_dets  
+        group by 1) d'), 
+        function($join)
+        {
+           $join->on('tr_cobros_cabs.id', '=', 'd.cobrocab_id');
+        })
         ->join("tr_deudas_dets","tr_deudas_dets.cobro_id","=","tr_cobros_cabs.id")
         ->join("tr_deudas_cabs","tr_deudas_cabs.id","=","tr_deudas_dets.deudacab_id")
         ->join("tm_matriculas","tm_matriculas.id","=","tr_deudas_cabs.matricula_id")
@@ -75,8 +84,7 @@ class VcReportCashReceints extends Component
         ->join("tm_cursos","tm_cursos.id","=","tm_matriculas.curso_id")
         ->join("tm_servicios","tm_servicios.id","=","tm_cursos.servicio_id")
         ->when($this->filters['srv_nombre'],function($query){
-            return $query->where('tm_personas.nombres','like','%'.$this->filters['srv_nombre'].'%')
-                        ->orWhere('tm_personas.apellidos','like','%'.$this->filters['srv_nombre'].'%');
+            return $query->whereRaw("concat(p.apellidos,' ',p.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })       
         ->when($this->filters['srv_periodo'],function($query){
             return $query->where('tm_matriculas.periodo_id',"{$this->filters['srv_periodo']}");
@@ -91,14 +99,15 @@ class VcReportCashReceints extends Component
             ['tr_deudas_dets.tipo','PAG'],
             ['tr_cobros_cabs.tipo','CP'],
         ])
-        ->select('tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario', 'tr_cobros_dets.referencia', 'entidad_id')
+        ->select('tr_cobros_cabs.id','tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario')
         ->orderBy('tr_cobros_cabs.fecha')
         ->paginate(15);
         
         $this->dfecha = $this->filters['srv_fecha'];
         $this->datos = json_encode($this->filters);
-
+         
         return $tblrecords;
+
     }
 
     public function dataReport($objdata=null)
@@ -111,7 +120,13 @@ class VcReportCashReceints extends Component
     public function impresion(){
 
         $tblrecords = TrCobrosCabs::query()
-        ->join("tr_cobros_dets","tr_cobros_cabs.id","=","tr_cobros_dets.cobrocab_id")
+        ->join(DB::raw('(select cobrocab_id,group_concat(distinct tipopago) as tipopago 
+        from tr_cobros_dets  
+        group by 1) d'), 
+        function($join)
+        {
+           $join->on('tr_cobros_cabs.id', '=', 'd.cobrocab_id');
+        })
         ->join("tr_deudas_dets","tr_deudas_dets.cobro_id","=","tr_cobros_cabs.id")
         ->join("tr_deudas_cabs","tr_deudas_cabs.id","=","tr_deudas_dets.deudacab_id")
         ->join("tm_matriculas","tm_matriculas.id","=","tr_deudas_cabs.matricula_id")
@@ -135,10 +150,12 @@ class VcReportCashReceints extends Component
             ['tr_deudas_dets.tipo','PAG'],
             ['tr_cobros_cabs.tipo','CP'],
         ])
-        ->select('tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario', 'tr_cobros_dets.referencia', 'entidad_id')
+        ->select('tr_cobros_cabs.id','tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 
+        'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario')
         ->orderBy('tr_cobros_cabs.fecha')
         ->get();
-        
+
+    
         return $tblrecords;
 
     }
@@ -151,7 +168,22 @@ class VcReportCashReceints extends Component
         $this->filters['srv_grupo']   = $data->srv_grupo;
         $this->filters['srv_nombre']  = $data->srv_nombre;
 
-        $tblrecords = $this->impresion();        
+        $tblrecords = $this->impresion(); 
+        
+        //Detalle Pago
+        $detCobro = $tblrecords->groupBy('id');
+
+        $idCobro = "";
+        foreach ($detCobro as $key => $value) {
+            $idCobro = $idCobro.strval($key).',';
+        }
+        $idCobro = substr($idCobro,0,-1);
+        $tbldetalle = TrCobrosDets::query()
+        ->join("tr_cobros_cabs","tr_cobros_cabs.id","=","tr_cobros_dets.cobrocab_id")
+        ->selectRaw("tr_cobros_cabs.documento,tr_cobros_dets.*")
+        ->whereRaw('tr_cobros_cabs.id in ('.$idCobro.')')
+        ->get(); 
+
         $sede    = TmSedes::where('id',1)->first();
         
         $tblTotal  = [];
@@ -188,7 +220,6 @@ class VcReportCashReceints extends Component
 
         foreach ($tblrecords as $record)
         {
-            
             $this->neto      = floatval($this->neto) + floatval($record['saldo']) + floatval($record['credito']);
             $this->descuento = floatval($this->descuento) + floatval($record['descuento']);
             $this->pago      = floatval($this->pago)+ floatval($record['pago']);
@@ -200,51 +231,34 @@ class VcReportCashReceints extends Component
             if ($record['tipopago']=="CHQ") {
                 $this->valorChq = $this->valorChq + floatval($record['pago']);
             }
+
             if ($record['tipopago']=="TAR") {
-
                 $this->valorTar = $this->valorTar + floatval($record['pago']);
-                $entidad = Tmgeneralidades::find($record['entidad_id']);
-
-                $detalle['tipo'] = "TAR";
-                $detalle['recibo'] = $record['documento'];
-                $detalle['referencia'] = $record['referencia'];
-                $detalle['entidad'] = $entidad['descripcion'];
-                $detalle['valor'] = $record['pago'];
-                array_push($resumenpago,$detalle);
-                
             }
+
             if ($record['tipopago']=="DEP") {
-                
                 $this->valorDep = $this->valorDep + floatval($record['pago']);
-                $entidad = Tmgeneralidades::find($record['entidad_id']);
-
-                $detalle['tipo'] = "DEP";
-                $detalle['recibo'] = $record['documento'];
-                $detalle['referencia'] = $record['referencia'];
-                $detalle['entidad'] = $entidad['descripcion'];
-                $detalle['valor'] = $record['pago'];
-                array_push($resumenpago,$detalle);
-
             }
+
             if ($record['tipopago']=="TRA") {
-
                 $this->valorTra = $this->valorTra + floatval($record['pago']);
-                $entidad = Tmgeneralidades::find($record['entidad_id']);
-
-                $detalle['tipo'] = "TRA";
-                $detalle['recibo'] = $record['documento'];
-                $detalle['referencia'] = $record['referencia'];
-                $detalle['entidad'] = $entidad['descripcion'];
-                $detalle['valor'] = $record['pago'];
-                array_push($resumenpago,$detalle);
-
             }
+
             if ($record['tipopago']=="CON") {
                 $this->valorCon = $this->valorCon + floatval($record['pago']);
             }
+        }
 
-            
+        foreach ($tbldetalle as $detpago){
 
+            $entidad = Tmgeneralidades::find($detpago['entidad_id']);
+
+            $detalle['tipo']        = $detpago['tipopago'];
+            $detalle['recibo']      = $detpago['documento'];
+            $detalle['referencia']  = $detpago['referencia'];
+            $detalle['entidad']     = $entidad['descripcion'];
+            $detalle['valor']       = $detpago['valor'];
+            array_push($resumenpago,$detalle);
         }
 
         $resumen['detalle'] = 'Valor sin desc.';
@@ -306,7 +320,22 @@ class VcReportCashReceints extends Component
         $this->filters['srv_grupo']   = $data->srv_grupo;
         $this->filters['srv_nombre']  = $data->srv_nombre;
         
-        $tblrecords = $this->impresion();        
+        $tblrecords = $this->impresion();
+        
+        //Detalle Pago
+        $detCobro = $tblrecords->groupBy('id');
+
+        $idCobro = "";
+        foreach ($detCobro as $key => $value) {
+            $idCobro = $idCobro.strval($key).',';
+        }
+        $idCobro = substr($idCobro,0,-1);
+        $tbldetalle = TrCobrosDets::query()
+        ->join("tr_cobros_cabs","tr_cobros_cabs.id","=","tr_cobros_dets.cobrocab_id")
+        ->selectRaw("tr_cobros_cabs.documento,tr_cobros_dets.*")
+        ->whereRaw('tr_cobros_cabs.id in ('.$idCobro.')')
+        ->get(); 
+
         $sede    = TmSedes::where('id',1)->first();
         $tblTotal  = [];
         $resumen   = [
@@ -342,7 +371,6 @@ class VcReportCashReceints extends Component
 
         foreach ($tblrecords as $record)
         {
-            
             $this->neto      = floatval($this->neto) + floatval($record['saldo']) + floatval($record['credito']);
             $this->descuento = floatval($this->descuento) + floatval($record['descuento']);
             $this->pago      = floatval($this->pago)+ floatval($record['pago']);
@@ -354,48 +382,35 @@ class VcReportCashReceints extends Component
             if ($record['tipopago']=="CHQ") {
                 $this->valorChq = $this->valorChq + floatval($record['pago']);
             }
-            if ($record['tipopago']=="TAR") {
-                
+
+            if ($record['tipopago']=="TAR") {    
                 $this->valorTar = $this->valorTar + floatval($record['pago']);
-                $entidad = Tmgeneralidades::find($record['entidad_id']);
-
-                $detalle['tipo'] = "TAR";
-                $detalle['recibo'] = $record['documento'];
-                $detalle['referencia'] = $record['referencia'];
-                $detalle['entidad'] = $entidad['descripcion'];
-                $detalle['valor'] = $record['pago'];
-                array_push($resumenpago,$detalle);
-
             }
-            if ($record['tipopago']=="DEP") {
-                
+
+            if ($record['tipopago']=="DEP") {    
                 $this->valorDep = $this->valorDep + floatval($record['pago']);
-                $entidad = Tmgeneralidades::find($record['entidad_id']);
-
-                $detalle['tipo'] = "DEP";
-                $detalle['recibo'] = $record['documento'];
-                $detalle['referencia'] = $record['referencia'];
-                $detalle['entidad'] = $entidad['descripcion'];
-                $detalle['valor'] = $record['pago'];
-                array_push($resumenpago,$detalle);
             }
+
             if ($record['tipopago']=="TRA") {
-
                 $this->valorTra = $this->valorTra + floatval($record['pago']);
-                $entidad = Tmgeneralidades::find($record['entidad_id']);
-
-                $detalle['tipo'] = "TRA";
-                $detalle['recibo'] = $record['documento'];
-                $detalle['referencia'] = $record['referencia'];
-                $detalle['entidad'] = $entidad['descripcion'];
-                $detalle['valor'] = $record['pago'];
-                array_push($resumenpago,$detalle);
-
             }
+
             if ($record['tipopago']=="CON") {
                 $this->valorCon = $this->valorCon + floatval($record['pago']);
             }
 
+        }
+
+        foreach ($tbldetalle as $detpago){
+
+            $entidad = Tmgeneralidades::find($detpago['entidad_id']);
+
+            $detalle['tipo']        = $detpago['tipopago'];
+            $detalle['recibo']      = $detpago['documento'];
+            $detalle['referencia']  = $detpago['referencia'];
+            $detalle['entidad']     = $entidad['descripcion'];
+            $detalle['valor']       = $detpago['valor'];
+            array_push($resumenpago,$detalle);
         }
 
         $resumen['detalle'] = 'Valor sin desc.';

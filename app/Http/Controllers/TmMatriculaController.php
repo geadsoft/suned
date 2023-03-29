@@ -32,6 +32,10 @@ class TmMatriculaController extends Controller
         return view('financial/accountstatus');
     }
 
+    public function analisisdeuda(){
+        return view('reports/debtanalysis');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

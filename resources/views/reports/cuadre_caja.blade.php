@@ -233,21 +233,27 @@
         </table>
     </section>
 
-    <section class="footer">
-        <table cellpadding="0" cellspacing="0" class="table table-nowrap align-middle" width="100%">
-            <tr style="font-size:10px">
-                <td width="40%">
-                    <span>SAMS | School and Administrative Management System</span>
-                </td>
-                <td width="30%" class="text-center">
-                    Usuario:<span> {{auth()->user()->name}} </span>
-                </td>
-                <td width="30%" class="text-center">
-                    Página <span class="pagenum"></span>
-                </td>
-            </tr>
-        </table>
-    </section>
+    <div style="position: absolute;
+      display: inline-block;
+      bottom: 0;
+      width: 100%;
+      height: 30px;">
+        <footer>
+            <table cellpadding="0" cellspacing="0" class="table table-nowrap align-middle" width="100%">
+                <tr style="font-size:10px">
+                    <td width="40%">
+                        <span>SAMS | School and Administrative Management System</span>
+                    </td>
+                    <td width="30%" class="text-center">
+                        Usuario:<span> {{auth()->user()->name}} </span>
+                    </td>
+                    <td width="30%" class="text-center">
+                        Página <span class="pagenum"></span>
+                    </td>
+                </tr>
+            </table>
+        </footer>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

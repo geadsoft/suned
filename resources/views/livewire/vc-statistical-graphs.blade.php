@@ -15,22 +15,27 @@
                             <form action="javascript:void(0);">
                                 <div class="row g-3 mb-0 align-items-center">
                                     <div class="col-sm-auto">
-                                        <div class="input-group">
-                                            <input type="text"
-                                                class="form-control border-0 dash-filter-picker shadow"
-                                                data-provider="flatpickr" data-range-date="true"
-                                                data-date-format="d M, Y"
-                                                data-deafult-date="01 Jan 2022 to 31 Jan 2022">
-                                            <div
-                                                class="input-group-text bg-primary border-primary text-white">
-                                                <i class="ri-calendar-2-line"></i></div>
+                                        <div>
+                                            <select class="form-select" name="cmbperiodo" wire:model="filters.srv_periodo" id="cmbperiodo">
+                                                <option value="">Select Period</option>
+                                                @foreach ($tblperiodos as $periodo)
+                                                    <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <div class="col-auto">
-                                        <button type="button" class="btn btn-soft-secondary"><i
-                                                class="ri-add-circle-line align-middle me-1"></i>
-                                            Add Student</button>
+                                        <div>
+                                            <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo" id="cmbgrupo">
+                                                <option value="">Todos</option>
+                                                @foreach ($tblgenerals as $general)
+                                                    @if ($general->superior == 1)
+                                                    <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                     <!--end col-->
                                     <!--<div class="col-auto">
@@ -195,8 +200,8 @@
                 <div class="col-xl-4">
                     <div class="card card-height-100">
                             <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Store Visits by Source</h4>
-                                <div class="flex-shrink-0">
+                                <h4 class="card-title mb-0 flex-grow-1">Estado de deuda en pensión</h4>
+                                <!--<div class="flex-shrink-0">
                                     <div class="dropdown card-header-dropdown">
                                         <a class="text-reset dropdown-btn" href="#"
                                             data-bs-toggle="dropdown" aria-haspopup="true"
@@ -210,12 +215,25 @@
                                             <a class="dropdown-item" href="#">Import</a>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
                             </div><!-- end card header -->
 
                             <div class="card-body">
-                                <div id="container"></div>
+                                <div>
+                                    <select class="form-select" name="cmbgrupo" id="cmbmes" wire:model="filters.srv_mes" wire:change="consulta()">
+                                        <option value="">Todos</option>
+                                        @for ($x=1;$x<=12;$x++)
+                                            <option value="{{$x}}">{{$mes[$x]}}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div id="container">
+                                </div>
+                                <div>
+                                    <span class="text-center text-muted" style="font-size: 10px">*Basado en cantidad de estudiantes</span>
+                                </div>
                             </div>
+                            
                         </div>
                     </div>
 
@@ -296,3 +314,12 @@
     </div> <!-- end col -->
     </div> <!-- end col -->
 </div>
+
+<!--<script type="text/javascript">
+
+        $("#cmbmes").change(function(){
+            const objdata = {!! json_encode($data) !!};
+             loadGraphs(null,objdata);
+        })
+        
+    </script>-->

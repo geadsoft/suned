@@ -179,7 +179,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="">
+                                <a class="nav-link menu-link" href="/report/debt-analysis">
                                     <i class="las la-chart-pie"></i> <span>@lang('translation.debt-analysis')</span>
                                 </a>
                             </li>

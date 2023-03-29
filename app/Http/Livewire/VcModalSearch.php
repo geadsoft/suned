@@ -6,6 +6,7 @@ use App\Models\TmMatricula;
 use App\Models\TmGeneralidades;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 
 class VcModalSearch extends Component
 {

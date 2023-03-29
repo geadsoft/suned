@@ -7,8 +7,21 @@ function loadGraphs(objdia,objdata) {
 
 function viewGraphs(objdata) {
 
+    // Data retrieved from https://netmarketshare.com/
+    // Build the chart
+    var pieColors = (function () {
+        var colors = [],
+            base = Highcharts.getOptions().colors[0],
+            i;
+    
+        for (i = 0; i < 10; i += 1) {
+            // Start out with a darkened base color (negative brighten), and end
+            // up with a much brighter color
+            colors.push(Highcharts.color(base).brighten((i - 3) / 7).get());
+        }
+        return colors;
+    }());
 
-    // Data retrieved from https://netmarketshare.com
     Highcharts.chart('container', {
         chart: {
             plotBackgroundColor: null,
@@ -17,7 +30,7 @@ function viewGraphs(objdata) {
             type: 'pie'
         },
         title: {
-            text: 'Browser market shares in May, 2020',
+            text: '',
             align: 'left'
         },
         tooltip: {
@@ -32,10 +45,18 @@ function viewGraphs(objdata) {
             pie: {
                 allowPointSelect: true,
                 cursor: 'pointer',
+                colors: pieColors,
                 dataLabels: {
                     enabled: true,
-                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                }
+                    format: '<b></b><br>{point.percentage:.1f} %',
+                    distance: -50,
+                    filter: {
+                        property: 'percentage',
+                        operator: '>',
+                        value: 4
+                    }
+                },
+                showInLegend: true
             }
         },
         series: [{
@@ -44,11 +65,12 @@ function viewGraphs(objdata) {
             data: objdata
         }]
     });
+   
 }
 
 function viewGraphsDia(objdata){
 
-    alert(objdata)
+
     // Data retrieved from https://gs.statcounter.com/browser-market-share#monthly-202201-202201-bar
 
     // Create the chart

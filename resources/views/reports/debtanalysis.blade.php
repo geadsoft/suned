@@ -12,20 +12,19 @@
             Report
         @endslot
         @slot('title')
-            Gráficos Estadísticos
+            Analisis de Deudas
         @endslot
     @endcomponent
 
-    @livewire('vc-statistical-graphs')
+    @livewire('vc-report-debt-analysis')
 
 @endsection
 @section('script')
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script> 
-    <script src="{{ URL::asset('assets/js/pages/reports-graphs.js') }}"></script>
+    <script src="{{ URL::asset('assets/libs/list.js/list.js.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>
 
+    <!--ecommerce-customer init js -->
+    <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
     
-
 @endsection
