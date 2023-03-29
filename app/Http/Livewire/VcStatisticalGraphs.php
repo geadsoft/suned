@@ -46,6 +46,8 @@ class VcStatisticalGraphs extends Component
         $ldate = date('Y-m-d H:i:s');
         $this->filters['srv_fecha'] = date('Y-m-d',strtotime($ldate));
         $this->filters['srv_mes'] = intval(date('m',strtotime($ldate)));
+
+        $this->consulta();
        
     }
     
@@ -55,6 +57,18 @@ class VcStatisticalGraphs extends Component
         
         $tblgenerals = TmGeneralidades::where('superior',1)->get();
         $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
+
+        return view('livewire.vc-statistical-graphs',[
+            'tblgenerals' => $tblgenerals,
+            'tblperiodos' => $tblperiodos,
+            "data" => $this->data,
+            "datadia" => $this->datIngdia,
+            "datames" => $this->datIngmes,
+        ]);
+
+    }
+
+    public function consulta(){
 
         $tblcobros = TrCobrosCabs::whereBetween('fecha', ['20230208', '20230214'])
         ->selectRaw('fecha, sum(monto) as monto')
@@ -74,34 +88,7 @@ class VcStatisticalGraphs extends Component
         })
         ->get();
 
-        $this->graphsIngesos($tblcobros);
-        $this->graphsDeudas($tbldeudas);
-
-        return view('livewire.vc-statistical-graphs',[
-            'tblgenerals' => $tblgenerals,
-            'tblperiodos' => $tblperiodos,
-            "data" => $this->data,
-            "datadia" => $this->datIngdia,
-            "datames" => $this->datIngmes,
-        ]);
-
-    }
-
-    public function consulta(){
-
-        $tbldeudas = TrDeudasCabs::query()
-        ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
-        ->when($this->filters['srv_periodo'],function($query){
-            return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
-        })
-        ->when($this->filters['srv_grupo'],function($query){
-            return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
-        })
-        ->when($this->filters['srv_mes'],function($query){
-            return $query->whereRaw('month(tr_deudas_cabs.fecha)<='.$this->filters['srv_mes']);
-        })
-        ->get();
-
+        //$this->graphsIngesos($tblcobros);
         $this->graphsDeudas($tbldeudas);
         
     }

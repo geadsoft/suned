@@ -196,7 +196,7 @@
             </div> <!-- end row-->
 
             <div class="row">
-                <body onload="loadGraphs({{$datIngdia}},{{$data}})">
+                <body onload="viewGraphs({{$data}})">
                 <div class="col-xl-4">
                     <div class="card card-height-100">
                             <div class="card-header align-items-center d-flex">
@@ -220,15 +220,16 @@
 
                             <div class="card-body">
                                 <div>
-                                    <select class="form-select" name="cmbgrupo" id="cmbmes" wire:model="filters.srv_mes" wire:change="consulta()">
+                                    <select class="form-select" name="cmbgrupo" id="cmbmes" wire:model="filters.srv_mes" onchange="viewGraphs({{$data}})">
                                         <option value="">Todos</option>
                                         @for ($x=1;$x<=12;$x++)
                                             <option value="{{$x}}">{{$mes[$x]}}</option>
                                         @endfor
                                     </select>
                                 </div>
-                                <div id="container">
-                                </div>
+                                <!--<div id="container">
+                                </div>-->
+                                @livewire('vc-debt-graph',['periodo' => $filters['srv_periodo'],'grupo' => $filters['srv_grupo'],'mes' => $filters['srv_mes']])
                                 <div>
                                     <span class="text-center text-muted" style="font-size: 10px">*Basado en cantidad de estudiantes</span>
                                 </div>
@@ -315,11 +316,3 @@
     </div> <!-- end col -->
 </div>
 
-<!--<script type="text/javascript">
-
-        $("#cmbmes").change(function(){
-            const objdata = {!! json_encode($data) !!};
-             loadGraphs(null,objdata);
-        })
-        
-    </script>-->
