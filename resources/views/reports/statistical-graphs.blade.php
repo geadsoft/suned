@@ -25,4 +25,27 @@
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script> 
     <script src="{{ URL::asset('assets/js/pages/reports-graphs.js') }}"></script>
+
+    <script>
+    
+        window.addEventListener('name-updated', event => {
+            var dataserie 
+            dataserie = JSON.parse(event.detail.newObj);
+            viewGraphs(dataserie);
+        })
+
+        window.addEventListener('grahp-ingdia', event => {
+            var dataserie 
+            dataserie = JSON.parse(event.detail.newObj);
+            viewGraphsDia(dataserie);
+        })
+
+        window.addEventListener('grahp-ingmes', event => {
+            var dataserie 
+            dataserie = JSON.parse(event.detail.newObj);
+            viewGraphsMes(dataserie);
+        })
+
+    </script>
+
 @endsection

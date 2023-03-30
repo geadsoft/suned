@@ -1,7 +1,8 @@
-function loadGraphs(objdia,objdata) {
+function loadGraphs(objdata,objdia,objmes) {
 
     viewGraphs(objdata)
     viewGraphsDia(objdia)
+    viewGraphsMes(objmes)
 
 }
 
@@ -68,8 +69,7 @@ function viewGraphs(objdata) {
    
 }
 
-function viewGraphsDia(objdata){
-
+function viewGraphsDia(objdia){
 
     // Data retrieved from https://gs.statcounter.com/browser-market-share#monthly-202201-202201-bar
 
@@ -80,11 +80,11 @@ function viewGraphsDia(objdata){
         },
         title: {
             align: 'left',
-            text: 'Browser market shares. January, 2022'
+            text: ''
         },
         subtitle: {
             align: 'left',
-            text: 'Click the columns to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'
+            text: ''
         },
         accessibility: {
             announceNewData: {
@@ -96,7 +96,7 @@ function viewGraphsDia(objdata){
         },
         yAxis: {
             title: {
-                text: 'Total percent market share'
+                text: ''
             }
 
         },
@@ -108,21 +108,81 @@ function viewGraphsDia(objdata){
                 borderWidth: 0,
                 dataLabels: {
                     enabled: true,
-                    format: '{point.y:.1f}%'
+                    format: '{point.y:.1f}'
                 }
             }
         },
 
         tooltip: {
             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
         },
 
         series: [
             {
                 name: 'Browsers',
                 colorByPoint: true,
-                data: objdata
+                data: objdia
+            }
+        ],
+        
+    });
+}
+
+function viewGraphsMes(objserie){
+
+    // Data retrieved from https://gs.statcounter.com/browser-market-share#monthly-202201-202201-bar
+
+    // Create the chart
+    Highcharts.chart('containermes', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            align: 'left',
+            text: ''
+        },
+        subtitle: {
+            align: 'left',
+            text: ''
+        },
+        accessibility: {
+            announceNewData: {
+                enabled: true
+            }
+        },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
+
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:.1f}'
+                }
+            }
+        },
+
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
+        },
+
+        series: [
+            {
+                name: 'Browsers',
+                colorByPoint: true,
+                data: objserie
             }
         ],
         
