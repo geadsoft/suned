@@ -135,7 +135,7 @@ class VcStatisticalGraphs extends Component
                 and m.periodo_id = ".$this->filters['srv_periodo']."
                 group by d.cobro_id 
             ) as de on de.cobro_id = c.id 
-            where fecha < '".$fechaFin."'
+            where c.tipo = 'CP' and fecha < '".$fechaFin."'
             group by fecha) as d
         order by fecha desc limit 7"    
         );
@@ -166,7 +166,7 @@ class VcStatisticalGraphs extends Component
                 and m.periodo_id = ".$this->filters['srv_periodo']."
                 group by d.cobro_id 
             ) as de on de.cobro_id = c.id
-            where month(c.fecha) < ".$this->filters['srv_ingmes']."
+            where c.tipo = 'CP' and month(c.fecha) < ".$this->filters['srv_ingmes']."
             group by month(c.fecha)) as d
         order by mes desc limit 4"    
         );

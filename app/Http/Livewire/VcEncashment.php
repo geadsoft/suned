@@ -22,7 +22,7 @@ class VcEncashment extends Component
     public $nombre="";
     public $selectpago = false;
 
-    public $documento, $concepto, $fecha, $identificacion, $estudiante, $grupo, $grado, $comentario;
+    public $documento, $concepto, $fecha, $identificacion, $estudiante, $curso, $grupo, $grado, $comentario;
 
     public $subtotal = 0;
     public $descuento = 0;
@@ -30,25 +30,20 @@ class VcEncashment extends Component
     public $totalpago = 0;
 
     public function mount($id){
-
         $this->selectId = $id;
-
     }
 
     public function render()
-    { 
+    {   
+
         if ($this->selectId==0){
-            $this->record  = TrCobrosCabs::orderBy('id', 'desc')->first();
+            $this->record   = TrCobrosCabs::orderBy('id', 'desc')->first();
+            $this->selectId = $this->record['id'];
         }else{
             $this->record  = TrCobrosCabs::find($this->selectId);
         }
 
-        if ($this->record==null){
-            $this->selectId = 0;
-        }else{
-            $this->selectId = $this->record['id'];
-            $this->loadData();
-        }      
+        $this->loadData();  
 
         $tblcobrodet = TrCobrosDets::where('cobrocab_id',$this->selectId)->get();
         $tbldeudas   = TrDeudasDets::where([
