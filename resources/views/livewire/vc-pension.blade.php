@@ -118,7 +118,7 @@
                     </div>
                     <div wire.ignore.self class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content border-0">
                                 <div class="modal-header p-3" style="background-color:#222454">
                                     <h5 class="modal-title" style="color: #D4D4DD" id="exampleModalLabel" >

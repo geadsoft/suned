@@ -151,8 +151,10 @@ class VcStatisticalGraphs extends Component
         ->when($this->filters['srv_mes'],function($query){
             return $query->whereRaw('month(tr_deudas_cabs.fecha)<='.$this->filters['srv_mes']);
         })
+        ->select('tr_deudas_cabs.*')
+        ->where('tr_deudas_cabs.estado','P')
         ->get();
-
+        
 
         //Cobros ultimo 4 meses
         $tblIngresoMes = DB::Select("Select * from (
@@ -210,28 +212,25 @@ class VcStatisticalGraphs extends Component
     public function graphsDeudas($tbldeudas){
 
         $array=[];
-        $cancelado = $tbldeudas->where('credito','=','debito')->count('estudiante_id');
-
-        $array[] = [
-            'name' =>  'Cancelado',
-            'y' => floatVal($cancelado)
-        ];
-
-
-        $abono = $tbldeudas->where('credito','>',0)
-        ->where('saldo','>',0)
-        ->count('estudiante_id');
-
-        $array[] = [
-            'name' =>  'Abonado',
-            'y' => floatVal($abono)
-        ];
 
         $sinpago = $tbldeudas->where('credito','=',0)->count('estudiante_id');
         $array[] = [
             'name' =>  'Sin registro',
             'y' => floatVal($sinpago)
         ];
+
+        $abono = $tbldeudas->where('credito','>',0)
+        ->where('saldo','>',0)
+        ->count('estudiante_id');
+        $array[] = [
+            'name' =>  'Abonado',
+            'y' => floatVal($abono)
+        ];
+
+        $array[] = [
+            'name' =>  'Cancelado',
+            'y' => count($tbldeudas)-floatVal( $sinpago+$abono)
+        ];        
 
         $this->data = json_encode($array);
 

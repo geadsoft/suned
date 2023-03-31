@@ -141,9 +141,9 @@
                                 <div class="modal-header p-3" style="background-color:#222454">
                                     <h5 class="modal-title" id="exampleModalLabel"  style="color: #D4D4DD">
                                         @if($showEditModal)
-                                            <span>Edit Course &nbsp;</span>
+                                            <span>Editar Servicio &nbsp;</span>
                                         @else
-                                            <span>Add Course  &nbsp;</span>
+                                            <span>Agregar Servicio  &nbsp;</span>
                                         @endif
                                     </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
