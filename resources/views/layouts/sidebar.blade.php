@@ -34,7 +34,7 @@
                 <li class="menu-title"><span>@lang('translation.home')</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="las la-tachometer-alt"></i> <span>@lang('translation.dashboards')</span>
+                        <i class="las la-tachometer-alt fs-20"></i> <span>@lang('translation.dashboards')</span>
                     </a>
                     <!--<div class="collapse menu-dropdown" id="sidebarDashboards">
                         <ul class="nav nav-sm flex-column">
@@ -63,7 +63,7 @@
                 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarPerson" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPerson">
-                        <i class="las la-user-check"></i> <span>@lang('translation.person')</span>
+                        <i class="las la-user-check fs-20"></i> <span>@lang('translation.person')</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarPerson">
                         <ul class="nav nav-sm flex-column">
@@ -84,18 +84,18 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/academic/tuition">
-                        <i class="las la-address-card"></i> <span>@lang('translation.tuition')</span>
+                        <i class="las la-address-card fs-20"></i> <span>@lang('translation.tuition')</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="">
-                        <i class="las la-school"></i> <span>@lang('translation.subjects')</span>
+                        <i class="las la-school fs-20"></i> <span>@lang('translation.subjects')</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="">
-                        <i class="las la-clock"></i> <span>@lang('translation.schedules')</span>
+                        <i class="las la-clock fs-20"></i> <span>@lang('translation.schedules')</span>
                     </a>
                 </li>
 
@@ -103,22 +103,22 @@
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.headquarters')</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/headquarters/headquarters-add">
-                        <i class="las la-address-card"></i> <span>@lang('translation.headquarter')</span>
+                        <i class="las la-address-card fs-20"></i> <span>@lang('translation.headquarter')</span>
                     </a>    
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/headquarters/educational-services">
-                        <i class="las la-chalkboard"></i> <span>@lang('translation.services')</span>
+                        <i class="las la-chalkboard fs-20"></i> <span>@lang('translation.services')</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/headquarters/pension">
-                        <i class="las la-chalkboard"></i> <span>@lang('translation.charges')</span>
+                        <i class="las la-chalkboard fs-20"></i> <span>@lang('translation.charges')</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/academic/course">
-                        <i class="las la-chalkboard"></i> <span>@lang('translation.course')</span>
+                        <i class="las la-chalkboard fs-20"></i> <span>@lang('translation.course')</span>
                     </a>
                 </li>
 
@@ -147,12 +147,12 @@
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.financial')</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/financial/encashment">
-                        <i class="las la-donate"></i> <span>Registrar Cobro</span>
+                        <i class="las la-donate fs-20"></i> <span>Registrar Cobro</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/financial/account-status">
-                        <i class="las la-archive"></i> <span>@lang('translation.statement-of-account')</span>
+                        <i class="las la-archive fs-20"></i> <span>@lang('translation.statement-of-account')</span>
                     </a>
                 </li>
                 <!--<li class="nav-item">
@@ -164,28 +164,28 @@
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.reports')</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarreport" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarreport">
-                        <i class="ri-menu-add-line"></i> <span>Reportes</span>
+                        <i class="ri-menu-add-line fs-20"></i> <span>Reportes</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarreport">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="/report/box-balance">
-                                    <i class="las la-cash-register"></i> <span>@lang('translation.cash-receipt')</span>
+                                    <i class="las la-cash-register fs-20"></i> <span>@lang('translation.cash-receipt')</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="/report/daily-charges">
-                                    <i class="las la-file-invoice-dollar"></i> <span>@lang('translation.daily-cobros')</span>
+                                    <i class="las la-file-invoice-dollar fs-20"></i> <span>@lang('translation.daily-cobros')</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="/report/debt-analysis">
-                                    <i class="las la-chart-pie"></i> <span>@lang('translation.debt-analysis')</span>
+                                    <i class="las la-chart-pie fs-20"></i> <span>@lang('translation.debt-analysis')</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="">
-                                    <i class="las la-sliders-h"></i> <span>@lang('translation.generic')</span>
+                                    <i class="las la-sliders-h fs-20"></i> <span>@lang('translation.generic')</span>
                                 </a>
                             </li>
                         </ul>
@@ -194,7 +194,7 @@
                 <li class="nav-item">
                     <li class="nav-item">
                     <a class="nav-link menu-link" href="/report/statistical-graphs">
-                        <i class="ri-menu-add-line"></i> <span>Gráficos</span>
+                        <i class="las la-chart-pie fs-20"></i> <span>Gráficos</span>
                     </a>
                     </li>
                     <!--<div class="collapse menu-dropdown" id="sidebarGrafico">
@@ -205,7 +205,7 @@
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.config')</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/config/generality">
-                        <i class="las la-flask"></i> <span>@lang('translation.generality')</span>
+                        <i class="las la-flask fs-20"></i> <span>@lang('translation.generality')</span>
                     </a>
                 </li>
 

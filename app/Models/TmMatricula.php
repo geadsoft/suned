@@ -28,4 +28,12 @@ class TmMatricula extends Model
         return $this->belongsTo('App\Models\TmPersonas');
     }
 
+    public function curso(){
+        return $this->belongsTo('App\Models\TmCursos');
+    }
+
+    public function modalidad(){
+        return $this->belongsTo('App\Models\TmGeneralidades');
+    }
+
 }

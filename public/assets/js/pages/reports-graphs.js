@@ -1,9 +1,9 @@
-function loadGraphs(objdata,objdia,objmes) {
+function loadGraphs(objdata,objdia,objmes,objcobro) {
 
     viewGraphs(objdata)
     viewGraphsDia(objdia)
     viewGraphsMes(objmes)
-
+    viewGraphsCobro(objcobro)
 }
 
 function viewGraphs(objdata) {
@@ -66,7 +66,7 @@ function viewGraphs(objdata) {
             data: objdata
         }]
     });
-   
+  
 }
 
 function viewGraphsDia(objdia){
@@ -187,4 +187,58 @@ function viewGraphsMes(objserie){
         ],
         
     });
+}
+
+function viewGraphsCobro($objserie){
+
+    Highcharts.chart('cobromes', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            categories: [
+                'Ene',
+                'Feb',
+                'Mar',
+                'Apr',
+                'May',
+                'Jun',
+                'Jul',
+                'Aug',
+                'Sep',
+                'Oct',
+                'Nov',
+                'Dic'
+            ],
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Ingresos ($)'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>${point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: $objserie
+    });
+
 }

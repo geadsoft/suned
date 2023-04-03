@@ -185,7 +185,7 @@
                 </div>
             </div>
             <div class="row">
-                <body onload="loadGraphs({{$data}},{{$datIngdia}},{{$datIngmes}})">
+                <body onload="loadGraphs({{$data}},{{$datIngdia}},{{$datIngmes}},{{$cobroMes}})">
                 <div class="col-xl-4">
                     <div class="card card-height-100">
                             <div class="card-header align-items-center d-flex">
@@ -257,6 +257,28 @@
                     </div><!-- end col -->
                 </body>
                 <!-- end col -->
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header border-0 align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Ingresos Mensuales Detallado</h4>
+                        </div><!-- end card header -->
+
+                        <div class="card-body">
+                            
+                            <div class="w-100">
+                                <div class="mb-3">
+                                    <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="graphIngDia"> 
+                                </div>
+                                <div id="cobromes"></div>
+                            </div>
+                            <div>
+                                <span class="text-center text-muted" style="font-size: 11px"></span>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
             </div>
             
         </div> <!-- end .h-100-->

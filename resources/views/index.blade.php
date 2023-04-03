@@ -17,7 +17,7 @@
                 <div class="col-12">
                     <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                         <div class="flex-grow-1">
-                            <h4 class="fs-16 mb-1">Good Morning, {{auth()->user()->name}}</h4>
+                            <h4 class="fs-16 mb-1">Buenos dias, {{auth()->user()->name}}</h4>
                             <!--<p class="text-muted mb-0">Here's what's happening with your store
                                 today.</p>-->
                         </div>
@@ -40,7 +40,7 @@
                                     <div class="col-auto">
                                         <button type="button" class="btn btn-soft-secondary"><i
                                                 class="ri-add-circle-line align-middle me-1"></i>
-                                            Add Student</button>
+                                            Agregar Matrícula</button>
                                     </div>
                                     <!--end col-->
                                     <!--<div class="col-auto">

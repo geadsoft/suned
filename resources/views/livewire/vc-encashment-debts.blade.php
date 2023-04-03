@@ -21,7 +21,7 @@
         <tr id="{{$fila}}" class="deudas">
             <th scope="row" class="deuda-id-{{$fila}}">
                 <div class="form-check form-check-success">
-                    <input class="form-check-input" type="checkbox" id="chkpago-{{$fila}}" onchange="chkpago({{$fila}})"/>  
+                    <input class="form-check-input fs-16" type="checkbox" id="chkpago-{{$fila}}" onchange="chkpago({{$fila}})"/>  
                 </div>
             </th>
             <td class="text-dark" style="display:none;">

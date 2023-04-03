@@ -7,8 +7,9 @@
         <div class="col-md-auto ms-auto">
             <div class="hstack text-nowrap gap-2">
                 <div>
+                    <label for="" class="form-label">Grupo</label>
                     <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
-                        <option value="">Grupo</option>
+                        <option value="">Todos</option>
                         @foreach ($tblgenerals as $general)
                             @if ($general->superior == 1)
                             <option value="{{$general->id}}">{{$general->descripcion}}</option>
@@ -17,8 +18,9 @@
                     </select>
                 </div>
                 <div>
+                    <label for="" class="form-label">Periodo</label>
                     <select class="form-select" name="cmbnivel" wire:model="filters.srv_periodo">
-                        <option value="">Periodo</option>
+                        <option value="">Todos</option>
                         @foreach ($tblperiodos as $periodo)
                             <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
                         @endforeach
@@ -45,7 +47,7 @@
                     @foreach ($tblrecords as $data)
                         <tr class="detalle">
                             <td>
-                                {{$data['apellidos']}} {{$data['nombres']}}
+                                {{$data['apellidos']}} {{$data['nombres']}} / {{$data->curso->servicio->descripcion}} {{$data->curso->paralelo}} / {{$data->modalidad->descripcion}}
                             </td>
                             <td style="width: 80px;">
                                 <ul class="list-inline hstack gap-2 mb-0">

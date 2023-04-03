@@ -20,7 +20,7 @@ class VcModalSearch extends Component
     public function mount()
     {
         $tblperiodo = TmPeriodosLectivos::orderBy('periodo','desc')->first();
-        $this->filters['srv_periodo'] = $tblperiodo['id'];
+        $this->filters['srv_periodo'] = '';
     }
     
     public function render()
