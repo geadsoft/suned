@@ -172,7 +172,7 @@ function recalculateCart() {
 
 function resetcontrol() {
 	document.getElementById("cmbtipopago").value = "EFE";
-    document.getElementById("cmbentidad").value = "15";
+    document.getElementById("cmbentidad").value = "32";
     document.getElementById("txtvalor").value = 0.00;
     document.getElementById("txtreferencia").value = "";
 }
