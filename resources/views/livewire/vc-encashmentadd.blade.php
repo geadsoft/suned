@@ -365,7 +365,7 @@
                 <div class="card-body">
                     <div class="table-responsive table-card">
                         <!--Deudas-->
-                         @livewire('vc-encashment-debts',['personaid' => $estudiante_id])       
+                         @livewire('vc-encashment-debts',['matriculaid' => $matricula_id, 'personaid' => $estudiante_id])       
                             
                         <hr/>
                         <div class="card-body">

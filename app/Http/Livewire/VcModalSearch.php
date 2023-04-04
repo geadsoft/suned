@@ -54,6 +54,7 @@ class VcModalSearch extends Component
         ->when($this->filters['srv_nombre'],function($query){
             return $query->whereRaw("concat(p.apellidos,' ',p.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
+        ->select('tm_matriculas.*','p.apellidos','p.nombres')
         ->where('tm_matriculas.estado','A')
         ->limit(10)
         ->get();
@@ -62,10 +63,10 @@ class VcModalSearch extends Component
 
     }
 
-    public function addCobro($personaId){
+    public function addCobro($matriculaId){
 
         $this->dispatchBrowserEvent('hide-form');
-        return redirect()->to('/financial/encashment-add/'.$this->filters['srv_periodo'].'/'.$personaId);
+        return redirect()->to('/financial/encashment-add/'.$this->filters['srv_periodo'].'/'.$matriculaId);
 
     }
 

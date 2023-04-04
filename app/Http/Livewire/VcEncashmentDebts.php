@@ -15,23 +15,25 @@ class VcEncashmentDebts extends Component
 
     protected $listeners = ['deudas' => 'cargadeuda'];
 
-    public function mount($personaid){
-        $this->cargadeuda($personaid);
+    public function mount($matriculaid,$personaid){
+        $this->cargadeuda($matriculaid,$personaid);
     }    
 
-    public function cargadeuda($idestudiante)
+    public function cargadeuda($idmatricula,$idestudiante)
     {   
         $this->idestudiante = $idestudiante;
+        $this->idmatricula  = $idmatricula;
     }
     
     public function render()
     {   
         $tbldeudas   = TrDeudasCabs::where('estudiante_id','=',$this->idestudiante)
         ->where('saldo','>',0)
+        ->where('matricula_Id','=',$this->idmatricula)
         ->orderbyRaw("case when left(referencia,3) = 'MAT' then 1
         when left(referencia,3) = 'PLA' then 2
         when left(referencia,3) = 'PLI' then 2
-        when left(referencia,3) = 'PLE' then 3
+        when left(referencia,3) = 'PEN' then 3
         else 4 end")
         ->get();
 

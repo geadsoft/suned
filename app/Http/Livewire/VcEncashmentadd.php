@@ -24,7 +24,7 @@ class VcEncashmentadd extends Component
     public $fecha;
     public $secuencia=0;
     public $tblCobro;
-    public $estudiante_id=0, $grupo, $curso, $concepto, $comentario;
+    public $estudiante_id=0, $grupo, $curso, $concepto, $comentario, $matricula_id;
 
     public $totalPago = 0;
     public $valpago   = 0;
@@ -32,16 +32,18 @@ class VcEncashmentadd extends Component
     
     protected $listeners = ['postAdded','setCedula'];
 
-    public function mount($periodoid,$personaid){
+    public function mount($periodoid,$matriculaid){
 
         $ldate = date('Y-m-d H:i:s');
         $this->fecha = date('Y-m-d',strtotime($ldate));
 
-        $tblpersona    = TmPersonas::find($personaid);
+        $tblmatricula  = TmMatricula::find($matriculaid);
+        $tblpersona    = TmPersonas::find($tblmatricula['estudiante_id']);
 
         $this->idbuscar = $tblpersona['identificacion'];
         $this->periodo  = $periodoid;
         $this->estudiante_id = $tblpersona['id'];
+        $this->matricula_id  = $matriculaid;
 
         $this->add();
         $this->search(1);
@@ -223,11 +225,12 @@ class VcEncashmentadd extends Component
                 $matricula = TmMatricula::join("tm_cursos","tm_matriculas.curso_id","=","tm_cursos.id")
                 ->join("tm_servicios","tm_cursos.servicio_id","=","tm_servicios.id")
                 ->join("tm_generalidades","tm_servicios.modalidad_id","=","tm_generalidades.id")
-                ->where([
+                /*->where([
                         ['tm_matriculas.periodo_id',$this->periodo],
                         ['tm_matriculas.estudiante_id',$this->estudiante_id],
                         ['tm_cursos.periodo_id',$this->periodo],
-                    ])
+                    ])*/
+                ->where("tm_matriculas.id",$this->matricula_id)
                 ->select('tm_generalidades.descripcion AS nomGrupo', 'tm_servicios.descripcion AS nomGrado', 'tm_cursos.paralelo', 'tm_matriculas.comentario')
                 ->first();
                    
