@@ -175,7 +175,8 @@ function resetcontrol() {
     document.getElementById("cmbentidad").value = "32";
     document.getElementById("txtvalor").value = 0.00;
     document.getElementById("txtreferencia").value = "";
-}
+	document.getElementById("cmbentidad").options.item(0).selected = 'selected';
+ }
 
 var genericExamples = document.querySelectorAll("[data-trigger]");
 genericExamples.forEach(function (genericExamp) {
