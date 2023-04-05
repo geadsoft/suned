@@ -375,7 +375,7 @@ class VcReportCashReceints extends Component
             $this->descuento = floatval($this->descuento) + floatval($record['descuento']);
             $this->pago      = floatval($this->pago)+ floatval($record['pago']);
             
-            if ($record['tipopago']=="EFE") {
+            /*if ($record['tipopago']=="EFE") {
                 $this->valorEfe = $this->valorEfe + floatval($record['pago']);
             }
 
@@ -397,9 +397,16 @@ class VcReportCashReceints extends Component
 
             if ($record['tipopago']=="CON") {
                 $this->valorCon = $this->valorCon + floatval($record['pago']);
-            }
+            }*/
 
         }
+
+        $this->valorEfe = $tbldetalle->where('tipopago','EFE')->sum('valor');
+        $this->valorChq = $tbldetalle->where('tipopago','CHQ')->sum('valor');
+        $this->valorTar = $tbldetalle->where('tipopago','TAR')->sum('valor');
+        $this->valorDep = $tbldetalle->where('tipopago','DEP')->sum('valor');
+        $this->valorTra = $tbldetalle->where('tipopago','TRA')->sum('valor');
+        $this->valorCon = $tbldetalle->where('tipopago','CON')->sum('valor');
 
         foreach ($tbldetalle as $detpago){
 
