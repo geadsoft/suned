@@ -223,31 +223,14 @@ class VcReportCashReceints extends Component
             $this->neto      = floatval($this->neto) + floatval($record['saldo']) + floatval($record['credito']);
             $this->descuento = floatval($this->descuento) + floatval($record['descuento']);
             $this->pago      = floatval($this->pago)+ floatval($record['pago']);
-
-            if ($record['tipopago']=="EFE") {
-                $this->valorEfe = $this->valorEfe + floatval($record['pago']);
-            }
-
-            if ($record['tipopago']=="CHQ") {
-                $this->valorChq = $this->valorChq + floatval($record['pago']);
-            }
-
-            if ($record['tipopago']=="TAR") {
-                $this->valorTar = $this->valorTar + floatval($record['pago']);
-            }
-
-            if ($record['tipopago']=="DEP") {
-                $this->valorDep = $this->valorDep + floatval($record['pago']);
-            }
-
-            if ($record['tipopago']=="TRA") {
-                $this->valorTra = $this->valorTra + floatval($record['pago']);
-            }
-
-            if ($record['tipopago']=="CON") {
-                $this->valorCon = $this->valorCon + floatval($record['pago']);
-            }
         }
+
+        $this->valorEfe = $tbldetalle->where('tipopago','EFE')->sum('valor');
+        $this->valorChq = $tbldetalle->where('tipopago','CHQ')->sum('valor');
+        $this->valorTar = $tbldetalle->where('tipopago','TAR')->sum('valor');
+        $this->valorDep = $tbldetalle->where('tipopago','DEP')->sum('valor');
+        $this->valorTra = $tbldetalle->where('tipopago','TRA')->sum('valor');
+        $this->valorCon = $tbldetalle->where('tipopago','CON')->sum('valor');
 
         foreach ($tbldetalle as $detpago){
 
@@ -374,31 +357,6 @@ class VcReportCashReceints extends Component
             $this->neto      = floatval($this->neto) + floatval($record['saldo']) + floatval($record['credito']);
             $this->descuento = floatval($this->descuento) + floatval($record['descuento']);
             $this->pago      = floatval($this->pago)+ floatval($record['pago']);
-            
-            /*if ($record['tipopago']=="EFE") {
-                $this->valorEfe = $this->valorEfe + floatval($record['pago']);
-            }
-
-            if ($record['tipopago']=="CHQ") {
-                $this->valorChq = $this->valorChq + floatval($record['pago']);
-            }
-
-            if ($record['tipopago']=="TAR") {    
-                $this->valorTar = $this->valorTar + floatval($record['pago']);
-            }
-
-            if ($record['tipopago']=="DEP") {    
-                $this->valorDep = $this->valorDep + floatval($record['pago']);
-            }
-
-            if ($record['tipopago']=="TRA") {
-                $this->valorTra = $this->valorTra + floatval($record['pago']);
-            }
-
-            if ($record['tipopago']=="CON") {
-                $this->valorCon = $this->valorCon + floatval($record['pago']);
-            }*/
-
         }
 
         $this->valorEfe = $tbldetalle->where('tipopago','EFE')->sum('valor');
