@@ -154,7 +154,7 @@
                                         <div class="row g-3 mb-0 align-items-center">
                                             <div class="col-sm-auto">
                                                 <div>
-                                                    <select class="form-select" name="cmbperiodo" wire:model="filters.srv_periodo" id="cmbperiodo">
+                                                    <select class="form-select" name="cmbperiodo" wire:model="lnperiodo">
                                                         <option value="">Select Period</option>
                                                         @foreach ($tblperiodos as $periodo)
                                                             <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
@@ -165,7 +165,7 @@
                                             <!--end col-->
                                             <div class="col-auto">
                                                 <div>
-                                                    <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo" id="cmbgrupo">
+                                                    <select class="form-select" name="cmbgrupo" wire:model="lngrupo">
                                                         <option value="">Todos</option>
                                                         @foreach ($tblgenerals as $general)
                                                             @if ($general->superior == 1)
@@ -269,7 +269,12 @@
                             
                             <div class="w-100">
                                 <div class="mb-3">
-                                    <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="graphIngDia"> 
+                                   <select class="form-select" name="cmbperiodo" wire:model="graphRubros">
+                                        <option value="">Periodo</option>
+                                        @foreach ($tblperiodos as $plectivo)
+                                            <option value="{{$plectivo->periodo}}">{{$plectivo->periodo}}</option>
+                                        @endforeach
+                                    </select> 
                                 </div>
                                 <div id="cobromes"></div>
                             </div>

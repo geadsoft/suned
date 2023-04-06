@@ -21,7 +21,7 @@ class VcTuitions extends Component
     use WithPagination;
     public $showEditModal = false;
     public $selectId = 0;
-    public $previus='', $current='', $nomnivel, $nomcurso, $fecha, $documento;
+    public $previus='', $current='', $nomnivel, $nomcurso, $fecha, $documento, $alumno;
     public $filterdata='M';
     public $tblcursos=null;
     public $tblservicios=null;
@@ -350,6 +350,17 @@ class VcTuitions extends Component
             ]);
         }
 
+    }
+
+    public function valoresPagar($objData){
+
+        $this->alumno = $objData['apellidos'].' '.$objData['nombres'];
+        
+        $this->record  = $objData;
+        $this->dispatchBrowserEvent('show-valores');
+        $this->emitTo('vc-modal-valores','setValores',$this->record['id']);
+
+        
     }
 
         

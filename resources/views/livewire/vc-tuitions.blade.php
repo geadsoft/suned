@@ -4,10 +4,10 @@
             <div class="card" id="orderList">
                 <div class="card-header  border-0">
                     <div class="d-flex align-items-center">
-                        <h5 class="card-title mb-0 flex-grow-1">Registration of Enrollments</h5>
+                        <h5 class="card-title mb-0 flex-grow-1">Registro de Inscripciones</h5>
                         <div class="flex-shrink-0">
                             <a class="btn btn-success add-btn" href="/academic/student-enrollment"><i
-                            class="ri-add-line me-1 align-bottom"></i> Add Tuition</a>
+                            class="ri-add-line me-1 align-bottom"></i> Agregar Matrícula</a>
                         </div>
                     </div>
                 </div>
@@ -17,7 +17,7 @@
                             <div class="col-xxl-5 col-sm-6">
                                 <div class="search-box">
                                     <input type="text" class="form-control search"
-                                        placeholder="Search for name or surnames" wire:model="filters.srv_nombre">
+                                        placeholder="Buscar por nombre o apellidos" wire:model="filters.srv_nombre">
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
                             </div>
@@ -25,7 +25,7 @@
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
-                                        <option value="">Select Group</option>
+                                        <option value="">Seleccionar Grupo</option>
                                         @foreach ($tblgenerals as $general)
                                             @if ($general->superior == 1)
                                             <option value="{{$general->id}}">{{$general->descripcion}}</option>
@@ -37,7 +37,7 @@
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" name="cmbnivel" wire:model="filters.srv_periodo">
-                                        <option value="">Select Period</option>
+                                        <option value="">Seleccionar Periodo</option>
                                         @foreach ($tblperiodos as $periodo)
                                             <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
                                         @endforeach
@@ -46,8 +46,8 @@
                             </div>
                             <div class="col-xxl-2 col-sm-4">
                                  <select class="form-select" name="cmbdato" wire:model="filterdata">
-                                    <option value="M">Tuition</option>
-                                    <option value="E">Student</option>
+                                    <option value="M">Matrícula</option>
+                                    <option value="E">Estudiantes</option>
                                 </select>
                             </div>
                             <!--end col-->
@@ -73,17 +73,17 @@
                             <table class="table table-nowrap align-middle" id="orderTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
-                                        <th class="sort" data-sort="id"> Identification</th>
+                                        <th class="sort" data-sort="id"> Identificación</th>
                                         <th class="sort" data-sort="description">Nombres</th>
                                         @if ($filterdata=='M')
-                                            <th class="sort" data-sort="modality">Document</th>
-                                            <th class="sort" data-sort="level">Date Incripction</th>
-                                            <th class="sort" data-sort="degree">Group</th>
-                                            <th class="sort" data-sort="">Period</th>
-                                            <th class="sort" data-sort="">Course</th>
-                                            <th class="sort" data-sort="">Paralel</th>
+                                            <th class="sort" data-sort="modality">Documento</th>
+                                            <th class="sort" data-sort="level">Fecha</th>
+                                            <th class="sort" data-sort="degree">Grupo</th>
+                                            <th class="sort" data-sort="">Periodo</th>
+                                            <th class="sort" data-sort="">Curso</th>
+                                            <th class="sort" data-sort="">Paralelo</th>
                                         @endif
-                                        <th class="sort" data-sort="">Action</th>
+                                        <th class="sort" data-sort="">Acción</th>
                                         
                                     </tr>
                                 </thead>
@@ -106,14 +106,14 @@
                                                     <i class="ri-more-fill"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a class="dropdown-item" href="/academic/student-enrollment/{{$record->identificacion}}"><i class="ri-add-box-fill align-bottom me-2 text-muted"></i>Add Tuition</a></li>
-                                                    <li><a class="dropdown-item" href="" wire:click.prevent="edit({{ $record }})"><i class="ri-repeat-line align-bottom me-2 text-muted"></i>Change of Section</a></li>
-                                                    <li><a class="dropdown-item" href="/academic/person-edit/{{$record->identificacion}}"><i class="ri-contacts-fill align-bottom me-2 text-muted"></i> Student Record </a></li>
-                                                    <li><a class="dropdown-item" href=""><i class="ri-hand-coin-fill align-bottom me-2 text-muted"></i> Amounts Owed </a></li>
+                                                    <li><a class="dropdown-item" href="/academic/student-enrollment/{{$record->identificacion}}"><i class="ri-add-box-fill align-bottom me-2 text-muted fs-16"></i>Agregar Matrícula</a></li>
+                                                    <li><a class="dropdown-item" href="" wire:click.prevent="edit({{ $record }})"><i class="ri-repeat-line align-bottom me-2 text-muted fs-16"></i>Cambiar Curso</a></li>
+                                                    <li><a class="dropdown-item" href="/academic/person-edit/{{$record->identificacion}}"><i class="ri-contacts-fill align-bottom me-2 text-muted fs-16"></i> Ficha del Estudiante </a></li>
+                                                    <li><a class="dropdown-item" href="" wire:click.prevent="valoresPagar({{ $record }})"><i class="ri-hand-coin-fill align-bottom me-2 text-muted fs-16"></i> Valores a Pagar</a></li>
 
                                                     <li class="dropdown-divider"></li>
                                                     <li><a class="dropdown-item remove-list" href="" data-bs-toggle="modal" data-bs-target="#removeItemModal">
-                                                    <i class=" ri-coins-fill align-bottom me-2 text-muted"></i> Payment Details</a></li>
+                                                    <i class=" ri-coins-fill align-bottom me-2 text-muted fs-16"></i>Detalle de Cobros</a></li>
                                                 </ul>
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Remove">
@@ -179,6 +179,25 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Modal Valores a Pagar -->
+                    <div wire.ignore.self class="modal fade" id="showModalValores" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" >
+                            <div class="modal-content modal-content border-0">
+                                
+                                <div class="modal-header p-3" style="background-color:#222454">
+                                    <h5 class="modal-title" id="exampleModalLabel"  style="color: #D4D4DD">
+                                        <span>Valores a Pagar de: {{$alumno}} &nbsp;</span>
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" id="close-modal">
+                                    
+                                </div>
+                                @livewire('vc-modal-valores')   
+                                    
+                            </div>
+                        </div>
+                    </div>
+
 
                     <!-- Modal -->
                     <div wire.ignore.self class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true" wire:model='selectId'>

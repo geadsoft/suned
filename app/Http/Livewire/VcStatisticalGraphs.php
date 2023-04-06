@@ -15,13 +15,14 @@ use Livewire\Component;
 class VcStatisticalGraphs extends Component
 {   
     public $data,$datIngdia,$datIngmes,$cobroMes;
-    public $fecha,$lnmes,$graphIngDia,$graphIngMes, $hombres, $mujeres, $totalIngresos=0.00;
+    public $fecha,$lnmes,$graphIngDia,$graphIngMes,$graphRubros,$lnperiodo,$lngrupo,$hombres, $mujeres, $totalIngresos=0.00;
     public $filters = [
         'srv_periodo' => '',
         'srv_grupo' => '',
         'srv_mes' => '',
         'srv_fecha' => '',
         'srv_ingmes' => '',
+        'srv_ejercicio' => '',
     ];
 
     public $mes = [
@@ -46,15 +47,19 @@ class VcStatisticalGraphs extends Component
 
         $this->filters['srv_periodo'] = $tblperiodos['id'];
         $this->filters['srv_grupo'] = $tblgenerals['id'];
-
+        $this->filters['srv_ejercicio'] = $tblperiodos['periodo'];
+        
         $ldate = date('Y-m-d H:i:s');
         $this->filters['srv_fecha'] = date('Y-m-d',strtotime($ldate));
         $this->filters['srv_mes'] = intval(date('m',strtotime($ldate)));
         $this->filters['srv_ingmes'] = intval(date('m',strtotime($ldate)));
 
+        $this->lngrupo = $tblgenerals['id'];
+        $this->lnperiodo = $tblperiodos['id'];
         $this->lnmes = intval(date('m',strtotime($ldate)));
-        $this->graphIngDia = date('Y-m-d',strtotime($ldate));
-        $this->graphIngMes = intval(date('m',strtotime($ldate)));
+        $this->graphIngDia  = date('Y-m-d',strtotime($ldate));
+        $this->graphIngMes  = intval(date('m',strtotime($ldate)));
+        $this->graphRubros = $tblperiodos['periodo'];
 
         $this->consulta();
     }
@@ -95,30 +100,44 @@ class VcStatisticalGraphs extends Component
         
         $this->filters['srv_mes'] = intval($this->lnmes);
         $this->consulta();
-        
-        $this->dispatchBrowserEvent('name-updated', ['newObj' => $this->data]);
-        $this->dispatchBrowserEvent('grahp-ingdia', ['newObj' => $this->datIngdia]);
-        $this->dispatchBrowserEvent('grahp-ingmes', ['newObj' => $this->datIngmes]);
+        $this->actualizaGraph();
+
     }
 
     public function updatedGraphIngDia() {
         
         $this->filters['srv_fecha'] = $this->graphIngDia;
         $this->consulta();
-
-        $this->dispatchBrowserEvent('name-updated', ['newObj' => $this->data]);
-        $this->dispatchBrowserEvent('grahp-ingdia', ['newObj' => $this->datIngdia]);
-        $this->dispatchBrowserEvent('grahp-ingmes', ['newObj' => $this->datIngmes]);
+        $this->actualizaGraph();
     }
     
     public function updatedGraphIngMes() {
         
         $this->filters['srv_ingmes'] = $this->graphIngMes;
         $this->consulta();
+        $this->actualizaGraph();
+    }
 
+    public function updatedGraphRubros() {
+        
+        $this->filters['srv_ejercicio'] = $this->graphRubros;
+        $this->consulta();
+        $this->actualizaGraph();
+    }
+
+    public function updatedLnPeriodo(){
+
+        $this->filters['srv_periodo'] = $this->lnperiodo;
+        $this->consulta();
+        $this->actualizaGraph();
+
+    }
+
+    public function actualizaGraph(){
         $this->dispatchBrowserEvent('name-updated', ['newObj' => $this->data]);
         $this->dispatchBrowserEvent('grahp-ingdia', ['newObj' => $this->datIngdia]);
         $this->dispatchBrowserEvent('grahp-ingmes', ['newObj' => $this->datIngmes]);
+        $this->dispatchBrowserEvent('grahp-rubros', ['newObj' => $this->cobroMes]);
     }
 
     public function consulta(){
@@ -179,15 +198,32 @@ class VcStatisticalGraphs extends Component
         ->join('tr_deudas_cabs','tr_deudas_cabs.id','=','tr_deudas_dets.deudacab_id')
         ->join('tm_matriculas','tm_matriculas.id','=','tr_deudas_cabs.matricula_id')
         ->selectRaw('left(tr_deudas_cabs.referencia,3) as tipo, month(tr_deudas_dets.fecha) as mes, sum(valor) as valor')
-        ->whereRaw("tr_deudas_dets.tipo = 'PAG' and tr_deudas_dets.tipovalor = 'CR' and year(tr_deudas_dets.fecha) = 2023")
+        ->whereRaw("tr_deudas_dets.tipo = 'PAG' and tr_deudas_dets.tipovalor = 'CR' and year(tr_deudas_dets.fecha) = ".$this->filters['srv_ejercicio'])
         ->groupbyRaw("left(tr_deudas_cabs.referencia,3), month(tr_deudas_dets.fecha), year(tr_deudas_dets.fecha)")
         ->orderbyRaw("month(tr_deudas_dets.fecha),left(tr_deudas_cabs.referencia,3)")
         ->get();
         
-        $this->graphsDeudas($tbldeudas);
-        $this->graphsIngDia($tblcobros);
-        $this->graphsIngMes($tblIngresoMes);
-        $this->graphsCobros($tblCobroMes);
+        if($tbldeudas!=null){
+            $this->graphsDeudas($tbldeudas);
+        }
+
+        if($tblcobros!=null){
+            $this->graphsIngDia($tblcobros);
+        }
+
+        if($tblIngresoMes!=null){
+            $this->graphsIngMes($tblIngresoMes);
+        }
+
+        if($tblCobroMes!=null){
+            $this->graphsCobros($tblCobroMes);
+        }
+
+        
+        
+        
+        
+        
         
     }
 
@@ -252,23 +288,17 @@ class VcStatisticalGraphs extends Component
         $objGrupo = $tblcobros->groupBy('tipo');
         $total = $tblcobros->groupBy('mes');
 
-        $array=[];
         $valores = '';
-        
         $this->cobroMes = "[";
-        foreach ($objGrupo as $key => $grupo){
-            $valores = '';
-            $mes = 0;
-            foreach ($grupo as $data){
-                for ($x=1;$x<12;$x++){
 
-                    if($x==$data['mes']){
-                        $valores = $valores.sprintf('%.2f', $data['valor']).' ,';
-                    }else{
-                        $valores = $valores.sprintf('%.2f', 0.00).' ,';
-                    }
-                    $mes = $data['mes'];
-                }
+        foreach ($objGrupo as $key => $grupo){
+            
+            $valores = '';
+            $array=[1 => 0,2 => 0,3 => 0,4 => 0,5 => 0,6 => 0,
+            7 => 0,8 => 0,9 => 0,10 => 0,11 => 0,12 => 0,];
+
+            foreach ($grupo as $data){
+                $array[$data['mes']] = $data['valor'];
             }
             
             switch ($key){
@@ -288,15 +318,16 @@ class VcStatisticalGraphs extends Component
                     $tipo = 'Plataforma Español';
                     break;
             }
-                      
+
+            for($x=1;$x<=12;$x++){
+                $valores =  $valores.sprintf('%.2f', $array[$x]).' ,';
+            }
+
             $this->cobroMes = $this->cobroMes."{
                 name: '".$tipo ."',
                 data: [".substr($valores, 0, -2)."]},";
-
         }
-
-        dd($this->cobroMes);
-
+        
         $valores = '';
         foreach ($total as $data){
             $valor   = $data->sum('valor');

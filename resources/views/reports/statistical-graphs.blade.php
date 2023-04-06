@@ -46,6 +46,12 @@
             viewGraphsMes(dataserie);
         })
 
+        window.addEventListener('grahp-rubros', event => {
+            var dataserie 
+            dataserie = JSON.parse(event.detail.newObj);
+            viewGraphsCobro(dataserie);
+        })
+
     </script>
 
 @endsection

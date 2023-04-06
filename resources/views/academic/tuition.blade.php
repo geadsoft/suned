@@ -58,6 +58,19 @@
 
         })
 
+        window.addEventListener('show-valores', event => {
+            $('#showModalValores').modal('show');
+        })
+
+        window.addEventListener('hide-valores', event => {
+            $('#showModalValores').modal('hide');
+        })
+
+        window.addEventListener('msg-grabar', event => {
+            swal("Buen Trabajo!", "Registro grabado con éxito!", "success");
+        })
+
+
     </script>
 
 @endsection
