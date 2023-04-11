@@ -4,7 +4,7 @@ namespace App\Http\Livewire;
 use App\Models\TrCobrosCabs;
 use App\Models\TmGeneralidades;
 use App\Models\TmPeriodosLectivos;
-use App\Models\Tmcursos;
+use App\Models\TmCursos;
 use PDF;
 
 use Livewire\Component;
