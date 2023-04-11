@@ -15,7 +15,7 @@ class VcPersons extends Component
 {   
     use WithPagination;
 
-    public $datos;
+    public $datos, $estudiante, $selectId, $estado=false;
     public $filters = [
         'srv_nombre' => '',
         'srv_periodo' => '',
@@ -23,6 +23,7 @@ class VcPersons extends Component
         'srv_curso' => '',
         'srv_genero' => '',
         'srv_reporte' => '',
+        'srv_estado' => 'A',
     ];
 
     public $consulta = [
@@ -64,6 +65,7 @@ class VcPersons extends Component
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
         })
         ->where('tm_personas.tipopersona','=','E')
+        ->where('tm_personas.estado',$this->filters['srv_estado'])
         ->orderBy('apellidos','asc')
         ->paginate(12);
 
@@ -82,6 +84,15 @@ class VcPersons extends Component
         return 'vendor.livewire.bootstrap'; 
     }
 
+    public function updatedEstado(){
+
+        $this->filters['srv_estado']  = 'A';
+
+        if ($this->estado){
+            $this->filters['srv_estado']  = 'R';
+        }
+    }
+
     public function view( $id ){
         
         $this->view = TmPersonas::find($id)->toArray();
@@ -96,6 +107,27 @@ class VcPersons extends Component
         return redirect()->to('/academic/person-add');
 
     }
+
+    public function delete($IdEstudiante){
+        
+        $tbldata = TmPersonas::find($IdEstudiante);
+
+        $this->estudiante = $tbldata['apellidos'].' '.$tbldata['nombres'];
+        $this->selectId   = $tbldata['id'];
+
+        $this->dispatchBrowserEvent('show-delete');
+    }
+
+    public function deleteData(){
+        
+        $record = TmPersonas::find($this->selectId);
+        $record->update([
+            'estado' => 'R',
+        ]);
+
+        $this->dispatchBrowserEvent('hide-delete');
+    }
+
 
     public function estudiantes(){
 
@@ -121,6 +153,7 @@ class VcPersons extends Component
         ,m.created_at as creado, weekday(tm_personas.created_at) as diapersona, weekday(m.created_at) as diamatricula, 
         g2.descripcion as nacionalidad")
         ->where('tm_personas.tipopersona','=','E')
+        ->where('tm_personas.estado',$this->filters['srv_estado'])
         ->orderBy('apellidos','asc')
         ->get();
 
@@ -153,6 +186,7 @@ class VcPersons extends Component
         ->selectRaw("tm_personas.nombres,tm_personas.apellidos,tm_personas.identificacion, g.descripcion as grupo, s.descripcion as curso, c.paralelo, p.nombres as nomfamilia, 
         p.apellidos as apefamilia, p.identificacion as nui, p.telefono, p.email")
         ->where('tm_personas.tipopersona','=','E')
+        ->where('tm_personas.estado',$this->filters['srv_estado'])
         ->orderBy('apellidos','asc')
         ->get();
 
@@ -170,6 +204,7 @@ class VcPersons extends Component
         $this->filters['srv_grupo'] = $data->srv_grupo;
         $this->filters['srv_curso'] = $data->srv_curso;
         $this->filters['srv_genero'] = $data->srv_genero;
+        $this->filters['srv_estado']  = $data->srv_estado;
            
         $tblrecords = $this->estudiantes();
         $tblcia = TmSedes::all();
@@ -197,6 +232,7 @@ class VcPersons extends Component
         $this->filters['srv_grupo']   = $data->srv_grupo;
         $this->filters['srv_curso']   = $data->srv_curso;
         $this->filters['srv_genero']  = $data->srv_genero;
+        $this->filters['srv_estado']  = $data->srv_estado;
            
         $tblrecords = $this->estudiantes();
 
@@ -263,6 +299,7 @@ class VcPersons extends Component
         $this->filters['srv_grupo']   = $data->srv_grupo;
         $this->filters['srv_curso']   = $data->srv_curso;
         $this->filters['srv_genero']  = $data->srv_genero;
+        $this->filters['srv_estado']  = $data->srv_estado;
            
         $tblrecords = $this->fimiliares();
 
@@ -314,6 +351,7 @@ class VcPersons extends Component
         $this->filters['srv_grupo'] = $data->srv_grupo;
         $this->filters['srv_curso'] = $data->srv_curso;
         $this->filters['srv_genero'] = $data->srv_genero;
+        $this->filters['srv_estado']  = $data->srv_estado;
            
         $tblrecords = $this->estudiantes();
         $tblcia = TmSedes::all();
@@ -341,6 +379,7 @@ class VcPersons extends Component
         $this->filters['srv_grupo']   = $data->srv_grupo;
         $this->filters['srv_curso']   = $data->srv_curso;
         $this->filters['srv_genero']  = $data->srv_genero;
+        $this->filters['srv_estado']  = $data->srv_estado;
            
         $tblrecords = $this->estudiantes();
 
@@ -406,6 +445,7 @@ class VcPersons extends Component
         $this->filters['srv_grupo']   = $data->srv_grupo;
         $this->filters['srv_curso']   = $data->srv_curso;
         $this->filters['srv_genero']  = $data->srv_genero;
+        $this->filters['srv_estado']  = $data->srv_estado;
            
         $tblrecords = $this->fimiliares();
 

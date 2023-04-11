@@ -16,6 +16,13 @@
                                             Person Data</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
+                                    <button class="nav-link fs-15 p-3" id="pills-bill-responsible-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-bill-responsible" type="button" role="tab"
+                                        aria-controls="pills-bill-responsible" aria-selected="false"><i
+                                            class="ri-bank-card-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
+                                            Representative</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3" id="pills-bill-family-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-family" type="button" role="tab"
                                         aria-controls="pills-bill-family" aria-selected="false"><i
@@ -23,9 +30,9 @@
                                             Family Data</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link fs-15 p-3" id="pills-bill-responsible-tab" data-bs-toggle="pill"
-                                        data-bs-target="#pills-bill-responsible" type="button" role="tab"
-                                        aria-controls="pills-bill-responsible" aria-selected="false"><i
+                                    <button class="nav-link fs-15 p-3" id="pills-bill-medical-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-bill-medical" type="button" role="tab"
+                                        aria-controls="pills-bill-medical" aria-selected="false"><i
                                             class="ri-bank-card-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
                                             Medical Data</button>
                                 </li>
@@ -283,6 +290,26 @@
                                    
                             </div>
                             <!-- end tab pane -->
+
+                            <div class="tab-pane fade" id="pills-bill-responsible" role="tabpanel"
+                                aria-labelledby="pills-bill-address-tab">
+                                <div>
+                                    <br>
+                                    <h5 class="mb-1">Information of the Responsible</h5>
+                                    <p class="text-muted mb-4">Please fill all information below</p>
+                                </div>
+                                
+                                @livewire('vc-person-enrollment',['estudianteId' => $estudiante_id, 'datoFamiliar' => $datosFamiliar])
+
+                                <!--<div class="d-flex align-items-start gap-3 mt-4">
+                                    <button type="button" class="btn btn-light btn-label previestab"
+                                        data-previous="pills-bill-info-tab" onclick="backTab('pills-bill-students')"><i
+                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back Student</button>
+                                    <button type="button" class="btn btn-primary btn-label right ms-auto nexttab"
+                                        data-nexttab="pills-bill-registration-tab" onclick="selecTab('pills-bill-family')"><i
+                                            class="ri-file-user-line label-icon align-middle fs-16 ms-2"></i>Continue to FamilyData</button>
+                                </div>-->    
+                            </div>
 
                             <div class="tab-pane fade" id="pills-bill-family" role="tabpanel" aria-labelledby="pills-bill-family-tab">
                                 <div class="row">

@@ -14,7 +14,7 @@
         <!--<div class="col-xxl-12">
             <div class="card" id="contactList">-->
                 <div class="card-body border border-dashed border-end-0 border-start-0">
-                    <div class="row g-3">
+                    <div class="row g-3 mb-3">
                         <div class="col-md-4">
                             <div class="search-box">
                                 <input type="text" class="form-control search"
@@ -81,6 +81,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" wire:model="estado">
+                            <label class="form-check-label" for="estado">Estudiantes retirados</label>
+                        </div>
+                    </div>
+                    
                 </div>
                 <div class="card-body">
                     <div>
@@ -131,36 +138,35 @@
                                                     <a class="edit-item-btn" href="/academic/person-edit/{{$record->identificacion}}"><i
                                                             class="ri-pencil-fill align-bottom text-muted"></i></a>
                                                 </li>
-                                                <!--<li class="list-inline-item">
+                                                <li class="list-inline-item">
                                                     <div class="dropdown">
                                                         <button
                                                             class="btn btn-soft-secondary btn-sm dropdown"
                                                             type="button" data-bs-toggle="dropdown"
                                                             aria-expanded="false">
-                                                            <i class="ri-more-fill align-middle"></i>
+                                                            <i class="ri-align-justify align-middle"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
                                                             <li><a class="dropdown-item view-item-btn"
-                                                                    href="javascript:void(0);"><i
-                                                                        class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                                    View</a></li>
+                                                                    href=""><i
+                                                                        class="ri-todo-line align-bottom me-2 text-muted fs-16"></i>
+                                                                    Informe Estudiantil</a></li>
                                                             <li><a class="dropdown-item edit-item-btn"
-                                                                    href="#showModal"
+                                                                    href=""
                                                                     data-bs-toggle="modal"><i
-                                                                        class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                                    Edit</a></li>
+                                                                        class=" ri-star-half-line align-bottom me-2 text-muted fs-16"></i>
+                                                                    Libreta Calificaciones</a></li>
                                                             <li>
                                                                 <a class="dropdown-item remove-item-btn"
                                                                     data-bs-toggle="modal"
-                                                                    href="#deleteRecordModal">
-                                                                    <i
-                                                                        class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                                    Delete
+                                                                    href="" wire:click.prevent="delete({{ $record->estudiante_id }})">
+                                                                    <i class="ri-user-unfollow-line align-bottom me-2 text-muted fs-16"></i>
+                                                                    Retirar Estudiante
                                                                 </a>
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                </li>-->
+                                                </li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -184,30 +190,25 @@
                         {{$tblrecords->links('')}}
                     </div>
                     
-                    <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1"
-                        aria-hidden="true">
+                    <!-- Modal -->
+                    <div wire.ignore.self class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true" wire:model='selectId'>
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close" id="btn-close"></button>
-                                </div>
                                 <div class="modal-body p-5 text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json"
-                                        trigger="loop" colors="primary:#405189,secondary:#f06548"
-                                        style="width:90px;height:90px"></lord-icon>
+                                    <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                                        colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px">
+                                    </lord-icon>
                                     <div class="mt-4 text-center">
-                                        <h4 class="fs-semibold">You are about to delete a contact ?</h4>
-                                        <p class="text-muted fs-14 mb-4 pt-1">Deleting your contact will
-                                            remove all of your information from our database.</p>
+                                        <h4>¿Está a punto de retirar al estudiante? {{ $estudiante }}</h4>
+                                        <p class="text-muted fs-15 mb-4">Retirarlo cambiará el estado (activo a retirado), 
+                                        esta opción es reversible.
+                                        </p>
                                         <div class="hstack gap-2 justify-content-center remove">
-                                            <button
-                                                class="btn btn-link link-success fw-medium text-decoration-none"
-                                                data-bs-dismiss="modal"><i
-                                                    class="ri-close-line me-1 align-middle"></i>
-                                                Close</button>
-                                            <button class="btn btn-danger" id="delete-record">Yes,
-                                                Delete It!!</button>
+                                            <button class="btn btn-link link-success fw-medium text-decoration-none"
+                                                data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i>
+                                                Cerrar</button>
+                                            <button class="btn btn-danger" id="delete-record"  wire:click="deleteData()"> Si,
+                                                Retirar</button>
                                         </div>
                                     </div>
                                 </div>

@@ -43,8 +43,9 @@ class VcModalValores extends Component
         ->selectRaw("Case When left(referencia,3) = 'MAT' Then 'Matricula'
                           When left(referencia,3) = 'PLI' Then 'Plataforma Ingles' 
                           When left(referencia,3) = 'PLE' Then 'Plataforma Español'
-                          Else 'Pensión' End as concepto, neto, debito, id as deudaid, month(fecha) as mes")
+                          Else 'Pensión' End as concepto, neto, debito, credito, id as deudaid, month(fecha) as mes")
         ->where('matricula_id',$matriculaId)
+        ->where('credito','=',0)
         ->where('saldo','>',0)
         ->get();
 
@@ -54,6 +55,7 @@ class VcModalValores extends Component
             $this->tblrecords[$key][1] = $record['concepto'].' '.$this->meses[$record['mes']];
             $this->tblrecords[$key][2] = floatval($record['neto']);
             $this->tblrecords[$key][3] = floatval($record['debito']);
+            $this->tblrecords[$key][4] = floatval($record['credito']);
         }
         
     }
@@ -69,8 +71,9 @@ class VcModalValores extends Component
             $iddeuda = $data[0];
             $record = TrDeudasCabs::find($iddeuda);
             $record->update([
-                'neto' => $data[3],
+                'neto'   => $data[3],
                 'debito' => $data[3],
+                'saldo'  => $data[3],
             ]);
 
             $deudadets = TrDeudasDets::where('deudacab_id',$iddeuda)

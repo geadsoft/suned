@@ -17,13 +17,15 @@ class VcPersonEnrollment extends Component
     public $email, $direccion, $parenteso, $eControl;
     public $estudianteId, $datoFamiliar;
 
+    protected $listeners = ['loadFamiliar']; 
+
     public function mount($estudianteId, $datoFamiliar){
 
         $this->estudianteId = $estudianteId;
         $this->datoFamiliar  = $datoFamiliar;
 
     }
-    
+   
     public function render()
     {   
         $this->eControl = "";
@@ -48,6 +50,11 @@ class VcPersonEnrollment extends Component
 
     //protected $listeners = ['grabar' => 'saveperson'];
     //protected $listeners = ['savePerson'];
+    public function loadFamiliar($nuifamiliar){
+        $this->search_nui = $nuifamiliar;
+        $this->searchPerson();
+    }
+
     public function searchPerson(){
         
         $records = TmPersonas::where("identificacion",$this->search_nui)->first();

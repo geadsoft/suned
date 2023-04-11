@@ -246,6 +246,7 @@ return [
     "charges"=>"Cargos por Servicios",
     "services"=>"Servicios Educativos",
     "create_invoice"=>"Crear Factura",
+    "list-income"=>"Listado de Ingresos",
 
 ];
 ?>

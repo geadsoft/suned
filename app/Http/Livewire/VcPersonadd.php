@@ -11,7 +11,7 @@ use Livewire\Component;
 
 class VcPersonadd extends Component
 {
-    public $record, $addfamily=false;
+    public $record, $addfamily=false, $estudiante_id, $datosFamiliar=1, $nuirepresentante;
     public $search_nui;
     public $eControl="";
     public $eControl2="disabled";
@@ -126,6 +126,7 @@ class VcPersonadd extends Component
         $this->email = $record->email;
         $this->etnia = $record->etnia;
         $this->direccion = $record->direccion;
+        $this->estudiante_id = $record->id;
 
         $domicilios = TmDomicilioEstudiantes::where("estudiante_id",$this->personaId)->get()->toArray();
        
@@ -139,13 +140,17 @@ class VcPersonadd extends Component
                     ->join("tm_personas as p","p.id","=","tm_familiar_estudiantes.persona_id")
                     ->where('estudiante_id',"{$this->personaId}")
                     ->select('tm_familiar_estudiantes.id','persona_id','apellidos','nombres','tipoidentificacion','identificacion','nacionalidad_id','genero','telefono','direccion','email','parentesco')
+                    ->orderby('tm_familiar_estudiantes.created_at','desc')
                     ->get()->toArray();
-        
+                
         if (empty($familys)) {
             $this->newFamiliar();
         }else{
             $this->familiares =  $familys;
         }
+
+        $this->nuirepresentante = $familys[0]['identificacion'];
+        $this->emitTo('vc-person-enrollment','loadFamiliar',$this->nuirepresentante);
 
     }
 

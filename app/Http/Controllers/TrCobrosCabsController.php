@@ -47,6 +47,11 @@ class TrCobrosCabsController extends Controller
         return view('reports/statistical-graphs');
     } 
 
+    public function listingresos()
+    {
+        return view('financial/listincome');
+    } 
+
     /**
      * Show the form for creating a new resource.
      *
