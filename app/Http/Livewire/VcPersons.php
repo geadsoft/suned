@@ -153,7 +153,7 @@ class VcPersons extends Component
         g2.descripcion as nacionalidad")
         ->where('tm_personas.tipopersona','=','E')
         ->where('tm_personas.estado',$this->filters['srv_estado'])
-        ->orderBy('apellidos','asc')
+        ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc')
         ->get();
 
         return $tblrecords;
