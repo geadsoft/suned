@@ -23,17 +23,17 @@
                     </a>
                 </div>
 
-                <button type="button" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger"
+                <!--<button type="button" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger"
                     id="topnav-hamburger-icon">
                     <span class="hamburger-icon">
                         <span></span>
                         <span></span>
                         <span></span>
                     </span>
-                </button>
+                </button>-->
 
                 <!-- App Search-->
-                <form class="app-search d-none d-md-block">
+                <form class="d-none d-md-block">
                     <div class="position-relative">
                         <!--<input type="text" class="form-control" placeholder="Search..." autocomplete="off"
                             id="search-options" value="">
@@ -41,8 +41,8 @@
                         <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
                             id="search-close-options"></span>-->
                         <div class="text-center mt-sm-5 mb-4 text-white-50">
-                            <a href="index" class="d-inline-block auth-logo">
-                                <img src="{{ URL::asset('assets/images/american-school.png')}}" alt="" height="65">
+                            <a class="d-inline-block">
+                                <img src="{{ URL::asset('assets/images/American Schooll.png')}}" alt="" height="65">
                             </a>
                         </div> <br>
                     </div>
