@@ -14,14 +14,14 @@
                                         data-bs-target="#pills-bill-address" type="button" role="tab"
                                         aria-controls="pills-bill-address" aria-selected="true"><i
                                             class=" ri-hand-coin-fill fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Cobro Information</button>
+                                            Información del Recibo</button>
                                 </li>
                                 <li class="nav-item" role="presentation" > 
                                     <button class="nav-link fs-15 p-3" id="pills-bill-info-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-info" type="button" role="tab"
                                         aria-controls="pills-bill-info" aria-selected="false"><i
                                             class="ri-user-2-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Billing</button>
+                                            Facturación</button>
                                 </li>
                                 <!--<li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3" id="pills-payment-tab" data-bs-toggle="pill"
@@ -50,34 +50,28 @@
                                             <p class="text-success mb-4 ">{{$concepto}}</p>
                                         </div>
                                     </div>
-                                    <div class="flex-shrink-0">
-                                        <div class="input-group">
-
-                                            <div class="dropdown mb-3 p-2">
-                                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="ri-more-fill"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a class="dropdown-item" href="apps-ecommerce-add-product.html"><i class="ri-pencil-fill align-bottom me-2 text-muted fs-14"></i>Anular/Recuperar Recibo</a></li>
-                                                    <li><a class="dropdown-item" href="apps-ecommerce-product-details.html"><i class="ri-eye-fill align-bottom me-2 text-muted fs-14"></i> Ver Factura </a></li>
-                                                    <li class="dropdown-divider"></li>
-                                                    <li><a class="dropdown-item remove-list" href="" data-bs-toggle="modal" data-bs-target="#removeItemModal">
-                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted fs-14"></i> Eliminar </a></li></ul>
-                                            </div>
-                                            <div class="mb-3 p-2">
-                                                <!--<a class="btn btn-info add-btn btn-sm" href="/financial/encashment-add"><i class="ri-add-fill me-1 align-bottom"></i> New Record</a>-->
-                                                <a class="btn btn-info add-btn btn-sm" wire:click="add()"><i class="ri-add-fill me-1 align-bottom"></i> New Record</a>
-                                                <!--<button class="btn btn-info add-btn btn-sm" wire:click="add()">New Record</button>-->
-                                            </div>    
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                                         
                                 <div class="mb-3">
                                     <div class="card-header">
+                                        <div class="d-flex align-items-center">
                                         <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
                                             class="mdi mdi-account-tie align-middle me-1 text-success"></i>
-                                            Personal Data</h5>
+                                            Datos Personales</h5>
+                                            <div class="flex-shrink-0">
+                                                <a class="btn btn-info add-btn" wire:click="add()"><i
+                                                class="ri-add-fill me-1 align-bottom"></i> Nuevo </a>
+                                                <button class="btn btn-secondary dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="ri-align-justify me-1 align-bottom"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href=""><i class="ri-close-circle-line align-bottom me-2 text-muted fs-16"></i>Anular/Recuperar Recibo</a></li>
+                                                    <li class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item remove-item-btn" data-bs-toggle="modal" href="" wire:click.prevent="delete({{ $selectId }})">
+                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted fs-16"></i>Eliminar</a></li>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="mt-4">
@@ -126,7 +120,7 @@
                                         <div class="card-header">
                                             <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
                                                 class="mdi mdi-cash-multiple align-middle me-1 text-success"></i>
-                                                Payments</h5>
+                                                Método de Pago</h5>
                                         </div>
                                     </div>
                                     <div class="card">
@@ -308,10 +302,7 @@
                         </div>
                         <!-- end tab content -->
 
-
-
-
-
+                        
                     </form>
                 </div>
                 <!-- end card body -->
@@ -325,7 +316,7 @@
                 <div class="card-header">
                     <div class="d-flex ">
                         <div class="flex-grow-1">
-                            <h5 class="card-title mb-0">Debts Summary</h5>
+                            <h5 class="card-title mb-0">Concepto de Cobros</h5>
                         </div>
                         <div class="flex-shrink-0">
                             <div class="form-check form-check-success" >
@@ -433,7 +424,31 @@
     </div>
     <!-- end row -->
 
-     
+     <!-- Modal -->
+    <div wire.ignore.self class="modal fade flip" id="deleteCobro" tabindex="-1" aria-hidden="true" wire:model='selectId'>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-5 text-center">
+                    <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                        colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px">
+                    </lord-icon>
+                    <div class="mt-4 text-center">
+                        <h4>¿Seguro de eliminar el Recibo? {{$documento}}</h4>
+                        <p class="text-muted fs-15 mb-4">Esta opción eliminará el registro del ingreso financiero. 
+                        Esta acción es irreversible</p>
+                        <div class="hstack gap-2 justify-content-center remove">
+                            <button class="btn btn-link link-success fw-medium text-decoration-none"
+                                data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i>
+                                Cerrar</button>
+                            <button class="btn btn-danger" id="delete-record"  wire:click="deleteData()"> Si,
+                                Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end delete modal -->
 
     <div wire.ignore.self class="modal fade" id="showModalBuscar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" >
@@ -461,31 +476,5 @@
             </div>
         </div>
     </div>
-
-    <!-- removeItemModal -->
-    <div id="removeItemModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mt-2 text-center">
-                        <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
-                            colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
-                        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                            <h4>Are you sure ?</h4>
-                            <p class="text-muted mx-4 mb-0">Are you sure you want to remove this Address ?</p>
-                        </div>
-                    </div>
-                    <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
-                        <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn w-sm btn-danger ">Yes, Delete It!</button>
-                    </div>
-                </div>
-
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
 </div>

@@ -52,8 +52,7 @@ class VcPersons extends Component
         $tblrecords = TmPersonas::query()
         ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
         ->when($this->filters['srv_nombre'],function($query){
-            return $query->where('tm_personas.nombres','like','%'.$this->filters['srv_nombre'].'%')
-                        ->orWhere('tm_personas.apellidos','like','%'.$this->filters['srv_nombre'].'%');
+            return $query->whereRaw("concat(tm_personas.apellidos,' ',tm_personas.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
         ->when($this->filters['srv_periodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");

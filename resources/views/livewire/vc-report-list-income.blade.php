@@ -104,7 +104,7 @@
                                 @foreach ($tblrecords as $record)    
                                     <tr>
                                         <td>{{$record->documento}}</td>
-                                        <td>{{$record->fecha}}</td>
+                                        <td>{{date('d/m/Y',strtotime($record->fecha))}}</td>
                                         <td>{{$record->apellidos}} {{$record->nombres}}</td> 
                                         <td>{{$record->descripcion}} {{$record->paralelo}}</td> 
                                         <td>{{number_format($record->monto,2)}}</td>
@@ -133,6 +133,25 @@
                                                     <a class="edit-item-btn" href="/download-pdf/comprobante/{{$record->id}}"><i
                                                             class="ri-file-download-fill align-bottom text-muted"></i></a>
                                                 </li>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item view-item-btn"
+                                                            href=""><i
+                                                                class="ri-todo-line align-bottom me-2 text-muted fs-16"></i>
+                                                            Informe Estudiantil</a></li>
+                                                    <li><a class="dropdown-item edit-item-btn"
+                                                            href=""
+                                                            data-bs-toggle="modal"><i
+                                                                class=" ri-star-half-line align-bottom me-2 text-muted fs-16"></i>
+                                                            Libreta Calificaciones</a></li>
+                                                    <li>
+                                                        <a class="dropdown-item remove-item-btn"
+                                                            data-bs-toggle="modal"
+                                                            href="" wire:click.prevent="delete({{ $record->estudiante_id }})">
+                                                            <i class="ri-user-unfollow-line align-bottom me-2 text-muted fs-16"></i>
+                                                            Retirar Estudiante
+                                                        </a>
+                                                    </li>
+                                                </ul>
                                             </ul>
                                         </td>
                                     </tr>

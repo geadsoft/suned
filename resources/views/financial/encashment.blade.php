@@ -27,7 +27,7 @@
     
 
     <!--ecommerce-customer init js -->
-    <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{{ URL::asset('assets/js/pages/financial-encashment.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
     
@@ -40,6 +40,15 @@
         window.addEventListener('hide-form', event => {
             $('#showModalBuscar').modal('hide');
         })
+
+        window.addEventListener('show-delete', event => {
+            $('#deleteCobro').modal('show');
+        })
+
+        window.addEventListener('hide-delete', event => {
+            $('#deleteCobro').modal('hide');
+        })
+
 
     </script>
 

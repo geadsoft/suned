@@ -12,6 +12,7 @@ class TrCobrosCabs extends Model
     protected $fillable = [
         'fecha',
         'estudiante_id',
+        'matricula_id',
         'tipo',
         'documento',
         'concepto',
@@ -22,6 +23,10 @@ class TrCobrosCabs extends Model
 
     public function estudiante(){
         return $this->belongsTo('App\Models\TmPersonas');
+    }
+
+    public function matricula(){
+        return $this->belongsTo('App\Models\TmMatricula');
     }
     
 }

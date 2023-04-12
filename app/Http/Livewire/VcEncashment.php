@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\TmPersonas;
 use App\Models\TrCobrosCabs;
 use App\Models\TrCobrosDets;
+use App\Models\TrDeudasCabs;
 use App\Models\TrDeudasDets;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmMatricula;
@@ -106,9 +107,38 @@ class VcEncashment extends Component
     }
 
     public function add(){
-        
-        //$this->dispatchBrowserEvent('search-form');
+
         $this->dispatchBrowserEvent('show-form');
+    }
+
+    public function delete($selectId){
+
+        $this->dispatchBrowserEvent('show-delete');
+
+    }
+
+    public function deleteData(){
+        
+        $detdeudas = TrDeudasDets::where("cobro_id",$this->selectId)->get();
+
+        foreach($detdeudas as $deuda){
+
+            $cabdeuda = TrDeudasCabs::find($deuda['deudacab_id']);
+            $cabdeuda->update([
+                'credito' => $cabdeuda['credito']-$deuda['valor'],
+                'saldo' => $cabdeuda['saldo']+$deuda['valor'],
+            ]);
+
+            TrDeudasDets::find($deuda['id'])->delete();
+        }
+
+        TrCobrosDets::where("cobrocab_id",$this->selectId)->delete();
+        TrCobrosCabs::find($this->selectId)->delete();
+
+        $this->dispatchBrowserEvent('hide-delete');
+        
+        return redirect()->to('/financial/list-income');
+
     }
 
 

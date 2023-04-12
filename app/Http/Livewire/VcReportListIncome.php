@@ -38,8 +38,8 @@ class VcReportListIncome extends Component
         $ldateini = date('Y-m-d H:i:s');
         $ldatefin = date('Y-m-d H:i:s');
 
-        $this->filters['srv_fechaini'] = date('Y-m-d',strtotime($ldateini));
-        $this->filters['srv_fechafin'] = date('Y-m-d',strtotime($ldatefin));
+        $this->filters['srv_fechaini'] = '';
+        $this->filters['srv_fechafin'] = '';
         $this->filters['srv_nombre'] = '';
         $this->filters['srv_grupo'] = '2';
         $this->filters['srv_periodo'] = $dataperiodo['id'];
@@ -82,9 +82,7 @@ class VcReportListIncome extends Component
 
         $tblrecords = TrCobrosCabs::query("")
         ->join("tm_personas as p","p.id","=","tr_cobros_cabs.estudiante_id")
-        ->join("tr_deudas_dets as d","d.cobro_id","=","tr_cobros_cabs.id")
-        ->join("tr_deudas_cabs as dc","dc.id","=","d.deudacab_id")
-        ->join("tm_matriculas as m","m.id","=","dc.matricula_id")
+        ->join("tm_matriculas as m","m.id","=","tr_cobros_cabs.matricula_id")
         ->join("tm_cursos as c","c.id","=","m.curso_id")
         ->join("tm_servicios as s","s.id","=","c.servicio_id")
         ->when($this->filters['srv_nombre'],function($query){
@@ -99,11 +97,13 @@ class VcReportListIncome extends Component
         ->when($this->filters['srv_curso'],function($query){
             return $query->where('m.id',"{$this->filters['srv_curso']}");
         })
-        ->where('tr_cobros_cabs.fecha','>=',date('Ymd',strtotime($this->filters['srv_fechaini'])))
-        ->where('tr_cobros_cabs.fecha','<=',date('Ymd',strtotime($this->filters['srv_fechafin'])))
+        ->when($this->filters['srv_fechaini'],function($query){
+            return $query->where('tr_cobros_cabs.fecha','>=',date('Ymd',strtotime($this->filters['srv_fechaini'])))
+            ->where('tr_cobros_cabs.fecha','<=',date('Ymd',strtotime($this->filters['srv_fechafin'])));
+        })
         ->where('tr_cobros_cabs.tipo','=','CP')
         ->select('tr_cobros_cabs.id','tr_cobros_cabs.fecha','tr_cobros_cabs.documento','tr_cobros_cabs.concepto','tr_cobros_cabs.monto',
-        'tr_cobros_cabs.estado','tr_cobros_cabs.usuario','p.nombres', 'p.apellidos','s.descripcion', 'c.paralelo')
+        'tr_cobros_cabs.estado','tr_cobros_cabs.usuario','p.nombres', 'p.apellidos', 's.descripcion', 'c.paralelo')
         ->orderBy('tr_cobros_cabs.fecha','desc')
         ->paginate(15);
 
