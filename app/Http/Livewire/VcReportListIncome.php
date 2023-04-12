@@ -104,7 +104,7 @@ class VcReportListIncome extends Component
         ->where('tr_cobros_cabs.tipo','=','CP')
         ->select('tr_cobros_cabs.id','tr_cobros_cabs.fecha','tr_cobros_cabs.documento','tr_cobros_cabs.concepto','tr_cobros_cabs.monto',
         'tr_cobros_cabs.estado','tr_cobros_cabs.usuario','p.nombres', 'p.apellidos', 's.descripcion', 'c.paralelo')
-        ->orderBy('tr_cobros_cabs.fecha','desc')
+        ->orderBy('tr_cobros_cabs.documento','desc')
         ->paginate(15);
 
         $this->datos = json_encode($this->filters);
