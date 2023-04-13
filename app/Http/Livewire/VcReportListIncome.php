@@ -14,7 +14,7 @@ class VcReportListIncome extends Component
 {
     use WithPagination;
 
-    public $fecha, $nombre, $fechaini, $fechafin, $cia, $nomgrupo='TODOS', $nomperiodo, $datos;
+    public $fecha, $nombre, $fechaini, $fechafin, $cia, $nomgrupo='TODOS', $nomperiodo, $datos, $estado=false;
     public $filters = [
         'srv_periodo' => '',
         'srv_grupo' => '',
@@ -22,6 +22,7 @@ class VcReportListIncome extends Component
         'srv_fechafin' => '',
         'srv_nombre' => '',
         'srv_curso' => '',
+        'srv_estado' => 'P',
     ];
 
     public $data=[
@@ -102,6 +103,7 @@ class VcReportListIncome extends Component
             ->where('tr_cobros_cabs.fecha','<=',date('Ymd',strtotime($this->filters['srv_fechafin'])));
         })
         ->where('tr_cobros_cabs.tipo','=','CP')
+        ->where('tr_cobros_cabs.estado','=',$this->filters['srv_estado'])
         ->select('tr_cobros_cabs.id','tr_cobros_cabs.fecha','tr_cobros_cabs.documento','tr_cobros_cabs.concepto','tr_cobros_cabs.monto',
         'tr_cobros_cabs.estado','tr_cobros_cabs.usuario','p.nombres', 'p.apellidos', 's.descripcion', 'c.paralelo')
         ->orderBy('tr_cobros_cabs.documento','desc')
@@ -110,6 +112,15 @@ class VcReportListIncome extends Component
         $this->datos = json_encode($this->filters);
         
         return $tblrecords;
+
+    }
+
+    public function updatedEstado(){
+
+        $this->filters['srv_estado'] = 'P';
+        if($this->estado){
+            $this->filters['srv_estado'] = 'A';
+        }
 
     }
 

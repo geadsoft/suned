@@ -28,27 +28,27 @@
 
     <script>
     
-        window.addEventListener('name-updated', event => {
+        window.addEventListener('graph-cobros', event => {
             var dataserie 
             dataserie = JSON.parse(event.detail.newObj);
             viewGraphs(dataserie);
         })
 
-        window.addEventListener('grahp-ingdia', event => {
+        window.addEventListener('graph-ingdia', event => {
             var dataserie 
             dataserie = JSON.parse(event.detail.newObj);
             viewGraphsDia(dataserie);
         })
 
-        window.addEventListener('grahp-ingmes', event => {
+        window.addEventListener('graph-ingmes', event => {
             var dataserie 
             dataserie = JSON.parse(event.detail.newObj);
             viewGraphsMes(dataserie);
         })
 
-        window.addEventListener('grahp-rubros', event => {
+        window.addEventListener('graph-rubros', event => {
             var dataserie 
-            dataserie = JSON.parse(event.detail.newObj);
+            dataserie = event.detail.newObj;
             viewGraphsCobro(dataserie);
         })
 

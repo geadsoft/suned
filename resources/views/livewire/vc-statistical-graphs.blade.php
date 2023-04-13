@@ -154,7 +154,7 @@
                                         <div class="row g-3 mb-0 align-items-center">
                                             <div class="col-sm-auto">
                                                 <div>
-                                                    <select class="form-select" name="cmbperiodo" wire:model="lnperiodo">
+                                                    <select class="form-select" name="cmbperiodo" wire:model="lnperiodoId">
                                                         <option value="">Select Period</option>
                                                         @foreach ($tblperiodos as $periodo)
                                                             <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
@@ -165,7 +165,7 @@
                                             <!--end col-->
                                             <div class="col-auto">
                                                 <div>
-                                                    <select class="form-select" name="cmbgrupo" wire:model="lngrupo">
+                                                    <select class="form-select" name="cmbgrupo" wire:model="lngrupoId">
                                                         <option value="">Todos</option>
                                                         @foreach ($tblgenerals as $general)
                                                             @if ($general->superior == 1)
@@ -194,7 +194,7 @@
 
                             <div class="card-body">
                                 <div class="mb-3">
-                                    <select class="form-select" name="cmbMes" wire:model="lnmes" >
+                                    <select class="form-select" name="cmbMes" wire:model="lnmescobro" >
                                         @for ($x=1;$x<=12;$x++)
                                             <option value="{{$x}}">{{$mes[$x]}}</option>
                                         @endfor
@@ -220,7 +220,7 @@
                                 
                                 <div class="w-100">
                                     <div class="mb-3">
-                                        <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="graphIngDia"> 
+                                        <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="lsfecha"> 
                                     </div>
                                     <div id="containerdia"></div>
                                 </div>
@@ -241,7 +241,7 @@
                                 
                                 <div class="w-100">
                                     <div class="mb-3">
-                                        <select class="form-select" name="ingmes" wire:model="graphIngMes" >
+                                        <select class="form-select" name="ingmes" wire:model="lnmesingreso" >
                                             @for ($x=1;$x<=12;$x++)
                                                 <option value="{{$x}}">{{$mes[$x]}}</option>
                                             @endfor
@@ -269,7 +269,7 @@
                             
                             <div class="w-100">
                                 <div class="mb-3">
-                                   <select class="form-select" name="cmbperiodo" wire:model="graphRubros">
+                                   <select class="form-select" name="cmbperiodo" wire:model="lnperiodo">
                                         <option value="">Periodo</option>
                                         @foreach ($tblperiodos as $plectivo)
                                             <option value="{{$plectivo->periodo}}">{{$plectivo->periodo}}</option>

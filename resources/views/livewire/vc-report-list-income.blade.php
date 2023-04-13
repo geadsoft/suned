@@ -109,7 +109,7 @@
                                         <td>{{$record->descripcion}} {{$record->paralelo}}</td> 
                                         <td>{{number_format($record->monto,2)}}</td>
                                         <td>
-                                            @if($record->estado = 'P')
+                                            @if($record->estado == 'P')
                                                 <span class="badge badge-soft-success text-uppercase">Procesado</span>
                                             @else
                                                 <span class="badge badge-soft-danger text-uppercase">Anulado</span>

@@ -15,14 +15,15 @@ class VcPersonEnrollment extends Component
     public $persona_id=0;
     public $nombres, $apellidos, $tipoident="C", $identificacion="", $genero="F", $fechanace, $nacionalidad=35, $telefono, $etnia="ME";
     public $email, $direccion, $parenteso, $eControl;
-    public $estudianteId, $datoFamiliar;
+    public $estudianteId, $datoFamiliar, $matricula;
 
-    protected $listeners = ['loadFamiliar']; 
-
-    public function mount($estudianteId, $datoFamiliar){
+    public function mount($estudianteId, $datoFamiliar, $nuiFamilia, $matricula){
 
         $this->estudianteId = $estudianteId;
-        $this->datoFamiliar  = $datoFamiliar;
+        $this->datoFamiliar = $datoFamiliar;
+        $this->search_nui   = $nuiFamilia;
+        $this->matricula    = $matricula;
+        $this->searchPerson();
 
     }
    
@@ -50,10 +51,6 @@ class VcPersonEnrollment extends Component
 
     //protected $listeners = ['grabar' => 'saveperson'];
     //protected $listeners = ['savePerson'];
-    public function loadFamiliar($nuifamiliar){
-        $this->search_nui = $nuifamiliar;
-        $this->searchPerson();
-    }
 
     public function searchPerson(){
         
@@ -81,6 +78,10 @@ class VcPersonEnrollment extends Component
 
         }
 
+    }
+
+    public function viewRepresentante(){
+        dd('ingresa');
     }
 
     public function validaNui(){

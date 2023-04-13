@@ -23,7 +23,7 @@ class VcEncashment extends Component
     public $nombre="";
     public $selectpago = false;
 
-    public $documento, $concepto, $fecha, $identificacion, $estudiante, $curso, $grupo, $grado, $comentario;
+    public $documento, $concepto, $fecha, $identificacion, $estudiante, $curso, $grupo, $grado, $comentario, $estado;
 
     public $subtotal = 0;
     public $descuento = 0;
@@ -73,6 +73,7 @@ class VcEncashment extends Component
         $this->concepto = $this->record['concepto'];
         $this->identificacion = $this->record->estudiante->identificacion;
         $this->estudiante = $this->record->estudiante->apellidos." ".$this->record->estudiante->nombres;
+        $this->estado = $this->record['estado'];
 
         $datacobro = TrCobrosCabs::join("tr_deudas_dets as dt","tr_cobros_cabs.id","=","dt.cobro_id")
         ->join("tr_deudas_cabs as dc","dc.id","=","dt.deudacab_id")
@@ -117,6 +118,12 @@ class VcEncashment extends Component
 
     }
 
+    public function anular($selectId){
+
+        $this->dispatchBrowserEvent('show-anular');
+
+    }
+
     public function deleteData(){
         
         $detdeudas = TrDeudasDets::where("cobro_id",$this->selectId)->get();
@@ -136,6 +143,64 @@ class VcEncashment extends Component
         TrCobrosCabs::find($this->selectId)->delete();
 
         $this->dispatchBrowserEvent('hide-delete');
+        
+        return redirect()->to('/financial/list-income');
+
+    }
+
+    public function anularData(){
+        
+        $detdeudas = TrDeudasDets::where("cobro_id",$this->selectId)->get();
+
+        if($this->estado=='A'){
+
+            foreach($detdeudas as $deuda){
+
+                $cabdeuda = TrDeudasCabs::find($deuda['deudacab_id']);
+                $cabdeuda->update([
+                    'credito' => $cabdeuda['credito']+$deuda['valor'],
+                    'saldo' => $cabdeuda['saldo']-$deuda['valor'],
+                ]);
+
+                TrDeudasDets::find($deuda['id'])->update([
+                    'estado' => 'P',
+                ]);
+            }
+
+            TrCobrosDets::where("cobrocab_id",$this->selectId)->update([
+                'estado' => 'P',
+            ]);
+            
+            TrCobrosCabs::find($this->selectId)->update([
+                'estado' => 'P',
+            ]);
+
+        }else{
+
+            foreach($detdeudas as $deuda){
+
+                $cabdeuda = TrDeudasCabs::find($deuda['deudacab_id']);
+                $cabdeuda->update([
+                    'credito' => $cabdeuda['credito']-$deuda['valor'],
+                    'saldo' => $cabdeuda['saldo']+$deuda['valor'],
+                ]);
+
+                TrDeudasDets::find($deuda['id'])->update([
+                    'estado' => 'A',
+                ]);
+            }
+
+            TrCobrosDets::where("cobrocab_id",$this->selectId)->update([
+                'estado' => 'A',
+            ]);
+            
+            TrCobrosCabs::find($this->selectId)->update([
+                'estado' => 'A',
+            ]);
+
+        }
+
+        $this->dispatchBrowserEvent('hide-anular');
         
         return redirect()->to('/financial/list-income');
 

@@ -46,8 +46,14 @@
                                 <div class="d-flex align-items-center flex-wrap gap-2">
                                     <div class="flex-grow-1">
                                         <div>
-                                            <h5 class="mb-1 text-danger">Recibo No. {{$documento}}</h5>
-                                            <p class="text-success mb-4 ">{{$concepto}}</p>
+                                            <h5 class="badge bg-primary text-wrap fs-14">Recibo No. {{$documento}}</h5>
+                                            @if ($estado=='A')
+                                                <p class="text-danger mb-4 ">{{$concepto}} - ANULADO
+                                                </p>
+                                            @else
+                                                <p class="text-success mb-4 ">{{$concepto}} 
+                                                </p>
+                                            @endif
                                         </div>
                                     </div>
                                     
@@ -66,7 +72,8 @@
                                                     <i class="ri-align-justify me-1 align-bottom"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a class="dropdown-item" href=""><i class="ri-close-circle-line align-bottom me-2 text-muted fs-16"></i>Anular/Recuperar Recibo</a></li>
+                                                    <li><a class="dropdown-item"  data-bs-toggle="modal" href="" wire:click.prevent="anular({{ $selectId }})">
+                                                    <i class="ri-close-circle-line align-bottom me-2 text-muted fs-16"></i>Anular/Recuperar Recibo</a></li>
                                                     <li class="dropdown-divider"></li>
                                                     <li><a class="dropdown-item remove-item-btn" data-bs-toggle="modal" href="" wire:click.prevent="delete({{ $selectId }})">
                                                     <i class="ri-delete-bin-fill align-bottom me-2 text-muted fs-16"></i>Eliminar</a></li>
@@ -424,7 +431,7 @@
     </div>
     <!-- end row -->
 
-     <!-- Modal -->
+    <!-- Modal -->
     <div wire.ignore.self class="modal fade flip" id="deleteCobro" tabindex="-1" aria-hidden="true" wire:model='selectId'>
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -442,6 +449,40 @@
                                 Cerrar</button>
                             <button class="btn btn-danger" id="delete-record"  wire:click="deleteData()"> Si,
                                 Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end delete modal -->
+
+    <!-- Modal -->
+    <div wire.ignore.self class="modal fade flip" id="anulaCobro" tabindex="-1" aria-hidden="true" wire:model='selectId'>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-5 text-center">
+                    <lord-icon src="https://cdn.lordicon.com/tvyxmjyo.json" trigger="loop"
+                        colors="primary:#405189,secondary:#f06548" style="width:150px;height:150px">
+                    </lord-icon>
+                    @if($estado!='A')
+                    <div class="mt-4 text-center">
+                        <h4>¿Seguro de anular el Recibo? {{$documento}}</h4>
+                        <p class="text-muted fs-15 mb-4">Esta opción cambiará el estado del registro del ingreso financiero 
+                        (recibo anulado o no), esta acción es reversible</p>
+                    @else
+                        <h4>¿Seguro de recuperar el Recibo? {{$documento}}</h4>
+                        <p class="text-muted fs-15 mb-4">Esta opción cambiará el estado del registro del ingreso financiero 
+                        (recibo anulado o no), esta acción es reversible</p>
+                    @endif
+                        <div class="hstack gap-2 justify-content-center remove">
+                            <button class="btn btn-link link-success fw-medium text-decoration-none"
+                                data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i>
+                                Cerrar</button>
+                            
+                            <button class="btn btn-danger" id="delete-record"  wire:click="anularData()"> Si,
+                                @if($estado!='A') Anular @else Recuperar @endif
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 <div>
     <div class="row">
+        @if ($matricula==1)
         <div class="card-header">
             <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
                 class="mdi mdi-search-web align-middle me-1 text-success"></i>
@@ -13,7 +14,7 @@
                     @if ($datoFamiliar==1)
 
                         <select class="form-select" wire:model="search_nui" wire:change="searchPerson('R')">
-                            <option value="">Select Representative</option>
+                            <option value="">Seleccione Representante</option>
                             @foreach ($tblfamilys as $family)
                                 <option value="{{$family->identificacion}}">{{$family->apellidos}} {{$family->nombres}}</option>
                             @endforeach
@@ -46,11 +47,12 @@
             <div class="col-xl-3">
             </div> 
         </div> 
+        @endif
 
         <div class="card-header">
             <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
                 class="mdi mdi-account-tie align-middle me-1 text-success"></i>
-                Personal Data</h5>
+                Datos Personales</h5>
         </div>
         <div class="card-body row" wire:model.defer="">
             <div class="col-lg-6">

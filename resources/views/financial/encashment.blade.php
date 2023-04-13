@@ -9,10 +9,10 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Financial
+            Financiero
         @endslot
         @slot('title')
-        Register of Encashments
+        Registro de Cobros
         @endslot
     @endcomponent
 
@@ -47,6 +47,14 @@
 
         window.addEventListener('hide-delete', event => {
             $('#deleteCobro').modal('hide');
+        })
+
+        window.addEventListener('show-anular', event => {
+            $('#anulaCobro').modal('show');
+        })
+
+        window.addEventListener('hide-anular', event => {
+            $('#anulaCobro').modal('hide');
         })
 
 

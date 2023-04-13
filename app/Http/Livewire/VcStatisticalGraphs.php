@@ -17,12 +17,12 @@ class VcStatisticalGraphs extends Component
     public $data,$datIngdia,$datIngmes,$cobroMes;
     public $fecha,$lnmes,$graphIngDia,$graphIngMes,$graphRubros,$lnperiodo,$lngrupo,$hombres, $mujeres, $totalIngresos=0.00;
     public $filters = [
-        'srv_periodo' => '',
-        'srv_grupo' => '',
-        'srv_mes' => '',
-        'srv_fecha' => '',
-        'srv_ingmes' => '',
-        'srv_ejercicio' => '',
+        'idperiodo' => '',
+        'idgrupo' => '',
+        'mescobro' => '',
+        'fecha' => '',
+        'mesingreso' => '',
+        'periodo' => '',
     ];
 
     public $mes = [
@@ -45,21 +45,21 @@ class VcStatisticalGraphs extends Component
         $tblgenerals = TmGeneralidades::where('superior',1)->first();
         $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->first();
 
-        $this->filters['srv_periodo'] = $tblperiodos['id'];
-        $this->filters['srv_grupo'] = $tblgenerals['id'];
-        $this->filters['srv_ejercicio'] = $tblperiodos['periodo'];
+        $this->filters['idperiodo'] = $tblperiodos['id'];
+        $this->filters['idgrupo']   = $tblgenerals['id'];
+        $this->filters['periodo']   = $tblperiodos['periodo'];
         
         $ldate = date('Y-m-d H:i:s');
-        $this->filters['srv_fecha'] = date('Y-m-d',strtotime($ldate));
-        $this->filters['srv_mes'] = intval(date('m',strtotime($ldate)));
-        $this->filters['srv_ingmes'] = intval(date('m',strtotime($ldate)));
+        $this->filters['fecha']      = date('Y-m-d',strtotime($ldate));
+        $this->filters['mescobro']   = intval(date('m',strtotime($ldate)));
+        $this->filters['mesingreso'] = intval(date('m',strtotime($ldate)));
 
-        $this->lngrupo = $tblgenerals['id'];
-        $this->lnperiodo = $tblperiodos['id'];
-        $this->lnmes = intval(date('m',strtotime($ldate)));
-        $this->graphIngDia  = date('Y-m-d',strtotime($ldate));
-        $this->graphIngMes  = intval(date('m',strtotime($ldate)));
-        $this->graphRubros = $tblperiodos['periodo'];
+        $this->lngrupoId    = $tblgenerals['id'];
+        $this->lnperiodoId  = $tblperiodos['id'];
+        $this->lnmescobro   = intval(date('m',strtotime($ldate)));
+        $this->lsfecha      = date('Y-m-d',strtotime($ldate));
+        $this->lnmesingreso = intval(date('m',strtotime($ldate)));
+        $this->lnperiodo    = $tblperiodos['periodo'];
 
         $this->consulta();
     }
@@ -96,80 +96,88 @@ class VcStatisticalGraphs extends Component
     }
 
 
-    public function updatedLnMes() {
+    public function updatedlnmescobro() {
         
-        $this->filters['srv_mes'] = intval($this->lnmes);
+        $this->filters['mescobro'] = intval($this->lnmescobro);
         $this->consulta();
         $this->actualizaGraph();
 
     }
 
-    public function updatedGraphIngDia() {
+    public function updatedlsfecha() {
         
-        $this->filters['srv_fecha'] = $this->graphIngDia;
+        $this->filters['fecha'] = $this->lsfecha;
         $this->consulta();
         $this->actualizaGraph();
     }
     
-    public function updatedGraphIngMes() {
+    public function updatedlnmesingreso() {
         
-        $this->filters['srv_ingmes'] = $this->graphIngMes;
+        $this->filters['mesingreso'] = $this->lnmesingreso;
         $this->consulta();
         $this->actualizaGraph();
     }
 
-    public function updatedGraphRubros() {
+    public function updatedlnperiodo() {
         
-        $this->filters['srv_ejercicio'] = $this->graphRubros;
+        $this->filters['periodo'] = $this->lnperiodo;
         $this->consulta();
         $this->actualizaGraph();
     }
 
-    public function updatedLnPeriodo(){
+    public function updatedlnperiodoId(){
 
-        $this->filters['srv_periodo'] = $this->lnperiodo;
+        $periodo = TmPeriodosLectivos::find($this->lnperiodoId);
+
+        $this->filters['idperiodo'] = $this->lnperiodoId;
+        $this->filters['periodo'] = $periodo['periodo'];
+        $this->consulta();
+        $this->actualizaGraph();
+        
+
+    }
+
+    public function updatedlngrupoId(){
+
+        $this->filters['idgrupo'] = $this->lngrupoId;
         $this->consulta();
         $this->actualizaGraph();
 
     }
 
     public function actualizaGraph(){
-        $this->dispatchBrowserEvent('name-updated', ['newObj' => $this->data]);
-        $this->dispatchBrowserEvent('grahp-ingdia', ['newObj' => $this->datIngdia]);
-        $this->dispatchBrowserEvent('grahp-ingmes', ['newObj' => $this->datIngmes]);
-        $this->dispatchBrowserEvent('grahp-rubros', ['newObj' => $this->cobroMes]);
+        $this->dispatchBrowserEvent('graph-cobros', ['newObj' => $this->data]);
+        $this->dispatchBrowserEvent('graph-ingdia', ['newObj' => $this->datIngdia]);
+        $this->dispatchBrowserEvent('graph-ingmes', ['newObj' => $this->datIngmes]);
+        $this->dispatchBrowserEvent('graph-rubros', ['newObj' => $this->cobroMes]);
+
     }
 
     public function consulta(){
 
-        $fechaFin = date("Y-m-d",strtotime($this->filters['srv_fecha']));
+        $fechaFin = date("Y-m-d",strtotime($this->filters['fecha']));
         
         $tblcobros = DB::Select("select * from (
-            select fecha,  sum(monto) AS monto
+            select c.fecha,  sum(monto) AS monto
             from tr_cobros_cabs c
-            inner join (select d.cobro_id from tm_matriculas m
-                inner join tr_deudas_cabs c on c.matricula_id = m.id
-                inner join tr_deudas_dets d on d.deudacab_id = c.id
-                where d.cobro_id > 0 and 
-                m.modalidad_id = ".$this->filters['srv_grupo']." 
-                and m.periodo_id = ".$this->filters['srv_periodo']."
-                group by d.cobro_id 
-            ) as de on de.cobro_id = c.id 
-            where c.tipo = 'CP' and fecha < '".$fechaFin."'
-            group by fecha) as d
+            inner join tm_matriculas m on c.matricula_id = m.id
+            where c.tipo = 'CP' and c.fecha < '".$fechaFin."' and
+            m.modalidad_id = ".$this->filters['idgrupo']." 
+            and m.periodo_id = ".$this->filters['idperiodo']."
+            group by c.fecha) as d
         order by fecha desc limit 7"    
         );
 
         $tbldeudas = TrDeudasCabs::query()
         ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
-        ->when($this->filters['srv_periodo'],function($query){
-            return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
+        ->when($this->filters['idperiodo'],function($query){
+            return $query->where('m.periodo_id',"{$this->filters['idperiodo']}");
         })
-        ->when($this->filters['srv_grupo'],function($query){
-            return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
+        ->when($this->filters['idgrupo'],function($query){
+            return $query->where('m.modalidad_id',"{$this->filters['idgrupo']}");
         })
-        ->when($this->filters['srv_mes'],function($query){
-            return $query->whereRaw('month(tr_deudas_cabs.fecha)<='.$this->filters['srv_mes']);
+        ->when($this->filters['mescobro'],function($query){
+            return $query->whereRaw('month(tr_deudas_cabs.fecha)<='.$this->filters['mescobro']);
         })
         ->select('tr_deudas_cabs.*')
         ->where('tr_deudas_cabs.estado','P')
@@ -184,11 +192,11 @@ class VcStatisticalGraphs extends Component
                 inner join tr_deudas_cabs c on c.matricula_id = m.id
                 inner join tr_deudas_dets d on d.deudacab_id = c.id
                 where d.cobro_id > 0 and 
-                m.modalidad_id = ".$this->filters['srv_grupo']." 
-                and m.periodo_id = ".$this->filters['srv_periodo']."
+                m.modalidad_id = ".$this->filters['idgrupo']." 
+                and m.periodo_id = ".$this->filters['idperiodo']."
                 group by d.cobro_id 
             ) as de on de.cobro_id = c.id
-            where c.tipo = 'CP' and month(c.fecha) < ".$this->filters['srv_ingmes']."
+            where c.tipo = 'CP' and month(c.fecha) < ".$this->filters['mesingreso']."
             group by month(c.fecha)) as d
         order by mes desc limit 4"    
         );
@@ -198,7 +206,8 @@ class VcStatisticalGraphs extends Component
         ->join('tr_deudas_cabs','tr_deudas_cabs.id','=','tr_deudas_dets.deudacab_id')
         ->join('tm_matriculas','tm_matriculas.id','=','tr_deudas_cabs.matricula_id')
         ->selectRaw('left(tr_deudas_cabs.referencia,3) as tipo, month(tr_deudas_dets.fecha) as mes, sum(valor) as valor')
-        ->whereRaw("tr_deudas_dets.tipo = 'PAG' and tr_deudas_dets.tipovalor = 'CR' and year(tr_deudas_dets.fecha) = ".$this->filters['srv_ejercicio'])
+        ->whereRaw("tr_deudas_dets.tipo = 'PAG' and tr_deudas_dets.tipovalor = 'CR' and year(tr_deudas_dets.fecha) = ".$this->filters['periodo']."
+        and tm_matriculas.modalidad_id = ".$this->filters['idgrupo'])
         ->groupbyRaw("left(tr_deudas_cabs.referencia,3), month(tr_deudas_dets.fecha), year(tr_deudas_dets.fecha)")
         ->orderbyRaw("month(tr_deudas_dets.fecha),left(tr_deudas_cabs.referencia,3)")
         ->get();
@@ -218,13 +227,34 @@ class VcStatisticalGraphs extends Component
         if($tblCobroMes!=null){
             $this->graphsCobros($tblCobroMes);
         }
+ 
+    }
 
-        
-        
-        
-        
-        
-        
+    public function graphsDeudas($tbldeudas){
+
+        $array=[];
+
+        $sinpago = $tbldeudas->where('credito','=',0)->count('estudiante_id');
+        $array[] = [
+            'name' =>  'Sin registro',
+            'y' => floatVal($sinpago)
+        ];
+
+        $abono = $tbldeudas->where('credito','>',0)
+        ->where('saldo','>',0)
+        ->count('estudiante_id');
+        $array[] = [
+            'name' =>  'Abonado',
+            'y' => floatVal($abono)
+        ];
+
+        $array[] = [
+            'name' =>  'Cancelado',
+            'y' => count($tbldeudas)-floatVal( $sinpago+$abono)
+        ];        
+
+        $this->data = json_encode($array);
+       
     }
 
     public function graphsIngDia($tblcobros){
@@ -256,37 +286,12 @@ class VcStatisticalGraphs extends Component
             
     }
 
-    public function graphsDeudas($tbldeudas){
-
-        $array=[];
-
-        $sinpago = $tbldeudas->where('credito','=',0)->count('estudiante_id');
-        $array[] = [
-            'name' =>  'Sin registro',
-            'y' => floatVal($sinpago)
-        ];
-
-        $abono = $tbldeudas->where('credito','>',0)
-        ->where('saldo','>',0)
-        ->count('estudiante_id');
-        $array[] = [
-            'name' =>  'Abonado',
-            'y' => floatVal($abono)
-        ];
-
-        $array[] = [
-            'name' =>  'Cancelado',
-            'y' => count($tbldeudas)-floatVal( $sinpago+$abono)
-        ];        
-
-        $this->data = json_encode($array);
-       
-    }
-
     public function graphsCobros($tblcobros){
 
+        $this->cobroMes = [];
+
         $objGrupo = $tblcobros->groupBy('tipo');
-        $total = $tblcobros->groupBy('mes');
+        $total    = $tblcobros->groupBy('mes');
 
         $valores = '';
         $this->cobroMes = "[";
@@ -295,7 +300,7 @@ class VcStatisticalGraphs extends Component
             
             $valores = '';
             $array=[1 => 0,2 => 0,3 => 0,4 => 0,5 => 0,6 => 0,
-            7 => 0,8 => 0,9 => 0,10 => 0,11 => 0,12 => 0,];
+            7 => 0,8 => 0,9 => 0,10 => 0,11 => 0,12 => 0];
 
             foreach ($grupo as $data){
                 $array[$data['mes']] = $data['valor'];
@@ -329,17 +334,25 @@ class VcStatisticalGraphs extends Component
         }
         
         $valores = '';
-        foreach ($total as $data){
-            $valor   = $data->sum('valor');
-            $valores = $valores.sprintf('%.2f', $valor).' ,';
+        $array=[1 => 0,2 => 0,3 => 0,4 => 0,5 => 0,6 => 0,
+        7 => 0,8 => 0,9 => 0,10 => 0,11 => 0,12 => 0];
+
+        foreach ($total as $key => $data){
+            $array[$key] = $data->sum('valor');
+        }
+
+        for($x=1;$x<=12;$x++){
+            $valores =  $valores.sprintf('%.2f', $array[$x]).' ,';
         }
 
         $this->cobroMes = $this->cobroMes."{
             name: 'Total',
-            data: [".substr($valores, 0, -2)."]},";
-
-        $this->cobroMes = substr($this->cobroMes, 0, -1)."]";
+            data: [".substr($valores, 0, -2)."]}, ";
         
+        //$this->cobroMes = substr($this->cobroMes, 0, -1)."]"; 
+        $this->cobroMes = substr($this->cobroMes, 0, -1)."]";  
+
+
     }
 
     

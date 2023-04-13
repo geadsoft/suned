@@ -150,7 +150,6 @@ class VcPersonadd extends Component
         }
 
         $this->nuirepresentante = $familys[0]['identificacion'];
-        $this->emitTo('vc-person-enrollment','loadFamiliar',$this->nuirepresentante);
 
     }
 
