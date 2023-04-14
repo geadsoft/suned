@@ -129,11 +129,6 @@
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                    <a href="" wire:click.prevent="view({{ $record->id }})" class="view-item-btn"><i
-                                                            class="ri-eye-fill align-bottom text-muted"></i></a>
-                                                </li>
-                                                <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Edit">
                                                     <a class="edit-item-btn" href="/academic/person-edit/{{$record->identificacion}}"><i
                                                             class="ri-pencil-fill align-bottom text-muted"></i></a>
