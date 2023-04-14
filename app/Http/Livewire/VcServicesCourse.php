@@ -24,8 +24,14 @@ class VcServicesCourse extends Component
         'srv_grupo' => '',
         'srv_nivel' => '',
         'srv_estado' => 'A',
-        'srv_periodo' => 'A',
+        'srv_periodo' => '',
     ];
+
+    public function mount()
+    {
+        $periodo = TmPeriodosLectivos::orderBy("periodo","desc")->first();
+        $this->filters['srv_periodo'] = $periodo['id'];  
+    }
 
     public function render()
     {

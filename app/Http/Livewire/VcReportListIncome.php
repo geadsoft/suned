@@ -87,7 +87,7 @@ class VcReportListIncome extends Component
         ->join("tm_cursos as c","c.id","=","m.curso_id")
         ->join("tm_servicios as s","s.id","=","c.servicio_id")
         ->when($this->filters['srv_nombre'],function($query){
-            return $query->where('tr_cobros_cabs.documento',"{$this->filters['srv_nombre']}");
+            return $query->whereRaw("concat(p.apellidos,' ',p.nombres,' ',tr_cobros_cabs.documento) LIKE '%".$this->filters['srv_nombre']."%'");
         })
         ->when($this->filters['srv_periodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");

@@ -26,7 +26,7 @@ class VcTuitions extends Component
     public $tblcursos=null;
     public $tblservicios=null;
     public $tbldatogen=null;
-    public $estudianteId,$periodoId,$grupoId,$nivelId,$gradoId,$cursoId,$numreg;
+    public $estudianteId,$periodoId,$grupoId,$nivelId,$gradoId,$cursoId,$numreg,$matriculaId;
     public $tblmontos,$valorpen;
 
     public $meses = [ 
@@ -72,7 +72,8 @@ class VcTuitions extends Component
                 return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
             })
             ->where('m.estado','=','A')
-            ->select('m.id','identificacion','nombres','apellidos', 'documento', 'fecha', 'g.descripcion as nomgrupo','p.descripcion as nomperiodo','s.descripcion as nomgrado','paralelo','m.periodo_id','m.modalidad_id','m.nivel_id','c.servicio_id','m.curso_id','m.estudiante_id')
+            ->select('m.id','identificacion','nombres','apellidos', 'documento', 'fecha', 'g.descripcion as nomgrupo','p.descripcion as nomperiodo',
+            's.descripcion as nomgrado','c.paralelo','m.periodo_id','m.modalidad_id','m.nivel_id','c.servicio_id','m.curso_id','m.estudiante_id')
             ->orderBy('documento','desc')
             ->paginate(10);
 
@@ -118,8 +119,8 @@ class VcTuitions extends Component
         $this->nomcurso = $this->record['nomgrado'].' - '.$this->record['paralelo'];
         $this->documento = $this->record['documento'];
         
-        $this->estudianteId = $this->record['estudiante_id'];
-        $this->periodoId = $this -> record['periodo_id'];
+        $this->estudianteId = $this -> record['estudiante_id'];
+        $this->periodoId    = $this -> record['periodo_id'];
         $grupoId = $this -> record['modalidad_id'];
         $nivelId = $this -> record['nivel_id'];
         $gradoId = $this -> record['servicio_id'];
@@ -142,6 +143,39 @@ class VcTuitions extends Component
     public function updateData(){
 
         $this->dispatchBrowserEvent('get-data');
+        
+    }
+
+    public function delete($selectId){
+
+        $matricula = TmMatricula::find($selectId);
+        $this->documento = $matricula['documento'];
+        $this->selectId  = $selectId;
+
+        $deudas = TrDeudasCabs::where('matricula_id',$selectId)->get();
+        $pagos  = $deudas->sum('credito');
+
+        if($pagos>0){
+            $this->dispatchBrowserEvent('msg-alert');
+            return;
+        }else{
+            $this->dispatchBrowserEvent('show-delete');
+        }
+        
+    }
+
+    public function deleteData(){
+
+        $deudas = TrDeudasCabs::where('matricula_id',$this->selectId)->get();
+
+        foreach($deudas as $data){
+            TrDeudasDets::where('deudacab_id',$data['id'])->delete();
+            TrDeudasCabs::find($data['id'])->delete();
+        }
+        
+        TmMatricula::find($this->selectId)->delete();
+
+        $this->dispatchBrowserEvent('hide-delete');
         
     }
 
@@ -216,6 +250,7 @@ class VcTuitions extends Component
         TrCobrosCabs::Create([
             'fecha' => $this -> fecha,
             'estudiante_id' => $this -> record['estudiante_id'],
+            'matricula_id' => $this->selectId,
             'tipo' => 'CM',
             'documento' => $docCobro,
             'concepto' => 'Se cancela deuda por cambio de Grupo/Sección en matrícula - Recibo No. '.$docCobro, 

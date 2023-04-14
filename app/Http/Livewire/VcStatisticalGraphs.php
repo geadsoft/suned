@@ -155,6 +155,11 @@ class VcStatisticalGraphs extends Component
 
     public function consulta(){
 
+        $this->data      = '';
+        $this->datIngdia = '';
+        $this->datIngmes = '';
+        $this->cobroMes  = '';
+
         $fechaFin = date("Y-m-d",strtotime($this->filters['fecha']));
         
         $tblcobros = DB::Select("select * from (
@@ -188,15 +193,10 @@ class VcStatisticalGraphs extends Component
         $tblIngresoMes = DB::Select("Select * from (
             select month(c.fecha) as mes,  sum(monto) AS monto
             from tr_cobros_cabs c
-            inner join (select d.cobro_id from tm_matriculas m
-                inner join tr_deudas_cabs c on c.matricula_id = m.id
-                inner join tr_deudas_dets d on d.deudacab_id = c.id
-                where d.cobro_id > 0 and 
-                m.modalidad_id = ".$this->filters['idgrupo']." 
-                and m.periodo_id = ".$this->filters['idperiodo']."
-                group by d.cobro_id 
-            ) as de on de.cobro_id = c.id
-            where c.tipo = 'CP' and month(c.fecha) < ".$this->filters['mesingreso']."
+            inner join tm_matriculas m on c.matricula_id = m.id
+            where c.tipo = 'CP' and month(c.fecha) < ".$this->filters['mesingreso']." and
+            m.modalidad_id = ".$this->filters['idgrupo']." 
+            and m.periodo_id = ".$this->filters['idperiodo']."
             group by month(c.fecha)) as d
         order by mes desc limit 4"    
         );
@@ -227,6 +227,7 @@ class VcStatisticalGraphs extends Component
         if($tblCobroMes!=null){
             $this->graphsCobros($tblCobroMes);
         }
+
  
     }
 
@@ -260,6 +261,7 @@ class VcStatisticalGraphs extends Component
     public function graphsIngDia($tblcobros){
 
         $array=[];
+
         for ($x=6;$x>=0;$x--) {
             $array[] = [
                 'name' =>  date('d/M/Y',strtotime($tblcobros[$x]->fecha)),
@@ -286,12 +288,10 @@ class VcStatisticalGraphs extends Component
             
     }
 
-    public function graphsCobros($tblcobros){
+    public function graphsCobros($tblCobroMes){
 
-        $this->cobroMes = [];
-
-        $objGrupo = $tblcobros->groupBy('tipo');
-        $total    = $tblcobros->groupBy('mes');
+        $objGrupo = $tblCobroMes->groupBy('tipo');
+        $total    = $tblCobroMes->groupBy('mes');
 
         $valores = '';
         $this->cobroMes = "[";
@@ -299,8 +299,7 @@ class VcStatisticalGraphs extends Component
         foreach ($objGrupo as $key => $grupo){
             
             $valores = '';
-            $array=[1 => 0,2 => 0,3 => 0,4 => 0,5 => 0,6 => 0,
-            7 => 0,8 => 0,9 => 0,10 => 0,11 => 0,12 => 0];
+            $array=[1 => 0,2 => 0,3 => 0,4 => 0,5 => 0,6 => 0,7 => 0,8 => 0,9 => 0,10 => 0,11 => 0,12 => 0];
 
             foreach ($grupo as $data){
                 $array[$data['mes']] = $data['valor'];
@@ -328,7 +327,7 @@ class VcStatisticalGraphs extends Component
                 $valores =  $valores.sprintf('%.2f', $array[$x]).' ,';
             }
 
-            $this->cobroMes = $this->cobroMes."{
+            $this->cobroMes = str_replace(' ', '',$this->cobroMes)."{
                 name: '".$tipo ."',
                 data: [".substr($valores, 0, -2)."]},";
         }
@@ -347,11 +346,9 @@ class VcStatisticalGraphs extends Component
 
         $this->cobroMes = $this->cobroMes."{
             name: 'Total',
-            data: [".substr($valores, 0, -2)."]}, ";
+            data: [".substr($valores, 0, -2)."]}";
         
-        //$this->cobroMes = substr($this->cobroMes, 0, -1)."]"; 
-        $this->cobroMes = substr($this->cobroMes, 0, -1)."]";  
-
+        $this->cobroMes = $this->cobroMes."]";  
 
     }
 

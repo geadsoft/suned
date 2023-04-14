@@ -112,13 +112,13 @@
                                                     <li><a class="dropdown-item" href="" wire:click.prevent="valoresPagar({{ $record }})"><i class="ri-hand-coin-fill align-bottom me-2 text-muted fs-16"></i> Valores a Pagar</a></li>
 
                                                     <li class="dropdown-divider"></li>
-                                                    <li><a class="dropdown-item remove-list" href="" data-bs-toggle="modal" data-bs-target="#removeItemModal">
+                                                    <li><a class="dropdown-item" href="" data-bs-toggle="modal">
                                                     <i class=" ri-coins-fill align-bottom me-2 text-muted fs-16"></i>Detalle de Cobros</a></li>
                                                 </ul>
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Remove">
                                                     <a class="text-danger d-inline-block remove-item-btn"
-                                                        data-bs-toggle="modal" href="">
+                                                        data-bs-toggle="modal" href="" wire:click.prevent="delete({{ $record->id }})">
                                                         <i class="ri-delete-bin-5-fill fs-16"></i>
                                                     </a>
                                                 </li>
@@ -198,9 +198,8 @@
                         </div>
                     </div>
 
-
                     <!-- Modal -->
-                    <div wire.ignore.self class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true" wire:model='selectId'>
+                    <div wire.ignore.self class="modal fade flip" id="showDelete" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-body p-5 text-center">
@@ -208,24 +207,23 @@
                                         colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px">
                                     </lord-icon>
                                     <div class="mt-4 text-center">
-                                        <h4>You are about to delete the record ?</h4>
-                                        <p class="text-muted fs-15 mb-4">Deleting the record will remove
-                                            all of
-                                            your information from our database.</p>
+                                        <h4>¿Seguro de eliminar matricula No.? {{$documento}}</h4>
+                                        <p class="text-muted fs-15 mb-4">Eliminar el registro afectará toda su 
+                                        información de nuestra base de datos.</p>
                                         <div class="hstack gap-2 justify-content-center remove">
                                             <button class="btn btn-link link-success fw-medium text-decoration-none"
                                                 data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i>
-                                                Close</button>
-                                            <button class="btn btn-danger" id="delete-record"  wire:click="deleteData()"> Yes,
-                                                Delete It</button>
+                                                Cerrar</button>
+                                            <button class="btn btn-danger" id="delete-record"  wire:click="deleteData()"> Si,
+                                                Eliminar</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!--end delete modal -->
 
-                    <!--end modal -->
                 </div>
             </div>
 

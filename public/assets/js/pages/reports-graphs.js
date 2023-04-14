@@ -191,6 +191,8 @@ function viewGraphsMes(objserie){
 
 function viewGraphsCobro($objserie){
 
+    alert($objserie)
+
     Highcharts.chart('cobromes', {
         chart: {
             type: 'column'

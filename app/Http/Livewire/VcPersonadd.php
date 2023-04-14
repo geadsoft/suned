@@ -18,6 +18,7 @@ class VcPersonadd extends Component
     public $showEditModal=false;
     public $directions = [];
     public $familiares = [];
+    public $representante = [];
     public $direction = [
         'id' => 0,
         'estudiante_id' => 0,
@@ -149,6 +150,7 @@ class VcPersonadd extends Component
             $this->familiares =  $familys;
         }
 
+        $this->representante    = $familys[0];
         $this->nuirepresentante = $familys[0]['identificacion'];
 
     }
@@ -306,6 +308,21 @@ class VcPersonadd extends Component
             }
 
         }
+
+        //Representante
+        $record = TmPersonas::find($this->representante['persona_id']);
+        $record->update([
+            'nombres'   => $this->representante['nombres'],
+            'apellidos' => $this->representante['apellidos'],
+            'tipoidentificacion' => $this->representante['tipoidentificacion'],
+            'identificacion'  => $this->representante['identificacion'],
+            'nacionalidad_id' => $this->representante['nacionalidad_id'],
+            'genero'     => $this->representante['genero'],
+            'telefono'   => $this->representante['telefono'],
+            'direccion'  => $this->representante['direccion'],
+            'email'      => $this->representante['email'],
+            'parentesco' => $this->representante['parentesco'],
+        ]);
         
         $this->dispatchBrowserEvent('msg-actualizar');
         return redirect()->to('/academic/students');

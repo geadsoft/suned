@@ -5,13 +5,6 @@
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
                         <div class="row g-3">
-                            <div class="col-xxl-3 col-sm-4">
-                                <div class="search-box">
-                                    <input type="text" class="form-control search"
-                                        placeholder="Buscar por Recibo" wire:model="filters.srv_nombre">
-                                    <i class="ri-search-line search-icon"></i>
-                                </div>
-                            </div>
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" name="cmbperiodo" wire:model="filters.srv_periodo" id="cmbperiodo">
@@ -48,6 +41,13 @@
                                 <div class="form-check form-switch hstack text-nowrap gap-2">
                                     <input class="form-check-input" type="checkbox" role="switch" wire:model="estado">
                                     <label class="form-check-label" for="estado">Recibos anulados</label>
+                                </div>
+                            </div>
+                            <div class="col-xxl-7 col-sm-4">
+                                <div class="search-box">
+                                    <input type="text" class="form-control search"
+                                        placeholder="Buscar por Apellidos, Nombre o Recibo" wire:model="filters.srv_nombre">
+                                    <i class="ri-search-line search-icon"></i>
                                 </div>
                             </div>
                             <div class="col-xxl-2 col-sm-4">

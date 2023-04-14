@@ -41,6 +41,18 @@
             swal("Good job!", "Record updated successfully!", "success");
         })
 
+        window.addEventListener('show-delete', event => {
+            $('#showDelete').modal('show');
+        })
+
+        window.addEventListener('hide-delete', event => {
+            $('#showDelete').modal('hide');
+        })
+
+        window.addEventListener('msg-alert', event => {
+            swal("No se puede Eliminar!", "Matricula registra pagos..", "error");
+        })
+
         window.addEventListener('get-data', event => {
             
             var grupoId = document.getElementById("cmbgrupoId").value;
