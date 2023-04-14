@@ -93,8 +93,8 @@
                     <div>
                         <div class="table-responsive table-card mb-3">
                             <table class="table align-middle table-nowrap mb-0" id="customerTable">
-                                <thead class="table-light">
-                                    <tr>
+                                <thead class="text-muted table-light">
+                                    <tr class="text-uppercase">
                                         <th scope="col" style="width: 50px;">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox"
@@ -102,13 +102,13 @@
                                             </div>
                                         </th>
                                         <!--<th class="sort" data-sort="id" scope="col">ID</th>-->
-                                        <th class="sort" data-sort="name" scope="col">Identification</th>
-                                        <th class="sort" data-sort="company_name" scope="col">Names</th>
-                                        <th class="sort" data-sort="email_id" scope="col">Surnames</th>
-                                        <th class="sort" data-sort="phone" scope="col">Date of Birth</th>
-                                        <th class="sort" data-sort="lead_score" scope="col">Nationality</th>
-                                        <th class="sort" data-sort="tags" scope="col">Phone Number</th>
-                                        <th scope="col">Action</th>
+                                        <th class="sort" data-sort="name" scope="col">Identificación</th>
+                                        <th class="sort" data-sort="company_name" scope="col">Nombres</th>
+                                        <th class="sort" data-sort="email_id" scope="col">Apellidos</th>
+                                        <th class="sort" data-sort="phone" scope="col">Fecha Nacimiento</th>
+                                        <th class="sort" data-sort="lead_score" scope="col">Nacionalidad</th>
+                                        <th class="sort" data-sort="tags" scope="col">Teléfono</th>
+                                        <th scope="col">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all">
@@ -131,7 +131,7 @@
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Edit">
                                                     <a class="edit-item-btn" href="/academic/person-edit/{{$record->identificacion}}"><i
-                                                            class="ri-pencil-fill align-bottom text-muted"></i></a>
+                                                            class="ri-pencil-fill fs-16"></i></a>
                                                 </li>
                                                 <li class="list-inline-item">
                                                     <div class="dropdown">
