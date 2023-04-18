@@ -261,7 +261,7 @@ class VcStatisticalGraphs extends Component
     public function graphsIngDia($tblcobros){
 
         $array=[];
-        if (empty($tblcobros)){
+        if ($tblcobros==null){
             $this->datIngdia = json_encode($array);
             return;
         }
