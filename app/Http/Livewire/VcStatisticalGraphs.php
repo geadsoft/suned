@@ -72,7 +72,14 @@ class VcStatisticalGraphs extends Component
         $tblgenerals = TmGeneralidades::where('superior',1)->get();
         $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
 
-        $personas = TmPersonas::query()
+        $personas = TmMatricula::query()
+        ->join('tm_personas as p','p.id','tm_matriculas.estudiante_id')
+        ->when($this->filters['idperiodo'],function($query){
+            return $query->where('tm_matriculas.periodo_id',"{$this->filters['idperiodo']}");
+        })
+        ->when($this->filters['idgrupo'],function($query){
+            return $query->where('tm_matriculas.modalidad_id',"{$this->filters['idgrupo']}");
+        })
         ->where("tipopersona","E")
         ->get();
         
