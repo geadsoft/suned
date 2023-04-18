@@ -294,8 +294,8 @@ class VcStatisticalGraphs extends Component
         $total    = $tblCobroMes->groupBy('mes');
 
         $valores = '';
-        $this->cobroMes = "[";
-
+        //$this->cobroMes = "[";
+        $objArray=[];
         foreach ($objGrupo as $key => $grupo){
             
             $valores = '';
@@ -327,11 +327,12 @@ class VcStatisticalGraphs extends Component
                 $valores =  $valores.sprintf('%.2f', $array[$x]).' ,';
             }
 
-            $this->cobroMes = str_replace(' ', '',$this->cobroMes)."{
-                name: '".$tipo ."',
-                data: [".substr($valores, 0, -2)."]},";
+            $objArray[] = [
+                'name' => $tipo,
+                'data' => [substr($valores, 0, -2)],
+            ];
         }
-        
+
         $valores = '';
         $array=[1 => 0,2 => 0,3 => 0,4 => 0,5 => 0,6 => 0,
         7 => 0,8 => 0,9 => 0,10 => 0,11 => 0,12 => 0];
@@ -344,11 +345,17 @@ class VcStatisticalGraphs extends Component
             $valores =  $valores.sprintf('%.2f', $array[$x]).' ,';
         }
 
-        $this->cobroMes = $this->cobroMes."{
-            name: 'Total',
-            data: [".substr($valores, 0, -2)."]}";
+        $objArray[] = [
+            'name' => 'Total',
+            'data' => [substr($valores, 0, -2)],
+        ];
+    
+        $strarray = json_encode($objArray);
+        $strarray = str_replace('["','[',$strarray);
+        $strarray = str_replace('"]',']',$strarray);
         
-        $this->cobroMes = $this->cobroMes."]";  
+        $this->cobroMes =  $strarray;
+     
 
     }
 

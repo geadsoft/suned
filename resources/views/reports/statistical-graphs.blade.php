@@ -48,7 +48,7 @@
 
         window.addEventListener('graph-rubros', event => {
             var dataserie 
-            dataserie = event.detail.newObj;
+            dataserie = JSON.parse(event.detail.newObj);
             viewGraphsCobro(dataserie);
         })
 
