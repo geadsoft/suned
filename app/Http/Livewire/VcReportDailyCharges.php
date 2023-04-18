@@ -94,7 +94,7 @@ class VcReportDailyCharges extends Component
         $this->tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
 
         $tblrecords = TrCobrosCabs::query()
-        ->join("tr_cobros_dets as cd","tr_cobros_cabs.id","=","cd.cobrocab_id")
+        //->join("tr_cobros_dets as cd","tr_cobros_cabs.id","=","cd.cobrocab_id")
         ->join("tr_deudas_dets as dd","dd.cobro_id","=","tr_cobros_cabs.id")
         ->join("tr_deudas_cabs as dc","dc.id","=","dd.deudacab_id")
         ->join("tm_matriculas as m","m.id","=","dc.matricula_id")
