@@ -198,9 +198,10 @@ class VcStatisticalGraphs extends Component
 
         //Cobros ultimo 4 meses
         $tblIngresoMes = DB::Select("Select * from (
-            select month(c.fecha) as mes,  sum(monto) AS monto
+            select month(c.fecha) as mes,  sum(dd.valor) AS monto
             from tr_cobros_cabs c
             inner join tm_matriculas m on c.matricula_id = m.id
+            inner join tr_deudas_dets dd on dd.cobro_id = c.id
             where c.tipo = 'CP' and month(c.fecha) < ".$this->filters['mesingreso']." and
             m.modalidad_id = ".$this->filters['idgrupo']." 
             and m.periodo_id = ".$this->filters['idperiodo']."
