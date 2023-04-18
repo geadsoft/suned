@@ -75,16 +75,22 @@ class VcAccountStatus extends Component
 
     public function genConsulta(){
 
-        $tblrecords = TrDeudasCabs::query()
+        $records = TrDeudasCabs::query()
         ->join("tr_deudas_dets as d","tr_deudas_cabs.id","=","d.deudacab_id")
         ->leftJoin("tr_cobros_dets as p","p.cobrocab_id","=","d.cobro_id")
         ->leftJoin("tm_generalidades as g","g.id","=","p.entidad_id")
         ->selectraw("d.*,tr_deudas_cabs.saldo, tr_deudas_cabs.descuento, p.tipopago, p.referencia as refpago, g.descripcion, tr_deudas_cabs.referencia as documento")
         ->where("tr_deudas_cabs.matricula_id",$this->consulta['idactual'])
         ->where("tipo","<>","'DES'")
-        ->orderByRaw("d.tipovalor desc, d.fecha")
+        ->orderByRaw("d.tipovalor desc,d.fecha,case when left(tr_deudas_cabs.referencia,3) = 'MAT' then 1
+        when left(tr_deudas_cabs.referencia,3) = 'PLA' then 2
+        when left(tr_deudas_cabs.referencia,3) = 'PLI' then 2
+        when left(tr_deudas_cabs.referencia,3) = 'PEN' then 3
+        when left(tr_deudas_cabs.referencia,3) = 'PLE' then 4
+        else 5 end")
         ->get();
 
+        $tblrecords = $records->where('tipo','<>','DES');
         return $tblrecords;                
     }
 

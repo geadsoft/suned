@@ -18,7 +18,7 @@ class VcServicesCourse extends Component
     public $selectCurso;
     public $record;
     public $objGrado,$nomSeccion;
-    public $servicioId,$grupoId,$nivelId,$gradoId,$paralelo,$carreraId,$periodoId,$plataforma;
+    public $servicioId,$grupoId,$nivelId,$gradoId,$paralelo,$carreraId,$periodoId,$plataforma,$dchogrado=false;
 
     public $filters = [
         'srv_grupo' => '',
@@ -79,8 +79,7 @@ class VcServicesCourse extends Component
         $this->nivelId = $this -> objGrado['nivel_id'];
         $this->gradoId = $this -> objGrado['grado_id'];
         $this->carreraId = $this -> objGrado['especializacion_id'];
-        
-       
+    
         $this->dispatchBrowserEvent('show-form');
 
     }
@@ -109,14 +108,15 @@ class VcServicesCourse extends Component
         
     
         TmCursos::Create([
-            'servicio_id' => $this -> servicioId,
-            'nivel_id' => $this -> nivelId,
-            'grado_id' => $this -> gradoId,
-            'paralelo' => $this -> paralelo,
-            'grupo_id' => $this -> grupoId,
-            'periodo_id' => $this -> periodoId,
-            'especializacion_id' => $this -> carreraId,
-            'vistaplataforma' => $this -> plataforma,
+            'servicio_id'   => $this -> servicioId,
+            'nivel_id'      => $this -> nivelId,
+            'grado_id'      => $this -> gradoId,
+            'paralelo'      => $this -> paralelo,
+            'grupo_id'      => $this -> grupoId,
+            'periodo_id'    => $this -> periodoId,
+            'especializacion_id'  => $this -> carreraId,
+            'vistaplataforma'     => $this -> plataforma,
+            'aplica_derechogrado' => $this -> dchogrado,
             'estado' => "A",
             'usuario' => auth()->user()->name,
         ]);
@@ -140,6 +140,7 @@ class VcServicesCourse extends Component
         $this->paralelo="";
         $this->plataforma="";
         $this->periodoId=0;
+        $this->dchogrado=false;
     }
 
 

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->double('pension',14,6);
             $table->double('eplataforma',14,6);
             $table->double('iplataforma',14,6);
+            $table->double('grado',14,6);
             $table->string('estado',1);
             $table->string('usuario');
             $table->timestamps();

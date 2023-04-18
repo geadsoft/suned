@@ -194,6 +194,7 @@
                                                                 <th scope="col" class="text-center" colspan="2">Matrícula</th>
                                                                 <th scope="col" class="text-end" style="width: 120px;">Pension</th>
                                                                 <th scope="col" class="text-center" colspan="2">Plataforma</th>
+                                                                <th scope="col" class="text-end" style="width: 120px;">Dcho. Grado</th>
                                                             </tr>
                                                             <tr class="table-active">
                                                                 <th scope="col" class="text-end"></th>
@@ -203,6 +204,7 @@
                                                                 <th scope="col" class="text-end"></th>
                                                                 <th scope="col" class="text-end" style="width: 120px;">Español</th>
                                                                 <th scope="col" class="text-end" style="width: 120px;">Ingles</th>
+                                                                <th scope="col" class="text-end"></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -229,6 +231,9 @@
                                                             </td>
                                                             <td> 
                                                                 <input type="number" class="form-control product-price bg-light border-0 text-end" id="iplataforma-{{$count}}" step="0.01" placeholder="0.00" value="{{$valor['iplataforma']}}" />
+                                                            </td>
+                                                            <td> 
+                                                                <input type="number" class="form-control product-price bg-light border-0 text-end" id="dgrado-{{$count}}" step="0.01" placeholder="0.00" value="{{$valor['grado']}}" />
                                                             </td>
                                                             <!--<td> 
                                                                 <ul class="list-inline hstack gap-2 mb-0 ">

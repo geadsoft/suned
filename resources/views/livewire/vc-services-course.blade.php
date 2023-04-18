@@ -163,7 +163,7 @@
                     </div>
 
                     <div wire.ignore.self class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog modal-xl" >
+                        <div class="modal-dialog modal-dialog-centered" >
                             <div class="modal-content modal-content border-0">
                                 
                                 <div class="modal-header p-3" style="background-color:#222454">
@@ -252,6 +252,12 @@
                                                 <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
                                             @endforeach
                                             </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch" wire:model.defer="dchogrado">
+                                                <label class="form-check-label" for="valorgrado">Aplicar - Derecho de Grado</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">

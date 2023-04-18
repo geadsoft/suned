@@ -16,6 +16,7 @@ class TmPensionesDet extends Model
         'matricula2',
         'pension',
         'plataforma',
+        'grado',
         'estado',
         'usuario',
     ];

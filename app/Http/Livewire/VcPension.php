@@ -150,6 +150,7 @@ class VcPension extends Component
         $pension = 0.00;
         $eplataforma = 0.00;
         $iplataforma = 0.00;
+        $grado = 0.00;
         
         foreach ($dataDet as $general)
         {   
@@ -161,6 +162,7 @@ class VcPension extends Component
                 $pension = $general->pension;
                 $eplataforma = $general->eplataforma;
                 $iplataforma = $general->iplataforma;
+                $grado = $general->grado;
 
             }else{
                 $id = $general->id;
@@ -175,6 +177,7 @@ class VcPension extends Component
                 'pension' => $pension,
                 'eplataforma'  => $eplataforma,
                 'iplataforma'  => $iplataforma,
+                'grado'  => $grado,
             ];
 
             array_push($this->tblvalores,$arrayData);

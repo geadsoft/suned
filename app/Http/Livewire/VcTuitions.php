@@ -331,6 +331,7 @@ class VcTuitions extends Component
         $valorPension     = $valores['pension'];
         $valorePlataforma = $valores['eplataforma'];
         $valoriPlataforma = $valores['iplataforma'];
+        $valorGrado       = $valores['grado'];
         
         $cuotapag = 10-$this->numreg;
         $cuotas   = 10-$cuotapag;

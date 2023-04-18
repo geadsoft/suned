@@ -37,6 +37,7 @@
                 </td> 
             </tr>
             <div class="mb-3">
+                <strong> Estudiantes : </strong> {{$totalalumno}}
             </div>
         </table>
     </section>
@@ -46,7 +47,7 @@
 
     <section style ="margin-top: -110px;">
         <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
-                <thead class="table-light" style="background-color:#222454">
+            <thead class="table-light" style="background-color:#222454">
                 <tr>
                     <th style="color:#FFFFFF">Estudiante</th>
                     <th style="color:#FFFFFF">Identificación</th>

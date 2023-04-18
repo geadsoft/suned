@@ -233,7 +233,8 @@ class VcPersons extends Component
         $this->filters['srv_genero']  = $data->srv_genero;
         $this->filters['srv_estado']  = $data->srv_estado;
            
-        $tblrecords = $this->estudiantes();
+        $tblrecords  = $this->estudiantes();
+        $totalalumno = $tblrecords->count(); 
 
         if(empty($tblrecords)){
             return;
@@ -269,6 +270,7 @@ class VcPersons extends Component
                 'data' => $this->consulta,
                 'tblcia' => $tblcia,
                 'dias' => $dias,
+                'totalalumno' => $totalalumno,
             ]);
             
             return $pdf->setPaper('a4')->stream('Ficha Estudiantes.pdf');
@@ -381,11 +383,7 @@ class VcPersons extends Component
         $this->filters['srv_estado']  = $data->srv_estado;
            
         $tblrecords = $this->estudiantes();
-
-        /*if(empty($tblrecords)){
-            return;
-        }*/
-        
+        $totalalumno = $tblrecords->count(); 
 
         $tblcia = TmSedes::all();
 
@@ -416,6 +414,7 @@ class VcPersons extends Component
                 'data' => $this->consulta,
                 'tblcia' => $tblcia,
                 'dias' => $dias,
+                'totalalumno' => $totalalumno,
             ]);
 
             return $pdf->download('Lista Estudiantes.pdf');

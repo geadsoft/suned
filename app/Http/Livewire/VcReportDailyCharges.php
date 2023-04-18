@@ -116,6 +116,7 @@ class VcReportDailyCharges extends Component
         ->where('tr_cobros_cabs.fecha','<=',date('Ymd',strtotime($this->filters['srv_fechafin'])))
         ->where('dd.tipo','<>','DES')
         ->where('tr_cobros_cabs.tipo','=','CP')
+        ->orderBy('fecha','asc')
         ->groupBy('fecha')
         ->get();
 

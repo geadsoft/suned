@@ -11,6 +11,7 @@ use App\Models\TrDeudasDets;
 use App\Models\TmPensionesCab;
 use App\Models\TmPensionesDet;
 use App\Models\TmFamiliarEstudiantes;
+use App\Models\TmCursos;
 
 use Livewire\Component;
 
@@ -353,9 +354,11 @@ class VcStudentEnrollment extends Component
         if ($this->estudentnew==1){
             $valorMatricula  = $pensiones['matricula2'];
         }
-        $valorPension    = $pensiones['pension'];
+        $valorPension     = $pensiones['pension'];
         $valorePlataforma = $pensiones['eplataforma'];
         $valoriPlataforma = $pensiones['iplataforma'];
+        $valorGrado       = $pensiones['grado']; 
+
         $cuotas = 10;
         
         //Matricula
@@ -518,6 +521,50 @@ class VcStudentEnrollment extends Component
                 'usuario' => auth()->user()->name,
             ]);
         }
+
+
+        //Grado
+        $curso = TmCursos::find($this -> cursoId);
+
+        if ($curso['aplica_derechogrado']){
+
+            $newDeuda = TrDeudasCabs::Create([
+                'matricula_id' => $matriculaId,
+                'estudiante_id' => $this -> estudiante_id,
+                'periodo_id' => $this -> periodoId,
+                'referencia' => 'DGR-PER'.substr($codperiodo, -2).str_pad($nromatricula, 4, "0", STR_PAD_LEFT),
+                'fecha' => $this->fecha,
+                'basedifgravada' => $valorGrado,
+                'basegravada' =>0.00,
+                'impuesto' =>0.00,
+                'descuento' =>0.00,
+                'neto' => $valorGrado,
+                'debito' => $valorGrado,
+                'credito' =>0.00,
+                'saldo' => $valorGrado,
+                'glosa' => 'Derecho de Grado '.$nomperiodo,
+                'estado' => 'P',
+                'usuario' => auth()->user()->name,
+            ]);
+            
+            $deudaId = $newDeuda['id'];
+
+            TrDeudasDets::Create([
+                'deudacab_id' => $deudaId,
+                'cobro_id' => 0,
+                'fecha' => $this->fecha,
+                'detalle' => 'Derecho de Grado '.$nomperiodo,
+                'tipo' => "",
+                'referencia' => "",
+                'tipovalor' => "DB",
+                'valor' => $valorGrado,
+                'estado' => 'P',
+                'usuario' => auth()->user()->name,
+            ]);
+
+        }
+
+
     }
 
     public function grabaPerson($data){

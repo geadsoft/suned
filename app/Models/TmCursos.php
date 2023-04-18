@@ -19,6 +19,7 @@ class TmCursos extends Model
         'especializacion_id',
         'vistaplataforma',
         'periodo_id',
+        'aplica_derechogrado',
         'estado',
         'usuario',
     ];
