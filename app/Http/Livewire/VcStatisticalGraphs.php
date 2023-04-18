@@ -261,12 +261,9 @@ class VcStatisticalGraphs extends Component
     public function graphsIngDia($tblcobros){
 
         $array=[];
-        if ($tblcobros==null){
-            $this->datIngdia = json_encode($array);
-            return;
-        }
+        $linea = count($tblcobros)-1;
 
-        for ($x=6;$x>=0;$x--) {
+        for ($x=$linea;$x>=0;$x--) {
             $array[] = [
                 'name' =>  date('d/M/Y',strtotime($tblcobros[$x]->fecha)),
                 'y' => floatVal($tblcobros[$x]->monto),
