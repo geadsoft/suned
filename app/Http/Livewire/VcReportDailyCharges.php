@@ -114,7 +114,7 @@ class VcReportDailyCharges extends Component
         ->selectRaw('tr_cobros_cabs.fecha, sum(debito) as monto, sum(descuento) as descuento, sum(dd.valor) as pago')
         ->where('tr_cobros_cabs.fecha','>=',date('Ymd',strtotime($this->filters['srv_fechaini'])))
         ->where('tr_cobros_cabs.fecha','<=',date('Ymd',strtotime($this->filters['srv_fechafin'])))
-        ->where('dd.tipo','<>','DES')
+        ->where('dd.tipo','=','PAG')
         ->where('tr_cobros_cabs.tipo','=','CP')
         ->orderBy('fecha','asc')
         ->groupBy('fecha')
