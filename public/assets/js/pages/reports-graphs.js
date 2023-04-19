@@ -35,7 +35,7 @@ function viewGraphs(objdata) {
             align: 'left'
         },
         tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            pointFormat: '{series.name}: <b>{point.y}</b>'
         },
         accessibility: {
             point: {

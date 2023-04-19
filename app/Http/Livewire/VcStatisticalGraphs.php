@@ -22,6 +22,7 @@ class VcStatisticalGraphs extends Component
         'mescobro' => '',
         'fecha' => '',
         'mesingreso' => '',
+        'anioingreso' => '',
         'periodo' => '',
     ];
 
@@ -52,13 +53,15 @@ class VcStatisticalGraphs extends Component
         $ldate = date('Y-m-d H:i:s');
         $this->filters['fecha']      = date('Y-m-d',strtotime($ldate));
         $this->filters['mescobro']   = intval(date('m',strtotime($ldate)));
-        $this->filters['mesingreso'] = intval(date('m',strtotime($ldate)));
+        $this->filters['mesingreso']  = intval(date('m',strtotime($ldate)));
+        $this->filters['anioingreso'] = intval(date('Y',strtotime($ldate)));
 
         $this->lngrupoId    = $tblgenerals['id'];
         $this->lnperiodoId  = $tblperiodos['id'];
         $this->lnmescobro   = intval(date('m',strtotime($ldate)));
         $this->lsfecha      = date('Y-m-d',strtotime($ldate));
-        $this->lnmesingreso = intval(date('m',strtotime($ldate)));
+        $this->lnmesingreso  = intval(date('m',strtotime($ldate)));
+        $this->lnanioingreso = intval(date('Y',strtotime($ldate)));
         $this->lnperiodo    = $tblperiodos['periodo'];
 
         $this->consulta();
@@ -121,6 +124,13 @@ class VcStatisticalGraphs extends Component
     public function updatedlnmesingreso() {
         
         $this->filters['mesingreso'] = $this->lnmesingreso;
+        $this->consulta();
+        $this->actualizaGraph();
+    }
+
+    public function updatedlnanioingreso() {
+        
+        $this->filters['anioingreso'] = $this->lnanioingreso;
         $this->consulta();
         $this->actualizaGraph();
     }
@@ -242,9 +252,9 @@ class VcStatisticalGraphs extends Component
             return $query->where('m.modalidad_id',"{$this->filters['idgrupo']}");
         })
         ->where('tr_cobros_cabs.tipo','CP')
-        ->where('tr_cobros_cabs.tipo','CP')
         ->where('d.tipo','PAG')
         ->whereRaw('month(tr_cobros_cabs.fecha) <= '.$this->filters['mesingreso'])
+        ->whereRaw('year(tr_cobros_cabs.fecha) <= '.$this->filters['anioingreso'])
         ->selectRaw('month(tr_cobros_cabs.fecha) as mes,  sum(d.valor) AS monto')
         ->groupbyRaw('month(tr_cobros_cabs.fecha)')
         ->orderby('mes','desc')

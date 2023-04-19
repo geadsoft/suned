@@ -240,7 +240,12 @@
                             <div class="card-body">
                                 
                                 <div class="w-100">
-                                    <div class="mb-3">
+                                    <div class="input-group mb-3">
+                                        <select class="form-select" name="ingmes" wire:model="lnanioingreso" >
+                                            @foreach ($tblperiodos as $plectivo)
+                                                <option value="{{$plectivo->periodo}}">{{$plectivo->periodo}}</option>
+                                            @endforeach
+                                        </select>
                                         <select class="form-select" name="ingmes" wire:model="lnmesingreso" >
                                             @for ($x=1;$x<=12;$x++)
                                                 <option value="{{$x}}">{{$mes[$x]}}</option>
