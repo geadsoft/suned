@@ -61,7 +61,7 @@ function viewGraphs(objdata) {
             }
         },
         series: [{
-            name: 'Brands',
+            name: 'Registros',
             colorByPoint: true,
             data: objdata
         }]
