@@ -51,7 +51,7 @@
                     <th style="color:#FFFFFF">Recibo</th>
                     <th style="color:#FFFFFF">Alumno</th>
                     <th style="color:#FFFFFF">Curso</th>
-                    <th style="color:#FFFFFF">Concepto</th>
+                    <th style="color:#FFFFFF; width:135px">Concepto</th>
                     <th style="color:#FFFFFF">F.P.</th>
                     <th style="color:#FFFFFF">Valor</th>
                     <th style="color:#FFFFFF">Desc.</th>
@@ -62,10 +62,14 @@
             <tbody class="list">
             @foreach ($tblrecords as $record)    
                 <tr>
-                    <td class="">{{$record->documento}}</td>
+                    <td class=""> {{$record->documento}}</td>
                     <td>{{$record->apellidos}} {{$record->nombres}}</td> 
                     <td>{{$record->descripcion}} {{$record->paralelo}}</td> 
-                    <td>{{$record->detalle}}</td>
+                    <td>{{$record->detalle}} 
+                        @if($record->estado=='A') 
+                            <span style="color:#FF0000">ANULADO</span> 
+                        @endif
+                    </td>
                     <td>{{$record->tipopago}}</td>
                     <td>{{number_format($record->saldo + $record->credito,2)}}</td>
                     <td>{{number_format($record->descuento,2)}}</td>
@@ -128,6 +132,37 @@
                             </tr>
                         </tbody>
                         @endforeach
+                    </table>
+                </td>           
+            </tr>
+        </table>
+    </section>
+    <section>
+        <table cellpadding="0" cellspancing="0" width="100%">
+            <tr>
+                <td width="40%" style="vertical-align: top; padding-top: 10px; position: relative">
+                    <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
+                        <thead class="table-light">
+                            <tr>
+                                <th colspan="4">Resumen de Efectivo</th>
+                            </tr>
+                            <tr style="background-color:#222454">
+                                <th style="color:#FFFFFF">Recibo</th>
+                                <th style="color:#FFFFFF" colspan="2">Referencia</th>
+                                <th style="color:#FFFFFF">Valor</th>
+                            </tr>
+                        <thead>
+                        <tbody class="list"> 
+                        @foreach ($resumenpago as $resumen) 
+                            @if($resumen['tipo']=='EFE')
+                                <tr>
+                                    <td class="">{{$resumen['recibo']}}</td>
+                                    <td class="" colspan="2">{{$resumen['referencia']}}</td>
+                                    <td>{{number_format($resumen['valor'],2)}}</td>
+                                </tr>
+                            @endif
+                         @endforeach
+                        </tbody>
                     </table>
                 </td>           
             </tr>

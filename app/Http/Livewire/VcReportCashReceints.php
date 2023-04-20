@@ -151,7 +151,7 @@ class VcReportCashReceints extends Component
             ['tr_cobros_cabs.tipo','CP'],
         ])
         ->select('tr_cobros_cabs.id','tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 
-        'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario')
+        'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario', 'tr_cobros_cabs.estado')
         ->orderBy('tr_cobros_cabs.fecha')
         ->get();
 
