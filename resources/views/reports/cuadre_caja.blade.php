@@ -51,7 +51,7 @@
                     <th style="color:#FFFFFF">Recibo</th>
                     <th style="color:#FFFFFF">Alumno</th>
                     <th style="color:#FFFFFF">Curso</th>
-                    <th style="color:#FFFFFF; width:135px">Concepto</th>
+                    <th style="color:#FFFFFF">Concepto</th>
                     <th style="color:#FFFFFF">F.P.</th>
                     <th style="color:#FFFFFF">Valor</th>
                     <th style="color:#FFFFFF">Desc.</th>
