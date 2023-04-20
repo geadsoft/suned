@@ -34,7 +34,8 @@ class VcEncashmentDebts extends Component
         when left(referencia,3) = 'PLA' then 2
         when left(referencia,3) = 'PLI' then 2
         when left(referencia,3) = 'PEN' then 3
-        else 4 end")
+        when left(referencia,3) = 'PLE' then 4
+        else 5 end")
         ->get();
 
         return view('livewire.vc-encashment-debts',[

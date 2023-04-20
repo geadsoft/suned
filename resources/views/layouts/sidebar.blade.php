@@ -33,7 +33,7 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span>@lang('translation.home')</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                    <a class="nav-link menu-link" href="">
                         <i class="las la-tachometer-alt fs-20"></i> <span>@lang('translation.dashboards')</span>
                     </a>
                     <!--<div class="collapse menu-dropdown" id="sidebarDashboards">
@@ -168,8 +168,30 @@
                               
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.reports')</span></li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="#reportfinanciero" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="reportfinanciero">
+                        <i class="ri-menu-add-line fs-20"></i> <span>Reportes Academicos</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="reportfinanciero">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="">
+                                    <i class="ri-folder-open-line fs-20"></i> <span>Documentación</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="">
+                                    <i class="ri-medal-2-line fs-20"></i> <span>Calificaciones</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="">
+                                    <i class="las la-sliders-h fs-20"></i> <span>@lang('translation.generic')</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     <a class="nav-link menu-link" href="#sidebarreport" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarreport">
-                        <i class="ri-menu-add-line fs-20"></i> <span>Reportes</span>
+                        <i class="ri-menu-add-line fs-20"></i> <span>Reportes Financieros</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarreport">
                         <ul class="nav nav-sm flex-column">

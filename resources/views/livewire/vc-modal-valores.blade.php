@@ -2,9 +2,9 @@
     <form autocomplete="off" wire:submit.prevent="updateMatricula">
         <div class="modal-body">
             <div class="table-responsive table-card mb-1">
-                <table class="table table-nowrap align-middle" id="orderTable">
+                <table class="table table-sm  align-middle" id="orderTable">
                     <thead class="text-muted table-light">
-                        <tr class="text-uppercase">
+                        <tr class="text-uppercase text-center">
                             <th> Concepto</th>
                             <th>Valor Original</th>
                             <th>Valor Actual</th>

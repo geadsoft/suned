@@ -193,8 +193,13 @@
                             </div><!-- end card header -->
 
                             <div class="card-body">
-                                <div class="mb-3">
-                                    <select class="form-select" name="cmbMes" wire:model="lnmescobro" >
+                                <div class="input-group mb-3">
+                                    <select class="form-select" name="ingmes" wire:model="lnaniocobro" >
+                                        @foreach ($tblperiodos as $plectivo)
+                                            <option value="{{$plectivo->periodo}}">{{$plectivo->periodo}}</option>
+                                        @endforeach
+                                    </select>
+                                    <select class="form-select" name="ingmes" wire:model="lnmescobro" >
                                         @for ($x=1;$x<=12;$x++)
                                             <option value="{{$x}}">{{$mes[$x]}}</option>
                                         @endfor

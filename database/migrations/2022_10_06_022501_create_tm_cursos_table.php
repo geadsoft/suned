@@ -28,6 +28,7 @@ return new class extends Migration
             $table->bigInteger('especializacion_id')->unsigned();
             $table->foreign('especializacion_id')->references('id')->on('tm_generalidades');
             $table->string('vistaplataforma',50);
+            $table->boolean('aplica_derechogrado')->default(false);
             $table->string('estado',1);
             $table->string('usuario');
             $table->timestamps();

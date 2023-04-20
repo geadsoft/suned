@@ -18,6 +18,8 @@ return new class extends Migration
             $table->datetime('fecha');
             $table->bigInteger('estudiante_id')->unsigned();
             $table->foreign('estudiante_id')->references('id')->on('tm_personas');
+            $table->bigInteger('matricula_id')->unsigned();
+            $table->foreign('matricula_id')->references('id')->on('tm_matriculas');
             $table->string('tipo',2)->default('CP');
             $table->string('documento',10)->nullable();
             $table->string('concepto',100);

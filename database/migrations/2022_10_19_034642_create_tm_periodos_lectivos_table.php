@@ -25,6 +25,10 @@ return new class extends Migration
             $table->foreign('secretaria_id')->references('id')->on('tm_personas');
             $table->bigInteger('coordinador_id')->unsigned();
             $table->foreign('coordinador_id')->references('id')->on('tm_personas');
+            $table->integer('num_recibo');
+            $table->integer('num_matricula');
+            $table->integer('mes_pension');
+            $table->integer('folio');
             $table->string('estado',1);
             $table->string('usuario');
             $table->timestamps();

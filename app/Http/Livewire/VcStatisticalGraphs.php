@@ -20,6 +20,7 @@ class VcStatisticalGraphs extends Component
         'idperiodo' => '',
         'idgrupo' => '',
         'mescobro' => '',
+        'aniocobro' => '',
         'fecha' => '',
         'mesingreso' => '',
         'anioingreso' => '',
@@ -53,12 +54,14 @@ class VcStatisticalGraphs extends Component
         $ldate = date('Y-m-d H:i:s');
         $this->filters['fecha']      = date('Y-m-d',strtotime($ldate));
         $this->filters['mescobro']   = intval(date('m',strtotime($ldate)));
+        $this->filters['aniocobro'] = intval(date('Y',strtotime($ldate)));
         $this->filters['mesingreso']  = intval(date('m',strtotime($ldate)));
         $this->filters['anioingreso'] = intval(date('Y',strtotime($ldate)));
 
         $this->lngrupoId    = $tblgenerals['id'];
         $this->lnperiodoId  = $tblperiodos['id'];
         $this->lnmescobro   = intval(date('m',strtotime($ldate)));
+        $this->lnaniocobro  = intval(date('Y',strtotime($ldate)));
         $this->lsfecha      = date('Y-m-d',strtotime($ldate));
         $this->lnmesingreso  = intval(date('m',strtotime($ldate)));
         $this->lnanioingreso = intval(date('Y',strtotime($ldate)));
@@ -179,17 +182,6 @@ class VcStatisticalGraphs extends Component
 
         $fechaFin = date("Y-m-d",strtotime($this->filters['fecha']));
                 
-        /*$tblcobros = DB::Select("select * from (
-            select c.fecha,  sum(monto) AS monto
-            from tr_cobros_cabs c
-            inner join tm_matriculas m on c.matricula_id = m.id
-            where c.tipo = 'CP' and c.fecha < '".$fechaFin."' and
-            m.modalidad_id = ".$this->filters['idgrupo']." 
-            and m.periodo_id = ".$this->filters['idperiodo']."
-            group by c.fecha) as d
-        order by fecha desc limit 7"    
-        );*/
-
         $cobros = TrCobrosCabs::query()
         ->join("tr_deudas_dets as d","d.cobro_id","=","tr_cobros_cabs.id")
         ->join("tm_matriculas as m","m.id","=","tr_cobros_cabs.matricula_id")
@@ -223,25 +215,18 @@ class VcStatisticalGraphs extends Component
             return $query->where('m.modalidad_id',"{$this->filters['idgrupo']}");
         })
         ->when($this->filters['mescobro'],function($query){
-            return $query->whereRaw('month(tr_deudas_cabs.fecha)<='.$this->filters['mescobro']);
+            return $query->whereRaw('month(tr_deudas_cabs.fecha)='.$this->filters['mescobro']);
+        })
+        ->when($this->filters['aniocobro'],function($query){
+            return $query->whereRaw('year(tr_deudas_cabs.fecha)='.$this->filters['aniocobro']);
         })
         ->select('tr_deudas_cabs.*')
         ->where('tr_deudas_cabs.estado','P')
+        ->whereraw("left(referencia,3)='PEN'")
         ->get();
         
 
         //Cobros ultimo 4 meses
-        /*$tblIngresoMes = DB::Select("Select * from (
-            select month(c.fecha) as mes,  sum(dd.valor) AS monto
-            from tr_cobros_cabs c
-            inner join tm_matriculas m on c.matricula_id = m.id
-            inner join tr_deudas_dets dd on dd.cobro_id = c.id
-            where c.tipo = 'CP' and dd.tipo = 'PAG' and month(c.fecha) < ".$this->filters['mesingreso']." and
-            m.modalidad_id = ".$this->filters['idgrupo']." 
-            and m.periodo_id = ".$this->filters['idperiodo']."
-            group by month(c.fecha)) as d
-        order by mes desc limit 4"    
-        );*/
         $cobros = TrCobrosCabs::query()
         ->join("tr_deudas_dets as d","d.cobro_id","=","tr_cobros_cabs.id")
         ->join("tm_matriculas as m","m.id","=","tr_cobros_cabs.matricula_id")
@@ -267,7 +252,7 @@ class VcStatisticalGraphs extends Component
         ->join('tr_deudas_cabs as c','c.id','=','tr_deudas_dets.deudacab_id')
         ->join('tm_matriculas as m','m.id','=','c.matricula_id')
         ->selectRaw('left(c.referencia,3) as tipo, month(tr_deudas_dets.fecha) as mes, sum(valor) as valor')
-        ->whereRaw("tr_deudas_dets.tipo = 'PAG' and tr_deudas_dets.tipovalor = 'CR' and year(tr_deudas_dets.fecha) = ".$this->filters['periodo'])
+        ->whereRaw("tr_deudas_dets.tipo = 'PAG' and year(tr_deudas_dets.fecha) = ".$this->filters['periodo'])
         ->when($this->filters['idperiodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['idperiodo']}");
         })
@@ -387,6 +372,9 @@ class VcStatisticalGraphs extends Component
                     break;
                 case "PLE":
                     $tipo = 'Plataforma Español';
+                    break;
+                case "DGR":
+                    $tipo = 'Derecho de Grado';
                     break;
             }
 

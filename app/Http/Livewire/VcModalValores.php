@@ -43,16 +43,21 @@ class VcModalValores extends Component
         ->selectRaw("Case When left(referencia,3) = 'MAT' Then 'Matricula'
                           When left(referencia,3) = 'PLI' Then 'Plataforma Ingles' 
                           When left(referencia,3) = 'PLE' Then 'Plataforma Español'
-                          Else 'Pensión' End as concepto, neto, debito, credito, id as deudaid, month(fecha) as mes")
+                          When left(referencia,3) = 'PEN' Then 'Pensión'
+                          Else 'Derecho de Grado' End as concepto, neto, debito, credito, id as deudaid, month(fecha) as mes, left(referencia,3) as tipo")
         ->where('matricula_id',$matriculaId)
         ->where('credito','=',0)
-        ->where('saldo','>',0)
+        //->where('saldo','>',0)
         ->get();
 
         
         foreach ( $tblrecords as $key => $record){
             $this->tblrecords[$key][0] = $record['deudaid'];
-            $this->tblrecords[$key][1] = $record['concepto'].' '.$this->meses[$record['mes']];
+            if ($record['tipo']=='PEN'){
+                $this->tblrecords[$key][1] = $record['concepto'].' '.$this->meses[$record['mes']];
+            }else{
+                $this->tblrecords[$key][1] = $record['concepto'];
+            }
             $this->tblrecords[$key][2] = floatval($record['neto']);
             $this->tblrecords[$key][3] = floatval($record['debito']);
             $this->tblrecords[$key][4] = floatval($record['credito']);

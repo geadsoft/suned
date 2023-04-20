@@ -13,7 +13,7 @@
                         <div class="row g-3">
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
-                                    <select class="form-select" name="cmbperiodo" wire:model="filters.srv_periodo" id="cmbperiodo">
+                                    <select class="form-select" name="cmbperiodo" wire:model="filters.srv_periodoId" id="cmbperiodo">
                                         <option value="">Select Period</option>
                                         @foreach ($tblperiodos as $periodo)
                                             <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>

@@ -14,12 +14,15 @@ use PDF;
 class VcReportDebtAnalysis extends Component
 {
     use WithPagination;
+    public $lnperiodo, $lnmespension;
 
     public $filters = [
-        'srv_periodo' => '',
+        'srv_periodoId' => '',
+        'mes_pension' => 0,
         'srv_grupo' => '',
         'srv_curso' => '',
         'srv_mes' => '',
+        'srv_periodo' => '',
     ];
 
     public $mes = [
@@ -50,9 +53,11 @@ class VcReportDebtAnalysis extends Component
         $tblgenerals = TmGeneralidades::where('superior',1)->first();
         $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->first();
 
-        $this->filters['srv_periodo'] = $tblperiodos['id'];
+        $this->filters['srv_periodoId'] = $tblperiodos['id'];
         $this->filters['srv_grupo'] = $tblgenerals['id'];
         $this->filters['srv_mes'] = intval(date('m',strtotime($ldate)));
+        $this->filters['srv_periodo'] = intval(date('Y',strtotime($ldate)));
+        $this->filters['mes_pension'] = $tblperiodos['mes_pension'];
 
     }
 
@@ -61,7 +66,7 @@ class VcReportDebtAnalysis extends Component
         $tblgenerals = TmGeneralidades::where('superior',1)->get();
         $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         $tblcursos   = TmCursos::query()
-        ->where('periodo_id',$this->filters['srv_periodo'])
+        ->where('periodo_id',$this->filters['srv_periodoId'])
         ->when($this->filters['srv_grupo'],function($query){
             return $query->where('grupo_id',"{$this->filters['srv_grupo']}");
         })
@@ -83,6 +88,10 @@ class VcReportDebtAnalysis extends Component
     }
 
     public function consulta(){
+
+        if($this->filters['srv_mes']>$this->filters['mes_pension']){
+            $this->filters['srv_periodo'] = $this->filters['srv_periodo']+1;
+        }
                 
         $tblrecords = TrDeudasCabs::query()
         ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
@@ -90,8 +99,8 @@ class VcReportDebtAnalysis extends Component
         ->join("tm_cursos as c","c.id","=","m.curso_id")
         ->join("tm_servicios as s","s.id","=","c.servicio_id")
         ->join("tm_generalidades as g","g.id","=","m.modalidad_id")   
-        ->when($this->filters['srv_periodo'],function($query){
-            return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
+        ->when($this->filters['srv_periodoId'],function($query){
+            return $query->where('m.periodo_id',"{$this->filters['srv_periodoId']}");
         })
         ->when($this->filters['srv_grupo'],function($query){
             return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
@@ -100,7 +109,7 @@ class VcReportDebtAnalysis extends Component
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
         })
         ->when($this->filters['srv_mes'],function($query){
-            return $query->whereRaw('month(tr_deudas_cabs.fecha) <= '.$this->filters['srv_mes']);
+            return $query->whereRaw('month(tr_deudas_cabs.fecha) <= '.$this->filters['srv_mes'].' and year(tr_deudas_cabs.fecha) = '.$this->filters['srv_periodo']);
         })
         ->where('saldo','>',0)
         ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
@@ -118,13 +127,16 @@ class VcReportDebtAnalysis extends Component
     { 
         $data = json_decode($objdata);
 
-        $this->filters['srv_periodo'] = $data->srv_periodo;
+        $this->filters['srv_periodoId'] = $data->srv_periodoId;
         $this->filters['srv_grupo']   = $data->srv_grupo;
         $this->filters['srv_curso']   = $data->srv_curso;
         $this->filters['srv_mes']     = $data->srv_mes;
-           
+        $this->filters['srv_periodo'] = $data->srv_periodo;
+        $this->filters['mes_pension'] = $data->mes_pension;
+        
+        
         $tblrecords = $this->consulta();
-
+        
         if(empty($tblrecords)){
             return;
         }
@@ -132,7 +144,7 @@ class VcReportDebtAnalysis extends Component
         $total = $tblrecords->sum('saldo');
         $grupo = $tblrecords->groupBy(['grupo','curso','paralelo'])->toArray();
        
-        $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();
+        $periodo = TmPeriodosLectivos::find($this->filters['srv_periodoId'])->toArray();
         $this->consulta['periodo'] = $periodo['descripcion'];
         $this->consulta['curso'] = 'Todos';
         $this->consulta['grupo'] = 'Todos';

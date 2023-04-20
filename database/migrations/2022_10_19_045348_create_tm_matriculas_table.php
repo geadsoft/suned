@@ -19,8 +19,6 @@ return new class extends Migration
             $table->datetime('fecha');
             $table->bigInteger('estudiante_id')->unsigned();
             $table->foreign('estudiante_id')->references('id')->on('tm_personas');
-            $table->bigInteger('nivel_id')->unsigned();
-            $table->foreign('nivel_id')->references('id')->on('tm_generalidades');
             $table->bigInteger('modalidad_id')->unsigned();
             $table->foreign('modalidad_id')->references('id')->on('tm_generalidades');
             $table->bigInteger('grado_id')->unsigned();
@@ -32,7 +30,7 @@ return new class extends Migration
             $table->bigInteger('representante_id')->unsigned();
             $table->foreign('representante_id')->references('id')->on('tm_personas');
             $table->string('comentario',255);
-            $table->unique(['estudiante_id','modalidad_id','nivel_id','periodo_id'],'estudiante_periodo_modalidad_nivel_unique');
+            $table->unique(['estudiante_id','modalidad_id','grado_id','periodo_id'],'estudiante_periodo_modalidad_grado_unique');
             $table->string('estado',1);
             $table->string('usuario');
             $table->timestamps();

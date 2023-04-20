@@ -39,6 +39,7 @@ class HomeController extends Controller
     public function root()
     {
         return view('index');
+        //return view('config/panel');
     }
 
     /*Language Translation*/
