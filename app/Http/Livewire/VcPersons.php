@@ -43,10 +43,13 @@ class VcPersons extends Component
         $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         $tblgenerals = TmGeneralidades::where('superior',1)->get();
         $tblcursos   = TmCursos::query()
-        ->where('periodo_id',$this->filters['srv_periodo'])
+        ->when($this->filters['srv_periodo'],function($query){
+            return $query->where('periodo_id',"{$this->filters['srv_periodo']}");
+        })
         ->when($this->filters['srv_grupo'],function($query){
             return $query->where('grupo_id',"{$this->filters['srv_grupo']}");
         })
+        ->orderByRaw('nivel_id,grado_id,paralelo')
         ->get();
 
         $tblrecords = TmPersonas::query()
@@ -170,8 +173,7 @@ class VcPersons extends Component
         ->join("tm_familiar_estudiantes as f","f.estudiante_id","=","tm_personas.id")
         ->join("tm_personas as p","p.id","=","f.persona_id")
         ->when($this->filters['srv_nombre'],function($query){
-            return $query->where('tm_personas.nombres','like','%'.$this->filters['srv_nombre'].'%')
-                        ->orWhere('tm_personas.apellidos','like','%'.$this->filters['srv_nombre'].'%');
+            return $query->whereRaw("concat(p.apellidos,' ',p.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
         ->when($this->filters['srv_periodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
@@ -186,7 +188,7 @@ class VcPersons extends Component
         p.apellidos as apefamilia, p.identificacion as nui, p.telefono, p.email")
         ->where('tm_personas.tipopersona','=','E')
         ->where('tm_personas.estado',$this->filters['srv_estado'])
-        ->orderBy('apellidos','asc')
+        ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc')
         ->get();
 
         return  $tblrecords ;
@@ -324,7 +326,7 @@ class VcPersons extends Component
 
         if(!empty($this->filters['srv_curso'])){
             $objcurso = TmCursos::find($this->filters['srv_curso']);
-            $this->consulta['curso'] = $objcurso->servicio['descripcion'] + $objcurso['paralelo'];
+            $this->consulta['curso'] = $objcurso->servicio['descripcion']." ".$objcurso['paralelo'];
         }
         
         $dias = [0=>'Domingo',1=>'Lunes',2=>'Martes',3=>'Miercoles',4=>'Jueves',5=>'Viernes',6=>'Sabado'];
@@ -467,7 +469,7 @@ class VcPersons extends Component
 
         if(!empty($this->filters['srv_curso'])){
             $objcurso = TmCursos::find($this->filters['srv_curso']);
-            $this->consulta['curso'] = $objcurso->servicio['descripcion'] + $objcurso['paralelo'];
+            $this->consulta['curso'] = $objcurso->servicio['descripcion'].' '.$objcurso['paralelo'];
         }
         
         $dias = [0=>'Domingo',1=>'Lunes',2=>'Martes',3=>'Miercoles',4=>'Jueves',5=>'Viernes',6=>'Sabado'];
