@@ -36,7 +36,7 @@ class VcReportDebtAnalysis extends Component
         8 => 'Agosto',
         9 => 'Septiembre',
         10=> 'Octubre',
-        11=> 'Novimebre',
+        11=> 'Noviembre',
         12=> 'Diciembre',
     ];
 
@@ -89,9 +89,9 @@ class VcReportDebtAnalysis extends Component
 
     public function consulta(){
 
-        if($this->filters['srv_mes']>$this->filters['mes_pension']){
+        /*if($this->filters['srv_mes']>$this->filters['mes_pension']){
             $this->filters['srv_periodo'] = $this->filters['srv_periodo']+1;
-        }
+        }*/
                 
         $tblrecords = TrDeudasCabs::query()
         ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
@@ -113,8 +113,9 @@ class VcReportDebtAnalysis extends Component
         })
         ->where('saldo','>',0)
         ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
-        'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo')
+        'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo','referencia')
         ->orderBy('p.apellidos')
+        ->orderBY('p.nombres')
         ->orderBy('tr_deudas_cabs.fecha')
         ->paginate(15);
         

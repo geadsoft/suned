@@ -374,9 +374,9 @@
                                                 placeholder="0.00" value="{{number_format($record->valor,2)}}" readonly/>
                                         </td>
                                     </tr>
-                                    <script>
-                                        $this->subtotal += $record->deudacab->saldo+$record->valor
-                                    </script>
+                                    <!--<script>
+                                        $this->subtotal += $record->deudacab->saldo+$record->valor+$record->deudacab->descuento
+                                    </script>-->
                                     @endforeach
                                 @endif
                             </tbody>

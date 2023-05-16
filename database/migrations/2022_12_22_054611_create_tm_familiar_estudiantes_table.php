@@ -20,6 +20,10 @@ return new class extends Migration
             $table->bigInteger('persona_id')->unsigned();
             $table->foreign('persona_id')->references('id')->on('tm_personas');
             $table->string('informacion',2);
+            $table->bigInteger('modalidad_id')->unsigned();
+            $table->foreign('modalidad_id')->references('id')->on('tm_generalidades');
+            $table->bigInteger('periodo_id')->unsigned();
+            $table->foreign('periodo_id')->references('id')->on('tm_periodos_lectivos');
             $table->string('usuario',50);
             $table->timestamps();
         });

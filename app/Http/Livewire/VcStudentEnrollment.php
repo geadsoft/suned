@@ -25,7 +25,7 @@ class VcStudentEnrollment extends Component
     public $codigo, $nombres="", $apellidos="", $nombrecompleto, $tipoident="C", $identificacion="", $genero="M", $fechanace, $nacionalidad=35, $telefono="", $etnia="ME";
     public $tipodiscapacidad, $discapacidad, $email="", $direccion="", $comentario="";
     public $periodoId, $grupoId, $nivelId, $gradoId, $cursoId, $datosFamiliar=0;
-    public $fecha,$crearperson, $estudentnew=0, $fControl='disabled'; 
+    public $fecha,$crearperson, $estudentnew=0, $mespension, $fControl='disabled'; 
     public $familiares = [];
     public $meses = [ 
         1 => 'ENE',
@@ -223,6 +223,7 @@ class VcStudentEnrollment extends Component
         $codperiodo   = $pLectivo['periodo'];
         $nomperiodo   = $pLectivo['descripcion'];
         $nromatricula = $pLectivo['num_matricula']+1;
+        $mespension   = $pLectivo['mes_pension'];
 
         TmMatricula::Create([
             'documento' => substr($codperiodo, -2).str_pad($nromatricula, 4, "0", STR_PAD_LEFT),
@@ -362,7 +363,8 @@ class VcStudentEnrollment extends Component
         $cuotas = 10;
         
         //Matricula
-        $mes = date('m',strtotime($this->fecha));
+        //$mes = date('m',strtotime($this->fecha));
+        $mes = $this->mespension;
         $año = date('Y',strtotime($this->fecha));
 
         TrDeudasCabs::Create([

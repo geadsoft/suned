@@ -99,8 +99,8 @@ class VcEncashment extends Component
         
         foreach ($tblDeuda as $deudas)
         {
-            $this->subtotal += $deudas->deudacab->saldo+$deudas['valor'];
-            $this->descuento += 0.00;
+            $this->subtotal += $deudas->deudacab->saldo+$deudas['valor']+$deudas->deudacab->descuento;
+            $this->descuento += $deudas->deudacab->descuento;
             $this->totalpago += $deudas['valor'];
         }
         $this->total = $this->subtotal-$this->descuento;

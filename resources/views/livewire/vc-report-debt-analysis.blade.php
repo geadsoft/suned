@@ -35,7 +35,7 @@
                             </div>
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
-                                    <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo" id="cmbcurso">
+                                    <select class="form-select" name="cmbcurso" wire:model="filters.srv_curso" id="cmbcurso">
                                         <option value="">Todos</option>
                                         @foreach ($tblcursos as $curso)
                                             <option value="{{$curso->id}}">{{$curso->servicio->descripcion}} {{$curso->paralelo}}</option>
@@ -43,13 +43,22 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-xxl-2 col-sm-4">
+                            <div class="col-xxl-1 col-sm-4">
                                 <div>
-                                    <select class="form-select" name="cmbgrupo" wire:model="filters.srv_mes" id="cmbcurso">
+                                    <select class="form-select" name="cmbmes" wire:model="filters.srv_mes" id="cmbmes">
                                         <option value="">Todos</option>
                                         @for ($x=1;$x<=12;$x++)
                                             <option value="{{$x}}">{{$mes[$x]}}</option>
                                         @endfor
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xxl-1 col-sm-4">
+                                <div>
+                                    <select class="form-select" name="cmbmes" wire:model="filters.srv_periodo" id="cmbmes">
+                                        @foreach ($tblperiodos as $data)
+                                            <option value="{{$data->periodo}}">{{$data->periodo}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>

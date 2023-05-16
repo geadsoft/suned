@@ -135,6 +135,7 @@ class VcPersons extends Component
 
         $tblrecords = TmPersonas::query()
         ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
+        ->join("tm_personas as r","r.id","=","m.representante_id")
         ->join("tm_cursos as c","c.id","=","m.curso_id")
         ->join("tm_servicios as s","s.id","=","c.servicio_id")
         ->join("tm_generalidades as g","g.id","=","m.modalidad_id")
@@ -153,7 +154,8 @@ class VcPersons extends Component
         })
         ->selectRaw("tm_personas.*, g.descripcion as grupo, s.descripcion as curso, c.paralelo, m.documento as nromatricula 
         ,m.created_at as creado, weekday(tm_personas.created_at) as diapersona, weekday(m.created_at) as diamatricula, 
-        g2.descripcion as nacionalidad")
+        g2.descripcion as nacionalidad, m.fecha as fechamatricula, 
+        r.nombres as nomrepre, r.apellidos as aperepre, r.identificacion as idenrepre, r.parentesco as parenrepre")
         ->where('tm_personas.tipopersona','=','E')
         ->where('tm_personas.estado',$this->filters['srv_estado'])
         ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc')

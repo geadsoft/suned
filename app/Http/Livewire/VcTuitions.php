@@ -22,7 +22,7 @@ class VcTuitions extends Component
     public $showEditModal = false;
     public $selectId = 0;
     public $previus='', $current='', $nomnivel, $nomcurso, $fecha, $documento, $alumno;
-    public $filterdata='M';
+    public $filterdata='M', $trDeudasCabs;
     public $tblcursos=null;
     public $tblservicios=null;
     public $tbldatogen=null;
@@ -237,6 +237,7 @@ class VcTuitions extends Component
         ->get();
         
         $this->numreg = count($deuda);
+        $this->trDeudasCabs = $deuda;
         
         $tblCobro  = TrCobrosCabs::orderBy('id', 'desc')->first();
         $secuencia = intval($tblCobro['documento'])+1;
@@ -319,6 +320,7 @@ class VcTuitions extends Component
         $pLectivo   = TmPeriodosLectivos::find($this->periodoId);
         $codperiodo = $pLectivo['periodo'];
         $nomperiodo = $pLectivo['descripcion'];
+
         //$nromatricula = $pLectivo['num_matricula']+1;
 
         $valores    = TmPensionesDet::join("tm_pensiones_cabs","tm_pensiones_cabs.id","=","tm_pensiones_dets.pension_id")
@@ -328,43 +330,59 @@ class VcTuitions extends Component
                 ['tm_pensiones_dets.nivel_id',$nivelId],
             ])->first();
 
+        $valorMatricula   = $valores['matricula'];
         $valorPension     = $valores['pension'];
         $valorePlataforma = $valores['eplataforma'];
         $valoriPlataforma = $valores['iplataforma'];
         $valorGrado       = $valores['grado'];
-        
-        $cuotapag = 10-$this->numreg;
-        $cuotas   = 10-$cuotapag;
+                
+        //$cuotapag = 10-$this->numreg;
+        //$cuotas   = 10-$cuotapag;
 
         //Matricula
-        $mes = date('m',strtotime($this->fecha));
-        $año = date('Y',strtotime($this->fecha));
+        
 
         //Pension
-        for ($i=$cuotapag; $i <= $cuotas; $i++){
+        //for ($i=$cuotapag; $i <= $cuotas; $i++){
+        foreach ($this->trDeudasCabs as $deudasCabs){
            
-            $mes++ ;
+            $mes = date('m',strtotime($deudasCabs->fecha));
+            $año = date('Y',strtotime($deudasCabs->fecha));
+            $tipodeuda =  substr($deudasCabs->referencia, 0, 3);
 
-            if ($mes==13){
-                $mes = 1;
-                $año = $año+1;
+            switch ($tipodeuda){
+                case "MAT":
+                    $valor = $valorMatricula;
+                    break;
+                case "PEN":
+                    $valor = $valorPension;
+                    break;
+                case "PLI":
+                    $valor = $valoriPlataforma;
+                    break;
+                case "PLE":
+                    $valor = $valorePlataforma;
+                    break;
+                case "DGR":
+                    $valor = $valorGrado;
+                    break;
             }
-            
+                        
             TrDeudasCabs::Create([
                 'matricula_id' => $this->selectId,
-                'estudiante_id' => $this -> estudianteId,
+                'estudiante_id' => $this->estudianteId,
                 'periodo_id' => $this -> periodoId,
-                'referencia' => 'PEN-'.$this->meses[$mes].$this->documento,
+                'referencia' => $deudasCabs->referencia,
                 'fecha' =>  strval($año)."-".str_pad($mes, 2, "0", STR_PAD_LEFT).'-01',
-                'basedifgravada' => $valorPension,
+                'basedifgravada' => $valor,
                 'basegravada' =>0.00,
                 'impuesto' =>0.00,
                 'descuento' =>0.00,
-                'neto' => $valorPension,
-                'debito' => $valorPension,
+                'neto' => $valor,
+                'debito' => $valor,
                 'credito' =>0.00,
-                'saldo' => $valorPension,
-                'glosa' => 'Pensión Cuota '.strval($i+1).' '.$nomperiodo,
+                'saldo' => $valor,
+                'glosa' => $deudasCabs->glosa,
                 'estado' => 'P',
                 'usuario' => auth()->user()->name,
             ]);
@@ -376,14 +394,17 @@ class VcTuitions extends Component
                 'deudacab_id' => $deudaId,
                 'cobro_id' => 0,
                 'fecha' => strval($año)."-".str_pad($mes, 2, "0", STR_PAD_LEFT).'-01',
-                'detalle' => 'Pensión '.$this->meses[$mes]." ".$nomperiodo,
+                'detalle' => 'Pensión '.$this->meses[intval($mes)]." ".$nomperiodo,
                 'tipo' => "",
                 'referencia' => "",
                 'tipovalor' => "DB",
-                'valor' => $valorPension,
+                'valor' => $valor,
                 'estado' => 'P',
                 'usuario' => auth()->user()->name,
             ]);
+
+            
+
         }
 
     }

@@ -66,7 +66,7 @@
                     <td>{{date('d/m/Y',strtotime($record->fecha))}}</td>
                     <td>{{$record->detalle}}</td> 
                     <td>{{$record->referencia}}</td>
-                    <td>{{number_format($record->saldo+$record->valor,2)}}</td>
+                    <td>{{number_format($record->saldo+$record->valor+$record->descuento,2)}}</td>
                     <td>{{number_format($record->descuento,2)}}</td>
                     <td>{{number_format($record->valor,2)}}</td>
                     <td>{{number_format($record->saldo,2)}}</td>
@@ -81,7 +81,7 @@
                     </td> 
                     <td colspan="3"></td>
                     <td colspan="1">
-                        <span><strong>${{number_format($tbldeudas->sum('saldo')+$tbldeudas->sum('valor'),2)}}<strong></span>
+                        <span><strong>${{number_format($tbldeudas->sum('saldo')+$tbldeudas->sum('valor')+$tbldeudas->sum('descuento'),2)}}<strong></span>
                     </td> 
                 </tr>
                 <tr>
@@ -101,7 +101,7 @@
                     </td> 
                     <td colspan="3"></td>
                     <td colspan="1">
-                        <span><strong>${{number_format($tbldeudas->sum('valor')-$tbldeudas->sum('descuento'),2)}}<strong></span>
+                        <span><strong>${{number_format($tbldeudas->sum('valor'),2)}}<strong></span>
                     </td> 
                 </tr>
                 <tr>

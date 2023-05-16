@@ -60,7 +60,7 @@
                                 </tr>
                                 <tr>
                                     <td class="text-left"><strong> Fecha Matricula: </strong></td>
-                                    <td class="text-left">  {{date('d/m/Y',strtotime($record['fecha']))}} </td>
+                                    <td class="text-left">  {{date('d/m/Y',strtotime($record['fechamatricula']))}} </td>
                                 </tr>
                                 <tr>
                                     <td class="text-left"><strong> Fecha Nacimiento: </strong></td>
@@ -78,6 +78,56 @@
                     </tr>
                 </tbody>
             </table>
+            <table cellpadding="0" cellspacing="0" class="table table-borderless" style="font-size:12px">
+                <tbody> 
+                    <tr>
+                        <h6>Datos del Representante</h6>
+                    </tr>                     
+                    <tr>
+                        <td width="60%" class="text-left">
+                            <table width="100%" cellpadding="0" cellspancing="0" class="table-sm">
+                                <tr>
+                                    <td class="text-left"><strong> Apellidos: </strong></td>
+                                    <td class="text-left"> {{$record->aperepre}} </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left"><strong> Nombres: </strong></td>
+                                    <td class="text-left"> {{$record->nomrepre}} </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left"><strong> Cédula de Identidad:</strong></td>
+                                    <td class="text-left"> {{$record->idenrepre}} </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left"><strong> Parentesco: </strong></td>
+                                    <td class="text-left"> {{$record->parenrepre}} </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table cellpadding="0" cellspacing="0" class="table table-borderless" style="font-size:10px">
+                <tr>
+                    <h6>Datos Familiares</h6>
+                </tr>
+                <tr class="text-uppercase">
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Identificación</th>
+                    <th>Relación</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                </tr>
+                <tbody> 
+                    
+
+                </tbody>
+            </table>
+
+
+
         </section>
         <section>
             <table cellpadding="0" cellspacing="0" class="table-sm" width="100%">
