@@ -73,7 +73,7 @@ class VcReportDebtAnalysis extends Component
         ->orderByRaw('nivel_id,grado_id,paralelo')
         ->get();
 
-        $tblrecords  = $this->consulta();
+        $tblrecords  = $this->consulta(1);
 
         return view('livewire.vc-report-debt-analysis',[
             'tblrecords' => $tblrecords,
@@ -88,11 +88,7 @@ class VcReportDebtAnalysis extends Component
     }
 
     public function consulta(){
-
-        /*if($this->filters['srv_mes']>$this->filters['mes_pension']){
-            $this->filters['srv_periodo'] = $this->filters['srv_periodo']+1;
-        }*/
-                
+               
         $tblrecords = TrDeudasCabs::query()
         ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
         ->join("tm_personas as p","p.id","=","m.estudiante_id")
@@ -113,12 +109,43 @@ class VcReportDebtAnalysis extends Component
         })
         ->where('saldo','>',0)
         ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
-        'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo','referencia')
+        'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo')
         ->orderBy('p.apellidos')
         ->orderBY('p.nombres')
         ->orderBy('tr_deudas_cabs.fecha')
         ->paginate(15);
-        
+         
+        $this->datos = json_encode($this->filters);
+
+        return $tblrecords;
+    }
+
+    public function reporte(){
+               
+        $tblrecords = TrDeudasCabs::query()
+        ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
+        ->join("tm_personas as p","p.id","=","m.estudiante_id")
+        ->join("tm_cursos as c","c.id","=","m.curso_id")
+        ->join("tm_servicios as s","s.id","=","c.servicio_id")
+        ->join("tm_generalidades as g","g.id","=","m.modalidad_id")   
+        ->when($this->filters['srv_periodoId'],function($query){
+            return $query->where('m.periodo_id',"{$this->filters['srv_periodoId']}");
+        })
+        ->when($this->filters['srv_grupo'],function($query){
+            return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
+        })
+        ->when($this->filters['srv_curso'],function($query){
+            return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
+        })
+        ->when($this->filters['srv_mes'],function($query){
+            return $query->whereRaw('month(tr_deudas_cabs.fecha) <= '.$this->filters['srv_mes'].' and year(tr_deudas_cabs.fecha) = '.$this->filters['srv_periodo']);
+        })
+        ->where('saldo','>',0)
+        ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
+        'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo')
+        ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc, tr_deudas_cabs.fecha')
+        ->get();
+         
         $this->datos = json_encode($this->filters);
 
         return $tblrecords;
@@ -128,6 +155,8 @@ class VcReportDebtAnalysis extends Component
     { 
         $data = json_decode($objdata);
 
+        //dd($data);
+
         $this->filters['srv_periodoId'] = $data->srv_periodoId;
         $this->filters['srv_grupo']   = $data->srv_grupo;
         $this->filters['srv_curso']   = $data->srv_curso;
@@ -136,7 +165,7 @@ class VcReportDebtAnalysis extends Component
         $this->filters['mes_pension'] = $data->mes_pension;
         
         
-        $tblrecords = $this->consulta();
+        $tblrecords = $this->reporte();
         
         if(empty($tblrecords)){
             return;
@@ -160,7 +189,7 @@ class VcReportDebtAnalysis extends Component
             $objcurso = TmCursos::find($this->filters['srv_curso']);
             $this->consulta['curso'] = $objcurso->servicio['descripcion']." ".$objcurso['paralelo'];
         }
-      
+        
         //Vista
         $pdf = PDF::loadView('reports/analisis_deudas',[
             'tblrecords' => $grupo,
