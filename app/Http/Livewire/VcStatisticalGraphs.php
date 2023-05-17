@@ -206,8 +206,14 @@ class VcStatisticalGraphs extends Component
         $tblcobros =  array_slice( $cobros,0,$datos);
 
         //Deudas Cancelada, Abonado
+        $tipo = 'OTR';
         $tbldeudas = TrDeudasCabs::query()
         ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
+        ->leftJoin('tr_deudas_dets as d', function($join)
+        {
+            $join->on('tr_deudas_cabs.id', '=', 'd.deudacab_id');
+            $join->on('d.tipo', '=',DB::raw("'OTR'"));
+        })
         ->when($this->filters['idperiodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['idperiodo']}");
         })
@@ -222,7 +228,7 @@ class VcStatisticalGraphs extends Component
         })
         ->select('tr_deudas_cabs.*')
         ->where('tr_deudas_cabs.estado','P')
-        ->whereraw("left(referencia,3)='PEN'")
+        ->whereraw("left(tr_deudas_cabs.referencia,3)='PEN' and d.tipo is null")
         ->get();
         
 
