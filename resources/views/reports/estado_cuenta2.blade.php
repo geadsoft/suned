@@ -34,6 +34,11 @@
                             <td class="text-left text-muted"><span style="font-size: 12px"><strong>Grupo: {{$data['grupo']}} / {{$data['periodo']}}</strong></span></td>
                         </tr>
                         <tr>
+                            @if($data['estado']=='R')
+                                <td class="text-left text-muted"><span style="font-size: 12px"><strong>RETIRADO</strong></span></td>
+                            @endif
+                        </tr>
+                        <tr>
                             <td class="text-right text-muted"><span style="font-size: 12px"><strong> {{date('d-M-Y H:i:s',strtotime($data['fecha']))}} </strong></span></td>
                         </tr>                        
                     </table>

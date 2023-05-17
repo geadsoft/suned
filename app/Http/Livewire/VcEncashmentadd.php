@@ -24,7 +24,7 @@ class VcEncashmentadd extends Component
     public $fecha;
     public $secuencia=0;
     public $tblCobro;
-    public $estudiante_id=0, $grupo, $curso, $concepto, $comentario, $matricula_id;
+    public $estudiante_id=0, $grupo, $curso, $concepto, $comentario, $matricula_id, $nromatricula;
 
     public $totalPago = 0;
     public $valpago   = 0;
@@ -44,6 +44,7 @@ class VcEncashmentadd extends Component
         $this->periodo  = $periodoid;
         $this->estudiante_id = $tblpersona['id'];
         $this->matricula_id  = $matriculaid;
+        $this->nromatricula  = $tblmatricula['documento'];
 
         $this->add();
         $this->search(1);

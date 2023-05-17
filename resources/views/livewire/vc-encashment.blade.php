@@ -114,7 +114,7 @@
                                             <div class="form-check card-radio">
                                                 
                                                     <label class="form-check-label" for="shippingAddress01">
-                                                    <span class="fw-semibold  text-muted text-uppercase">Tuition</span>
+                                                    <span class="fw-semibold  text-muted text-uppercase">Matricula - {{$nromatricula}}</span>
                                                     <span class="fs-15  d-block">Modalidad: {{$grupo}}</span>
                                                     <span class="text-muted fw-normal text-wrap mb-1 d-block">{{$curso}}</span>
                                                     <span class="text-muted fw-normal d-block">{{$comentario}}</span>
@@ -335,7 +335,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive table-card">
-                        <table class="table table-borderless align-middle mb-0">
+                        <table class="table table-borderless table-sm  align-middle mb-0">
                             <thead class="table-light text-muted">
                                 <tr>
                                     <th scope="col" style="width: 50px;">

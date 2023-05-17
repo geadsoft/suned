@@ -65,8 +65,16 @@ class VcModalSearch extends Component
 
     public function addCobro($matriculaId){
 
-        $this->dispatchBrowserEvent('hide-form');
-        return redirect()->to('/financial/encashment-add/'.$this->filters['srv_periodo'].'/'.$matriculaId);
+        $matricula = TmMatricula::find($matriculaId);
+        $estado    = $matricula->estudiante->estado;
+        
+        if($estado=='R'){
+            $this->dispatchBrowserEvent('hide-form');
+            $this->dispatchBrowserEvent('msg-retirado');
+        }else{
+            $this->dispatchBrowserEvent('hide-form');
+            return redirect()->to('/financial/encashment-add/'.$this->filters['srv_periodo'].'/'.$matriculaId);
+        }
 
     }
 

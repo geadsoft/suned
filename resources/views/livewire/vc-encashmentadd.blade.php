@@ -107,7 +107,7 @@
                                             <div class="form-check card-radio">
                                                 
                                                     <label class="form-check-label" for="shippingAddress01">
-                                                    <span class="fw-semibold  text-muted text-uppercase">Matricula</span>
+                                                    <span class="fw-semibold  text-muted text-uppercase">Matricula - {{$nromatricula}}</span>
                                                     <span class="fs-15  d-block">Modalidad: {{$grupo}}</span>
                                                     <span class="text-muted fw-normal text-wrap mb-1 d-block">{{$curso}}</span>
                                                     <span class="text-muted fw-normal d-block">{{$comentario}}

@@ -57,6 +57,11 @@
             $('#anulaCobro').modal('hide');
         })
 
+        window.addEventListener('msg-retirado', event => {
+            swal("Mensaje", "Estudiante retirado, no puede realizar cobro...", "info");
+            
+        })
+
 
     </script>
 

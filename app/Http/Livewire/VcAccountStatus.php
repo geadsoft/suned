@@ -31,6 +31,7 @@ class VcAccountStatus extends Component
         'grupo' => '',
         'fecha' => '',
         'periodo' => '',
+        'estado' => '',
         'idactual' => 0,
     ];
 
@@ -82,12 +83,12 @@ class VcAccountStatus extends Component
         ->selectraw("d.*,tr_deudas_cabs.saldo, tr_deudas_cabs.descuento, p.tipopago, p.referencia as refpago, g.descripcion, tr_deudas_cabs.referencia as documento")
         ->where("tr_deudas_cabs.matricula_id",$this->consulta['idactual'])
         ->where("tipo","<>","'DES'")
-        ->orderByRaw("d.tipovalor desc,d.fecha,case when left(tr_deudas_cabs.referencia,3) = 'MAT' then 1
+        ->orderByRaw("d.tipovalor desc,case when left(tr_deudas_cabs.referencia,3) = 'MAT' then 1
         when left(tr_deudas_cabs.referencia,3) = 'PLA' then 2
         when left(tr_deudas_cabs.referencia,3) = 'PLI' then 2
         when left(tr_deudas_cabs.referencia,3) = 'PEN' then 3
         when left(tr_deudas_cabs.referencia,3) = 'PLE' then 4
-        else 5 end")
+        else 5 end,d.fecha")
         ->get();
 
         $tblrecords = $records->where('tipo','<>','DES');
@@ -113,7 +114,9 @@ class VcAccountStatus extends Component
         $tblrecords = $this->genConsulta();
         $matricula = TmMatricula::find($matriculaId);
         $this->consulta['nombre'] = $matricula->estudiante->apellidos.' '.$matricula->estudiante->nombres;
+        $this->consulta['estado'] = $matricula->estudiante->estado;
         $this->consulta['fecha'] = date('Y-m-d H:i:s');
+
 
         $curso = TmCursos::query()
         ->join("tm_servicios as s","s.id","=","tm_cursos.servicio_id")
@@ -151,6 +154,7 @@ class VcAccountStatus extends Component
         $tblrecords = $this->genConsulta();
         $matricula = TmMatricula::find($matriculaId);
         $this->consulta['nombre'] = $matricula->estudiante->apellidos.' '.$matricula->estudiante->nombres;
+        $this->consulta['estado'] = $matricula->estudiante->estado;
         $this->consulta['fecha'] = date('Y-m-d H:i:s');
 
         $curso = TmCursos::query()
@@ -169,7 +173,7 @@ class VcAccountStatus extends Component
         $this->consulta['periodo'] = $periodo['descripcion'];
         
         $dias = [0=>'Domingo',1=>'Lunes',2=>'Martes',3=>'Miercoles',4=>'Jueves',5=>'Viernes',6=>'Sabado'];
-
+        
         //Vista
         $pdf = PDF::loadView('reports/estado_cuenta2',[
             'tblrecords' => $tblrecords,

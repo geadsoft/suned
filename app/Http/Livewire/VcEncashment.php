@@ -23,7 +23,7 @@ class VcEncashment extends Component
     public $nombre="";
     public $selectpago = false;
 
-    public $documento, $concepto, $fecha, $identificacion, $estudiante, $curso, $grupo, $grado, $comentario, $estado;
+    public $documento, $concepto, $fecha, $identificacion, $estudiante, $curso, $grupo, $grado, $comentario, $estado, $nromatricula;
 
     public $subtotal = 0;
     public $descuento = 0;
@@ -84,13 +84,14 @@ class VcEncashment extends Component
         ->join("tm_servicios","tm_cursos.servicio_id","=","tm_servicios.id")
         ->join("tm_generalidades","tm_servicios.modalidad_id","=","tm_generalidades.id")
         ->where('tm_matriculas.id',$datacobro['matricula_id'])
-        ->select('tm_generalidades.descripcion AS nomGrupo', 'tm_servicios.descripcion AS nomGrado', 'tm_cursos.paralelo', 'tm_matriculas.comentario')
+        ->select('tm_generalidades.descripcion AS nomGrupo', 'tm_servicios.descripcion AS nomGrado', 'tm_cursos.paralelo', 'tm_matriculas.comentario','tm_matriculas.documento')
         ->first();
             
         if($matricula!=null){
             $this->grupo = $matricula['nomGrupo'];
             $this->curso = $matricula['nomGrado']." - ".$matricula['paralelo'];
-            $this->comentario = $matricula['comentario'];
+            $this->comentario   = $matricula['comentario'];
+            $this->nromatricula = $matricula['documento'];
         }
 
     }

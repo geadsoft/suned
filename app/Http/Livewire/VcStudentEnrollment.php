@@ -223,7 +223,7 @@ class VcStudentEnrollment extends Component
         $codperiodo   = $pLectivo['periodo'];
         $nomperiodo   = $pLectivo['descripcion'];
         $nromatricula = $pLectivo['num_matricula']+1;
-        $mespension   = $pLectivo['mes_pension'];
+        $this->mespension = $pLectivo['mes_pension'];
 
         TmMatricula::Create([
             'documento' => substr($codperiodo, -2).str_pad($nromatricula, 4, "0", STR_PAD_LEFT),
@@ -239,7 +239,7 @@ class VcStudentEnrollment extends Component
             'usuario' => auth()->user()->name,
             'estado' => "A",
         ]);
-        $matricula = TmMatricula::orderBy("id", "desc")->first();
+        $matricula   = TmMatricula::orderBy("id", "desc")->first();
         $matriculaId = $matricula['id'];
 
         /*Actualiza secuencia*/
@@ -481,8 +481,6 @@ class VcStudentEnrollment extends Component
         //Pension
         for ($i=0; $i < $cuotas; $i++){
            
-            $mes++ ;
-
             if ($mes==13){
                 $mes = 1;
                 $año = $año+1;
@@ -522,6 +520,8 @@ class VcStudentEnrollment extends Component
                 'estado' => 'P',
                 'usuario' => auth()->user()->name,
             ]);
+
+            $mes++ ;
         }
 
 
