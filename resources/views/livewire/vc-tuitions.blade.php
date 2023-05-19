@@ -13,7 +13,7 @@
                 </div>
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
-                        <div class="row g-3">
+                        <div class="row mb-3">
                             <div class="col-xxl-5 col-sm-6">
                                 <div class="search-box">
                                     <input type="text" class="form-control search"
@@ -61,6 +61,14 @@
                             </div>
                             <!--end col-->
                         </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" wire:model="estado">
+                                    <label class="form-check-label" for="estado">Estudiantes retirados</label>
+                                </div>
+                            </div>
+                        </div>
                         <!--end row-->
                     </form>
                 </div>
@@ -106,6 +114,7 @@
                                                     <i class="ri-more-fill"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="" wire:click.prevent=""><i class="ri-printer-fill align-bottom me-2 text-muted fs-16"></i> Comprobante </a></li>
                                                     <li><a class="dropdown-item" href="/academic/student-enrollment/{{$record->identificacion}}"><i class="ri-add-box-fill align-bottom me-2 text-muted fs-16"></i>Agregar Matrícula</a></li>
                                                     <li><a class="dropdown-item" href="" wire:click.prevent="edit({{ $record }})"><i class="ri-repeat-line align-bottom me-2 text-muted fs-16"></i>Cambiar Curso</a></li>
                                                     <li><a class="dropdown-item" href="/academic/person-edit/{{$record->identificacion}}"><i class="ri-contacts-fill align-bottom me-2 text-muted fs-16"></i> Ficha del Estudiante </a></li>

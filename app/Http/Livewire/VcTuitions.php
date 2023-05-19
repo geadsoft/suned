@@ -27,7 +27,7 @@ class VcTuitions extends Component
     public $tblservicios=null;
     public $tbldatogen=null;
     public $estudianteId,$periodoId,$grupoId,$nivelId,$gradoId,$cursoId,$numreg,$matriculaId;
-    public $tblmontos,$valorpen;
+    public $tblmontos,$valorpen,$estado;
 
     public $meses = [ 
         1 => 'ENE',
@@ -47,6 +47,7 @@ class VcTuitions extends Component
         'srv_periodo' => '',
         'srv_grupo' => '',
         'srv_nombre' => '',
+        'srv_estado' => 'A',
     ];
     
     protected $listeners = ['setData'];
@@ -71,7 +72,7 @@ class VcTuitions extends Component
             ->when($this->filters['srv_grupo'],function($query){
                 return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
             })
-            ->where('p.estado','=','A')
+            ->where('tm_personas.estado',$this->filters['srv_estado'])
             ->select('m.id','identificacion','nombres','apellidos', 'documento', 'fecha', 'g.descripcion as nomgrupo','p.descripcion as nomperiodo',
             's.descripcion as nomgrado','c.paralelo','m.periodo_id','m.modalidad_id','m.nivel_id','c.servicio_id','m.curso_id','m.estudiante_id')
             ->orderBy('documento','desc')
@@ -109,6 +110,15 @@ class VcTuitions extends Component
   
     public function paginationView(){
         return 'vendor.livewire.bootstrap'; 
+    }
+
+    public function updatedEstado(){
+
+        $this->filters['srv_estado']  = 'A';
+
+        if ($this->estado){
+            $this->filters['srv_estado']  = 'R';
+        }
     }
 
     public function edit($objData){
