@@ -87,7 +87,7 @@ class VcStatisticalGraphs extends Component
             return $query->where('tm_matriculas.modalidad_id',"{$this->filters['idgrupo']}");
         })
         ->where("tipopersona","E")
-        ->where("estado","A")
+        ->where("p.estado","A")
         ->get();
         
         $ingresos = TrCobrosCabs::query()
