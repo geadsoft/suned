@@ -19,6 +19,7 @@
                                 <option value="{{$family->identificacion}}">{{$family->apellidos}} {{$family->nombres}}</option>
                             @endforeach
                         </select>
+                        
 
                     @else
 
@@ -46,7 +47,23 @@
             </div>
             <div class="col-xl-3">
             </div> 
-        </div> 
+        </div>
+        @if ($datoFamiliar==1)
+        <div class="row">
+            <div class="col-xl-3">
+            </div> 
+            <div class="col-xl-6">
+                <div class="input-group mb-3">
+                    <label for="" class="form-label fs-15 mt-2  me-5">NUI</label>
+                    <input type="text" class="form-control" id="txtnombres" placeholder="Enter your Numers" wire:model="search_nui">
+                    <a id="btnstudents" class ="input-group-text btn btn-soft-info" wire:click="searchPerson('R')"><i class="ri-search-line me-1"></i>Search</a>
+                </div>
+            </div>
+            <div class="col-xl-3">
+            </div> 
+        </div>
+        @endif
+
         @endif
 
         <div class="card-header">

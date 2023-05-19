@@ -71,7 +71,7 @@ class VcTuitions extends Component
             ->when($this->filters['srv_grupo'],function($query){
                 return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
             })
-            ->where('m.estado','=','A')
+            ->where('p.estado','=','A')
             ->select('m.id','identificacion','nombres','apellidos', 'documento', 'fecha', 'g.descripcion as nomgrupo','p.descripcion as nomperiodo',
             's.descripcion as nomgrado','c.paralelo','m.periodo_id','m.modalidad_id','m.nivel_id','c.servicio_id','m.curso_id','m.estudiante_id')
             ->orderBy('documento','desc')

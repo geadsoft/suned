@@ -108,6 +108,7 @@ class VcReportDebtAnalysis extends Component
             return $query->whereRaw('month(tr_deudas_cabs.fecha) <= '.$this->filters['srv_mes'].' and year(tr_deudas_cabs.fecha) = '.$this->filters['srv_periodo']);
         })
         ->where('saldo','>',0)
+        ->where('p.estado','A')
         ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
         'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo')
         ->orderBy('p.apellidos')
@@ -141,6 +142,7 @@ class VcReportDebtAnalysis extends Component
             return $query->whereRaw('month(tr_deudas_cabs.fecha) <= '.$this->filters['srv_mes'].' and year(tr_deudas_cabs.fecha) = '.$this->filters['srv_periodo']);
         })
         ->where('saldo','>',0)
+        ->where('p.estado','A')
         ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
         'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo')
         ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc, tr_deudas_cabs.fecha')
