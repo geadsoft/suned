@@ -167,6 +167,10 @@
                                                                                 <option value="TRA">Transferencia</option>
                                                                                 @case('CON')
                                                                                 <option value="CON">Convenio</option>
+                                                                                @case('APP')
+                                                                                <option value="APP">App Movil</option>
+                                                                                @case('RET')
+                                                                                <option value="RET">Retención</option>
                                                                                 @case('OTR')
                                                                                 <option value="OTR">Otros</option>
                                                                             @endswitch

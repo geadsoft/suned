@@ -217,6 +217,9 @@ class VcEncashment extends Component
             'TAR' => 'Tarjeta',
             'DEP' => 'Depósito',
             'TRA' => 'Transferencia',
+            'APP' => 'App Movil',
+            'RET' => 'Retención',
+            'OTR' => 'Otros',
             'CON' => 'Convenio',
         ];
 
@@ -250,6 +253,9 @@ class VcEncashment extends Component
             'TAR' => 'Tarjeta',
             'DEP' => 'Depósito',
             'TRA' => 'Transferencia',
+            'APP' => 'App Movil',
+            'RET' => 'Retención',
+            'OTR' => 'Otros',
             'CON' => 'Convenio',
         ];
 
