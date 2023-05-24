@@ -106,16 +106,16 @@
                                     <td class="text-right">{{number_format($tblrecords->where('tipovalor','DB')->sum('valor'),2)}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Saldo</td>
-                                    <td class="text-right">{{number_format($tblrecords->sum('saldo'),2)}}</td>
-                                </tr>
-                                <tr>
                                     <td>Haber</td>
                                     <td class="text-right">{{number_format($tblrecords->where('tipovalor','CR')->sum('valor'),2)}}</td>
                                 </tr>
                                 <tr>
                                     <td>Descuento</td>
-                                    <td class="text-right">{{number_format($tblrecords->sum('descuento'),2)}}</td>
+                                    <td class="text-right">{{number_format($tblrecords->where('tipovalor','DB')->sum('descuento'),2)}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Saldo</td>
+                                    <td class="text-right">{{number_format($tblrecords->sum('saldo'),2)}}</td>
                                 </tr>
                         </tbody>
                     </table>
