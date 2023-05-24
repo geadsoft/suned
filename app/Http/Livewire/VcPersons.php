@@ -165,7 +165,7 @@ class VcPersons extends Component
         
     }
 
-    public function fimiliares(){
+    public function familiares(){
 
         $tblrecords = TmPersonas::query()
         ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
@@ -175,7 +175,7 @@ class VcPersons extends Component
         ->join("tm_familiar_estudiantes as f","f.estudiante_id","=","tm_personas.id")
         ->join("tm_personas as p","p.id","=","f.persona_id")
         ->when($this->filters['srv_nombre'],function($query){
-            return $query->whereRaw("concat(p.apellidos,' ',p.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
+            return $query->whereRaw("concat(tm_personas.apellidos,' ',tm_personas.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
         ->when($this->filters['srv_periodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
@@ -187,13 +187,14 @@ class VcPersons extends Component
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
         })
         ->selectRaw("tm_personas.nombres,tm_personas.apellidos,tm_personas.identificacion, g.descripcion as grupo, s.descripcion as curso, c.paralelo, p.nombres as nomfamilia, 
-        p.apellidos as apefamilia, p.identificacion as nui, p.telefono, p.email")
-        ->where('tm_personas.tipopersona','=','E')
+        p.apellidos as apefamilia, p.identificacion as nui, p.telefono, p.email, p.parentesco")
+        ->where('tm_personas.tipopersona','E')
         ->where('tm_personas.estado',$this->filters['srv_estado'])
         ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc')
         ->get();
 
         return  $tblrecords ;
+        
 
     }
 
@@ -209,15 +210,19 @@ class VcPersons extends Component
         $this->filters['srv_genero'] = $data->srv_genero;
         $this->filters['srv_estado']  = $data->srv_estado;
            
-        $tblrecords = $this->estudiantes();
+        $tblrecords  = $this->estudiantes();
+        $tblfamiliar = $this->familiares();
         $tblcia = TmSedes::all();
 
         $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();
         $this->consulta['periodo'] = $periodo['descripcion'];
 
+        dd($tblfamiliar);
+
         //Vista
         $pdf = PDF::loadView('reports/ficha_estudiante',[
-            'tblrecords' => $tblrecords,
+            'tblrecords'  => $tblrecords,
+            'tblfamiliar' => $tblfamiliar,
             'data' => $this->consulta,
             'tblcia' => $tblcia,
         ]);
@@ -306,7 +311,7 @@ class VcPersons extends Component
         $this->filters['srv_genero']  = $data->srv_genero;
         $this->filters['srv_estado']  = $data->srv_estado;
            
-        $tblrecords = $this->fimiliares();
+        $tblrecords = $this->familiares();
 
         if(empty($tblrecords)){
             return;
@@ -449,7 +454,7 @@ class VcPersons extends Component
         $this->filters['srv_genero']  = $data->srv_genero;
         $this->filters['srv_estado']  = $data->srv_estado;
            
-        $tblrecords = $this->fimiliares();
+        $tblrecords = $this->familiares();
 
         if(empty($tblrecords)){
             return;

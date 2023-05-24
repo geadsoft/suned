@@ -114,15 +114,32 @@
                 </tr>
                 <tr class="text-uppercase">
                     <th>Nombres</th>
-                    <th>Apellidos</th>
                     <th>Identificación</th>
                     <th>Relación</th>
                     <th>Email</th>
                     <th>Teléfono</th>
                 </tr>
                 <tbody> 
-                    
-
+                    @foreach ($tblfamiliar as $fil => $data)
+                        @if($record->identificacion==$data->identificacion)
+                            <tr>
+                                <td class="text-left"> {{$data->apefamilia}} {{$data->nomfamilia}} </td>
+                                <td class="text-left"> {{$data->nui}}</td>
+                                @switch($data->parentesco)
+                                    @case('MA')
+                                        <td class="text-left"> Madre</td>
+                                    @case('PA')
+                                        <td class="text-left"> Padre</td>
+                                    @case('AP')
+                                        <td class="text-left"> Apoderado</td>
+                                    @case('OT')
+                                        <td class="text-left"> Otro</td>
+                                @endswitch
+                                <td class="text-left"> {{$data->email}}</td>
+                                <td class="text-left"> {{$data->telefono}}</td>
+                            </tr>
+                        @endif
+                    @endforeach
                 </tbody>
             </table>
 
