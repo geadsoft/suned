@@ -217,8 +217,6 @@ class VcPersons extends Component
         $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();
         $this->consulta['periodo'] = $periodo['descripcion'];
 
-        dd($tblfamiliar);
-
         //Vista
         $pdf = PDF::loadView('reports/ficha_estudiante',[
             'tblrecords'  => $tblrecords,
