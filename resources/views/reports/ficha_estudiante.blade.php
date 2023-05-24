@@ -128,12 +128,16 @@
                                 @switch($data->parentesco)
                                     @case('MA')
                                         <td class="text-left"> Madre</td>
+                                        @break
                                     @case('PA')
                                         <td class="text-left"> Padre</td>
+                                        @break
                                     @case('AP')
                                         <td class="text-left"> Apoderado</td>
+                                        @break
                                     @case('OT')
                                         <td class="text-left"> Otro</td>
+                                        @break
                                 @endswitch
                                 <td class="text-left"> {{$data->email}}</td>
                                 <td class="text-left"> {{$data->telefono}}</td>
