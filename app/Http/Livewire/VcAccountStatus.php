@@ -5,6 +5,7 @@ use App\Models\TmPersonas;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmGeneralidades;
 use App\Models\TrDeudasCabs;
+use App\Models\TrCobrosDets;
 use App\Models\TmMatricula;
 use App\Models\TmCursos;
 
@@ -79,15 +80,15 @@ class VcAccountStatus extends Component
         $records = TrDeudasCabs::query()
         ->join("tr_deudas_dets as d","tr_deudas_cabs.id","=","d.deudacab_id")
         /*->leftJoin("tr_cobros_dets as p","p.cobrocab_id","=","d.cobro_id")*/
-        ->join(DB::raw('(select cobrocab_id,group_concat(distinct tipopago) as tipopago 
+        ->leftJoin(DB::raw('(select cobrocab_id,group_concat(distinct tipopago) as tipopago 
         from tr_cobros_dets  
-        group by 1) d'), 
+        group by 1) as p'), 
         function($join)
         {
-           $join->on('tr_cobros_cabs.id', '=', 'd.cobrocab_id');
+           $join->on('p.cobrocab_id', '=', 'd.cobro_id');
         })
-        ->leftJoin("tm_generalidades as g","g.id","=","p.entidad_id")
-        ->selectraw("d.*,tr_deudas_cabs.saldo, tr_deudas_cabs.descuento, d.tipopago, g.descripcion, tr_deudas_cabs.referencia as documento")
+        /*->leftJoin("tm_generalidades as g","g.id","=","p.entidad_id")*/
+        ->selectraw("d.*,tr_deudas_cabs.saldo, tr_deudas_cabs.descuento, p.tipopago, tr_deudas_cabs.referencia as documento")
         ->where("tr_deudas_cabs.matricula_id",$this->consulta['idactual'])
         ->where("tipo","<>","'DES'")
         ->orderByRaw("d.tipovalor desc,case when left(tr_deudas_cabs.referencia,3) = 'MAT' then 1
@@ -106,7 +107,8 @@ class VcAccountStatus extends Component
 
         $tblrecords = TrDeudasCabs::query()
         ->join("tr_deudas_dets as d","tr_deudas_cabs.id","=","d.deudacab_id")
-        ->selectraw("d.*,tr_deudas_cabs.saldo, tr_deudas_cabs.descuento, tr_deudas_cabs.referencia as documento", )
+        ->join("tm_generalidades as g","g.id","=","d.entidad_id")
+        ->selectraw("d.*,g.descripcion")
         ->where("tr_deudas_cabs.matricula_id",$this->consulta['idactual'])
         ->get();
 
@@ -122,7 +124,8 @@ class VcAccountStatus extends Component
 
         $tbldetalle = TrCobrosDets::query()
         ->join("tr_cobros_cabs","tr_cobros_cabs.id","=","tr_cobros_dets.cobrocab_id")
-        ->selectRaw("tr_cobros_cabs.documento,tr_cobros_dets.*")
+        ->Join("tm_generalidades as g","g.id","=","tr_cobros_dets.entidad_id")
+        ->selectRaw("tr_cobros_cabs.documento,tr_cobros_dets.*, g.descripcion")
         ->where('tr_cobros_cabs.matricula_id',$matriculaId)
         ->get(); 
 
