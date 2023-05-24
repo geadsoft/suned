@@ -362,6 +362,8 @@ class VcPersons extends Component
         $this->filters['srv_estado']  = $data->srv_estado;
            
         $tblrecords = $this->estudiantes();
+        $tblfamiliar = $this->familiares();
+
         $tblcia = TmSedes::all();
 
         $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();
@@ -369,7 +371,8 @@ class VcPersons extends Component
 
         //Vista
         $pdf = PDF::loadView('reports/ficha_estudiante',[
-            'tblrecords' => $tblrecords,
+            'tblrecords'  => $tblrecords,
+            'tblfamiliar' => $tblfamiliar,
             'data' => $this->consulta,
             'tblcia' => $tblcia,
         ]);
