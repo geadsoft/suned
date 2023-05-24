@@ -138,6 +138,9 @@
                                     @case('OT')
                                         <td class="text-left"> Otro</td>
                                         @break
+                                    @case('NN')
+                                        <td class="text-left"> </td>
+                                        @break
                                 @endswitch
                                 <td class="text-left"> {{$data->email}}</td>
                                 <td class="text-left"> {{$data->telefono}}</td>
