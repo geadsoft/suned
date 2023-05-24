@@ -9,7 +9,7 @@ use App\Models\TmMatricula;
 use App\Models\TmCursos;
 
 use PDF;
-
+use Illuminate\Support\Facades\DB;
 
 use Livewire\Component;
 use Livewire\WithPagination;
