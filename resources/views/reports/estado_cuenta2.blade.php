@@ -140,7 +140,7 @@
                             </tr>
                         <thead>
                         <tbody class="list"> 
-                        @foreach ($tblrecords as $resumen) 
+                        @foreach ($tbldetalle as $resumen) 
                             @if($resumen['tipopago']=='DEP')
                                 <tr>
                                     <td class="">{{$resumen['referencia']}}</td>
@@ -173,7 +173,7 @@
                             </tr>
                         <thead>
                         <tbody class="list"> 
-                        @foreach ($tblrecords as $resumen) 
+                        @foreach ($tbldetalle as $resumen) 
                             @if($resumen['tipopago']=='TRA')
                                 <tr>
                                     <td class="">{{$resumen['referencia']}}</td>
@@ -206,7 +206,7 @@
                             </tr>
                         <thead>
                         <tbody class="list"> 
-                        @foreach ($tblrecords as $resumen) 
+                        @foreach ($tbldetalle as $resumen) 
                             @if($resumen['tipopago']=='TAR')
                                 <tr>
                                     <td class="">{{$resumen['referencia']}}</td>

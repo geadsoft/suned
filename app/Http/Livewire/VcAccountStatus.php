@@ -78,9 +78,16 @@ class VcAccountStatus extends Component
 
         $records = TrDeudasCabs::query()
         ->join("tr_deudas_dets as d","tr_deudas_cabs.id","=","d.deudacab_id")
-        ->leftJoin("tr_cobros_dets as p","p.cobrocab_id","=","d.cobro_id")
+        /*->leftJoin("tr_cobros_dets as p","p.cobrocab_id","=","d.cobro_id")*/
+        ->join(DB::raw('(select cobrocab_id,group_concat(distinct tipopago) as tipopago 
+        from tr_cobros_dets  
+        group by 1) d'), 
+        function($join)
+        {
+           $join->on('tr_cobros_cabs.id', '=', 'd.cobrocab_id');
+        })
         ->leftJoin("tm_generalidades as g","g.id","=","p.entidad_id")
-        ->selectraw("d.*,tr_deudas_cabs.saldo, tr_deudas_cabs.descuento, p.tipopago, p.referencia as refpago, g.descripcion, tr_deudas_cabs.referencia as documento")
+        ->selectraw("d.*,tr_deudas_cabs.saldo, tr_deudas_cabs.descuento, d.tipopago, g.descripcion, tr_deudas_cabs.referencia as documento")
         ->where("tr_deudas_cabs.matricula_id",$this->consulta['idactual'])
         ->where("tipo","<>","'DES'")
         ->orderByRaw("d.tipovalor desc,case when left(tr_deudas_cabs.referencia,3) = 'MAT' then 1
@@ -112,11 +119,17 @@ class VcAccountStatus extends Component
         $this->consulta['idactual'] = $matriculaId;
     
         $tblrecords = $this->genConsulta();
+
+        $tbldetalle = TrCobrosDets::query()
+        ->join("tr_cobros_cabs","tr_cobros_cabs.id","=","tr_cobros_dets.cobrocab_id")
+        ->selectRaw("tr_cobros_cabs.documento,tr_cobros_dets.*")
+        ->where('tr_cobros_cabs.matricula_id',$matriculaId)
+        ->get(); 
+
         $matricula = TmMatricula::find($matriculaId);
         $this->consulta['nombre'] = $matricula->estudiante->apellidos.' '.$matricula->estudiante->nombres;
         $this->consulta['estado'] = $matricula->estudiante->estado;
         $this->consulta['fecha'] = date('Y-m-d H:i:s');
-
 
         $curso = TmCursos::query()
         ->join("tm_servicios as s","s.id","=","tm_cursos.servicio_id")
@@ -138,6 +151,7 @@ class VcAccountStatus extends Component
         //Vista
         $pdf = PDF::loadView('reports/estado_cuenta2',[
             'tblrecords' => $tblrecords,
+            'tbldetalle' => $tbldetalle,
             'data' => $this->consulta,
             'dias' => $dias,
         ]);
@@ -152,6 +166,13 @@ class VcAccountStatus extends Component
         $this->consulta['idactual'] = $matriculaId;
     
         $tblrecords = $this->genConsulta();
+
+        $tbldetalle = TrCobrosDets::query()
+        ->join("tr_cobros_cabs","tr_cobros_cabs.id","=","tr_cobros_dets.cobrocab_id")
+        ->selectRaw("tr_cobros_cabs.documento,tr_cobros_dets.*")
+        ->where('tr_cobros_cabs.matricula_id',$matriculaId)
+        ->get();
+
         $matricula = TmMatricula::find($matriculaId);
         $this->consulta['nombre'] = $matricula->estudiante->apellidos.' '.$matricula->estudiante->nombres;
         $this->consulta['estado'] = $matricula->estudiante->estado;
@@ -177,6 +198,7 @@ class VcAccountStatus extends Component
         //Vista
         $pdf = PDF::loadView('reports/estado_cuenta2',[
             'tblrecords' => $tblrecords,
+            'tbldetalle' => $tbldetalle,
             'data' => $this->consulta,
             'dias' => $dias,
         ]);
