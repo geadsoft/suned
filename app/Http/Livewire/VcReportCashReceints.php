@@ -231,6 +231,9 @@ class VcReportCashReceints extends Component
         $this->valorDep = $tbldetalle->where('tipopago','DEP')->sum('valor');
         $this->valorTra = $tbldetalle->where('tipopago','TRA')->sum('valor');
         $this->valorCon = $tbldetalle->where('tipopago','CON')->sum('valor');
+        $this->valorRet = $tbldetalle->where('tipopago','RET')->sum('valor');
+        $this->valorApp = $tbldetalle->where('tipopago','APP')->sum('valor');
+        $this->valorOtr = $tbldetalle->where('tipopago','OTR')->sum('valor');
 
         foreach ($tbldetalle as $detpago){
 
@@ -275,6 +278,18 @@ class VcReportCashReceints extends Component
 
         $detallepago['nombre'] = 'Transferencia';
         $detallepago['valor'] = $this->valorTra;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'Retención';
+        $detallepago['valor'] = $this->valorRet;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'App Movil';
+        $detallepago['valor'] = $this->valorApp;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'Otros';
+        $detallepago['valor'] = $this->valorOtr;
         array_push($formapago,$detallepago);
 
         $detallepago['nombre'] = 'Convenio';
@@ -365,6 +380,9 @@ class VcReportCashReceints extends Component
         $this->valorDep = $tbldetalle->where('tipopago','DEP')->sum('valor');
         $this->valorTra = $tbldetalle->where('tipopago','TRA')->sum('valor');
         $this->valorCon = $tbldetalle->where('tipopago','CON')->sum('valor');
+        $this->valorRet = $tbldetalle->where('tipopago','RET')->sum('valor');
+        $this->valorApp = $tbldetalle->where('tipopago','APP')->sum('valor');
+        $this->valorOtr = $tbldetalle->where('tipopago','OTR')->sum('valor');
 
         foreach ($tbldetalle as $detpago){
 
@@ -409,6 +427,18 @@ class VcReportCashReceints extends Component
 
         $detallepago['nombre'] = 'Transferencia';
         $detallepago['valor'] = $this->valorTra;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'Retención';
+        $detallepago['valor'] = $this->valorRet;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'App Movil';
+        $detallepago['valor'] = $this->valorApp;
+        array_push($formapago,$detallepago);
+
+        $detallepago['nombre'] = 'Otros';
+        $detallepago['valor'] = $this->valorOtr;
         array_push($formapago,$detallepago);
 
         $detallepago['nombre'] = 'Convenio';
