@@ -295,7 +295,9 @@ class VcStatisticalGraphs extends Component
 
         $array=[];
 
-        $sinpago = $tbldeudas->where('credito','=',0)->count('estudiante_id');
+        $sinpago = $tbldeudas->where('credito','=',0)
+        ->where('saldo','>',0)
+        ->count('estudiante_id');
         $array[] = [
             'name' =>  'Sin registro',
             'y' => floatVal($sinpago)
