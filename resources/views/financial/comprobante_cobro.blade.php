@@ -40,7 +40,7 @@
                             <td class="text-left text-muted"><span style="font-size: 12px"><strong>Matricula: {{$tblrecords->matricula->documento}} - {{$tblrecords->matricula->modalidad->descripcion}}</strong></span></td>
                         </tr>
                          <tr>
-                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Curso: {{$tblrecords->matricula->curso->servicio->descripcion}} {{$tblrecords->matricula->curso->paralelo}}</strong></span></td>
+                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Curso: {{$tblrecords->matricula->curso->servicio->descripcion}} - {{$tblrecords->matricula->curso->paralelo}}</strong></span></td>
                         </tr>
                         <tr>
                             <td class="text-left text-muted"><span style="font-size: 12px"><strong>Recaudador: {{$tblrecords->usuario}} </strong></span></td>
