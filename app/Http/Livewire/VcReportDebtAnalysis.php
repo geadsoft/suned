@@ -6,7 +6,7 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TrDeudasCabs;
 use App\Models\TmCursos;
 
-
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 use PDF;
