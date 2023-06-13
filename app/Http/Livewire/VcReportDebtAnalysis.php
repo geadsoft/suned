@@ -126,6 +126,12 @@ class VcReportDebtAnalysis extends Component
         $tblrecords = TrDeudasCabs::query()
         ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
         ->join("tm_personas as p","p.id","=","m.estudiante_id")
+        ->leftJoin(DB::raw("(select c.id from tm_matriculas m
+        inner join tr_deudas_cabs c on c.matricula_id = m.id
+        inner join tr_deudas_dets d on c.id = d.deudacab_id
+        where d.tipo = 'OTR') as d"),function($join){
+            $join->on('tr_deudas_cabs.id', '=', 'd.id');
+        })
         ->join("tm_cursos as c","c.id","=","m.curso_id")
         ->join("tm_servicios as s","s.id","=","c.servicio_id")
         ->join("tm_generalidades as g","g.id","=","m.modalidad_id")   
@@ -143,6 +149,7 @@ class VcReportDebtAnalysis extends Component
         })
         ->where('saldo','>',0)
         ->where('p.estado','A')
+        ->whereraw("d.id is null")
         ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
         'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo')
         ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc, tr_deudas_cabs.fecha')

@@ -218,11 +218,6 @@ class VcStatisticalGraphs extends Component
         where d.tipo = 'OTR') as d"),function($join){
             $join->on('tr_deudas_cabs.id', '=', 'd.id');
         })
-        /*->leftJoin('tr_deudas_dets as d', function($join)
-        {
-            $join->on('tr_deudas_cabs.id', '=', 'd.deudacab_id');
-            $join->on('d.tipo', '=',DB::raw("'OTR'"));
-        })*/
         ->when($this->filters['idperiodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['idperiodo']}");
         })
