@@ -206,6 +206,7 @@ class VcStatisticalGraphs extends Component
         }
         $tblcobros =  array_slice( $cobros,0,$datos);
 
+        
         //Deudas Cancelada, Abonado
         $tipo = 'OTR';
         $tbldeudas = TrDeudasCabs::query()
@@ -231,7 +232,7 @@ class VcStatisticalGraphs extends Component
         ->select('tr_deudas_cabs.*')
         ->where('tr_deudas_cabs.estado','P')
         ->where('p.estado','A')
-        ->whereraw("left(tr_deudas_cabs.referencia,3)='PEN' and d.tipo is null")
+        ->whereraw("left(tr_deudas_cabs.referencia,3)='PEN' and d.id is null")
         ->get();
         
 
