@@ -212,11 +212,17 @@ class VcStatisticalGraphs extends Component
         $tbldeudas = TrDeudasCabs::query()
         ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
         ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->leftJoin('tr_deudas_dets as d', function($join)
+        ->leftJoin(DB::raw("(select c.id from tm_matriculas m
+        inner join tr_deudas_cabs c on c.matricula_id = m.id
+        inner join tr_deudas_dets d on c.id = d.deudacab_id
+        where d.tipo = 'OTR') as d"),function($join){
+            $join->on('tr_deudas_cabs.id', '=', 'd.id');
+        })
+        /*->leftJoin('tr_deudas_dets as d', function($join)
         {
             $join->on('tr_deudas_cabs.id', '=', 'd.deudacab_id');
             $join->on('d.tipo', '=',DB::raw("'OTR'"));
-        })
+        })*/
         ->when($this->filters['idperiodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['idperiodo']}");
         })
