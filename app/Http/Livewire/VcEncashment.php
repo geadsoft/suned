@@ -227,7 +227,7 @@ class VcEncashment extends Component
         $tblcobrodet  = TrCobrosDets::where('cobrocab_id',$selectId)->get();
         $tbldeudas    = TrDeudasDets::query()
         ->join("tr_deudas_cabs","tr_deudas_cabs.id","=","tr_deudas_dets.deudacab_id")
-        ->select('tr_deudas_cabs.referencia','tr_deudas_dets.fecha','tr_deudas_dets.detalle','tr_deudas_cabs.descuento','tr_deudas_dets.valor','tr_deudas_cabs.saldo')
+        ->select('tr_deudas_cabs.referencia','tr_deudas_dets.fecha','tr_deudas_dets.detalle','tr_deudas_cabs.descuento','tr_deudas_dets.valor','tr_deudas_cabs.saldo','tr_deudas_cabs.debito')
         ->where([
             ['cobro_id',$selectId],
             ['tipovalor',"CR"],
@@ -263,7 +263,7 @@ class VcEncashment extends Component
         $tblcobrodet  = TrCobrosDets::where('cobrocab_id',$selectId)->get();
         $tbldeudas    = TrDeudasDets::query()
         ->join("tr_deudas_cabs","tr_deudas_cabs.id","=","tr_deudas_dets.deudacab_id")
-        ->select('tr_deudas_cabs.referencia','tr_deudas_dets.fecha','tr_deudas_dets.detalle','tr_deudas_cabs.descuento','tr_deudas_dets.valor','tr_deudas_cabs.saldo')
+        ->select('tr_deudas_cabs.referencia','tr_deudas_dets.fecha','tr_deudas_dets.detalle','tr_deudas_cabs.descuento','tr_deudas_dets.valor','tr_deudas_cabs.saldo','tr_deudas_cabs.debito')
         ->where([
             ['cobro_id',$selectId],
             ['tipovalor',"CR"],

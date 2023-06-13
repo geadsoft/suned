@@ -19,20 +19,28 @@
                 </td>
             <tr>-->
             <tr>
-                <td width="30%" style="vertical-align: top; padding-top: 10px; position: relative">
-                    <img src="../public/assets/images/AmericanSchooll.jpg" width="200px" height="60px">                  
-                </td>
+                <td width="100%" style="vertical-align: top; padding-top: 10px">
+                    <img src="../public/assets/images/banner-ueas.jpg" height="126px">
+                    <div class="text-center" style="position: absolute;top: 12%; left: 68%; transform: translate(-12%, -70%); font-size:15px;">
+                    <strong>Recibo de Cobro No. {{$tblrecords['documento']}}</strong>
+                    </div>
+                </td>        
+            </tr>
+            <tr>
                 <td width="70%" class="text-center" style="vertical-align: top; padding-top: 10px">
                     
                     <table width="100%" cellpadding="0" cellspancing="0">
-                        <tr>
-                            <td class="text-right"><span style="font-size: 16px"><strong>Recibo de Cobro No. {{$tblrecords['documento']}}</strong></span></td>
-                        </tr>
                         <tr>
                             <td class="text-left text-muted"><span style="font-size: 12px"><strong>Fecha: {{date('d/m/Y',strtotime($tblrecords['fecha']))}} </strong></span></td>
                         </tr>
                         <tr>
                             <td class="text-left text-muted"><span style="font-size: 12px"><strong>Estudiante: {{$tblrecords->estudiante->apellidos}} {{$tblrecords->estudiante->nombres}}</strong></span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Matricula: {{$tblrecords->matricula->documento}} - {{$tblrecords->matricula->modalidad->descripcion}}</strong></span></td>
+                        </tr>
+                         <tr>
+                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Curso: {{$tblrecords->matricula->curso->servicio->descripcion}} {{$tblrecords->matricula->curso->paralelo}}</strong></span></td>
                         </tr>
                         <tr>
                             <td class="text-left text-muted"><span style="font-size: 12px"><strong>Recaudador: {{$tblrecords->usuario}} </strong></span></td>
@@ -54,8 +62,9 @@
                     <th style="color:#FFFFFF">Fecha</th>
                     <th style="color:#FFFFFF">Glosa</th>
                     <th style="color:#FFFFFF">Referencia</th>
-                    <th style="color:#FFFFFF">Neto</th>
+                    <th style="color:#FFFFFF">Bruto</th>
                     <th style="color:#FFFFFF">Desc.</th>
+                    <th style="color:#FFFFFF">Neto.</th>
                     <th style="color:#FFFFFF">Cancela</th>
                     <th style="color:#FFFFFF">Saldo</th>
                 </tr>
@@ -66,8 +75,9 @@
                     <td>{{date('d/m/Y',strtotime($record->fecha))}}</td>
                     <td>{{$record->detalle}}</td> 
                     <td>{{$record->referencia}}</td>
-                    <td>{{number_format($record->saldo+$record->valor+$record->descuento,2)}}</td>
+                    <td>{{number_format($record->debito,2)}}</td>
                     <td>{{number_format($record->descuento,2)}}</td>
+                    <td>{{number_format($record->saldo+$record->valor+$record->descuento,2)}}</td>
                     <td>{{number_format($record->valor,2)}}</td>
                     <td>{{number_format($record->saldo,2)}}</td>
                 </tr>
@@ -79,7 +89,7 @@
                     <td class="text-left">
                         <span><b>SUBTOTAL<b></span>
                     </td> 
-                    <td colspan="3"></td>
+                    <td colspan="4"></td>
                     <td colspan="1">
                         <span><strong>${{number_format($tbldeudas->sum('saldo')+$tbldeudas->sum('valor')+$tbldeudas->sum('descuento'),2)}}<strong></span>
                     </td> 
@@ -89,7 +99,7 @@
                     <td class="text-left">
                         <span><b>DESCUENTO<b></span>
                     </td> 
-                    <td colspan="3"></td>
+                    <td colspan="4"></td>
                     <td colspan="1">
                         <span><strong>${{number_format($tbldeudas->sum('descuento'),2)}}<strong></span>
                     </td> 
@@ -99,7 +109,7 @@
                     <td class="text-left">
                         <span><b>TOTAL<b></span>
                     </td> 
-                    <td colspan="3"></td>
+                    <td colspan="4"></td>
                     <td colspan="1">
                         <span><strong>${{number_format($tbldeudas->sum('valor'),2)}}<strong></span>
                     </td> 
@@ -109,7 +119,7 @@
                     <td class="text-left">
                         <span><b>CANCELA<b></span>
                     </td> 
-                    <td colspan="3"></td>
+                    <td colspan="4"></td>
                     <td colspan="1">
                         <span><strong>${{number_format($tbldeudas->sum('valor'),2)}}<strong></span>
                     </td> 
