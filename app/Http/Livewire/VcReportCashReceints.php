@@ -181,7 +181,7 @@ class VcReportCashReceints extends Component
         $tbldetalle = TrCobrosDets::query()
         ->join("tr_cobros_cabs","tr_cobros_cabs.id","=","tr_cobros_dets.cobrocab_id")
         ->selectRaw("tr_cobros_cabs.documento,tr_cobros_dets.*")
-        ->whereRaw('tr_cobros_cabs.id in ('.$idCobro.')')
+        ->whereRaw("tr_cobros_cabs.id in (".$idCobro.") and estado='A'")
         ->get(); 
 
         $sede    = TmSedes::where('id',1)->first();
