@@ -4,7 +4,7 @@
             <div class="card" id="paymentList">
                 <div class="card-header  border-0">
                     <div class="d-flex align-items-center">
-                        <h5 class="card-title mb-0 flex-grow-1">Valores Génericos</h5>
+                        <h5 class="card-title mb-0 flex-grow-1">Consulta de Valores</h5>
                         <div class="col-md-auto ms-auto">
                             <div class="hstack text-nowrap gap-2">
                                 <div>
