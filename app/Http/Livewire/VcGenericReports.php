@@ -13,7 +13,7 @@ use PDF;
 class VcGenericReports extends Component
 {
     use WithPagination;
-    public $referencia='PEN', $relacion='>', $tipo='saldo', $valor=0.00;
+    public $referencia='PEN', $relacion='>', $tipo='saldo', $valor='0.00';
     public $tblgenerals, $tblperiodos, $tblniveles, $datos;
 
     public $filters = [
