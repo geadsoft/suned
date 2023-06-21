@@ -211,7 +211,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="">
+                                <a class="nav-link menu-link" href="/report/generic-reports">
                                     <i class="las la-sliders-h fs-20"></i> <span>@lang('translation.generic')</span>
                                 </a>
                             </li>

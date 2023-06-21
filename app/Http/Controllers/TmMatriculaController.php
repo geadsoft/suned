@@ -36,6 +36,10 @@ class TmMatriculaController extends Controller
         return view('reports/debtanalysis');
     }
 
+    public function reportegenerico(){
+        return view('reports/generic_reports');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
