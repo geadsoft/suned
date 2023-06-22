@@ -37,6 +37,7 @@
                 </td> 
             </tr>
             <div class="mb-3">
+                <strong> Estudiantes : </strong> {{$totalalumno}}
             </div>
         </table>
     </section>
@@ -50,7 +51,7 @@
                 <tr>
                     <th style="color:#FFFFFF">Estudiante</th>
                     <th style="color:#FFFFFF">Concepto</th>
-                    <th class="text-right" style="color:#FFFFFF">Saldo</th>
+                    <th class="text-right" style="color:#FFFFFF">Monto</th>
                 </tr>
             <thead>
             <tbody class="list"> 
@@ -70,7 +71,7 @@
                             <tr>
                                 <td class="text-left">{{$recno['apellidos']}} {{$recno['nombres']}}</td>
                                 <td class="text-left">{{$recno['glosa']}}</td>
-                                <td class="text-right">{{number_format($recno['saldo'],2)}}</td>
+                                <td class="text-right">{{number_format($recno[$data['tipo']],2)}}</td>
                             </tr>
                             @endforeach
                         @endforeach

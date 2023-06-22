@@ -33,7 +33,7 @@ class VcGenericReports extends Component
         'nivel' => '',
         'curso' => '',
         'consulta' => '',
-        
+        'tipo' => '',        
     ];
 
     public function mount(){
@@ -115,7 +115,7 @@ class VcGenericReports extends Component
         $this->filters['srv_tipo']       = $this->tipo;
         $this->filters['srv_relacion']   = $this->relacion;
         $this->filters['srv_valor']      = $this->valor;
-
+        
         $this->datos = json_encode($this->filters);
 
         return $tblrecords;
@@ -147,11 +147,9 @@ class VcGenericReports extends Component
         })
         ->where('p.estado','A')
         ->whereRaw($this->tipo.$this->relacion.floatval($this->valor))
-        ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
+        ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'p.identificacion', 'g.descripcion as grupo', 's.descripcion as curso', 
         'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo')
-        ->orderBy('p.apellidos')
-        ->orderBY('p.nombres')
-        ->orderBy('tr_deudas_cabs.fecha')
+        ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, p.apellidos asc, tr_deudas_cabs.fecha')
         ->get();
          
         return $tblrecords;
@@ -178,14 +176,16 @@ class VcGenericReports extends Component
             return;
         }
 
-        $total = $tblrecords->sum('saldo');
+        $total = $tblrecords->sum($this->tipo);
         $grupo = $tblrecords->groupBy(['grupo','curso','paralelo'])->toArray();
+        $totalalumno = $tblrecords->groupBy('identificacion')->count(); 
        
         $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();
         $this->consulta['periodo'] = $periodo['descripcion'];
         $this->consulta['curso'] = 'Todos';
         $this->consulta['grupo'] = 'Todos';
         $this->consulta['nivel'] = 'Todos';
+        $this->consulta['tipo'] = $this->tipo;
 
         if(!empty($this->filters['srv_grupo'])){
             $objgrupo = TmGeneralidades::find($this->filters['srv_grupo']);
@@ -209,6 +209,7 @@ class VcGenericReports extends Component
             'tblrecords' => $grupo,
             'data'  => $this->consulta,
             'total' => $total,
+            'totalalumno' => $totalalumno,
         ]);
         
         if ($modo=='Preview'){
