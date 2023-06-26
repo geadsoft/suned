@@ -104,6 +104,38 @@
             </tbody>
         </table>
     </section>
+        <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
+            <thead class="table-light">
+                <tr>
+                    <th>RESUMEN MATRICULA</th>
+                </tr>
+            </thead>
+            <thead class="table-light" style="background-color:#222454">
+                <tr>
+                    <th style="color:#FFFFFF">Mes</th>
+                    <th style="color:#FFFFFF">Estudiantes</th>
+                    <th style="color:#FFFFFF">Mujeres</th>
+                    <th style="color:#FFFFFF">Hombres</th>
+                    <th style="color:#FFFFFF">Nuevos</th>
+                    <th style="color:#FFFFFF">Propios</th>
+                </tr>
+            </thead>
+            <tbody class="list"> 
+                @foreach ($resmatricula as $key => $recno)
+                    <tr>
+                        <td class="text-left">{{$meses[$recno['mes']]}}</td>
+                        <td class="text-left">{{$recno['estudiantes']}}</td>
+                        <td class="text-left">{{$recno['mujeres']}}</td>
+                        <td class="text-left">{{$recno['hombres']}}</td>
+                        <td class="text-left">{{$recno['nuevos']}}</td>
+                        <td class="text-left">{{$recno['propios']}}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>            
+    <section>
+
+    </section>
     
     <div style="position: absolute;
       display: inline-block;

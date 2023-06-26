@@ -91,7 +91,7 @@ class VcEncashmentadd extends Component
 
     public function postAdded($objDeuda=null,$objPago=null)
     {
-        
+
         foreach ($objPago as $pago)
         {
             $this->totalPago += $pago['valor'];

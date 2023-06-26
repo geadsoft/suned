@@ -19,6 +19,9 @@ var totalpago = 0;
 function new_link() {
 	count++;
 	var tr1 = document.createElement("tr");
+	tr1.id = count;
+	tr1.className = "pagos";
+
     var tipopago = document.getElementById("cmbtipopago").value;
     var entidad = document.getElementById("cmbentidad").value;
     var valor = document.getElementById("txtvalor").value;
@@ -26,8 +29,6 @@ function new_link() {
 	totalpago +=  parseFloat(valor);
 
     var nomentidad = "";
-	tr1.id = count;
-	tr1.className = "pagos";
 
 	var selectEFE = "";
 	var selectCHQ = "";
@@ -36,6 +37,8 @@ function new_link() {
 	var selectTRA = "";
 	var selectCON = "";
 	var selectOTR = "";
+	var selectAPP = "";
+	var selectRET = "";
 
 	switch(tipopago) {
 		case "EFE":
@@ -57,14 +60,20 @@ function new_link() {
 		case "CON":
 			selectCON = "selected"
 		  break;
-		  case "OTR":
+		case "OTR":
 			selectOTR = "selected"
+		  break;
+		case "APP":
+			selectAPP = "selected"
+		  break;
+		case "RET":
+			selectRET = "selected"
 		  break;
 	  }
 	
 	var delLink =
-		'<tr id ="' + count  +'" class="pagos">' +
-	    '<th scope="row" class="pago-id">' + count + "</th>" +
+		'<tr>' +
+	    '<th scope="row" class="pagos-id">' + count + "</th>" +
 		"<td>" +
             '<select type="select" class="form-select disabled" name="cmbtipopago" id="cmbtipopago-' + count + '"value= "' +  tipopago + '">' +
                 '<option value="EFE"'+ selectEFE +'>Efectivo</option>'+
@@ -73,6 +82,8 @@ function new_link() {
                 '<option value="DEP"'+ selectDEP +'>Depósito</option>'+
                 '<option value="TRA"'+ selectTRA +'>Transferencia</option>'+
                 '<option value="CON"'+ selectCON +'>Convenio</option>'+
+				'<option value="APP"'+ selectAPP +'>App Movil</option>'+
+                '<option value="RET"'+ selectRET +'>Retención</option>'+
 				'<option value="OTR"'+ selectOTR +'>Convenio</option>'+
             "</select>"+
 		"</td>" +
@@ -85,17 +96,18 @@ function new_link() {
 		"<td>" +
 	    	'<input type="number" class="form-control pago-line-valor"  id="txtvalor-' + count + '" step="0.01" value= "' + valor + '" readonly/>' +
 		"</td>" +
-		'<td class="pago-removal">' +
+		'<td class="pagos-removal">' +
             '<ul class="list-inline hstack gap-2 mb-0">'+
                 '<li class="list-inline-item" data-bs-toggle="tooltip"'+
                     'data-bs-trigger="hover" data-bs-placement="top" title="Remove">'+
-                    '<a class="text-danger d-inline-block remove-item-btn"'+
+                    '<a href="" class="text-danger d-inline-block remove-item-btn"'+
                         'data-bs-toggle="modal">'+
                         '<i class="ri-delete-bin-5-fill fs-16"></i>'+
                     "</a>"+
                 "</li>"+
             "</ul>"+
         "</td>";
+		"</tr>";
 
 	document.getElementById("cart-pago").value = paymentSign + totalpago.toFixed(2);
 	document.getElementById("cart-totalfact").value = paymentSign + totalpago.toFixed(2);
@@ -111,10 +123,10 @@ function new_link() {
 		});
 	});*/
 
-	remove();
 	
+	remove();
 	resetRow();
-    resetcontrol()
+    resetcontrol();
 }
 
 
@@ -129,7 +141,8 @@ function remove() {
 	
 	valorpago = document.getElementById("txtvalor").value;
 
-	document.querySelectorAll(".pago-removal ul li a").forEach(function (el) {
+	/*document.querySelectorAll(".pago-removal ul li a").forEach(function (el) {*/
+	Array.from(document.querySelectorAll(".pagos-removal ul li a")).forEach(function (el) {
 		el.addEventListener("click", function (e) {
 			removeItem(e);
 			resetRow()
@@ -141,7 +154,7 @@ function resetRow() {
 
 	document.getElementById("newlink").querySelectorAll("tr").forEach(function (subItem, index) {
 		var incid = index + 1;
-		subItem.querySelector('.pago-id').innerHTML = incid;
+		subItem.querySelector('.pagos-id').innerHTML = incid;
 
 	});
 }
@@ -171,6 +184,7 @@ function recalculateCart() {
 }
 
 function resetcontrol() {
+
 	document.getElementById("cmbtipopago").value = "EFE";
     document.getElementById("cmbentidad").value = "32";
     document.getElementById("txtvalor").value = 0.00;

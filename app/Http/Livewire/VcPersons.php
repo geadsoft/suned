@@ -8,6 +8,7 @@ use App\Models\TmGeneralidades;
 use App\Models\TmCursos;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
 use PDF;
 
@@ -15,7 +16,8 @@ class VcPersons extends Component
 {   
     use WithPagination;
 
-    public $datos, $estudiante, $selectId, $estado=false;
+    public $datos, $estudiante, $selectId, $estado=false, $periodoOld;
+    public $resumenMatricula = [], $resumenNivel = [];
     public $filters = [
         'srv_nombre' => '',
         'srv_periodo' => '',
@@ -31,10 +33,28 @@ class VcPersons extends Component
         'grupo'   => '',
         'periodo' => '',
     ];
+
+    public $meses = [
+        1 => 'Enero',
+        2 => 'Febrero',
+        3 => 'Marzo',
+        4 => 'Abril',
+        5 => 'Mayo',
+        6 => 'Junio',
+        7 => 'Julio',
+        8 => 'Agosto',
+        9 => 'Septiembre',
+        10=> 'Octubre',
+        11=> 'Noviembre',
+        12=> 'Diciembre',
+    ];
   
     public function mount(){
         $periodo = TmPeriodosLectivos::orderBy("periodo","desc")->first();
         $this->filters['srv_periodo'] = $periodo['id'];    
+
+        $anioant = TmPeriodosLectivos::where('periodo',$periodo['periodo']-1)->first();
+        $this->periodoOld  = $anioant['id'];
     }
 
     public function render()
@@ -136,6 +156,11 @@ class VcPersons extends Component
         $tblrecords = TmPersonas::query()
         ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
         ->join("tm_personas as r","r.id","=","m.representante_id")
+        ->leftJoin('tm_matriculas as a', function($join)
+        {
+            $join->on('a.estudiante_id', '=', 'm.estudiante_id');
+            $join->on('a.periodo_id', '=',DB::raw($this->periodoOld));
+        })
         ->join("tm_cursos as c","c.id","=","m.curso_id")
         ->join("tm_servicios as s","s.id","=","c.servicio_id")
         ->join("tm_generalidades as g","g.id","=","m.modalidad_id")
@@ -154,8 +179,9 @@ class VcPersons extends Component
         })
         ->selectRaw("tm_personas.*, g.descripcion as grupo, s.descripcion as curso, c.paralelo, m.documento as nromatricula 
         ,m.created_at as creado, weekday(tm_personas.created_at) as diapersona, weekday(m.created_at) as diamatricula, 
-        g2.descripcion as nacionalidad, m.fecha as fechamatricula, 
-        r.nombres as nomrepre, r.apellidos as aperepre, r.identificacion as idenrepre, r.parentesco as parenrepre")
+        g2.descripcion as nacionalidad, m.fecha as fechamatricula, month(m.fecha) as mes, 
+        r.nombres as nomrepre, r.apellidos as aperepre, r.identificacion as idenrepre, r.parentesco as parenrepre,
+        Case When a.id is null then 'N' else 'A' End as tipomatricula")
         ->where('tm_personas.tipopersona','=','E')
         ->where('tm_personas.estado',$this->filters['srv_estado'])
         ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc')
@@ -209,12 +235,14 @@ class VcPersons extends Component
         $this->filters['srv_curso'] = $data->srv_curso;
         $this->filters['srv_genero'] = $data->srv_genero;
         $this->filters['srv_estado']  = $data->srv_estado;
+
+        $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();
            
         $tblrecords  = $this->estudiantes();
         $tblfamiliar = $this->familiares();
         $tblcia = TmSedes::all();
 
-        $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();
+        
         $this->consulta['periodo'] = $periodo['descripcion'];
 
         //Vista
@@ -391,15 +419,52 @@ class VcPersons extends Component
         $this->filters['srv_curso']   = $data->srv_curso;
         $this->filters['srv_genero']  = $data->srv_genero;
         $this->filters['srv_estado']  = $data->srv_estado;
+
+        
+        $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();       
+        $anioant = TmPeriodosLectivos::where('periodo',$periodo['periodo']-1)->first();
+        $this->periodoOld  = $anioant['id'];
            
         $tblrecords = $this->estudiantes();
         $totalalumno = $tblrecords->count(); 
 
         $tblcia = TmSedes::all();
 
-        $grupo = $tblrecords->groupBy(['grupo','curso','paralelo'])->toArray();
+        $grupo    = $tblrecords->groupBy(['grupo','curso','paralelo'])->toArray();
+        $resumenM = $tblrecords->groupBy(['mes','tipomatricula','genero'])->toArray();
 
-        $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();
+        
+        foreach($resumenM as $mes => $recno){
+            $resumen['mes'] = $mes;
+            $resumen['estudiantes'] = 0;
+            $totM = 0;
+            $totF = 0;
+
+            foreach($recno as $tipo => $data){
+
+                if ($tipo=='N'){
+                    
+                    $totM = $totM + count($data['M']);
+                    $totF = $totF + count($data['F']);
+                    $totN = count($data['M'])+count($data['F']);
+                    
+                }else{
+                    
+                    $totM = $totM + count($data['M']);
+                    $totF = $totF + count($data['F']);
+                    $totA = count($data['M'])+count($data['F']);
+
+                }
+
+            }
+            $resumen['mujeres'] = $totF;
+            $resumen['hombres'] = $totM;
+            $resumen['nuevos']  = $totN;
+            $resumen['propios'] = $totA;
+            $resumen['estudiantes'] = $totN+$totA;
+            array_push($this->resumenMatricula,$resumen);
+        }
+        
         $this->consulta['periodo'] = $periodo['descripcion'];
         $this->consulta['curso'] = 'Todos';
         $this->consulta['grupo'] = 'Todos';
@@ -437,6 +502,8 @@ class VcPersons extends Component
                 'data' => $this->consulta,
                 'tblcia' => $tblcia,
                 'dias' => $dias,
+                'meses' => $this->meses,
+                'resmatricula'=>$this->resumenMatricula
             ]);
             
             return $pdf->download('Reporte Matrículas.pdf');

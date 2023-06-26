@@ -61,22 +61,26 @@
         })
         
         window.addEventListener('save-det', event => {
-
-            var count=0;
                           
             /*Pagos*/
-            count = 1;
-            var pagos  = document.getElementsByClassName("pagos");
+            var count = 0;
             var new_pago_obj = [];
             var deuda_list;
+
+            const tableRows = document.querySelectorAll('#newlink tr');
+            let col_tipopago = '';
+            let col_entidad  = '';
+            let col_valor = '';
+            let col_referencia = '';
             
-            pagos.forEach(element => {
-                var col_tipopago = element.querySelector("#cmbtipopago-"+count).value;
-                var col_entidad = element.querySelector("#cmbentidad-"+count).value;
-                
-                var col_valor = element.querySelector("#txtvalor-"+count).value;
-                var col_referencia = element.querySelector("#txtreferencia-"+count).value;
-                                
+            for(let i=0; i<tableRows.length; i++) {
+                const row = tableRows[i];
+                count = row.id;
+                col_tipopago   = row.querySelector("#cmbtipopago-"+count).value;
+                col_entidad    = row.querySelector("#cmbentidad-"+count).value;
+                col_valor      = row.querySelector("#txtvalor-"+count).value;
+                col_referencia = row.querySelector("#txtreferencia-"+count).value;
+
                 var pago_obj = {
                     tipopago: col_tipopago,
                     entidadid: col_entidad,
@@ -85,11 +89,10 @@
                     referencia: col_referencia,
                 }
                 new_pago_obj.push(pago_obj);
-                count++;
-            });
+            }
 
             deuda_list = JSON.parse(localStorage.getItem('deuda-list'));
-
+            
             Livewire.emit('postAdded',deuda_list,new_pago_obj);
         
         })
