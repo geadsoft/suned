@@ -85,7 +85,7 @@
                     </td> 
                     <td colspan="6"></td>
                     <td colspan="1">
-                        <span><strong>${{number_format($tblrecords->sum('pago'),2)}}<strong></span>
+                        <span><strong>${{number_format($tblrecords->where('estado','P')->sum('pago'),2)}}<strong></span>
                     </td> 
                 </tr>
             </tfoot>
