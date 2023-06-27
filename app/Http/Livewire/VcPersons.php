@@ -259,6 +259,8 @@ class VcPersons extends Component
 
     public function listEstudiantesPDF($report,$objdata)
     { 
+        ini_set('max_execution_time', 60);
+
         $data = json_decode($objdata);
 
         $this->filters['srv_nombre']  = $data->srv_nombre;
@@ -488,6 +490,7 @@ class VcPersons extends Component
 
     public function downloadEstudiantesPDF($report,$objdata)
     { 
+        ini_set('max_execution_time', 60);
         $data = json_decode($objdata);
 
         $this->filters['srv_nombre']  = $data->srv_nombre;
@@ -497,7 +500,6 @@ class VcPersons extends Component
         $this->filters['srv_genero']  = $data->srv_genero;
         $this->filters['srv_estado']  = $data->srv_estado;
 
-        
         $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();       
         $anioant = TmPeriodosLectivos::where('periodo',$periodo['periodo']-1)->first();
         $this->periodoOld  = $anioant['id'];
