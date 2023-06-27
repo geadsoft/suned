@@ -285,9 +285,6 @@ class VcPersons extends Component
         $resumenM = $tblrecords->groupBy(['mes','tipomatricula','genero'])->toArray();
         $resumenN = $tblrecords->groupBy(['mes','nivel_id'])->toArray();
 
-        ksort($resumenM);
-        ksort($resumenN);
-
         /*Resumen Estudiante por Genero*/        
         foreach($resumenM as $mes => $recno){
             $resumen['mes'] = $mes;
@@ -299,27 +296,15 @@ class VcPersons extends Component
 
                 if ($tipo=='N'){
                     
-                    if (is_null($data['M']) != true){
-                        $totM = $totM + count($data['M']);
-                    }
-
-                    if (is_null($data['F']) != true){
-                        $totF = $totF + count($data['F']);
-                    }
-                    
-                    $totN = $totM+$totF;
+                    $totM = $totM + count($data['M']);
+                    $totF = $totF + count($data['F']);
+                    $totN = count($data['M'])+count($data['F']);
                     
                 }else{
                     
-                    if (is_null($data['M']) != true) {
-                        $totM = $totM + count($data['M']);
-                    }
-
-                    if (is_null($data['F']) != true){
-                        $totF = $totF + count($data['F']);
-                    }
-
-                    $totA = $totM+$totF;
+                    $totM = $totM + count($data['M']);
+                    $totF = $totF + count($data['F']);
+                    $totA = count($data['M'])+count($data['F']);
 
                 }
 
