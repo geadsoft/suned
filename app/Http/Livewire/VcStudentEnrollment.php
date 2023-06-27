@@ -219,14 +219,20 @@ class VcStudentEnrollment extends Component
         ]);
 
         /* -- Registro de Matricula */
-        $pLectivo = TmPeriodosLectivos::find($this->periodoId);
+        $pLectivo     = TmPeriodosLectivos::find($this->periodoId);
         $codperiodo   = $pLectivo['periodo'];
         $nomperiodo   = $pLectivo['descripcion'];
         $nromatricula = $pLectivo['num_matricula']+1;
         $this->mespension = $pLectivo['mes_pension'];
+        $registro     = 'N';
+        
+        if($this->estudentnew==0){
+            $registro = 'P';
+        }
 
         TmMatricula::Create([
             'documento' => substr($codperiodo, -2).str_pad($nromatricula, 4, "0", STR_PAD_LEFT),
+            'registro' = $registro,
             'fecha' => $this -> fecha,
             'estudiante_id' => $this -> estudiante_id,
             'nivel_id' => $this -> nivelId,

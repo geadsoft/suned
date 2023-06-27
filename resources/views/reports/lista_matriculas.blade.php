@@ -78,7 +78,7 @@
                                 <td class="text-left">{{$recno['nromatricula']}} </td>
                                 <td class="text-left">{{$recno['apellidos']}} {{$recno['nombres']}}</td>
                                 <td class="text-left">{{$recno['identificacion']}}</td>
-                                @if(date('d-M-Y',strtotime($recno['created_at']))==date('d-M-Y',strtotime($recno['creado'])))
+                                @if($recno['tipomatricula']=='N')
                                     <td class="text-center">X</td>
                                     <td class="text-center"> </td>
                                 @else

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('tm_matriculas', function (Blueprint $table) {
             $table->id();
             $table->string('documento',10);
+            $table->string('registro',1);
             $table->datetime('fecha');
             $table->bigInteger('estudiante_id')->unsigned();
             $table->foreign('estudiante_id')->references('id')->on('tm_personas');

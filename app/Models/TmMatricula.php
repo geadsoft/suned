@@ -11,6 +11,7 @@ class TmMatricula extends Model
     protected $primaryKey = "id";
     protected $fillable = [
         'documento',
+        'registro',
         'fecha',
         'estudiante_id',
         'nivel_id',
