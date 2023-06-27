@@ -299,15 +299,27 @@ class VcPersons extends Component
 
                 if ($tipo=='N'){
                     
-                    $totM = $totM + count($data['M']);
-                    $totF = $totF + count($data['F']);
-                    $totN = count($data['M'])+count($data['F']);
+                    if ($data['M'] ?? null){
+                        $totM = $totM + count($data['M']);
+                    }
+
+                    if ($data['F'] ?? null){
+                        $totF = $totF + count($data['F']);
+                    }
+                    
+                    $totN = $totM+$totF;
                     
                 }else{
                     
-                    $totM = $totM + count($data['M']);
-                    $totF = $totF + count($data['F']);
-                    $totA = count($data['M'])+count($data['F']);
+                    if ($data['M'] ?? null){
+                        $totM = $totM + count($data['M']);
+                    }
+
+                    if ($data['F'] ?? null){
+                        $totF = $totF + count($data['F']);
+                    }
+
+                    $totA = $totM+$totF;
 
                 }
 
