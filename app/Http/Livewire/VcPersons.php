@@ -285,6 +285,8 @@ class VcPersons extends Component
         $resumenM = $tblrecords->groupBy(['mes','tipomatricula','genero'])->toArray();
         $resumenN = $tblrecords->groupBy(['mes','nivel_id'])->toArray();
 
+        dd($resumenM);
+
         /*Resumen Estudiante por Genero*/        
         foreach($resumenM as $mes => $recno){
             $resumen['mes'] = $mes;
