@@ -517,20 +517,34 @@ class VcPersons extends Component
             $resumen['estudiantes'] = 0;
             $totM = 0;
             $totF = 0;
+            $totN = 0;
+            $totA = 0;
 
             foreach($recno as $tipo => $data){
 
                 if ($tipo=='N'){
                     
-                    $totM = $totM + count($data['M']);
-                    $totF = $totF + count($data['F']);
-                    $totN = count($data['M'])+count($data['F']);
+                    if (isset($data['M'])){
+                        $totM = $totM + count($data['M']);
+                        $totN = $totN + count($data['M']);
+                    }
+
+                    if (isset($data['F'])){
+                        $totF = $totF + count($data['F']);
+                        $totN = $totN+count($data['F']);
+                    }
                     
                 }else{
                     
-                    $totM = $totM + count($data['M']);
-                    $totF = $totF + count($data['F']);
-                    $totA = count($data['M'])+count($data['F']);
+                    if (isset($data['M'])){
+                        $totM = $totM + count($data['M']);
+                        $totA = $totA + count($data['M']);
+                    }
+
+                    if (isset($data['F'])){
+                        $totF = $totF + count($data['F']);
+                        $totA = $totA + count($data['F']);
+                    }
 
                 }
 
