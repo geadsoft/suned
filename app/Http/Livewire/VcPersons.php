@@ -299,11 +299,11 @@ class VcPersons extends Component
 
                 if ($tipo=='N'){
                     
-                    if ($data['M'] ?? null){
+                    if (is_null($data['M']) != true){
                         $totM = $totM + count($data['M']);
                     }
 
-                    if ($data['F'] ?? null){
+                    if (is_null($data['F']) != true){
                         $totF = $totF + count($data['F']);
                     }
                     
@@ -311,11 +311,11 @@ class VcPersons extends Component
                     
                 }else{
                     
-                    if ($data['M'] ?? null){
+                    if (is_null($data['M']) != true) {
                         $totM = $totM + count($data['M']);
                     }
 
-                    if ($data['F'] ?? null){
+                    if (is_null($data['F']) != true){
                         $totF = $totF + count($data['F']);
                     }
 
