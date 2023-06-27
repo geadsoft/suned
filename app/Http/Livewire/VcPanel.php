@@ -66,6 +66,7 @@ class VcPanel extends Component
         ->where('tm_matriculas.periodo_id',$this->lnperiodoId)
         ->where("tipopersona","E")
         ->where("p.estado","A")
+        ->whereRaw("tm_matriculas.modalidad_id in (2,4)")
         ->groupByRaw("Case When a.id is null then 'N' else 'A' End")
         ->get();
 

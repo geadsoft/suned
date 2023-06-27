@@ -17,7 +17,7 @@ class VcPersons extends Component
     use WithPagination;
 
     public $datos, $estudiante, $selectId, $estado=false, $periodoOld;
-    public $resumenMatricula = [], $resumenNivel = [];
+    public $resumenMatricula = [], $resumenNivel = [], $nivelestudio=[];
     public $filters = [
         'srv_nombre' => '',
         'srv_periodo' => '',
@@ -181,7 +181,7 @@ class VcPersons extends Component
         ,m.created_at as creado, weekday(tm_personas.created_at) as diapersona, weekday(m.created_at) as diamatricula, 
         g2.descripcion as nacionalidad, m.fecha as fechamatricula, month(m.fecha) as mes, 
         r.nombres as nomrepre, r.apellidos as aperepre, r.identificacion as idenrepre, r.parentesco as parenrepre,
-        Case When a.id is null then 'N' else 'A' End as tipomatricula")
+        Case When a.id is null then 'N' else 'A' End as tipomatricula, s.nivel_id")
         ->where('tm_personas.tipopersona','=','E')
         ->where('tm_personas.estado',$this->filters['srv_estado'])
         ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc')
@@ -267,6 +267,10 @@ class VcPersons extends Component
         $this->filters['srv_curso']   = $data->srv_curso;
         $this->filters['srv_genero']  = $data->srv_genero;
         $this->filters['srv_estado']  = $data->srv_estado;
+
+        $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();       
+        $anioant = TmPeriodosLectivos::where('periodo',$periodo['periodo']-1)->first();
+        $this->periodoOld  = $anioant['id'];
            
         $tblrecords  = $this->estudiantes();
         $totalalumno = $tblrecords->count(); 
@@ -277,9 +281,63 @@ class VcPersons extends Component
 
         $tblcia = TmSedes::all();
 
-        $grupo = $tblrecords->groupBy(['grupo','curso','paralelo'])->toArray();
+        $grupo    = $tblrecords->groupBy(['grupo','curso','paralelo'])->toArray();
+        $resumenM = $tblrecords->groupBy(['mes','tipomatricula','genero'])->toArray();
+        $resumenN = $tblrecords->groupBy(['mes','nivel_id'])->toArray();
 
-        $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();
+        ksort($resumenM);
+        ksort($resumenN);
+
+        /*Resumen Estudiante por Genero*/        
+        foreach($resumenM as $mes => $recno){
+            $resumen['mes'] = $mes;
+            $resumen['estudiantes'] = 0;
+            $totM = 0;
+            $totF = 0;
+
+            foreach($recno as $tipo => $data){
+
+                if ($tipo=='N'){
+                    
+                    $totM = $totM + count($data['M']);
+                    $totF = $totF + count($data['F']);
+                    $totN = count($data['M'])+count($data['F']);
+                    
+                }else{
+                    
+                    $totM = $totM + count($data['M']);
+                    $totF = $totF + count($data['F']);
+                    $totA = count($data['M'])+count($data['F']);
+
+                }
+
+            }
+            $resumen['mujeres'] = $totF;
+            $resumen['hombres'] = $totM;
+            $resumen['nuevos']  = $totN;
+            $resumen['propios'] = $totA;
+            $resumen['estudiantes'] = $totN+$totA;
+            array_push($this->resumenMatricula,$resumen);
+        }
+
+         /*Resumen Estudiante por Nivel de Estudio*/
+         $resumen = [];
+         $totalMatricula = 0;
+         foreach($resumenN as $mes => $recno){
+            $resumen['mes'] = $mes;
+            $resumen['estudiantes'] = 0;
+            $total = 0;
+            foreach($recno as $nivel => $data){
+                $resumen[$nivel] = count($data);
+                $total = $total + count($data);
+            }
+            $resumen['estudiantes'] = $total;
+            $totalMatricula = $totalMatricula + $total;
+            array_push($this->resumenNivel,$resumen);
+         }
+
+        $nivelestudio = TmGeneralidades::where("superior",2)->get()->toArray();
+
         $this->consulta['periodo'] = $periodo['descripcion'];
         $this->consulta['curso'] = 'Todos';
         $this->consulta['grupo'] = 'Todos';
@@ -318,6 +376,11 @@ class VcPersons extends Component
                 'data' => $this->consulta,
                 'tblcia' => $tblcia,
                 'dias' => $dias,
+                'meses' => $this->meses,
+                'resmatricula'=>$this->resumenMatricula,
+                'resnivel'=>$this->resumenNivel,
+                'nivelestudio' => $nivelestudio,
+                'totalmatricula' => $totalMatricula
             ]);
             
             return $pdf->setPaper('a4')->stream('Reporte Matriculas.pdf');
@@ -432,8 +495,9 @@ class VcPersons extends Component
 
         $grupo    = $tblrecords->groupBy(['grupo','curso','paralelo'])->toArray();
         $resumenM = $tblrecords->groupBy(['mes','tipomatricula','genero'])->toArray();
+        $resumenN = $tblrecords->groupBy(['mes','nivel_id'])->toArray();
 
-        
+        /*Resumen Estudiante por Genero*/        
         foreach($resumenM as $mes => $recno){
             $resumen['mes'] = $mes;
             $resumen['estudiantes'] = 0;
@@ -464,7 +528,25 @@ class VcPersons extends Component
             $resumen['estudiantes'] = $totN+$totA;
             array_push($this->resumenMatricula,$resumen);
         }
-        
+
+         /*Resumen Estudiante por Nivel de Estudio*/
+         $resumen = [];
+         $totalMatricula = 0;
+         foreach($resumenN as $mes => $recno){
+            $resumen['mes'] = $mes;
+            $resumen['estudiantes'] = 0;
+            $total = 0;
+            foreach($recno as $nivel => $data){
+                $resumen[$nivel] = count($data);
+                $total = $total + count($data);
+            }
+            $resumen['estudiantes'] = $total;
+            $totalMatricula = $totalMatricula + $total;
+            array_push($this->resumenNivel,$resumen);
+         }
+
+        $nivelestudio = TmGeneralidades::where("superior",2)->get()->toArray();
+
         $this->consulta['periodo'] = $periodo['descripcion'];
         $this->consulta['curso'] = 'Todos';
         $this->consulta['grupo'] = 'Todos';
@@ -503,7 +585,10 @@ class VcPersons extends Component
                 'tblcia' => $tblcia,
                 'dias' => $dias,
                 'meses' => $this->meses,
-                'resmatricula'=>$this->resumenMatricula
+                'resmatricula'=>$this->resumenMatricula,
+                'resnivel'=>$this->resumenNivel,
+                'nivelestudio' => $nivelestudio,
+                'totalmatricula' => $totalMatricula
             ]);
             
             return $pdf->download('Reporte Matrículas.pdf');

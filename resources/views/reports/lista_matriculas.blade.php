@@ -102,12 +102,27 @@
                     @endforeach
                 @endforeach
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6"></td>
+                    <td class="text-center">
+                        <span><b>TOTAL<b></span>
+                    </td> 
+                    <td colspan="1" class="text-right">
+                        <span><strong>{{number_format($totalmatricula,2)}}<strong></span>
+                    </td> 
+                </tr>
+            </tfoot>
         </table>
     </section>
+    <section>
+
+    </section>
+    <section>
         <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
             <thead class="table-light">
                 <tr>
-                    <th>RESUMEN MATRICULA</th>
+                    <th colspan="6">RESUMEN MATRICULA</th>
                 </tr>
             </thead>
             <thead class="table-light" style="background-color:#222454">
@@ -133,10 +148,40 @@
                 @endforeach
             </tbody>
         </table>            
-    <section>
-
     </section>
-    
+    <section>
+        <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
+            <thead class="table-light">
+                <tr>
+                    <th colspan="8">RESUMEN MATRICULA - NIVEL DE ESTUDIO</th>
+                </tr>
+            </thead>
+            <thead class="table-light" style="background-color:#222454">
+                <tr>
+                    <th style="color:#FFFFFF">Mes</th>
+                    <th style="color:#FFFFFF">Estudiantes</th>
+                    @foreach ($nivelestudio as $nivel)
+                        <th style="color:#FFFFFF">{{$nivel['descripcion']}}</th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody class="list"> 
+                @foreach ($resnivel as $recno)
+                    <tr>
+                        <td class="text-left">{{$meses[$recno['mes']]}}</td>
+                        <td class="text-left">{{$recno['estudiantes']}}</td>
+                        @foreach ($nivelestudio as $row)
+                            @if ($recno[$row['id']] ?? null)
+                                <td class="text-left">{{$recno[$row['id']]}}</td>
+                            @else
+                                <td class="text-left">0</td>
+                            @endif
+                        @endforeach
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>            
+    </section>    
     <div style="position: absolute;
       display: inline-block;
       bottom: 0;
