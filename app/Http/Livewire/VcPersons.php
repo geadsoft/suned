@@ -301,28 +301,24 @@ class VcPersons extends Component
 
                 if ($tipo=='N'){
                     
-                    if (is_null($data['M'])){
-                    }else{
+                    if (isset($data['M'])){
                         $totM = $totM + count($data['M']);
                         $totN = $totN + count($data['M']);
                     }
 
-                    if (is_null($data['F'])){
-                    }else{
+                    if (isset($data['F'])){
                         $totF = $totF + count($data['F']);
                         $totN = $totN+count($data['F']);
                     }
                     
                 }else{
                     
-                    if (is_null($data['M'])){
-                    }else{
+                    if (isset($data['M'])){
                         $totM = $totM + count($data['M']);
                         $totA = $totA + count($data['M']);
                     }
 
-                    if (is_null($data['F'])){
-                    }else{
+                    if (isset($data['F'])){
                         $totF = $totF + count($data['F']);
                         $totA = $totA + count($data['F']);
                     }
