@@ -5,6 +5,7 @@
                 <div class="card-body checkout-tab">
                     <form autocomplete="off" wire:submit.prevent="{{ 'createData' }}">
                         @csrf
+
                         <div class="step-arrow-nav mt-n3 mx-n3 mb-3">
 
                             <ul class="nav nav-pills nav-justified custom-nav nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
@@ -51,55 +52,85 @@
                                     </div>
                                 </div>
                                 <div class="card-body row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label for="txtnombres" class="form-label">
-                                            Nombres</label>
-                                            <input type="text" class="form-control" id="txtnombres"
-                                                placeholder="Enter your Names" wire:model.defer="nombres" required {{$eControl}}>
-                                            @error('nombres') <span class="error">{{ $message }}</span> @enderror
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="txtnombres" class="form-label">
+                                                    Nombres</label>
+                                                    <input type="text" class="form-control" id="txtnombres"
+                                                        placeholder="Enter your Names" wire:model.defer="nombres" required {{$eControl}}>
+                                                    @error('nombres') <span class="error">{{ $message }}</span> @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="txtapellidos" class="form-label">Apellidos</label>
+                                                    <input type="text" class="form-control" id="txtapellidos"
+                                                        placeholder="Enter your Surnames" wire:model.defer="apellidos" required {{$eControl}}>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="mb-3">
+                                                    <label for="cmbtipoident" class="form-label">Tipo de Identificación</label>
+                                                    <select class="form-select" data-choices data-choices-search-false id="cmbtipoident" wire:model.defer="tipoident" required {{$eControl}}>
+                                                        <option value="C">Cédula</option>
+                                                        <option value="P">Pasaporte</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="mb-3">
+                                                    <label for="txtidentificacion" class="form-label">
+                                                    Identificación</label>
+                                                    <input type="text" class="form-control" id="txtnui"
+                                                        placeholder="Enter your firstname" wire:model.defer="identificacion" required {{$eControl}}>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="mb-3">
+                                                    <label for="txtfechanace" class="form-label">Fecha de Nacimiento</label>
+                                                    <input type="date" class="form-control" id="txtfechanace" wire:model.defer="fechanace" required {{$eControl}}> 
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="mb-3">
+                                                    <label for="cmbgenero" class="form-label">Genero</label>
+                                                    <select class="form-select" data-choices data-choices-search-false id="cmbgenero" wire:model.defer="genero" required {{$eControl}}>
+                                                        <option value="M">Masculino</option>
+                                                        <option value="F">Femenino</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label for="txtapellidos" class="form-label">Apellidos</label>
-                                            <input type="text" class="form-control" id="txtapellidos"
-                                                placeholder="Enter your Surnames" wire:model.defer="apellidos" required {{$eControl}}>
+                                    <div class="col-lg-4">
+                                        <div class="row">
+                                            <div class="card-body text-center mb-3">
+                                                
+                                                <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
+                                                    <!--<img src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('assets/images/users/avatar-1.jpg') }} @endif"
+                                                        class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">-->   
+                                                    @if ($fileimg)
+                                                        <img src="{{ $fileimg->temporaryURL() }}"
+                                                            class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
+                                                    @else
+                                                        <img src="@if ($foto != '') {{ URL::asset('storage/fotos/'.$foto) }}@else{{ URL::asset('assets/images/users/sin-foto.jpg') }} @endif"
+                                                            class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
+                                                    @endif
+                                                    <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                                                        <input id="profile-img-file-input" type="file" class="profile-img-file-input" wire:model="fileimg">
+                                                        <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
+                                                            <span class="avatar-title rounded-circle bg-light text-body">
+                                                                <i class="ri-camera-fill"></i>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
-                                        <div class="mb-3">
-                                            <label for="cmbtipoident" class="form-label">Tipo de Identificación</label>
-                                            <select class="form-select" data-choices data-choices-search-false id="cmbtipoident" wire:model.defer="tipoident" required {{$eControl}}>
-                                                <option value="C">Cédula</option>
-                                                <option value="P">Pasaporte</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label for="txtidentificacion" class="form-label">
-                                            Identificación</label>
-                                            <input type="text" class="form-control" id="txtnui"
-                                                placeholder="Enter your firstname" wire:model.defer="identificacion" required {{$eControl}}>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="mb-3">
-                                            <label for="cmbgenero" class="form-label">Genero</label>
-                                            <select class="form-select" data-choices data-choices-search-false id="cmbgenero" wire:model.defer="genero" required {{$eControl}}>
-                                                <option value="M">Masculino</option>
-                                                <option value="F">Femenino</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="mb-3">
-                                            <label for="txtfechanace" class="form-label">Fecha de Nacimiento</label>
-                                            <input type="date" class="form-control" id="txtfechanace" wire:model.defer="fechanace" required {{$eControl}}> 
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
                                         <div class="mb-3">
                                             <label for="cmbnacionalidad" class="form-label">Nacionalidad</label>
                                             <select class="form-select" data-choices data-choices-search-false id="cmbnacionalidad" wire:model.defer="nacionalidad" required {{$eControl}}>
@@ -112,14 +143,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
-                                        <div class="mb-3">
-                                            <label for="txttelefono" class="form-label">Teléfono</label>
-                                            <input type="text" class="form-control" id="txttelefono"
-                                                placeholder="Enter your phone number" wire:model.defer="telefono" required {{$eControl}}>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-2">
                                         <div class="mb-3">
                                             <label for="cmbetnia" class="form-label">Grupo Etnico</label>
                                             <select class="form-select data-choices data-choices-search-false" id="cmbetnia" wire:model.defer="etnia" {{$eControl}}>
@@ -139,6 +163,15 @@
                                                 placeholder="Enter Email" wire:model.defer="email" {{$eControl}}>
                                         </div>
                                     </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label for="txttelefono" class="form-label">Teléfono</label>
+                                            <input type="text" class="form-control" id="txttelefono"
+                                                placeholder="Enter your phone number" wire:model.defer="telefono" required {{$eControl}}>
+                                        </div>
+                                    </div>
+
+                                    
                                 </div>
                                 <div class="card">
                                     <div class="mb-3">

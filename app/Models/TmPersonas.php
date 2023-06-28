@@ -24,6 +24,7 @@ class TmPersonas extends Model
         'parentesco',
         'tipopersona',
         'relacion_id',
+        'foto',
         'estado',
         'usuario',
     ];

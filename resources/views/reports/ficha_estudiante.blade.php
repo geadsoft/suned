@@ -73,7 +73,11 @@
                             </table>
                         </td>
                         <td width="40%" class="text-center">
-                            <img src="../public/assets/images/foto-ueas.jpg">
+                            @if ($record->foto=='')
+                                <img src="../public/assets/images/foto-ueas.jpg">
+                            @else
+                                <img src="{{'../storage/app/public/fotos/'.$record->foto}}" width="150" height="170">
+                            @endif
                         </td>
                     </tr>
                 </tbody>

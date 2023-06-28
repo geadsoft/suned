@@ -8,11 +8,16 @@ use App\Models\TmFamiliarEstudiantes;
 use Illuminate\Support\Arr;
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class VcPersonadd extends Component
 {
+    use WithFileUploads;
+
     public $record, $addfamily=false, $estudiante_id, $datosFamiliar=1, $nuirepresentante;
-    public $search_nui;
+    public $search_nui, $foto, $fileimg='';
     public $eControl="";
     public $eControl2="disabled";
     public $showEditModal=false;
@@ -128,9 +133,16 @@ class VcPersonadd extends Component
         $this->etnia = $record->etnia;
         $this->direccion = $record->direccion;
         $this->estudiante_id = $record->id;
+        $this->foto = $record->foto;
+
+        $contents   = Storage::disk('public')->exists('fotos/'.$this->foto);
+        
+        if($contents==false){
+            $this->foto='';
+        }
 
         $domicilios = TmDomicilioEstudiantes::where("estudiante_id",$this->personaId)->get()->toArray();
-       
+
         if (empty($domicilios)) {
             $this->newDirections();
         }else{
@@ -188,7 +200,18 @@ class VcPersonadd extends Component
     }
 
     public function updateData(){
-        
+
+        $nameFile='';
+
+        if($this->fileimg ?? null){
+            $this ->validate([
+                'fileimg' => ['image', 'mimes:jpg,jpeg,png', 'max:1024'],
+                ]);
+
+            $nameFile = $this->identificacion.'.'.$this->fileimg->getClientOriginalExtension();
+            $pathfile = 'storage/'.$this->fileimg->storeAs('public/fotos', $nameFile);
+        }
+
         if ($this->personaId){
             $record = TmPersonas::find($this->personaId);
             $record->update([
@@ -206,6 +229,7 @@ class VcPersonadd extends Component
                 'parentesco' => "",
                 'tipopersona' => "E",
                 'relacion_id' => 0,
+                'foto' => $nameFile,
                 ]);
             
         }

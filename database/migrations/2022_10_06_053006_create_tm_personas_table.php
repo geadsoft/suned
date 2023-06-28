@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('parentesco',2);
             $table->string('tipopersona',1);
             $table->integer('relacion_id');
+            $table->string('foto',30);
             $table->string('estado',1);
             $table->string('usuario',50);
             $table->unique(['identificacion'],'uq_identificacion');
