@@ -114,6 +114,7 @@ class VcPersonadd extends Component
         $this->record['etnia']= "ME";
         $this->record['tipopersona']= "E";
         $this->record['estado']= 'A';
+        $this->record['foto']= '';
 
     }
 
@@ -177,7 +178,19 @@ class VcPersonadd extends Component
             'record.genero' => 'genero',
             'record.fechanacimiento' => 'required',
             'record.nacionalidad_id' => 'required',
+            'record.foto' => ['image', 'mimes:jpg,jpeg,png', 'max:1024'],
         ]);
+
+        if($this->fileimg ?? null){
+            $this ->validate([
+                'fileimg' => ['image', 'mimes:jpg,jpeg,png', 'max:1024'],
+                ]);
+
+            $nameFile = $this->identificacion.'.'.$this->fileimg->getClientOriginalExtension();
+            $pathfile = 'storage/'.$this->fileimg->storeAs('public/fotos', $nameFile);
+
+            $this->record['foto'] = $nameFile;
+        }
 
         TmPersonas::Create([
             'nombres' => $this -> record['nombres'],
@@ -193,6 +206,7 @@ class VcPersonadd extends Component
             'tipopersona' => $this -> record['tipopersona'],
             'usuario' => auth()->user()->name,
             'estado' => $this -> record['estado'],
+            'foto' => $this -> record['foto'],
         ]);
 
         $this->dispatchBrowserEvent('hide-form', ['message'=> 'added successfully!']);  
