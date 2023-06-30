@@ -12,6 +12,7 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TmMatricula;
 use PDF;
 
+use Illuminate\Support\Facades\DB;
 
 class VcEncashment extends Component
 {
@@ -225,14 +226,24 @@ class VcEncashment extends Component
 
         $this->record = TrCobrosCabs::find($selectId);
         $tblcobrodet  = TrCobrosDets::where('cobrocab_id',$selectId)->get();
-        $tbldeudas    = TrDeudasDets::query()
-        ->join("tr_deudas_cabs","tr_deudas_cabs.id","=","tr_deudas_dets.deudacab_id")
-        ->select('tr_deudas_cabs.referencia','tr_deudas_dets.fecha','tr_deudas_dets.detalle','tr_deudas_cabs.descuento','tr_deudas_dets.valor','tr_deudas_cabs.saldo','tr_deudas_cabs.debito')
-        ->where([
-            ['cobro_id',$selectId],
-            ['tipovalor',"CR"],
-            ['tipo',"PAG"],
-        ])->get();          
+        $tbldeudas    = TrDeudasCabs::query()
+        ->join(DB::raw("(select sum(case when tipo = 'PAG' then valor else 0 end) as valor,
+        sum(case when tipo = 'DES' then valor else 0 end) as descuento,
+        deudacab_id, fecha, detalle
+        from tr_deudas_dets d 
+        where  cobro_id = ".$selectId." 
+        group by deudacab_id,fecha, detalle) as d"),function($join){
+            $join->on('d.deudacab_id', '=', 'tr_deudas_cabs.id');
+        })
+        ->leftJoin(DB::raw("(select sum(valor) as credito, deudacab_id
+        from tr_deudas_dets d
+        inner join tr_deudas_cabs c on c.id = d.deudacab_id
+        where d.fecha <= ".date('Ymd',strtotime($this->record['fecha']))." and cobro_id<> ".$selectId." and tipovalor = 'CR' and matricula_id = ".$this->record['matricula_id']."
+        group by deudacab_id) as p"),function($join){
+            $join->on('p.deudacab_id', '=', 'tr_deudas_cabs.id');
+        })
+        ->selectRaw("tr_deudas_cabs.referencia,d.fecha,d.detalle,ifnull(tr_deudas_cabs.debito-p.credito,tr_deudas_cabs.debito) as saldo,d.descuento,d.valor, tr_deudas_cabs.debito")
+        ->get();             
         
         $pdf = PDF::loadView('financial/comprobante_cobro',[
             'tblrecords' => $this->record,
@@ -261,14 +272,25 @@ class VcEncashment extends Component
 
         $this->record = TrCobrosCabs::find($selectId);
         $tblcobrodet  = TrCobrosDets::where('cobrocab_id',$selectId)->get();
-        $tbldeudas    = TrDeudasDets::query()
-        ->join("tr_deudas_cabs","tr_deudas_cabs.id","=","tr_deudas_dets.deudacab_id")
-        ->select('tr_deudas_cabs.referencia','tr_deudas_dets.fecha','tr_deudas_dets.detalle','tr_deudas_cabs.descuento','tr_deudas_dets.valor','tr_deudas_cabs.saldo','tr_deudas_cabs.debito')
-        ->where([
-            ['cobro_id',$selectId],
-            ['tipovalor',"CR"],
-            ['tipo',"PAG"],
-        ])->get();          
+        $tbldeudas    = TrDeudasCabs::query()
+        ->join(DB::raw("(select sum(case when tipo = 'PAG' then valor else 0 end) as valor,
+        sum(case when tipo = 'DES' then valor else 0 end) as descuento,
+        deudacab_id, fecha, detalle
+        from tr_deudas_dets d 
+        where  cobro_id = ".$selectId." 
+        group by deudacab_id,fecha, detalle) as d"),function($join){
+            $join->on('d.deudacab_id', '=', 'tr_deudas_cabs.id');
+        })
+        ->leftJoin(DB::raw("(select sum(valor) as credito, deudacab_id
+        from tr_deudas_dets d
+        inner join tr_deudas_cabs c on c.id = d.deudacab_id
+        where d.fecha <= ".date('Ymd',strtotime($this->record['fecha']))." and cobro_id<> ".$selectId." and tipovalor = 'CR' and matricula_id = ".$this->record['matricula_id']."
+        group by deudacab_id) as p"),function($join){
+            $join->on('p.deudacab_id', '=', 'tr_deudas_cabs.id');
+        })
+        ->selectRaw("tr_deudas_cabs.referencia,d.fecha,d.detalle,ifnull(tr_deudas_cabs.debito-p.credito,tr_deudas_cabs.debito) as saldo,d.descuento,d.valor, tr_deudas_cabs.debito")
+        ->get(); 
+        
         
         $pdf = PDF::loadView('financial/comprobante_cobro',[
             'tblrecords' => $this->record,

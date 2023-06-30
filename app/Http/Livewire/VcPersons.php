@@ -12,9 +12,14 @@ use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
 use PDF;
 
+use App\Exports\ListaMatriculasExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\Exportable;
+
 class VcPersons extends Component
 {   
     use WithPagination;
+    use Exportable;
 
     public $datos, $estudiante, $selectId, $estado=false, $periodoOld;
     public $resumenMatricula = [], $resumenNivel = [], $nivelestudio=[];
@@ -671,9 +676,11 @@ class VcPersons extends Component
 
     }
 
+    public function exportExcel(){
 
+        $data = json_encode($this->filters);
+        return Excel::download(new ListaMatriculasExport($data), 'Reporte Matriculas.xlsx');
 
-
-
+    }
     
 }

@@ -75,11 +75,11 @@
                     <td>{{date('d/m/Y',strtotime($record->fecha))}}</td>
                     <td>{{$record->detalle}}</td> 
                     <td>{{$record->referencia}}</td>
-                    <td>{{number_format($record->debito,2)}}</td>
-                    <td>{{number_format($record->descuento,2)}}</td>
-                    <td>{{number_format($record->saldo+$record->valor+$record->descuento,2)}}</td>
-                    <td>{{number_format($record->valor,2)}}</td>
                     <td>{{number_format($record->saldo,2)}}</td>
+                    <td>{{number_format($record->descuento,2)}}</td>
+                    <td>{{number_format($record->saldo-$record->descuento,2)}}</td>
+                    <td>{{number_format($record->valor,2)}}</td>
+                    <td>{{number_format($record->saldo-$record->descuento-$record->valor,2)}}</td>
                 </tr>
             @endforeach
             </tbody>
@@ -91,7 +91,7 @@
                     </td> 
                     <td colspan="4"></td>
                     <td colspan="1">
-                        <span><strong>${{number_format($tbldeudas->sum('saldo')+$tbldeudas->sum('valor')+$tbldeudas->sum('descuento'),2)}}<strong></span>
+                        <span><strong>${{number_format($tbldeudas->sum('saldo'),2)}}<strong></span>
                     </td> 
                 </tr>
                 <tr>
@@ -111,7 +111,7 @@
                     </td> 
                     <td colspan="4"></td>
                     <td colspan="1">
-                        <span><strong>${{number_format($tbldeudas->sum('valor'),2)}}<strong></span>
+                        <span><strong>${{number_format($tbldeudas->sum('saldo')-$tbldeudas->sum('descuento'),2)}}<strong></span>
                     </td> 
                 </tr>
                 <tr>
@@ -122,6 +122,16 @@
                     <td colspan="4"></td>
                     <td colspan="1">
                         <span><strong>${{number_format($tbldeudas->sum('valor'),2)}}<strong></span>
+                    </td> 
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td class="text-left">
+                        <span><b>SALDO<b></span>
+                    </td> 
+                    <td colspan="4"></td>
+                    <td colspan="1">
+                        <span><strong>${{number_format($tbldeudas->sum('saldo')-$tbldeudas->sum('descuento')-$tbldeudas->sum('valor'),2)}}<strong></span>
                     </td> 
                 </tr>
             </tfoot>

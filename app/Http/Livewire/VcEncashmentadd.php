@@ -195,7 +195,7 @@ class VcEncashmentadd extends Component
 
             $tbldeuda = TrDeudasCabs::find($deuda['id']);
             $tbldeuda->update([
-                'descuento' => $tbldeuda['credito']+($this->despago), 
+                'descuento' => $tbldeuda['descuento']+($this->despago), 
                 'credito' => $tbldeuda['credito']+($this->valpago+$this->despago),
                 'saldo' => $tbldeuda['saldo']-($this->valpago+$this->despago),
             ]); 

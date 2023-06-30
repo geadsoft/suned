@@ -37,7 +37,7 @@
             </td>
             <td class="text-end">
                 <input type="number" class="form-control product-price bg-light border-0 text-end" id="desc-{{$fila}}" step="0.01" 
-                placeholder="0.00" value="{{number_format($deuda->descuento,2)}}" />
+                placeholder="0.00" value="0.00" />
             </td>
             <td class="text-end">
                 <input type="number" class="form-control product-price bg-white border-0 text-end" id="neto-{{$fila}}" step="0.01" 
