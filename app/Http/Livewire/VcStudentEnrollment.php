@@ -232,7 +232,7 @@ class VcStudentEnrollment extends Component
 
         TmMatricula::Create([
             'documento' => substr($codperiodo, -2).str_pad($nromatricula, 4, "0", STR_PAD_LEFT),
-            'registro' = $registro,
+            'registro' => $registro,
             'fecha' => $this -> fecha,
             'estudiante_id' => $this -> estudiante_id,
             'nivel_id' => $this -> nivelId,

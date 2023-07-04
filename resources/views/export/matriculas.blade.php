@@ -92,6 +92,13 @@
             <th><strong>Propios</strong></th>
         </tr>
     </thead>
+    <?php
+        $totest = 0;
+        $totfem = 0;
+        $totmas = 0;
+        $totnue = 0;
+        $totpro = 0;
+    ?>
     <tbody> 
         @foreach ($resmatricula as $key => $recno)
             <tr>
@@ -103,7 +110,23 @@
                 <td>{{$recno['nuevos']}}</td>
                 <td>{{$recno['propios']}}</td>
             </tr>
+            <?php
+                $totest = $totest+$recno['estudiantes'];
+                $totfem = $totfem+$recno['mujeres'];
+                $totmas = $totmas+$recno['hombres'];
+                $totnue = $totnue+$recno['nuevos'];
+                $totpro = $totpro+$recno['propios'];
+            ?>
         @endforeach
+            <tr>
+                <td></td>
+                <td><strong>TOTAL</strong></td>
+                <td><strong>{{$totest}}</strong></td>
+                <td><strong>{{$totfem}}</strong></td>
+                <td><strong>{{$totmas}}</strong></td>
+                <td><strong>{{$totnue}}</strong></td>
+                <td><strong>{{$totpro}}</strong></td>
+            </tr>
     </tbody>
     <tr></tr>
     <tr></tr>
