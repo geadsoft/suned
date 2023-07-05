@@ -174,13 +174,16 @@
                                     
                                 </div>
                                 <div class="card">
-                                    <div class="mb-3">
-                                        
-                                    </div>
                                     <div class="card-header">
                                         <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" data-bs-toggle="tab" href="#add-direction"
+                                                <a class="nav-link active" data-bs-toggle="tab" href="#info-matricula"
+                                                    role="tab">
+                                                    Matrícula
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-bs-toggle="tab" href="#add-direction"
                                                     role="tab">
                                                     Domicilio
                                                 </a>
@@ -188,123 +191,141 @@
                                         </ul>
                                     </div>
                                     <div class="card-body">
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="info-matricula" role="tabpanel">
+                                                <div class="mb-3">
+                                                    <div class="input-group">
+                                                         <span class="badge bg-info text-wrap fs-12"> Nro. Registro: {{$matricula['documento']}}</span>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                        <label class="form-label">Fecha: 
+                                                         <span class="text-muted fw-normal">{{date('d/m/Y',strtotime($matricula['fecha']))}}</span>
+                                                        </label>
+                                                </div>
+                                                 <div class="mb-3">
+                                                    <label class="form-label">Comentario</label>
+                                                    <textarea type="text" class="form-control" id="txtcomentario" placeholder="Enter your Comment" wire:model.defer="comentario">
+                                                    </textarea>
+                                                </div>
+                                            </div>                                       
+                                            <div class="tab-pane" id="add-direction" role="tabpanel">
+                                                <div class="row mb-3">
+                                                    <div class="mb-3 col-lg-4">
+                                                        <input type="text" class="form-control" wire:model.defer="direction.direccion">
+                                                    </div>
+                                                    <div class="mb-3 col-sm-1">
+                                                        <select class="form-select" data-choices data-choices-search-false id="cmbdomingo" wire:model.defer="direction.domingo">
+                                                            <option value=0>Libre</option>
+                                                            <option value=1>Va</option>
+                                                            <option value=2>Viene</option>
+                                                            <option value=3>Viene/Va</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3 col-sm-1">
+                                                        <select class="form-select" data-choices data-choices-search-false id="cmblunes" wire:model.defer="direction.lunes">
+                                                            <option value=0>Libre</option>
+                                                            <option value=1>Va</option>
+                                                            <option value=2>Viene</option>
+                                                            <option value=3>Viene/Va</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3 col-sm-1">
+                                                        <select class="form-select" data-choices data-choices-search-false id="cmbmartes" wire:model.defer="direction.martes">
+                                                            <option value=0>Libre</option>
+                                                            <option value=1>Va</option>
+                                                            <option value=2>Viene</option>
+                                                            <option value=3>Viene/Va</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3 col-sm-1">
+                                                        <select class="form-select" data-choices data-choices-search-false id="cmbmiercoles" wire:model.defer="direction.miercoles">
+                                                            <option value=0>Libre</option>
+                                                            <option value=1>Va</option>
+                                                            <option value=2>Viene</option>
+                                                            <option value=3>Viene/Va</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3 col-sm-1">
+                                                        <select class="form-select" data-choices data-choices-search-false id="cmbjueves" wire:model.defer="direction.jueves">
+                                                            <option value=0>Libre</option>
+                                                            <option value=1>Va</option>
+                                                            <option value=2>Viene</option>
+                                                            <option value=3>Viene/Va</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3 col-sm-1">
+                                                        <select class="form-select" data-choices data-choices-search-false id="cmbviernes" wire:model.defer="direction.viernes">
+                                                            <option value=0>Libre</option>
+                                                            <option value=1>Va</option>
+                                                            <option value=2>Viene</option>
+                                                            <option value=3>Viene/Va</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3 col-sm-1">
+                                                        <select class="form-select" data-choices data-choices-search-false id="cmbsabado" wire:model.defer="direction.sabado">
+                                                            <option value=0>Libre</option>
+                                                            <option value=1>Va</option>
+                                                            <option value=2>Viene</option>
+                                                            <option value=3>Viene/Va</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3 col-sm-1">
+                                                        <button type="button" wire:click="addDirections()" class="btn btn-soft-secondary" id="create-btn"
+                                                            data-bs-target=""><i class="ri-add-fill me-1"></i> Agregar
+                                                            </button>
+                                                    </div>
+                                                </div>
+                                                <div class="table-responsive table-card mb-3">
+                                                    <table class="table align-middle table-nowrap mb-0" id="customerTable">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th scope="col" style="width: 500px;">Direction</th>
+                                                                <th scope="col">Sunday</th>
+                                                                <th scope="col">Monday</th>
+                                                                <th scope="col">Tuesday</th>
+                                                                <th scope="col">Wednesday</th>
+                                                                <th scope="col">Thursday</th>
+                                                                <th scope="col">Friday</th>
+                                                                <th scope="col">Saturday</th>
+                                                                <th scope="col">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="newlink">
 
-                                        
-                                        <div class="tab-pane active" id="#add-direction" role="tabpanel">
-                                            <div class="row mb-3">
-                                                <div class="mb-3 col-lg-4">
-                                                    <input type="text" class="form-control" wire:model.defer="direction.direccion">
+                                                            @foreach ($directions as $data)  
+                                                            <tr>
+                                                                <td>{{$data['direccion']}}</td>
+                                                                <td>{{$dia[$data['domingo']]}}</td>
+                                                                <td>{{$dia[$data['lunes']]}}</td>
+                                                                <td>{{$dia[$data['martes']]}}</td>
+                                                                <td>{{$dia[$data['miercoles']]}}</td>
+                                                                <td>{{$dia[$data['jueves']]}}</td>
+                                                                <td>{{$dia[$data['viernes']]}}</td>
+                                                                <td>{{$dia[$data['sabado']]}}</td>
+                                                                <td>
+                                                                    <ul class="list-inline hstack gap-2 mb-0">
+                                                                        <li class="list-inline-item edit" data-bs-toggle="tooltip"
+                                                                            data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                                            <a href="" wire:click.prevent="">
+                                                                                <i class="ri-pencil-fill fs-16"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                                            data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                            <a class="text-danger d-inline-block remove-item-btn"
+                                                                                data-bs-toggle="modal" href="" wire:click.prevent="">
+                                                                                <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>    
+                                                    </table>
                                                 </div>
-                                                <div class="mb-3 col-sm-1">
-                                                    <select class="form-select" data-choices data-choices-search-false id="cmbdomingo" wire:model.defer="direction.domingo">
-                                                        <option value=0>Libre</option>
-                                                        <option value=1>Va</option>
-                                                        <option value=2>Viene</option>
-                                                        <option value=3>Viene/Va</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3 col-sm-1">
-                                                    <select class="form-select" data-choices data-choices-search-false id="cmblunes" wire:model.defer="direction.lunes">
-                                                        <option value=0>Libre</option>
-                                                        <option value=1>Va</option>
-                                                        <option value=2>Viene</option>
-                                                        <option value=3>Viene/Va</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3 col-sm-1">
-                                                    <select class="form-select" data-choices data-choices-search-false id="cmbmartes" wire:model.defer="direction.martes">
-                                                        <option value=0>Libre</option>
-                                                        <option value=1>Va</option>
-                                                        <option value=2>Viene</option>
-                                                        <option value=3>Viene/Va</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3 col-sm-1">
-                                                    <select class="form-select" data-choices data-choices-search-false id="cmbmiercoles" wire:model.defer="direction.miercoles">
-                                                        <option value=0>Libre</option>
-                                                        <option value=1>Va</option>
-                                                        <option value=2>Viene</option>
-                                                        <option value=3>Viene/Va</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3 col-sm-1">
-                                                    <select class="form-select" data-choices data-choices-search-false id="cmbjueves" wire:model.defer="direction.jueves">
-                                                        <option value=0>Libre</option>
-                                                        <option value=1>Va</option>
-                                                        <option value=2>Viene</option>
-                                                        <option value=3>Viene/Va</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3 col-sm-1">
-                                                    <select class="form-select" data-choices data-choices-search-false id="cmbviernes" wire:model.defer="direction.viernes">
-                                                        <option value=0>Libre</option>
-                                                        <option value=1>Va</option>
-                                                        <option value=2>Viene</option>
-                                                        <option value=3>Viene/Va</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3 col-sm-1">
-                                                    <select class="form-select" data-choices data-choices-search-false id="cmbsabado" wire:model.defer="direction.sabado">
-                                                        <option value=0>Libre</option>
-                                                        <option value=1>Va</option>
-                                                        <option value=2>Viene</option>
-                                                        <option value=3>Viene/Va</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3 col-sm-1">
-                                                    <button type="button" wire:click="addDirections()" class="btn btn-soft-secondary" id="create-btn"
-                                                        data-bs-target=""><i class="ri-add-fill me-1"></i> Agregar
-                                                        </button>
-                                                </div>
-                                            </div>
-                                            <div class="table-responsive table-card mb-3">
-                                                <table class="table align-middle table-nowrap mb-0" id="customerTable">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th scope="col" style="width: 500px;">Direction</th>
-                                                            <th scope="col">Sunday</th>
-                                                            <th scope="col">Monday</th>
-                                                            <th scope="col">Tuesday</th>
-                                                            <th scope="col">Wednesday</th>
-                                                            <th scope="col">Thursday</th>
-                                                            <th scope="col">Friday</th>
-                                                            <th scope="col">Saturday</th>
-                                                            <th scope="col">Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="newlink">
-
-                                                        @foreach ($directions as $data)  
-                                                        <tr>
-                                                            <td>{{$data['direccion']}}</td>
-                                                            <td>{{$dia[$data['domingo']]}}</td>
-                                                            <td>{{$dia[$data['lunes']]}}</td>
-                                                            <td>{{$dia[$data['martes']]}}</td>
-                                                            <td>{{$dia[$data['miercoles']]}}</td>
-                                                            <td>{{$dia[$data['jueves']]}}</td>
-                                                            <td>{{$dia[$data['viernes']]}}</td>
-                                                            <td>{{$dia[$data['sabado']]}}</td>
-                                                            <td>
-                                                                <ul class="list-inline hstack gap-2 mb-0">
-                                                                    <li class="list-inline-item edit" data-bs-toggle="tooltip"
-                                                                        data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                                        <a href="" wire:click.prevent="">
-                                                                            <i class="ri-pencil-fill fs-16"></i>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                                        data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                                        <a class="text-danger d-inline-block remove-item-btn"
-                                                                            data-bs-toggle="modal" href="" wire:click.prevent="">
-                                                                            <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </td>
-                                                        </tr>
-                                                        @endforeach
-                                                    </tbody>    
-                                                </table>
                                             </div>
                                         </div>
                                     </div>

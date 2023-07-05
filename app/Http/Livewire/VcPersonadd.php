@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Livewire;
+use App\Models\TmPeriodosLectivos;
+use App\Models\TmMatricula;
 use App\Models\TmPersonas;
 use App\Models\TmGeneralidades;
 use App\Models\TmDomicilioEstudiantes;
@@ -69,13 +71,15 @@ class VcPersonadd extends Component
     ];
 
     public $personaId, $nombres, $apellidos, $tipoident, $identificacion, $genero, $fechanace, $nacionalidad, $telefono, $etnia;
-    public $tipodiscapacidad, $discapacidad, $email, $direccion;
+    public $tipodiscapacidad, $discapacidad, $email, $direccion, $plectivo, $matricula, $comentario;
 
     public $fnombres, $fapellidos, $ftipoident, $fidentificacion, $fgenero, $fnacionalidad, $ftelefono, $femail, $fdireccion, $fparentesco;
 
     protected $listeners = ['updateFamiliar'];    
  
     public function mount($tuition_id){
+
+        $this->plectivo = TmPeriodosLectivos::orderBy('periodo','desc')->first();
         
         if ($tuition_id!=""){
             $this->search_nui = $tuition_id;
@@ -95,6 +99,7 @@ class VcPersonadd extends Component
         return view('livewire.vc-personadd',[
             'record' => $record,
             'tblgenerals' => $tblgenerals,
+            'matricula' => $this->matricula,
         ]);
 
     }
@@ -163,8 +168,15 @@ class VcPersonadd extends Component
             $this->familiares =  $familys;
         }
 
+        $this->matricula = TmMatricula::where('estudiante_id',$this->personaId)
+        ->where('periodo_id',$this->plectivo['id'])
+        ->orderBy('fecha','desc')
+        ->first();
+
         $this->representante    = $familys[0];
         $this->nuirepresentante = $familys[0]['identificacion'];
+        $this->comentario       = $this->matricula['comentario'];
+
 
     }
 
@@ -360,6 +372,12 @@ class VcPersonadd extends Component
             'direccion'  => $this->representante['direccion'],
             'email'      => $this->representante['email'],
             'parentesco' => $this->representante['parentesco'],
+        ]);
+
+        //Comentario Matricula
+        $tmatricula = TmMatricula::find($this->matricula['id']);
+        $tmatricula->update([
+            'comentario' => $this->comentario
         ]);
         
         $this->dispatchBrowserEvent('msg-actualizar');
