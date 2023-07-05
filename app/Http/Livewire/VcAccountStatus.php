@@ -91,7 +91,7 @@ class VcAccountStatus extends Component
         ->selectraw("d.*,tr_deudas_cabs.saldo, tr_deudas_cabs.descuento, p.tipopago, tr_deudas_cabs.referencia as documento")
         ->where("tr_deudas_cabs.matricula_id",$this->consulta['idactual'])
         ->where("tipo","<>","'DES'")
-        ->orderByRaw("d.tipo, case when left(tr_deudas_cabs.referencia,3) = 'MAT' then 1
+        ->orderByRaw("d.tipo, d.fecha, case when left(tr_deudas_cabs.referencia,3) = 'MAT' then 1
         when left(tr_deudas_cabs.referencia,3) = 'PLA' then 2
         when left(tr_deudas_cabs.referencia,3) = 'PLI' then 2
         when left(tr_deudas_cabs.referencia,3) = 'PEN' then 3
