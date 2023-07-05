@@ -364,14 +364,14 @@
                                                 <input class="form-check-input" type="checkbox" id="chkpago" checked>
                                             </div>
                                         </th>
-                                        <td class="text-dark">{{$record->deudacab->referencia}}</td>
+                                        <td class="text-dark">{{$record->referencia}}</td>
                                         <td class="text-end">
                                             <input type="number" class="form-control product-price bg-white border-0 text-end" id="saldo" step="0.01" 
-                                                placeholder="0.00" value="{{number_format($record->deudacab->saldo+$record->valor+$record->deudacab->descuento,2)}}" readonly/>
+                                                placeholder="0.00" value="{{number_format($record->saldo,2)}}" readonly/>
                                         </td>
                                         <td class="text-end">
                                             <input type="number" class="form-control product-price bg-light border-0 text-end" id="desc" step="0.01" 
-                                            placeholder="0.00" value="{{number_format($record->deudacab->descuento,2)}}" />
+                                            placeholder="0.00" value="{{number_format($record->descuento,2)}}" />
                                         </td>
                                         <td class="text-end">
                                             <input type="number" class="form-control product-price bg-white border-0 text-end" id="saldo" step="0.01" 
@@ -412,6 +412,12 @@
                                 <div class="input-group">
                                     <label for="cart-impuesto" class="form-label fw-semibold p-1">TOTAL TO CANCEL:</label>
                                     <input type="text" class="form-control bg-white border-0 text-end fw-semibold fs-15" id="cart-pago" placeholder="$0.00" value="${{number_format($totalpago,2)}}" readonly />
+                                </div>
+                            </div>
+                            <div class="table-active bg-light">
+                                <div class="input-group">
+                                    <label for="cart-impuesto" class="form-label fw-semibold p-2">Saldo (USD):</label>
+                                    <input type="text" class="form-control bg-light border-0 text-end fw-semibold" id="cart-total" value="${{number_format($saldo,2)}}" placeholder="$0.00" readonly />
                                 </div>
                             </div>
 

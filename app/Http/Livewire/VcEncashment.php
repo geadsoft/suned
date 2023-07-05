@@ -30,6 +30,7 @@ class VcEncashment extends Component
     public $descuento = 0;
     public $total = 0;
     public $totalpago = 0;
+    public $saldo = 0;
 
     public function mount($id){
         $this->selectId = $id;
@@ -48,12 +49,32 @@ class VcEncashment extends Component
         $this->loadData();  
 
         $tblcobrodet = TrCobrosDets::where('cobrocab_id',$this->selectId)->get();
-        $tbldeudas   = TrDeudasDets::where([
+        /*$tbldeudas   = TrDeudasDets::where([
             ['cobro_id',$this->selectId],
             ['tipovalor',"CR"],
         ])
         ->whereIn('tipo',["PAG","OTR"])
-        ->get();
+        ->get();*/
+
+        $tbldeudas    = TrDeudasCabs::query()
+        ->join(DB::raw("(select sum(case when tipo in ('PAG','OTR') then valor else 0 end) as valor,
+        sum(case when tipo = 'DES' then valor else 0 end) as descuento,
+        deudacab_id, fecha, detalle
+        from tr_deudas_dets d 
+        where  cobro_id = ".$this->selectId." 
+        group by deudacab_id,fecha, detalle) as d"),function($join){
+            $join->on('d.deudacab_id', '=', 'tr_deudas_cabs.id');
+        })
+        ->leftJoin(DB::raw("(select sum(valor) as credito, deudacab_id
+        from tr_deudas_dets d
+        inner join tr_deudas_cabs c on c.id = d.deudacab_id
+        where d.fecha <= ".date('Ymd',strtotime($this->record['fecha']))." and cobro_id<> ".$this->selectId." and tipovalor = 'CR' and matricula_id = ".$this->record['matricula_id']."
+        group by deudacab_id) as p"),function($join){
+            $join->on('p.deudacab_id', '=', 'tr_deudas_cabs.id');
+        })
+        ->selectRaw("tr_deudas_cabs.referencia,d.fecha,d.detalle,ifnull(tr_deudas_cabs.debito-p.credito,tr_deudas_cabs.debito) as saldo,d.descuento,d.valor, tr_deudas_cabs.debito")
+        ->get(); 
+
         $tblperiodos = TmPeriodosLectivos::all();
         
         $this->calculatotal($tbldeudas);
@@ -101,11 +122,12 @@ class VcEncashment extends Component
         
         foreach ($tblDeuda as $deudas)
         {
-            $this->subtotal += $deudas->deudacab->saldo+$deudas['valor']+$deudas->deudacab->descuento;
-            $this->descuento += $deudas->deudacab->descuento;
+            $this->subtotal += $deudas->saldo;
+            $this->descuento += $deudas->descuento;
             $this->totalpago += $deudas['valor'];
         }
         $this->total = $this->subtotal-$this->descuento;
+        $this->saldo = $this->total-$this->totalpago;
 
     }
 
