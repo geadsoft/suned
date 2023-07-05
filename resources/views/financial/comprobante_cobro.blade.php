@@ -20,8 +20,8 @@
             <tr>-->
             <tr>
                 <td width="100%" style="vertical-align: top; padding-top: 10px">
-                    <img src="../public/assets/images/banner-ueas.jpg" height="126px">
-                    <div class="text-center" style="position: absolute;top: 12%; left: 68%; transform: translate(-12%, -70%); font-size:15px;">
+                    <img src="../public/assets/images/banner-ueas.jpg" height="100px">
+                    <div class="text-center" style="position: absolute;top: 8%; left: 68%; transform: translate(-12%, -70%); font-size:15px;">
                     <strong>Recibo de Cobro No. {{$tblrecords['documento']}}</strong>
                     </div>
                 </td>        

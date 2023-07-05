@@ -13,30 +13,25 @@
 <body>
     <section class="header" style ="top: -287px;">
         <table cellpadding="0" cellspancing="0" width="100%">
-            <!--<tr>
-                <td colspan="2" class="text-center">
-                    <span style="font-size: 18px; font-weight: bold;">Unidad Educativa American Schooll</span>
-                </td>
-            <tr>-->
             <tr>
-                <td width="30%" style="vertical-align: top; padding-top: 10px; position: relative">
-                    <img src="../public/assets/images/AmericanSchooll.jpg" width="200px" height="60px">                  
-                </td>
-                <td width="70%" class="text-center" style="vertical-align: top; padding-top: 10px">
-                    <span style="font-size: 16px"><strong>Cuadre de Caja</strong></span>
-                    <table width="100%" cellpadding="0" cellspancing="0">
-                        <tr>
-                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Fecha: {{$filter['fecha']}}</strong></span></td>
-                        </tr>
-                        <tr>
-                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Grupo: {{$filter['grupo']}}</strong></span></td>
-                        </tr>
-                        <tr>
-                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Periodo: {{$filter['periodo']}}</strong></span></td>
-                        </tr>
-                    </table>
-                </td>           
+                <td width="100%" style="vertical-align: top; padding-top: 10px">
+                    <img src="../public/assets/images/banner-ueas.jpg" height="100px">
+                    <div class="text-center" style="position: absolute;top: 8%; left: 70%; transform: translate(-12%, -70%); font-size:15px;">
+                    <strong>Cuadre de Caja</strong>
+                    </div>
+                </td>        
+            </tr>
+            <br>         
             <tr>
+                <td class="text-left text-muted"><span style="font-size: 12px"><strong>Fecha: {{$filter['fecha']}}</strong></span></td>
+            </tr>
+            <tr>
+                <td class="text-left text-muted"><span style="font-size: 12px"><strong>Grupo: {{$filter['grupo']}}</strong></span></td>
+            </tr>
+            <tr>
+                <td class="text-left text-muted"><span style="font-size: 12px"><strong>Periodo: {{$filter['periodo']}}</strong></span></td>
+            </tr>
+                    
         </table>
         <br>
     </section>
@@ -45,7 +40,7 @@
     </section>
 
     <section style ="margin-top: -110px;">
-        <table cellpadding="0" cellspacing="0" class="table table-nowrap align-middle" style="font-size:10px">
+        <table cellpadding="0" cellspacing="0" class="table table-borderless table-sm align-middle mb-0" style="font-size:10px">
             <thead class="table-light" style="background-color:#222454">
                 <tr>
                     <th style="color:#FFFFFF">Recibo</th>

@@ -12,38 +12,33 @@
 </head>
 <body>
     <section class="header" style ="top: -287px;">
-        <table cellpadding="0" cellspancing="0" width="100%">
+        <table cellpadding="0" cellspancing="0" width="100%" style="font-size:13px">
             <tr>
-                <td width="30%" style="vertical-align: top; padding-top: 10px; position: relative">
-                    <img src="../public/assets/images/AmericanSchooll.jpg" width="200px" height="60px">                  
-                </td>
-                <td width="70%" class="text-center" style="vertical-align: top; padding-top: 10px">
-                    <div class="mb-3">
+                <td width="100%" style="vertical-align: top; padding-top: 10px">
+                    <img src="../public/assets/images/banner-ueas.jpg" height="100px">
+                    <div class="text-center" style="position: absolute;top: 8%; left: 70%; transform: translate(-12%, -70%); font-size:15px;">
+                    <strong>Estado de Cuenta</strong>
                     </div>
-                    <span style="font-size: 16px"><strong>Estado de Cuenta</strong></span>
-                    <div class="mb-3">
-                    </div>
-                    <table width="100%" cellpadding="0" cellspancing="0">
-                        <tr>
-                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Estudiante: {{$data['nombre']}}</strong></span></td>
-                        </tr>
-                        <tr>
-                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Curso: {{$data['curso']}}</strong></span></td>
-                        </tr>
-                        <tr>
-                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Grupo: {{$data['grupo']}} / {{$data['periodo']}}</strong></span></td>
-                        </tr>
-                        <tr>
-                            @if($data['estado']=='R')
-                                <td class="text-left text-muted"><span style="font-size: 12px"><strong>RETIRADO</strong></span></td>
-                            @endif
-                        </tr>
-                        <tr>
-                            <td class="text-right text-muted"><span style="font-size: 12px"><strong> {{date('d-M-Y H:i:s',strtotime($data['fecha']))}} </strong></span></td>
-                        </tr>                        
-                    </table>
-                </td>           
+                </td>        
+            </tr>
             <tr>
+                <td class="text-right text-muted"><span style="font-size: 12px"><strong> {{date('d-M-Y H:i:s',strtotime($data['fecha']))}} </strong></span></td>
+            </tr>
+            <tr>
+                <td class="text-left text-muted"><span style="font-size: 12px"><strong>Estudiante: {{$data['nombre']}}</strong></span></td>
+            </tr>
+            <tr>
+                <td class="text-left text-muted"><span style="font-size: 12px"><strong>Curso: {{$data['curso']}}</strong></span></td>
+            </tr>
+            <tr>
+                <td class="text-left text-muted"><span style="font-size: 12px"><strong>Grupo: {{$data['grupo']}} / {{$data['periodo']}}</strong></span></td>
+            </tr>
+            <tr>
+                @if($data['estado']=='R')
+                    <td class="text-left text-muted"><span style="font-size: 12px"><strong>RETIRADO</strong></span></td>
+                @endif
+            </tr>            
+                    
         </table>
         <br>
     </section>
@@ -52,7 +47,7 @@
     </section>
 
     <section style ="margin-top: -110px;">
-        <table cellpadding="0" cellspacing="0" class="table table-sm" style="font-size:10px">
+        <table cellpadding="0" cellspacing="0" class="table table-borderless table-sm align-middle mb-0" style="font-size:10px">
             <thead class="table-light" style="background-color:#222454">
                 <tr>
                     <th style="color:#FFFFFF">Concepto</th>

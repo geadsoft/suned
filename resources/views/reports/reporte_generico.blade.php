@@ -15,8 +15,8 @@
         <table cellpadding="0" cellspancing="0" width="100%" style="font-size:13px">
             <tr>
                 <td width="100%" style="vertical-align: top; padding-top: 10px">
-                    <img src="../public/assets/images/banner-ueas.jpg" height="126px">
-                    <div class="text-center" style="position: absolute;top: 12%; left: 70%; transform: translate(-12%, -70%); font-size:15px;">
+                    <img src="../public/assets/images/banner-ueas.jpg" height="100px">
+                    <div class="text-center" style="position: absolute;top: 8%; left: 70%; transform: translate(-12%, -70%); font-size:15px;">
                     <strong>Reporte Generico</strong>
                     </div>
                 </td>        
@@ -46,7 +46,7 @@
     </section>
 
     <section style ="margin-top: -110px;">
-        <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
+        <table cellpadding="0" cellspacing="0" class="table table-borderless table-sm align-middle mb-0" style="font-size:10px">
                 <thead class="table-light" style="background-color:#222454">
                 <tr>
                     <th style="color:#FFFFFF">Estudiante</th>

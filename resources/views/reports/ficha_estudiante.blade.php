@@ -25,8 +25,8 @@
         <section style ="margin-top: -110px;">
             <table cellpadding="0" cellspancing="0" width="100%" style="font-size:14px">
                 <tr>
-                    <td width="100%" style="vertical-align: top; padding-top: 10px">
-                        <img src="../public/assets/images/banner-ueas.jpg" height="126px">
+                    <td width="100%" style="vertical-align: top; padding-top: 8px">
+                        <img src="../public/assets/images/banner-ueas.jpg" height="100px">
                     </td>        
                 </tr>
                 <tr>
