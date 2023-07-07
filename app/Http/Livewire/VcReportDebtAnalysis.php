@@ -152,7 +152,7 @@ class VcReportDebtAnalysis extends Component
         ->whereraw("d.id is null and left(referencia,3) not in (case when ".$this->filters['srv_mes']."=12 then '' else 'DGR' end)")
         ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
         'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo')
-        ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc, tr_deudas_cabs.fecha')
+        ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc')
         ->get();
          
         $this->datos = json_encode($this->filters);
