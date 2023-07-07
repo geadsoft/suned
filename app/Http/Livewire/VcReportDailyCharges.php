@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 use App\Models\TrCobrosCabs;
 use App\Models\TmGeneralidades;
 use App\Models\TmPeriodosLectivos;
+use App\Models\User;
 use PDF;
 
 use Livewire\Component;
@@ -13,13 +14,14 @@ class VcReportDailyCharges extends Component
 {
     use WithPagination;
 
-    public $fecha, $nombre, $fechaini, $fechafin, $cia, $nomgrupo='TODOS', $nomperiodo, $datos;
+    public $fecha, $nombre, $fechaini, $fechafin, $cia, $nomgrupo='TODOS', $nomperiodo, $datos, $users;
     public $filters = [
         'srv_periodo' => '',
         'srv_grupo' => '',
         'srv_fechaini' => '',
         'srv_fechafin' => '',
         'srv_nombre' => '',
+        'srv_usuario' => '',
     ];
 
     public $data=[
@@ -38,6 +40,7 @@ class VcReportDailyCharges extends Component
         $this->filters['srv_fechafin'] = date('Y-m-d',strtotime($ldatefin));
         $this->filters['srv_nombre'] = '';
 
+        $this->users = User::where('id','<>',2)->get();
     }
 
     public function render()
@@ -50,6 +53,7 @@ class VcReportDailyCharges extends Component
             'tblrecords' => $tblrecords,
             'tblgenerals' => $this->tblgenerals,
             'tblperiodos' => $this->tblperiodos,
+            'users' => $this->users,
         ]);
 
     }
@@ -88,6 +92,7 @@ class VcReportDailyCharges extends Component
         $this->filters['srv_fechaini'] = $objdata->srv_fechaini;
         $this->filters['srv_fechafin'] = $objdata->srv_fechafin;
         $this->filters['srv_nombre'] = $objdata->srv_nombre;
+        $this->filters['srv_usuario'] = $objdata->srv_usuario;
 
         $this->data['grupo'] = "TODOS";
         $this->tblgenerals = TmGeneralidades::where('superior',1)->get();
@@ -110,6 +115,9 @@ class VcReportDailyCharges extends Component
         })
         ->when($this->filters['srv_grupo'],function($query){
             return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
+        })
+        ->when($this->filters['srv_usario'],function($query){
+            return $query->where('tr_cobros_cabs.usuario',"{$this->filters['srv_usuario']}");
         })
         ->selectRaw('tr_cobros_cabs.fecha, sum(debito) as monto, sum(descuento) as descuento, sum(dd.valor) as pago')
         ->where('tr_cobros_cabs.fecha','>=',date('Ymd',strtotime($this->filters['srv_fechaini'])))

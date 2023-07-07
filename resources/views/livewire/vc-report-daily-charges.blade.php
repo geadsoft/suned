@@ -44,11 +44,21 @@
                                     <a class="btn btn-info add-btn" href="/financial/encashment-add"><i class="ri-add-fill me-1 align-bottom"></i> New Record</a>
                                 </div>
                             </div>
-                            <div class="col-xxl-7 col-sm-4">
+                            <div class="col-xxl-5 col-sm-4">
                                 <div class="search-box">
                                     <input type="text" class="form-control search"
                                         placeholder="Search for student..." wire:model="filters.srv_nombre">
                                     <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                            <div class="col-xxl-2 col-sm-4">
+                                <div>
+                                    <select class="form-select" name="cmbusers" wire:model="filters.srv_usuario" id="cmbusers">
+                                        <option value="">Todos</option>
+                                        @foreach ($users as $usuario)
+                                            <option value="{{$usuario->id}}">{{$usuario->name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-xxl-1 col-sm-4">
