@@ -116,7 +116,7 @@ class VcReportDailyCharges extends Component
         ->when($this->filters['srv_grupo'],function($query){
             return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
         })
-        ->when($this->filters['srv_usario'],function($query){
+        ->when($this->filters['srv_usuario'],function($query){
             return $query->where('tr_cobros_cabs.usuario',"{$this->filters['srv_usuario']}");
         })
         ->selectRaw('tr_cobros_cabs.fecha, sum(debito) as monto, sum(descuento) as descuento, sum(dd.valor) as pago')
