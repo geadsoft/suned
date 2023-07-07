@@ -56,7 +56,7 @@
                                     <select class="form-select" name="cmbusers" wire:model="filters.srv_usuario" id="cmbusers">
                                         <option value="">Todos</option>
                                         @foreach ($users as $usuario)
-                                            <option value="{{$usuario->id}}">{{$usuario->name}}</option>
+                                            <option value="{{$usuario->name}}">{{$usuario->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
