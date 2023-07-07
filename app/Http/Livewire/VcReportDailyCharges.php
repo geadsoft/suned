@@ -71,6 +71,9 @@ class VcReportDailyCharges extends Component
         ->when($this->filters['srv_nombre'],function($query){
             return $query->whereRaw("concat(tm_personas.apellidos,' ',tm_personas.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
+        ->when($this->filters['srv_usuario'],function($query){
+            return $query->where('tr_cobros_cabs.usuario',"{$this->filters['srv_usuario']}");
+        })
         //->whereBetween('tr_cobros_cabs.fecha',["'".date('Ymd',strtotime($this->filters['srv_fechaini']))."'","'".date('Ymd',strtotime($this->filters['srv_fechafin']))."'"])
         ->where('tr_cobros_cabs.fecha','>=',date('Ymd',strtotime($this->filters['srv_fechaini'])))
         ->where('tr_cobros_cabs.fecha','<=',date('Ymd',strtotime($this->filters['srv_fechafin'])))
