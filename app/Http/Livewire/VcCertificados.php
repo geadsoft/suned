@@ -216,6 +216,7 @@ class VcCertificados extends Component
                 $pdf = PDF::loadView('reports/matricula_folio',[
                     'data'  => $data,
                     'mes'   => $mes,
+                    'foto'  => $this->foto,
                 ]);
         
                 return $pdf->setPaper('a4')->stream('Certificado Folio.pdf');
