@@ -196,7 +196,7 @@ class VcCertificados extends Component
         
         $data = TmReportes::find($idReporte);
 
-        $this->foto    = $data->identificacion.'.jpg';
+        $this->foto    = $data['identificacion'].'.jpg';
 
         $contents   = Storage::disk('public')->exists('fotos/'.$this->foto);
         
