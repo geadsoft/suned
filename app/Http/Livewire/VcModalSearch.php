@@ -11,13 +11,14 @@ use Illuminate\Support\Facades\DB;
 class VcModalSearch extends Component
 {
 
+    public $opcion;
     public $filters = [
         'srv_nombre' => '',
         'srv_grupo' => 0,
         'srv_periodo' => 0,
     ];
 
-    public function mount()
+    public function mount($opcion)
     {
         $tblperiodo = TmPeriodosLectivos::orderBy('periodo','desc')->first();
         $this->filters['srv_periodo'] = $tblperiodo['id'];
@@ -75,6 +76,13 @@ class VcModalSearch extends Component
             $this->dispatchBrowserEvent('hide-form');
             return redirect()->to('/financial/encashment-add/'.$this->filters['srv_periodo'].'/'.$matriculaId);
         }
+
+    }
+
+    public function setPersona($matriculaId){
+        
+        $this->emitTo('vc-certificados','setPersona',$matriculaId);
+        $this->dispatchBrowserEvent('hide-form');
 
     }
 

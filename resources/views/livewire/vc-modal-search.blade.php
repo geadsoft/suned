@@ -51,10 +51,17 @@
                             </td>
                             <td style="width: 80px;">
                                 <ul class="list-inline hstack gap-2 mb-0">
-                                    <li class="list-inline-item edit" data-bs-toggle="tooltip"
-                                        data-bs-trigger="hover" data-bs-placement="top" title="Continuar">
-                                    <a class="btn" wire:click="addCobro({{$data['id']}})"><i class="ri-arrow-right-fill me-1 align-bottom fs-16 text-success"></i></a>
-                                    </li>
+                                    @if ($opcion=='null')
+                                        <li class="list-inline-item edit" data-bs-toggle="tooltip"
+                                            data-bs-trigger="hover" data-bs-placement="top" title="Continuar">
+                                        <a class="btn" wire:click="addCobro({{$data['id']}})"><i class="ri-arrow-right-fill me-1 align-bottom fs-16 text-success"></i></a>
+                                        </li>
+                                    @else
+                                        <li class="list-inline-item edit" data-bs-toggle="tooltip"
+                                            data-bs-trigger="hover" data-bs-placement="top" title="Continuar">
+                                        <a class="btn" wire:click="setPersona({{$data['id']}})"><i class="ri-arrow-right-fill me-1 align-bottom fs-16 text-success"></i></a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </td>
                         </tr>

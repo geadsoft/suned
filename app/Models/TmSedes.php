@@ -51,6 +51,9 @@ class TmSedes extends Model
         'clave_firma',
         'logo_factura',
         'usuario',
+        'rector',
+        'secretaria',
+        'coordinador',
     ];
 
     /*public function provincia(){

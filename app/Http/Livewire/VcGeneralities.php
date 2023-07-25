@@ -12,7 +12,7 @@ class VcGeneralities extends Component
 
     public $showEditModal = false;
     public $selectId;
-    public $record;
+    public $record=[];
     public $codigo;
 
     public $sortDirection = 'desc';

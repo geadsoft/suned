@@ -9,6 +9,7 @@ use App\Http\Livewire\VcReportDebtAnalysis;
 use App\Http\Livewire\VcGenericReports;
 use App\Http\Livewire\VcAccountStatus;
 use App\Http\Livewire\VcPersons;
+use App\Http\Livewire\VcCertificados;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,7 +47,7 @@ Route::get('/report/statistical-graphs',[App\Http\Controllers\TrCobrosCabsContro
 Route::get('/report/debt-analysis',[App\Http\Controllers\TmMatriculaController::class, 'analisisdeuda'])->name('analisisdeuda');
 Route::get('/financial/list-income',[App\Http\Controllers\TrCobrosCabsController::class, 'listingresos'])->name('listingresos');
 Route::get('/report/generic-reports',[App\Http\Controllers\TmMatriculaController::class, 'reportegenerico'])->name('reportegenerico');
-
+Route::get('/secretary/certificate',[App\Http\Controllers\SecretariaController::class, 'certificados'])->name('certificados');
 
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
@@ -70,6 +71,7 @@ Route::get('/preview-pdf/debt-analysis/{report},{data}',[VcReportDebtAnalysis::c
 Route::get('/download-pdf/debt-analysis/{report},{data}',[VcReportDebtAnalysis::class, 'liveWirePDF']);
 Route::get('/preview-pdf/generic-report/{report},{data}',[VcGenericReports::class, 'liveWirePDF']);
 Route::get('/download-pdf/generic-report/{report},{data}',[VcGenericReports::class, 'liveWirePDF']);
+Route::get('/preview-pdf/certificados/{data}',[VcCertificados::class, 'liveWirePDF']);
 
 
 Auth::routes();

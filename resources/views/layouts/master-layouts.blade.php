@@ -11,6 +11,7 @@
     @include('layouts.head-css')
     
     @livewireStyles
+
 </head>
 <body>
 

@@ -165,7 +165,28 @@
                         <i class="las la-archive"></i> <span>@lang('translation.create_invoice')</span>
                     </a>
                 </li>-->
-                              
+                <li class="menu-title"><i class="ri-more-fill"></i> <span>Secretaria</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/secretary/certificate">
+                        <i class="ri-article-line fs-20"></i> <span>Certificados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="">
+                        <i class="ri-medal-2-fill fs-20"></i> <span>Calificaciones</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="">
+                        <i class="ri-book-3-line fs-20"></i> <span>Documentacion</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="">
+                        <i class="ri-bubble-chart-fill fs-20"></i> <span>Solicitudes</span>
+                    </a>
+                </li>
+
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.reports')</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#reportfinanciero" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="reportfinanciero">

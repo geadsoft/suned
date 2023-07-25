@@ -74,7 +74,11 @@
                         <td class="text-right"> {{number_format($record['valor'],2)}} </td>
                         <td class="text-right"> {{number_format($record['descuento'],2)}} </td>
                         <td> {{$dias[date('N', strtotime($record->fecha))];}}, {{date('d-M-Y',strtotime($record->fecha))}}</td>
-                        <td> {{$record['referencia']}}</td>
+                        <td> {{$record['referencia']}} 
+                            @if($record->estado=='A') 
+                                <span style="color:#FF0000">ANULADO</span> 
+                            @endif
+                        </td>
                         <td> {{$record['tipopago']}}</td>
                         <td> {{$record['usuario']}}</td>
                     @endif                    

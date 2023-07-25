@@ -122,13 +122,20 @@ class VcReportCashReceints extends Component
         $tblrecords = TrCobrosCabs::query()
         ->join(DB::raw('(select cobrocab_id,group_concat(distinct tipopago) as tipopago 
         from tr_cobros_dets  
-        group by 1) d'), 
+        group by 1) c'), 
         function($join)
         {
-           $join->on('tr_cobros_cabs.id', '=', 'd.cobrocab_id');
+           $join->on('tr_cobros_cabs.id', '=', 'c.cobrocab_id');
         })
-        ->join("tr_deudas_dets","tr_deudas_dets.cobro_id","=","tr_cobros_cabs.id")
-        ->join("tr_deudas_cabs","tr_deudas_cabs.id","=","tr_deudas_dets.deudacab_id")
+        ->join(DB::raw("(select sum(case when tipo in ('PAG','OTR') then valor else 0 end) as valor,
+        sum(case when tipo = 'DES' then valor else 0 end) as descuento,
+        deudacab_id, fecha, detalle, cobro_id
+        from tr_deudas_dets d 
+        group by deudacab_id,fecha, detalle, cobro_id) as d"),function($join){
+            $join->on('d.cobro_id', '=', 'tr_cobros_cabs.id');
+        })
+        /*->join("tr_deudas_dets","tr_deudas_dets.cobro_id","=","tr_cobros_cabs.id")*/
+        ->join("tr_deudas_cabs","tr_deudas_cabs.id","=","d.deudacab_id")
         ->join("tm_matriculas","tm_matriculas.id","=","tr_deudas_cabs.matricula_id")
         ->join("tm_personas","tm_personas.id","=","tm_matriculas.estudiante_id")
         ->join("tm_cursos","tm_cursos.id","=","tm_matriculas.curso_id")
@@ -147,11 +154,11 @@ class VcReportCashReceints extends Component
             return $query->where('tr_cobros_cabs.fecha',"{$this->filters['srv_fecha']}");
         })
         ->where([
-            ['tr_deudas_dets.tipo','PAG'],
+            /*['tr_deudas_dets.tipo','PAG'],*/
             ['tr_cobros_cabs.tipo','CP'],
         ])
         ->select('tr_cobros_cabs.id','tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 
-        'tipopago', 'saldo','credito', 'descuento', 'tr_deudas_dets.valor as pago',  'tr_cobros_cabs.usuario', 'tr_cobros_cabs.estado')
+        'tipopago', 'saldo','credito', 'd.descuento', 'd.valor as pago',  'tr_cobros_cabs.usuario', 'tr_cobros_cabs.estado')
         ->orderBy('tr_cobros_cabs.fecha')
         ->get();
 

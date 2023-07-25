@@ -37,4 +37,8 @@ class TmMatricula extends Model
         return $this->belongsTo('App\Models\TmGeneralidades');
     }
 
+    public function periodo(){
+        return $this->belongsTo('App\Models\TmPeriodosLectivos');
+    }
+
 }

@@ -514,7 +514,7 @@
                 
                 <form autocomplete="off" wire:submit.prevent="">
                     <div class="modal-body">                                        
-                            @livewire('vc-modal-search')                                       
+                            @livewire('vc-modal-search',['opcion' => 'null'])                                       
                     </div>
                     <div class="modal-footer">
                         <div class="hstack gap-2 justify-content-end">

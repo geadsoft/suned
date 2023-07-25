@@ -8,7 +8,7 @@
                         <div class="col-md-auto ms-auto">
                             <div class="hstack text-nowrap gap-2">
                                 <div>
-                                    <select class="form-select" name="cmbperiodo" wire:model="filters.srv_periodo" id="cmbperiodo">
+                                    <select class="form-select" name="cmbperiodo" wire:model="filters.srv_periodo" id="cmbperiodo" >
                                         <option value="">Select Period</option>
                                         @foreach ($tblperiodos as $periodo)
                                             <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
@@ -39,6 +39,7 @@
                                         @foreach ($tblniveles as $nivel)
                                             <option value="{{$nivel->id}}">{{$nivel->descripcion}}</option>
                                         @endforeach
+                                        <option value="0">Todos</option>
                                     </select>
                                 </div>
                             </div>
@@ -57,6 +58,7 @@
                                     <select class="form-select" name="cmbreferencia" wire:model="referencia" id="cmbmes">
                                         <option value="">Tipo Valor</option>
                                         <option value="MAT">Matricula</option>
+                                        <option value="PLA">Plataforma</option>
                                         <option value="PLE">Plataforma Español</option>
                                         <option value="PLI">Plataforma Ingles</option>
                                         <option value="PEN">Pensión</option>

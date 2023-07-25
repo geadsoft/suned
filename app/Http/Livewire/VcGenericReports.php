@@ -45,7 +45,7 @@ class VcGenericReports extends Component
 
         $this->filters['srv_periodo'] = $this->tblperiodos[0]['id'];
         $this->filters['srv_grupo']   = $this->tblgenerals[0]['id'];
-        $this->filters['srv_nivel']   = $this->tblniveles[0]['id'];
+        $this->filters['srv_nivel']   = 0;
 
     }
 
@@ -57,7 +57,7 @@ class VcGenericReports extends Component
         ->when($this->filters['srv_grupo'],function($query){
             return $query->where('grupo_id',"{$this->filters['srv_grupo']}");
         })
-        ->when($this->filters['srv_nivel'],function($query){
+        ->when((int)$this->filters['srv_nivel']>0,function($query){
             return $query->where('nivel_id',"{$this->filters['srv_nivel']}");
         })
         ->orderByRaw('nivel_id,grado_id,paralelo')
@@ -93,7 +93,7 @@ class VcGenericReports extends Component
         ->when($this->filters['srv_grupo'],function($query){
             return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
         })
-        ->when($this->filters['srv_nivel'],function($query){
+        ->when((int)$this->filters['srv_nivel']>0,function($query){
             return $query->where('s.nivel_id',"{$this->filters['srv_nivel']}");
         })
         ->when($this->filters['srv_curso'],function($query){
