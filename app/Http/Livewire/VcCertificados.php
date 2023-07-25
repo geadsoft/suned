@@ -195,6 +195,15 @@ class VcCertificados extends Component
     { 
         
         $data = TmReportes::find($idReporte);
+
+        $this->foto    = $data->identificacion.'.jpg';
+
+        $contents   = Storage::disk('public')->exists('fotos/'.$this->foto);
+        
+        if($contents==false){
+            $this->foto='';
+        }
+
         $formatter = new NumeroALetras();
         $numletra = $formatter->toWords($data['nota'], 2);
 

@@ -44,10 +44,10 @@
                         </p> 
                     </td>
                     <td width="30%" class="text-center">
-                        @if ($data['foto']=='')
+                        @if ($foto=='')
                                 <img src="../public/assets/images/foto-ueas.jpg">
                         @else
-                            <img src="{{'../storage/app/public/fotos/'.$record->foto}}" width="150" height="170">
+                            <img src="{{'../storage/app/public/fotos/'.$foto}}" width="150" height="170">
                         @endif
                     </td>
                     <td width="5%">

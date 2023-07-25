@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('escala',3);
             $table->string('asunto',50);
             $table->string('destinatario',100);
-            $table->string('institución',100);
+            $table->string('institucion',100);
             $table->string('ciudad',40);
             $table->string('rector',50);
             $table->string('secretaria',50);
