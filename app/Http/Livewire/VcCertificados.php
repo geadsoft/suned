@@ -19,7 +19,7 @@ class VcCertificados extends Component
     public $tblperiodo;
     public $tipoDoc="MF", $periodoId, $cursoId, $nombres, $nui, $documento, $fecha, $folio=0, $matricula=0, $nomcurso;
     public $periodo, $foto="", $rector, $secretaria, $coordinador, $bachilleren, $nota=0, $escala=''; 
-    public $dttitulo='', $dtnombre='', $dtinstitucion='', $dtciudad='', $dtfecha;
+    public $dttitulo="", $dtnombre="", $dtinstitucion="", $dtciudad="", $dtfecha;
 
     public $mes = [
         1 => 'Enero',
