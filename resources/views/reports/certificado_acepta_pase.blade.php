@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitud Pase Reglamentado</title>
+    <title>Solicitud Aceptación Pase Reglamentado</title>
 
 
     <!-- Bootstrap CSS -->
@@ -21,7 +21,7 @@
             <table cellpadding="0" cellspancing="0" width="100%" style="font-size:14px">
                 <tr>
                     <td width="100%" style="vertical-align: top; padding-top: 8px">
-                        <img src="../public/assets/images/AmericanSchooll.jpg" height="80px">
+                        
                     </td>        
                 </tr>
             </table>
@@ -30,7 +30,7 @@
                     <td width="5%">
                     </td>
                     <td width="90%" class="text-right">
-                        <p><br><span style="font-size:13px; text-transform: uppercase;">GUAYAQUIL, {{date('d',strtotime($data['emision']))}} DE 
+                        <p><br><br><br><br><br><span style="font-size:13px; text-transform: uppercase;">GUAYAQUIL, {{date('d',strtotime($data['emision']))}} DE 
                         {{$mes[date('m',strtotime($data['emision']))]}} DEL {{date('Y',strtotime($data['emision']))}}</span>
                         </p> 
                     </td>
@@ -44,15 +44,16 @@
                         <td width="5%">
                         </td>
                         <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
-                            <p><br><br>{{$data['asunto']}}<br>{{$data['destinatario']}}<br>{{$data['cargo']}}<br><strong>{{$data['institucion']}}</strong><br>CIUDAD
+                            <p><br><br><strong>{{$data['asunto']}}</strong><br><strong>{{$data['destinatario']}}</strong><br>
+                            <strong>{{$data['cargo']}}</strong><br><strong>{{$data['institucion']}}</strong><br>Ciudad
                             </p>
                             <p style style="line-height: 200%" class="text-justify"><br><br>
-                            AGRADECIÉNDOLE DE ANTEMANO POR SU GENTIL GESTION SOLICITO A UD MUY RESPETUOSAMENTE EL PASE REGLAMENTARIO PARA QUE EL
-                            SR (ita) <strong>{{$data['nombres']}} CON C.I. {{$data['identificacion']}}</strong>, 
-                            PUEDA CONTINUAR SUS ESTUDIOS EN NUESTRO PLANTEL EN EL {{$data['especializacion']}} EN EL ACTUAL PERIODO LECTIVO {{$data['periodo']}}.
-                            <br> DE UDS.        
+                            De mis consideraciones <br><br>En atención a la solicitud presentada por el representante legal del estudiante <strong>{{$data['nombres']}}</strong>, 
+                            del <strong>{{$data['especializacion']}}</strong> periodo lectivo {{$data['periodo']}}, me permito poner a su conocimiento que este <strong>
+                            RECTORADO ACEPTA RECIBIRLO CON PASE REGLAMENTARIO</strong> para que continue sus estudios en el plantel de mi dirección.<br><br>
+                            Por la atención que se dé a la presente, reitero a usted mis sincero agradecimiento.     
                             <br><br><br><br><br><br><br>
-                            ATENTAMENTE,
+                            Atentamente,
                             </p>
                             </span>
                         </td>

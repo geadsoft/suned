@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitud Pase Reglamentado</title>
+    <title>Solicitud Emisión Pase Reglamentado</title>
 
 
     <!-- Bootstrap CSS -->
@@ -21,7 +21,7 @@
             <table cellpadding="0" cellspancing="0" width="100%" style="font-size:14px">
                 <tr>
                     <td width="100%" style="vertical-align: top; padding-top: 8px">
-                        <img src="../public/assets/images/AmericanSchooll.jpg" height="80px">
+                        
                     </td>        
                 </tr>
             </table>
@@ -30,7 +30,7 @@
                     <td width="5%">
                     </td>
                     <td width="90%" class="text-right">
-                        <p><br><span style="font-size:13px; text-transform: uppercase;">GUAYAQUIL, {{date('d',strtotime($data['emision']))}} DE 
+                        <p><br><br><br><br><br><span style="font-size:13px; text-transform: uppercase;">GUAYAQUIL, {{date('d',strtotime($data['emision']))}} DE 
                         {{$mes[date('m',strtotime($data['emision']))]}} DEL {{date('Y',strtotime($data['emision']))}}</span>
                         </p> 
                     </td>
@@ -44,15 +44,19 @@
                         <td width="5%">
                         </td>
                         <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
-                            <p><br><br>{{$data['asunto']}}<br>{{$data['destinatario']}}<br>{{$data['cargo']}}<br><strong>{{$data['institucion']}}</strong><br>CIUDAD
+                            <p><br><br><strong>{{$data['asunto']}}</strong><br>{{$data['destinatario']}}<br>
+                            <strong>{{$data['cargo']}}</strong><br><strong>{{$data['institucion']}}</strong><br>Ciudad.-
                             </p>
                             <p style style="line-height: 200%" class="text-justify"><br><br>
-                            AGRADECIÉNDOLE DE ANTEMANO POR SU GENTIL GESTION SOLICITO A UD MUY RESPETUOSAMENTE EL PASE REGLAMENTARIO PARA QUE EL
-                            SR (ita) <strong>{{$data['nombres']}} CON C.I. {{$data['identificacion']}}</strong>, 
-                            PUEDA CONTINUAR SUS ESTUDIOS EN NUESTRO PLANTEL EN EL {{$data['especializacion']}} EN EL ACTUAL PERIODO LECTIVO {{$data['periodo']}}.
-                            <br> DE UDS.        
-                            <br><br><br><br><br><br><br>
-                            ATENTAMENTE,
+                            De mis consideraciones <br><br>Por medio de la presente tengo a bien saludarlo a la vez que pongo a su conocimiento para los fines de la ley, que vista
+                            la solicitud presentada por el representante legal del alumno (a) <strong> {{$data['nombres']}}</strong>, 
+                            del <strong>{{$data['especializacion']}}</strong>, jornada matutina, periodo lectivo {{$data['periodo']}}, asi como la aceptación por parte del colegio
+                            de su acertada dirección para recibirlo, de acuerdo con las facultades que me otorga el reglamento general de ley de educación
+                            y cultura en vigencia, exitiendo el pase reglamentado a favor del alumno (a) <strong>{{$data['nombres']}}</strong> (anexo 
+                            notas correspondiente al primer quimestre)<br><br>
+                            Agradezco de antemano, por la atención que se designe brindar a la presente, y me suscribo de usted.   
+                            <br><br><br><br><br><br>
+                            ATTE.<br>HONOR, PATRIA Y DISCIPLINA
                             </p>
                             </span>
                         </td>
@@ -76,7 +80,7 @@
                         <span><strong>________________________________</strong></span>
                     </td>
                     <td width="50%" class="text-center">
-                        <span><strong>________________________________</strong></span>
+                        
                     </td>
                 </tr>
                 <tr style="font-size:13px">
@@ -84,7 +88,7 @@
                         <span>{{$data['rector']}}</span>
                     </td>
                     <td width="50%" class="text-center">
-                        <span>{{$data['secretaria']}}</span>
+                        
                     </td>
                 </tr>
                 <tr style="font-size:13px">
@@ -92,12 +96,34 @@
                         <span><strong>RECTOR</strong></span>
                     </td>
                     <td width="50%" class="text-center">
-                        <span><strong>SECRETARIA</strong></span>
+                        
                     </td>
                 </tr>
             </table>
         </section>
     </div>
+    <div style="page-break-before: always;">
+    </div>
+    <section style ="margin-top: -110px;">
+        <table cellpadding="0" cellspacing="0" class="" style="font-size:12px">
+            <tbody>
+                <tr style="font-size:13px">
+                    <td width="5%">
+                    </td>
+                    <td width="90%">
+                        <p style style="line-height: 200%" class="text-justify"><br><br><br><br><br><br>
+                        PASE REGLAMENTARIO DE COLEGIO "AMERICAN SCHOOL"<br><br>
+
+                        </p>
+                       
+                    </td>
+                    <td width="5%">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

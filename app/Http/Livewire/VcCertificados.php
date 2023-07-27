@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\TmGeneralidades;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmCursos;
+use App\Models\TmServicios;
 use App\Models\TmMatricula;
 use App\Models\TmSedes;
 use App\Models\TmReportes;
@@ -16,10 +17,11 @@ use PDF;
 
 class VcCertificados extends Component
 {
-    public $tblperiodo;
-    public $tipoDoc="MF", $periodoId, $cursoId, $nombres, $nui, $documento, $fecha, $folio=0, $matricula=0, $nomcurso;
-    public $periodo, $foto="", $rector, $secretaria, $coordinador, $bachilleren, $nota=0, $escala=''; 
-    public $dttitulo="", $dtnombre="", $dtinstitucion="", $dtciudad="", $dtfecha;
+    public $tblperiodo, $control="";
+    public $tipoDoc="MF", $periodoId, $cursoId, $nombres, $nui="", $documento, $fecha, $folio=0, $matricula=0, $nomcurso="";
+    public $periodo, $foto="", $rector, $secretaria, $coordinador, $bachilleren="", $nota=0, $escala=''; 
+    public $dttitulo="", $dtnombre="", $dtinstitucion="", $dtcargo="", $dtfecha, $refrendacion=0, $pagina=0, $fprorroga, $documentos="";
+    public $especializacion="";
 
     public $mes = [
         1 => 'Enero',
@@ -58,16 +60,16 @@ class VcCertificados extends Component
     public function render()
     {
 
-        if ($this->tipoDoc == 'PA'){
-            $tblcursos   = TmCursos::query()
-            ->where('periodo_id',$this->periodoId)
+        if ($this->tipoDoc == 'PA' || $this->tipoDoc == 'AR'){
+            $tblcursos   = TmServicios::query()
             ->where('nivel_id',11)
-            ->orderByRaw('nivel_id,grado_id,paralelo')
+            ->where('modalidad_id',2)
+            ->orderByRaw('nivel_id,grado_id')
             ->get();
         }else{
-            $tblcursos   = TmCursos::query()
-            ->where('periodo_id',$this->periodoId)
-            ->orderByRaw('nivel_id,grado_id,paralelo')
+            $tblcursos   = TmServicios::query()
+            ->where('modalidad_id',2)
+            ->orderByRaw('nivel_id,grado_id')
             ->get();
         }
                 
@@ -88,12 +90,15 @@ class VcCertificados extends Component
         $tblmatricula    = TmMatricula::find($idMatricula);
         $this->documento =  $tblmatricula['documento'];
         $this->fecha     =  date('Y-m-d',strtotime($tblmatricula['fecha']));
-        $this->cursoId   =  $tblmatricula['curso_id'];
+        $this->cursoId   =  $tblmatricula->curso_id;
 
-        $cursos         = TmCursos::find($this->cursoId);
-        $this->nomcurso    = $cursos->servicio->descripcion;
+        $cursos     = TmCursos::find($this->cursoId);
+        $servicio   = TmServicios::find($cursos->servicio_id);
+        $this->cursoId = $cursos->servicio_id;
+
+        $this->nomcurso  = $servicio->descripcion;
         
-        $especializacion = $cursos->especializacion->descripcion;
+        $especializacion = $servicio->especializacion->descripcion;
 
         if ($especializacion =='Contabilidad' or $especializacion =='Informática' ){
             $this->bachilleren = "Bachiller de Servicio en ".$especializacion;
@@ -130,19 +135,26 @@ class VcCertificados extends Component
 
     public function updatedCursoId(){
         
-        $cursos = TmCursos::find($this->cursoId);
-        $this->nomcurso  = $cursos->servicio->descripcion;
+        $servicio = TmServicios::find($this->cursoId);
         
-        $especializacion = $cursos->especializacion->descripcion;
+        $this->nomcurso  = $servicio->descripcion;
+        
+        $especializacion = $servicio->especializacion->descripcion;
 
-        if ($especializacion =='Contabilidad' || $especializacion =='Informática' ){
-            $this->bachilleren = "Bachiller de Servicio en ".$especializacion;
+        if ($servicio->nivel_id==11){
+
+            if ($especializacion =='Contabilidad' || $especializacion =='Informática' ){
+                $this->bachilleren = "Bachiller de Servicio en ".$especializacion;
+            }else{
+                $this->bachilleren = "Bachillerato General Unificado en Ciencias";
+            }
+
         }else{
-            $this->bachilleren = "Bachillerato General Unificado en Ciencias";
+            $this->bachilleren = $this->nomcurso;
         }
 
-        if ($this->tipoDoc=='CO' || $this->tipoDoc=='AP' || $this->tipoDoc=='PR' ){
-            $grado = $cursos->grado->descripcion;
+        if ($this->tipoDoc=='CO' || $this->tipoDoc=='AP' || $this->tipoDoc=='PR' || $this->tipoDoc=='AR' ){
+            $grado = $servicio->grado->descripcion;
             $array = [
                 'Primero' => 'PRIMER AÑO DE ',
                 'Segundo' => 'SEGUNDO AÑO DE ',
@@ -152,40 +164,96 @@ class VcCertificados extends Component
             $this->bachilleren = $array[$grado].strtoupper($this->bachilleren);
         }
 
+        if ($this->tipoDoc=='RR'){
+            $this->bachilleren = $especializacion;
+        }
+
+    }
+
+    public function updatedtipoDoc(){
+
+        if ($this->tipoDoc == 'MF'){
+            $this->control="";
+        }else{
+            $this->control="disabled";
+        }
+
     }
 
     public function print(){
 
-        foreach($this->tblperiodos as $row){
-            if ($row['id'] = $this->periodoId){
-                $this->periodo = $row['descripcion'];
-                break; 
+        if ($this->tipoDoc!='ND'){
+
+            foreach($this->tblperiodos as $row){
+                if ($row['id'] = $this->periodoId){
+                    $this->periodo = $row['descripcion'];
+                    break; 
+                }
             }
+
         }
 
         $ldate  = date('Y-m-d H:i:s');
+
+        $data = TmReportes::where('tipo',$this->tipoDoc)->first();
+
+        if ($data!=null){
+
+            $reporte = TmReportes::find($data->id);
+            $reporte->update([
+                'emision' => date('Y-m-d',strtotime($ldate)),
+                'periodo' => $this->periodo,
+                'identificacion' => $this->nui,
+                'nombres' => $this->nombres,
+                'curso' => $this->nomcurso,
+                'especializacion' => $this->bachilleren,
+                'folio' => $this->folio,
+                'matricula' => $this->matricula,
+                'fecha' => $this->dtfecha,
+                'nota' => $this->nota,
+                'escala' => $this->escala,
+                'asunto' => $this->dttitulo,
+                'destinatario' => $this->dtnombre,
+                'institucion' => $this->dtinstitucion,
+                'cargo' => $this->dtcargo,
+                'refrendacion' => $this->refrendacion,
+                'pagina' => $this->pagina,
+                'fprorroga' => date('Y-m-d',strtotime($this->fprorroga)),
+                'documento' => $this->documentos,
+                'rector' => $this->rector,
+                'secretaria' => $this->secretaria,
+                'coordinador' => $this->coordinador,
+            ]);
+
+        }else{
                 
-        $reporte = TmReportes::Create([
-            'tipo' => $this->tipoDoc,
-            'emision' => date('Y-m-d',strtotime($ldate)),
-            'periodo' => $this->periodo,
-            'identificacion' => $this->nui,
-            'nombres' => $this->nombres,
-            'curso' => $this->nomcurso,
-            'especializacion' => $this->bachilleren,
-            'folio' => $this->folio,
-            'matricula' => $this->matricula,
-            'fecha' => $this->fecha,
-            'nota' => $this->nota,
-            'escala' => $this->escala,
-            'asunto' => $this->dttitulo,
-            'destinatario' => $this->dtnombre,
-            'institucion' => $this->dtinstitucion,
-            'ciudad' => $this->dtciudad,
-            'rector' => $this->rector,
-            'secretaria' => $this->secretaria,
-            'coordinador' => $this->coordinador,
-        ]);
+            $reporte = TmReportes::Create([
+                'tipo' => $this->tipoDoc,
+                'emision' => date('Y-m-d',strtotime($ldate)),
+                'periodo' => $this->periodo,
+                'identificacion' => $this->nui,
+                'nombres' => $this->nombres,
+                'curso' => $this->nomcurso,
+                'especializacion' => $this->bachilleren,
+                'folio' => $this->folio,
+                'matricula' => $this->matricula,
+                'fecha' => $this->dtfecha,
+                'nota' => $this->nota,
+                'escala' => $this->escala,
+                'asunto' => $this->dttitulo,
+                'destinatario' => $this->dtnombre,
+                'institucion' => $this->dtinstitucion,
+                'cargo' => $this->dtcargo,
+                'refrendacion' => $this->refrendacion,
+                'pagina' => $this->pagina,
+                'fprorroga' => date('Y-m-d',strtotime($this->fprorroga)),
+                'documento' => $this->documentos,
+                'rector' => $this->rector,
+                'secretaria' => $this->secretaria,
+                'coordinador' => $this->coordinador,
+            ]);
+
+        }
 
         return redirect()->to('/preview-pdf/certificados/'.$reporte['id']); 
 
@@ -209,6 +277,12 @@ class VcCertificados extends Component
 
         $mes  = ["01" => 'Enero', "02" => 'Febrero', "03" => 'Marzo', "04" => 'Abril', "05" => 'Mayo', "06" => 'Junio',
         "07" => 'Julio', "08" => 'Agosto', "09" => 'Septiembre', "10" => 'Octubre', "11" => 'Noviembre', "12" => 'Diciembre'];
+
+        $arraydcto = [
+            'AC' => 'Acta',
+            'TI' => 'Título',
+            'AT' => 'Acta y TÍtulo',
+        ];
 
         switch ($data['tipo']) {
             case 'MF':
@@ -275,18 +349,53 @@ class VcCertificados extends Component
 
                 break;
             case 'AR':
+
+                $pdf = PDF::loadView('reports/certificado_acepta_pase',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                ]);
+        
+                return $pdf->setPaper('a4')->stream('Solicitud Aceptación Pase Reglamentado.pdf');
+            
+            case 'ER':
+
+                    $pdf = PDF::loadView('reports/certificado_emision_pase',[
+                        'data'  => $data,
+                        'mes'   => $mes,
+                    ]);
+            
+                    return $pdf->setPaper('a4')->stream('Solicitud Emisión Pase Reglamentado.pdf');
     
                 break;
             case 'RR':
 
+                $pdf = PDF::loadView('reports/certificado_rezago',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                    'arraydcto' =>  $arraydcto,
+                ]);
+        
+                return $pdf->setPaper('a4')->stream('Certificado Rezago Refrendación.pdf');
+
                 break;
             case 'SD':
+
+                $pdf = PDF::loadView('reports/certificado_distritosi',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                ]);
+        
+                return $pdf->setPaper('a4')->stream('Certificado Subsecretaría y Distrito.pdf');
 
                 break;
             case 'ND':
 
-                break;
-            case 'LI':
+                $pdf = PDF::loadView('reports/certificado_distritono',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                ]);
+        
+                return $pdf->setPaper('a4')->stream('Certificado Subsecretaría y Distrito.pdf');
 
                 break;
         }

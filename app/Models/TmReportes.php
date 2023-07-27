@@ -26,7 +26,11 @@ class TmReportes extends Model
         'asunto',
         'destinatario',
         'institucion',
-        'ciudad',
+        'cargo',
+        'refrendacion',
+        'pagina',
+        'fprorroga',
+        'documento',
         'secretaria',
         'coordinador',
     ];

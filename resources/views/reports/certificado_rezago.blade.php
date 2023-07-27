@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitud Pase Reglamentado</title>
+    <title>Certificado Rezago con Refrendación</title>
 
 
     <!-- Bootstrap CSS -->
@@ -19,22 +19,20 @@
 
     <section style ="margin-top: -110px;">
             <table cellpadding="0" cellspancing="0" width="100%" style="font-size:14px">
-                <tr>
-                    <td width="100%" style="vertical-align: top; padding-top: 8px">
-                        <img src="../public/assets/images/AmericanSchooll.jpg" height="80px">
-                    </td>        
+                <tr>       
                 </tr>
             </table>
             <table cellpadding="0" cellspacing="0" class="" width="100%">
                 <tr style="font-size:13px">
-                    <td width="5%">
-                    </td>
-                    <td width="90%" class="text-right">
-                        <p><br><span style="font-size:13px; text-transform: uppercase;">GUAYAQUIL, {{date('d',strtotime($data['emision']))}} DE 
-                        {{$mes[date('m',strtotime($data['emision']))]}} DEL {{date('Y',strtotime($data['emision']))}}</span>
+                    <td width="60%" class="text-right">
+                        <p><br><br><br><br><br><br><br><span style="font-size:13px;">Guayaquil, {{date('d',strtotime($data['emision']))}} de
+                        {{$mes[date('m',strtotime($data['emision']))]}} del {{date('Y',strtotime($data['emision']))}}</span>
                         </p> 
                     </td>
-                    <td width="5%">
+                </tr>
+                <tr style="font-size:12px">
+                    <td width="60%" class="text-center">
+                        <p><br><br><br><span style="font-size:18px"><strong>CERTIFICO</strong></p> 
                     </td>
                 </tr>
             </table>
@@ -44,15 +42,19 @@
                         <td width="5%">
                         </td>
                         <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
-                            <p><br><br>{{$data['asunto']}}<br>{{$data['destinatario']}}<br>{{$data['cargo']}}<br><strong>{{$data['institucion']}}</strong><br>CIUDAD
-                            </p>
-                            <p style style="line-height: 200%" class="text-justify"><br><br>
-                            AGRADECIÉNDOLE DE ANTEMANO POR SU GENTIL GESTION SOLICITO A UD MUY RESPETUOSAMENTE EL PASE REGLAMENTARIO PARA QUE EL
-                            SR (ita) <strong>{{$data['nombres']}} CON C.I. {{$data['identificacion']}}</strong>, 
-                            PUEDA CONTINUAR SUS ESTUDIOS EN NUESTRO PLANTEL EN EL {{$data['especializacion']}} EN EL ACTUAL PERIODO LECTIVO {{$data['periodo']}}.
-                            <br> DE UDS.        
-                            <br><br><br><br><br><br><br>
-                            ATENTAMENTE,
+                            <p style="line-height: 200%" class="text-justify"><br><br>
+                            Yo, Gladys Quiroz con C.I 090036728-5, Rectoror (a) de la Unidad Educativa American Shool, certifico que el Sr. (Srta.) 
+                            <strong>{{$data['nombres']}}</strong> con C.I. {{$data['identificacion']}}, constan en los archivos de la institución,
+                            en el periodo lectivo {{$data['periodo']}}, como Bachiller en CIENCIAS, con especialización en {{$data['especializacion']}},
+                            con calificación <strong>{{$data['nota']}}</strong>, graduado el {{date('d',strtotime($data['fecha']))}} de 
+                            {{$mes[date('m',strtotime($data['fecha']))]}} del {{date('Y',strtotime($data['fecha']))}}, con Refrendación #{{$data['refrendacion']}}
+                            , Página #{{$data['pagina']}}.<br> Por lo cual solicitamos una prorroga hasta el dia {{date('d',strtotime($data['fprorroga']))}} de 
+                            {{$mes[date('m',strtotime($data['fprorroga']))]}} del {{date('Y',strtotime($data['fprorroga']))}} para la entrega del 
+                            {{$arraydcto[$data['documento']]}}.</p>
+                            
+                            <p> 
+                            <br><br><br><br><br><br><br><br><br>
+                            Atentamente,
                             </p>
                             </span>
                         </td>

@@ -31,4 +31,8 @@ class TmServicios extends Model
         return $this->belongsTo('App\Models\TmGeneralidades');
     }
 
+    public function especializacion(){
+        return $this->belongsTo('App\Models\TmGeneralidades');
+    }
+
 }
