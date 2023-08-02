@@ -142,8 +142,8 @@
                         @foreach ($tbldetalle as $resumen) 
                             @if($resumen['tipopago']=='DEP')
                                 <tr>
+                                    <td class="">{{$resumen['documento']}}</td>
                                     <td class="">{{$resumen['referencia']}}</td>
-                                    <td class="">{{$resumen['refpago']}}</td>
                                     <td class="">{{$resumen['descripcion']}}</td>
                                     <td>{{number_format($resumen['valor'],2)}}</td>
                                 </tr>
@@ -175,8 +175,8 @@
                         @foreach ($tbldetalle as $resumen) 
                             @if($resumen['tipopago']=='TRA')
                                 <tr>
+                                    <td class="">{{$resumen['documento']}}</td>
                                     <td class="">{{$resumen['referencia']}}</td>
-                                    <td class="">{{$resumen['refpago']}}</td>
                                     <td class="">{{$resumen['descripcion']}}</td>
                                     <td>{{number_format($resumen['valor'],2)}}</td>
                                 </tr>
@@ -208,8 +208,8 @@
                         @foreach ($tbldetalle as $resumen) 
                             @if($resumen['tipopago']=='TAR')
                                 <tr>
+                                    <td class="">{{$resumen['documento']}}</td>
                                     <td class="">{{$resumen['referencia']}}</td>
-                                    <td class="">{{$resumen['refpago']}}</td>
                                     <td class="">{{$resumen['descripcion']}}</td>
                                     <td>{{number_format($resumen['valor'],2)}}</td>
                                 </tr>
