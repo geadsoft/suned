@@ -49,19 +49,13 @@ class VcEncashment extends Component
         $this->loadData();  
 
         $tblcobrodet = TrCobrosDets::where('cobrocab_id',$this->selectId)->get();
-        /*$tbldeudas   = TrDeudasDets::where([
-            ['cobro_id',$this->selectId],
-            ['tipovalor',"CR"],
-        ])
-        ->whereIn('tipo',["PAG","OTR"])
-        ->get();*/
 
         $tbldeudas    = TrDeudasCabs::query()
         ->join(DB::raw("(select sum(case when tipo in ('PAG','OTR') then valor else 0 end) as valor,
         sum(case when tipo = 'DES' then valor else 0 end) as descuento,
         deudacab_id, fecha, detalle
         from tr_deudas_dets d 
-        where  cobro_id = ".$this->selectId." and estado='P' 
+        where  cobro_id = ".$this->selectId."
         group by deudacab_id,fecha, detalle) as d"),function($join){
             $join->on('d.deudacab_id', '=', 'tr_deudas_cabs.id');
         })
