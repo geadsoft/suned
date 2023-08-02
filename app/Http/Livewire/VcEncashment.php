@@ -61,7 +61,7 @@ class VcEncashment extends Component
         sum(case when tipo = 'DES' then valor else 0 end) as descuento,
         deudacab_id, fecha, detalle
         from tr_deudas_dets d 
-        where  cobro_id = ".$this->selectId." 
+        where  cobro_id = ".$this->selectId." and estado='P' 
         group by deudacab_id,fecha, detalle) as d"),function($join){
             $join->on('d.deudacab_id', '=', 'tr_deudas_cabs.id');
         })
@@ -253,7 +253,7 @@ class VcEncashment extends Component
         sum(case when tipo = 'DES' then valor else 0 end) as descuento,
         deudacab_id, fecha, detalle
         from tr_deudas_dets d 
-        where  cobro_id = ".$selectId." 
+        where  cobro_id = ".$selectId." and estado='P' 
         group by deudacab_id,fecha, detalle) as d"),function($join){
             $join->on('d.deudacab_id', '=', 'tr_deudas_cabs.id');
         })
@@ -299,7 +299,7 @@ class VcEncashment extends Component
         sum(case when tipo = 'DES' then valor else 0 end) as descuento,
         deudacab_id, fecha, detalle
         from tr_deudas_dets d 
-        where  cobro_id = ".$selectId." 
+        where  cobro_id = ".$selectId." and estado='P' 
         group by deudacab_id,fecha, detalle) as d"),function($join){
             $join->on('d.deudacab_id', '=', 'tr_deudas_cabs.id');
         })
