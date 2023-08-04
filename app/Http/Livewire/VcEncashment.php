@@ -258,7 +258,7 @@ class VcEncashment extends Component
         group by deudacab_id) as p"),function($join){
             $join->on('p.deudacab_id', '=', 'tr_deudas_cabs.id');
         })
-        ->selectRaw("tr_deudas_cabs.referenci,d.fecha,d.detalle,ifnull(tr_deudas_cabs.debito-p.credito,tr_deudas_cabs.debito) as saldo,d.descuento,d.valor, tr_deudas_cabs.debito")
+        ->selectRaw("tr_deudas_cabs.referencia,d.fecha,d.detalle,ifnull(tr_deudas_cabs.debito-p.credito,tr_deudas_cabs.debito) as saldo,d.descuento,d.valor, tr_deudas_cabs.debito")
         ->get();             
         
         $pdf = PDF::loadView('financial/comprobante_cobro',[
