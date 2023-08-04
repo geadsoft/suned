@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Storage;
 use Luecano\NumeroALetras\NumeroALetras;
 use PDF;
 
+use Illuminate\Support\Facades\DB;
+
 class VcCertificados extends Component
 {
     public $tblperiodo, $control="";
@@ -92,6 +94,18 @@ class VcCertificados extends Component
         $this->fecha     =  date('Y-m-d',strtotime($tblmatricula['fecha']));
         $this->cursoId   =  $tblmatricula->curso_id;
 
+        /*$objData = DB::Select("(select truncate(rownr/100,0) + folio as folio, rownr, documento 
+        from (
+        SELECT (@row := @row + 1) as rownr,  t.documento, p.folio
+        FROM tm_matriculas t, tm_periodos_lectivos p, (SELECT @row := 0) r
+        where t.periodo_id = p.id and p.id = ".$tblmatricula['periodo_id'].") as d 
+        where documento = '".$this->documento."'");
+
+        dd($objData);
+
+        $this->folio     = $objData['folio']; 
+        $this->matricula = $objData['matricula']; */
+        
         $cursos     = TmCursos::find($this->cursoId);
         $servicio   = TmServicios::find($cursos->servicio_id);
         $this->cursoId = $cursos->servicio_id;
