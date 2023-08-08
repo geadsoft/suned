@@ -48,6 +48,7 @@ Route::get('/report/debt-analysis',[App\Http\Controllers\TmMatriculaController::
 Route::get('/financial/list-income',[App\Http\Controllers\TrCobrosCabsController::class, 'listingresos'])->name('listingresos');
 Route::get('/report/generic-reports',[App\Http\Controllers\TmMatriculaController::class, 'reportegenerico'])->name('reportegenerico');
 Route::get('/secretary/certificate',[App\Http\Controllers\SecretariaController::class, 'certificados'])->name('certificados');
+Route::get('/secretary/documentation',[App\Http\Controllers\SecretariaController::class, 'documentos'])->name('documentos');
 
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);

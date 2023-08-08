@@ -177,7 +177,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="">
+                    <a class="nav-link menu-link" href="/secretary/documentation">
                         <i class="ri-book-3-line fs-20"></i> <span>Documentacion</span>
                     </a>
                 </li>

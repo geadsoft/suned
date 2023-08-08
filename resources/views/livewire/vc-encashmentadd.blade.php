@@ -143,7 +143,7 @@
                                                         <div class="col-lg-3 col-sm-6">
                                                             <div class="mb-3">
                                                                 <label class="form-label" for="stocks-input">Tipo de pago</label>
-                                                                <select type="select" class="form-select" id="cmbtipopago" name="cmbtipopago">
+                                                                <select type="select" class="form-select" id="cmbtipopago" name="cmbtipopago" wire:model.defer="tipopago">
                                                                 <option value="EFE">Efectivo</option>
                                                                 <option value="CHQ">Cheque</option>
                                                                 <option value="TAR">Tarjeta</option>
@@ -159,12 +159,12 @@
                                                         <div class="col-lg-5 col-sm-6">
                                                             <div class="mb-3" id="divEntidad">
                                                                 <label class="form-label" for="txtentidad" name="lblentidad" style="display:none">Entidad</label>
-                                                                <select type="select" class="form-select" name="cmbentidad" id="cmbentidad" value = "32" style="display:none">
+                                                                <select type="select" class="form-select" name="cmbentidad" id="cmbentidad" value = "32" style="display:none" wire:model.defer="entidad">
                                                                 @foreach ($tblentidads as $entidad) 
                                                                     <option value="{{$entidad->id}}">{{$entidad->descripcion}}</option>
                                                                 @endforeach
                                                                 </select>
-                                                                <select type="select" class="form-select" name="cmbtarjeta" id="cmbtarjeta" value = "58" style="display:none">
+                                                                <select type="select" class="form-select" name="cmbtarjeta" id="cmbtarjeta" value = "58" style="display:none" wire:model.defer="entidad">
                                                                 @foreach ($tbltarjetas as $tarjeta) 
                                                                     <option value="{{$tarjeta->id}}">{{$tarjeta->descripcion}}</option>
                                                                 @endforeach
@@ -174,14 +174,14 @@
                                                         <div class="col-lg-2 col-sm-6">
                                                             <div class="mb-3">
                                                                 <label class="form-label" for="txtvalor">Valor</label>
-                                                                <input type="number" class="form-control  product-price" id="txtvalor" step="0.01" placeholder="0.00">
+                                                                <input type="number" class="form-control  product-price" id="txtvalor" step="0.01" placeholder="0.00" wire:model.defer="valor">
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-2 col-sm-6 text-center">
                                                             <div class="mb-3">
                                                             <label class="form-label">-</label>                                     
-                                                                <a href="javascript:new_link()" id="add-pago" class ="form-control btn btn-soft-secondary"><i class="ri-add-fill me-1"></i> Agregar</a>
-                                                                <!--<a href="javascript:new_link()" id="add-item" class="btn btn-soft-secondary fw-medium"><i class="ri-add-fill me-1 align-bottom"></i> Add Item</a>-->
+                                                                <a wire:click="addPago()" id="add-pago" class ="form-control btn btn-soft-secondary"><i class="ri-add-fill me-1"></i> Agregar</a>
+                                                                <!--<a wire:click="addPagos()" id="add-item" class="btn btn-soft-secondary fw-medium"><i class="ri-add-fill me-1 align-bottom"></i> Add Item</a>-->
                                                             </div>
                                                         </div>
                                                         <!-- end col -->
@@ -190,7 +190,7 @@
                                                     <div class="row align-items-center sm-3">
                                                         <div class="col-lg-12 col-sm-6">
                                                             <label class="form-label" for="txtreferencia">Referencia</label>
-                                                            <input type="text" class="form-control  product-price" id="txtreferencia" placeholder="">
+                                                            <input type="text" class="form-control  product-price" id="txtreferencia" placeholder="" wire:model.defer="referencia">
                                                         </div>
                                                     </div>   
                                                     <!-- end row -->
@@ -213,7 +213,7 @@
                                                                         <th>Acción</th>
                                                                     </tr>
                                                                 </thead>
-                                                                <tbody id="newlink">
+                                                                <!--<tbody id="newlink">
 
                                                                 </tbody>    
                                                                 <tbody>
@@ -222,6 +222,46 @@
                                                                             <p>Add New Form</p>
                                                                         </td>
                                                                     </tr>
+                                                                </tbody>-->
+                                                                <tbody>
+                                                                @foreach($objPago as $key => $row)
+                                                                <tr>
+                                                                    <th scope="row" class="pagos-id">{{$key+1}}</th>
+                                                                    <td>
+                                                                        <select type="select" class="form-select disabled" name="cmbtipopago" id="cmbtipopago-{{$key+1}}" wire:model.prevent="objPago.{{$key}}.tipopago" disabled>
+                                                                            <option value="EFE">Efectivo</option>
+                                                                            <option value="CHQ">Cheque</option>
+                                                                            <option value="TAR">Tarjeta</option>
+                                                                            <option value="DEP">Depósito</option>
+                                                                            <option value="TRA">Transferencia</option>
+                                                                            <option value="CON">Convenio</option>
+                                                                            <option value="APP">App Movil</option>
+                                                                            <option value="RET">Retención</option>
+                                                                            <option value="OTR">Convenio</option>
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" class="form-control" id="txtreferencia-{{$key+1}}" wire:model.prevent="objPago.{{$key}}.detalle" readonly/>
+                                                                    </td>
+                                                                    <td style="display:none;">
+                                                                        <input type="text" class="form-control pago-entidad" id="cmbentidad-{{$key+1}}" wire:model.prevent="objPago.{{$key}}.entidad" readonly/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="number" class="form-control pago-line-valor"  id="txtvalor-{{$key+1}}" step="0.01" wire:model.prevent="objPago.{{$key}}.valor" readonly/>
+                                                                    </td>
+                                                                    <td class="pagos-removal">
+                                                                        <ul class="list-inline hstack gap-2 mb-0">
+                                                                            <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                                                data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                                <a href="" wire:click="deletePago({{$key}})" class="text-danger d-inline-block remove-item-btn"
+                                                                                    data-bs-toggle="modal" >
+                                                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                </tr>
+                                                                @endforeach
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -395,7 +435,7 @@
                             <div class="d-flex">
                                 <div class="input-group">
                                     <label for="cart-impuesto" class="form-label fw-semibold p-1">TOTAL TO CANCEL:</label>
-                                    <input type="text" class="form-control bg-white border-0 text-end fw-semibold fs-15" id="cart-pago" placeholder="$0.00" wire:model.defer="monto" readonly />
+                                    <input type="text" class="form-control bg-white border-0 text-end fw-semibold fs-15" id="cart-pago" placeholder="$0.00" wire:model.defer="cancela" readonly />
                                 </div>
                             </div>
 

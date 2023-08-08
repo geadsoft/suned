@@ -21,6 +21,11 @@ class SecretariaController extends Controller
         return view('secretary/certificados');
     }
 
+    public function documentos()
+    {
+        return view('secretary/documentos');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

@@ -23,13 +23,17 @@
 @section('script')
     <!--ecommerce-customer init js -->
     <script src="{{ URL::asset('assets/js/pages/financial-encashment.js') }}"></script>
-    <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script>
         
         window.addEventListener('show-message', event => {
             $('#messageModal').modal('show');
+        })
+
+        window.addEventListener('msg-pago', event => {
+            swal("Error!", "Pago es mayor a las deudas aplicadas..", "warning");
         })
 
         $("#cmbtipopago").change(function(){
@@ -62,10 +66,12 @@
         
         window.addEventListener('save-det', event => {
                           
-            /*Pagos*/
+            /*Pagos
             var count = 0;
             var new_pago_obj = [];
             var deuda_list;
+            var totpagos = 0;
+            var totmonto = 0;
 
             const tableRows = document.querySelectorAll('#newlink tr');
             let col_tipopago = '';
@@ -80,7 +86,8 @@
                 col_entidad    = row.querySelector("#cmbentidad-"+count).value;
                 col_valor      = row.querySelector("#txtvalor-"+count).value;
                 col_referencia = row.querySelector("#txtreferencia-"+count).value;
-
+                totpagos       = totpagos+col_valor;
+                
                 var pago_obj = {
                     tipopago: col_tipopago,
                     entidadid: col_entidad,
@@ -89,11 +96,11 @@
                     referencia: col_referencia,
                 }
                 new_pago_obj.push(pago_obj);
-            }
+            }*/
 
             deuda_list = JSON.parse(localStorage.getItem('deuda-list'));
-            
-            Livewire.emit('postAdded',deuda_list,new_pago_obj);
+
+            Livewire.emit('postAdded',deuda_list);
         
         })
 

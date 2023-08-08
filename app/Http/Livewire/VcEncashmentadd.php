@@ -23,8 +23,9 @@ class VcEncashmentadd extends Component
     public $periodo;
     public $fecha;
     public $secuencia=0;
-    public $tblCobro;
+    public $tblCobro, $objPago=[];
     public $estudiante_id=0, $grupo, $curso, $concepto, $comentario, $matricula_id, $nromatricula;
+    public $tipopago='EFE', $entidad=0, $valor=0, $referencia='', $cancela=0;
 
     public $totalPago = 0;
     public $valpago   = 0;
@@ -89,10 +90,78 @@ class VcEncashmentadd extends Component
 
     }
 
-    public function postAdded($objDeuda=null,$objPago=null)
+    public function addPago(){
+
+        if ($this->valor==0){
+            return;
+        }
+
+        $entidad = TmGeneralidades::find($this->entidad);
+
+        $detpago = [];
+        $detpago['tipopago']   = $this->tipopago;
+        $detpago['entidadid']  = $this->entidad;
+        $detpago['numero']     = '';
+        $detpago['valor']      = $this->valor;
+        $detpago['referencia'] = $this->referencia;
+
+        if ($this->entidad>0){
+            $detpago['detalle']    = $entidad['descripcion'].' '.$this->referencia;
+        }
+        
+
+        $this->cancela = $this->cancela+floatval($this->valor);
+
+        array_push($this->objPago, $detpago);
+        $this->tipopago='EFE';
+        $this->entidad=0;
+        $this->valor=0;
+        $this->referencia='';
+
+    }
+
+    public function deletePago($row){
+
+        $recnoToDelete = $this->objPago;
+        foreach ($recnoToDelete as $index => $recno)
+        {
+            if ($index == $row){
+                $this->cancela = $this->cancela-floatval($recno['valor']);
+                unset ($recnoToDelete[$index]);
+            } 
+        }
+
+        $this->reset(['objPago']);
+        $this->objPago = $recnoToDelete;
+
+    }
+
+    public function validapago($objDeuda){
+
+        $pago  = 0;
+        $monto = 0;
+        foreach ($objDeuda as $deuda)
+        {
+            $monto += floatval($deuda['valpago']);
+        }
+
+        if ($this->cancela>$monto){
+            return true ; 
+        }else{
+            return false ; 
+        }
+
+    }
+
+    public function postAdded($objDeuda=null)
     {
 
-        foreach ($objPago as $pago)
+        if ($this->validapago($objDeuda)){
+            $this->dispatchBrowserEvent('msg-pago');
+            return;
+        }
+
+        foreach ($this->objPago as $pago)
         {
             $this->totalPago += $pago['valor'];
         }    
@@ -136,7 +205,7 @@ class VcEncashmentadd extends Component
         $this->tblCobro = TrCobrosCabs::orderBy("id", "desc")->first();
         $this->selectId = $this->tblCobro['id'];
                 
-        foreach ($objPago as $pago)
+        foreach ($this->objPago as $pago)
         {
             
             TrCobrosDets::Create([
@@ -227,11 +296,6 @@ class VcEncashmentadd extends Component
                 $matricula = TmMatricula::join("tm_cursos","tm_matriculas.curso_id","=","tm_cursos.id")
                 ->join("tm_servicios","tm_cursos.servicio_id","=","tm_servicios.id")
                 ->join("tm_generalidades","tm_servicios.modalidad_id","=","tm_generalidades.id")
-                /*->where([
-                        ['tm_matriculas.periodo_id',$this->periodo],
-                        ['tm_matriculas.estudiante_id',$this->estudiante_id],
-                        ['tm_cursos.periodo_id',$this->periodo],
-                    ])*/
                 ->where("tm_matriculas.id",$this->matricula_id)
                 ->select('tm_generalidades.descripcion AS nomGrupo', 'tm_servicios.descripcion AS nomGrado', 'tm_cursos.paralelo', 'tm_matriculas.comentario')
                 ->first();
