@@ -25,7 +25,7 @@ class VcEncashmentadd extends Component
     public $secuencia=0;
     public $tblCobro, $objPago=[];
     public $estudiante_id=0, $grupo, $curso, $concepto, $comentario, $matricula_id, $nromatricula;
-    public $tipopago='EFE', $entidad=0, $valor=0, $referencia='', $cancela=0;
+    public $tipopago='EFE', $entidadbco=0, $entidadtar=0, $valor=0, $referencia='', $cancela=0;
 
     public $totalPago = 0;
     public $valpago   = 0;
@@ -96,16 +96,26 @@ class VcEncashmentadd extends Component
             return;
         }
 
-        $entidad = TmGeneralidades::find($this->entidad);
+        $idEntidad = 32;
+
+        if ($this->entidadbco>0){
+            $idEntidad = $this->entidadbco;
+        }
+        
+        if ($this->entidadtar>0){
+            $idEntidad = $this->entidadtar;
+        }
+
+        $entidad = TmGeneralidades::find($idEntidad);
 
         $detpago = [];
         $detpago['tipopago']   = $this->tipopago;
-        $detpago['entidadid']  = $this->entidad;
+        $detpago['entidadid']  = $idEntidad;
         $detpago['numero']     = '';
         $detpago['valor']      = $this->valor;
         $detpago['referencia'] = $this->referencia;
 
-        if ($this->entidad>0){
+        if ($idEntidad>0){
             $detpago['detalle']    = $entidad['descripcion'].' '.$this->referencia;
         }
         
@@ -114,7 +124,8 @@ class VcEncashmentadd extends Component
 
         array_push($this->objPago, $detpago);
         $this->tipopago='EFE';
-        $this->entidad=0;
+        $this->entidadbco=0;
+        $this->entidadtar=0;
         $this->valor=0;
         $this->referencia='';
 

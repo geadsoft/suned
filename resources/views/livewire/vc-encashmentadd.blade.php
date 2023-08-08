@@ -159,12 +159,12 @@
                                                         <div class="col-lg-5 col-sm-6">
                                                             <div class="mb-3" id="divEntidad">
                                                                 <label class="form-label" for="txtentidad" name="lblentidad" style="display:none">Entidad</label>
-                                                                <select type="select" class="form-select" name="cmbentidad" id="cmbentidad" value = "32" style="display:none" wire:model.defer="entidad">
+                                                                <select type="select" class="form-select" name="cmbentidad" id="cmbentidad" value = "32" style="display:none" wire:model.defer="entidadbco">
                                                                 @foreach ($tblentidads as $entidad) 
                                                                     <option value="{{$entidad->id}}">{{$entidad->descripcion}}</option>
                                                                 @endforeach
                                                                 </select>
-                                                                <select type="select" class="form-select" name="cmbtarjeta" id="cmbtarjeta" value = "58" style="display:none" wire:model.defer="entidad">
+                                                                <select type="select" class="form-select" name="cmbtarjeta" id="cmbtarjeta" value = "58" style="display:none" wire:model.defer="entidadtar">
                                                                 @foreach ($tbltarjetas as $tarjeta) 
                                                                     <option value="{{$tarjeta->id}}">{{$tarjeta->descripcion}}</option>
                                                                 @endforeach
