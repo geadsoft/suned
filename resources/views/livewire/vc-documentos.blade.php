@@ -22,49 +22,7 @@
                                 <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
-                        <div class="col-xxl-2 col-sm-4">
-                            <div>
-                                <select class="form-select" name="cmbnivel" wire:model="filters.srv_periodo">
-                                    <option value="">Seleccione Periodo</option>
-                                    @foreach ($tblperiodos as $periodo)
-                                        <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-xxl-2 col-sm-4">
-                            <div>
-                                <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
-                                    <option value="">Todos Grupos</option>
-                                    @foreach ($tblgenerals as $general)
-                                        @if ($general->superior == 1)
-                                        <option value="{{$general->id}}">{{$general->descripcion}}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-xxl-2 col-sm-4">
-                                <div>
-                                    <select class="form-select" name="cmbgrupo" wire:model="filters.srv_curso">
-                                        <option value="">Todos Cursos</option>
-                                        @foreach ($tblcursos as $curso)
-                                            <option value="{{$curso->id}}">{{$curso->servicio->descripcion}} {{$curso->paralelo}} {{$curso->grupo->descripcion}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-
-
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" wire:model="estado">
-                            <label class="form-check-label" for="estado">Estudiantes retirados</label>
-                        </div>
-                    </div>
-                    
                 </div>
                 <div class="card-body">
                     <div>
@@ -72,32 +30,36 @@
                             <table class="table align-middle table-nowrap mb-0" id="customerTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
-                                        <th class="sort" data-sort="company_name" scope="col">Matricula</th>
                                         <th class="sort" data-sort="name" scope="col">Identificación</th>
-                                        <th class="sort" data-sort="company_name" scope="col">Nombres</th>
-                                        <th class="sort" data-sort="company_name" scope="col">Documentación</th>
+                                        <th class="sort" data-sort="nombre" scope="col">Nombres</th>
+                                        <th class="sort" data-sort="nace" scope="col">Fecha Nacimiento</th>
+                                        <th class="sort" data-sort="telefono" scope="col">Telefono</th>
+                                        <th class="sort" data-sort="email" scope="col">Email</th>
+                                        <th class="sort" scope="col">Documentación</th>
                                         <th scope="col">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all">
                                 @foreach ($tblrecords as $record)
-                                    <tr>
-                                        <td>{{$record->documento}}</td>                                        
+                                    <tr>                                        
                                         <td>{{$record->identificacion}}</td>
                                         <td>{{$record->apellidos}} {{$record->nombres}}</td>
+                                        <td>{{$record->fechanacimiento}}</td>
+                                        <td>{{$record->telefono}}</td>
+                                        <td>{{$record->email}}</td>
                                         <td><i class="me-1 align-bottom"></i> Registrada <span class="badge bg-success align-middle ms-1"> 0</span>
-                                            <i class="me-1 align-bottom"></i> Por Registrar <span class="badge bg-secondary align-middle ms-1">10</span>
+                                            <!--<i class="me-1 align-bottom"></i> Por Registrar <span class="badge bg-secondary align-middle ms-1">10</span>-->
                                         </td>
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Registrar Documentación">
-                                                    <a class="edit-item-btn" wire:click="add({{$record->id}},{{$record->matricula_id}})"><i
+                                                    <a href="" class="edit-item-btn" wire:click.prevent="add({{$record->id}})"><i
                                                             class="ri-folder-open-fill fs-18"></i></a>
                                                 </li>
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Retirar Documentación">
-                                                    <a class="text-danger d-inline-block remove-item-btn" href="/academic/person-edit/{{$record->identificacion}}"><i
+                                                    <a class="text-danger d-inline-block remove-item-btn" href=""><i
                                                             class="ri-folder-shared-fill fs-18"></i>
                                                     </a>
                                                 </li>                                                

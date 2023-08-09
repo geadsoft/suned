@@ -3,7 +3,6 @@
 namespace App\Http\Livewire;
 
 use App\Models\TmPersonas;
-use App\Models\TmPeriodosLectivos;
 use App\Models\TmGeneralidades;
 use App\Models\TmCursos;
 
@@ -32,17 +31,17 @@ class VcDocumentos extends Component
 
     public  function mount()
     {
-        $this->tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
+        /*$this->tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         $this->tblgenerals = TmGeneralidades::where('superior',1)->get();
 
-        $this->filters['srv_periodo'] = $this->tblperiodos[0]['id'];
+        $this->filters['srv_periodo'] = $this->tblperiodos[0]['id'];*/
     }
 
 
     public function render()
     {
         
-        $tblcursos   = TmCursos::query()
+        /*$tblcursos   = TmCursos::query()
         ->when($this->filters['srv_periodo'],function($query){
             return $query->where('periodo_id',"{$this->filters['srv_periodo']}");
         })
@@ -50,14 +49,14 @@ class VcDocumentos extends Component
             return $query->where('grupo_id',"{$this->filters['srv_grupo']}");
         })
         ->orderByRaw('nivel_id,grado_id,paralelo')
-        ->get();
+        ->get();*/
         
         $tblrecords = TmPersonas::query()
-        ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
+        /*->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")*/
         ->when($this->filters['srv_nombre'],function($query){
             return $query->whereRaw("concat(tm_personas.apellidos,' ',tm_personas.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
-        ->when($this->filters['srv_periodo'],function($query){
+        /*->when($this->filters['srv_periodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
         })
         ->when($this->filters['srv_grupo'],function($query){
@@ -65,18 +64,15 @@ class VcDocumentos extends Component
         })
         ->when($this->filters['srv_curso'],function($query){
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
-        })
+        })*/
         ->where('tm_personas.tipopersona','=','E')
         ->where('tm_personas.estado',$this->filters['srv_estado'])
-        ->select('tm_personas.*','m.documento', 'm.id as matricula_id')
+        /*->select('tm_personas.*','m.documento', 'm.id as matricula_id')*/
         ->orderBy('apellidos','asc')
         ->paginate(12);
 
         return view('livewire.vc-documentos',[
             'tblrecords'  => $tblrecords,
-            'tblperiodos' => $this->tblperiodos,
-            'tblgenerals' => $this->tblgenerals,
-            'tblcursos'   => $tblcursos,
         ]);
 
     }
@@ -85,13 +81,11 @@ class VcDocumentos extends Component
         return 'vendor.livewire.bootstrap'; 
     }
 
-    public function add($id, $matricula){
+    public function add($id){
 
         $this->selectId    = $id;
-        $this->matriculaId = $matricula;
-
         $this->dispatchBrowserEvent('show-form');
-        $this->emitTo('vc-modal-upload','loadData',$id,$matricula);
+        $this->emitTo('vc-modal-upload','loadData',$id);
     }
 
 

@@ -6,7 +6,7 @@ use App\Models\TmGeneralidades;
 use App\Models\TmDocumentacion;
 use App\Models\TmMatricula;
 use App\Models\TmServicios;
-
+use App\Models\TmPeriodosLectivos;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -15,19 +15,29 @@ use Illuminate\Support\Facades\Storage;
 class VcModalUpload extends Component
 {   
     use WithFileUploads;
-    public $objdocument=[], $tbldocument, $selectId, $nombres, $nui, $curso;
+    public $tblperiodos, $documentos;
+    public $objdocument=[], $tbldocument, $selectId, $nombres, $nui, $curso, $periodoId, $servicioId;
 
     protected $listeners = ['loadData'];
 
     public function mount()
     {
-        $this->tbldocument = TmGeneralidades::where('superior',9)->get();
+        $this->tbldocument  = TmGeneralidades::where('superior',9)->get();
+
+        $this->tblservicios = TmServicios::where('modalidad_id',2)
+        ->orderByRaw('nivel_id,grado_id')
+        ->get();
+
+        $this->tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
+        $this->periodoId   = $this->tblperiodos[0]['id']; 
 
         foreach ($this->tbldocument as $key => $row){
             $iddoc = "doc".$key;
             $this->objdocument[$key]['id']   = $row->id;
             $this->objdocument[$key]['name'] = $row->descripcion;
-            $this->objdocument[$key]['file'] = "";
+            $this->objdocument[$key]['file']    = "";
+            $this->objdocument[$key]['archivo'] = "";
+            $this->objdocument[$key]['documentoid'] = 0;
         }
 
     }
@@ -42,20 +52,13 @@ class VcModalUpload extends Component
 
     }
 
-    public function loadData($id, $matricula){
+    public function loadData($id){
 
         $this->selectId = $id;
 
         $tblpersona = TmPersonas::find($this->selectId);
         $this->nombres = $tblpersona['apellidos'].' '.$tblpersona['nombres'];
-        $this->nui  = $tblpersona['identificacion'];
-
-        $tblmatricula = TmMatricula::find($matricula);
-        $servicioId   = $tblmatricula->curso->servicio_id;
-
-        $tblservicio  = TmServicios::find($servicioId);
-        $this->curso = $tblservicio->descripcion;
-        
+        $this->nui     = $tblpersona['identificacion'];
  
     }
 
@@ -67,23 +70,39 @@ class VcModalUpload extends Component
             'nui' => 'required',
         ]);
 
-        foreach ($this->objdocument as $data){
-            
-            if ($data['file'] != ''){
+        foreach ($this->objdocument as $data){            
 
-                TmDocumentacion::Create([
-                    'estudiante_id' => $this->selectId,
-                    'servicio_id' => $this->servicioId,
-                    'documentacion_id' => $data['id'],
-                    'carpeta' => $this -> $this->nui,
-                    'archivo' => $this -> $data['file'],
-                    'usuario' => auth()->user()->name,
-                ]);
-
+            if ($data['file'] != '' && $data['documentoid']==0){
+                
                 $extension = $data['file']->getClientOriginalExtension();
                 $name = $data['file']->getClientOriginalName();
+                $file = $name;
+
+                TmDocumentacion::Create([
+                    'periodo_id'    => $this->periodoId,
+                    'estudiante_id' => $this->selectId,
+                    'servicio_id'   => $this->servicioId,
+                    'documentacion_id' => $data['id'],
+                    'carpeta' => $this->nui,
+                    'archivo' => $file,
+                    'usuario' => auth()->user()->name,
+                ]);
                 
-                $file = $name.'.'.$extension;
+                $data['file']->storeAs('document/'.$this->nui, $name,'public_uploads');
+
+            }
+
+            if ($data['file'] != '' && $data['documentoid']>0){
+                
+                $extension = $data['file']->getClientOriginalExtension();
+                $name = $data['file']->getClientOriginalName();
+                $file = $name;
+
+                $record = TmDocumentacion::find($data['documentoid']);
+                $record->update([
+                    'archivo' => $file,
+                ]);
+                
                 $data['file']->storeAs('document/'.$this->nui, $name,'public_uploads');
 
             }
@@ -92,6 +111,46 @@ class VcModalUpload extends Component
 
         $this->dispatchBrowserEvent('hide-form');
 
+    }
+
+    public function updatedservicioId(){
+
+        $this->documentos = TmDocumentacion::where('periodo_id',$this->periodoId)
+        ->where('estudiante_id',$this->selectId)
+        ->where('servicio_id',$this->servicioId)
+        ->get();
+
+        foreach ($this->documentos as $key => $row){
+
+            for ($i=0;$i<=count($this->objdocument)-1;$i++){
+                
+                if ($this->objdocument[$i]['id']== $row['documentacion_id']){
+                    $this->objdocument[$i]['archivo']    =$row['archivo'];
+                    $this->objdocument[$i]['documentoid']=$row['id'];
+                }
+
+            }
+
+        }       
+
+    }
+
+    public function export($idRow)
+    {
+        foreach ($this->documentos as $row){
+            
+            if ($row['documentacion_id']==$idRow){
+                $path = 'document/'.$row['carpeta'].'/'.$row['archivo'];
+            }
+
+        }
+
+        return Storage::disk('public_uploads')->download($path);
+    }
+
+    public function delete($fila)
+    {
+        $this->objdocument[$fila]['archivo']="";
     }
 
 

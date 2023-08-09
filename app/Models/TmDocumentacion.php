@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TmDocumentacion extends Model
 {
-    protected $table = 'tm_documentacion';
+    protected $table = 'tm_documentacions';
     protected $primaryKey = "id";
     protected $fillable = [
         'periodo_id',
