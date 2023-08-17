@@ -376,9 +376,14 @@ class VcReportCashReceints extends Component
 
         foreach ($tblrecords as $record)
         {
+            if($record['estado']=='A'){
+                continue;
+            }
+
             $this->neto      = floatval($this->neto) + floatval($record['saldo']) + floatval($record['credito']);
             $this->descuento = floatval($this->descuento) + floatval($record['descuento']);
             $this->pago      = floatval($this->pago)+ floatval($record['pago']);
+        
         }
 
         $this->valorEfe = $tbldetalle->where('tipopago','EFE')->sum('valor');
