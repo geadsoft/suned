@@ -71,6 +71,10 @@ class VcReportDailyCharges extends Component
            
         $tblrecords = TrCobrosCabs::query()
         ->join("tm_personas","tm_personas.id","=","tr_cobros_cabs.estudiante_id")
+        ->join("tm_matriculas","tm_matriculas.id","=","tr_cobros_cabs.matricula_id")
+        ->when($this->filters['srv_periodo'],function($query){
+            return $query->where('tm_matriculas.periodo_id',"{$this->filters['srv_periodo']}");
+        })
         ->when($this->filters['srv_nombre'],function($query){
             return $query->whereRaw("concat(tm_personas.apellidos,' ',tm_personas.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
