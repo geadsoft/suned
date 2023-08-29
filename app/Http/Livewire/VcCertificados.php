@@ -94,17 +94,18 @@ class VcCertificados extends Component
         $this->fecha     =  date('Y-m-d',strtotime($tblmatricula['fecha']));
         $this->cursoId   =  $tblmatricula->curso_id;
 
-        /*$objData = DB::Select("(select truncate(rownr/100,0) + folio as folio, rownr, documento 
+        $objData = DB::Select("select truncate(rownr/100,0) + folio as folio, rownr, documento 
         from (
         SELECT (@row := @row + 1) as rownr,  t.documento, p.folio
         FROM tm_matriculas t, tm_periodos_lectivos p, (SELECT @row := 0) r
         where t.periodo_id = p.id and p.id = ".$tblmatricula['periodo_id'].") as d 
         where documento = '".$this->documento."'");
-
-        dd($objData);
-
-        $this->folio     = $objData['folio']; 
-        $this->matricula = $objData['matricula']; */
+        
+        foreach ($objData as $row){
+            $this->folio     = $row->folio; 
+            $this->documento = $row->documento;
+            $this->matricula = substr($row->documento,-4); 
+        }
         
         $cursos     = TmCursos::find($this->cursoId);
         $servicio   = TmServicios::find($cursos->servicio_id);
@@ -194,7 +195,7 @@ class VcCertificados extends Component
 
     }
 
-    public function print(){
+    public function print($modo){
 
         if ($this->tipoDoc!='ND'){
 
@@ -269,7 +270,11 @@ class VcCertificados extends Component
 
         }
 
-        return redirect()->to('/preview-pdf/certificados/'.$reporte['id']); 
+        if ($modo=='P'){
+            return redirect()->to('/preview-pdf/certificados/'.$reporte['id']);
+        }else{
+            return redirect()->to('/download-pdf/certificados/'.$reporte['id']); 
+        }
 
     }
 
@@ -414,6 +419,150 @@ class VcCertificados extends Component
                 break;
         }
         
+    }
+
+    public function downloadPDF($idReporte)
+    {
+
+        $data = TmReportes::find($idReporte);
+
+        $this->foto    = $data['identificacion'].'.jpg';
+
+        $contents   = Storage::disk('public')->exists('fotos/'.$this->foto);
+        
+        if($contents==false){
+            $this->foto='';
+        }
+
+        $formatter = new NumeroALetras();
+        $numletra = $formatter->toWords($data['nota'], 2);
+
+        $mes  = ["01" => 'Enero', "02" => 'Febrero', "03" => 'Marzo', "04" => 'Abril', "05" => 'Mayo', "06" => 'Junio',
+        "07" => 'Julio', "08" => 'Agosto', "09" => 'Septiembre', "10" => 'Octubre', "11" => 'Noviembre', "12" => 'Diciembre'];
+
+        $arraydcto = [
+            'AC' => 'Acta',
+            'TI' => 'Título',
+            'AT' => 'Acta y TÍtulo',
+        ];
+
+        switch ($data['tipo']) {
+            case 'MF':
+                
+                $pdf = PDF::loadView('reports/matricula_folio',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                    'foto'  => $this->foto,
+                ]);
+        
+                return $pdf->download('Certificado Folio.pdf');
+
+                break;
+            case 'MA':
+                
+                $pdf = PDF::loadView('reports/certificado_matricula',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                ]);
+        
+                return $pdf->download('Certificado Matrícula.pdf');
+
+                break;
+            case 'PA':
+                
+                $pdf = PDF::loadView('reports/certificado_pasantias',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                ]);
+        
+                return $pdf->download('Certificado Pasantias.pdf');
+
+                break;
+            case 'CO':
+                
+                $pdf = PDF::loadView('reports/certificado_conducta',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                    'numletra' => $numletra,
+                ]);
+        
+                return $pdf->download('Certificado Conducta.pdf');
+
+                break;
+            case 'AP':
+                
+                $pdf = PDF::loadView('reports/certificado_aprovechamiento',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                    'numletra' => $numletra,
+                ]);
+        
+                return $pdf->download('Certificado Aprovechamiento.pdf');
+
+                break;
+            case 'PR':
+                
+                $pdf = PDF::loadView('reports/certificado_pase',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                ]);
+        
+                return $pdf->download('Solicitud Pase Reglamentado.pdf');
+
+                break;
+            case 'AR':
+
+                $pdf = PDF::loadView('reports/certificado_acepta_pase',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                ]);
+
+                return $pdf->download('Solicitud Aceptación Pase Reglamentado.pdf');
+            
+            case 'ER':
+
+                    $pdf = PDF::loadView('reports/certificado_emision_pase',[
+                        'data'  => $data,
+                        'mes'   => $mes,
+                    ]);
+            
+                    return $pdf->download('Solicitud Emisión Pase Reglamentado.pdf');
+    
+                break;
+            case 'RR':
+
+                $pdf = PDF::loadView('reports/certificado_rezago',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                    'arraydcto' =>  $arraydcto,
+                ]);
+        
+                return $pdf->download('Certificado Rezago Refrendación.pdf');
+
+                break;
+            case 'SD':
+
+                $pdf = PDF::loadView('reports/certificado_distritosi',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                ]);
+        
+                return $pdf->download('Certificado Subsecretaría y Distrito.pdf');
+
+                break;
+            case 'ND':
+
+                $pdf = PDF::loadView('reports/certificado_distritono',[
+                    'data'  => $data,
+                    'mes'   => $mes,
+                ]);
+        
+                return $pdf->download('Certificado Subsecretaría y Distrito.pdf');
+
+                break;
+        }
+
+
     }
 
 

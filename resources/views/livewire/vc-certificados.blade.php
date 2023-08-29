@@ -1,4 +1,5 @@
 <div>
+    <form autocomplete="off" id="certificado_form">
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -272,8 +273,8 @@
             
             <!-- end card -->
             <div class="text-end mb-4">
-                <button type="button" class="btn btn-danger w-sm" wire:click='print'><i class="ri-printer-line align-bottom me-1"></i> Print</button>
-                <button type="submit" class="btn btn-success w-sm"><i class="ri-download-2-line align-bottom me-1"></i>Download PDF</button>
+                <button type="button" class="btn btn-danger w-sm" wire:click='print("P")'><i class="ri-printer-line align-bottom me-1"></i>Print</button>
+                <button type="button" class="btn btn-success w-sm" wire:click='print("D")'><i class="ri-download-2-line align-bottom me-1"></i>Download PDF</button>
             </div>
         </div>
         <!-- end col -->
@@ -393,6 +394,7 @@
         <!-- end col -->
     </div>
     <!-- end row -->
+    </form>
 
 
 

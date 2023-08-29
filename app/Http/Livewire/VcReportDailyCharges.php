@@ -33,9 +33,12 @@ class VcReportDailyCharges extends Component
 
     public function mount(){
         
+        $dataperiodo = TmPeriodosLectivos::orderBy("periodo","desc")->first();
+        
         $ldateini = date('Y-m-d H:i:s');
         $ldatefin = date('Y-m-d H:i:s');
 
+        $this->filters['srv_periodo']  = $dataperiodo['id'];
         $this->filters['srv_fechaini'] = date('Y-m-d',strtotime($ldateini));
         $this->filters['srv_fechafin'] = date('Y-m-d',strtotime($ldatefin));
         $this->filters['srv_nombre'] = '';
@@ -64,7 +67,7 @@ class VcReportDailyCharges extends Component
 
     public function consulta(){
 
-        $this->filters['srv_periodo'] = $this->tblperiodos[0]->id;
+        //$this->filters['srv_periodo'] = $this->tblperiodos[0]->id;
            
         $tblrecords = TrCobrosCabs::query()
         ->join("tm_personas","tm_personas.id","=","tr_cobros_cabs.estudiante_id")

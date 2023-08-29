@@ -73,6 +73,7 @@ Route::get('/download-pdf/debt-analysis/{report},{data}',[VcReportDebtAnalysis::
 Route::get('/preview-pdf/generic-report/{report},{data}',[VcGenericReports::class, 'liveWirePDF']);
 Route::get('/download-pdf/generic-report/{report},{data}',[VcGenericReports::class, 'liveWirePDF']);
 Route::get('/preview-pdf/certificados/{data}',[VcCertificados::class, 'liveWirePDF']);
+Route::get('/download-pdf/certificados/{data}',[VcCertificados::class, 'downloadPDF']);
 
 
 Auth::routes();
