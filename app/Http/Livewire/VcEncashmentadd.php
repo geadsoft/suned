@@ -20,7 +20,7 @@ class VcEncashmentadd extends Component
     public $persona;
     public $idbuscar="";
     public $nombre="";
-    public $periodo;
+    public $periodo_id;
     public $fecha;
     public $secuencia=0;
     public $tblCobro, $objPago=[];
@@ -41,8 +41,8 @@ class VcEncashmentadd extends Component
         $tblmatricula  = TmMatricula::find($matriculaid);
         $tblpersona    = TmPersonas::find($tblmatricula['estudiante_id']);
 
-        $this->idbuscar = $tblpersona['identificacion'];
-        $this->periodo  = $periodoid;
+        $this->idbuscar      = $tblpersona['identificacion'];
+        $this->periodo_id    = $periodoid;
         $this->estudiante_id = $tblpersona['id'];
         $this->matricula_id  = $matriculaid;
         $this->nromatricula  = $tblmatricula['documento'];
@@ -193,11 +193,15 @@ class VcEncashmentadd extends Component
         $comentario = "";
         $this->tblCobro = TrCobrosCabs::orderBy('id', 'desc')->first();
 
-        if ($this->tblCobro==null){
+        /*if ($this->tblCobro==null){
             $this->secuencia = 1;  
         } else {  
             $this->secuencia = intval($this->tblCobro['documento'])+1;
-        }
+        }*/
+
+        /*-- Begin Registro de Recibo */
+        $pLectivo        = TmPeriodosLectivos::find($this->periodo_id);
+        $this->secuencia = $pLectivo['num_recibo']+1;
 
         $this->document = str_pad($this->secuencia, 7, "0", STR_PAD_LEFT);
         
@@ -212,6 +216,10 @@ class VcEncashmentadd extends Component
             'usuario' => auth()->user()->name,
             'estado' => "P",
         ]);
+
+        $pLectivo['num_recibo'] = $this->secuencia;
+        $pLectivo->update();
+        /* End Registro Recibo --*/
 
         $this->tblCobro = TrCobrosCabs::orderBy("id", "desc")->first();
         $this->selectId = $this->tblCobro['id'];
