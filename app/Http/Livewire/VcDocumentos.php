@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\TmPersonas;
 use App\Models\TmGeneralidades;
+use App\Models\TmPeriodosLectivos;
 use App\Models\TmCursos;
 
 use Livewire\Component;
@@ -31,10 +32,10 @@ class VcDocumentos extends Component
 
     public  function mount()
     {
-        /*$this->tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
-        $this->tblgenerals = TmGeneralidades::where('superior',1)->get();
+        $this->tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
+        /*$this->tblgenerals = TmGeneralidades::where('superior',1)->get();*/
 
-        $this->filters['srv_periodo'] = $this->tblperiodos[0]['id'];*/
+        $this->filters['srv_periodo'] = $this->tblperiodos[0]['id'];
     }
 
 
@@ -52,14 +53,14 @@ class VcDocumentos extends Component
         ->get();*/
         
         $tblrecords = TmPersonas::query()
-        /*->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")*/
+        ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
         ->when($this->filters['srv_nombre'],function($query){
             return $query->whereRaw("concat(tm_personas.apellidos,' ',tm_personas.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
-        /*->when($this->filters['srv_periodo'],function($query){
+        ->when($this->filters['srv_periodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
         })
-        ->when($this->filters['srv_grupo'],function($query){
+        /*->when($this->filters['srv_grupo'],function($query){
             return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
         })
         ->when($this->filters['srv_curso'],function($query){
@@ -67,7 +68,7 @@ class VcDocumentos extends Component
         })*/
         ->where('tm_personas.tipopersona','=','E')
         ->where('tm_personas.estado',$this->filters['srv_estado'])
-        /*->select('tm_personas.*','m.documento', 'm.id as matricula_id')*/
+        ->select('tm_personas.*')
         ->orderBy('apellidos','asc')
         ->paginate(12);
 

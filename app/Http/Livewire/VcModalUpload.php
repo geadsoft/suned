@@ -7,6 +7,7 @@ use App\Models\TmDocumentacion;
 use App\Models\TmMatricula;
 use App\Models\TmServicios;
 use App\Models\TmPeriodosLectivos;
+use App\Models\TmCursos;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 class VcModalUpload extends Component
 {   
     use WithFileUploads;
-    public $tblperiodos, $documentos;
+    public $tblperiodos, $documentos, $tblgrados=[];
     public $objdocument=[], $tbldocument, $selectId, $nombres, $nui, $curso, $periodoId, $servicioId;
 
     protected $listeners = ['loadData'];
@@ -59,6 +60,23 @@ class VcModalUpload extends Component
         $tblpersona = TmPersonas::find($this->selectId);
         $this->nombres = $tblpersona['apellidos'].' '.$tblpersona['nombres'];
         $this->nui     = $tblpersona['identificacion'];
+
+        $matriculas = TmMatricula::where('estudiante_id',$id)
+        ->where('periodo_id',$this->periodoId)
+        ->get()
+        ->toArray();
+
+        $matricula = $matriculas[0];
+
+        $this->tblservicios = TmServicios::where('modalidad_id',$matricula['modalidad_id'])
+        ->orderByRaw('nivel_id,grado_id')
+        ->get();
+
+        $curso = TmCursos::find($matricula['curso_id']);
+        $this->servicioId = $curso->servicio_id;
+
+        $this->tblgrados = TmServicios::where('id','<',$this->servicioId)
+        ->get();
  
     }
 

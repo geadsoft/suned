@@ -102,7 +102,7 @@
                                     <div class="modal-body">                                        
                                         @livewire('vc-modal-upload')                                          
                                     </div>
-                                    <div class="modal-footer">
+                                    <div class="modal-footer mb-3">
                                         <div class="hstack gap-2 justify-content-end">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                             <!--<button type="button" wire:click.prevent="add()" class="btn btn-success" id="add-btn">Continuar</button>-->
