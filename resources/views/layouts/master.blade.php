@@ -8,7 +8,7 @@
     <meta content="School and Administrative Management System" name="description" />
     <meta content="Christian Galarza" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ URL::asset('assets/images/AmericanSchool.svg')}}">
+    <link rel="shortcut icon" href="{{ URL::asset('assets/images/sams.ico')}}">
     
     @include('layouts.head-css')
     @livewireStyles
