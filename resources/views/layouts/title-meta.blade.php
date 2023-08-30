@@ -4,4 +4,4 @@
 <meta content="School and Administrative Management System" name="description" />
 <meta content="Themesbrand" name="Christian Galarza" />
 <!-- App favicon -->
-<link rel="shortcut icon" href="{{ URL::asset('assets/images/sams.ico') }}">
+<link rel="shortcut icon" href="{{ URL::asset('assets/images/samsueas.ico') }}">
