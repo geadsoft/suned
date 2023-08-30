@@ -17,7 +17,7 @@
                 <img src="{{ URL::asset('assets/images/power.png') }}" alt="" height="22">
             </span>
             <span class="logo-lg">
-                <img src="{{ URL::asset('assets/images/sams.png') }}" alt="" height="40">
+                <img src="{{ URL::asset('assets/images/sams-ueas.png') }}" alt="" height="40">
             </span>
         </a>
         <!--<button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-default" id="vertical-hover">
