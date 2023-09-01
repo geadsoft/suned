@@ -470,11 +470,8 @@ class VcReportCashReceints extends Component
             'resumenpago' => $resumenpago,
         ]);
 
-        return $pdf->setPaper('a4', 'landscape')->stream('cuadre de caja.pdf');
+        return $pdf->setPaper('a4')->stream('cuadre de caja.pdf');
     }
-
-
-
 
 }
 
