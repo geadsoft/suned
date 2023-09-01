@@ -1,7 +1,7 @@
 <?php
 return [
     "menu"=>"Menu",
-    "dashboards"=>"Dashboards",
+    "dashboards"=>"Panel Principal",
     "analytics"=>"Analytics",
     "crm"=>"CRM",
     "ecommerce"=>"Ecommerce",
@@ -229,10 +229,10 @@ return [
     "financial"=>"Financiero",
     "register-collection"=>"Registro Cobranzas",
     "statement-of-account"=>"Estado de Cuenta",
-    "daily-cobros"=>"Cobros",
+    "daily-cobros"=>"Cobros Diarios",
     "debt-analysis"=>"Análisis Deudas",
-    "cash-receipt"=>"Recibo de Caja",
-    "generic"=>"Generic",
+    "cash-receipt"=>"Recibos de Caja",
+    "generic"=>"Valores Genericos",
     "platform"=>"Plataforma",
     "config"=>"Configuración",
     "generality"=>"Generalidad",

@@ -33,32 +33,15 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span>@lang('translation.home')</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="">
+                    <a class="nav-link menu-link" href="/">
                         <i class="las la-tachometer-alt fs-20"></i> <span>@lang('translation.dashboards')</span>
                     </a>
-                    <!--<div class="collapse menu-dropdown" id="sidebarDashboards">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="dashboard-analytics" class="nav-link">@lang('translation.analytics')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-crm" class="nav-link">@lang('translation.crm')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="index" class="nav-link">@lang('translation.ecommerce')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-crypto" class="nav-link">@lang('translation.crypto')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-projects" class="nav-link">@lang('translation.projects')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="dashboard-nft" class="nav-link" data-key="t-nft"> @lang('translation.nft') <span class="badge badge-pill bg-danger" data-key="t-new">@lang('translation.new')</span></a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>--> <!-- end Dashboard Menu -->
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/report/statistical-graphs">
+                        <i class="las la-chart-pie fs-20"></i> <span>Gráficos</span>
+                    </a>
+                </li>
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.academic')</span></li>
                 
                 <li class="nav-item">
@@ -93,29 +76,37 @@
                         <i class="las la-school fs-20"></i> <span>@lang('translation.subjects')</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link menu-link" href="">
                         <i class="las la-clock fs-20"></i> <span>@lang('translation.schedules')</span>
                     </a>
-                </li>
+                </li>-->
 
                 <!--Sedes-->
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.headquarters')</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="/headquarters/headquarters-add">
-                        <i class="las la-address-card fs-20"></i> <span>@lang('translation.headquarter')</span>
-                    </a>    
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="/headquarters/educational-services">
-                        <i class="las la-chalkboard fs-20"></i> <span>@lang('translation.services')</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="/headquarters/pension">
-                        <i class="las la-chalkboard fs-20"></i> <span>@lang('translation.charges')</span>
-                    </a>
-                </li>
+
+                <a class="nav-link menu-link" href="#sidebarsede" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsede">
+                    <i class="ri-menu-add-line fs-20"></i> <span>Sede</span>
+                </a>
+                <div class="collapse menu-dropdown" id="sidebarsede">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="/headquarters/headquarters-add">
+                                <i class="las la-address-card fs-20"></i> <span>@lang('translation.headquarter')</span>
+                            </a>    
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="/headquarters/educational-services">
+                                <i class="las la-chalkboard fs-20"></i> <span>@lang('translation.services')</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="/headquarters/pension">
+                                <i class="las la-chalkboard fs-20"></i> <span>@lang('translation.charges')</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/academic/course">
                         <i class="las la-chalkboard fs-20"></i> <span>@lang('translation.course')</span>
@@ -204,11 +195,6 @@
                                     <i class="ri-medal-2-line fs-20"></i> <span>Calificaciones</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link menu-link" href="">
-                                    <i class="las la-sliders-h fs-20"></i> <span>@lang('translation.generic')</span>
-                                </a>
-                            </li>
                         </ul>
                     </div>
                     <a class="nav-link menu-link" href="#sidebarreport" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarreport">
@@ -238,17 +224,6 @@
                             </li>
                         </ul>
                     </div>
-                </li>
-                <li class="nav-item">
-                    <li class="nav-item">
-                    <a class="nav-link menu-link" href="/report/statistical-graphs">
-                        <i class="las la-chart-pie fs-20"></i> <span>Gráficos</span>
-                    </a>
-                    </li>
-                    <!--<div class="collapse menu-dropdown" id="sidebarGrafico">
-                        <ul class="nav nav-sm flex-column">
-                        </ul>
-                    </div>-->
                 </li>
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.config')</span></li>
                 <li class="nav-item">
