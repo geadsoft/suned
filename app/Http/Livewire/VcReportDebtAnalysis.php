@@ -105,7 +105,7 @@ class VcReportDebtAnalysis extends Component
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
         })
         ->when($this->filters['srv_mes'],function($query){
-            return $query->whereRaw('month(tr_deudas_cabs.fecha) <= '.$this->filters['srv_mes'].' and year(tr_deudas_cabs.fecha) = '.$this->filters['srv_periodo']);
+            return $query->whereRaw('month(tr_deudas_cabs.fecha) <= '.$this->filters['srv_mes'].' and year(tr_deudas_cabs.fecha) <= '.$this->filters['srv_periodo']);
         })
         ->where('saldo','>',0)
         ->where('p.estado','A')
