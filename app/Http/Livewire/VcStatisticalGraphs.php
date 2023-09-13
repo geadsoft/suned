@@ -249,6 +249,7 @@ class VcStatisticalGraphs extends Component
         })
         ->where('tr_cobros_cabs.tipo','CP')
         ->where('d.tipo','PAG')
+        ->where('d.estado','A')
         ->whereRaw('month(tr_cobros_cabs.fecha) <= '.$this->filters['mesingreso'])
         ->whereRaw('year(tr_cobros_cabs.fecha) <= '.$this->filters['anioingreso'])
         ->selectRaw('month(tr_cobros_cabs.fecha) as mes,  sum(d.valor) AS monto')
