@@ -263,7 +263,7 @@ class VcStatisticalGraphs extends Component
         ->join('tr_deudas_cabs as c','c.id','=','tr_deudas_dets.deudacab_id')
         ->join('tm_matriculas as m','m.id','=','c.matricula_id')
         ->selectRaw('left(c.referencia,3) as tipo, month(tr_deudas_dets.fecha) as mes, sum(valor) as valor')
-        ->whereRaw("tr_deudas_dets.tipo = 'PAG' and year(tr_deudas_dets.fecha) = ".$this->filters['periodo'])
+        ->whereRaw("tr_deudas_dets.tipo = 'PAG' and tr_deudas_dets.estado = 'A' and year(tr_deudas_dets.fecha) = ".$this->filters['periodo'])
         ->when($this->filters['idperiodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['idperiodo']}");
         })
