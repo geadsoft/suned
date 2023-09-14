@@ -105,7 +105,7 @@ class VcReportDebtAnalysis extends Component
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
         })
         ->when($this->filters['srv_mes'],function($query){
-            return $query->whereRaw('month(tr_deudas_cabs.fecha) <= '.$this->filters['srv_mes'].' and year(tr_deudas_cabs.fecha) <= '.$this->filters['srv_periodo']);
+            return $query->whereRaw('concat(year(tr_deudas_cabs.fecha),month(tr_deudas_cabs.fecha)) <= '.$this->filters['srv_periodo'].$this->filters['srv_mes']);
         })
         ->where('saldo','>',0)
         ->where('p.estado','A')
@@ -145,7 +145,7 @@ class VcReportDebtAnalysis extends Component
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
         })
         ->when($this->filters['srv_mes'],function($query){
-            return $query->whereRaw('concat(month(fecha),YEAR(fecha)) <= '.$this->filters['srv_mes'].$this->filters['srv_periodo']);
+            return $query->whereRaw('concat(year(tr_deudas_cabs.fecha),month(tr_deudas_cabs.fecha)) <= '.$this->filters['srv_periodo'].$this->filters['srv_mes']);
         })
         ->where('saldo','>',0)
         ->where('p.estado','A')
