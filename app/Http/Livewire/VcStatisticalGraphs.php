@@ -238,6 +238,12 @@ class VcStatisticalGraphs extends Component
         
 
         //Cobros ultimo 4 meses
+        $anio = $this->lnanioingreso;
+        $mes = $this->lnmesingreso;
+
+        $fecha = strval($anio)."-".str_pad($mes, 2, "0", STR_PAD_LEFT).'-01';
+        $fecha = date("Y-m-t", strtotime($fecha));
+
         $cobros = TrCobrosCabs::query()
         ->join("tr_deudas_dets as d","d.cobro_id","=","tr_cobros_cabs.id")
         ->join("tm_matriculas as m","m.id","=","tr_cobros_cabs.matricula_id")
@@ -250,8 +256,7 @@ class VcStatisticalGraphs extends Component
         ->where('tr_cobros_cabs.tipo','CP')
         ->where('d.tipo','PAG')
         ->where('d.estado','P')
-        ->whereRaw('month(tr_cobros_cabs.fecha) <= '.$this->filters['mesingreso'])
-        ->whereRaw('year(tr_cobros_cabs.fecha) <= '.$this->filters['anioingreso'])
+        ->whereRaw("tr_cobros_cabs.fecha <= '".$fecha."'")
         ->selectRaw('month(tr_cobros_cabs.fecha) as mes,  sum(d.valor) AS monto')
         ->groupbyRaw('month(tr_cobros_cabs.fecha)')
         ->orderby('mes','desc')
