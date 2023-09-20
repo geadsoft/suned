@@ -46,7 +46,7 @@ Highcharts.chart('container', {
             borderRadius: 5,
             dataLabels: {
                 enabled: true,
-                format: '<b>{point.name}</b><br>{point.percentage:.1f} %',
+                format: '<b></b><br>{point.percentage:.1f} %',
                 distance: -50,
                 filter: {
                     property: 'percentage',
