@@ -14,7 +14,7 @@ use PDF;
 class VcReportDebtAnalysis extends Component
 {
     use WithPagination;
-    public $lnperiodo, $lnmespension;
+    public $lnperiodo, $lnmespension, $lsfecha;
 
     public $filters = [
         'srv_periodoId' => '',
@@ -59,6 +59,11 @@ class VcReportDebtAnalysis extends Component
         $this->filters['srv_periodo'] = intval(date('Y',strtotime($ldate)));
         $this->filters['mes_pension'] = $tblperiodos['mes_pension'];
 
+        $anio = intval(date('Y',strtotime($ldate)));
+        $mes  = intval(date('m',strtotime($ldate)));
+
+        $this->lsfecha = strval($anio)."-".str_pad($mes, 2, "0", STR_PAD_LEFT).'-01';
+        $this->lsfecha = date("Y-m-t", strtotime($this->lsfecha));
     }
 
     public function render()
@@ -105,15 +110,14 @@ class VcReportDebtAnalysis extends Component
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
         })
         ->when($this->filters['srv_mes'],function($query){
-            return $query->whereRaw('concat(year(tr_deudas_cabs.fecha),month(tr_deudas_cabs.fecha)) <= '.$this->filters['srv_periodo'].$this->filters['srv_mes']);
+            /*return $query->whereRaw('concat(year(tr_deudas_cabs.fecha),month(tr_deudas_cabs.fecha)) <= '.$this->filters['srv_periodo'].$this->filters['srv_mes']);*/
+            return $query->whereRaw("tr_deudas_cabs.fecha <= '".$this->lsfecha."'");
         })
         ->where('saldo','>',0)
         ->where('p.estado','A')
         ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
         'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo')
-        ->orderBy('p.apellidos')
-        ->orderBY('p.nombres')
-        ->orderBy('tr_deudas_cabs.fecha')
+        ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id,apellidos asc,tr_deudas_cabs.fecha')
         ->paginate(15);
          
         $this->datos = json_encode($this->filters);
@@ -122,6 +126,12 @@ class VcReportDebtAnalysis extends Component
     }
 
     public function reporte(){
+
+        $anio = $this->filters['srv_periodo'];
+        $mes  = $this->filters['srv_mes'];
+
+        $this->lsfecha = strval($anio)."-".str_pad($mes, 2, "0", STR_PAD_LEFT).'-01';
+        $this->lsfecha = date("Y-m-t", strtotime($this->lsfecha));
                
         $tblrecords = TrDeudasCabs::query()
         ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
@@ -145,7 +155,8 @@ class VcReportDebtAnalysis extends Component
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
         })
         ->when($this->filters['srv_mes'],function($query){
-            return $query->whereRaw('concat(year(tr_deudas_cabs.fecha),month(tr_deudas_cabs.fecha)) <= '.$this->filters['srv_periodo'].$this->filters['srv_mes']);
+            /*return $query->whereRaw('concat(year(tr_deudas_cabs.fecha),month(tr_deudas_cabs.fecha)) <= '.$this->filters['srv_periodo'].$this->filters['srv_mes']);*/
+            return $query->whereRaw("tr_deudas_cabs.fecha <= '".$this->lsfecha."'");
         })
         ->where('saldo','>',0)
         ->where('p.estado','A')
