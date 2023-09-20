@@ -8,58 +8,55 @@ function loadGraphs(objdata,objdia,objmes,objcobro) {
 
 function viewGraphs(objdata) {
 
-    // Data retrieved from https://netmarketshare.com/
-    // Build the chart
-    var pieColors = (function () {
-        var colors = [],
-            base = Highcharts.getOptions().colors[0],
-            i;
-    
-        for (i = 0; i < 10; i += 1) {
-            // Start out with a darkened base color (negative brighten), and end
-            // up with a much brighter color
-            colors.push(Highcharts.color(base).brighten((i - 3) / 7).get());
-        }
-        return colors;
-    }());
+// Data retrieved from https://netmarketshare.com/
+// Make monochrome colors
+const colors = Highcharts.getOptions().colors.map((c, i) =>
+    // Start out with a darkened base color (negative brighten), and end
+    // up with a much brighter color
+    Highcharts.color(Highcharts.getOptions().colors[0])
+        .brighten((i - 3) / 7)
+        .get()
+);
 
-    Highcharts.chart('container', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-        },
-        title: {
-            text: '',
-            align: 'left'
-        },
-        tooltip: {
-            pointFormat: '{series.name}: <b>{point.y}</b>'
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                colors: pieColors,
-                dataLabels: {
-                    enabled: true,
-                    format: '<b></b><br>{point.percentage:.1f} %',
-                    distance: -50,
-                    filter: {
-                        property: 'percentage',
-                        operator: '>',
-                        value: 1
-                    }
-                },
-                showInLegend: true
-            }
-        },
+// Build the chart
+Highcharts.chart('container', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: '',
+        align: 'left'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.y}</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            colors,
+            borderRadius: 5,
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b><br>{point.percentage:.1f} %',
+                distance: -50,
+                filter: {
+                    property: 'percentage',
+                    operator: '>',
+                    value: 1
+                }
+            },
+          showInLegend: true
+        }
+    },
         series: [{
             name: 'Registros',
             colorByPoint: true,
