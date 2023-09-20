@@ -59,11 +59,6 @@ class VcReportDebtAnalysis extends Component
         $this->filters['srv_periodo'] = intval(date('Y',strtotime($ldate)));
         $this->filters['mes_pension'] = $tblperiodos['mes_pension'];
 
-        $anio = intval(date('Y',strtotime($ldate)));
-        $mes  = intval(date('m',strtotime($ldate)));
-
-        $this->lsfecha = strval($anio)."-".str_pad($mes, 2, "0", STR_PAD_LEFT).'-01';
-        $this->lsfecha = date("Y-m-t", strtotime($this->lsfecha));
     }
 
     public function render()
@@ -78,7 +73,7 @@ class VcReportDebtAnalysis extends Component
         ->orderByRaw('nivel_id,grado_id,paralelo')
         ->get();
 
-        $tblrecords  = $this->consulta(1);
+        $tblrecords  = $this->consulta();
 
         return view('livewire.vc-report-debt-analysis',[
             'tblrecords' => $tblrecords,
@@ -93,6 +88,12 @@ class VcReportDebtAnalysis extends Component
     }
 
     public function consulta(){
+
+        $anio = $this->filters['srv_periodo'];
+        $mes  = $this->filters['srv_mes'];
+
+        $this->lsfecha = strval($anio)."-".str_pad($mes, 2, "0", STR_PAD_LEFT).'-01';
+        $this->lsfecha = date("Y-m-t", strtotime($this->lsfecha));
                
         $tblrecords = TrDeudasCabs::query()
         ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
@@ -110,7 +111,6 @@ class VcReportDebtAnalysis extends Component
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
         })
         ->when($this->filters['srv_mes'],function($query){
-            /*return $query->whereRaw('concat(year(tr_deudas_cabs.fecha),month(tr_deudas_cabs.fecha)) <= '.$this->filters['srv_periodo'].$this->filters['srv_mes']);*/
             return $query->whereRaw("tr_deudas_cabs.fecha <= '".$this->lsfecha."'");
         })
         ->where('saldo','>',0)
@@ -155,7 +155,6 @@ class VcReportDebtAnalysis extends Component
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
         })
         ->when($this->filters['srv_mes'],function($query){
-            /*return $query->whereRaw('concat(year(tr_deudas_cabs.fecha),month(tr_deudas_cabs.fecha)) <= '.$this->filters['srv_periodo'].$this->filters['srv_mes']);*/
             return $query->whereRaw("tr_deudas_cabs.fecha <= '".$this->lsfecha."'");
         })
         ->where('saldo','>',0)
