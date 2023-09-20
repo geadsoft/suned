@@ -54,7 +54,7 @@ function viewGraphs(objdata) {
                     filter: {
                         property: 'percentage',
                         operator: '>',
-                        value: 4
+                        value: 1
                     }
                 },
                 showInLegend: true
