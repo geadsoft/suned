@@ -148,14 +148,18 @@ class VcStatisticalGraphs extends Component
 
     public function updatedlnperiodoId(){
 
-        $periodo = TmPeriodosLectivos::find($this->lnperiodoId);
+        if ($this->lnperiodoId=="0"){
+            $this->filters['idperiodo'] = '';
+        }else{
+            $periodo = TmPeriodosLectivos::find($this->lnperiodoId);
 
-        $this->filters['idperiodo'] = $this->lnperiodoId;
-        $this->filters['periodo'] = $periodo['periodo'];
+            $this->filters['idperiodo'] = $this->lnperiodoId;
+            $this->filters['periodo']   = $periodo['periodo'];
+        }
+
         $this->consulta();
         $this->actualizaGraph();
         
-
     }
 
     public function updatedlngrupoId(){

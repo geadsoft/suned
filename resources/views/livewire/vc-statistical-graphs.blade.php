@@ -159,6 +159,7 @@
                                                         @foreach ($tblperiodos as $periodo)
                                                             <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
                                                         @endforeach
+                                                        <option value="0">Todos</option>
                                                     </select>
                                                 </div>
                                             </div>
