@@ -5,6 +5,7 @@ use App\Models\TrCobrosCabs;
 use App\Models\TmGeneralidades;
 use App\Models\TmPeriodosLectivos;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use PDF;
 
 use Livewire\Component;
@@ -109,34 +110,32 @@ class VcReportDailyCharges extends Component
         $this->tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
 
         $tblrecords = TrCobrosCabs::query()
-        //->join("tr_cobros_dets as cd","tr_cobros_cabs.id","=","cd.cobrocab_id")
-        ->join("tr_deudas_dets as dd","dd.cobro_id","=","tr_cobros_cabs.id")
-        ->join("tr_deudas_cabs as dc","dc.id","=","dd.deudacab_id")
-        ->join("tm_matriculas as m","m.id","=","dc.matricula_id")
-        ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->join("tm_cursos as c","c.id","=","m.curso_id")
-        ->join("tm_servicios as s","s.id","=","c.servicio_id")   
+        ->join(DB::raw("(select deudacab_id, cobro_id, c.matricula_id, case when tipo = 'PAG' then valor else 0 end pago,
+        case when tipo = 'DES' then valor else 0 end descuento  
+        from tr_deudas_dets d
+        inner join tr_deudas_cabs c on c.id = d.deudacab_id
+        inner join tm_matriculas m on c.matricula_id = m.id
+        where d.tipo <> 'OTR' and d.estado = 'P' and m.periodo_id = ".$this->filters['srv_periodo'].") as d "),function($join){
+            $join->on('d.cobro_id', '=', 'tr_cobros_cabs.id');
+        })
+        ->join("tm_matriculas as m","m.id","=","tr_cobros_cabs.matricula_id")
+        ->join("tm_personas as p","p.id","=","m.estudiante_id")  
         ->when($this->filters['srv_nombre'],function($query){
             return $query->where('p.nombres','like','%'.$this->filters['srv_nombre'].'%')
                         ->orWhere('p.apellidos','like','%'.$this->filters['srv_nombre'].'%');
         })        
-        ->when($this->filters['srv_periodo'],function($query){
-            return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
-        })
         ->when($this->filters['srv_grupo'],function($query){
             return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
         })
         ->when($this->filters['srv_usuario'],function($query){
             return $query->where('tr_cobros_cabs.usuario',"{$this->filters['srv_usuario']}");
         })
-        ->selectRaw('tr_cobros_cabs.fecha, sum(debito) as monto, sum(descuento) as descuento, sum(dd.valor) as pago')
+        ->selectRaw('tr_cobros_cabs.fecha,  sum(d.pago+d.descuento) monto, sum(d.descuento) descuento, sum(d.pago) pago, day(tr_cobros_cabs.fecha) as dia')
         ->where('tr_cobros_cabs.fecha','>=',date('Ymd',strtotime($this->filters['srv_fechaini'])))
         ->where('tr_cobros_cabs.fecha','<=',date('Ymd',strtotime($this->filters['srv_fechafin'])))
-        ->where('dd.tipo','=','PAG')
         ->where('tr_cobros_cabs.tipo','=','CP')
-        ->where('dd.estado','=','P')
-        ->orderBy('fecha','asc')
         ->groupBy('fecha')
+        ->orderBy('dia')
         ->get();
 
         for ($x=0; $x<count($this->tblgenerals);$x++){
