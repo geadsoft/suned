@@ -155,11 +155,10 @@
                                             <div class="col-sm-auto">
                                                 <div>
                                                     <select class="form-select" name="cmbperiodo" wire:model="lnperiodoId">
-                                                        <option value="">Select Period</option>
+                                                        <option value="0">Todos</option>
                                                         @foreach ($tblperiodos as $periodo)
                                                             <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
                                                         @endforeach
-                                                        <option value="0">Todos</option>
                                                     </select>
                                                 </div>
                                             </div>
