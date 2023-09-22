@@ -135,7 +135,7 @@ class VcReportDailyCharges extends Component
         ->where('tr_cobros_cabs.fecha','<=',date('Ymd',strtotime($this->filters['srv_fechafin'])))
         ->where('tr_cobros_cabs.tipo','=','CP')
         ->groupBy('fecha')
-        ->orderBy('year(tr_cobros_cabs.fecha)','month(tr_cobros_cabs.fecha)','day(tr_cobros_cabs.fecha)')
+        ->orderBy('year(tr_cobros_cabs.fecha)')
         ->get();
 
         for ($x=0; $x<count($this->tblgenerals);$x++){
