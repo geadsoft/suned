@@ -130,12 +130,12 @@ class VcReportDailyCharges extends Component
         ->when($this->filters['srv_usuario'],function($query){
             return $query->where('tr_cobros_cabs.usuario',"{$this->filters['srv_usuario']}");
         })
-        ->selectRaw('tr_cobros_cabs.fecha,  sum(d.pago+d.descuento) monto, sum(d.descuento) descuento, sum(d.pago) pago, day(tr_cobros_cabs.fecha) as dia')
+        ->selectRaw('tr_cobros_cabs.fecha,  sum(d.pago+d.descuento) monto, sum(d.descuento) descuento, sum(d.pago) pago')
         ->where('tr_cobros_cabs.fecha','>=',date('Ymd',strtotime($this->filters['srv_fechaini'])))
         ->where('tr_cobros_cabs.fecha','<=',date('Ymd',strtotime($this->filters['srv_fechafin'])))
         ->where('tr_cobros_cabs.tipo','=','CP')
         ->groupBy('fecha')
-        ->orderBy('dia')
+        ->orderBy('year(tr_cobros_cabs.fecha)','month(tr_cobros_cabs.fecha)','day(tr_cobros_cabs.fecha)')
         ->get();
 
         for ($x=0; $x<count($this->tblgenerals);$x++){
