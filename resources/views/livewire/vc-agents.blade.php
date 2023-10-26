@@ -5,10 +5,10 @@
                 <div class="card-header border-0">
 
                         <div class="d-flex align-items-center">
-                            <h5 class="card-title mb-0 flex-grow-1">Registration of Representatives</h5>
+                            <h5 class="card-title mb-0 flex-grow-1">Listado de Representantes</h5>
                             <div class="flex-shrink-0">
                                 <a class="btn btn-success add-btn" href="/academic/student-enrollment"><i
-                                class="ri-add-line me-1 align-bottom"></i> Add Representative</a>
+                                class="ri-add-line me-1 align-bottom"></i> Nuevo</a>
                             </div>
                         </div>
 
@@ -90,39 +90,24 @@
                     <div>
                         <div class="table-responsive table-card mb-3">
                             <table class="table align-middle table-nowrap mb-0" id="customerTable">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th scope="col" style="width: 50px;">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="checkAll" value="option">
-                                            </div>
-                                        </th>
-                                        <!--<th class="sort" data-sort="id" scope="col">ID</th>-->
-                                        <th class="sort" data-sort="name" scope="col">Identification</th>
-                                        <th class="sort" data-sort="company_name" scope="col">Names</th>
-                                        <th class="sort" data-sort="email_id" scope="col">Surnames</th>
-                                        
-                                        <th class="sort" data-sort="lead_score" scope="col">Nationality</th>
-                                        <th class="sort" data-sort="tags" scope="col">Phone Number</th>
-                                        <th scope="col">Action</th>
+                                <thead class="text-muted table-light">
+                                    <tr class="text-uppercase">
+                                        <th class="sort" data-sort="name" scope="col">Identificación</th>
+                                        <th class="sort" data-sort="company_name" scope="col">Nombres</th>
+                                        <th class="sort" data-sort="lead_score" scope="col">Nacionalidad</th>
+                                        <th class="sort" data-sort="tags" scope="col">Teléfono</th>
+                                        <th class="sort" data-sort="tags" scope="col">Email</th>
+                                        <th scope="col">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all">
                                 @foreach ($tblrecords as $record)
-                                    <tr>
-                                        <th scope="row">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="chk_child" value="option1">
-                                            </div>
-                                        </th>
-                                        
+                                    <tr>                                       
                                         <td class="name">{{$record->identificacion}}</td>
-                                        <td class="company_name">{{$record->nombres}}</td>
-                                        <td class="email_id">{{$record->apellidos}}</td>
-                                        
+                                        <td class="company_name">{{$record->apellidos}} {{$record->nombres}}</td>
                                         <td class="lead_score">{{$record->nacionalidad->descripcion}}</td>
                                         <td class="tags">{{$record->telefono}}</td>
+                                        <td class="tags">{{$record->email}}</td>
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"

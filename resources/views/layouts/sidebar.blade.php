@@ -46,20 +46,15 @@
                 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarPerson" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPerson">
-                        <i class="las la-user-check fs-20"></i> <span>@lang('translation.person')</span>
+                        <i class="las la-user-check fs-20"></i> <span>Estudiantes</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarPerson">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="/academic/students" class="nav-link" role="button">@lang('translation.students')
-                                </a>
+                                <a href="/academic/students" class="nav-link" role="button">Ficha</a>
                             </li>
                             <li class="nav-item">
                                 <a href="/academic/representatives" class="nav-link" role="button">@lang('translation.representatives')
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="" class="nav-link" role="button">@lang('translation.teachers')
                                 </a>
                             </li>
                         </ul>
@@ -68,12 +63,6 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/academic/tuition">
                         <i class="las la-address-card fs-20"></i> <span>@lang('translation.tuition')</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="">
-                        <i class="las la-school fs-20"></i> <span>@lang('translation.subjects')</span>
                     </a>
                 </li>
                 <!--<li class="nav-item">
@@ -107,9 +96,36 @@
                         </li>
                     </ul>
                 </div>
+                <a class="nav-link menu-link" href="#personalce" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsede">
+                    <i class="mdi mdi-*-* mdi-account-group fs-20"></i> <span>Personal CE</span>
+                </a>
+                <div class="collapse menu-dropdown" id="personalce">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="/headquarters/staff">
+                                <i class="las la-address-card fs-20"></i> <span>Fichas</span>
+                            </a>    
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="">
+                                <i class="las la-address-card fs-20"></i> <span>Ficha</span>
+                            </a>    
+                        </li>
+                    </ul>
+                </div>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/academic/course">
                         <i class="las la-chalkboard fs-20"></i> <span>@lang('translation.course')</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/headquarters/subjects">
+                        <i class="las la-school fs-20"></i> <span>Asignaturas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/headquarters/schedules">
+                        <i class="las la-stopwatch fs-20"></i> <span>Horarios Escolares</span>
                     </a>
                 </li>
 

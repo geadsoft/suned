@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TmPersonas;
+use App\Models\TmHorarios;
 use Illuminate\Http\Request;
 
-class TmPersonasController extends Controller
+class TmHorariosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,32 +14,12 @@ class TmPersonasController extends Controller
      */
     public function index()
     {
-        return view('academic/person');
+        return view('sede/horarios');
     }
 
-    public function addperson()
+    public function addhorarios()
     {
-        return view('academic/personadd');
-    }
-
-    public function editperson($identificacion)
-    {
-        return view('academic/personadd',['id' => $identificacion]);
-    }
-
-    public function agent()
-    {
-        return view('academic/agent');
-    }
-
-    public function personal()
-    {
-        return view('/sede/personal');
-    }
-
-    public function addpersonal()
-    {
-        return view('/sede/personaladd',['tipo' => 'D']);
+        return view('sede/horariosadd');
     }
 
     /**
@@ -66,10 +46,10 @@ class TmPersonasController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\TmPersonas  $tmPersonas
+     * @param  \App\Models\TmHorarios  $tmHorarios
      * @return \Illuminate\Http\Response
      */
-    public function show(TmPersonas $tmPersonas)
+    public function show(TmHorarios $tmHorarios)
     {
         //
     }
@@ -77,10 +57,10 @@ class TmPersonasController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\TmPersonas  $tmPersonas
+     * @param  \App\Models\TmHorarios  $tmHorarios
      * @return \Illuminate\Http\Response
      */
-    public function edit(TmPersonas $tmPersonas)
+    public function edit(TmHorarios $tmHorarios)
     {
         //
     }
@@ -89,10 +69,10 @@ class TmPersonasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TmPersonas  $tmPersonas
+     * @param  \App\Models\TmHorarios  $tmHorarios
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TmPersonas $tmPersonas)
+    public function update(Request $request, TmHorarios $tmHorarios)
     {
         //
     }
@@ -100,10 +80,10 @@ class TmPersonasController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\TmPersonas  $tmPersonas
+     * @param  \App\Models\TmHorarios  $tmHorarios
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TmPersonas $tmPersonas)
+    public function destroy(TmHorarios $tmHorarios)
     {
         //
     }
