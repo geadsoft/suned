@@ -8,22 +8,41 @@ use App\Models\TmFamiliarEstudiantes;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class VcPersonaladd extends Component
 {
+    use WithFileUploads;
     use WithPagination;
 
-    public $personaId, $tipo, $eControl='', $fControl='', $fileimg, $foto;
+    public $record=[];
+    public $personaId, $tipo, $eControl='', $fControl='', $fileimg='', $foto;
 
     public function mount($tipo){
 
+        $this->record  = TmPersonas::find(0);
+        $this->record['nombres'] = "";
+        $this->record['apellidos'] = "";
+        $this->record['tipoidentificacion'] = "C";
+        $this->record['identificacion'] = "";
+        $this->record['fechanacimiento'] = "";
+        $this->record['nacionalidad_id'] = 35;
+        $this->record['genero'] = "M";
+        $this->record['telefono'] = "";
+        $this->record['direccion'] = "";
+        $this->record['email'] = "";
+        $this->record['etnia'] = "ME";
+        $this->record['tipopersona'] = "A";
+        $this->record['estado'] = "A";
+        $this->record['foto'] = "";
         $this->tipo = $tipo;
 
     }
 
     public function render()
     {
-        $record      = TmPersonas::find(0);
         $tblgenerals = TmGeneralidades::where('superior',7)->get();
         $familiares  = TmFamiliarEstudiantes::query()
         ->join("tm_personas as p","p.id","=","tm_familiar_estudiantes.persona_id")
@@ -32,7 +51,7 @@ class VcPersonaladd extends Component
         ->get()->toArray();
 
         return view('livewire.vc-personaladd',[
-            'record' => $record,
+            'record' => $this->record,
             'tblgenerals' => $tblgenerals,
             'familiares' => $familiares
         ]);
@@ -49,10 +68,21 @@ class VcPersonaladd extends Component
             'record.apellidos' => 'required',
             'record.tipoidentificacion' => 'required',
             'record.identificacion' => 'required',
-            'record.genero' => 'genero',
+            'record.genero' => 'required',
             'record.fechanacimiento' => 'required',
             'record.nacionalidad_id' => 'required',
         ]);
+
+        if($this->fileimg ?? null){
+            $this ->validate([
+                'fileimg' => ['image', 'mimes:jpg,jpeg,png', 'max:1024'],
+                ]);
+
+            $nameFile = $this->record['identificacion'].'.'.$this->fileimg->getClientOriginalExtension();
+            $pathfile = 'storage/'.$this->fileimg->storeAs('public/fotos', $nameFile);
+
+            $this->record['foto'] = $nameFile;
+        }
 
         TmPersonas::Create([
             'nombres' => $this -> record['nombres'],
@@ -65,8 +95,10 @@ class VcPersonaladd extends Component
             'telefono' => $this -> record['telefono'],
             'email' => $this -> record['email'],
             'etnia' => $this -> record['etnia'],
-            'etnia' => $this -> record['direccion'],
-            'tipopersona' => $this->tipo,
+            'direccion' => $this -> record['direccion'],
+            'tipopersona' => $this -> record['tipopersona'],
+            'parentesco' => "NN",
+            'relacion_id' => 0,
             'usuario' => auth()->user()->name,
             'estado' => $this -> record['estado'],
             'foto' => $this -> record['foto'],
@@ -103,6 +135,14 @@ class VcPersonaladd extends Component
         $this->dispatchBrowserEvent('msg-actualizar');
         return redirect()->to('/academic/students');
 
+    }
+
+    public function validaNui(){
+        $records = TmPersonas::where("identificacion",$this->record['identificacion'])->first();
+        
+        if ($records != null){
+            $this->dispatchBrowserEvent('msg-validanui');
+        }
     }
 
 

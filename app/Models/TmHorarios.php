@@ -10,7 +10,8 @@ class TmHorarios extends Model
     protected $table = 'tm_horarios';
     protected $primaryKey = "id";
     protected $fillable = [
-        'servicios_id',
+        'grupo_id',
+        'servicio_id',
         'periodo_id',
         'curso_id',
         'usuario',

@@ -100,7 +100,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="cmbgrupo" class="form-label">Periodo</label>
-                                                <select class="form-select" data-choices data-choices-search-false id="cmbgrupo" wire:model="periodoId">
+                                                <select class="form-select" data-choices data-choices-search-false id="cmbgrupo" wire:model="periodoId" required>
                                                     <option value="">Seleccione Periodo</option>
                                                     @foreach ($tblperiodos as $periodo)
                                                         <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
@@ -109,7 +109,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="cmbgrupo" class="form-label">Sección</label>
-                                                <select class="form-select" data-choices data-choices-search-false id="cmbgrupo" wire:model="cursoId">
+                                                <select class="form-select" data-choices data-choices-search-false id="cmbgrupo" wire:model="cursoId" required>
                                                     <option value="">Seleccione Sección</option>
                                                     @if ($tblcursos != null)
                                                     @foreach ($tblcursos as $curso)
@@ -137,7 +137,9 @@
                                     <h5 class="mb-1"></h5>
                                     <p class="text-muted mb-4"></p>
                                 </div>
-                                @livewire('vc-horarios-clase')
+                                @livewire('vc-horarios-clase',[
+                                    'horarioId' => $selectId, 
+                                ])
                             </div>
                             <div class="tab-pane fade" id="pills-bill-docente" role="tabpanel"
                                 aria-labelledby="pills-bill-docente-tab">

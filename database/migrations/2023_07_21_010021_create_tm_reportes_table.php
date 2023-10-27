@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('asunto',50);
             $table->string('destinatario',100);
             $table->string('institucion',100);
-            $table->string('ciudad',40);
+            $table->string('cargo',40);
             $table->string('rector',50);
             $table->string('secretaria',50);
             $table->string('coordinador',50);

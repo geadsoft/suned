@@ -70,7 +70,7 @@
                                                         <label for="txtnombres" class="form-label">
                                                         Nombres</label>
                                                         <input type="text" class="form-control" id="txtnombres"
-                                                            placeholder="Ingrese sus nombres" wire:model.defer="nombres" required {{$eControl}}>
+                                                            placeholder="Ingrese sus nombres" wire:model.defer="record.nombres" required {{$eControl}}>
                                                         @error('nombres') <span class="error">{{ $message }}</span> @enderror
                                                     </div>
                                                 </div>
@@ -79,13 +79,13 @@
                                                     <div class="mb-3">
                                                         <label for="txtapellidos" class="form-label">Apellidos</label>
                                                         <input type="text" class="form-control" id="txtapellidos"
-                                                            placeholder="Ingrese sus apellidos" wire:model.defer="apellidos" required {{$eControl}}>
+                                                            placeholder="Ingrese sus apellidos" wire:model.defer="record.apellidos" required {{$eControl}}>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <div class="mb-3">
                                                         <label for="cmbtipoident" class="form-label">Tipo Identificación</label>
-                                                        <select class="form-select" data-choices data-choices-search-false id="cmbtipoident" wire:model.defer="tipoident" required {{$eControl}}>
+                                                        <select class="form-select" data-choices data-choices-search-false id="cmbtipoident" wire:model.defer="record.tipoidentificacion" required {{$eControl}}>
                                                             <option value="C">Cédula</option>
                                                             <option value="P">Pasaporte</option>
                                                         </select>
@@ -96,19 +96,19 @@
                                                         <label for="txtidentificacion" class="form-label">
                                                         Identificación</label>
                                                         <input type="text" class="form-control" id="txtnui"
-                                                            placeholder="Ingrese su identificación" wire:model.defer="identificacion" required {{$eControl}} wire:focusout='validaNui()'>
+                                                            placeholder="Ingrese su identificación" wire:model.defer="record.identificacion" required {{$eControl}} wire:focusout='validaNui()'>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <div class="mb-3">
                                                         <label for="txtfechanace" class="form-label">Fecha de Nacimiento</label>
-                                                        <input type="date" class="form-control" id="txtfechanace" wire:model.defer="fechanace" required {{$eControl}}> 
+                                                        <input type="date" class="form-control" id="txtfechanace" wire:model.defer="record.fechanacimiento" required {{$eControl}}> 
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <div class="mb-3">
                                                         <label for="cmbgenero" class="form-label">Genero</label>
-                                                        <select class="form-select" data-choices data-choices-search-false id="cmbgenero" wire:model.defer="genero" required {{$eControl}}>
+                                                        <select class="form-select" data-choices data-choices-search-false id="cmbgenero" wire:model.defer="record.genero" required {{$eControl}}>
                                                             <option value="M">Masculino</option>
                                                             <option value="F">Femenino</option>
                                                         </select>
@@ -146,7 +146,7 @@
                                         <div class="col-lg-2">
                                             <div class="mb-3">
                                                 <label for="cmbnacionalidad" class="form-label">Nacionalidad</label>
-                                                <select class="form-select" data-choices data-choices-search-false id="cmbnacionalidad" wire:model.defer="nacionalidad" required {{$eControl}}>
+                                                <select class="form-select" data-choices data-choices-search-false id="cmbnacionalidad" wire:model.defer="record.nacionalidad_id" required {{$eControl}}>
                                                     <option value="">Seleccione Nacionalidad</option>
                                                     @foreach ($tblgenerals as $general)
                                                         @if ($general->superior == 7)
@@ -160,13 +160,13 @@
                                             <div class="mb-3">
                                                 <label for="cmbetnia" class="form-label">Dirección</label>
                                                 <input type="text" class="form-control" id="txtdireccion"
-                                                    placeholder="Ingrese su dirección domiciliaria" wire:model.defer="direccion" {{$eControl}}>
+                                                    placeholder="Ingrese su dirección domiciliaria" wire:model.defer="record.direccion" {{$eControl}}>
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="mb-3">
                                                 <label for="cmbetnia" class="form-label">Tipo Personal</label>
-                                                <select class="form-select data-choices data-choices-search-false" id="cmbetnia" wire:model.defer="etnia" {{$eControl}}>
+                                                <select class="form-select data-choices data-choices-search-false" id="cmbtipopersona" wire:model.defer="record.tipopersona" {{$eControl}}>
                                                     <option value="A">Administrativo</option>
                                                     <option value="D">Docente</option>
                                                     <option value="P">Apoyo Profesional</option>
@@ -177,7 +177,7 @@
                                         <div class="col-lg-2">
                                             <div class="mb-3">
                                                 <label for="cmbetnia" class="form-label">Estado</label>
-                                                <select class="form-select data-choices data-choices-search-false" id="cmbetnia" wire:model.defer="etnia" {{$eControl}}>
+                                                <select class="form-select data-choices data-choices-search-false" id="cmbestado" wire:model.defer="record.estado" {{$eControl}}>
                                                     <option value="A">Activo</option>
                                                     <option value="I">Inactivo</option>
                                                 </select>
@@ -197,12 +197,12 @@
                                             <div class="mb-3">
                                                 <label for="txtemail" class="form-label">Email</label>
                                                 <input type="email" class="form-control" id="txtemail"
-                                                    placeholder="Enter your email" wire:model.defer="email" {{$eControl}}>
+                                                    placeholder="Enter your email" wire:model.defer="record.email" {{$eControl}}>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="txttelefono" class="form-label">Teléfono</label>
                                                 <input type="text" class="form-control" id="txttelefono"
-                                                    placeholder="Ingrese su número de telefono" wire:model.defer="telefono" {{$eControl}}>
+                                                    placeholder="Ingrese su número de telefono" wire:model.defer="record.telefono" {{$eControl}}>
                                             </div>
                                         </div>
                                         

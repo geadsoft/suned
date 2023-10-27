@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('tm_horarios', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('grupo_id')->unsigned();
+            $table->foreign('grupo_id')->references('id')->on('tm_generalidades');
             $table->bigInteger('servicio_id')->unsigned();
             $table->foreign('servicio_id')->references('id')->on('tm_servicios');
             $table->bigInteger('periodo_id')->unsigned();

@@ -25,8 +25,8 @@ class VcHorariosadd extends Component
         $this->tblperiodos  = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         $this->tblmaterias  = TmAsignaturas::all();
         $this->tabHorario="disabled";
-        $this->tabDocente="disabled";
-    
+        $this->tabDocente="disabled"; 
+        $this->selectId=0;  
     }
 
     public function render()
@@ -54,7 +54,8 @@ class VcHorariosadd extends Component
         $this->nivelId = $servicio->nivel_id;
         $this->gradoId = $servicio->grado_id;
         $this->especialidadId = $servicio->especializacion_id;
-
+        $this->periodoId = '';
+        $this->cursoId = '';
     }
 
     public function updatedperiodoId($id){
@@ -67,7 +68,20 @@ class VcHorariosadd extends Component
 
     public function createData(){
         
-        $this->$tabHorario = "";       
+        $this ->validate([
+            'grupoId'    => 'required',
+            'servicioId' => 'required',
+            'periodoId'  => 'required',
+            'cursoId'    => 'required',
+        ]);
+
+        $this->selectId = TmHorarios::Create([
+            'grupo_id' => $this -> grupoId,
+            'servicio_id' => $this -> servicioId,
+            'periodo_id' => $this -> periodoId,
+            'curso_id' => $this -> cursoId,
+            'usuario' => auth()->user()->name,
+        ]);
         
     }
 
