@@ -6,6 +6,7 @@ use App\Models\TmGeneralidades;
 use App\Models\TmHorarios;
 use App\Models\TmCursos;
 use App\Models\TmServicios;
+use App\Models\TmAsignaturas;
 
 use Livewire\Component;
 
@@ -16,11 +17,15 @@ class VcHorariosadd extends Component
     public $tblcursos=null;
     public $tblservicios=null;
     public $selectId,$grupoId,$servicioId,$nivelId,$gradoId,$especialidadId,$periodoId,$cursoId;
+    public $tabHorario, $tabDocente;
     
     public function mount(){
 
         $this->tblgenerals  = TmGeneralidades::whereRaw('superior in (1,2,3,4)')->get();
         $this->tblperiodos  = TmPeriodosLectivos::orderBy("periodo","desc")->get();
+        $this->tblmaterias  = TmAsignaturas::all();
+        $this->tabHorario="disabled";
+        $this->tabDocente="disabled";
     
     }
 
@@ -33,7 +38,7 @@ class VcHorariosadd extends Component
             'tblgenerals' => $this->tblgenerals,
             'tblperiodos' => $this->tblperiodos,
             'tblservicios' => $this->tblservicios,
-
+            'tblmaterias' => $this->tblmaterias,
         ]);
 
     }
@@ -58,6 +63,12 @@ class VcHorariosadd extends Component
                          ->where('servicio_id',$this->servicioId)
                          ->get();  
 
+    }
+
+    public function createData(){
+        
+        $this->$tabHorario = "";       
+        
     }
 
 

@@ -10,21 +10,21 @@
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3 active" id="pills-bill-info-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-info" type="button" role="tab"
-                                        aria-controls="pills-bill-info" aria-selected="false"><i
+                                        aria-controls="pills-bill-info" aria-selected="true"><i
                                             class=" ri-open-source-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
                                             Datos Generales</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link fs-15 p-3" id="pills-bill-horario-tab" data-bs-toggle="pill"
-                                        data-bs-target="#pills-bill-horario" type="button" role="tab"
-                                        aria-controls="pills-bill-horario" aria-selected="false"><i
-                                            class=" ri-calendar-check-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
+                                    <button class="nav-link fs-15 p-3" id="pills-bill-horarios-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-bill-horarios" type="button" role="tab"
+                                        aria-controls="pills-bill-horarios" aria-selected="false" $tabHorario><i
+                                            class="ri-bank-card-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
                                             Horarios Escolares</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3" id="pills-bill-docente-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-docente" type="button" role="tab"
-                                        aria-controls="pills-bill-docente" aria-selected="false"><i
+                                        aria-controls="pills-bill-docente" aria-selected="false" $tabDocente><i
                                             class=" ri-folder-user-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
                                             Asignación Docente</button>
                                 </li>
@@ -121,18 +121,29 @@
                                         </div>
                                         <div class="col-lg-4">
                                         </div>
+                                        <div class="card-body">
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-success w-sm">Grabar</button>
+                                                <a class="btn btn-secondary w-sm"><i class="me-1 align-bottom"></i>Cancelar</a>
+                                            </div>
+                                        </div>
                                     </div>
-                                <div>
+                                </div>
                             </div>
-                            <div class="tab-pane fade" id="pills-bill-horario" role="tabpanel"
-                                aria-labelledby="pills-bill-horario-tab">
+                            <div class="tab-pane fade" id="pills-bill-horarios" role="tabpanel"
+                                aria-labelledby="pills-bill-horarios-tab">
+                                <div class="mb-3">
+                                    <br>
+                                    <h5 class="mb-1"></h5>
+                                    <p class="text-muted mb-4"></p>
+                                </div>
+                                @livewire('vc-horarios-clase')
                             </div>
                             <div class="tab-pane fade" id="pills-bill-docente" role="tabpanel"
                                 aria-labelledby="pills-bill-docente-tab">
                             </div>
                         </div>
-                    </form>
-                    
+                    </form>   
 
 
                 </div>
