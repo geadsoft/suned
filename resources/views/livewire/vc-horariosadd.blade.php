@@ -137,12 +137,16 @@
                                     <h5 class="mb-1"></h5>
                                     <p class="text-muted mb-4"></p>
                                 </div>
-                                @livewire('vc-horarios-clase',[
-                                    'horarioId' => $selectId, 
-                                ])
+                                @livewire('vc-horarios-clase',['horarioId' => $selectId])
                             </div>
                             <div class="tab-pane fade" id="pills-bill-docente" role="tabpanel"
                                 aria-labelledby="pills-bill-docente-tab">
+                                <div class="mb-3">
+                                    <br>
+                                    <h5 class="mb-1"></h5>
+                                    <p class="text-muted mb-4"></p>
+                                </div>
+                                @livewire('vc-horarios-docentes')
                             </div>
                         </div>
                     </form>   

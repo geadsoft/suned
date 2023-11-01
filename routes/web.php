@@ -53,6 +53,7 @@ Route::get('/headquarters/staff',[App\Http\Controllers\TmPersonasController::cla
 Route::get('/headquarters/staff-add',[App\Http\Controllers\TmPersonasController::class, 'addpersonal'])->name('addpersonal');
 Route::get('/headquarters/schedules',[App\Http\Controllers\TmHorariosController::class, 'index'])->name('index');
 Route::get('/headquarters/schedules-add',[App\Http\Controllers\TmHorariosController::class, 'addhorarios'])->name('addhorarios');
+Route::get('/headquarters/schedules-edit/{id}',[App\Http\Controllers\TmHorariosController::class, 'edithorarios'])->name('edithorarios');
 Route::get('/headquarters/subjects',[App\Http\Controllers\TmAsignaturasController::class, 'index'])->name('index');
 
 

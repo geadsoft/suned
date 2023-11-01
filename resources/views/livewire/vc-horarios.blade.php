@@ -102,7 +102,7 @@
                                 @foreach ($tblrecords as $record)    
                                     <tr>
                                         <td>{{$record->id}}</td>
-                                        <td>{{$record->servicio->modalidad->descripcion}}</td> 
+                                        <td>{{$record->grupo->descripcion}}</td> 
                                         <td>{{$record->servicio->nivel->descripcion}}</td>
                                         <td>{{$record->servicio->grado->descripcion}}</td>
                                         <td>{{$record->servicio->especializacion->descripcion}}</td>

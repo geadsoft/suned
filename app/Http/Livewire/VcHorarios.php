@@ -37,11 +37,19 @@ class VcHorarios extends Component
             'tblgenerals' => $this->tblgenerals,
             'tblperiodos' => $this->tblperiodos,
         ]);
-    }
+    }  
 
     public function paginationView(){
         return 'vendor.livewire.bootstrap'; 
     }
 
+    public function edit(TmHorarios $tblrecords ){
+        
+        $this->record  = $tblrecords->toArray();
+       
+        $this->selectId = $this -> record['id'];
+        return redirect()->to('/headquarters/schedules-edit/'.$this->selectId);
+
+    }
 
 }

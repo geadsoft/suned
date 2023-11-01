@@ -19,7 +19,12 @@ class TmHorariosController extends Controller
 
     public function addhorarios()
     {
-        return view('sede/horariosadd');
+        return view('sede/horariosadd',['id' => 0]);
+    }
+
+    public function edithorarios($id)
+    {
+        return view('sede/horariosadd',['id' => $id]);
     }
 
     /**

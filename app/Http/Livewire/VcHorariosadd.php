@@ -19,29 +19,59 @@ class VcHorariosadd extends Component
     public $selectId,$grupoId,$servicioId,$nivelId,$gradoId,$especialidadId,$periodoId,$cursoId;
     public $tabHorario, $tabDocente;
     
-    public function mount(){
+    public function mount($horarioId){
 
         $this->tblgenerals  = TmGeneralidades::whereRaw('superior in (1,2,3,4)')->get();
         $this->tblperiodos  = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         $this->tblmaterias  = TmAsignaturas::all();
-        $this->tabHorario="disabled";
-        $this->tabDocente="disabled"; 
-        $this->selectId=0;  
+        $this->tabHorario   = "disabled";
+        $this->tabDocente   = "disabled"; 
+        $this->selectId     = $horarioId;  
     }
 
     public function render()
     {
-
-        $tblrecords = TmHorarios::where('id',0)->get();
+        if ($this->selectId==0){
+            $tblrecords = TmHorarios::where('id',0)->get();
+        }else{
+           $this->loadData();
+        }
 
         return view('livewire.vc-horariosadd',[
             'tblgenerals' => $this->tblgenerals,
             'tblperiodos' => $this->tblperiodos,
-            'tblservicios' => $this->tblservicios,
+            'tblservicios'=> $this->tblservicios,
             'tblmaterias' => $this->tblmaterias,
         ]);
 
     }
+
+    public function loadData(){
+
+        $tblrecords = TmHorarios::find($this->selectId);
+        $this->grupoId    = $tblrecords['grupo_id'];
+        $this->updatedgrupoId($this->grupoId);
+
+        $this->servicioId = $tblrecords['servicio_id']; 
+        $this->updatedservicioId($this->servicioId);
+
+        $this->periodoId  = $tblrecords['periodo_id'];
+        $this->updatedperiodoId($this->periodoId);
+
+        $this->cursoId    = $tblrecords['curso_id']; 
+        //$this->emitTo('vc-horarios-clase','setHorario',$this->selectId);
+    }
+
+    public function loadHorario(){
+
+        if($this->selectId==0){
+            return;
+        }
+        
+        $this->emitTo('vc-horarios-clase','setHorario',$this->selectId);
+    }
+
+
 
     public function updatedgrupoId($id){   
         
@@ -75,7 +105,7 @@ class VcHorariosadd extends Component
             'cursoId'    => 'required',
         ]);
 
-        $this->selectId = TmHorarios::Create([
+        $tmhorarios = TmHorarios::Create([
             'grupo_id' => $this -> grupoId,
             'servicio_id' => $this -> servicioId,
             'periodo_id' => $this -> periodoId,
@@ -83,6 +113,8 @@ class VcHorariosadd extends Component
             'usuario' => auth()->user()->name,
         ]);
         
+        $this->selectId = $tmhorarios['id'];
+        $this->emitTo('vc-horarios-clase','setHorario',$this->selectId);
     }
 
 

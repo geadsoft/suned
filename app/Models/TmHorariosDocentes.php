@@ -15,5 +15,9 @@ class TmHorariosDocentes extends Model
         'docente_id',
         'usuario',
     ];
+
+    public function asignatura(){
+        return $this->belongsTo('App\Models\TmAsignaturas');
+    }
     
 }

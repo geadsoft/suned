@@ -17,9 +17,16 @@ class TmHorarios extends Model
         'usuario',
     ];
 
-    public function servicios(){
+    public function servicio(){
         return $this->belongsTo('App\Models\TmServicios');
     }
 
+    public function grupo(){
+        return $this->belongsTo('App\Models\TmGeneralidades');
+    }
+
+    public function curso(){
+        return $this->belongsTo('App\Models\TmCursos');
+    }
 
 }

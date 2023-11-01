@@ -16,7 +16,7 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-horariosadd')
+    @livewire('vc-horariosadd',['horarioId' => $id])
 
 @endsection
 @section('script')
