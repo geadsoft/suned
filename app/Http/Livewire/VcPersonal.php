@@ -15,7 +15,7 @@ class VcPersonal extends Component
     public function render()
     {
         
-        $tblrecords = TmPersonas::whereRaw("tipopersona in ('D','P')")->orderBy('apellidos','asc')->paginate(10);
+        $tblrecords = TmPersonas::whereRaw("tipopersona <> 'E' and tipopersona <> 'R'")->orderBy('apellidos','asc')->paginate(10);
         
         return view('livewire.vc-personal',[
             'tblrecords' => $tblrecords
