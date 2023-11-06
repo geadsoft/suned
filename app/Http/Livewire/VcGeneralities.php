@@ -22,7 +22,7 @@ class VcGeneralities extends Component
 
     public function render()
     {
-        $tblrecords = TmGeneralidades::orderBy('root', 'asc')->paginate(10);        
+        $tblrecords = TmGeneralidades::orderbyRaw('case when superior = 0 then codigo else superior end, codigo')->paginate(10);        
         return view('livewire.vc-generalities',['tblrecords' => $tblrecords]);
     }
 

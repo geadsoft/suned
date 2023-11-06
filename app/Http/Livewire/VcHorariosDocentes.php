@@ -7,9 +7,18 @@ use Livewire\Component;
 
 class VcHorariosDocentes extends Component
 {
-    public $tblrecords=[];
+    public $tblrecords=[], $selectId;
     
-    protected $listeners = ['setHorario'];
+    protected $listeners = ['setHorario','setDocente'];
+
+    public function mount($horarioId){
+
+        if ($horarioId>0){
+            $this->setHorario($horarioId);
+        }
+        
+    }
+
     
     public function render()
     {   
@@ -23,7 +32,12 @@ class VcHorariosDocentes extends Component
         $this->tblrecords = TmHorariosDocentes::where('horario_id',$this->horarioId)->get();
     }
 
-    
+
+
+    public function setDocente($horarioId){
+        $this->horarioId    = $horarioId;
+        $this->tblrecords = TmHorariosDocentes::where('horario_id',$this->horarioId)->get();
+    }   
 
     
 }

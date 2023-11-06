@@ -104,7 +104,8 @@ class VcPersonaladd extends Component
             'foto' => $this -> record['foto'],
         ]);
 
-        //$this->dispatchBrowserEvent('hide-form', ['message'=> 'added successfully!']);  
+        $this->dispatchBrowserEvent('msg-save');  
+        return redirect()->to('/headquarters/staff');
         
     }
 
@@ -138,7 +139,9 @@ class VcPersonaladd extends Component
     }
 
     public function validaNui(){
-        $records = TmPersonas::where("identificacion",$this->record['identificacion'])->first();
+
+       
+        $records = TmPersonas::where("identificacion",$this -> record['identificacion'])->first();
         
         if ($records != null){
             $this->dispatchBrowserEvent('msg-validanui');

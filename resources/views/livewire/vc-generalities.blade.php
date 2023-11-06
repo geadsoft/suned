@@ -136,10 +136,17 @@
                                 <tbody class="list form-check-all">
                                 @foreach ($tblrecords as $record)    
                                     <tr>
-                                        <td>{{$record->id}}</td>
-                                        <td>{{$record->superior}}</td> 
-                                        <td>{{$record->codigo}}</td>
-                                        <td>{{$record->descripcion}}</td> 
+                                        @if ($record->superior==0)
+                                            <td><span class="badge badge-soft-primary text-uppercase fs-12">{{$record->id}}</span></td>
+                                            <td><span class="badge badge-soft-primary text-uppercase fs-12">{{$record->superior}}</span></td>                                         
+                                            <td><span class="badge badge-soft-primary text-uppercase fs-12">{{$record->codigo}}</span></td>
+                                            <td><span class="badge badge-soft-primary text-uppercase fs-12 w-100">{{$record->descripcion}}</span></td>
+                                        @else
+                                            <td>{{$record->id}}</td>
+                                            <td>{{$record->superior}}</td>
+                                            <td>{{$record->codigo}}</td>
+                                            <td>{{$record->descripcion}}</td> 
+                                        @endif
                                         <td class="status">
                                             <span class="badge badge-soft-success text-uppercase">@lang('status.'.($record->estado))</span>
                                         </td>

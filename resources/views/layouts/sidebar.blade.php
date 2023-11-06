@@ -51,7 +51,7 @@
                     <div class="collapse menu-dropdown" id="sidebarPerson">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="/academic/students" class="nav-link" role="button">Ficha</a>
+                                <a href="/academic/students" class="nav-link" role="button">Fichas</a>
                             </li>
                             <li class="nav-item">
                                 <a href="/academic/representatives" class="nav-link" role="button">@lang('translation.representatives')

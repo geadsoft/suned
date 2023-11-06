@@ -155,6 +155,25 @@ class VcPersons extends Component
         $this->dispatchBrowserEvent('hide-delete');
     }
 
+    public function reintegrar($IdEstudiante){
+        
+        $tbldata = TmPersonas::find($IdEstudiante);
+
+        $this->estudiante = $tbldata['apellidos'].' '.$tbldata['nombres'];
+        $this->selectId   = $tbldata['id'];
+
+        $this->dispatchBrowserEvent('show-reintegrar');
+    }
+
+    public function reintegrarData(){
+        
+        $record = TmPersonas::find($this->selectId);
+        $record->update([
+            'estado' => 'A',
+        ]);
+
+        $this->dispatchBrowserEvent('hide-reintegrar');
+    }
 
     public function estudiantes(){
 
@@ -184,7 +203,7 @@ class VcPersons extends Component
         m.registro as tipomatricula, s.nivel_id")
         ->where('tm_personas.tipopersona','=','E')
         ->where('tm_personas.estado',$this->filters['srv_estado'])
-        ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc')
+        ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id,c.paralelo,apellidos asc')
         ->get();
 
         return $tblrecords;

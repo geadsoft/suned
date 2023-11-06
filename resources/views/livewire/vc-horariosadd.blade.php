@@ -146,7 +146,7 @@
                                     <h5 class="mb-1"></h5>
                                     <p class="text-muted mb-4"></p>
                                 </div>
-                                @livewire('vc-horarios-docentes')
+                                @livewire('vc-horarios-docentes',['horarioId' => $selectId])
                             </div>
                         </div>
                     </form>   

@@ -34,15 +34,18 @@ class VcHorariosClase extends Component
     public function setHorario($horarioId){
 
         $this->horarioId = $horarioId;
-        $this->edit = true;
-
         $this->horarios = TmHorariosAsignaturas::where('horario_id',$this->horarioId)
         ->get()->toArray();
-        
-        foreach ($this->horarios as $data){
-            $this->objdetalle[$data['linea']][$data['dia']] = $data['asignatura_id']; 
-        } 
 
+        if (!empty($this->horarios)){
+
+            $this->edit = true;
+            foreach ($this->horarios as $data){
+                $this->objdetalle[$data['linea']][$data['dia']] = $data['asignatura_id']; 
+            } 
+
+        }
+        
     }
 
     public function newdetalle(){
@@ -117,19 +120,50 @@ class VcHorariosClase extends Component
 
     public function editData(){
 
-        dd($this->horarios);
+        foreach($this->horarios as $key => $recno){
 
-        foreach ($this->objdetalle as $key => $asignatura){
-            for ($col = 1; $col <= 5; $col++) {
-                if ($this->horarios[$key].['dia'] == $key){
-                    $this->horarios[$key].['asignatura_id'] = $asignatura[$col];
+            foreach ($this->objdetalle as $linea => $asignatura){
+                if ($linea==$recno['linea']){
+                    
+                    $record = TmHorariosAsignaturas::find($recno['id']);
+                    $record->update([
+                        'asignatura_id' => $asignatura[$recno['dia']],
+                    ]);
+                    
                 }
             }
+
         }
-        
-        dd($this->horarios);
-        
-        TmHorariosAsignaturas::update($this->horarios);
+
+        /*Docente por Asignatura*/
+        $tbldata = TmHorariosAsignaturas::where('horario_id',$this->horarioId)
+        ->where('asignatura_id','<>','null')
+        ->select('asignatura_id')
+        ->groupBy('asignatura_id')
+        ->get()->toArray();
+
+        $objdocente=[];
+        foreach ($tbldata as $recno){
+
+            $record = TmHorariosDocentes::where('horario_id',$this->horarioId)
+            ->where('asignatura_id',$recno['asignatura_id'])
+            ->get()->toArray();
+
+            if (empty($record)){
+                
+                TmHorariosDocentes::Create([
+                    'horario_id' => $this->horarioId,
+                    'asignatura_id' => $recno['asignatura_id'],
+                    'docente_id' => null,
+                    'usuario' => auth()->user()->name,
+                ]);
+
+            }
+
+        }
+
+        $this->emitTo('vc-horarios-docentes','setHorario',$this->horarioId);
+
     }
 
 

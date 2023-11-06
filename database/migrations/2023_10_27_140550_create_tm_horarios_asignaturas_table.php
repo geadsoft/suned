@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('horario_id')->references('id')->on('tm_horarios');
             $table->integer('linea');
             $table->integer('dia');
-            $table->bigInteger('asignatura_id')->unsigned();
+            $table->bigInteger('asignatura_id')->unsigned()->nullable();
             $table->foreign('asignatura_id')->references('id')->on('tm_asignaturas');
             $table->string('usuario');
             $table->timestamps();

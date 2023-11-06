@@ -152,12 +152,21 @@
                                                                         class=" ri-star-half-line align-bottom me-2 text-muted fs-16"></i>
                                                                     Libreta Calificaciones</a></li>
                                                             <li>
-                                                                <a class="dropdown-item remove-item-btn"
-                                                                    data-bs-toggle="modal"
-                                                                    href="" wire:click.prevent="delete({{ $record->estudiante_id }})">
-                                                                    <i class="ri-user-unfollow-line align-bottom me-2 text-muted fs-16"></i>
-                                                                    Retirar Estudiante
-                                                                </a>
+                                                                @if ($record->telefono=='A')
+                                                                    <a class="dropdown-item remove-item-btn"
+                                                                        data-bs-toggle="modal"
+                                                                        href="" wire:click.prevent="delete({{ $record->estudiante_id }})">
+                                                                        <i class="ri-user-unfollow-line align-bottom me-2 text-muted fs-16"></i>
+                                                                        Retirar Estudiante
+                                                                    </a>
+                                                                @else
+                                                                    <a class="dropdown-item remove-item-btn"
+                                                                        data-bs-toggle="modal"
+                                                                        href="" wire:click.prevent="reintegrar({{ $record->estudiante_id }})">
+                                                                        <i class="ri-user-received-2-line me-2 text-muted fs-16"></i>
+                                                                        Reintegrar Estudiante
+                                                                    </a>
+                                                                @endif
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -204,6 +213,33 @@
                                                 Cerrar</button>
                                             <button class="btn btn-danger" id="delete-record"  wire:click="deleteData()"> Si,
                                                 Retirar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end delete modal -->
+
+                    <!-- Modal -->
+                    <div wire.ignore.self class="modal fade flip" id="reintegrar" tabindex="-1" aria-hidden="true" wire:model='selectId'>
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body p-5 text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/ghhwiltn.json" trigger="loop"
+                                        colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px">
+                                    </lord-icon>
+                                    <div class="mt-4 text-center">
+                                        <h4>{{ $estudiante }}</h4>
+                                        <p class="text-muted fs-15 mb-4">Reintegrarlo cambiará el estado (retirado a activo), 
+                                        esta opción es reversible.
+                                        </p>
+                                        <div class="hstack gap-2 justify-content-center remove">
+                                            <button class="btn btn-link link-success fw-medium text-decoration-none"
+                                                data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i>
+                                                Cerrar</button>
+                                            <button class="btn btn-danger" id="delete-record"  wire:click="reintegrarData()"> Si,
+                                                Reintegrar</button>
                                         </div>
                                     </div>
                                 </div>

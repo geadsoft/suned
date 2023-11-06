@@ -67,19 +67,18 @@
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <div class="mb-3">
+                                                        <label for="txtapellidos" class="form-label">Apellidos</label>
+                                                        <input type="text" class="form-control" id="txtapellidos"
+                                                            placeholder="Ingrese sus apellidos" wire:model.defer="record.apellidos" required {{$eControl}}>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
                                                         <label for="txtnombres" class="form-label">
                                                         Nombres</label>
                                                         <input type="text" class="form-control" id="txtnombres"
                                                             placeholder="Ingrese sus nombres" wire:model.defer="record.nombres" required {{$eControl}}>
                                                         @error('nombres') <span class="error">{{ $message }}</span> @enderror
-                                                    </div>
-                                                </div>
-                                                <!--end col-->
-                                                <div class="col-lg-6">
-                                                    <div class="mb-3">
-                                                        <label for="txtapellidos" class="form-label">Apellidos</label>
-                                                        <input type="text" class="form-control" id="txtapellidos"
-                                                            placeholder="Ingrese sus apellidos" wire:model.defer="record.apellidos" required {{$eControl}}>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
