@@ -52,4 +52,7 @@ class VcHorariosDocentes extends Component
 
     } 
     
+    public function exit(){
+        return redirect()->to('/headquarters/schedules');
+    }
 }

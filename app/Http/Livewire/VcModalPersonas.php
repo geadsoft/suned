@@ -33,7 +33,7 @@ class VcModalPersonas extends Component
             return $query->where('identificacion',"{$this->filters['srv_nui']}");
         })        
         ->when($this->filters['srv_nombre'],function($query){
-            return $query->whereRaw("concat(apellidos,' ',nombres) LIKE '%".$this->filters['srv_nombre']."%'");
+            return $query->whereRaw("concat(apellidos,'',nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
         ->select('id','apellidos','nombres','identificacion')
         ->where('estado','A')

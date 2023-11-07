@@ -65,8 +65,7 @@
     </div>
     <div class="card-body">
         <div class="text-end">
-            <!--<button  class="btn btn-success w-sm">Grabar</button>-->
-            <a id="btnsave" class ="btn btn-success w-sm" wire:click="createData()">Grabar <i class="ri-save-fill"></i></a>
+            <a id="btnexit" class ="btn btn-primary w-sm" wire:click="exit()">Cerrar</a>
         </div>
     </div>
 
