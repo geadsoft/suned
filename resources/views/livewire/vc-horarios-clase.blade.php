@@ -40,7 +40,7 @@
                             @for ($col=1;$col<=5;$col++)
                             <td>
                                 <select id="col-{{$col}}" class="form-select" data-choices data-choices-search-false id="cmbgrupo" wire:model="objdetalle.{{$fil}}.{{$col}}">
-                                <option value="">Asignar Materia</option>
+                                <option value=""> - </option>
                                 @foreach ($tblmaterias as $materia)
                                     <option value="{{$materia->id}}">{{$materia->descripcion}}</option>
                                 @endforeach
