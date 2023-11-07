@@ -14,7 +14,7 @@ class VcHorariosClase extends Component
     
     public function mount($horarioId){
 
-        $this->tblmaterias  = TmAsignaturas::all()->orderBy('descripcion','asc');
+        $this->tblmaterias  = TmAsignaturas::orderBy('descripcion','asc')->get();
         $this->filas = 5;
         $this->newdetalle();
 
