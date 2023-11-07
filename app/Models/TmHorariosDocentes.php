@@ -16,6 +16,10 @@ class TmHorariosDocentes extends Model
         'usuario',
     ];
 
+    public function docente(){
+        return $this->belongsTo('App\Models\TmPersonas');
+    }
+
     public function asignatura(){
         return $this->belongsTo('App\Models\TmAsignaturas');
     }

@@ -28,14 +28,18 @@
                     <tr class="text-uppercase">
                         <th class="sort">Componente Plan de Estudios</th>
                         <th class="sort">Docente</th>
-                        <th class="sort" style="width: 70px;">...</th>
+                        <th class="sort" style="width: 100px;">...</th>
                     </tr>
                 </thead>
                 <tbody class="list form-check-all">
                     @foreach ($tblrecords as $record)    
                     <tr>
                         <td class="text-uppercase">{{$record->asignatura->descripcion}}</td>
-                        <td>{{$record->docente_id}}</td>
+                        @if ($record['docente_id']==null)
+                        <td></td>
+                        @else
+                        <td>{{$record->docente->apellidos}} {{$record->docente->nombres}}</td>
+                        @endif
                         <td>
                             <ul class="list-inline hstack gap-2 mb-0">
                                 <li class="list-inline-item edit" data-bs-toggle="tooltip"
@@ -65,4 +69,31 @@
             <a id="btnsave" class ="btn btn-success w-sm" wire:click="createData()">Grabar <i class="ri-save-fill"></i></a>
         </div>
     </div>
+
+    <div wire.ignore.self class="modal fade" id="addDocentes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" >
+            <div class="modal-content modal-content border-0">
+                
+                <div class="modal-header p-3 bg-light">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <span> Docentes &nbsp;</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                </div>
+                
+                <form autocomplete="off" wire:submit.prevent="">
+                    <div class="modal-body">                                        
+                            @livewire('vc-modal-personas')                                       
+                    </div>
+                    <div class="modal-footer">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+
 </div>

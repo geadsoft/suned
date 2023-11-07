@@ -18,7 +18,6 @@ class VcHorariosDocentes extends Component
         }
         
     }
-
     
     public function render()
     {   
@@ -27,17 +26,30 @@ class VcHorariosDocentes extends Component
         ]);
     }
 
-    public function setHorario($horarioId){
-        $this->horarioId    = $horarioId;
-        $this->tblrecords = TmHorariosDocentes::where('horario_id',$this->horarioId)->get();
+    public function add(TmHorariosDocentes $tblrecords){
+
+        $record  = $tblrecords->toArray();
+        $this->selectId = $record['id'];
+
+        $this->dispatchBrowserEvent('show-form');
     }
 
-
-
-    public function setDocente($horarioId){
+    public function setHorario($horarioId){
+        
         $this->horarioId    = $horarioId;
         $this->tblrecords = TmHorariosDocentes::where('horario_id',$this->horarioId)->get();
-    }   
+    
+    }
 
+    public function setDocente($id){
+        
+        $record = TmHorariosDocentes::find($this->selectId);
+        $record->update([
+            'docente_id' => $id,
+        ]);
+
+        $this->setHorario($this->horarioId);
+
+    } 
     
 }
