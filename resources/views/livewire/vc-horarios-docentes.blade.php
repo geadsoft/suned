@@ -34,7 +34,7 @@
                 <tbody class="list form-check-all">
                     @foreach ($tblrecords as $record)    
                     <tr>
-                        <td><span class="text-uppercase">{{$record->asignatura->descripcion}}</span></td>
+                        <td class="text-uppercase">{{$record->asignatura->descripcion}}</td>
                         <td>{{$record->docente_id}}</td>
                         <td>
                             <ul class="list-inline hstack gap-2 mb-0">
