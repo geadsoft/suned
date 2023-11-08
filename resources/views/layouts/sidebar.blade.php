@@ -54,6 +54,15 @@
                                 <a href="/academic/students" class="nav-link" role="button">Fichas</a>
                             </li>
                             <li class="nav-item">
+                                <a href="/academic/students" class="nav-link" role="button">Control de Asistencia</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/academic/ratings" class="nav-link" role="button">Calificaciones</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/academic/ratings-period" class="nav-link" role="button">Calificacion Periodo</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="/academic/representatives" class="nav-link" role="button">@lang('translation.representatives')
                                 </a>
                             </li>
