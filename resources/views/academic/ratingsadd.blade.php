@@ -27,6 +27,15 @@
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
     <script>
+
+        window.addEventListener('msg-grabar', event => {
+            swal("Buen trabajo!", "¡Registros guardados exitosamente!", "success");
+        })
+
+        window.addEventListener('msg-editar', event => {
+            swal("Buen trabajo!", "Registros actualizados exitosamente!", "success");
+        })
+        
     </script>   
      
 @endsection

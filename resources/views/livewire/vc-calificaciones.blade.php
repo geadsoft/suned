@@ -21,41 +21,55 @@
                             <div class="col-xxl-6 col-sm-6">
                                 <div class="row mb-3">
                                     <div class="col-lg-3">
-                                        <label class="form-label mt-2 me-5" for="cmbprovince">Periodo Lectivo</label>
+                                        <label class="form-label mt-2 me-5" for="selperiodo">Periodo Lectivo</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <select class="form-select" id="cmbprovince" wire:model="" required> 
-                                            <option value="0" selected>Seleccionar</option>
+                                        <select class="form-select" id="selperiodo" wire:model="periodoId" required> 
+                                            @foreach ($tblperiodos as $periodo)
+                                                <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-lg-3">
-                                        <label class="form-label mt-2 me-5" for="cmbprovince">Nivel</label>
+                                        <label class="form-label mt-2 me-5" for="selnivel">Nivel</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <select class="form-select" id="cmbprovince" wire:model="" required> 
-                                            <option value="0" selected>Seleccionar</option>
+                                        <select class="form-select" id="selnivel" wire:model="nivelId" required> 
+                                            <option value="" selected>Seleccionar</option>
+                                            @foreach ($tblgenerals as $general)
+                                                @if ($general->superior == 2)
+                                                <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                                @endif
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div> 
                                 <div class="row mb-3">
                                     <div class="col-lg-3">
-                                        <label class="form-label mt-2 me-5" for="cmbprovince">Especialización</label>
+                                        <label class="form-label mt-2 me-5" for="selespecialidad">Especialización</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <select class="form-select" id="cmbprovince" wire:model="" required> 
-                                            <option value="0" selected>Seleccionar</option>
+                                        <select class="form-select" id="selespecialidad" wire:model="especialidadId" required> 
+                                            @foreach ($tblgenerals as $general)
+                                                @if ($general->superior == 4)
+                                                <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                                @endif
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-lg-3">
-                                        <label class="form-label mt-2 me-5" for="cmbprovince">Componente Plan de Estudio</label>
+                                        <label class="form-label mt-2 me-5" for="selasignatura">Componente Plan de Estudio</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <select class="form-select" id="cmbprovince" wire:model="" required> 
+                                        <select class="form-select" id="selasignatura" wire:model="asignaturaId" required> 
                                             <option value="0" selected>Seleccionar</option>
+                                            @foreach ($asignaturas as $data)
+                                                <option value="{{$data->id}}">{{$data->descripcion}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>                   
@@ -63,41 +77,52 @@
                             <div class="col-xxl-6 col-sm-6">
                                 <div class="row mb-3">
                                     <div class="col-lg-3">
-                                        <label class="form-label mt-2 me-5" for="cmbprovince">Grupo</label>
+                                        <label class="form-label mt-2 me-5" for="selgrupo">Grupo</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <select class="form-select" id="cmbprovince" wire:model="" required> 
+                                        <select class="form-select" id="selgrupo" wire:model="grupoId" required> 
+                                            @foreach ($tblgenerals as $general)
+                                                @if ($general->superior == 1)
+                                                <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-lg-3">
+                                        <label class="form-label mt-2 me-5" for="selgradoId">Grado</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <select class="form-select" id="selgradoId" wire:model="gradoId" required> 
+                                            <option value="0" selected>Seleccionar</option>
+                                            @foreach ($tblgrados as $general)
+                                                <option value="{{$general->grado_id}}">{{$general->descripcion}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-lg-3">
+                                        <label class="form-label mt-2 me-5" for="selcurso">Sección</label>
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <select class="form-select" id="selcurso" wire:model="cursoId" required> 
                                             <option value="0" selected>Seleccionar</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-lg-3">
-                                        <label class="form-label mt-2 me-5" for="cmbprovince">Grado</label>
+                                        <label class="form-label mt-2 me-5" for="selparcial">Parcial</label>
                                     </div>
                                     <div class="col-lg-9">
-                                        <select class="form-select" id="cmbprovince" wire:model="" required> 
-                                            <option value="0" selected>Seleccionar</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-lg-3">
-                                        <label class="form-label mt-2 me-5" for="cmbprovince">Sección</label>
-                                    </div>
-                                    <div class="col-lg-9">
-                                        <select class="form-select" id="cmbprovince" wire:model="" required> 
-                                            <option value="0" selected>Seleccionar</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-lg-3">
-                                        <label class="form-label mt-2 me-5" for="cmbprovince">Tipo de Periodo</label>
-                                    </div>
-                                    <div class="col-lg-9">
-                                        <select class="form-select" id="cmbprovince" wire:model="" required> 
-                                            <option value="0" selected>Seleccionar</option>
+                                        <select class="form-select" id="selparcial" wire:model="parcial" required> 
+                                            <option value="P1">P1 - Primer Periodo</option>
+                                            <option value="P2">P2 - Segundo Periodo</option>
+                                            <option value="P3">P3 - Tercer Periodo</option>
+                                            <option value="P4">P4 - Cuarto Periodo</option>
+                                            <option value="P5">P5 - Quinto Periodo</option>
                                         </select>
                                     </div>
                                 </div>

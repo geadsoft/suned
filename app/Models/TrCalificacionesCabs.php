@@ -15,9 +15,9 @@ class TrCalificacionesCabs extends Model
         'servicio_id',
         'periodo_id',
         'curso_id',
-        'componente_id',
-        'modalidad',
-        'periodo_academico',
+        'asignatura_id',
+        'ciclo_academico',
+        'parcial',
         'usuario',
     ];
 }

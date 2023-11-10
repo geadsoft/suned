@@ -19,4 +19,8 @@ class TrCalificacionesDets extends Model
         'usuario',
     ];
 
+    public function estudiante(){
+        return $this->belongsTo('App\Models\TmPersonas');
+    }
+
 }
