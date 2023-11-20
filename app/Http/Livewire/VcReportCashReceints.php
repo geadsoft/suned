@@ -38,7 +38,7 @@ class VcReportCashReceints extends Component
 
     public function mount(){
         
-        $año = = date('Y');
+        $año   = date('Y');
         $ldate = date('Y-m-d H:i:s');
         $periodo = TmPeriodosLectivos::where("periodo",$año)->first();
 
