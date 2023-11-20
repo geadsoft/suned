@@ -71,7 +71,7 @@ class VcPanel extends Component
         ->get();
 
         $this->chartsmatricula = json_encode($personas);
-
+        $array=[];
         foreach($matricula as $recno){
 
             if($recno->tipo=='N'){

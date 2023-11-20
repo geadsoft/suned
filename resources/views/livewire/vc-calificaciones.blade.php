@@ -128,11 +128,58 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-lg-12 text-end">
-                                        <a wire:click="" id="btnlimpiar" class ="btn btn-soft-secondary w-sm"><i class="ri-search-line me-1"></i>Buscar</a>
+                                        <a wire:click="loadData()" id="btnload" class ="btn btn-soft-secondary w-sm"><i class="ri-search-line me-1"></i>Buscar</a>
                                         <a wire:click="" id="btnlimpiar" class ="btn btn-soft-primary w-sm">Limpiar</a>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="card" id="orderList">
+                            <div class="card-body pt-0">
+                                <div>
+                                    <div class="table-responsive table-card mb-1">
+                                        <table class="table table-nowrap align-middle" id="orderTable">
+                                            @if ($tblrecords != null) 
+                                            <thead class="text-muted table-light">
+                                                <tr class="text-uppercase">
+                                                    <th class="sort" data-sort="id">Fecha Registro</th>
+                                                    <th class="sort" data-sort="id">Oferta Educativa</th>
+                                                    <th class="sort">Especialización</th>
+                                                    <th class="sort" data-sort="nota">Componente</th>
+                                                    <th class="sort">Seccion</th>
+                                                    <th class="sort">Parcial</th>
+                                                    <th class="sort">Acción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="list form-check-all">
+                                                
+                                                @foreach ($tblrecords as $key => $record)
+                                                <tr>
+                                                    <td>{{$record['fecha']}}</td>
+                                                    <td>{{$record->servicio->descripcion}}</td>
+                                                    <td>{{$record->servicio->especializacion->descripcion}}</td>
+                                                    <td>{{$record->asignatura->descripcion}}</td>
+                                                    <td>{{$record->curso->paralelo}}</td>
+                                                    <td>{{$record->parcial}}</td>
+                                                    <td>
+                                                        <ul class="list-inline hstack gap-2 mb-0">
+                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip"
+                                                                data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                                <a href="" wire:click.prevent="edit({{ $record }})">
+                                                                    <i class="ri-pencil-fill fs-16"></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            
+                                            </tbody>
+                                            @endif 
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>        
                         </div>
                     </form>
                 </div>

@@ -10,6 +10,7 @@ use App\Http\Livewire\VcGenericReports;
 use App\Http\Livewire\VcAccountStatus;
 use App\Http\Livewire\VcPersons;
 use App\Http\Livewire\VcCertificados;
+use App\Http\Livewire\VcRatingsDetail;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,9 @@ Route::get('/headquarters/schedules-edit/{id}',[App\Http\Controllers\TmHorariosC
 Route::get('/headquarters/subjects',[App\Http\Controllers\TmAsignaturasController::class, 'index'])->name('index');
 Route::get('/academic/ratings',[App\Http\Controllers\TmCalificaciones::class, 'index'])->name('index');
 Route::get('/academic/ratings-add',[App\Http\Controllers\TmCalificaciones::class, 'addCalificacion'])->name('addCalificacion');
+Route::get('/secretary/ratings',[App\Http\Controllers\SecretariaController::class, 'ratings'])->name('ratings');
+
+
 
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
@@ -82,7 +86,8 @@ Route::get('/preview-pdf/generic-report/{report},{data}',[VcGenericReports::clas
 Route::get('/download-pdf/generic-report/{report},{data}',[VcGenericReports::class, 'liveWirePDF']);
 Route::get('/preview-pdf/certificados/{data}',[VcCertificados::class, 'liveWirePDF']);
 Route::get('/download-pdf/certificados/{data}',[VcCertificados::class, 'downloadPDF']);
-
+Route::get('/preview-pdf/ratings/{data}',[VcRatingsDetail::class, 'printPDF']);
+Route::get('/download-pdf/ratings/{data}',[VcRatingsDetail::class, 'downloadPDF']);
 
 Auth::routes();
 //Language Translation

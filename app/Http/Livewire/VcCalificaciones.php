@@ -9,9 +9,12 @@ use App\Models\TmAsignaturas;
 use App\Models\TmServicios;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class VcCalificaciones extends Component
 {
+    use WithPagination;
+    public $tblrecords;
     public $periodoId, $grupoId, $nivelId, $gradoId, $especialidadId, $seccionId, $asignaturaId, $parcial;
     
     public function mount(){
@@ -20,19 +23,37 @@ class VcCalificaciones extends Component
         $this->tblgrados    = TmGeneralidades::where('superior','3')->get();
         $this->tblperiodos  = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         $this->asignaturas  = TmAsignaturas::all();
-        $this->periodoId   = 0;
+        $this->periodoId    = $this->tblperiodos[0]['id'];
         $this->parcial  = 'P1';
         $this->grupoId  = 2;
 
     }
     
     public function render()
-    {
-        $tblrecords = TrCalificacionesCabs::query()
-        ->join("tm_servicios as s","tr_calificaciones_cabs.servicio_id","=","s.id")
-        ->when($this->periodoId,function($query){
-            return $query->where('periodo_id',"{$this->periodoId}");
-        })
+    {      
+        return view('livewire.vc-calificaciones',[
+            'tblrecords'  => $this->tblrecords,
+            'tblperiodos' => $this->tblperiodos,
+            'tblgenerals' => $this->tblgenerals,
+        ]);
+    }
+
+    public function paginationView(){
+        return 'vendor.livewire.bootstrap'; 
+    }
+
+    public function updatedNivelId(){   
+        
+        $this->tblgrados = TmServicios::where('modalidad_id',$this->grupoId)
+        ->where('nivel_id',$this->nivelId)
+        ->get();
+
+    }
+
+    public function loadData(){   
+        
+        $this->tblrecords = TrCalificacionesCabs::query()
+        ->join("tm_servicios  as s","tr_calificaciones_cabs.servicio_id","=","s.id")
         ->when($this->grupoId,function($query){
             return $query->where('grupo_id',"{$this->grupoId}");
         })
@@ -53,22 +74,10 @@ class VcCalificaciones extends Component
         })
         ->when($this->parcial,function($query){
             return $query->where('parcial',"{$this->parcial}");
-        })                
-        ->paginate(10);
-        
-        return view('livewire.vc-calificaciones',[
-            'tblrecords' => $tblrecords,
-            'tblperiodos' => $this->tblperiodos,
-            'tblgenerals' => $this->tblgenerals,
-            'asignaturas' => $this->asignaturas,
-            'tblgrados' => $this->tblgrados,
-        ]);
-    }
-
-    public function updatedNivelId(){   
-        
-        $this->tblgrados = TmServicios::where('modalidad_id',$this->grupoId)
-        ->get();
+        })  
+        ->where('periodo_id',$this->periodoId)  
+        ->select('tr_calificaciones_cabs.*')          
+        ->get(); 
 
     }
 

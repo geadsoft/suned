@@ -188,7 +188,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="">
+                    <a class="nav-link menu-link" href="/secretary/ratings">
                         <i class="ri-medal-2-fill fs-20"></i> <span>Calificaciones</span>
                     </a>
                 </li>

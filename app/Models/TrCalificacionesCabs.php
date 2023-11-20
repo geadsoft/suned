@@ -20,4 +20,18 @@ class TrCalificacionesCabs extends Model
         'parcial',
         'usuario',
     ];
+
+    public function servicio(){
+        return $this->belongsTo('App\Models\TmServicios');
+    }
+
+    public function curso(){
+        return $this->belongsTo('App\Models\TmCursos');
+    }
+
+    public function asignatura(){
+        return $this->belongsTo('App\Models\TmAsignaturas');
+    }
+
+
 }

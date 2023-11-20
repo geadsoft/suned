@@ -15,4 +15,5 @@ class TmCalificaciones extends Controller
     {
         return view('academic/ratingsadd');
     }
+
 }
