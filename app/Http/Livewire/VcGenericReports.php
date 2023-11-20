@@ -38,12 +38,14 @@ class VcGenericReports extends Component
 
     public function mount(){
         
+        $año = date('Y');
         $ldate = date('Y-m-d H:i:s');
+        $periodo = TmPeriodosLectivos::where("periodo",$año)->first();
         $this->tblgenerals = TmGeneralidades::where('superior',1)->get();
         $this->tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         $this->tblniveles  = TmGeneralidades::where('superior',2)->get();
 
-        $this->filters['srv_periodo'] = $this->tblperiodos[0]['id'];
+        $this->filters['srv_periodo'] = $periodo['id'];
         $this->filters['srv_grupo']   = $this->tblgenerals[0]['id'];
         $this->filters['srv_nivel']   = 0;
 
