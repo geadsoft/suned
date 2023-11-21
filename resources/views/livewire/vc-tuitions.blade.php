@@ -117,7 +117,7 @@
                                                     <li><a class="dropdown-item" href="" wire:click.prevent=""><i class="ri-printer-fill align-bottom me-2 text-muted fs-16"></i> Comprobante </a></li>
                                                     <li><a class="dropdown-item" href="/academic/student-enrollment/{{$record->identificacion}}"><i class="ri-add-box-fill align-bottom me-2 text-muted fs-16"></i>Agregar Matrícula</a></li>
                                                     <li><a class="dropdown-item" href="" wire:click.prevent="edit({{ $record }})"><i class="ri-repeat-line align-bottom me-2 text-muted fs-16"></i>Cambiar Curso</a></li>
-                                                    <li><a class="dropdown-item" href="/academic/person-edit/{{$record->identificacion}}"><i class="ri-contacts-fill align-bottom me-2 text-muted fs-16"></i> Ficha del Estudiante </a></li>
+                                                    <li><a class="dropdown-item" href="/academic/person-edit/{{$record->id}}"><i class="ri-contacts-fill align-bottom me-2 text-muted fs-16"></i> Ficha del Estudiante </a></li>
                                                     <li><a class="dropdown-item" href="" wire:click.prevent="valoresPagar({{ $record }})"><i class="ri-hand-coin-fill align-bottom me-2 text-muted fs-16"></i> Valores a Pagar</a></li>
 
                                                     <li class="dropdown-divider"></li>

@@ -130,7 +130,7 @@
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                    <a class="edit-item-btn" href="/academic/person-edit/{{$record->identificacion}}"><i
+                                                    <a class="edit-item-btn" href="/academic/person-edit/{{$record->matriculaId}}"><i
                                                             class="ri-pencil-fill fs-16"></i></a>
                                                 </li>
                                                 <li class="list-inline-item">
