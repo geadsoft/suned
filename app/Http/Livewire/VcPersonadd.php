@@ -79,13 +79,26 @@ class VcPersonadd extends Component
  
     public function mount($tuition_id){
 
-        $this->plectivo = TmPeriodosLectivos::orderBy('periodo','desc')->first();
-        
         if ($tuition_id!=""){
-            $this->search_nui = $tuition_id;
+
+            $matricula = TmMatricula::find($tuition_id);
+
+            $personas  = TmPersonas::find($matricula['estudiante_id']);
+
+ 
+
+            $this->plectivo   = TmPeriodosLectivos::find($matricula['periodo_id']);
+
+            $this->search_nui = $personas['identificacion'];
+
             $this->searchPerson();  
+
         }else{
+
+            $this->plectivo = TmPeriodosLectivos::orderBy('periodo','desc')->first();
+
             $this->chkoptnui="no";
+
         }
 
     }

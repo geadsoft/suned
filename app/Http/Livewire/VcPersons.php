@@ -95,6 +95,7 @@ class VcPersons extends Component
         })
         ->where('tm_personas.tipopersona','=','E')
         ->where('tm_personas.estado',$this->filters['srv_estado'])
+        ->select('tm_personas.*','m.id as matriculaId')
         ->orderBy('apellidos','asc')
         ->paginate(12);
 
