@@ -1,3 +1,4 @@
+
 @extends('layouts.master')
 @section('title')
     @lang('translation.orders')
@@ -9,34 +10,32 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Sede
+            Académico
         @endslot
         @slot('title')
-            Horario Escolar
+            Calificaciones
         @endslot
     @endcomponent
 
-    @livewire('vc-horariosadd',['horarioId' => $id])
+    @livewire('vc-calificacionesadd')
 
 @endsection
 @section('script')
-    <script src="{{ URL::asset('assets/libs/list.js/list.js.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>
 
     <!--ecommerce-customer init js -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
     <script>
-       
-        window.addEventListener('show-form', event => {
-                $('#addDocentes').modal('show');
-            })
 
-        window.addEventListener('hide-form', event => {
-            $('#addDocentes').modal('hide');
+        window.addEventListener('msg-grabar', event => {
+            swal("Buen trabajo!", "¡Registros guardados exitosamente!", "success");
         })
 
+        window.addEventListener('msg-editar', event => {
+            swal("Buen trabajo!", "Registros actualizados exitosamente!", "success");
+        })
+        
     </script>   
      
 @endsection

@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class VcModalPersonas extends Component
 {
-    public $selectId;
+    public $selectId, $tblrecords=[];
     public $filters = [
         'srv_tipo' => 'D',
         'srv_nombre' => '',
@@ -16,12 +16,10 @@ class VcModalPersonas extends Component
 
     public function render()
     {
-        if (!empty($this->filters['srv_nombre'])){
-            $tblrecords = $this->loadpersona();
-        }
+        $this->tblrecords = $this->loadpersona();
 
         return view('livewire.vc-modal-personas',[
-            'tblrecords' => $tblrecords,
+            'tblrecords' => $this->tblrecords,
         ]);
     }
 
@@ -35,9 +33,9 @@ class VcModalPersonas extends Component
             return $query->where('identificacion',"{$this->filters['srv_nui']}");
         })        
         ->when($this->filters['srv_nombre'],function($query){
-            return $query->whereRaw("concat(p.apellidos,' ',p.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
+            return $query->whereRaw("concat(apellidos,'',nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
-        ->select('apellidos','nombres','identificacion')
+        ->select('id','apellidos','nombres','identificacion')
         ->where('estado','A')
         ->limit(15)
         ->get();
@@ -46,9 +44,9 @@ class VcModalPersonas extends Component
 
     }
 
-    public function setPersona($personaId){
+    public function setDocente($personaId){
         
-        $this->emitTo('vc-horarios-docentes','setPersona',$personaId);
+        $this->emitTo('vc-horarios-docentes','setDocente',$personaId);
         $this->dispatchBrowserEvent('hide-form');
 
     }

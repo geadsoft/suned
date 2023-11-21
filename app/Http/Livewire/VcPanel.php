@@ -31,7 +31,8 @@ class VcPanel extends Component
     
     public function mount(){    
 
-        $periodo = TmPeriodosLectivos::orderBy("periodo","desc")->first();
+        $año     = date('Y');
+        $periodo = TmPeriodosLectivos::where("periodo",$año)->first();
         $anioant = TmPeriodosLectivos::where('periodo',$periodo->periodo-1)->first();
 
         $ldate     = date('Y-m-d H:i:s');
@@ -71,7 +72,7 @@ class VcPanel extends Component
         ->get();
 
         $this->chartsmatricula = json_encode($personas);
-
+        $array=[];
         foreach($matricula as $recno){
 
             if($recno->tipo=='N'){

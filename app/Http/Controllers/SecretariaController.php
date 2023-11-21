@@ -26,6 +26,11 @@ class SecretariaController extends Controller
         return view('secretary/documentos');
     }
 
+    public function ratings()
+    {
+        return view('secretary/calificacion');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

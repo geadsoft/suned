@@ -55,7 +55,9 @@ class VcPersons extends Component
     ];
   
     public function mount(){
-        $periodo = TmPeriodosLectivos::orderBy("periodo","desc")->first();
+        
+        $año   = date('Y');
+        $periodo = TmPeriodosLectivos::where("periodo",$año)->first();
         $this->filters['srv_periodo'] = $periodo['id'];    
 
         $anioant = TmPeriodosLectivos::where('periodo',$periodo['periodo']-1)->first();

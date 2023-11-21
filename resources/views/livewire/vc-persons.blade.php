@@ -152,7 +152,7 @@
                                                                         class=" ri-star-half-line align-bottom me-2 text-muted fs-16"></i>
                                                                     Libreta Calificaciones</a></li>
                                                             <li>
-                                                                @if ($record->telefono=='A')
+                                                                @if ($filters['srv_estado']=='A')
                                                                     <a class="dropdown-item remove-item-btn"
                                                                         data-bs-toggle="modal"
                                                                         href="" wire:click.prevent="delete({{ $record->estudiante_id }})">
