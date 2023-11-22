@@ -68,8 +68,8 @@
                                         @else
                                         <td></td>
                                         <td>{{$record->identificacion}}</td>
-                                        @endif                                      
-                                        <td>{{$record->fechanacimiento}}</td>
+                                        @endif                                     
+                                        <td>{{date('d/m/Y',strtotime($record->fechanacimiento))}}</td>
                                         <td>{{$record->nacest}}</td>
                                         <td>{{$record->apellidos}}</td>
                                         <td>{{$record->nombres}}</td>
