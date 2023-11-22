@@ -193,9 +193,31 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/secretary/documentation">
-                        <i class="ri-book-3-line fs-20"></i> <span>Documentacion</span>
+                    <a class="nav-link menu-link" href="#documentacion" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsede">
+                        <i class="ri-book-3-line fs-20"></i> <span>Documentación</span>
                     </a>
+                    <div class="collapse menu-dropdown" id="documentacion">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/secretary/documentation">
+                                    <i class="ri-file-add-line fs-20"></i> <span>Registro</span>
+                                </a>    
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/secretary/report-cas">
+                                    <i class="ri-contacts-book-upload-line fs-20"></i> <span>Ingreso de CAS</span>
+                                </a>    
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/secretary/titles-file">
+                                    <i class="ri-character-recognition-line fs-20"></i> <span>Títulos y Actas</span>
+                                </a>    
+                            </li>
+                        </ul>
+                    </div>
+                    <!--<a class="nav-link menu-link" href="/secretary/documentation">
+                        <i class="ri-book-3-line fs-20"></i> <span>Documentacion</span>
+                    </a>-->
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="">
