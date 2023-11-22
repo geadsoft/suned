@@ -16,6 +16,7 @@ class VcModalPersonas extends Component
 
     public function render()
     {
+        $this->filters['srv_nombre'] = '';
         $this->tblrecords = $this->loadpersona();
 
         return view('livewire.vc-modal-personas',[
