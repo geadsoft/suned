@@ -60,7 +60,7 @@ Route::get('/academic/ratings',[App\Http\Controllers\TmCalificaciones::class, 'i
 Route::get('/academic/ratings-add',[App\Http\Controllers\TmCalificaciones::class, 'addCalificacion'])->name('addCalificacion');
 Route::get('/secretary/ratings',[App\Http\Controllers\SecretariaController::class, 'ratings'])->name('ratings');
 Route::get('/secretary/report-cas',[App\Http\Controllers\SecretariaController::class, 'reportCas'])->name('reportCas');
-
+Route::get('/secretary/titles-file',[App\Http\Controllers\SecretariaController::class, 'titlesFile'])->name('titlesFile');
 
 
 
