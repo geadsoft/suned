@@ -109,6 +109,11 @@ class VcHorariosadd extends Component
             'cursoId'    => 'required',
         ]);
 
+        if ($this->edit==true){
+            $this->editData();
+            return;
+        }
+
         $tmhorarios = TmHorarios::Create([
             'grupo_id' => $this -> grupoId,
             'servicio_id' => $this -> servicioId,
@@ -119,6 +124,18 @@ class VcHorariosadd extends Component
         
         $this->selectId = $tmhorarios['id'];
         $this->emitTo('vc-horarios-clase','setHorario',$this->selectId);
+    }
+
+    public function editData(){
+
+        $record = TmHorarios::find($this->selectId);
+        $record->update([
+            'grupo_id' => $this -> grupoId,
+            'servicio_id' =>$this -> servicioId,
+            'periodo_id' => $this -> periodoId,
+            'curso_id' => $this -> cursoId,
+        ]);
+
     }
 
 
