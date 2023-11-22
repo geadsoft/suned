@@ -89,6 +89,7 @@
                                         <th class="sort">Grado</th>
                                         <th class="sort">Especializacion</th>
                                         <th class="sort">Curso</th>
+                                        <th class="sort">Materias/Docentes</th>
                                         <th class="sort" data-sort="">Acción</th>
                                     </tr>
                                 </thead>
@@ -121,6 +122,10 @@
                                                 </li> 
                                                 @endif 
                                                 @endforeach                                              
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul class="list-inline hstack gap-2 mb-0">                                           
                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Edit">
                                                     <a href="" wire:click.prevent="edit({{ $record }})">
