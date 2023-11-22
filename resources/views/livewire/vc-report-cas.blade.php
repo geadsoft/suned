@@ -84,7 +84,7 @@
                                         <td>{{$record->nacrepresentante}}</td>
                                         <td>{{$record->aperepresentante}}</td>
                                         <td>{{$record->nomrepresentante}}</td>
-                                        <td>{{$record->parentesco}}</td>
+                                        <td>{{$pariente[$record->pariente]}}</td>
                                         <td>{{$record->dirrepresentante}}</td>
                                         <td>{{$record->telfrepresentante}}</td>
                                         <td></td>

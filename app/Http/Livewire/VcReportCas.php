@@ -17,6 +17,13 @@ class VcReportCas extends Component
         'srv_nombre' => '',
     ];
 
+    public $pariente = [
+        'PA' => 'Padre',
+        'MA' => 'Madre',
+        'AP' => 'Apoderado',
+        'NN' => '',
+    ];
+
     public  function mount()
     {
         $año   = date('Y');
@@ -44,7 +51,7 @@ class VcReportCas extends Component
         ->where('tm_personas.estado','A')
         ->select('tm_personas.*','g1.descripcion as nacest','p.tipoidentificacion as tiponui','p.identificacion as nui',
         'p.nombres as nomrepresentante','p.apellidos as aperepresentante','g2.descripcion as nacrepresentante',
-        'p.direccion as dirrepresentante','p.telefono as telfrepresentante')
+        'p.direccion as dirrepresentante','p.telefono as telfrepresentante','p.parentesco as pariente')
         ->orderBy('apellidos','asc')
         ->paginate(13);
 
