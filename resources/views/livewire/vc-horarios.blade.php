@@ -103,6 +103,24 @@
                                         <td>{{$record->curso->paralelo}}</td>
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
+                                                @foreach ($datos as $dt) 
+                                                @if ($dt->horario_id == $record->id)
+                                                <i>{{$dt->materias}}</i>
+                                                <li class="list-inline-item edit" data-bs-toggle="tooltip"
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Horario">
+                                                    <a href="">
+                                                        <i class="bx bx-collection fs-16"></i>
+                                                    </a>
+                                                </li>
+                                                <i>{{$dt->docentes}}</i>
+                                                <li class="list-inline-item edit" data-bs-toggle="tooltip"
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Docentes">
+                                                    <a href="">
+                                                        <i class="ri-user-star-line fs-16"></i>
+                                                    </a>
+                                                </li> 
+                                                @endif 
+                                                @endforeach                                              
                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Edit">
                                                     <a href="" wire:click.prevent="edit({{ $record }})">
