@@ -43,7 +43,8 @@ class VcReportCas extends Component
         ->where('tm_personas.tipopersona','=','E')
         ->where('tm_personas.estado','A')
         ->select('tm_personas.*','g1.descripcion as nacest','p.tipoidentificacion as tiponui','p.identificacion as nui',
-        'p.nombres as nomrepresentante','p.apellidos as aperepresentante','g2.descripcion as nacrepresentante')
+        'p.nombres as nomrepresentante','p.apellidos as aperepresentante','g2.descripcion as nacrepresentante',
+        'p.direccion as dirrepresentante','p.telefono as telfrepresentante')
         ->orderBy('apellidos','asc')
         ->paginate(13);
 
