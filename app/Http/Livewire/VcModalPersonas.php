@@ -16,7 +16,6 @@ class VcModalPersonas extends Component
 
     public function render()
     {
-        $this->filters['srv_nombre'] = '';
         $this->tblrecords = $this->loadpersona();
 
         return view('livewire.vc-modal-personas',[
@@ -49,7 +48,7 @@ class VcModalPersonas extends Component
         
         $this->emitTo('vc-horarios-docentes','setDocente',$personaId);
         $this->dispatchBrowserEvent('hide-form');
-
+        $this->filters['srv_nombre'] = '';
     }
 
 }
