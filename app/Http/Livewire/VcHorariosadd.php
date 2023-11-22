@@ -17,7 +17,7 @@ class VcHorariosadd extends Component
     public $tblcursos=null;
     public $tblservicios=null;
     public $selectId,$grupoId,$servicioId,$nivelId,$gradoId,$especialidadId,$periodoId,$cursoId;
-    public $tabHorario, $tabDocente;
+    public $tabHorario, $tabDocente, $edit=false;
     
     public function mount($horarioId){
 
@@ -48,6 +48,10 @@ class VcHorariosadd extends Component
 
     public function loadData(){
 
+        if ($this->edit==true){
+            return;
+        }
+
         $tblrecords = TmHorarios::find($this->selectId);
         $this->grupoId    = $tblrecords['grupo_id'];
         $this->updatedgrupoId($this->grupoId);
@@ -59,7 +63,7 @@ class VcHorariosadd extends Component
         $this->updatedperiodoId($this->periodoId);
 
         $this->cursoId    = $tblrecords['curso_id']; 
-        //$this->emitTo('vc-horarios-clase','setHorario',$this->selectId);
+        $this->edit = true;
     }
 
     public function loadHorario(){
