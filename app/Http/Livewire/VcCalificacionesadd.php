@@ -90,7 +90,8 @@ class VcCalificacionesadd extends Component
         ->first();
 
         if(!empty($record)){
-            $this->selectId = $record['id'];
+            $this->selectId   = $record['id'];
+            $this->evaluacion = $record['evaluacion'];
             $this->fecha    = date('Y-m-d',strtotime($record['fecha'])); 
             $this->loadCalificacion();
         }else{
