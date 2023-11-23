@@ -17,6 +17,7 @@ class TrCalificacionesCabs extends Model
         'curso_id',
         'asignatura_id',
         'ciclo_academico',
+        'evaluacion',
         'parcial',
         'usuario',
     ];

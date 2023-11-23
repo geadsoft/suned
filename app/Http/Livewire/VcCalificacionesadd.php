@@ -22,7 +22,7 @@ class VcCalificacionesadd extends Component
     public $tblservicios=null;
     public $tblmaterias=null;
     public $selectId,$grupoId,$servicioId,$nivelId,$gradoId,$especialidadId,$periodoId,$cursoId,$componenteId;
-    public $ciclo='T', $parcial, $fecha;
+    public $ciclo='T',$parcial,$fecha,$evaluacion='N';
     public $tbldetalle=[];
     
     public function mount(){
@@ -209,6 +209,7 @@ class VcCalificacionesadd extends Component
             $record->update([
                 'fecha'        => $data['fecha'],
                 'calificacion' => $data['nota'],
+                'escala_cualitativa' => $data['escala'],
                 'observacion'  => $data['observacion'],
             ]);
 

@@ -27,6 +27,7 @@ return new class extends Migration
             $table->bigInteger('asignatura_id')->unsigned();
             $table->foreign('asignatura_id')->references('id')->on('tm_asignaturas');
             $table->string('ciclo_academico',1);
+            $table->string('evaluacion',1);
             $table->string('parcial',2);
             $table->string('usuario');
             $table->timestamps();

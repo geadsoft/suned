@@ -153,6 +153,17 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-lg-3">
+                                            <label class="form-label mt-2 me-5" for="cmbpacademico">Evaluación</label>
+                                        </div>
+                                        <div class="col-lg-9">
+                                            <select class="form-select" id="cmbpacademico" wire:model="evaluacion" required> 
+                                                <option value="N">Cuantitativa</option>    
+                                                <option value="L">Cualitativa</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-lg-3">
                                             <label class="form-label mt-2 me-5" for="cmbpacademico">Parcial</label>
                                         </div>
                                         <div class="col-lg-9">
@@ -186,6 +197,7 @@
             <div class="card" id="orderList">
                 <div class="card-body pt-0">
                     <div>
+                        @if ($tbldetalle != null)
                         <div class="table-responsive table-card mb-1">
                             <table class="table table-nowrap align-middle" id="orderTable">
                                 <thead class="text-muted table-light">
@@ -199,7 +211,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all">
-                                @if ($tbldetalle != null)
+                                
                                     @foreach ($tbldetalle as $key => $data)
                                     <tr>
                                         <td>{{$data['nui']}}</td>
@@ -208,16 +220,30 @@
                                         <td><input type="date" class="form-control form-control-sm bg-light border-0" id="fechaActual-{{$key}}" 
                                             data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="tbldetalle.{{$key}}.fecha">
                                         </td>
-                                        <td><input type="number" step="0.01" class="form-control form-control-sm bg-light border-0 product-price"
-                                                     id="nota-{{$key}}" wire:model="tbldetalle.{{$key}}.nota" /></td>
+                                        <td>
+                                            @if ($evaluacion=='N')
+                                            <input type="number" step="0.01" class="form-control form-control-sm bg-light border-0 product-price"
+                                                     id="nota-{{$key}}" wire:model="tbldetalle.{{$key}}.nota"/>
+                                            @else
+                                            
+                                            <select class="form-select form-select-sm bg-light border-0" id="nota-{{$key}}" wire:model="tbldetalle.{{$key}}.escala" required> 
+                                                <option value="" selected>Seleccionar</option>    
+                                                <option value="EX">EX - Excelente</option>
+                                                <option value="MB">MB - Muy Bueno</option>
+                                                <option value="B">B - Bueno</option>
+                                                <option value="R">R - Regular</option>
+                                            </select>
+                                            @endif
+                                        </td>
                                         <td><input type="text" class="form-control form-control-sm bg-light border-0"
                                                      id="obs-{{$key}}" wire:model="tbldetalle.{{$key}}.observacion" /></td>
                                     </tr>
                                     @endforeach
-                                @endif
+                                
                                 </tbody>
                             </table>
                         </div>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body">
