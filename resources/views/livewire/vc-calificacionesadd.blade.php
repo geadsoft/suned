@@ -180,7 +180,7 @@
                                             <label class="form-label mt-2 me-5" for="cmbfecha">Fecha</label>
                                         </div>
                                         <div class="col-lg-3">
-                                            <input type="date" class="form-control" id="cmbfecha" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha" required> 
+                                            <input type="date" class="form-control" id="cmbfecha" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="fecha" required> 
                                         </div>
                                     </div>                
                                 </div>

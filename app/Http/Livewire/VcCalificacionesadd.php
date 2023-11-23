@@ -101,6 +101,12 @@ class VcCalificacionesadd extends Component
         }
 
     } 
+
+    public function updatedFecha(){
+        foreach ($this->tbldetalle as $key => $data){
+            $this->tbldetalle[$key]['fecha'] = $this->fecha; 
+        }
+    }
     
     public function loadEstudiantes(){
 
