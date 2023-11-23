@@ -182,6 +182,7 @@ class VcCalificacionesadd extends Component
             'curso_id' => $this -> cursoId,
             'asignatura_id' => $this -> componenteId,
             'ciclo_academico' => $this -> ciclo,
+            'evaluacion' => $this -> evaluacion,
             'parcial' => $this -> parcial,
             'usuario' => auth()->user()->name,
         ]);
