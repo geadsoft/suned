@@ -48,7 +48,7 @@ class VcModalPersonas extends Component
         
         $this->emitTo('vc-horarios-docentes','setDocente',$personaId);
         $this->dispatchBrowserEvent('hide-form');
-
+        $this->filters['srv_nombre'] = '';
     }
 
 }

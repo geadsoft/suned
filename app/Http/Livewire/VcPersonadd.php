@@ -78,17 +78,21 @@ class VcPersonadd extends Component
     protected $listeners = ['updateFamiliar'];    
  
     public function mount($tuition_id){
-        
+
         if ($tuition_id!=""){
+
             $matricula = TmMatricula::find($tuition_id);
             $personas  = TmPersonas::find($matricula['estudiante_id']);
 
             $this->plectivo   = TmPeriodosLectivos::find($matricula['periodo_id']);
             $this->search_nui = $personas['identificacion'];
             $this->searchPerson();  
+
         }else{
+
             $this->plectivo = TmPeriodosLectivos::orderBy('periodo','desc')->first();
             $this->chkoptnui="no";
+
         }
 
     }

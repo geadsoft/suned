@@ -6,6 +6,7 @@ use App\Models\TmGeneralidades;
 use App\Models\TmServicios;
 use App\Models\TmCursos;
 use App\Models\TmHorarios;
+use App\Models\TmHorariosDocentes;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,7 +15,7 @@ class VcHorarios extends Component
 {
 
     use WithPagination;
-    public $tblgenerals=null;
+    public $tblgenerals=null, $datos;
     public $tblperiodos=null;
     public $tblcursos=null;
     public $tblservicios=null;
@@ -31,6 +32,9 @@ class VcHorarios extends Component
     public function render()
     {
         $tblrecords = TmHorarios::paginate(10);
+        $this->datos = TmHorariosDocentes::selectRaw('horario_id, count(asignatura_id) as materias, count(docente_id) as docentes')
+        ->groupBy('horario_id')
+        ->get();
         
         return view('livewire.vc-horarios',[
             'tblrecords' => $tblrecords,
