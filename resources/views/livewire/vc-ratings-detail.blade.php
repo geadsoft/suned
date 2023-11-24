@@ -133,23 +133,23 @@
                                             {{$nf = 'PF_'.$data['asignatura_id'] }}
                                         </script>
                                             <td>
-                                                <input type="number" step="0.01"  style="width:80px" class="form-control form-control-sm product-price bg-light border-0"
+                                                <input type="text" style="width:80px" class="form-control form-control-sm product-price bg-light border-0"
                                                 id="col{{$key}}-1" value="{{$record[$n1]}}" disabled/>
                                             </td>
                                             <td>
-                                                <input type="number" step="0.01"  style="width:80px" class="form-control form-control-sm product-price bg-light border-0"
+                                                <input type="text" style="width:80px" class="form-control form-control-sm product-price bg-light border-0"
                                                 id="col{{$key}}-2" value="{{$record[$n2]}}" disabled/>
                                             </td>
                                             <td>
-                                                <input type="number" step="0.01"  style="width:80px" class="form-control form-control-sm product-price bg-light border-0"
+                                                <input type="text" style="width:80px" class="form-control form-control-sm product-price bg-light border-0"
                                                 id="col{{$key}}-3" value="{{$record[$n3]}}" disabled/>
                                             </td>
                                             <td>
-                                                <input type="number" step="0.01"  style="width:80px" class="form-control form-control-sm product-price bg-light border-0"
+                                                <input type="text" style="width:80px" class="form-control form-control-sm product-price bg-light border-0"
                                                 id="col{{$key}}-4" value="{{$record[$pr]}}" disabled/>
                                             </td>
                                             <td>
-                                                <input type="number" step="0.01"  style="width:80px" class="form-control form-control-sm product-price bg-light border-0"
+                                                <input type="text" style="width:80px" class="form-control form-control-sm product-price bg-light border-0"
                                                 id="col{{$key}}-5" value="{{$record[$nf]}}" disabled/>
                                             </td>
                                         @endforeach

@@ -82,12 +82,11 @@ class VcRatingsDetail extends Component
             return $query->where('curso_id',"{$this->cursoId}");
         }) 
         ->where('periodo_id',$this->periodoId)  
-        ->select('d.estudiante_id','d.calificacion','tr_calificaciones_cabs.*')     
+        ->select('d.estudiante_id','d.calificacion','d.escala_cualitativa','tr_calificaciones_cabs.*')     
         ->get(); 
 
-        $this->tblcomponentes = TmHorarios::query()
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","d.asignatura_id","=","m.id")
+        $this->tblcomponentes = TrCalificacionesCabs::query()
+        ->join("tm_asignaturas as m","tr_calificaciones_cabs.asignatura_id","=","m.id")
         ->when($this->grupoId,function($query){
             return $query->where('grupo_id',"{$this->grupoId}");
         })
@@ -98,7 +97,7 @@ class VcRatingsDetail extends Component
             return $query->where('curso_id',"{$this->cursoId}");
         }) 
         ->where('periodo_id',$this->periodoId)  
-        ->select('d.*','m.descripcion')     
+        ->select('tr_calificaciones_cabs.*','m.descripcion')     
         ->get(); 
 
         $alumnos = $tblrecords->groupBy('estudiante_id');
@@ -109,26 +108,32 @@ class VcRatingsDetail extends Component
             
             $detalle['id']     = $key;
             $detalle['nombres'] = $persona['apellidos'].' '.$persona['nombres'] ;
-            $detalle['comportamiento'] = 0;
+            $detalle['comportamiento'] = '';
 
             foreach ($this->tblcomponentes as $data)
             {
-                $detalle['P1_'.$data['asignatura_id']] = 0;
-                $detalle['P2_'.$data['asignatura_id']] = 0;
-                $detalle['P3_'.$data['asignatura_id']] = 0;
-                $detalle['PR_'.$data['asignatura_id']] = 0;
-                $detalle['PF_'.$data['asignatura_id']] = 0;
+                $detalle['P1_'.$data['asignatura_id']] ='';
+                $detalle['P2_'.$data['asignatura_id']] ='';
+                $detalle['P3_'.$data['asignatura_id']] ='';
+                $detalle['PR_'.$data['asignatura_id']] ='';
+                $detalle['PF_'.$data['asignatura_id']] ='';
             }
             array_push($this->detalles,$detalle);
         }
+        
 
         /*Asigna Calificación*/
         foreach ($tblrecords as $data){
-
+           
             foreach ($this->detalles as $fila => $detalle){
                 if ($detalle['id'] == $data['estudiante_id']){
 
-                    $this->detalles[$fila][$data['parcial'].'_'.$data['asignatura_id']] = $data['calificacion']; 
+                    if ($data['evaluacion']=='N'){
+                        $this->detalles[$fila][$data['parcial'].'_'.$data['asignatura_id']] = $data['calificacion']; 
+                    }else{
+                        $this->detalles[$fila][$data['parcial'].'_'.$data['asignatura_id']] = $data['escala_cualitativa']; 
+                    }
+                    
                 }
             }
 
@@ -155,18 +160,17 @@ class VcRatingsDetail extends Component
         ->where('grupo_id',$this->grupoId)
         ->where('servicio_id',$this->servicioId)
         ->where('curso_id',$this->cursoId)
-        ->select('d.estudiante_id','d.calificacion','tr_calificaciones_cabs.*')     
+        ->select('d.estudiante_id','d.calificacion','d.escala_cualitativa','tr_calificaciones_cabs.*')     
         ->get();
 
-        $this->materias = TmHorarios::query()
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","d.asignatura_id","=","m.id")
+        $this->materias = TrCalificacionesCabs::query()
+        ->join("tm_asignaturas as m","tr_calificaciones_cabs.asignatura_id","=","m.id")
         ->where('periodo_id',$this->periodoId)  
         ->where('grupo_id',$this->grupoId)
         ->where('servicio_id',$this->servicioId)
         ->where('curso_id',$this->cursoId)
         ->where('periodo_id',$this->periodoId)  
-        ->select('d.*','m.descripcion')     
+        ->select('tr_calificaciones_cabs.*','m.descripcion')     
         ->get(); 
 
         $alumnos = $tblrecords->groupBy('estudiante_id');
@@ -177,15 +181,15 @@ class VcRatingsDetail extends Component
             
             $detalle['id']     = $key;
             $detalle['nombres'] = $persona['apellidos'].' '.$persona['nombres'] ;
-            $detalle['comportamiento'] = 0;
+            $detalle['comportamiento'] = '';
 
             foreach ($this->materias as $data)
             {
-                $detalle['P1_'.$data['asignatura_id']] = 0;
-                $detalle['P2_'.$data['asignatura_id']] = 0;
-                $detalle['P3_'.$data['asignatura_id']] = 0;
-                $detalle['PR_'.$data['asignatura_id']] = 0;
-                $detalle['PF_'.$data['asignatura_id']] = 0;
+                $detalle['P1_'.$data['asignatura_id']] ='';
+                $detalle['P2_'.$data['asignatura_id']] ='';
+                $detalle['P3_'.$data['asignatura_id']] ='';
+                $detalle['PR_'.$data['asignatura_id']] ='';
+                $detalle['PF_'.$data['asignatura_id']] ='';
             }
             array_push($arrNotas,$detalle);
         }

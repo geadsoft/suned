@@ -27,6 +27,12 @@ class VcCertificados extends Component
     public $periodo, $foto="", $rector, $secretaria, $coordinador, $bachilleren="", $nota=0, $escala=''; 
     public $dttitulo="", $dtnombre="", $dtinstitucion="", $dtcargo="", $dtfecha, $refrendacion=0, $pagina=0, $fprorroga, $documentos="";
     public $especializacion="",$paseCursoId,$matriculaId=0;
+    public $refescala=[
+        'EX' => 'Demuestra destacado desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un excente aporte a su formación integral.',
+        'MB' => 'Demuestra muy buen desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un aporte a su formación integral.',
+        'B'  => 'Demuestra buen desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un aporte a su formación integral.',
+        'R'  => 'Demuestra regular desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un aporte a su formación integral.'
+    ];
 
     public $mes = [
         1 => 'Enero',
@@ -214,7 +220,9 @@ class VcCertificados extends Component
 
         $ldate  = date('Y-m-d H:i:s');
 
-        $data = TmReportes::where('tipo',$this->tipoDoc)->first();
+        $data     = TmReportes::where('tipo',$this->tipoDoc)->first();
+        $servicio = TmServicios::find($this->paseCursoId);
+        $nomcurso_pase = $servicio->descripcion;
 
         if ($data!=null){
 
@@ -240,6 +248,7 @@ class VcCertificados extends Component
                 'fprorroga' => date('Y-m-d',strtotime($this->fprorroga)),
                 'documento' => $this->documentos,
                 'matricula_id' => $this->matriculaId,
+                'curso_promovido' => $this->$nomcurso_pase,
                 'rector' => $this->rector,
                 'secretaria' => $this->secretaria,
                 'coordinador' => $this->coordinador,
@@ -269,6 +278,7 @@ class VcCertificados extends Component
                 'fprorroga' => date('Y-m-d',strtotime($this->fprorroga)),
                 'documento' => $this->documentos,
                 'matricula_id' => $this->matriculaId,
+                'curso_promovido' => $this->$nomcurso_pase,
                 'rector' => $this->rector,
                 'secretaria' => $this->secretaria,
                 'coordinador' => $this->coordinador,
@@ -284,11 +294,7 @@ class VcCertificados extends Component
 
     }
 
-    public function liveWirePDF($idReporte)
-    { 
-        $sede  = TmSedes::orderBy('id','desc')->first();
-        $data  = TmReportes::find($idReporte);
-        $matricula = TmMatricula::find($data['matricula_id']);
+    public function calificaciones($matricula){
 
         $notas = TrCalificacionesDets::query()
         ->join('tr_calificaciones_cabs as c','c.id','=','tr_calificaciones_dets.calificacioncab_id')
@@ -300,7 +306,46 @@ class VcCertificados extends Component
         ->where('c.curso_id',$matricula['curso_id'])
         ->get();
 
-        dd($matricula);
+        $objnotas = [];
+        $total=0;
+        foreach($notas as $record){
+            $data['area']    = $record['area'];
+            $data['materia'] = $record['materia']; 
+
+            if ($record['escala_cualitativa']!=''){
+                $data['nota']  = $record['escala_cualitativa']; 
+                $data['letra'] = $this->refescala[$record['escala_cualitativa']];
+            }else{
+                $data['nota'] = $record['calificacion'];
+                $total =$total+$record['calificacion'];
+                $formatter = new NumeroALetras();
+                $notaletra = $formatter->toWords($record['calificacion'], 2);
+                $data['letra'] = $notaletra;
+            }
+            
+            array_push($objnotas, $data);
+        }
+        $promedio = round($total/count($objnotas), 2);
+        $data['area']='';
+        $data['materia'] = '';
+        $data['nota'] = $promedio;
+
+        $formatter = new NumeroALetras();
+        $notaletra = $formatter->toWords($promedio, 2);
+        $data['letra']=$notaletra;
+        array_push($objnotas, $data);
+
+        return $objnotas;
+    }
+
+
+    public function liveWirePDF($idReporte)
+    { 
+        $sede  = TmSedes::orderBy('id','desc')->first();
+        $data  = TmReportes::find($idReporte);
+        $matricula = TmMatricula::find($data['matricula_id']);
+
+        $notas = $this->calificaciones($matricula);
 
         $this->foto    = $data['identificacion'].'.jpg';
 
@@ -442,6 +487,7 @@ class VcCertificados extends Component
                         'data'  => $data,
                         'sede'  => $sede,
                         'notas' => $notas,
+                        'mes'   => $mes,
                     ]);
             
                     return $pdf->setPaper('a4')->stream('Certificado de Promoción.pdf');

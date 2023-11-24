@@ -40,7 +40,7 @@
                         <td width="10%">
                         </td>
                         <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
-                            <p style style="line-height: 200%" class="text-justify"><br><br>
+                            <p style style="line-height: 200%" class="text-justify"><br>
                             De conformidad con lo prescrito en el Art. 197 del Reglamento General a la Ley Orgánica 
                             de Educación Intercultural y demás normativas vigentes, certifica que el/la estudiante
                             <strong>{{$data['nombres']}}</strong>, del <strong>{{$data['curso']}}: </strong> obtuvo las
@@ -51,40 +51,84 @@
                     </tr>
                 </tbody>
             </table>
-            <table width="100%" style="font-size:12px; border: 1px solid black;">
-                <thead>
-                    <tr style="border: 1px solid black;">
-                        <th class="text-center">ÁREA</th>
-                        <th class="text-center" style="border: 1px solid black;">ASIGNATURAS</th>
-                        <th colspan="2" class="text-center">CALIFICACIONES</th>
-                    </tr>
-                    <tr>
-                        <th colspan="2"></th>
-                        <th class="text-center" style="border: 1px solid black;">NÚMERO</th>
-                        <th class="text-center">LETRAS</th>
-                    </tr>
-                </thead>
+    </section>
+    <section>
+        <table cellpadding="0" cellspancing="0" width="100%" style="font-size:12px">
+        <tbody>                
+            <tr style="font-size:13px">  
+                <td width="10%">
+                </td>
+                <td width="86%">               
+                    <table width="100%" style="font-size:10px; border: 1px solid black;">
+                        <thead>
+                            <tr style="border: 1px solid black;">
+                                <th width="30%" class="text-center">ÁREA</th>
+                                <th width="30%" class="text-center" style="border: 1px solid black;">ASIGNATURAS</th>
+                                <th colspan="2" class="text-center">CALIFICACIONES</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2"></th>
+                                <th width="10%" class="text-center" style="border: 1px solid black;">NÚMERO</th>
+                                <th width="30%" class="text-center">LETRAS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($notas as $key => $record)
+                            @if ($record['area']!='')
+                            <tr>
+                                <td style="border: 1px solid black;" class="text-center">{{$record['area']}}</td>
+                                <td style="border: 1px solid black;" class="text-center">{{$record['materia']}}</td>
+                                <td style="border: 1px solid black;" class="text-center">{{$record['nota']}}</td>
+                                <td style="border: 1px solid black;">{{$record['letra']}}</td>
+                            </tr>
+                            @else
+                            <tr>
+                                <td colspan="2" style="border: 1px solid black;" class="text-center"><strong>PROMEDIO GENERAL</strong></td>
+                                <td style="border: 1px solid black;" class="text-center">{{$record['nota']}}</td>
+                                <td style="border: 1px solid black;">{{$record['letra']}}</td>
+                            </tr>
+                            @endif
+                            @endforeach
+                            <tr>
+                                <td colspan="2" style="border: 1px solid black;" class="text-center"><strong>EVALUACIÓN DEL COMPORTAMIENTO</strong></td>
+                                <td style="border: 1px solid black;" class="text-center"></td>
+                                <td style="border: 1px solid black;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td width="4%">
+                </td>
+            </tr>
+                            </tbody>
+        </table>
+    </section>
+    <section>
+            <table cellpadding="0" cellspacing="0" width="100%" style="font-size:12px">
                 <tbody>
-                @foreach ($notas as $key => $record)
-                    <tr>
-                        <td>{{$record['areas']}}</td>
-                        <td>{{$record['materia']}}</td>
-                        @if($record['escala_cualitativa']!='')
-                            {{$record['escala_cualitativa']}}
-                        @else
-                            {{$record['calificacion']}}
-                        @endif
+                    <tr style="font-size:13px">
+                        <td width="10%">
+                        </td>
+                        <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
+                            <p style="line-height: 200%" class="text-justify"><br>
+                            Por lo tanto es promovido/a al <strong>{{$data['curso_promovido']}}.</strong><br>
+                            Para constancia suscriben en unidad de acto <strong>{{$data['rector']}}</strong><br>
+                            Dado y firmado en:<br>
+                            Guayaquil, {{date('d',strtotime($data['emision']))}} de 
+                            {{$mes[date('m',strtotime($data['emision']))]}} de {{date('Y',strtotime($data['emision']))}}
+                            </p>
+                        </td>
+                        <td width="5%">
+                        </td>
                     </tr>
-                 @endforeach
                 </tbody>
             </table>
     </section>
-
     <div style="position: absolute;
       display: inline-block;
       bottom: 0;
       width: 100%;
-      height: 150px;">
+      height: 100px;">
         <section>
 
             <table cellpadding="0" cellspacing="0" class="" width="100%">
