@@ -31,6 +31,7 @@ class TmReportes extends Model
         'pagina',
         'fprorroga',
         'documento',
+        'matricula_id',
         'secretaria',
         'coordinador',
     ];

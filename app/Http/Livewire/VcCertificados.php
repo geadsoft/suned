@@ -9,6 +9,9 @@ use App\Models\TmServicios;
 use App\Models\TmMatricula;
 use App\Models\TmSedes;
 use App\Models\TmReportes;
+use App\Models\TrCalificacionesCabs;
+use App\Models\TrCalificacionesDets;
+use App\Models\TmAsignaturas;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Storage;
@@ -23,7 +26,7 @@ class VcCertificados extends Component
     public $tipoDoc="MF", $periodoId, $cursoId, $nombres, $nui="", $documento, $fecha, $folio=0, $matricula=0, $nomcurso="";
     public $periodo, $foto="", $rector, $secretaria, $coordinador, $bachilleren="", $nota=0, $escala=''; 
     public $dttitulo="", $dtnombre="", $dtinstitucion="", $dtcargo="", $dtfecha, $refrendacion=0, $pagina=0, $fprorroga, $documentos="";
-    public $especializacion="";
+    public $especializacion="",$paseCursoId,$matriculaId=0;
 
     public $mes = [
         1 => 'Enero',
@@ -89,6 +92,7 @@ class VcCertificados extends Component
 
     public function setPersona($idMatricula){
 
+        $this->matriculaId = $idMatricula;
         $tblmatricula    = TmMatricula::find($idMatricula);
         $this->documento =  $tblmatricula['documento'];
         $this->fecha     =  date('Y-m-d',strtotime($tblmatricula['fecha']));
@@ -235,6 +239,7 @@ class VcCertificados extends Component
                 'pagina' => $this->pagina,
                 'fprorroga' => date('Y-m-d',strtotime($this->fprorroga)),
                 'documento' => $this->documentos,
+                'matricula_id' => $this->matriculaId,
                 'rector' => $this->rector,
                 'secretaria' => $this->secretaria,
                 'coordinador' => $this->coordinador,
@@ -263,6 +268,7 @@ class VcCertificados extends Component
                 'pagina' => $this->pagina,
                 'fprorroga' => date('Y-m-d',strtotime($this->fprorroga)),
                 'documento' => $this->documentos,
+                'matricula_id' => $this->matriculaId,
                 'rector' => $this->rector,
                 'secretaria' => $this->secretaria,
                 'coordinador' => $this->coordinador,
@@ -280,8 +286,21 @@ class VcCertificados extends Component
 
     public function liveWirePDF($idReporte)
     { 
-        
-        $data = TmReportes::find($idReporte);
+        $sede  = TmSedes::orderBy('id','desc')->first();
+        $data  = TmReportes::find($idReporte);
+        $matricula = TmMatricula::find($data['matricula_id']);
+
+        $notas = TrCalificacionesDets::query()
+        ->join('tr_calificaciones_cabs as c','c.id','=','tr_calificaciones_dets.calificacioncab_id')
+        ->join('tm_asignaturas as a','a.id','=','c.asignatura_id')
+        ->join('tm_generalidades as g','g.id','=','a.area_id')
+        ->select('tr_calificaciones_dets.*','a.descripcion as materia','g.descripcion as area')
+        ->where('tr_calificaciones_dets.estudiante_id',$matricula['estudiante_id'])
+        ->where('c.periodo_id',$matricula['periodo_id'])
+        ->where('c.curso_id',$matricula['curso_id'])
+        ->get();
+
+        dd($matricula);
 
         $this->foto    = $data['identificacion'].'.jpg';
 
@@ -417,6 +436,17 @@ class VcCertificados extends Component
                 return $pdf->setPaper('a4')->stream('Certificado Subsecretaría y Distrito.pdf');
 
                 break;
+            case 'PP':
+
+                    $pdf = PDF::loadView('reports/certificado_promocion',[
+                        'data'  => $data,
+                        'sede'  => $sede,
+                        'notas' => $notas,
+                    ]);
+            
+                    return $pdf->setPaper('a4')->stream('Certificado de Promoción.pdf');
+    
+                    break;
         }
         
     }

@@ -18,6 +18,7 @@
                                 <option value="RR">Rezago con Refrendación</option>
                                 <option value="SD">Constancia Subsecretaria y Distrito</option>
                                 <option value="ND">No Constancia Subsecretaria y Distrito</option>
+                                <option value="PP">Promoción</option>
                             </select>
                         </div>
                         <div class="col-xxl-2 col-sm-4">
@@ -35,14 +36,55 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label" for="project-title-input">Estudiante</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="estudiante-input" placeholder="Nombres Completos"  wire:model="nombres" required>
-                            <a class="btn btn-info add-btn" wire:click="search()"><i class="ri-user-search-fill me-1 align-bottom"></i></a>
+                    @if($tipoDoc=='PP')
+                        <div class="row">
+                            <div class="col-xxl-2 mb-3">
+                                <label class="form-label" for="project-title-input">Emisión</label>
+                                <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="fecha" disabled> 
+                            </div>
+                            <div class="col-xxl-10 mb-3">
+                                <label class="form-label" for="project-title-input">Estudiante</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="estudiante-input" placeholder="Nombres Completos"  wire:model="nombres" required>
+                                    <a class="btn btn-info add-btn" wire:click="search()"><i class="ri-user-search-fill me-1 align-bottom"></i></a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-xxl-4 mb-3">
+                                <label class="form-label" for="project-title-input">Identificación</label>
+                                <input type="text" class="form-control" id="nui-input" wire:model="nui" disabled>
+                            </div>
+                            <div class="col-xxl-6 mb-3">
+                                <label class="form-label" for="project-title-input">Curso</label>
+                                <select class="form-select" name="cmbperiodo" wire:model="cursoId" disabled>
+                                    <option value="">-</option>
+                                    @foreach ($tblcursos as $curso)
+                                        <option value="{{$curso->id}}">{{$curso->descripcion}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xxl-6 mb-3">
+                                <label class="form-label" for="project-title-input">Promovido</label>
+                                <select class="form-select" name="cmbperiodo" wire:model="paseCursoId" required>
+                                    <option value="">-</option>
+                                    @foreach ($tblcursos as $curso)
+                                        <option value="{{$curso->id}}">{{$curso->descripcion}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    @else
                     <div class="row">
+                        <div class="mb-3">
+                            <label class="form-label" for="project-title-input">Estudiante</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="estudiante-input" placeholder="Nombres Completos"  wire:model="nombres" required>
+                                <a class="btn btn-info add-btn" wire:click="search()"><i class="ri-user-search-fill me-1 align-bottom"></i></a>
+                            </div>
+                        </div>
                         <div class="col-xxl-4 mb-3">
                             <label class="form-label" for="project-title-input">Identificación</label>
                             <input type="text" class="form-control" id="nui-input" placeholder="Identificación" wire:model="nui" required>
@@ -241,7 +283,7 @@
                             @endif
                         </div>
                     </div>
-
+                    @endif
                     <div class="card mb-3">
                         <div class="card-header">
                             <label class="form-label">Firman</label>
