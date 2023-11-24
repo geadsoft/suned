@@ -227,7 +227,7 @@
                                             @else
                                             
                                             <select class="form-select form-select-sm bg-light border-0" id="nota-{{$key}}" wire:model="tbldetalle.{{$key}}.escala" required> 
-                                                <option value="" selected>Seleccionar</option>    
+                                                <option value="NN"> - </option>    
                                                 <option value="EX">EX - Excelente</option>
                                                 <option value="MB">MB - Muy Bueno</option>
                                                 <option value="B">B - Bueno</option>

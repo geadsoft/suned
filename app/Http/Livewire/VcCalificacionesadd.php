@@ -127,7 +127,7 @@ class VcCalificacionesadd extends Component
             $detalle['nombres']   = $recno['nombres'];
             $detalle['fecha']     = $this->fecha;
             $detalle['nota']        = null;
-            $detalle['escala']      = "";
+            $detalle['escala']      = "NN";
             $detalle['observacion'] = "";
             array_push($this->tbldetalle, $detalle);
         }
