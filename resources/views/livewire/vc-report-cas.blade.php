@@ -7,14 +7,46 @@
                         <h5 class="card-title mb-0 flex-grow-1">Listado de Estudiantes</h5>
                         <div class="flex-shrink-0">
                             <a href="" wire:click.prevent="exportExcel()" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-file-excel-2-line align-bottom fs-22"></i></a>
-                            <!--<select class="form-select" name="cmbnivel" wire:model="filters.srv_periodo">
-                                <option value="">Seleccionar Periodo</option>
-                                @foreach ($tblperiodos as $periodo)
-                                    <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
-                                @endforeach
-                            </select>-->
                         </div>
                     </div>
+                </div>
+                <div class="card-body border border-dashed border-end-0 border-start-0">
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-xxl-2 col-sm-4">
+                                <div>
+                                    <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
+                                        <option value="">Seleccionar Grupo</option>
+                                        
+                                            <option value=""></option>
+                                            
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xxl-2 col-sm-4">
+                                <div>
+                                    <select class="form-select" name="cmbnivel" wire:model="filters.srv_periodo">
+                                        <option value="">Seleccionar Periodo</option>
+                                       
+                                            <option value=""></option>
+                                      
+                                    </select>
+                                </div>
+                            </div>
+                           
+                            <!--end col-->
+                            <div class="col-xxl-1 col-sm-4">
+                                <div>
+                                    <button type="button" class="btn btn-primary w-100" wire:click="deleteFilters()"> <i
+                                            class="ri-delete-bin-5-line me-1 align-bottom"></i>
+                                        Filters
+                                    </button>
+                                </div>
+                            </div>
+                            <!--end col-->
+                        </div>
+                        <!--end row-->
+                    </form>
                 </div>
             
         <!--end col-->
@@ -32,16 +64,19 @@
                     </div>
                 </div>-->
                 <div class="card-body">
+
                     <div>
                         <div class="table-responsive table-card mb-3">
                             <table class="table align-middle table-nowrap mb-0" id="customerTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
+                                        <th class="text-center"></th>
                                         <th class="text-center" colspan="6">Estudiante</th>
                                         <th class="text-center" colspan="6">Representate</th>
                                         <th class="text-center" colspan="3">Datos de Ingresos Cas</th>
                                     </tr>
                                     <tr class="text-uppercase">
+                                        <th>..</th>
                                         <th>CI</th>
                                         <th>Pasaporte</th>
                                         <th>Fecha Nacimiento</th>
@@ -60,8 +95,11 @@
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all">
-                                @foreach ($tblrecords as $record)
+                                @foreach ($tblrecords as $fil => $record)
                                     <tr> 
+                                        <td>
+                                            <input class="form-check-input" type="checkbox" id="chk-{{$fil}}"  wire:model="">
+                                        </td>
                                         @if ($record->tipoidentificacion=='C')
                                         <td>{{$record->identificacion}}</td>
                                         <td></td>
