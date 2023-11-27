@@ -68,7 +68,7 @@
                                                             </div>
                                                             <div class="col-lg-6 col-6 mb-3">
                                                                 <br>
-                                                                <table class="table table-nowrap align-middle">
+                                                                <table class="table table-borderless table-sm align-middle mb-0">
                                                                     <tr>
                                                                         <td><p class="text-muted mb-2 text-uppercase fw-semibold">Fecha de Entrega</p></td>
                                                                         <td><input type="date" class="form-control form-control-sm bg-light border-0" id="fechaEntrega" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fentrega"> </td>
@@ -152,7 +152,8 @@
                                                 <div class="col-lg-12">
                                                     <div class="card-body p-4">
                                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                                            <a href="javascript:window.print()" class="btn btn-danger"><i class="ri-printer-line align-bottom me-1"></i> Print</a>
+                                                            <button type="button" class="btn btn-danger w-sm" wire:click='print()'><i class="ri-printer-line align-bottom me-1"></i>Print</button>
+                                                            <!--<a href="javascript:window.print()" class="btn btn-danger"><i class="ri-printer-line align-bottom me-1"></i> Print</a>-->
                                                             <!--<a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download</a>-->
                                                             <button type="submit" class="btn btn-success"><i class="ri-printer-line align-bottom me-1"></i> Save Tuition</button>
                                                         </div>

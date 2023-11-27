@@ -20,10 +20,10 @@ use PDF;
 
 use Illuminate\Support\Facades\DB;
 
-class VcCertificados extends Component
+class VcPromocion extends Component
 {
     public $tblperiodo, $control="";
-    public $tipoDoc="MF", $periodoId, $cursoId, $nombres, $nui="", $documento, $fecha, $folio=0, $matricula=0, $nomcurso="";
+    public $tipoDoc="PP", $periodoId, $cursoId, $nombres, $nui="", $documento, $fecha, $folio=0, $matricula=0, $nomcurso="";
     public $periodo, $foto="", $rector, $secretaria, $coordinador, $bachilleren="", $nota=0, $escala=''; 
     public $dttitulo="", $dtnombre="", $dtinstitucion="", $dtcargo="", $dtfecha, $refrendacion=0, $pagina=0, $fprorroga, $documentos="";
     public $especializacion="",$paseCursoId,$matriculaId=0,$registrar;
@@ -87,7 +87,7 @@ class VcCertificados extends Component
             ->get();
         }
                 
-        return view('livewire.vc-certificados',[
+        return view('livewire.vc-promocion',[
             'tblperiodos' => $this->tblperiodos,
             'tblcursos' => $tblcursos,
         ]);

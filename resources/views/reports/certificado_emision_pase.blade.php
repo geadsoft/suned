@@ -55,7 +55,7 @@
                             y cultura en vigencia, exitiendo el pase reglamentado a favor del alumno (a) <strong>{{$data['nombres']}}</strong> (anexo 
                             notas correspondiente al primer quimestre)<br><br>
                             Agradezco de antemano, por la atención que se designe brindar a la presente, y me suscribo de usted.   
-                            <br><br><br><br><br><br>
+                            <br><br><br><br>
                             ATTE.<br>HONOR, PATRIA Y DISCIPLINA
                             </p>
                             </span>
@@ -112,10 +112,15 @@
                     </td>
                     <td width="90%">
                         <p style style="line-height: 200%" class="text-justify"><br><br><br><br><br><br>
-                        PASE REGLAMENTARIO DE COLEGIO "AMERICAN SCHOOL"<br><br>
-
+                        PASE REGLAMENTARIO DE LA {{$sede['nombre']}}<br><br>
+                        La {{$sede['nombre']}} por intermedio de los suscritos {{$data['rector']}} rector/a, luego de revisar los libros
+                        de control del alumnado de la institución certifican:<br><br>
+                        Que el alumno <strong>{{$data['nombres']}}</strong> se matriculo en el {{$data['curso']}}, jornada matutina, 
+                        periodo lectivo {{$data['periodo']}}, habiendose hecho acreedor a las siguientes calificaciones durante su 
+                        permanencia en este plantel.<br><br>
+                        Agradezco de antemano por la atención que se digne brindar a la presente, y me suscribo de usted.
                         </p>
-                       
+                        <p><strong>MATERIAS PROMEDIOS</strong></p>
                     </td>
                     <td width="5%">
                     </td>
@@ -123,6 +128,55 @@
             </tbody>
         </table>
     </section>
+    <section>
+        <table cellpadding="0" cellspacing="0" class="" width="100%" style="font-size:12px">
+            <tbody>
+                @foreach($notas as $recno)
+                <tr style="font-size:13px">
+                    <td width="5%"></td>
+                    <td style="text-transform: uppercase;">{{$recno['materia']}}</td>
+                    <td>{{$recno['calificacion']}}</td>
+                    <td width="40%"></td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </section>
+    <div style="position: absolute;
+      display: inline-block;
+      bottom: 0;
+      width: 100%;
+      height: 150px;">
+        <section>
+
+            <table cellpadding="0" cellspacing="0" class="" width="100%">
+                <tr style="font-size:12px">
+                    <td width="50%" class="text-center">
+                        <span><strong>________________________________</strong></span>
+                    </td>
+                    <td width="50%" class="text-center">
+                        <span><strong>________________________________</strong></span>
+                    </td>
+                </tr>
+                <tr style="font-size:13px">
+                    <td width="50%" class="text-center">
+                        <span>{{$data['rector']}}</span>
+                    </td>
+                    <td width="50%" class="text-center">
+                        <span>{{$data['secretaria']}}</span>
+                    </td>
+                </tr>
+                <tr style="font-size:13px">
+                    <td width="50%" class="text-center">
+                        <span><strong>RECTOR/A</strong></span>
+                    </td>
+                    <td width="50%" class="text-center">
+                        <span><strong>SECRETARIA</strong></span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </div>
 
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

@@ -188,9 +188,23 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/secretary/ratings">
+                    <a class="nav-link menu-link" href="#calificaciones" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsede">
                         <i class="ri-medal-2-fill fs-20"></i> <span>Calificaciones</span>
                     </a>
+                    <div class="collapse menu-dropdown" id="calificaciones">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/secretary/promotion">
+                                    <i class="ri-file-ppt-line fs-20"></i> <span>Certf. de Promoción</span>
+                                </a>    
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/secretary/ratings">
+                                    <i class="bx bxs-graduation fs-20"></i> <span>Calificaciones</span>
+                                </a>    
+                            </li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#documentacion" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsede">
@@ -275,7 +289,7 @@
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.config')</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/config/generality">
-                        <i class="las la-flask fs-20"></i> <span>@lang('translation.generality')</span>
+                        <i class="ri-tools-fill fs-20"></i> <span>@lang('translation.generality')</span>
                     </a>
                 </li>
 

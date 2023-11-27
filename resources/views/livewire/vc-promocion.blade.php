@@ -6,18 +6,8 @@
                 <div class="card-header">
                     <div class="row g-3">
                         <div class="col-xxl-4 col-sm-4">
-                            <select class="form-select" name="cmbperiodo" wire:model="tipoDoc">
-                                <option value="MF">Matricula con Folio</option>
-                                <option value="MA">Matricula</option>
-                                <option value="PA">Pasantias</option>
-                                <option value="CO">Conducta</option>
-                                <option value="AP">Aprovechamiento</option>
-                                <option value="PR">Pase Reglamentario</option>
-                                <option value="AR">Aceptacion Pase Reglamentario</option>
-                                <option value="ER">Emisión Pase Reglamentario</option>
-                                <option value="RR">Rezago con Refrendación</option>
-                                <option value="SD">Constancia Subsecretaria y Distrito</option>
-                                <option value="ND">No Constancia Subsecretaria y Distrito</option>
+                            <select class="form-select" name="cmbperiodo" wire:model="tipoDoc" disabled>
+                                <option value="PP">Certificado de Promoción</option>
                             </select>
                         </div>
                         <div class="col-xxl-2 col-sm-4">

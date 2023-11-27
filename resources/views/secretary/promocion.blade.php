@@ -12,11 +12,11 @@
             Secretaría
         @endslot
         @slot('title')
-            Certificados
+            Promocion
         @endslot
     @endcomponent
 
-    @livewire('vc-certificados')
+    @livewire('vc-promocion')
 
 @endsection
 @section('script')

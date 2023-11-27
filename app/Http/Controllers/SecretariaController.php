@@ -46,6 +46,11 @@ class SecretariaController extends Controller
         return view('secretary/solicitudes');
     }
 
+    public function promotion()
+    {
+        return view('secretary/promocion');
+    }
+
 
     /**
      * Show the form for creating a new resource.
