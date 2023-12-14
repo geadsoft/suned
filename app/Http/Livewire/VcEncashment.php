@@ -254,7 +254,7 @@ class VcEncashment extends Component
         ->leftJoin(DB::raw("(select sum(valor) as credito, deudacab_id
         from tr_deudas_dets d
         inner join tr_deudas_cabs c on c.id = d.deudacab_id
-        where d.fecha <= ".date('Ymd',strtotime($this->record['fecha']))." and cobro_id<> ".$selectId." and tipovalor = 'CR' and estado = '".$this->record['estado']."' and matricula_id = ".$this->record['matricula_id']."
+        where d.fecha <= ".date('Ymd',strtotime($this->record['fecha']))." and cobro_id<> ".$selectId." and tipovalor = 'CR' and d.estado = '".$this->record['estado']."' and matricula_id = ".$this->record['matricula_id']."
         group by deudacab_id) as p"),function($join){
             $join->on('p.deudacab_id', '=', 'tr_deudas_cabs.id');
         })
