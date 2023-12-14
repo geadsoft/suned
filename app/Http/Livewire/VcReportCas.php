@@ -4,6 +4,10 @@ namespace App\Http\Livewire;
 use App\Models\TmPersonas;
 use App\Models\TmGeneralidades;
 use App\Models\TmPeriodosLectivos;
+use App\Models\TmServicios;
+use App\Models\TmCursos;
+use App\Models\TrRegistrocasCab;
+use App\Models\TrRegistrocasDet;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -11,6 +15,9 @@ use Livewire\WithPagination;
 class VcReportCas extends Component
 {
     use WithPagination;
+
+    public $grupoId, $gradoId, $cursoId, $observacion;
+    public $tblgrupos, $tblgrados=[], $tblcursos=[], $ingCas=[];
 
     public $filters = [
         'srv_periodo' => '',
@@ -32,6 +39,10 @@ class VcReportCas extends Component
         $this->filters['srv_nombre'] = '';
 
         $this->tblperiodos = TmPeriodosLectivos::orderBy("periodo",'desc')->get();
+        $this->tblgrupos = Tmgeneralidades::where('superior',1)->get();
+        $this->grupoId = 2;
+        $this->updatedgrupoId();
+
     }
 
     public function render()
@@ -53,7 +64,7 @@ class VcReportCas extends Component
         'p.nombres as nomrepresentante','p.apellidos as aperepresentante','g2.descripcion as nacrepresentante',
         'p.direccion as dirrepresentante','p.telefono as telfrepresentante','p.parentesco as pariente')
         ->orderBy('apellidos','asc')
-        ->paginate(13);
+        ->paginate(10);
 
         return view('livewire.vc-report-cas',[
             'tblrecords'  => $tblrecords,
@@ -61,9 +72,66 @@ class VcReportCas extends Component
 
     }
 
+    public function addCAS($data){
+        
+        if (count($this->ingCas)==0){
+            array_push($this->ingCas,$data);
+        }else{
+
+            foreach ($this->ingCas as $cas){
+                if ($cas['id']!=$data['id']){
+                    array_push($this->ingCas,$data);
+                }
+            }
+
+        }
+       
+    }
+
+    
     public function paginationView(){
         return 'vendor.livewire.bootstrap'; 
     }
+
+    public function updatedgrupoId(){
+        
+        $this->tblgrados = TmServicios::where('modalidad_id',$this->grupoId)->get();
+
+    }
+
+    public function updatedgradoId(){
+        
+        $this->tblcursos = TmCursos::where('periodo_id',$this->filters['srv_periodo'])
+        ->where('servicio_id',$this->gradoId)
+        ->get();
+        
+    }
+
+    public function createData(){
+        
+        $this ->validate([
+            'grupoId'    => 'required',
+            'gradoId'    => 'required',
+            'periodoId'  => 'required',
+            'cursoId'    => 'required',
+        ]);
+
+        $tblcasCab = TrRegistrocasCab::Create([
+            'periodo_id' => $this -> periodoId,
+            'grupo_id' => $this -> grupoId,
+            'servicio_id' => $this -> gradoId,
+            'curso_id' => $this -> cursoId,
+            'observacion' => $this->observacion,
+            'usuario' => auth()->user()->name,
+        ]);
+        
+        $this->selectId = $tblcasCab['id'];
+
+
+
+    }
+
+
 
 
 }

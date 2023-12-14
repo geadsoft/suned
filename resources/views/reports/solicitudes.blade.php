@@ -24,7 +24,7 @@
                         <img src="../public/assets/images/AmericanSchooll.jpg" height="60px">
                     </td>
                     <td width="30%" class="text-center">
-                        <p style="line-height: 200%" class="text-justify" style="font-size:8px; margin-top:0; margin-bottom:0;">
+                        <p style="line-height: 200%" class="text-justify" style="font-size:8px; margin-top:0; margin-bottom:0; color:#0A385A;">
                             {{$sede['direccion']}}<br>
                             Telf.:{{$sede['telefono']}}<br>
                             {{$sede['email']}}
@@ -35,7 +35,7 @@
             </table>
             <br>
             <table cellpadding="0" cellspacing="0" class="" width="100%">
-                <tr style="font-size:12px">
+                <tr style="font-size:12px; color:#0A385A">
                     <td width="5%">
                     </td>
                     <td width="90%">
@@ -71,7 +71,7 @@
     <section>
         <table cellpadding="0" cellspancing="0" width="100%">
         <tbody>                
-            <tr style="font-size:11px">  
+            <tr style="font-size:11px; color:#0A385A">  
                 <td width="5%">
                 </td>
                 <td width="90%">               
@@ -159,7 +159,7 @@
     </section>
     <section>
         <table cellpadding="0" cellspacing="0" class="" width="100%">
-            <tr style="font-size:12px">
+            <tr style="font-size:12px; color:#0A385A">
                 <td width="5%">
                 </td>
                 <td width="90%">
@@ -202,7 +202,7 @@
             <td width="90%">
             
             <table>
-                <tr style="font-size:12px">
+                <tr style="font-size:12px; color:#0A385A">
                     <td width="50%" class="text-center">
                         <span><strong>________________________________</strong></span>
                     </td>
@@ -210,7 +210,7 @@
                        
                     </td>
                 </tr>
-                <tr style="font-size:12px">
+                <tr style="font-size:12px; color:#0A385A">
                     <td width="50%">
                         <span><strong>Firma</strong></span>
                     </td>
@@ -229,7 +229,7 @@
     <section>
         <br>
         <table cellpadding="0" cellspacing="0" class="" width="100%">
-            <tr style="font-size:12px">
+            <tr style="font-size:12px; color:#0A385A">
                 <td width="5%">
                 </td>
                 <td width="90%">
