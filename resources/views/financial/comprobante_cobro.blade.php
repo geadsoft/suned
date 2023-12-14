@@ -23,6 +23,9 @@
                     <img src="../public/assets/images/banner-ueas.jpg" height="100px">
                     <div class="text-center" style="position: absolute;top: 8%; left: 68%; transform: translate(-12%, -70%); font-size:15px;">
                     <strong>Recibo de Cobro No. {{$tblrecords['documento']}}</strong>
+                    @if ($tblrecords->estado=='A')
+                        <strong>ANULADO</strong>
+                    @endif
                     </div>
                 </td>        
             </tr>
@@ -44,7 +47,7 @@
                         </tr>
                         <tr>
                             <td class="text-left text-muted"><span style="font-size: 12px"><strong>Recaudador: {{$tblrecords->usuario}} </strong></span></td>
-                        </tr>
+                        </tr> 
                     </table>
                 </td>           
             <tr>

@@ -107,6 +107,8 @@ class VcPromocion extends Component
         $this->fecha     =  date('Y-m-d',strtotime($tblmatricula['fecha']));
         $this->cursoId   =  $tblmatricula->curso_id;
 
+        dd($tblmatricula);
+
         $objData = DB::Select("select truncate(rownr/100,0) + folio as folio, rownr, documento 
         from (
         SELECT (@row := @row + 1) as rownr,  t.documento, p.folio

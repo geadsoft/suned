@@ -32,10 +32,14 @@ class VcDocumentos extends Component
 
     public  function mount()
     {
-        $this->tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
+        $año   = date('Y');
+        $tblperiodos = TmPeriodosLectivos::where("periodo",$año)->first();
+
+
+        /*$this->tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();*/
         /*$this->tblgenerals = TmGeneralidades::where('superior',1)->get();*/
 
-        $this->filters['srv_periodo'] = $this->tblperiodos[0]['id'];
+        $this->filters['srv_periodo'] = $tblperiodos['id'];
     }
 
 

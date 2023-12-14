@@ -247,18 +247,18 @@ class VcEncashment extends Component
         sum(case when tipo = 'DES' then valor else 0 end) as descuento,
         deudacab_id, fecha, detalle
         from tr_deudas_dets d 
-        where  cobro_id = ".$selectId." and estado='P' 
+        where  cobro_id = ".$selectId." 
         group by deudacab_id,fecha, detalle) as d"),function($join){
             $join->on('d.deudacab_id', '=', 'tr_deudas_cabs.id');
         })
         ->leftJoin(DB::raw("(select sum(valor) as credito, deudacab_id
         from tr_deudas_dets d
         inner join tr_deudas_cabs c on c.id = d.deudacab_id
-        where d.fecha <= ".date('Ymd',strtotime($this->record['fecha']))." and cobro_id<> ".$selectId." and tipovalor = 'CR' and d.estado='P' and matricula_id = ".$this->record['matricula_id']."
+        where d.fecha <= ".date('Ymd',strtotime($this->record['fecha']))." and cobro_id<> ".$selectId." and tipovalor = 'CR' and matricula_id = ".$this->record['matricula_id']."
         group by deudacab_id) as p"),function($join){
             $join->on('p.deudacab_id', '=', 'tr_deudas_cabs.id');
         })
-        ->selectRaw("tr_deudas_cabs.referencia,d.fecha,d.detalle,ifnull(tr_deudas_cabs.debito-p.credito,tr_deudas_cabs.debito) as saldo,d.descuento,d.valor, tr_deudas_cabs.debito")
+        ->selectRaw("tr_deudas_cabs.referencia,d.fecha,d.detalle,ifnull(tr_deudas_cabs.debito-p.credito,tr_deudas_cabs.debito) as saldo,d.descuento,d.valor, tr_deudas_cabs.debito, tr_deudas_cabs.estado")
         ->get();             
         
         $pdf = PDF::loadView('financial/comprobante_cobro',[
