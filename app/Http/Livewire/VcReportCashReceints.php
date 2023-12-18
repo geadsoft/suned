@@ -238,7 +238,7 @@ class VcReportCashReceints extends Component
                 continue;
             }
             
-            $this->neto      = floatval($this->neto) + floatval($record['saldo']) + floatval($record['credito']);
+            $this->neto      = floatval($this->debito) - floatval($record['pagoant']) + floatval($record['desant']);
             $this->descuento = floatval($this->descuento) + floatval($record['descuento']);
             $this->pago      = floatval($this->pago)+ floatval($record['pago']);
         }
@@ -391,7 +391,7 @@ class VcReportCashReceints extends Component
                 continue;
             }
 
-            $this->neto      = floatval($this->neto) + floatval($record['saldo']) + floatval($record['credito']);
+            $this->neto      = floatval($this->debito) - floatval($record['pagoant']) + floatval($record['desant']);
             $this->descuento = floatval($this->descuento) + floatval($record['descuento']);
             $this->pago      = floatval($this->pago)+ floatval($record['pago']);
         
