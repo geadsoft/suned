@@ -135,8 +135,15 @@ class VcReportCashReceints extends Component
         group by deudacab_id,fecha, detalle, cobro_id) as d"),function($join){
             $join->on('d.cobro_id', '=', 'tr_cobros_cabs.id');
         })
-        /*->join("tr_deudas_dets","tr_deudas_dets.cobro_id","=","tr_cobros_cabs.id")*/
         ->join("tr_deudas_cabs","tr_deudas_cabs.id","=","d.deudacab_id")
+        ->leftjoin(DB::raw("(select sum(case when tipo in ('PAG','OTR') then valor else 0 end) as pagoant,
+        sum(case when tipo = 'DES' then valor else 0 end) as desant,
+        deudacab_id
+        from tr_deudas_dets d
+        where d.tipovalor = 'CR' and fecha < '".$this->filters['srv_fecha']."'
+        group by deudacab_id) as p"),function($join){
+            $join->on('p.deudacab_id', '=', 'tr_deudas_cabs.id');
+        })
         ->join("tm_matriculas","tm_matriculas.id","=","tr_deudas_cabs.matricula_id")
         ->join("tm_personas","tm_personas.id","=","tm_matriculas.estudiante_id")
         ->join("tm_cursos","tm_cursos.id","=","tm_matriculas.curso_id")
@@ -159,11 +166,10 @@ class VcReportCashReceints extends Component
             ['tr_cobros_cabs.tipo','CP'],
         ])
         ->select('tr_cobros_cabs.id','tr_cobros_cabs.documento', 'tm_personas.nombres', 'tm_personas.apellidos', 'tm_servicios.descripcion', 'tm_cursos.paralelo', 'detalle', 
-        'tipopago', 'saldo','credito', 'd.descuento', 'd.valor as pago',  'tr_cobros_cabs.usuario', 'tr_cobros_cabs.estado')
+        'tipopago', 'saldo','debito','credito', 'd.descuento', 'd.valor as pago',  'tr_cobros_cabs.usuario', 'tr_cobros_cabs.estado', 'p.pagoant', 'p.desant')
         ->orderBy('tr_cobros_cabs.fecha')
         ->get();
 
-    
         return $tblrecords;
 
     }

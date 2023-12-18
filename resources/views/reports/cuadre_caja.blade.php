@@ -66,7 +66,8 @@
                         @endif
                     </td>
                     <td>{{$record->tipopago}}</td>
-                    <td>{{number_format($record->saldo + $record->credito,2)}}</td>
+                    <!--<td>{{number_format($record->saldo + $record->credito,2)}}</td>-->
+                    <td>{{number_format($record->debito - $record->pagoant+$record->desant,2)}}</td>
                     <td>{{number_format($record->descuento,2)}}</td>
                     <td>{{number_format($record->pago,2)}}</td>
                     <td>{{$record->usuario}}</td>
