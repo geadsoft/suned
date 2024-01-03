@@ -119,6 +119,14 @@ class VcStatisticalGraphs extends Component
 
     }
 
+    public function updatedlnaniocobro() {
+        
+        $this->filters['aniocobro'] = intval($this->lnaniocobro);
+        $this->consulta();
+        $this->actualizaGraph();
+
+    }
+
     public function updatedlsfecha() {
         
         $this->filters['fecha'] = $this->lsfecha;
