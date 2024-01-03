@@ -46,7 +46,7 @@ class VcStatisticalGraphs extends Component
         
         $año   = date('Y');
         $tblgenerals = TmGeneralidades::where('superior',1)->first();
-        $tblperiodos = TmPeriodosLectivos::where("periodo",$año)->first();
+        $tblperiodos = TmPeriodosLectivos::where("estado",'A')->first();
 
         $this->filters['idperiodo'] = $tblperiodos['id'];
         $this->filters['idgrupo']   = $tblgenerals['id'];

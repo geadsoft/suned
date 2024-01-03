@@ -22,7 +22,7 @@ class VcModalSearch extends Component
     {
         $periodo = date('Y');
         /*$tblperiodo = TmPeriodosLectivos::orderBy('periodo','desc')->first()*/;
-        $tblperiodo = TmPeriodosLectivos::where('periodo',$periodo)->first();
+        $tblperiodo = TmPeriodosLectivos::where('estado','A')->first();
         $this->filters['srv_periodo'] = $tblperiodo['id'];
     }
     

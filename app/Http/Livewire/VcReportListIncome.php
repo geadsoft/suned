@@ -35,7 +35,7 @@ class VcReportListIncome extends Component
     public function mount(){
 
         $año = date('Y');
-        $dataperiodo = TmPeriodosLectivos::where("periodo",$año)->first();
+        $dataperiodo = TmPeriodosLectivos::where("estado",'A')->first();
         
         $ldateini = date('Y-m-d H:i:s');
         $ldatefin = date('Y-m-d H:i:s');

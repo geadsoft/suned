@@ -40,7 +40,7 @@ class VcReportCashReceints extends Component
         
         $año   = date('Y');
         $ldate = date('Y-m-d H:i:s');
-        $periodo = TmPeriodosLectivos::where("periodo",$año)->first();
+        $periodo = TmPeriodosLectivos::where("estado",'A')->first();
 
         $this->filters['srv_fecha'] = date('Y-m-d',strtotime($ldate));
         $this->filters['srv_periodo'] = $periodo['id'];

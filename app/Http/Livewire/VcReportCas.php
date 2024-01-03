@@ -34,7 +34,7 @@ class VcReportCas extends Component
     public  function mount()
     {
         $año   = date('Y');
-        $this->tblperiodos = TmPeriodosLectivos::where("periodo",$año)->first();
+        $this->tblperiodos = TmPeriodosLectivos::where("estado",'A')->first();
         $this->filters['srv_periodo'] = $this->tblperiodos['id'];
         $this->filters['srv_nombre'] = '';
 

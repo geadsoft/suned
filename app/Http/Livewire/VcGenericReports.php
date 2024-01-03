@@ -40,7 +40,7 @@ class VcGenericReports extends Component
         
         $año = date('Y');
         $ldate = date('Y-m-d H:i:s');
-        $periodo = TmPeriodosLectivos::where("periodo",$año)->first();
+        $periodo = TmPeriodosLectivos::where("estado",'A')->first();
         $this->tblgenerals = TmGeneralidades::where('superior',1)->get();
         $this->tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         $this->tblniveles  = TmGeneralidades::where('superior',2)->get();

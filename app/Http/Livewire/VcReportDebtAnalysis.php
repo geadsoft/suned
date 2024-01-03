@@ -52,7 +52,7 @@ class VcReportDebtAnalysis extends Component
         $año   = date('Y');
         $ldate = date('Y-m-d H:i:s');
         $tblgenerals = TmGeneralidades::where('superior',1)->first();
-        $tblperiodos = TmPeriodosLectivos::where("periodo",$año)->first();
+        $tblperiodos = TmPeriodosLectivos::where("estado",'A')->first();
 
         $this->filters['srv_periodoId'] = $tblperiodos['id'];
         $this->filters['srv_grupo'] = $tblgenerals['id'];
