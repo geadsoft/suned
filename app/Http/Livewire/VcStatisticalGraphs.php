@@ -38,7 +38,7 @@ class VcStatisticalGraphs extends Component
         8 => 'Agosto',
         9 => 'Septiembre',
         10=> 'Octubre',
-        11=> 'Novimebre',
+        11=> 'Noviembre',
         12=> 'Diciembre',
     ];
 
