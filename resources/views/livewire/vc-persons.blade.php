@@ -108,6 +108,7 @@
                                         <th class="sort" data-sort="phone" scope="col">Fecha Nacimiento</th>
                                         <th class="sort" data-sort="lead_score" scope="col">Nacionalidad</th>
                                         <th class="sort" data-sort="tags" scope="col">Teléfono</th>
+                                        <th class="sort" data-sort="tags" scope="col">Curso</th>
                                         <th scope="col">Acción</th>
                                     </tr>
                                 </thead>
@@ -119,13 +120,13 @@
                                                 <input class="form-check-input" type="checkbox" name="chk_child" value="option1">
                                             </div>
                                         </th>
-                                        
                                         <td>{{$record->identificacion}}</td>
                                         <td>{{$record->nombres}}</td>
                                         <td>{{$record->apellidos}}</td>
                                         <td>{{date('d/m/Y',strtotime($record->fechanacimiento))}}</td>
                                         <td>{{$record->nacionalidad->descripcion}}</td>
                                         <td>{{$record->telefono}}</td>
+                                        <td>{{$record->descripcion}}-{{$record->paralelo}}</td>
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
@@ -155,14 +156,14 @@
                                                                 @if ($filters['srv_estado']=='A')
                                                                     <a class="dropdown-item remove-item-btn"
                                                                         data-bs-toggle="modal"
-                                                                        href="" wire:click.prevent="delete({{ $record->estudiante_id }})">
+                                                                        href="" wire:click.prevent="delete({{$record->estudiante_id}},{{$record->matriculaId}})">
                                                                         <i class="ri-user-unfollow-line align-bottom me-2 text-muted fs-16"></i>
                                                                         Retirar Estudiante
                                                                     </a>
                                                                 @else
                                                                     <a class="dropdown-item remove-item-btn"
                                                                         data-bs-toggle="modal"
-                                                                        href="" wire:click.prevent="reintegrar({{ $record->estudiante_id }})">
+                                                                        href="" wire:click.prevent="reintegrar({{ $record->estudiante_id}},{{$record->matriculaId}})">
                                                                         <i class="ri-user-received-2-line me-2 text-muted fs-16"></i>
                                                                         Reintegrar Estudiante
                                                                     </a>

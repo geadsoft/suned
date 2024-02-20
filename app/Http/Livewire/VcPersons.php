@@ -22,7 +22,7 @@ class VcPersons extends Component
     use WithPagination;
     use Exportable;
 
-    public $datos, $estudiante, $selectId, $estado=false, $periodoOld;
+    public $datos, $estudiante, $selectId, $estado=false, $periodoOld, $matriculaId;
     public $resumenMatricula = [], $resumenNivel = [], $nivelestudio=[];
     public $filters = [
         'srv_nombre' => '',
@@ -82,6 +82,8 @@ class VcPersons extends Component
 
         $tblrecords = TmPersonas::query()
         ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
+        ->join("tm_cursos as c","c.id","=","m.curso_id")
+        ->join("tm_servicios as s","s.id","=","c.servicio_id")
         ->when($this->filters['srv_nombre'],function($query){
             return $query->whereRaw("concat(tm_personas.apellidos,' ',tm_personas.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
@@ -96,7 +98,7 @@ class VcPersons extends Component
         })
         ->where('tm_personas.tipopersona','=','E')
         ->where('m.estado',$this->filters['srv_estado'])
-        ->select('tm_personas.*','m.id as matriculaId','m.estudiante_id')
+        ->select('tm_personas.*','m.id as matriculaId','m.estudiante_id','s.descripcion','c.paralelo')
         ->orderBy('apellidos','asc')
         ->paginate(12);
 
@@ -139,12 +141,13 @@ class VcPersons extends Component
 
     }
 
-    public function delete($IdEstudiante){
+    public function delete($IdEstudiante, $IdMatricula){
         
         $tbldata = TmPersonas::find($IdEstudiante);
 
         $this->estudiante = $tbldata['apellidos'].' '.$tbldata['nombres'];
         $this->selectId   = $tbldata['id'];
+        $this->matriculaId = $IdMatricula;
 
         $this->dispatchBrowserEvent('show-delete');
     }
@@ -155,8 +158,7 @@ class VcPersons extends Component
         $record->update([
             'estado' => 'R',
         ]);*/
-        $matricula = TmMatricula::whereRaw('estudiante_id = '.$this->selectId.' and periodo_id = '.$this->filters['srv_periodo'])
-        ->get();
+        $matricula = TmMatricula::find($this->matriculaId);
 
         $matricula->update([
             'estado' => 'R',
@@ -165,12 +167,13 @@ class VcPersons extends Component
         $this->dispatchBrowserEvent('hide-delete');
     }
 
-    public function reintegrar($IdEstudiante){
+    public function reintegrar($IdEstudiante, $IdMatricula){
         
         $tbldata = TmPersonas::find($IdEstudiante);
 
         $this->estudiante = $tbldata['apellidos'].' '.$tbldata['nombres'];
         $this->selectId   = $tbldata['id'];
+        $this->matriculaId = $IdMatricula;
 
         $this->dispatchBrowserEvent('show-reintegrar');
     }
@@ -182,9 +185,7 @@ class VcPersons extends Component
             'estado' => 'A',
         ]);*/
 
-        $matricula = TmMatricula::whereRaw('estudiante_id = '.$this->selectId.' and periodo_id = '.$this->filters['srv_periodo'])
-        ->get();
-
+        $matricula = TmMatricula::find($this->matriculaId);
         $matricula->update([
             'estado' => 'A',
         ]);
