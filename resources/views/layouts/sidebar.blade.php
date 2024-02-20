@@ -292,7 +292,28 @@
                         <i class="ri-tools-fill fs-20"></i> <span>@lang('translation.generality')</span>
                     </a>
                 </li>
-
+                <a class="nav-link menu-link" href="#sidebaruser" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarreport">
+                    <i class="ri-menu-add-line fs-20"></i> <span>Usuarios</span>
+                </a>
+                <div class="collapse menu-dropdown" id="sidebaruser">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="/config/users">
+                                <i class="las la-user-tie fs-20"></i> <span>Usuarios</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="/config/rols">
+                                <i class="las la-suitcase-rolling fs-20"></i> <span>Roles</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="/config/permissions">
+                                <i class="las la-check-circle fs-20"></i> <span>Permisos</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </ul>
         </div>
         <!-- Sidebar -->

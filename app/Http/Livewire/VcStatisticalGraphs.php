@@ -92,7 +92,7 @@ class VcStatisticalGraphs extends Component
         ->get();
         
         $ingresos = TrCobrosCabs::query()
-        ->whereRaw('year(fecha) = '.$tblperiodos[0]->periodo.' and month(fecha) = '.$mesactual." and estado = 'P'")
+        ->whereRaw('year(fechapago) = '.$tblperiodos[0]->periodo.' and month(fechapago) = '.$mesactual." and estado = 'P'")
         ->get();
 
         $this->totalIngresos = $ingresos->sum('monto');

@@ -61,15 +61,21 @@
                                         
 
                                 <div class="mt-4">
-                                    <div class="d-flex align-items-center">
-                                        <div class="">
+                                    <div class="row align-items-center">
+                                        <div class="col-sm-2">
                                             <div class="mb-3">
                                                 <label for="txtfecha" class="form-label">Fecha de Emisión</label>
                                                 <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha" required> 
                                             </div>
                                         </div>
-                                        <div class="flex-grow-1">
-                                            <div class="mb-3 p-2">
+                                        <div class="col-sm-2">
+                                            <div class="mb-3">
+                                                <label for="txtfechap" class="form-label">Fecha de Pago</label>
+                                                <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fechapago" required> 
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 flex-grow-1">
+                                            <div class="mb-3">
                                                 <label for="cmbperiodo" class="form-label">Periodo Lectivo</label>
                                                 <select type="select" class="form-select" data-trigger name="cmbnivel" wire:model="periodo">
                                                     @foreach ($tblperiodos as $periodo) 

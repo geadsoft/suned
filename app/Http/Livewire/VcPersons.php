@@ -294,8 +294,10 @@ class VcPersons extends Component
 
         $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();       
         $anioant = TmPeriodosLectivos::where('periodo',$periodo['periodo']-1)->first();
-        $this->periodoOld  = $anioant['id'];
-           
+        if ($anioant != ''){
+            $this->periodoOld  = $anioant['id'];
+        }
+                   
         $tblrecords  = $this->estudiantes();
         $totalalumno = $tblrecords->count(); 
 
@@ -524,7 +526,9 @@ class VcPersons extends Component
 
         $periodo = TmPeriodosLectivos::find($this->filters['srv_periodo'])->toArray();       
         $anioant = TmPeriodosLectivos::where('periodo',$periodo['periodo']-1)->first();
-        $this->periodoOld  = $anioant['id'];
+        if ($anioant != ''){
+            $this->periodoOld  = $anioant['id'];
+        }
            
         $tblrecords = $this->estudiantes();
         $totalalumno = $tblrecords->count(); 

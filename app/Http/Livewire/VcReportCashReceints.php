@@ -22,6 +22,7 @@ class VcReportCashReceints extends Component
         'srv_periodo' => '',
         'srv_grupo' => '',
         'srv_fecha' => '',
+        'srv_fechapago' => '',
         'srv_nombre' => '',
 
     ];
@@ -43,6 +44,7 @@ class VcReportCashReceints extends Component
         $periodo = TmPeriodosLectivos::where("estado",'A')->first();
 
         $this->filters['srv_fecha'] = date('Y-m-d',strtotime($ldate));
+        $this->filters['srv_fechapago'] = '';
         $this->filters['srv_periodo'] = $periodo['id'];
         $this->filters['srv_grupo'] = '';
         $this->filters['srv_nombre'] = '';
@@ -95,6 +97,9 @@ class VcReportCashReceints extends Component
         })
         ->when($this->filters['srv_fecha'],function($query){
             return $query->where('tr_cobros_cabs.fecha',"{$this->filters['srv_fecha']}");
+        })
+        ->when($this->filters['srv_fechapago'],function($query){
+            return $query->where('tr_cobros_cabs.fechapago',"{$this->filters['srv_fechapago']}");
         })
         ->where([
             ['tr_deudas_dets.tipo','PAG'],

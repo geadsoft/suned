@@ -6,6 +6,7 @@
                     <form>
                         <div class="row g-3">
                             <div class="col-xxl-2 col-sm-4">
+                                <label for="lblgrupo" class="form-label badge bg-soft-primary text-dark form-control fs-12">Periodo Lectivo</label>
                                 <div>
                                     <select class="form-select" name="cmbperiodo" wire:model="filters.srv_periodo" id="cmbperiodo">
                                         <option value="">Select Period</option>
@@ -16,6 +17,7 @@
                                 </div>
                             </div>
                            <div class="col-xxl-2 col-sm-4">
+                                <label for="lblgrupo" class="form-label badge bg-soft-primary text-dark form-control fs-12">Modalidad</label>
                                 <div>
                                     <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo" id="cmbgrupo">
                                         <option value="">Todos</option>
@@ -27,12 +29,20 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-xxl-2 col-sm-4">
+                            <div class="col-xxl-2 col-sm-2">
+                                <label for="lblgrupo" class="form-label badge bg-soft-primary text-dark form-control fs-12">Fecha de Emisión</label>
                                 <div class="">
                                         <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.srv_fecha"> 
                                 </div>
                             </div>
+                            <div class="col-xxl-2 col-sm-2">
+                                <label for="lblgrupo" class="form-label badge bg-soft-primary text-dark form-control fs-12">Fecha de Pago</label>
+                                <div class="">
+                                        <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.srv_fechapago"> 
+                                </div>
+                            </div>
                             <div class="col-xxl-2 col-sm-4">
+                                <label for="lblconsultar" class="form-label text-white">.</label>
                                 <button type="button" class="btn btn-primary w-100" wire:click=""><i
                                         class="me-1 align-bottom"></i>Consultar
                                 </button>

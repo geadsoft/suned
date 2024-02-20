@@ -21,7 +21,7 @@ class VcEncashmentadd extends Component
     public $idbuscar="";
     public $nombre="";
     public $periodo_id;
-    public $fecha;
+    public $fecha, $fechapago;
     public $secuencia=0;
     public $tblCobro, $objPago=[];
     public $estudiante_id=0, $grupo, $curso, $concepto, $comentario, $matricula_id, $nromatricula;
@@ -37,6 +37,8 @@ class VcEncashmentadd extends Component
 
         $ldate = date('Y-m-d H:i:s');
         $this->fecha = date('Y-m-d',strtotime($ldate));
+        $this->fechapago = date('Y-m-d',strtotime($ldate));
+
 
         $tblmatricula  = TmMatricula::find($matriculaid);
         $tblpersona    = TmPersonas::find($tblmatricula['estudiante_id']);
@@ -86,6 +88,7 @@ class VcEncashmentadd extends Component
     public function createData(){
 
         $this->record['fecha'] = $this->fecha;
+        $this->record['fechapago'] = $this->fechapago;
         $this->dispatchBrowserEvent('save-det');
 
     }
@@ -211,6 +214,7 @@ class VcEncashmentadd extends Component
             'matricula_id' =>  $this->matricula_id,
             'tipo' => "CP",
             'documento' => $this -> document,
+            'fechapago' => $this -> record['fechapago'],
             'concepto' => 'Gestión de Cobro - Recibo No. '.$this -> document, 
             'monto' => $this -> record['monto'],
             'usuario' => auth()->user()->name,

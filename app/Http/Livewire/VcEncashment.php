@@ -24,7 +24,7 @@ class VcEncashment extends Component
     public $nombre="";
     public $selectpago = false;
 
-    public $documento, $concepto, $fecha, $identificacion, $estudiante, $curso, $grupo, $grado, $comentario, $estado, $nromatricula;
+    public $documento, $concepto, $fecha, $identificacion, $estudiante, $curso, $grupo, $grado, $comentario, $estado, $nromatricula, $fechapago;
 
     public $subtotal = 0;
     public $descuento = 0;
@@ -85,6 +85,7 @@ class VcEncashment extends Component
     public function loadData(){
 
         $this->fecha = date('Y-m-d',strtotime($this->record['fecha']));
+        $this->fechapago = date('Y-m-d',strtotime($this->record['fechapago']));
         $this->documento =  $this->record['documento'];
         $this->concepto = $this->record['concepto'];
         $this->identificacion = $this->record->estudiante->identificacion;

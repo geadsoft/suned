@@ -15,6 +15,7 @@ class TrCobrosCabs extends Model
         'matricula_id',
         'tipo',
         'documento',
+        'fechapago',
         'concepto',
         'monto',
         'estado',

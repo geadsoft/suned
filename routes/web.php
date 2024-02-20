@@ -27,6 +27,8 @@ use App\Http\Livewire\VcSolicitudes;
 Route::get('/headquarters/campus',[App\Http\Controllers\TmEmpresasController::class, 'index'])->name('index');
 Route::get('/config/generality',[App\Http\Controllers\TmGeneralidadesController::class, 'index'])->name('index');
 Route::get('/config/zone',[App\Http\Controllers\TmZonasController::class, 'index'])->name('index');
+Route::get('/config/rols',[App\Http\Controllers\RolesController::class, 'index'])->name('index');
+
 Route::get('/academic/course',[App\Http\Controllers\TmCursosController::class, 'course'])->name('course');
 Route::get('/academic/students',[App\Http\Controllers\TmPersonasController::class, 'index'])->name('index');
 Route::get('/academic/person-add',[App\Http\Controllers\TmPersonasController::class, 'addperson'])->name('addperson');

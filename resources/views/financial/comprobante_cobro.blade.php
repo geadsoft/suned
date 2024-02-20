@@ -34,7 +34,10 @@
                     
                     <table width="100%" cellpadding="0" cellspancing="0">
                         <tr>
-                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Fecha: {{date('d/m/Y',strtotime($tblrecords['fecha']))}} </strong></span></td>
+                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Fecha de Emision: {{date('d/m/Y',strtotime($tblrecords['fecha']))}} </strong></span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left text-muted"><span style="font-size: 12px"><strong>Fecha de Pago: {{date('d/m/Y',strtotime($tblrecords['fechapago']))}} </strong></span></td>
                         </tr>
                         <tr>
                             <td class="text-left text-muted"><span style="font-size: 12px"><strong>Estudiante: {{$tblrecords->estudiante->apellidos}} {{$tblrecords->estudiante->nombres}}</strong></span></td>

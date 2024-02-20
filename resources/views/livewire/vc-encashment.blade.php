@@ -85,9 +85,16 @@
                                     <div class="d-flex align-items-center">
                                         <div class="">
                                             <div class="mb-3">
-                                                <label for="txtfecha" class="form-label">Date Emisión</label>
+                                                <label for="txtfecha" class="form-label">Fecha de Emisión</label>
                                                 <input type="date" class="form-control border-0" id="txtfecha"
-                                                    placeholder="Enter first name" value="{{$fecha}}" disabled>
+                                                    placeholder="" value="{{$fecha}}" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <div class="mb-3 p-2">
+                                                <label for="txtfecha" class="form-label">Fecha de Pago</label>
+                                                <input type="date" class="form-control border-0" id="txtfecha"
+                                                    placeholder="" value="{{$fechapago}}" disabled>
                                             </div>
                                         </div>
                                         <div class="">
