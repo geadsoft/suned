@@ -156,7 +156,7 @@ class VcPersons extends Component
             'estado' => 'R',
         ]);*/
         $matricula = TmMatricula::whereRaw('estudiante_id = '.$this->selectId.' and periodo_id = '.$this->filters['srv_periodo'])
-        ->get()
+        ->get();
 
         $matricula->update([
             'estado' => 'R',
@@ -183,7 +183,7 @@ class VcPersons extends Component
         ]);*/
 
         $matricula = TmMatricula::whereRaw('estudiante_id = '.$this->selectId.' and periodo_id = '.$this->filters['srv_periodo'])
-        ->get()
+        ->get();
 
         $matricula->update([
             'estado' => 'A',
