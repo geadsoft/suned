@@ -6,6 +6,7 @@ use App\Models\TmPersonas;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmGeneralidades;
 use App\Models\TmCursos;
+use App\Models\TmMatricula;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -94,7 +95,7 @@ class VcPersons extends Component
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
         })
         ->where('tm_personas.tipopersona','=','E')
-        ->where('tm_personas.estado',$this->filters['srv_estado'])
+        ->where('m.estado',$this->filters['srv_estado'])
         ->select('tm_personas.*','m.id as matriculaId','m.estudiante_id')
         ->orderBy('apellidos','asc')
         ->paginate(12);
@@ -150,8 +151,14 @@ class VcPersons extends Component
 
     public function deleteData(){
         
-        $record = TmPersonas::find($this->selectId);
+        /*$record = TmPersonas::find($this->selectId);
         $record->update([
+            'estado' => 'R',
+        ]);*/
+        $matricula = TmMatricula::whereRaw('estudiante_id = '.$this->selectId.' and periodo_id = '.$this->filters['srv_periodo'])
+        ->get()
+
+        $matricula->update([
             'estado' => 'R',
         ]);
 
@@ -170,8 +177,15 @@ class VcPersons extends Component
 
     public function reintegrarData(){
         
-        $record = TmPersonas::find($this->selectId);
+        /*$record = TmPersonas::find($this->selectId);
         $record->update([
+            'estado' => 'A',
+        ]);*/
+
+        $matricula = TmMatricula::whereRaw('estudiante_id = '.$this->selectId.' and periodo_id = '.$this->filters['srv_periodo'])
+        ->get()
+
+        $matricula->update([
             'estado' => 'A',
         ]);
 
