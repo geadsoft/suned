@@ -51,7 +51,7 @@
                 <tr>
                     <th style="color:#FFFFFF">Estudiante</th>
                     <th style="color:#FFFFFF">Identificación</th>
-                    <th style="color:#FFFFFF">Usuario activo</th>
+                    <th style="color:#FFFFFF">Usuario</th>
                     <th style="color:#FFFFFF">Fecha de registro</th>
                 </tr>
             <thead>
@@ -74,8 +74,10 @@
                                 <td class="text-left">{{$recno['apellidos']}} {{$recno['nombres']}}</td>
                                 <td class="text-left">{{$recno['identificacion']}}</td>
                                 <td class="text-center">
-                                    @if ($recno['estado'] == 'A')
-                                        A
+                                    @if ($recno['status'] == 'A')
+                                        Activo
+                                    @else
+                                        Retirado     
                                     @endif
                                 </td>
                                 <td class="text-left">{{$dias[$recno['diapersona']]}}, {{date('d-M-Y h:m:s',strtotime($recno['created_at']))}}</td>
