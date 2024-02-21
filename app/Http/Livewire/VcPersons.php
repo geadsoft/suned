@@ -220,7 +220,7 @@ class VcPersons extends Component
         r.nombres as nomrepre, r.apellidos as aperepre, r.identificacion as idenrepre, r.parentesco as parenrepre,
         m.registro as tipomatricula, s.nivel_id")
         ->where('tm_personas.tipopersona','=','E')
-        ->where('tm_personas.estado',$this->filters['srv_estado'])
+        ->where('m.estado',$this->filters['srv_estado'])
         ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id,c.paralelo,apellidos asc')
         ->get();
 
