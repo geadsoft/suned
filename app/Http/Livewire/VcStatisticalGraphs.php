@@ -245,7 +245,7 @@ class VcStatisticalGraphs extends Component
         })
         ->select('tr_deudas_cabs.*')
         ->where('tr_deudas_cabs.estado','P')
-        ->where('p.estado','A')
+        ->where('m.estado','A')
         ->whereraw("left(tr_deudas_cabs.referencia,3)='PEN' and d.id is null")
         ->get();
         
