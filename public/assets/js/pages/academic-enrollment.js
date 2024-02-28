@@ -217,7 +217,7 @@ function editFamiliar(id,idpersona,nombres,apellidos,tipo,ident,genero,nacion,te
     pertelefono = telefono
     perrelacion = relacion
     peremail = email
-    perdireccion = direccion
+    perdireccion = direccion    
     
     document.getElementById("familiarid").value = personaid
     document.getElementById("nomfamiliar").value = pernombres
@@ -233,7 +233,6 @@ function editFamiliar(id,idpersona,nombres,apellidos,tipo,ident,genero,nacion,te
     document.getElementById("addfamily-btn").style.display = 'none'
     document.getElementById("editfamily-btn").style.display = ''
     
-
     document.getElementById("nomfamiliar").disabled = false
     document.getElementById("apefamiliar").disabled = false
     document.getElementById("tipfamiliar").disabled = false
@@ -275,9 +274,10 @@ function familyData() {
         perdireccion = document.getElementById("dirfamiliar").value
     }
    
-    var e = document.getElementById("perrelacion")
+    var e = document.getElementById("relfamiliar")
     var relacion = e.options[e.selectedIndex].value
-    if (perrelacion="NN" && relacion!=perrelacion){
+
+    if (perrelacion=="NN" && relacion!=perrelacion){
         perrelacion = relacion
     }
 
