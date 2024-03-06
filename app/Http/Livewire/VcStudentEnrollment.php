@@ -210,7 +210,7 @@ class VcStudentEnrollment extends Component
         foreach ($objPers as $person){
             
             if($person['idpersona']==0){
-                $this->grabaPerson($person)
+                $this->grabaPerson($person);
             }
 
         }
