@@ -179,9 +179,6 @@ class VcStudentEnrollment extends Component
         }
 
         $this->dispatchBrowserEvent('get-data');
-
-
-
     }
 
     public function postAdded($objData, $objPers)
@@ -208,6 +205,16 @@ class VcStudentEnrollment extends Component
             'estudiante_id' => 'required',
             'persona_id' => 'required',
         ]);
+        
+        /* Inicia Representante - No existe*/
+        foreach ($objPers as $person){
+            
+            if($person['idpersona']==0){
+                $this->grabaPerson($person)
+            }
+
+        }
+        /* Fin Representante */
 
         /* -- Registro de Matricula */
         $pLectivo     = TmPeriodosLectivos::find($this->periodoId);
@@ -328,13 +335,10 @@ class VcStudentEnrollment extends Component
         }
         /* Fin Familiar--*/
 
-        /* Inicia Representante */
+        /* Inicia Representante - Existe*/
         foreach ($objPers as $person){
-            
-            //Si no existe representante lo registra
-            if($person['idpersona']==0){
-                $this->grabaPerson($person);
-            }else{
+
+            if($person['idpersona']>0){
                 $this->updatePerson($person);
             }
 
