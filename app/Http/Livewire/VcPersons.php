@@ -22,7 +22,7 @@ class VcPersons extends Component
     use WithPagination;
     use Exportable;
 
-    public $datos, $estudiante, $selectId, $estado=false, $periodoOld, $matriculaId;
+    public $datos, $estudiante, $selectId, $estado=false, $periodoOld, $matriculaId, $registros;
     public $resumenMatricula = [], $resumenNivel = [], $nivelestudio=[];
     public $filters = [
         'srv_nombre' => '',
@@ -104,11 +104,13 @@ class VcPersons extends Component
 
         $this->datos = json_encode($this->filters);
 
+        $this->registros = $tblrecords->total();
+
         return view('livewire.vc-persons',[
-            'tblrecords' => $tblrecords,
+            'tblrecords'  => $tblrecords,
             'tblperiodos' => $tblperiodos,
             'tblgenerals' => $tblgenerals,
-            'tblcursos' => $tblcursos,
+            'tblcursos'   => $tblcursos,
         ]);
 
     }

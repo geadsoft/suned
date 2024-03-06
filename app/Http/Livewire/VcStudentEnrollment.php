@@ -180,6 +180,8 @@ class VcStudentEnrollment extends Component
 
         $this->dispatchBrowserEvent('get-data');
 
+
+
     }
 
     public function postAdded($objData, $objPers)
@@ -194,17 +196,6 @@ class VcStudentEnrollment extends Component
             $this->cursoId    = $data['cursoid'];
             $this->persona_id = $data['personaid'];
             
-        }
-
-        foreach ($objPers as $person){
-            
-            //Si no existe representante lo registra
-            if($person['idpersona']==0){
-                $this->grabaPerson($person);
-            }else{
-                $this->updatePerson($person);
-            }
-
         }
 
         $this ->validate([
@@ -336,6 +327,19 @@ class VcStudentEnrollment extends Component
 
         }
         /* Fin Familiar--*/
+
+        /* Inicia Representante */
+        foreach ($objPers as $person){
+            
+            //Si no existe representante lo registra
+            if($person['idpersona']==0){
+                $this->grabaPerson($person);
+            }else{
+                $this->updatePerson($person);
+            }
+
+        }
+        /* Fin Representante */
 
         $this->dispatchBrowserEvent('msg-grabar');
         return redirect()->to('/academic/tuition');

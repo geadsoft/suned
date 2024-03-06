@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-header border-0">
                     <div class="d-flex align-items-center">
-                        <h5 class="card-title mb-0 flex-grow-1">Registros de Estudiantes</h5>
+                        <h5 class="card-title mb-0 flex-grow-1"><i class="ri-team-fill align-middle me-2"></i> {{$registros}} Registros de Estudiantes</h5>
                         <div class="flex-shrink-0">
                         </div>
                     </div>
