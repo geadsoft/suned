@@ -5,6 +5,7 @@ use App\Models\TmGeneralidades;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmServicios;
 use App\Models\TmCursos;
+use App\Models\TrDeudasCabs;
 
 
 
@@ -13,7 +14,7 @@ use Livewire\Component;
 
 class VcSelectedCourse extends Component
 {
-    
+    public $estudiante_id;
     public $selectedCourse=null;
     public $periodoId;
     public $grupoId;
@@ -29,6 +30,12 @@ class VcSelectedCourse extends Component
         'gradoId' => 0,
         'seccionId' => 0,
     ];
+
+    public function mount($estudianteId){
+
+        $this->estudiante_id = $estudianteId;
+
+    }
 
     public function render()
     {   
@@ -47,6 +54,22 @@ class VcSelectedCourse extends Component
 
     public function updatedperiodoId($id){
         $this->datos['periodoId'] =  $id;
+
+        /* Mantiene Deuda */
+        $this->deudas = TrDeudasCabs::query()
+        ->join("tm_periodos_lectivos as p","p.id","=","tr_deudas_cabs.periodo_id")
+        ->selectRaw("p.descripcion, sum(saldo) as monto")
+        ->where("tr_deudas_cabs.estudiante_id",$this->estudiante_id)
+        ->where("tr_deudas_cabs.periodo_id","<>",$this->id)
+        ->groupBy("p.descripcion")
+        ->get()->toArray();
+
+        $montoDeuda = (array_sum(array_column($this->deudas,'monto')));
+
+        if ($montoDeuda>0 && $this->estudiante_id>0){
+            $this->dispatchBrowserEvent('show-deuda');
+        }
+        
     }
 
     public function updatednivelId($id){

@@ -26,7 +26,7 @@ class VcStudentEnrollment extends Component
     public $tipodiscapacidad, $discapacidad, $email="", $direccion="", $comentario="";
     public $periodoId, $grupoId, $nivelId, $gradoId, $cursoId, $datosFamiliar=0;
     public $fecha,$crearperson, $estudentnew=0, $mespension, $fControl='disabled'; 
-    public $familiares = [];
+    public $familiares = [], $deudas, $montoDeuda = 0;
     public $meses = [ 
         1 => 'ENE',
         2 => 'FEB',
@@ -95,7 +95,8 @@ class VcStudentEnrollment extends Component
         return view('livewire.vc-student-enrollment',[
             'tblgenerals' => $tblgenerals,
         ]);
-       
+        
+        
     }
 
     public function searchPerson($buscar){
@@ -139,6 +140,16 @@ class VcStudentEnrollment extends Component
                 $this->familiares =  $familys;
                 $this->datosFamiliar = 1;
             }
+            
+            /* Mantiene Deuda */
+            $this->deudas = TrDeudasCabs::query()
+            ->join("tm_periodos_lectivos as p","p.id","=","tr_deudas_cabs.periodo_id")
+            ->selectRaw("p.descripcion, sum(saldo) as monto")
+            ->where("tr_deudas_cabs.estudiante_id",$this->estudiante_id)
+            ->groupBy("p.descripcion")
+            ->get()->toArray();
+
+            $this->montoDeuda = (array_sum(array_column($this->deudas,'monto')));
 
         }else{
             
@@ -165,7 +176,7 @@ class VcStudentEnrollment extends Component
 
         if ($this->nombres=="" || $this->apellidos==""){
             return;
-        }
+       }
                
         if ($this->estudiante_id==0){
 
@@ -763,6 +774,5 @@ class VcStudentEnrollment extends Component
         $this->dispatchBrowserEvent('active-tab'); 
         
     }
-    
 
 }

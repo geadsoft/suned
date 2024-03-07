@@ -588,7 +588,9 @@
                                                     <div class="mb-3"> 
                                                         <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha">
                                                     </div> 
-                                                    @livewire('vc-selected-course')
+                                                    @livewire('vc-selected-course',[
+                                                            'estudianteId' => $estudiante_id, 
+                                                        ])
                                                     <div class="mb-3">    
                                                         <textarea type="text" class="form-control" id="txtcomentario" placeholder="Enter your Comment" wire:model.defer="comentario" {{$eControl}}>
                                                         </textarea>
@@ -764,6 +766,52 @@
                             <h4>Record not found</h4>
                             <p class="text-muted mx-4 mb-0">Verify the data entered.</p>
                         </div>
+                    </div>
+                    <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+                        <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">OK</button>
+                    </div>
+                </div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- Deuda Modal -->
+    <div wire.ignore.self id="messageDeuda" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-confirm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mt-2 text-center">
+
+                        <lord-icon
+                            src="https://cdn.lordicon.com/dnmvmpfk.json"
+                            trigger="loop"
+                            colors="primary:#f7b84b,secondary:#f06548"
+                            style="width:100px;height:100px">
+                        </lord-icon>
+                        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+                            <h4>Estudiante Mantiene Deudas</h4>
+                            <!--<p class="text-muted mx-4 mb-0">Verify the data entered.</p>-->
+                        </div>
+                        <table class="table align-middle table-nowrap mb-0" id="customerTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Periodo</th>
+                                <th scope="col">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($deudas as $deuda)  
+                            <tr>
+                                <td>{{$deuda['descripcion']}}</td>
+                                <td>{{number_format($deuda['monto'],2)}}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        </table>               
                     </div>
                     <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                         <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">OK</button>

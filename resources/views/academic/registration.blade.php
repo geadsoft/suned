@@ -27,10 +27,14 @@
     <script src="{{ URL::asset('assets/js/pages/academic-enrollment.js') }}"></script>
     
 
-    <script>
+    <script type="text/javascript">
        
         window.addEventListener('show-message', event => {
             $('#messageModal').modal('show');
+        })
+
+        window.addEventListener('show-deuda', event => {
+            $('#messageDeuda').modal('show');
         })
 
         window.addEventListener('msg-validanui', event => {
@@ -109,9 +113,7 @@
 
             Livewire.emit('postAdded',new_registro, new_persona);
         
-        })
-
-        
+        }) 
 
     </script>
     
