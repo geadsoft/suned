@@ -804,12 +804,14 @@
                             </tr>
                         </thead>
                         <tbody>
+                        @if(!is_null($deudas))
                             @foreach ($deudas as $deuda)  
                             <tr>
                                 <td>{{$deuda['descripcion']}}</td>
                                 <td>{{number_format($deuda['monto'],2)}}</td>
                             </tr>
                             @endforeach
+                        @endif
                         </tbody>
                         </table>               
                     </div>
