@@ -124,6 +124,9 @@
                                         <th class="sort" data-sort="">Estudiante</th>
                                         <th class="sort" data-sort="">Course</th>
                                         <th class="sort" data-sort="">Description</th>
+                                        @if ($tipo=='credito')
+                                        <th class="sort" data-sort="">Documento</th>
+                                        @endif 
                                         <th class="sort" data-sort="">Debito</th>
                                         <th class="sort" data-sort="">Descuento</th>
                                         <th class="sort" data-sort="">Credito</th>
@@ -137,6 +140,9 @@
                                         <td>{{$record->apellidos}} {{$record->nombres}}</td> 
                                         <td>{{$record->curso}} {{$record->paralelo}}</td> 
                                         <td>{{$record->glosa}}</td>
+                                        @if ($tipo=='credito')
+                                        <td>{{$record->referencia}}</td>
+                                        @endif 
                                         <td>{{number_format($record->debito,2)}}</td>
                                         <td>{{number_format($record->descuento,2)}}</td>
                                         <td>{{number_format($record->credito,2)}}</td>

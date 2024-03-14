@@ -82,43 +82,88 @@ class VcGenericReports extends Component
     }
 
     public function consulta(){
-               
-        $tblrecords = TrDeudasCabs::query()
-        ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
-        ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->join("tm_cursos as c","c.id","=","m.curso_id")
-        ->join("tm_servicios as s","s.id","=","c.servicio_id")
-        ->join("tm_generalidades as g","g.id","=","m.modalidad_id")   
-        ->when($this->filters['srv_periodo'],function($query){
-            return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
-        })
-        ->when($this->filters['srv_grupo'],function($query){
-            return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
-        })
-        ->when((int)$this->filters['srv_nivel']>0,function($query){
-            return $query->where('s.nivel_id',"{$this->filters['srv_nivel']}");
-        })
-        ->when($this->filters['srv_curso'],function($query){
-            return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
-        })
-        ->when($this->referencia,function($query){
-            return $query->whereRaw("left(tr_deudas_cabs.referencia,3) = '{$this->referencia}'");
-        })
-        ->where('p.estado','A')
-        ->whereRaw($this->tipo.$this->relacion.floatval($this->valor))
-        ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
-        'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo')
-        ->orderBy('p.apellidos')
-        ->orderBY('p.nombres')
-        ->orderBy('tr_deudas_cabs.fecha')
-        ->paginate(15);
-         
-        $this->filters['srv_referencia'] = $this->referencia;
-        $this->filters['srv_tipo']       = $this->tipo;
-        $this->filters['srv_relacion']   = $this->relacion;
-        $this->filters['srv_valor']      = $this->valor;
         
-        $this->datos = json_encode($this->filters);
+        if ($this->tipo!='credito') {
+
+            $tblrecords = TrDeudasCabs::query()
+            ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
+            ->join("tm_personas as p","p.id","=","m.estudiante_id")
+            ->join("tm_cursos as c","c.id","=","m.curso_id")
+            ->join("tm_servicios as s","s.id","=","c.servicio_id")
+            ->join("tm_generalidades as g","g.id","=","m.modalidad_id")   
+            ->when($this->filters['srv_periodo'],function($query){
+                return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
+            })
+            ->when($this->filters['srv_grupo'],function($query){
+                return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
+            })
+            ->when((int)$this->filters['srv_nivel']>0,function($query){
+                return $query->where('s.nivel_id',"{$this->filters['srv_nivel']}");
+            })
+            ->when($this->filters['srv_curso'],function($query){
+                return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
+            })
+            ->when($this->referencia,function($query){
+                return $query->whereRaw("left(tr_deudas_cabs.referencia,3) = '{$this->referencia}'");
+            })
+            ->where('p.estado','A')
+            ->whereRaw($this->tipo.$this->relacion.floatval($this->valor))
+            ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
+            'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo')
+            ->orderBy('p.apellidos')
+            ->orderBY('p.nombres')
+            ->orderBy('tr_deudas_cabs.fecha')
+            ->paginate(15);
+            
+            $this->filters['srv_referencia'] = $this->referencia;
+            $this->filters['srv_tipo']       = $this->tipo;
+            $this->filters['srv_relacion']   = $this->relacion;
+            $this->filters['srv_valor']      = $this->valor;
+            
+            $this->datos = json_encode($this->filters);
+
+        } else {
+
+            $tblrecords = TrDeudasCabs::query()
+            ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
+            ->join("tr_deudas_dets as dt","dt.deudacab_id","=","tr_deudas_cabs.id")
+            ->join("tm_personas as p","p.id","=","m.estudiante_id")
+            ->join("tm_cursos as c","c.id","=","m.curso_id")
+            ->join("tm_servicios as s","s.id","=","c.servicio_id")
+            ->join("tm_generalidades as g","g.id","=","m.modalidad_id")   
+            ->when($this->filters['srv_periodo'],function($query){
+                return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
+            })
+            ->when($this->filters['srv_grupo'],function($query){
+                return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
+            })
+            ->when((int)$this->filters['srv_nivel']>0,function($query){
+                return $query->where('s.nivel_id',"{$this->filters['srv_nivel']}");
+            })
+            ->when($this->filters['srv_curso'],function($query){
+                return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
+            })
+            ->when($this->referencia,function($query){
+                return $query->whereRaw("left(tr_deudas_cabs.referencia,3) = '{$this->referencia}'");
+            })
+            ->where('p.estado','A')
+            ->where('dt.tipo','PAG')
+            ->whereRaw('dt.valor '.$this->relacion.floatval($this->valor))
+            ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
+            'c.paralelo','tr_deudas_cabs.glosa','dt.referencia','debito','credito','descuento','saldo')
+            ->orderBy('p.apellidos')
+            ->orderBY('p.nombres')
+            ->orderBy('tr_deudas_cabs.fecha')
+            ->paginate(15);
+            
+            $this->filters['srv_referencia'] = $this->referencia;
+            $this->filters['srv_tipo']       = $this->tipo;
+            $this->filters['srv_relacion']   = $this->relacion;
+            $this->filters['srv_valor']      = $this->valor;
+            
+            $this->datos = json_encode($this->filters);
+
+        }
 
         return $tblrecords;
     }
