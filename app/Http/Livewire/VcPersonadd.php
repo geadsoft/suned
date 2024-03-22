@@ -87,7 +87,7 @@ class VcPersonadd extends Component
 
             $this->plectivo   = TmPeriodosLectivos::find($matricula['periodo_id']);
             $this->search_nui = $personas['identificacion'];
-            $this->representante    = TmPersonas::find($matricula['representante_id']);
+            $this->representante    = TmPersonas::find($matricula['representante_id'])->toArray();
             $this->nuirepresentante = $this->representante['identificacion'];
             $this->searchPerson();  
 
