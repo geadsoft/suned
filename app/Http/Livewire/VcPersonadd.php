@@ -84,8 +84,11 @@ class VcPersonadd extends Component
             $matricula = TmMatricula::find($tuition_id);
             $personas  = TmPersonas::find($matricula['estudiante_id']);
 
+
             $this->plectivo   = TmPeriodosLectivos::find($matricula['periodo_id']);
             $this->search_nui = $personas['identificacion'];
+            $this->representante    = TmPersonas::find($matricula['representante_id']);
+            $this->nuirepresentante = $this->representante['identificacion'];
             $this->searchPerson();  
 
         }else{
@@ -180,8 +183,8 @@ class VcPersonadd extends Component
         ->orderBy('fecha','desc')
         ->first();
 
-        $this->representante    = $familys[0];
-        $this->nuirepresentante = $familys[0]['identificacion'];
+        /*$this->representante    = $familys[0];
+        $this->nuirepresentante = $familys[0]['identificacion'];*/
         $this->comentario       = $this->matricula['comentario'];
 
 
