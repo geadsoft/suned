@@ -370,7 +370,7 @@ class VcPersonadd extends Component
         }
 
         //Representante
-        $record = TmPersonas::find($this->representante['persona_id']);
+        $record = TmPersonas::find($this->representante['id']);
         $record->update([
             'nombres'   => $this->representante['nombres'],
             'apellidos' => $this->representante['apellidos'],
