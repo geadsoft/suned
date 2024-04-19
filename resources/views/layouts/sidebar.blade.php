@@ -90,17 +90,17 @@
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="/headquarters/headquarters-add">
-                                <i class="las la-address-card fs-20"></i> <span>@lang('translation.headquarter')</span>
+                                <i class="mdi mdi-*-* mdi-bank-check fs-20"></i> <span>@lang('translation.headquarter')</span>
                             </a>    
                         </li>
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="/headquarters/educational-services">
-                                <i class="las la-chalkboard fs-20"></i> <span>@lang('translation.services')</span>
+                                <i class="mdi mdi-*-* mdi-cart fs-20"></i> <span>@lang('translation.services')</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="/headquarters/pension">
-                                <i class="las la-chalkboard fs-20"></i> <span>@lang('translation.charges')</span>
+                                <i class="mdi mdi-*-* mdi-layers fs-20"></i> <span>@lang('translation.charges')</span>
                             </a>
                         </li>
                     </ul>
@@ -166,6 +166,47 @@
                         <i class="las la-donate fs-20"></i> <span>Registrar Cobro</span>
                     </a>
                 </li>
+                <a class="nav-link menu-link" href="#comprobantes" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsede">
+                    <i class="mdi mdi-*-* mdi-gesture-double-tap fs-20"></i> <span>Doc. Electronicos</span>
+                </a>
+                <div class="collapse menu-dropdown" id="comprobantes">
+                    <ul class="nav nav-sm flex-column">
+                        <a class="nav-link menu-link" href="#Factura" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsede">
+                            <i class="mdi mdi-*-* mdi-filter-variant-plus fs-20"></i> <span>Facturas</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="Factura">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link menu-link" href="/sri/create-invoice">
+                                        <span>Nuevo</span>
+                                    </a>    
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link menu-link" href="/sri/invoices">
+                                        <span>Todos</span>
+                                    </a>    
+                                </li>
+                            </ul>
+                        </div>
+                        <a class="nav-link menu-link" href="#NCredito" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsede">
+                            <i class="mdi mdi-*-* mdi-filter-variant-minus fs-20"></i> <span>Notas de Créditos</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="NCredito">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link menu-link" href="/headquarters/staff">
+                                        <span>Nuevo</span>
+                                    </a>    
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link menu-link" href="">
+                                        <span>Todos</span>
+                                    </a>    
+                                </li>
+                            </ul>
+                        </div>
+                    </ul>
+                </div>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/financial/account-status">
                         <i class="las la-archive fs-20"></i> <span>@lang('translation.statement-of-account')</span>

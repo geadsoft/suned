@@ -13,13 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('tr_cobros_cabs', function (Blueprint $table) {
-            $table->datetime('fechapago')->after('documento')->nullable();
+        Schema::table('tr_deudas_dets', function (Blueprint $table) {
+            $table->boolean('facturado')->after('estado')->default(false);
         });
-
     }
-
-
 
     /**
      * Reverse the migrations.
@@ -28,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('tr_cobros_cabs', function (Blueprint $table) {
-            $table->dropColumn('fechapago');
+        Schema::table('tr_deudas_dets', function (Blueprint $table) {
+            $table->dropColumn('facturado');
         });
     }
 };

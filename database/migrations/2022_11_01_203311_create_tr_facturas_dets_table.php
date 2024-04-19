@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('facturacab_id')->unsigned();
             $table->foreign('facturacab_id')->references('id')->on('tr_facturas_cabs');
             $table->integer('linea');
-            $table->string('cobro_id',15);
+            $table->integer('deudadet_id')->default(0);
             $table->string('descripcion',100);
             $table->string('unidad',3);
             $table->double('cantidad',14,2);

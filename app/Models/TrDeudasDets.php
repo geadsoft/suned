@@ -19,6 +19,7 @@ class TrDeudasDets extends Model
         'tipovalor',
         'valor',
         'estado',
+        'facturado',
         'usuario',
     ];
 

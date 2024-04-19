@@ -26,7 +26,7 @@
                                     <li class="list-inline-item edit" data-bs-toggle="tooltip"
                                         data-bs-trigger="hover" data-bs-placement="top" title="Seleccionar">
                                     <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="" 
-                                        wire:click="setDocente({{$data['id']}})">
+                                        wire:click="setPersona({{$data['id']}},{{$data['estudiante_id']}})">
                                         <i class="ri-arrow-right-fill me-1 align-bottom fs-16 text-success"></i>
                                     </a>
                                     </li>

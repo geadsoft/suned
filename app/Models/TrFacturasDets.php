@@ -12,9 +12,10 @@ class TrFacturasDets extends Model
     protected $fillable = [
         'periodo',
         'mes',
-        'factura_id',
+        'facturacab_id',
         'linea',
-        'cobro_id',
+        'deudadet_id',
+        'codigo',
         'descripcion',
         'unidad',
         'cantidad',

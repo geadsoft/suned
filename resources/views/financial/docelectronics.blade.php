@@ -14,11 +14,11 @@
             SRI
         @endslot
         @slot('title')
-            Nueva Factura
+            Facturas
         @endslot
     @endcomponent
-
-    @livewire('vc-createinvoice')
+    
+    @livewire('vc-doc-electronics')
 
 @endsection
 @section('script')
@@ -28,18 +28,12 @@
 
     <script>
 
-        let url = "https://azur.com.ec/plataforma/api/v2/factura/emision";
-    
         window.addEventListener('show-form', event => {
             $('#showCliente').modal('show');
         })
 
         window.addEventListener('hide-form', event => {
             $('#showCliente').modal('hide');
-        })
-
-        window.addEventListener('msg-grabar', event => {
-            swal("Buen Trabajo!", "Registro grabado con éxito!", "success");
         })
 
         window.addEventListener('msg-ride', event => {

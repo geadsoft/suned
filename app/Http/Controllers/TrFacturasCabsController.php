@@ -17,6 +17,11 @@ class TrFacturasCabsController extends Controller
         return view('/financial/createinvoice');
     }
 
+    public function documents()
+    {
+        return view('/financial/docelectronics');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

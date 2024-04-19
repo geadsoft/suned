@@ -17,9 +17,13 @@ class TrFacturasCabs extends Model
         'establecimiento',
         'puntoemision',
         'documento',
+        'autorizacion',
         'persona_id',
+        'periodo_id',
+        'estudiante_id',
+        'formapago',
+        'dias',
         'plazo',
-        'tipo_plazo',
         'subtotal_grabado',
         'subtotal_nograbado',
         'subtotal_nosujeto',
@@ -32,4 +36,12 @@ class TrFacturasCabs extends Model
         'docelectronico',
         'usuario',
     ];   
+
+    public function persona(){
+        return $this->belongsTo('App\Models\TmPersonas');
+    }
+
+    public function estudiante(){
+        return $this->belongsTo('App\Models\TmPersonas');
+    }
 }

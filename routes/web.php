@@ -12,6 +12,7 @@ use App\Http\Livewire\VcPersons;
 use App\Http\Livewire\VcCertificados;
 use App\Http\Livewire\VcRatingsDetail;
 use App\Http\Livewire\VcSolicitudes;
+use App\Http\Livewire\VcGeneraXML;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +44,6 @@ Route::get('/headquarters/educational-services',[App\Http\Controllers\TmServicio
 Route::get('/financial/encashment/{id}',[App\Http\Controllers\TrCobrosCabsController::class, 'viewtuition'])->name('viewtuition');
 Route::get('/financial/encashment',[App\Http\Controllers\TrCobrosCabsController::class, 'loadtuition'])->name('loadtuition');
 Route::get('/financial/encashment-add/{periodoid}/{matriculaid}',[App\Http\Controllers\TrCobrosCabsController::class, 'addencashment'])->name('addescashment');
-Route::get('/financial/create-invoice',[App\Http\Controllers\TrFacturasCabsController::class, 'index'])->name('index');
 Route::get('/report/box-balance',[App\Http\Controllers\TrCobrosCabsController::class, 'cuadrecaja'])->name('cuadrecaja');
 Route::get('/report/daily-charges',[App\Http\Controllers\TrCobrosCabsController::class, 'cobrosdiarios'])->name('cobrosdiarios');
 Route::get('/financial/account-status',[App\Http\Controllers\TmMatriculaController::class, 'estadocuenta'])->name('estadocuenta');
@@ -66,6 +66,8 @@ Route::get('/secretary/report-cas',[App\Http\Controllers\SecretariaController::c
 Route::get('/secretary/titles-file',[App\Http\Controllers\SecretariaController::class, 'titlesFile'])->name('titlesFile');
 Route::get('/secretary/requests',[App\Http\Controllers\SecretariaController::class, 'requests'])->name('requests');
 Route::get('/secretary/promotion',[App\Http\Controllers\SecretariaController::class, 'promotion'])->name('promotion');
+Route::get('/sri/create-invoice',[App\Http\Controllers\TrFacturasCabsController::class, 'index'])->name('index');
+Route::get('/sri/invoices',[App\Http\Controllers\TrFacturasCabsController::class, 'documents'])->name('documents');
 
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
@@ -95,12 +97,14 @@ Route::get('/preview-pdf/ratings/{data}',[VcRatingsDetail::class, 'printPDF']);
 Route::get('/download-pdf/ratings/{data}',[VcRatingsDetail::class, 'downloadPDF']);
 Route::get('/preview-pdf/requests',[VcSolicitudes::class, 'printPDF']);
 
+Route::get('/invoice/genera/{id}',[VcGeneraXML::class, 'setGeneraXML']);
+Route::get('/invoice/ride-pdf/{id}',[VcGeneraXML::class, 'ImprimeRide']);
+
 Auth::routes();
 //Language Translation
 Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
-
 
 //Update User Details
 Route::post('/update-profile/{id}', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('updateProfile');
