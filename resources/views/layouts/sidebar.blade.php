@@ -222,6 +222,26 @@
                         <i class="las la-archive"></i> <span>@lang('translation.create_invoice')</span>
                     </a>
                 </li>-->
+                <li class="menu-title"><i class="ri-more-fill"></i> <span>Inventario</span></li>
+                <a class="nav-link menu-link" href="#productos" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsede">
+                    <i class="ri-shopping-cart-2-line fs-20"></i> <span>Productos & Servicios</span>
+                </a>
+                <div class="collapse menu-dropdown" id="productos">
+                    <ul class="nav nav-sm flex-column">
+                        <a class="nav-link menu-link" href="/secretary/certificate">
+                            <i class="ri-price-tag-3-line fs-20"></i> <span>Catálogo</span>
+                        </a>
+                        <a class="nav-link menu-link" href="/secretary/certificate">
+                            <i class="ri-add-circle-line fs-20"></i> <span>Ingresos</span>
+                        </a>
+                        <a class="nav-link menu-link" href="/secretary/certificate">
+                            <i class=" ri-indeterminate-circle-line fs-20"></i> <span>Salidas</span>
+                        </a>
+                        <a class="nav-link menu-link" href="/secretary/certificate">
+                            <i class="ri-swap-line fs-20"></i> <span>Kardex</span>
+                        </a>
+                    </ul>
+                </div>
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>Secretaria</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/secretary/certificate">

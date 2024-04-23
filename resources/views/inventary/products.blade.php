@@ -9,23 +9,19 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Headquarters
+            Inventario
         @endslot
         @slot('title')
-            Education Services
+            Productos
         @endslot
     @endcomponent
 
-    @livewire('vc-products')
+    @livewire('vc-services')
 
 @endsection
 @section('script')
-    <script src="{{ URL::asset('assets/libs/list.js/list.js.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>
-
     <!--ecommerce-customer init js -->
     <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
     <script>
