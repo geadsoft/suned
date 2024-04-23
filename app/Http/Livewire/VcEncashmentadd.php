@@ -39,7 +39,7 @@ class VcEncashmentadd extends Component
         $this->fecha = date('Y-m-d',strtotime($ldate));
         $this->fechapago = date('Y-m-d',strtotime($ldate));
 
-
+        
         $tblmatricula  = TmMatricula::find($matriculaid);
         $tblpersona    = TmPersonas::find($tblmatricula['estudiante_id']);
 

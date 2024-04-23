@@ -104,7 +104,7 @@ class VcDocElectronics extends Component
         }
 
         curl_close($ch);
-        $this->grabaXML();
+        /*$this->grabaXML($firmados);*/
         
     }
 
@@ -112,10 +112,8 @@ class VcDocElectronics extends Component
 
         foreach($data as $key){
 
-            dd($key);
-
             $curl = $key['xml'];
-            curl_exec($curl);
+            return redirect($curl);
 
         }
 

@@ -53,7 +53,7 @@ class VcDetailinvoice extends Component
         ->select('d.*','c.referencia')
         ->where('d.tipo','PAG')
         ->where('d.estado','P')
-        ->whereRaw('f.deudadet_id is null')
+        ->whereRaw('f.deudadet_id is null and d.facturado = 0')
         ->get();
 
         $this->addDetalle();
@@ -140,7 +140,7 @@ class VcDetailinvoice extends Component
                 'usuario' => auth()->user()->name,
             ]);
             
-            $record = TrFacturasDets::find($recno['deudadet_id']);
+            $record = TrDeudasDets::find($recno['deudadet_id']);
             $record->update([
                 'facturado' => true,
             ]);
