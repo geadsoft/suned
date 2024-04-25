@@ -13,7 +13,7 @@ class TmProductosController extends Controller
 
     public function add()
     {
-        return view('inventary/products-add');
+        return view('inventary/productsadd',['id' => 0]);
     }
 
     public function edit()
@@ -21,14 +21,14 @@ class TmProductosController extends Controller
         return view('inventary/products-edit');
     }
 
-    public function input()
+    public function register()
     {
-        return view('products/input');
+        return view('inventary/registers');
     }
 
-    public function output()
+    public function movements()
     {
-        return view('products/output');
+        return view('inventary/movements');
     }
 
     public function kardex()

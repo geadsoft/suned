@@ -11,8 +11,10 @@ class TmProductos extends Model
     protected $primaryKey = "id";
     protected $fillable = [
         'codigo',
+        'nombre',
         'descripcion',
-        'unidad'
+        'unidad',
+        'talla',
         'categoria_id',
         'tipo',
         'tipo_iva',

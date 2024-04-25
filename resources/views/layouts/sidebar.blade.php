@@ -228,15 +228,28 @@
                 </a>
                 <div class="collapse menu-dropdown" id="productos">
                     <ul class="nav nav-sm flex-column">
-                        <a class="nav-link menu-link" href="/secretary/certificate">
+                        <a class="nav-link menu-link" href="/inventary/products-add">
                             <i class="ri-price-tag-3-line fs-20"></i> <span>Catálogo</span>
                         </a>
-                        <a class="nav-link menu-link" href="/secretary/certificate">
-                            <i class="ri-add-circle-line fs-20"></i> <span>Ingresos</span>
+                        <a class="nav-link menu-link" href="#movimientos" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsede">
+                            <i class="mdi mdi-*-* mdi-filter-variant-plus fs-20"></i> <span>Movimientos</span>
                         </a>
-                        <a class="nav-link menu-link" href="/secretary/certificate">
-                            <i class=" ri-indeterminate-circle-line fs-20"></i> <span>Salidas</span>
-                        </a>
+                        <div class="collapse menu-dropdown" id="movimientos">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link menu-link" href="/inventary/register">
+                                        <span>Registrar</span>
+                                    </a>    
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link menu-link" href="/inventary/movements">
+                                        <span>Consultar</span>
+                                    </a>    
+                                </li>
+                            </ul>
+                        </div>
+                        
+
                         <a class="nav-link menu-link" href="/secretary/certificate">
                             <i class="ri-swap-line fs-20"></i> <span>Kardex</span>
                         </a>

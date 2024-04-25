@@ -71,8 +71,8 @@ Route::get('/sri/invoices',[App\Http\Controllers\TrFacturasCabsController::class
 Route::get('/inventary/products',[App\Http\Controllers\TmProductosController::class, 'index'])->name('index');
 Route::get('/inventary/products-add',[App\Http\Controllers\TmProductosController::class, 'add'])->name('add');
 Route::get('/inventary/products-edit/{id}',[App\Http\Controllers\TmProductosController::class, 'edit'])->name('edit');
-Route::get('/products/input',[App\Http\Controllers\TmProductosController::class, 'input'])->name('input');
-Route::get('/products/output',[App\Http\Controllers\TmProductosController::class, 'output'])->name('output');
+Route::get('/inventary/register',[App\Http\Controllers\TmProductosController::class, 'register'])->name('register');
+Route::get('/inventary/movements',[App\Http\Controllers\TmProductosController::class, 'movements'])->name('movements');
 Route::get('/products/kardex',[App\Http\Controllers\TmProductosController::class, 'kardex'])->name('kardex');
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);

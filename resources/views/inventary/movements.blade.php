@@ -12,11 +12,11 @@
             Inventario
         @endslot
         @slot('title')
-            Productos
+            Consultar Movimientos
         @endslot
     @endcomponent
 
-    @livewire('vc-services')
+    @livewire('vc-inventary-movements')
 
 @endsection
 @section('script')
