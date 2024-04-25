@@ -15,31 +15,31 @@
          @foreach ($detalle as $key => $recno)  
         <tr class="invtra">
             <td>
-                <input type="text" class="form-control form-control" id="linea-{{$key}}" wire:model="detalle.{{$key}}.linea" disabled>
+                <input type="text" class="form-control form-control" id="linea-{{$recno['linea']}}" wire:model="detalle.{{$key}}.linea" disabled>
             </td>
             <td>
                 <div class="input-group">
-                <input type="text" class="form-control form-control p-1" id="producto-{{$key}}" wire:model="detalle.{{$key}}.producto">
-                <button type="button" wire:click.prevent="search({{$key}})" class="btn dropdown bg-light" 
-                    data-bs-target=""><i class="ri-share-box-fill align-bottom me-1"></i>
-                </button>
+                    <input type="text" class="form-control form-control p-1" id="producto-{{$recno['linea']}}" wire:model="detalle.{{$key}}.producto" readonly>
+                    <button type="button" wire:click.prevent="search({{$key}})" class="btn dropdown bg-light" 
+                        data-bs-target="" id="btn-{{$recno['linea']}}"><i class="ri-share-box-fill align-bottom me-1"></i>
+                    </button>
                 </div>
             </td>
             <td>
-                <select class="form-select" id="unidad-{{$key}}" wire:model="detalle.{{$key}}.unidad" disabled>
+                <select class="form-select" id="unidad-{{$recno['linea']}}" wire:model="detalle.{{$key}}.unidad" disabled>
                     <option value="UND">Unidad</option>
                 </select>
             </td>
             <td class="text-end">
-                <input type="number" class="form-control product-price text-end" id="cantidad-{{$key}}" step="0.01" 
+                <input type="number" class="form-control product-price text-end" id="cantidad-{{$recno['linea']}}" step="1" 
                     placeholder="0.00" wire:model="detalle.{{$key}}.cantidad"/>
             </td>
             <td class="text-end">
-                <input type="number" class="form-control product-price text-end" id="precio-{{$key}}" step="0.01" 
+                <input type="number" class="form-control product-price text-end" id="precio-{{$recno['linea']}}" step="1" 
                     placeholder="0.00" wire:model="detalle.{{$key}}.precio" wire:focusout='calcular({{$key}})'/>
             </td> 
             <td class="text-end">
-                <input type="number" class="form-control product-price text-end" id="total-{{$key}}" step="0.01" 
+                <input type="number" class="form-control product-price text-end" id="total-{{$recno['linea']}}" step="0.01" 
                     placeholder="0.00" wire:model="detalle.{{$key}}.total" readonly/>
             </td>           
         </tr>
