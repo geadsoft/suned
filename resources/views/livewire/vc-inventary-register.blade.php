@@ -11,14 +11,16 @@
                                 <div class="flex-shrink-0">
                                     <a class="btn btn-success add-btn" wire:click="add()"><i
                                     class="ri-add-fill me-1 align-bottom"></i></a>
+                                    @if($status=='disabled' & $inventarioId>0)
                                     <button type="button" class="btn btn-info"><i
                                             class="ri-printer-fill align-bottom me-1"></i></button>
                                     <button class="btn btn-danger" onClick="deleteMultiple()"><i
                                             class="ri-delete-bin-2-line"></i></button>
-                                    
+                                    @endif
                                 </div>
                             </div>
                         </div>
+                        <fieldset {{$status}}>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-8">
@@ -27,10 +29,9 @@
                                             <tbody class="list form-check-all">
                                             <tr>
                                                 <td>
-                                                <h5 class="badge bg-primary text-wrap fs-14">Documento No. </h5>
+                                                <h5 class="badge bg-primary text-wrap fs-14">Documento No. {{$record['documento']}}</h5>
                                                 </td>
                                                 <td>
-                                                    <!--<input type="text" class="form-control" id="product-title-input" value="" placeholder="Ingrese cóidgo de producto" required>-->
                                                 </td>
                                             </tr>
                                             <tr>
@@ -38,7 +39,7 @@
                                                     <label class="form-label p-1" for="product-title-input">Fecha</label>
                                                 </td>
                                                 <td>
-                                                    <input type="date" class="form-control" id="txtfecha" placeholder="" wire:model="fecha" required>
+                                                    <input type="date" class="form-control" id="txtfecha" placeholder="" wire:model="record.fecha" required>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -55,14 +56,14 @@
                                                 
                                                 <td>
                                                     @if ($tipo=='ING')
-                                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="transac" required>
+                                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="record.movimiento" required>
                                                         <option value="II">Inventario Inicial</option>
                                                         <option value="CL">Compras Locales</option>
                                                         <option value="IA">Ingreso por Ajuste</option>
                                                         <option value="DE">Devolucion</option>
                                                     </select>
                                                     @else
-                                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="transac" required>
+                                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="record.movimiento" required>
                                                         <option value="VE">Ventas</option>
                                                         <option value="EA">Egreso por Ajuste</option>
                                                     </select>
@@ -75,25 +76,25 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-8">
-                                @if ($transac=='VE')
+                                @if ($record['movimiento']=='VE')
                                 <label class="form-label" for="product-title-input">Razon Social</label>
                                 @else
                                 <label class="form-label" for="product-title-input">Referencia</label>
                                 @endif
                                 <div class="input-group mb-2">
-                                    @if ($transac=='VE')
-                                    <input type="text" class="form-control" name="identidad" id="billinginfo-firstName" placeholder="Razon Social" wire:model="cliente" required readonly>
+                                    @if ($record['movimiento']=='VE')
+                                    <input type="text" class="form-control" name="identidad" id="billinginfo-firstName" placeholder="Razon Social" wire:model="record.referencia" required readonly>
                                     @else
-                                    <input type="text" class="form-control" name="identidad" id="billinginfo-firstName" placeholder="Razon Social" wire:model="cliente" required>
+                                    <input type="text" class="form-control" name="identidad" id="billinginfo-firstName" placeholder="Razon Social" wire:model="record.referencia" required>
                                     @endif
-                                    @if ($transac=='VE')
+                                    @if ($record['movimiento']=='VE')
                                     <a id="btnstudents" class ="input-group-text btn btn-soft-secondary" wire:click="buscar()"><i class="ri-user-add-line me-1"></i></a>
                                     @endif
                                 </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <label class="form-label" for="product-title-input">Forma de Pago</label>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="fpago" required>
+                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="record.tipopago" required>
                                         <option value="NN">Ninguno</option>
                                         <option value="EFE">Efectivo</option>
                                         <option value="CHQ">Cheque</option>
@@ -106,28 +107,34 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="product-title-input">Observación</label>
-                                <textarea class="form-control" id="billingAddress" rows="2" placeholder="Descripción de producto"></textarea>
+                                <textarea class="form-control" id="billingAddress" rows="2" placeholder="Descripción de producto" wire:model="record.observacion"></textarea>
                             </div>
                         </div>
+                        
                     </div>
                     <!-- end card -->
-
+                    <fieldset {{$status}}>
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                 @livewire('vc-inventary-registerdet')
+                                 @livewire('vc-inventary-registerdet',['id' => $inventarioId])
                             </div>
                         </div>
                     </div>
                     <!-- end card -->
-                    <div class="text-end mb-3">
-                        <button type="submit" class="btn btn-success w-sm">Grabar</button>
-                    </div>
+            </div>
+            <div class="text-end mb-3">
+                @if ($inventarioId>0)
+                
+                <button type="button" wire:click.prevent="procesar()"  class="btn btn-success w-sm">Procesar</button>
+            
+                @else
+                <button type="submit" class="btn btn-success w-sm">Grabar</button>
+                @endif
             </div>
             <!-- end col -->
         </div>
         <!-- end row -->
-        
     </form>
 
     <div wire.ignore.self class="modal fade" id="showModalBuscar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

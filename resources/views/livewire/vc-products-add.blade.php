@@ -9,7 +9,7 @@
                                     <label class="form-label" for="product-title-input">Código</label>
                                     <input type="hidden" class="form-control" id="formAction" name="formAction" value="add">
                                     <input type="text" class="form-control d-none" id="product-id-input">
-                                    <input type="text" class="form-control" id="product-title-input" value="" placeholder="Ingrese cóidgo de producto" wire:model.defer="codigo" required>
+                                    <input type="text" class="form-control" id="product-title-input" value="" placeholder="Ingrese cóidgo de producto" wire:model.defer="codigo" readonly>
                                     <div class="invalid-feedback">Por favor ingrese código de producto.</div>
                                 </div>
                                 <div class="mb-3">

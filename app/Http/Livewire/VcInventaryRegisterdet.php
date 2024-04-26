@@ -4,28 +4,34 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\TmProductos;
+use App\Models\TrInventarioCabs;
+use App\Models\TrInventarioDets;
 
 class VcInventaryRegisterdet extends Component
 {
     
-    public $detalle = [];
+    public $detalle = [], $invCab;
     public $linea;
     
-    protected $listeners = ['setDetalle'];
+    protected $listeners = ['setDetalle','setGrabaDetalle'];
 
-    public function mount() {
+    public function mount($id) {
 
-        $recno=[
-            'linea' => 1,
-            'productoid' => 0,
-            'producto' => '',
-            'unidad' => '',
-            'cantidad' => 1,
-            'precio' => 0.00,
-            'total' => 0.00
-        ];
+        if ($id>0){
+            $this->loadDetalle($id);
+        }else {
 
-        array_push($this->detalle,$recno);
+            $recno=[
+                'linea' => 1,
+                'productoid' => 0,
+                'producto' => '',
+                'unidad' => '',
+                'cantidad' => 1,
+                'precio' => 0.00,
+                'total' => 0.00
+            ];
+            array_push($this->detalle,$recno);
+        }
 
     }
     
@@ -82,7 +88,66 @@ class VcInventaryRegisterdet extends Component
         $this->detalle[$linea]['precio'] = $record->precio;
         $this->detalle[$linea]['total'] =  $cantidad*floatval($record->precio);
         $this->dispatchBrowserEvent('hide-form');
+
     }
 
+
+    public function setLoad($iventarioId){
+
+        $this->invCab = TrInventarioCabs::find($iventarioId);
+        $this->createData();
+    }
+
+    public function loadDetalle($id){
+
+       $invtra = TrInventarioDets::where('inventariocab_id',$id)->get();
+       
+       foreach ($invtra as $index => $record)
+       {
+            $this->add();
+            $this->detalle[$index]['linea'] = $record->linea;
+            $this->detalle[$index]['productoid'] = $record->productoId;
+            $this->detalle[$index]['producto'] = $record->producto->nombre;
+            $this->detalle[$index]['cantidad'] = $record->cantidad;
+            $this->detalle[$index]['unidad'] = $record->unidad;
+            $this->detalle[$index]['precio'] = $record->precio;
+            $this->detalle[$index]['total'] =  $record->total;
+
+       }
+
+    }
+
+    public function createData(){
+
+        $total = 0;
+
+        foreach ($this->detalle as $index => $recno)
+        {
+            TrInventarioDets::Create([
+                'periodo' => $this->invCab->periodo,
+                'mes' => $this->invCab->mes,
+                'inventariocab_id' => $this->invCab->id,
+                'tipo' => $this->invCab->tipo,
+                'documento' => $this->invCab->documento,
+                'fecha' => $this->invCab->fecha,
+                'movimiento' => $this->invCab->movimiento,
+                'linea' => $recno['linea'],
+                'producto_id' => $recno['productoid'],
+                'unidad' => $recno['unidad'],
+                'cantidad' => $recno['cantidad'],
+                'precio' => $recno['precio'],
+                'total' => $recno['total'],
+                'estado' => 'G',
+                'usuario' => auth()->user()->name,
+            ]);
+            
+            $total = $total + $recno['total'];
+        }
+
+        $this->invCab->update([
+            'neto' => $total,
+        ]);
+
+    }
 
 }

@@ -66,7 +66,6 @@ class VcProductsAdd extends Component
     public function createData(){
 
         $this ->validate([
-            'codigo' => 'required',
             'nombre' => 'required',
             'unidad' => 'required',
             'categoria' => 'required',
@@ -76,6 +75,21 @@ class VcProductsAdd extends Component
             'precio' => 'required',
         ]);
 
+        $secuencia = 1;
+        $categoria = TmGeneralidades::find($this->categoria);
+
+        $productos = TmProductos::where('categoria_id',$categoria['codigo'])
+        ->where('talla',$this->talla)
+        ->orderby('codigo','desc')
+        ->first();
+
+        if (!empty($productos)){
+            $secuencia = intval(right($productos['codigo'],4));
+            $secuencia = $secuencia+1;
+        }
+
+        $this->codigo = $categoria['codigo'].$this->talla.str_pad($secuencia, 4, "0", STR_PAD_LEFT); 
+        
         TmProductos::Create([
             'codigo' => $this->codigo,
             'nombre' => $this->nombre,
