@@ -13,14 +13,14 @@ class VcInventaryRegisterdet extends Component
     public $detalle = [], $invCab;
     public $linea;
     
-    protected $listeners = ['setDetalle','setGrabaDetalle'];
+    protected $listeners = ['setDetalle','setGrabaDetalle','mount'];
 
     public function mount($id) {
 
         if ($id>0){
             $this->loadDetalle($id);
         }else {
-
+            $this->detalle = [];
             $recno=[
                 'linea' => 1,
                 'productoid' => 0,
@@ -92,7 +92,7 @@ class VcInventaryRegisterdet extends Component
     }
 
 
-    public function setLoad($iventarioId){
+    public function setGrabaDetalle($iventarioId){
 
         $this->invCab = TrInventarioCabs::find($iventarioId);
         $this->createData();

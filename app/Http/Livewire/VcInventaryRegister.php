@@ -6,13 +6,14 @@ use Livewire\Component;
 use App\Models\TrInventarioCabs;
 use App\Models\TrInventarioDets;
 use App\Models\TmProductos;
+use App\Models\TmMatricula;
 
 class VcInventaryRegister extends Component
 {
     public $linea, $status, $tipo='ING', $fecha, $inventarioId=0;
     public $record=[];
     
-    protected $listeners = ['view'];
+    protected $listeners = ['view','setPersona'];
 
     public function mount(){
         
@@ -55,6 +56,15 @@ class VcInventaryRegister extends Component
         $this->dispatchBrowserEvent('show-form');
     }
 
+    public function setPersona($matriculaId){
+        
+        $matricula = TmMatricula::find($matriculaId);
+        $this->record['estudiante_id'] = $matricula['estudiante_id'];
+        $this->record['referencia'] = $matricula->estudiante['apellidos'].' '.$matricula->estudiante['nombres'];
+        
+        $this->dispatchBrowserEvent('hide-persona');
+    }
+
     public function buscar(){
         $this->dispatchBrowserEvent('show-persona');
     }
@@ -89,10 +99,11 @@ class VcInventaryRegister extends Component
         $this->record['observacion'] = '';
         $this->record['estado'] = 'G';
 
+        $this->emitTo('vc-inventary-registerdet','mount',0);
     }
 
     public function createData(){
-    
+        
         $this ->validate([
             'record.fecha' => 'required',
             'record.tipo' => 'required',
@@ -102,14 +113,14 @@ class VcInventaryRegister extends Component
         ]);
         
         $invCab = TrInventarioCabs::where('tipo',$this->record['tipo'])
-        ->where('movimiento',$this->record['tipo'])
+        ->where('movimiento',$this->record['movimiento'])
         ->select('documento')
         ->orderby('documento','desc')
         ->first();
         
         $secuencia = 1;
         if(!empty($invCab)){
-            $secuencia = intval(right($invCab->documento,5))+1;
+            $secuencia = intval(substr($invCab['documento'], -5))+1;
         }
 
         $documento = $this->record['movimiento'].str_pad($secuencia, 5, "0", STR_PAD_LEFT); 
@@ -133,7 +144,9 @@ class VcInventaryRegister extends Component
         $this->inventarioId = $invCab->id;
         $this->emitTo('vc-inventary-registerdet','setGrabaDetalle',$this->inventarioId);
 
-        $this->dispatchBrowserEvent('msg-grabar');
+        $message = "Registro grabado con éxito!";
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+
         $this->status = 'disabled'; 
         
     }
@@ -148,7 +161,7 @@ class VcInventaryRegister extends Component
             {
                 $producto = TmProductos::find($record['producto_id']);
                 $producto->update([
-                    'stock' => $stock+$record['cantidad'],
+                    'stock' => $producto['stock']+$record['cantidad'],
                 ]);
             }
 
@@ -161,18 +174,29 @@ class VcInventaryRegister extends Component
             
             $error='';
 
+            /*Valida Stock*/
             foreach ($invtra as $index => $record)
             {
                 $producto = TmProductos::find($record['producto_id']);
                 $stock = $producto['stock'];
                 
                 if ($record['cantidad']>$stock & $producto['maneja_stock']==1){
-                    $error = 'Producto: '.$producto['nombre'].', cantidad digitada: '.$record['cantidad'].' es mayor al stock: '.$stock.'/n';
+                    $error = $error.$producto['nombre'].', Cantidad Digitada: '.$record['cantidad'].' es mayor al Stock: '.$stock."\n";
                 }
             }
 
             if (!empty($error)){
-                return
+                $this->dispatchBrowserEvent('error-stock', ['newName' => $error]);
+                return;
+            }
+
+            /* Actualiza Stock*/
+            foreach ($invtra as $index => $record)
+            {
+                $producto = TmProductos::find($record['producto_id']);
+                $producto->update([
+                    'stock' => $producto['stock']-$record['cantidad'],
+                ]);
             }
 
             $invCab = TrInventarioCabs::find($this->inventarioId);
@@ -182,7 +206,8 @@ class VcInventaryRegister extends Component
 
         }
 
-        $this->dispatchBrowserEvent('msg-procesar');
+        $message = "Documento ".$this->record['documento']." procesado con éxito!";
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
     }
 

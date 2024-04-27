@@ -44,7 +44,11 @@
         })
 
         window.addEventListener('msg-grabar', event => {
-            swal("Buen Trabajo!", "Registro grabado con éxito!", "success");
+            swal("Buen Trabajo!", event.detail.newName, "success");
+        })
+
+        window.addEventListener('error-stock', event => {
+            swal("Error!", event.detail.newName, "warning");
         })
 
     </script>

@@ -24,6 +24,7 @@ class VcModalSearch extends Component
         /*$tblperiodo = TmPeriodosLectivos::orderBy('periodo','desc')->first()*/;
         $tblperiodo = TmPeriodosLectivos::where('estado','A')->first();
         $this->filters['srv_periodo'] = $tblperiodo['id'];
+        $this->opcion = $opcion;
     }
     
     public function render()
@@ -82,9 +83,15 @@ class VcModalSearch extends Component
     }
 
     public function setPersona($matriculaId){
-        
-        $this->emitTo('vc-certificados','setPersona',$matriculaId);
-        $this->dispatchBrowserEvent('hide-form');
+
+        if ($this->opcion=='INV'){
+            $this->emitTo('vc-inventary-register','setPersona',$matriculaId);
+        }else{
+            $this->emitTo('vc-certificados','setPersona',$matriculaId);
+            $this->dispatchBrowserEvent('hide-form');
+        }
+
+       
 
     }
 

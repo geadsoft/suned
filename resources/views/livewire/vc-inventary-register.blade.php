@@ -1,5 +1,5 @@
 <div>
-    <form id="createproduct-form" autocomplete="off" wire:submit.prevent="{{ 'createData' }}" class="needs-validation">
+    <form id="createproduct-form" autocomplete="off" wire:submit.prevent="{{ 'createData' }}">
         <div class="row">
             <div class="col-lg-12">                    
                     <div class="card">
@@ -9,13 +9,20 @@
                                 class="ri-shopping-bag-line me-1 text-success"></i>
                                 Registrar Movimientos de Inventario</h5>
                                 <div class="flex-shrink-0">
-                                    <a class="btn btn-success add-btn" wire:click="add()"><i
-                                    class="ri-add-fill me-1 align-bottom"></i></a>
+                                    <a class="btn btn-icon btn-success" wire:click="add()"><i
+                                    class="ri-add-fill fs-22"></i></a>
                                     @if($status=='disabled' & $inventarioId>0)
-                                    <button type="button" class="btn btn-info"><i
-                                            class="ri-printer-fill align-bottom me-1"></i></button>
-                                    <button class="btn btn-danger" onClick="deleteMultiple()"><i
-                                            class="ri-delete-bin-2-line"></i></button>
+                                        @if ($record['estado'] =='P')
+                                        <button type="button" wire:click="print()" class="btn btn-icon btn-info"><i
+                                                class="ri-printer-fill fs-22"></i></button>
+                                        @else
+                                        <button type="button" wire:click="edit()" class="btn btn-icon btn-info"><i
+                                                class="ri-edit-2-fill fs-22"></i></button>
+                                        @endif
+                                        @if ($record['estado'] =='G')
+                                        <button class="btn btn-icon btn-danger" wire:click="delete()"><i
+                                                class="ri-delete-bin-line fs-22"></i></button>
+                                        @endif
                                     @endif
                                 </div>
                             </div>
@@ -123,18 +130,19 @@
                     </div>
                     <!-- end card -->
             </div>
-            <div class="text-end mb-3">
-                @if ($inventarioId>0)
-                
-                <button type="button" wire:click.prevent="procesar()"  class="btn btn-success w-sm">Procesar</button>
-            
-                @else
+            <div class="text-end mb-3">               
+                @if ($inventarioId==0)
                 <button type="submit" class="btn btn-success w-sm">Grabar</button>
                 @endif
             </div>
             <!-- end col -->
         </div>
         <!-- end row -->
+        <div class="text-end mb-3">
+            @if ($inventarioId>0 & $record['estado']=="G")
+                <button type="button" wire:click="procesar()"  class="btn btn-secondary w-sm">Procesar</button>
+            @endif
+            </div>
     </form>
 
     <div wire.ignore.self class="modal fade" id="showModalBuscar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -150,7 +158,7 @@
                 
                 <form autocomplete="off" wire:submit.prevent="">
                     <div class="modal-body">                                        
-                            @livewire('vc-modal-search',['opcion' => 'null'])                                       
+                            @livewire('vc-modal-search',['opcion' => 'INV'])                                       
                     </div>
                     <div class="modal-footer">
                         <div class="hstack gap-2 justify-content-end">

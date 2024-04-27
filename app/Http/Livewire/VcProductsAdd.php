@@ -107,7 +107,8 @@ class VcProductsAdd extends Component
             'usuario' => auth()->user()->name,
         ]);
 
-        $this->dispatchBrowserEvent('msg-grabar');  
+        $message = "Registro grabado con éxito!";
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
         
     }
 

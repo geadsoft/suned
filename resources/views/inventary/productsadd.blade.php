@@ -42,6 +42,10 @@
             $('#deleteOrder').modal('hide');
         })
 
+        window.addEventListener('msg-grabar', event => {
+            swal("Buen Trabajo!", event.detail.newName, "success");
+        })
+
     </script>
     
 @endsection
