@@ -127,7 +127,7 @@ class VcProductsAdd extends Component
         $message = "Registro grabado con éxito!";
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
-        return redirect()->to('/iventary/products');
+        return redirect()->to('/inventary/products');
         
     }
 
