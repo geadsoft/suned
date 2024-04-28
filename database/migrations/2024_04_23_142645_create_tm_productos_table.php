@@ -28,6 +28,8 @@ return new class extends Migration
             $table->double('stock',14,6)->default(0);
             $table->double('stock_min',14,6);
             $table->double('precio',14,6)->default(0.00);
+            $table->double('costo_unitario',14,6)->default(0.00);
+            $table->double('costo_total',14,6)->default(0.00);
             $table->string('foto',30);
             $table->string('estado',1);
             $table->string('usuario');
