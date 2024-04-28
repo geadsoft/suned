@@ -35,7 +35,7 @@
                     placeholder="0.00" wire:model="detalle.{{$key}}.cantidad"/>
             </td>
             <td class="text-end">
-                <input type="number" class="form-control product-price text-end" id="precio-{{$recno['linea']}}" step="1" 
+                <input type="number" class="form-control product-price text-end" id="precio-{{$recno['linea']}}" step="0.01" 
                     placeholder="0.00" wire:model="detalle.{{$key}}.precio" wire:focusout='calcular({{$key}})'/>
             </td> 
             <td class="text-end">

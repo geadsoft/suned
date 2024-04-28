@@ -59,6 +59,7 @@ class VcInventaryRegister extends Component
         $this->linea = $linea;
         $this->dispatchBrowserEvent('show-form');
         
+        
     }
 
     public function setPersona($matriculaId){

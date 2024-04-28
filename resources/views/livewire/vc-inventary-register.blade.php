@@ -183,7 +183,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
                 </div>
                 
-                <form autocomplete="off" wire:submit.prevent="">
+                <form autocomplete="off">
                     
                     <div class="modal-body">                                        
                         @livewire('vc-search-product')                                    

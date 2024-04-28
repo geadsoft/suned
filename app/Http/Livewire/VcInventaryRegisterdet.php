@@ -58,6 +58,8 @@ class VcInventaryRegisterdet extends Component
         ];
 
         array_push($this->detalle,$recno);
+        $this->emitTo('vc-inventary-register','view',$linea);
+        $this->emit('newfocus');
 
     }
 

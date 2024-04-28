@@ -1,7 +1,7 @@
 <div>
     <div class="relative">
         <div class="search-box mb-3">
-            <input id="idproducto" type="text" class="form-control search border border-primary"
+            <input id="searchproducto" type="text" class="form-control search border border-primary"
                 placeholder="Buscar" wire:model="filters" autofocus>
             <i class="ri-search-line search-icon"></i>
         </div>    

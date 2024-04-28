@@ -31,6 +31,12 @@
             $('#showProducto').modal('show');
         })
 
+        document.addEventListener('livewire:load', () => { 
+            window.livewire.on('newfocus', inputname => { 
+                document.getElementById("searchproducto").focus();
+            }) 
+        })
+
         window.addEventListener('hide-form', event => {
             $('#showProducto').modal('hide');
         })
