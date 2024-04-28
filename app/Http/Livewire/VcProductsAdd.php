@@ -12,7 +12,7 @@ class VcProductsAdd extends Component
     public $codigo, $nombre, $descripcion="", $unidad='UND', $talla='NN', $tipoiva="0", $stockmin, $precio, $tipo="B", $categoria=0, $estado='A', $controlastock=true;
     public $tblcategorias=[], $record=[];
     public $arrtalla=[
-        'NN'=>'Ninguna'
+        'NN'=>'Ninguna',
         '28'=>28,
         '30'=>30,
         '32'=>32,
