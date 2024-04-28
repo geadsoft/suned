@@ -58,7 +58,9 @@ class VcInventaryRegisterdet extends Component
         ];
 
         array_push($this->detalle,$recno);
-        $this->emitTo('vc-inventary-register','view',$linea);
+        
+        $this->linea = $linea-1;
+        $this->emitTo('vc-inventary-register','view',$this->linea);
         $this->emit('newfocus');
 
     }
@@ -81,6 +83,7 @@ class VcInventaryRegisterdet extends Component
     }
 
     public function setDetalle($productoId){
+
 
         $record = TmProductos::find($productoId);
         $linea = $this->linea;
