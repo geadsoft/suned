@@ -138,7 +138,7 @@ class VcProductsAdd extends Component
         
     }
 
-    public function createData(){
+    public function updateData(){
 
         $record = TmProductos::find($id);
         $record->update([
