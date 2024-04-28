@@ -101,13 +101,13 @@ class VcProductsAdd extends Component
             $secuencia = 1;
             $categoria = TmGeneralidades::find($this->categoria);
 
-            $productos = TmProductos::where('categoria_id',$categoria['id'])
+            $productos = TmProductos::where('categoria_id',$this->categoria)
             ->where('talla',$this->talla)
             ->orderby('codigo','desc')
             ->first();
 
             if (!empty($productos)){
-                $secuencia = intval(substr($productos['documento'], -4));
+                $secuencia = intval(substr($productos['codigo'], -4));
                 $secuencia = $secuencia+1;
             }
 
