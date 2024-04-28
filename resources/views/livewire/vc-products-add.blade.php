@@ -55,7 +55,6 @@
                                             <div class="mb-3">
                                                 <label class="form-label" for="manufacturer-name-input">Talla</label>
                                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="talla" {{( $productoId>0 ) ? "disabled" : ''}} required>
-                                                    <option value="">Seleccione talla</option>
                                                     @foreach ($arrtalla as $key)
                                                         <option value="{{$key}}">{{$key}}</option>
                                                     @endforeach
