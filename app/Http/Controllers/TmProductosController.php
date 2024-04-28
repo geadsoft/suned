@@ -16,9 +16,9 @@ class TmProductosController extends Controller
         return view('inventary/productsadd',['id' => 0]);
     }
 
-    public function edit()
+    public function edit($id)
     {
-        return view('inventary/products-edit');
+        return view('inventary/productsadd',['id' => $id]);
     }
 
     public function register()

@@ -12,16 +12,16 @@
             Inventario
         @endslot
         @slot('title')
-            Consultar Movimientos
+            Productos
         @endslot
     @endcomponent
 
-    @livewire('vc-inventary-movements')
+    @livewire('vc-products')
 
 @endsection
 @section('script')
     <!--ecommerce-customer init js -->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
     <script>

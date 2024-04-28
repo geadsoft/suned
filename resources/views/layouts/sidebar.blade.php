@@ -228,7 +228,7 @@
                 </a>
                 <div class="collapse menu-dropdown" id="productos">
                     <ul class="nav nav-sm flex-column">
-                        <a class="nav-link menu-link" href="/inventary/products-add">
+                        <a class="nav-link menu-link" href="/inventary/products">
                             <i class="ri-price-tag-3-line fs-20"></i> <span>Catálogo</span>
                         </a>
                         <a class="nav-link menu-link" href="#movimientos" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsede">

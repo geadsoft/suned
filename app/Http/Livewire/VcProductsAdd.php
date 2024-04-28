@@ -8,7 +8,7 @@ use App\Models\TmProductos;
 
 class VcProductsAdd extends Component
 {
-    public $fileimg, $foto;
+    public $fileimg, $foto, $stock, $productoId;
     public $codigo, $nombre, $descripcion="", $unidad='UND', $talla, $tipoiva="0", $stockmin, $precio, $tipo="B", $categoria=0, $estado='A', $controlastock=true;
     public $tblcategorias=[], $record=[];
     public $arrtalla=[
@@ -29,9 +29,12 @@ class VcProductsAdd extends Component
     public function mount($id)
     {
         $this->tblcategorias = TmGeneralidades::where('superior',11)->get();
+        $this->productoId = $id;
         
         if ($id>0){
+
             $this->edit($id);
+
         }
 
     }
@@ -58,7 +61,21 @@ class VcProductsAdd extends Component
 
     public function edit($id){
         
-        $this->record = TmProductos::find($id);
+        $record = TmProductos::find($id);
+        $this->codigo = $record['codigo'];
+        $this->nombre = $record['nombre'];
+        $this->descripcion = $record['descripcion'];
+        $this->unidad = $record['unidad'];
+        $this->talla = $record['talla'];
+        $this->categoria = $record['categoria_id'];
+        $this->tipo = $record['tipo'];
+        $this->tipoiva = $record['tipo_iva'];
+        $this->controlastock = $record['maneja_stock'];
+        $this->stockmin = $record['stock_min'];
+        $this->precio = $record['precio'];
+        $this->stock = $record['stock'];
+        $this->estado = $record['estado'];
+        
 
     }
 
@@ -109,6 +126,8 @@ class VcProductsAdd extends Component
 
         $message = "Registro grabado con éxito!";
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+
+        return redirect()->to('/iventary/products');
         
     }
 

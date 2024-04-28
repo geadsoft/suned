@@ -54,7 +54,7 @@
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label" for="manufacturer-name-input">Talla</label>
-                                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="talla">
+                                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="talla" {{( $productoId>0 ) ? "disabled" : ''}}>
                                                     <option value="">Seleccione talla</option>
                                                     @foreach ($arrtalla as $key)
                                                         <option value="{{$key}}">{{$key}}</option>
@@ -83,7 +83,7 @@
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label" for="stocks-input">Stocks</label>
-                                                <input type="number" class="form-control" id="stocks-input" placeholder="Stocks" disabled>
+                                                <input type="number" class="form-control" id="stocks-input" placeholder="Stocks" wire:model.defer="stock" disabled>
                                                 <div class="invalid-feedback">Please Enter a product stocks.</div>
                                             </div>
                                         </div>
@@ -207,7 +207,7 @@
                     </div>
                     <div class="card-body">
                         <p class="text-muted mb-2">Seleccione Categoria de Producto</p>
-                            <select class="form-select" id="choices-category-input" name="choices-category-input" wire:model.defer="categoria" required>
+                            <select class="form-select" id="choices-category-input" name="choices-category-input" wire:model.defer="categoria"  {{( $productoId>0 ) ? "disabled" : ''}} required>
                                 <option value="">...</option>
                                 @foreach ($tblcategorias as $categoria)
                                     <option value="{{$categoria['id']}}">{{$categoria['descripcion']}}</option>

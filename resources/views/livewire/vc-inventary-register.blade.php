@@ -13,8 +13,8 @@
                                     class="ri-add-fill fs-22"></i></a>
                                     @if($status=='disabled' & $inventarioId>0)
                                         @if ($record['estado'] =='P')
-                                        <button type="button" wire:click="print()" class="btn btn-icon btn-info"><i
-                                                class="ri-printer-fill fs-22"></i></button>
+                                        <a class="btn btn-icon btn-info" href="/preview-pdf/record-inv/{{$inventarioId}}" target="_blank"><i
+                                        class="ri-printer-fill fs-22"></i></a>
                                         @else
                                         <button type="button" wire:click="edit()" class="btn btn-icon btn-info"><i
                                                 class="ri-edit-2-fill fs-22"></i></button>

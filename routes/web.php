@@ -13,6 +13,7 @@ use App\Http\Livewire\VcCertificados;
 use App\Http\Livewire\VcRatingsDetail;
 use App\Http\Livewire\VcSolicitudes;
 use App\Http\Livewire\VcGeneraXML;
+use App\Http\Livewire\VcInventaryRegister;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,6 +102,7 @@ Route::get('/download-pdf/certificados/{data}',[VcCertificados::class, 'download
 Route::get('/preview-pdf/ratings/{data}',[VcRatingsDetail::class, 'printPDF']);
 Route::get('/download-pdf/ratings/{data}',[VcRatingsDetail::class, 'downloadPDF']);
 Route::get('/preview-pdf/requests',[VcSolicitudes::class, 'printPDF']);
+Route::get('/preview-pdf/record-inv/{id}',[VcInventaryRegister::class, 'liveWirePDF']);
 
 Route::get('/invoice/genera/{id}',[VcGeneraXML::class, 'setGeneraXML']);
 Route::get('/invoice/ride-pdf/{id}',[VcGeneraXML::class, 'ImprimeRide']);

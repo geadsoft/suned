@@ -8,7 +8,7 @@
                 <th style="width: 200px;">Cantidad</th>
                 <th style="width: 200px;">Precio</th>
                 <th style="width: 200px;">Total</th>
-                <th>...</th>
+                <th style="width: 80px;">...</th>
             </tr>
         </thead>
         <tbody>
@@ -41,6 +41,17 @@
             <td class="text-end">
                 <input type="number" class="form-control product-price text-end" id="total-{{$recno['linea']}}" step="0.01" 
                     placeholder="0.00" wire:model="detalle.{{$key}}.total" readonly/>
+            </td>
+            <td>
+                <ul class="list-inline hstack gap-2 mb-0">
+                    <li class="list-inline-item" data-bs-toggle="tooltip"
+                        data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                        <a class="text-danger d-inline-block remove-item-btn"
+                            data-bs-toggle="modal" href="" wire:click.prevent="delete({{$recno['linea']}})">
+                            <i class="ri-delete-back-2-fill fs-16"></i>
+                        </a>
+                    </li>
+                </ul>
             </td>           
         </tr>
         @endforeach

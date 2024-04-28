@@ -62,8 +62,10 @@ class VcInventaryRegisterdet extends Component
     }
 
     public function search($linea){
+
         $this->linea = $linea;
         $this->emitTo('vc-inventary-register','view',$linea);
+
     }
 
     public function calcular($linea){
@@ -80,13 +82,15 @@ class VcInventaryRegisterdet extends Component
 
         $record = TmProductos::find($productoId);
         $linea = $this->linea;
-
+      
         $cantidad = floatval($this->detalle[$linea]);
         $this->detalle[$linea]['productoid'] = $record->id;
         $this->detalle[$linea]['producto'] = $record->nombre;
         $this->detalle[$linea]['unidad'] = $record->unidad;
         $this->detalle[$linea]['precio'] = $record->precio;
         $this->detalle[$linea]['total'] =  $cantidad*floatval($record->precio);
+        
+        
         $this->dispatchBrowserEvent('hide-form');
 
     }
@@ -123,25 +127,29 @@ class VcInventaryRegisterdet extends Component
 
         foreach ($this->detalle as $index => $recno)
         {
-            TrInventarioDets::Create([
-                'periodo' => $this->invCab->periodo,
-                'mes' => $this->invCab->mes,
-                'inventariocab_id' => $this->invCab->id,
-                'tipo' => $this->invCab->tipo,
-                'documento' => $this->invCab->documento,
-                'fecha' => $this->invCab->fecha,
-                'movimiento' => $this->invCab->movimiento,
-                'linea' => $recno['linea'],
-                'producto_id' => $recno['productoid'],
-                'unidad' => $recno['unidad'],
-                'cantidad' => $recno['cantidad'],
-                'precio' => $recno['precio'],
-                'total' => $recno['total'],
-                'estado' => 'G',
-                'usuario' => auth()->user()->name,
-            ]);
-            
-            $total = $total + $recno['total'];
+            if ($recno['cantidad']>0){
+
+                TrInventarioDets::Create([
+                    'periodo' => $this->invCab->periodo,
+                    'mes' => $this->invCab->mes,
+                    'inventariocab_id' => $this->invCab->id,
+                    'tipo' => $this->invCab->tipo,
+                    'documento' => $this->invCab->documento,
+                    'fecha' => $this->invCab->fecha,
+                    'movimiento' => $this->invCab->movimiento,
+                    'linea' => $recno['linea'],
+                    'producto_id' => $recno['productoid'],
+                    'unidad' => $recno['unidad'],
+                    'cantidad' => $recno['cantidad'],
+                    'precio' => $recno['precio'],
+                    'total' => $recno['total'],
+                    'estado' => 'G',
+                    'usuario' => auth()->user()->name,
+                ]);
+                
+                $total = $total + $recno['total'];
+
+            }
         }
 
         $this->invCab->update([

@@ -8,6 +8,8 @@ use App\Models\TrInventarioDets;
 use App\Models\TmProductos;
 use App\Models\TmMatricula;
 
+use PDF;
+
 class VcInventaryRegister extends Component
 {
     public $linea, $status, $tipo='ING', $fecha, $inventarioId=0;
@@ -39,6 +41,7 @@ class VcInventaryRegister extends Component
             $this->record['tipo'] = 'ING';
             $this->record['movimiento'] = 'CL';
             $this->record['tipopago'] = 'NN';
+            $this->record['estado'] = 'G';
         }else{
 
             $this->record = $this->record->toarray();
@@ -52,8 +55,10 @@ class VcInventaryRegister extends Component
     }
 
     public function view($linea){
+
         $this->linea = $linea;
         $this->dispatchBrowserEvent('show-form');
+        
     }
 
     public function setPersona($matriculaId){
@@ -209,6 +214,45 @@ class VcInventaryRegister extends Component
         $message = "Documento ".$this->record['documento']." procesado con éxito!";
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
+    }
+
+    public function liveWirePDF($selectId)
+    {   
+
+        $fpago = [
+            'NN' => 'Ninguno',
+            'EFE' => 'Efectivo',
+            'CHQ' => 'Cheque',
+            'TAR' => 'Tarjeta',
+            'DEP' => 'Depósito',
+            'TRA' => 'Transferencia',
+            'APP' => 'App Movil',
+            'RET' => 'Retención',
+            'OTR' => 'Otros',
+            'CON' => 'Convenio',
+        ];
+
+        $movimiento=[
+            'II' => 'Inventario Inicial',
+            'CL' => 'Compras Locales',
+            'IA' => 'Ingreso por Ajuste',
+            'VE' => 'Venta',
+            'EA' => 'Egreso por Ajuste',
+        ];
+
+        $invCab = TrInventarioCabs::find($selectId);
+        $invDet = TrInventarioDets::where('inventariocab_id',$selectId)->get();
+                
+        $pdf = PDF::loadView('inventary/comprobante',[
+            'invcab' => $invCab,
+            'invdet' => $invDet,
+            'fpago' =>  $fpago,
+            'tpmov' => $movimiento,
+        ]);
+
+        $documento = $invCab['tipo'].$invCab['documento'].'.pdf';
+
+        return $pdf->setPaper('a4')->stream($documento);
     }
 
 }
