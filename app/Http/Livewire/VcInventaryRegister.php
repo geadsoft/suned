@@ -48,6 +48,7 @@ class VcInventaryRegister extends Component
 
             $fecha = $this->record['fecha'];
             $this->record['fecha'] = date('Y-m-d',strtotime($fecha));
+            $this->tipo = $this->record['tipo'];
             $this->inventarioId = $this->record['id'];
 
         }
@@ -104,6 +105,7 @@ class VcInventaryRegister extends Component
         $this->record['estudiante_id'] = 0;
         $this->record['observacion'] = '';
         $this->record['estado'] = 'G';
+        $this->tipo = 'ING';
 
         $this->emitTo('vc-inventary-registerdet','mount',0);
     }
