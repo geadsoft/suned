@@ -153,7 +153,7 @@ class VcInventaryRegister extends Component
         $message = "Registro grabado con éxito!";
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
-        $this->status = 'disabled'; 
+        $this->load();
         
     }
 
@@ -214,6 +214,8 @@ class VcInventaryRegister extends Component
 
         $message = "Documento ".$this->record['documento']." procesado con éxito!";
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+
+        $this->load();
 
     }
 
