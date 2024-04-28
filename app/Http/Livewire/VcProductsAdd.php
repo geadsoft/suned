@@ -9,10 +9,10 @@ use App\Models\TmProductos;
 class VcProductsAdd extends Component
 {
     public $fileimg, $foto, $stock, $productoId;
-    public $codigo, $nombre, $descripcion="", $unidad='UND', $talla='NN', $tipoiva="0", $stockmin, $precio, $tipo="B", $categoria=0, $estado='A', $controlastock=true;
+    public $codigo, $nombre, $descripcion="", $unidad='UND', $talla=0, $tipoiva="0", $stockmin, $precio, $tipo="B", $categoria=0, $estado='A', $controlastock=true;
     public $tblcategorias=[], $record=[];
     public $arrtalla=[
-        'NN'=>'Ninguna',
+        '0'=>'Ninguna',
         '28'=>28,
         '30'=>30,
         '32'=>32,
