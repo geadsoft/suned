@@ -76,6 +76,10 @@ class VcInventaryRegisterdet extends Component
 
         $cantidad = $this->detalle[$linea]['cantidad'];
         $precio = $this->detalle[$linea]['precio'];
+        if (empty($cantidad)){
+            $cantidad=0;
+            $this->detalle[$linea]['cantidad']=0;
+        }
         $total = $cantidad*$precio;
 
         $this->detalle[$linea]['total'] = floatval($total);
