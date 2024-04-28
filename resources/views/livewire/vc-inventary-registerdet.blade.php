@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-         @foreach ($detalle as $key => $recno)  
+         @foreach ($detalle as $key => $recno) 
         <tr class="invtra">
             <td>
                 <input type="text" class="form-control form-control" id="linea-{{$recno['linea']}}" wire:model="detalle.{{$key}}.linea" disabled>
@@ -54,7 +54,19 @@
                 </ul>
             </td>           
         </tr>
+        <script>
+            {{$total=$total+$recno['total']}}
+            {{$cantidad=$cantidad+$recno['cantidad']}}
+        </script>
         @endforeach
+        <tr>
+            <td></td>
+            <td></td>
+            <td class="text-end"><strong>TOTAL</strong></td>
+            <td class="text-end"><strong>{{number_format($cantidad,2)}}</strong></td>
+            <td></td>
+            <td class="text-end"><strong>{{number_format($total,2)}}</strong></td>
+        <tr>
         </tbody>
     </table>
     <div class="mb-3">

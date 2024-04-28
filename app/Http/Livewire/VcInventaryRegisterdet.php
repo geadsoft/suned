@@ -11,7 +11,7 @@ class VcInventaryRegisterdet extends Component
 {
     
     public $detalle = [], $invCab;
-    public $linea;
+    public $linea, $total=0, $cantidad=0;
     
     protected $listeners = ['setDetalle','setGrabaDetalle','mount'];
 
