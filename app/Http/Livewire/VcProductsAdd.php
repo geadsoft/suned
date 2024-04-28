@@ -92,43 +92,73 @@ class VcProductsAdd extends Component
             'precio' => 'required',
         ]);
 
-        $secuencia = 1;
-        $categoria = TmGeneralidades::find($this->categoria);
+        if ($this->productoId>0){
 
-        $productos = TmProductos::where('categoria_id',$categoria['codigo'])
-        ->where('talla',$this->talla)
-        ->orderby('codigo','desc')
-        ->first();
+            $this->updateData();            
 
-        if (!empty($productos)){
-            $secuencia = intval(right($productos['codigo'],4));
-            $secuencia = $secuencia+1;
+        }else {
+
+            $secuencia = 1;
+            $categoria = TmGeneralidades::find($this->categoria);
+
+            $productos = TmProductos::where('categoria_id',$categoria['codigo'])
+            ->where('talla',$this->talla)
+            ->orderby('codigo','desc')
+            ->first();
+
+            if (!empty($productos)){
+                $secuencia = intval(right($productos['codigo'],4));
+                $secuencia = $secuencia+1;
+            }
+
+            $this->codigo = $categoria['codigo'].$this->talla.str_pad($secuencia, 4, "0", STR_PAD_LEFT); 
+            
+            TmProductos::Create([
+                'codigo' => $this->codigo,
+                'nombre' => $this->nombre,
+                'descripcion' => $this->descripcion,
+                'unidad' => $this->unidad,
+                'talla' => $this->talla,
+                'categoria_id' => $this->categoria,
+                'tipo' => $this->tipo,
+                'tipo_iva' => $this->tipoiva,
+                'maneja_stock' => $this->controlastock,
+                'stock_min' => $this->stockmin,
+                'precio' => $this->precio,
+                'foto' => '',
+                'estado' => $this->estado,
+                'usuario' => auth()->user()->name,
+            ]);
+
+            $message = "Registro grabado con éxito!";
+            $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+
+            return redirect()->to('/inventary/products');
         }
-
-        $this->codigo = $categoria['codigo'].$this->talla.str_pad($secuencia, 4, "0", STR_PAD_LEFT); 
         
-        TmProductos::Create([
-            'codigo' => $this->codigo,
+    }
+
+    public function createData(){
+
+        $record = TmProductos::find($id);
+        $record->update([
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
             'unidad' => $this->unidad,
-            'talla' => $this->talla,
-            'categoria_id' => $this->categoria,
             'tipo' => $this->tipo,
             'tipo_iva' => $this->tipoiva,
             'maneja_stock' => $this->controlastock,
             'stock_min' => $this->stockmin,
             'precio' => $this->precio,
-            'foto' => '',
             'estado' => $this->estado,
-            'usuario' => auth()->user()->name,
+
         ]);
 
-        $message = "Registro grabado con éxito!";
+        $message = "Registro modificado con éxito!";
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
         return redirect()->to('/inventary/products');
-        
+
     }
 
 
