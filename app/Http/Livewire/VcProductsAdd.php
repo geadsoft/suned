@@ -9,9 +9,10 @@ use App\Models\TmProductos;
 class VcProductsAdd extends Component
 {
     public $fileimg, $foto, $stock, $productoId;
-    public $codigo, $nombre, $descripcion="", $unidad='UND', $talla, $tipoiva="0", $stockmin, $precio, $tipo="B", $categoria=0, $estado='A', $controlastock=true;
+    public $codigo, $nombre, $descripcion="", $unidad='UND', $talla='NN', $tipoiva="0", $stockmin, $precio, $tipo="B", $categoria=0, $estado='A', $controlastock=true;
     public $tblcategorias=[], $record=[];
     public $arrtalla=[
+        'NN'=>'Ninguna'
         '28'=>28,
         '30'=>30,
         '32'=>32,
@@ -56,6 +57,7 @@ class VcProductsAdd extends Component
         $this->record->maneja_stock = true;
         $this->record->precio = 0.00;
         $this->record->estado = 'A';
+        $this->record->talla = 'NN';
 
     }
 
@@ -88,6 +90,7 @@ class VcProductsAdd extends Component
             'categoria' => 'required',
             'tipo' => 'required',
             'tipoiva' => 'required',
+            'talla' => 'required',
             'controlastock' => 'required',
             'precio' => 'required',
         ]);
