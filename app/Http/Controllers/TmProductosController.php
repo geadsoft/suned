@@ -33,6 +33,12 @@ class TmProductosController extends Controller
 
     public function kardex()
     {
-        return view('products/kardex');
+        return view('inventary/kardex');
     }
+
+    public function stock()
+    {
+        return view('inventary/stocks');
+    }
+
 }

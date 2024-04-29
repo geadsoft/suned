@@ -75,6 +75,7 @@ Route::get('/inventary/products-edit/{id}',[App\Http\Controllers\TmProductosCont
 Route::get('/inventary/register',[App\Http\Controllers\TmProductosController::class, 'register'])->name('register');
 Route::get('/inventary/movements',[App\Http\Controllers\TmProductosController::class, 'movements'])->name('movements');
 Route::get('/products/kardex',[App\Http\Controllers\TmProductosController::class, 'kardex'])->name('kardex');
+Route::get('/inventary/stock',[App\Http\Controllers\TmProductosController::class, 'stock'])->name('stock');
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
 Route::get('/liveWire-pdf/{data}',[VcReportCashReceints::class, 'liveWirePDF']);
