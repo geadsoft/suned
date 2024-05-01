@@ -30,8 +30,7 @@ class VcInventaryStock extends Component
     public function mount()
     {
         $this->tblcategorias = TmGeneralidades::where('superior',11)->get();
-        $this->load();
-
+        
         $ldate = date('Y-m-d H:i:s');
         $ldate = date('Y',strtotime($ldate)).'-'.date('m',strtotime($ldate)).'-01';
        
@@ -73,6 +72,8 @@ class VcInventaryStock extends Component
     }
 
     public function consulta(){
+
+        $this->load();
 
         /* Saldo Anterior */
         $invtra = TrInventarioDets::query()
