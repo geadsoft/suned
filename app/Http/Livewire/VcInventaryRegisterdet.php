@@ -108,6 +108,12 @@ class VcInventaryRegisterdet extends Component
     public function setGrabaDetalle($iventarioId){
 
         $this->invCab = TrInventarioCabs::find($iventarioId);
+        $invTra = TrInventarioDets::where('inventariocab_id',$iventarioId)->get();
+        
+        if(!empty($invTra)){
+            TrInventarioDets::where('inventariocab_id',$iventarioId)->delete();
+        }
+
         $this->createData();
     }
 

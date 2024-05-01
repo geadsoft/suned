@@ -13,7 +13,7 @@ use PDF;
 class VcInventaryRegister extends Component
 {
     public $linea, $status, $tipo='ING', $fecha, $inventarioId=0;
-    public $record=[];
+    public $record=[], $action='';
     
     protected $listeners = ['view','setPersona'];
 
@@ -31,6 +31,7 @@ class VcInventaryRegister extends Component
 
     public function load(){
         
+        $this->action = '';
         $this->status = 'disabled';
         $this->record = TrInventarioCabs::orderBy('id','desc')->first();
                
@@ -92,6 +93,7 @@ class VcInventaryRegister extends Component
     
     public function add()
     {
+        $this->action = 'N';
         $this->status = 'enabled';       
         $this->record = TrInventarioCabs::find(0);
         $this->inventarioId = 0;
@@ -110,6 +112,13 @@ class VcInventaryRegister extends Component
         $this->emitTo('vc-inventary-registerdet','mount',0);
     }
 
+    public function edit()
+    {
+        $this->action = 'E';
+        $this->status = 'enabled';       
+        
+    }
+
     public function createData(){
         
         $this ->validate([
@@ -119,44 +128,75 @@ class VcInventaryRegister extends Component
             'record.referencia' => 'required',
             'record.tipopago' => 'required',
         ]);
+
+        if($this->action!='E'){          
         
-        $invCab = TrInventarioCabs::where('tipo',$this->record['tipo'])
-        ->where('movimiento',$this->record['movimiento'])
-        ->select('documento')
-        ->orderby('documento','desc')
-        ->first();
-        
-        $secuencia = 1;
-        if(!empty($invCab)){
-            $secuencia = intval(substr($invCab['documento'], -5))+1;
+            $invCab = TrInventarioCabs::where('tipo',$this->record['tipo'])
+            ->where('movimiento',$this->record['movimiento'])
+            ->select('documento')
+            ->orderby('documento','desc')
+            ->first();
+            
+            $secuencia = 1;
+            if(!empty($invCab)){
+                $secuencia = intval(substr($invCab['documento'], -5))+1;
+            }
+
+            $documento = $this->record['movimiento'].str_pad($secuencia, 5, "0", STR_PAD_LEFT); 
+
+            $invCab = TrInventarioCabs::Create([
+                'periodo' => date("Y",strtotime($this->record['fecha'])),
+                'mes' => date("m",strtotime($this->record['fecha'])),
+                'tipo' => $this->record['tipo'],
+                'documento' => $documento,
+                'fecha'=>$this->record['fecha'],
+                'movimiento' => $this->record['movimiento'],
+                'referencia' => $this->record['referencia'],
+                'estudiante_id' => $this->record['estudiante_id'],
+                'tipopago' => $this->record['tipopago'],
+                'observacion' => $this->record['observacion'],
+                'neto' => 0,
+                'estado' => $this -> record['estado'],
+                'usuario' => auth()->user()->name,
+            ]);
+
+            $this->inventarioId = $invCab->id;
+            $this->emitTo('vc-inventary-registerdet','setGrabaDetalle',$this->inventarioId);
+
+            $message = "Registro grabado con éxito!";
+            $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+
+            $this->load();
+
+        }else{
+            $this->updateData();
+            $this->load();
         }
+        
+    }
 
-        $documento = $this->record['movimiento'].str_pad($secuencia, 5, "0", STR_PAD_LEFT); 
+    public function updateData(){
 
-        $invCab = TrInventarioCabs::Create([
+        $invCab = TrInventarioCabs::find($this->inventarioId);
+        $invCab->update([
             'periodo' => date("Y",strtotime($this->record['fecha'])),
             'mes' => date("m",strtotime($this->record['fecha'])),
             'tipo' => $this->record['tipo'],
-            'documento' => $documento,
             'fecha'=>$this->record['fecha'],
             'movimiento' => $this->record['movimiento'],
             'referencia' => $this->record['referencia'],
             'estudiante_id' => $this->record['estudiante_id'],
             'tipopago' => $this->record['tipopago'],
             'observacion' => $this->record['observacion'],
-            'neto' => 0,
             'estado' => $this -> record['estado'],
             'usuario' => auth()->user()->name,
         ]);
 
         $this->inventarioId = $invCab->id;
         $this->emitTo('vc-inventary-registerdet','setGrabaDetalle',$this->inventarioId);
-
-        $message = "Registro grabado con éxito!";
-        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
-
-        $this->load();
         
+        $message = "Registro actualizado con éxito!";
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
     }
 
     public function procesar(){

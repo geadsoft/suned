@@ -39,7 +39,7 @@ class VcInventaryStock extends Component
     public function load()
     {
         foreach ($this->tblcategorias as $key => $recno){
-            $array[$key]=$key;
+            $array['codigo']=$key;
             $array['nombre']=$recno['descripcion'];
             $arrdet=[];
             for ($i = 1; $i <= 6; $i++){
@@ -66,7 +66,7 @@ class VcInventaryStock extends Component
         ->groupBy('g.id','talla')
         ->get();
 
-        dd($invtra);
+        dd($this->detalle);
 
     }
 

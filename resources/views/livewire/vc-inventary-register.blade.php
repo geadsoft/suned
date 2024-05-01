@@ -127,7 +127,7 @@
                     <!-- end card -->
             </div>
             <div class="text-end mb-3">               
-                @if ($inventarioId==0)
+                @if ($inventarioId==0 || $action=='E')
                 <button type="submit" class="btn btn-success w-sm">Grabar</button>
                 @endif
             </div>
@@ -135,7 +135,7 @@
         </div>
         <!-- end row -->
         <div class="text-end mb-3">
-            @if ($inventarioId>0 & $record['estado']=="G")
+            @if ($inventarioId>0 & $record['estado']=="G" & $action!='E')
                 <button type="button" wire:click="procesar()"  class="btn btn-secondary w-sm">Procesar</button>
             @endif
             </div>
