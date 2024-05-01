@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\TmGeneralidades;
+use App\Models\TrInventarioDets;
 
 class VcInventaryStock extends Component
 {
@@ -43,17 +44,30 @@ class VcInventaryStock extends Component
             $arrdet=[];
             for ($i = 1; $i <= 6; $i++){
                 
+                
                 $arrtalla = $this->newarray();
+                $arrtalla['codigo'] = $i;
                 $arrtalla['nombre'] = $this->movimiento[$i];
+
+
                 array_push($arrdet,$arrtalla);
             }
             
             $array['data']=$arrdet;
-
-            array_push($this->detalle,$array);
-            
+            array_push($this->detalle,$array);    
         }
-                
+
+
+        $invtra = TrInventarioDets::query()
+        ->join("tm_productos as p","p.id","=","tr_inventario_dets.producto_id")
+        ->join("tm_generalidades as g","g.id","=","p.categoria_id")
+        ->where('fecha','<','20240101')
+        ->selectRaw('sum(cantidad), g.id, talla')
+        ->groupBy('g.id','talla')
+        ->get();
+
+        dd($invtra);
+
     }
 
     public function newarray(){
