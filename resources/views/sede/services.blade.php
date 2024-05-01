@@ -16,7 +16,7 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-products')
+    @livewire('vc-services')
 
 @endsection
 @section('script')

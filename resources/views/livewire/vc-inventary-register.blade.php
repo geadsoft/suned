@@ -89,9 +89,7 @@
                                 <label class="form-label" for="product-title-input">Referencia</label>
                                 @endif
                                 <div class="input-group mb-2">
-                                    
                                     <input type="text" class="form-control" name="identidad" id="billinginfo-firstName" placeholder="Razon Social" wire:model="record.referencia" required>
-                                    
                                     @if ($record['movimiento']=='VE')
                                     <a id="btnstudents" class ="input-group-text btn btn-soft-secondary" wire:click="buscar()"><i class="ri-user-add-line me-1"></i></a>
                                     @endif
