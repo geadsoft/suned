@@ -23,7 +23,12 @@ class TmProductosController extends Controller
 
     public function register()
     {
-        return view('inventary/registers');
+        return view('inventary/registers',['id' => 0]);
+    }
+
+    public function editRegister($id)
+    {
+        return view('inventary/registers',['id' => $id]);
     }
 
     public function movements()

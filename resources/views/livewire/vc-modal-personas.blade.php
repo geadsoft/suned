@@ -12,9 +12,24 @@
         <div class="table-responsive table-card mb-3">
             <div style="overflow-x:auto;">
             <table class="table table-sm align-middle" style="width:100%">
+                @if($filters['srv_tipo']=='R')
+                <thead class="text-muted table-light">
+                    <tr class="text-uppercase">
+                        <th>Estudiante</th>
+                        <th>Familiar</th>
+                        <th>identificación</th>
+                        <th>...</th>
+                    </tr>
+                </thead>
+                @endif
                 <tbody class="list form-check-all">
                     @foreach ($tblrecords as $data)
                         <tr class="detalle">
+                            @if($filters['srv_tipo']=='R')
+                            <td>
+                                {{$data['apeestudent']}} {{$data['nomestudent']}}
+                            </td>
+                            @endif
                             <td>
                                 {{$data['apellidos']}} {{$data['nombres']}}
                             </td>

@@ -17,10 +17,14 @@ class VcInventaryRegister extends Component
     
     protected $listeners = ['view','setPersona'];
 
-    public function mount(){
+    public function mount($id){
         
-        $record = TrInventarioCabs::find(0);
-        $this->load();
+        if($id==0){
+            $record = TrInventarioCabs::find(0);
+            $this->load();
+        }else{
+            $this->loadData($id);
+        }
         
     }
 
@@ -54,6 +58,12 @@ class VcInventaryRegister extends Component
 
         }
 
+    }
+
+    public function loadData($id){
+        $this->action = '';
+        $this->status = 'disabled';
+        $this->record = TrInventarioCabs::find($id);
     }
 
     public function view($linea){

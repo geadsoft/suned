@@ -17,7 +17,7 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-inventary-register')
+    @livewire('vc-inventary-register',['id' => $id])
 
 @endsection
 @section('script')

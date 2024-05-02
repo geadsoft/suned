@@ -74,6 +74,7 @@ Route::get('/inventary/products',[App\Http\Controllers\TmProductosController::cl
 Route::get('/inventary/products-add',[App\Http\Controllers\TmProductosController::class, 'add'])->name('add');
 Route::get('/inventary/products-edit/{id}',[App\Http\Controllers\TmProductosController::class, 'edit'])->name('edit');
 Route::get('/inventary/register',[App\Http\Controllers\TmProductosController::class, 'register'])->name('register');
+Route::get('/inventary/register-edit/{{id}}',[App\Http\Controllers\TmProductosController::class, 'editRegister'])->name('editRegister');
 Route::get('/inventary/movements',[App\Http\Controllers\TmProductosController::class, 'movements'])->name('movements');
 Route::get('/products/kardex',[App\Http\Controllers\TmProductosController::class, 'kardex'])->name('kardex');
 Route::get('/inventary/stock',[App\Http\Controllers\TmProductosController::class, 'stock'])->name('stock');

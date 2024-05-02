@@ -146,7 +146,7 @@
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Visualizar">
-                                                    <a href="{{URL::asset('/apps-ecommerce-order-details')}}"
+                                                    <a href=""
                                                         class="text-warning d-inline-block">
                                                         <i class="ri-eye-fill fs-16"></i>
                                                     </a>
