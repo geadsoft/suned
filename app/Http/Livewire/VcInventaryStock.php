@@ -88,6 +88,7 @@ class VcInventaryStock extends Component
         ->groupBy('g.id','talla')
         ->get()->toArray();
 
+
         foreach($invtra as $data){
             
             $cat = $data['id'];
@@ -114,8 +115,6 @@ class VcInventaryStock extends Component
         ->groupBy('g.id','talla','mov')
         ->get();
     
-
-
         foreach($invtra as $data){
             
             $cat = $data['id'];
@@ -125,7 +124,7 @@ class VcInventaryStock extends Component
 
             $this->detalle[$cat]['data'][$mov][$talla] = $valor ;
         }
-        
+    
         /* Stock */
         foreach ($this->detalle as $cat => $record){
 
@@ -150,7 +149,7 @@ class VcInventaryStock extends Component
                 $mov  = $data['codigo'];
                 $cant = 0; 
 
-                if($cat==110){
+                if($cat==111){
                     $cant = $cant + $this->detalle[$cat]['data'][$mov][0];
                 }else{
 
