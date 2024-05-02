@@ -23,6 +23,7 @@ class VcInventaryRegister extends Component
             $record = TrInventarioCabs::find(0);
             $this->load();
         }else{
+            
             $this->loadData($id);
         }
         
@@ -63,7 +64,12 @@ class VcInventaryRegister extends Component
     public function loadData($id){
         $this->action = '';
         $this->status = 'disabled';
-        $this->record = TrInventarioCabs::find($id);
+        $this->record = TrInventarioCabs::find($id)->toArray();
+
+        $fecha = $this->record['fecha'];
+        $this->record['fecha'] = date('Y-m-d',strtotime($fecha));
+        $this->tipo = $this->record['tipo'];
+        $this->inventarioId = $this->record['id'];
     }
 
     public function view($linea){
@@ -228,6 +234,8 @@ class VcInventaryRegister extends Component
                 'estado' => 'P',
             ]);
 
+            TrInventarioDets::where("inventariocab_id",$this->inventarioId)->update(["estado" => "P"]);
+
         }else{
             
             $error='';
@@ -262,6 +270,7 @@ class VcInventaryRegister extends Component
                 'estado' => 'P',
             ]);
 
+            TrInventarioDets::where("inventariocab_id",$this->inventarioId)->update(["estado" => "P"]);
         }
 
         $message = "Documento ".$this->record['documento']." procesado con éxito!";

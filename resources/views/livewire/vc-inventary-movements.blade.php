@@ -127,7 +127,7 @@
                                     <tr>
                                         <td>{{date('d/m/Y',strtotime($record['fecha']))}}</td>
                                         <td>
-                                            <div><a href="{{URL::asset('/apps-ecommerce-order-details')}}"
+                                            <div><a href="/inventary/register-edit/{{$record['id']}}"
                                                 class="fw-medium link-primary">{{$record['tipo']}} {{$record['documento']}}</a><div>
                                             <div>
                                                 @if($record['tipo']=='ING')
@@ -146,14 +146,14 @@
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Visualizar">
-                                                    <a href=""
+                                                    <a href="/inventary/register-edit/{{$record['id']}}"
                                                         class="text-warning d-inline-block">
                                                         <i class="ri-eye-fill fs-16"></i>
                                                     </a>
                                                 </li>
                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Editar">
-                                                    <a href="" data-bs-toggle="modal"
+                                                    <a href="" wire:click.prevent="edit({{$record['id']}})" data-bs-toggle="modal"
                                                         class="text-secondary d-inline-block edit-item-btn">
                                                         <i class="ri-pencil-fill fs-16"></i>
                                                     </a>

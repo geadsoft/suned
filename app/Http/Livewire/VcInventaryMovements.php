@@ -95,6 +95,17 @@ class VcInventaryMovements extends Component
 
     }
 
+    public function edit($id){
+
+        $invCab = TrInventarioCabs::find($id);
+
+        if($invCab['estado']=='P'){
+            return;
+        }
+
+        return redirect()->to('/inventary/register-edit/'.$id);
+    }
+
     public function procesar($id){
 
         $registroId = $id;
@@ -119,6 +130,8 @@ class VcInventaryMovements extends Component
             $invCab->update([
                 'estado' => 'P',
             ]);
+
+            TrInventarioDets::where("inventariocab_id",$registroId)->update(["estado" => "P"]);
 
         }else{
             
@@ -152,6 +165,8 @@ class VcInventaryMovements extends Component
             $invCab->update([
                 'estado' => 'P',
             ]);
+
+            TrInventarioDets::where("inventariocab_id",$registroId)->update(["estado" => "P"]);
 
         }
 
