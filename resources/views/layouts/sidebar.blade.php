@@ -250,8 +250,8 @@
                         </div>
                         
 
-                        <a class="nav-link menu-link" href="/secretary/certificate">
-                            <i class="ri-swap-line fs-20"></i> <span>Kardex</span>
+                        <a class="nav-link menu-link" href="/inventary/stock">
+                            <i class="ri-swap-line fs-20"></i> <span>Stock</span>
                         </a>
                     </ul>
                 </div>
@@ -355,6 +355,18 @@
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="/report/generic-reports">
                                     <i class="las la-sliders-h fs-20"></i> <span>@lang('translation.generic')</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <a class="nav-link menu-link" href="#sidebarproduct" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarreport">
+                        <i class="ri-menu-add-line fs-20"></i> <span>Reportes Productos</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarproduct">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/inventary/detail-products">
+                                    <i class="las la-sliders-h fs-20"></i> <span>Detalle de Productos</span>
                                 </a>
                             </li>
                         </ul>

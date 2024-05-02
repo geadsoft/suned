@@ -12,11 +12,11 @@
             Inventario
         @endslot
         @slot('title')
-            Stock Productos
+            Detalle Productos
         @endslot
     @endcomponent
 
-    @livewire('vc-inventary-stock')
+    @livewire('vc-inventary-reports')
 
 @endsection
 @section('script')

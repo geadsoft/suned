@@ -29,9 +29,9 @@
                         @foreach ($detalle as $cat => $record)
                         <div class="card" id="orderList">
                             <div class="card-header  border-0">
-                                <div class="d-flex align-items-center">
-                                    <h5 class="card-title mb-0 flex-grow-1">{{$record['nombre']}}</h5>
-                                </div>
+                                <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
+                                class="ri-shopping-bag-line me-1 text-success"></i>
+                                {{$record['nombre']}}</h5>
                             </div>
                             <div class="card-body border border-dashed border-end-0 border-start-0">
                         <div class="table-responsive table-card mb-1">
@@ -57,24 +57,45 @@
                                 </thead>
                                 <tbody class="list form-check-all">
                                     @foreach ($movimiento as $data)
-                                        @if ( ($detalle[$cat]['data'][$data['codigo']]=='SA' || $detalle[$cat]['data'][$data['codigo']]=='ED') || $detalle[$cat]['data'][$data['codigo']]['total']>0)
-                                        <tr>
-                                            <td>{{$detalle[$cat]['data'][$data['codigo']]['nombre']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['0']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['28']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['30']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['32']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['34']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['36']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['38']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['40']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['42']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['44']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['46']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['48']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['50']}}</td>
-                                            <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['total']}}</td>
-                                        </tr>
+                                        @if ( ($detalle[$cat]['data'][$data['codigo']]=='SA' || $detalle[$cat]['data'][$data['codigo']]=='SD') || $detalle[$cat]['data'][$data['codigo']]['total']>0)
+                                            @if ($data['codigo']!='SD')
+                                            <tr>
+                                                <td>{{$detalle[$cat]['data'][$data['codigo']]['nombre']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['0']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['28']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['30']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['32']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['34']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['36']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['38']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['40']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['42']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['44']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['46']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['48']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['50']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['total']}}</td>
+                                            </tr>
+                                            @else
+                                            <tr>
+                                                <td><strong>{{$detalle[$cat]['data'][$data['codigo']]['nombre']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['0']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['28']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['30']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['32']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['34']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['36']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['38']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['40']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['42']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['44']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['46']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['48']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['50']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['total']}}</strong></td>
+                                            </tr>
+                                            @endif
+                                            
                                         @endif 
                                     @endforeach
                                 </tbody>

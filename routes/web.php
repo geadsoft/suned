@@ -14,6 +14,7 @@ use App\Http\Livewire\VcRatingsDetail;
 use App\Http\Livewire\VcSolicitudes;
 use App\Http\Livewire\VcGeneraXML;
 use App\Http\Livewire\VcInventaryRegister;
+use App\Http\Livewire\VcInventaryReports;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +77,7 @@ Route::get('/inventary/register',[App\Http\Controllers\TmProductosController::cl
 Route::get('/inventary/movements',[App\Http\Controllers\TmProductosController::class, 'movements'])->name('movements');
 Route::get('/products/kardex',[App\Http\Controllers\TmProductosController::class, 'kardex'])->name('kardex');
 Route::get('/inventary/stock',[App\Http\Controllers\TmProductosController::class, 'stock'])->name('stock');
+Route::get('/inventary/detail-products',[App\Http\Controllers\TmProductosController::class, 'report'])->name('report');
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
 Route::get('/liveWire-pdf/{data}',[VcReportCashReceints::class, 'liveWirePDF']);
@@ -104,6 +106,8 @@ Route::get('/preview-pdf/ratings/{data}',[VcRatingsDetail::class, 'printPDF']);
 Route::get('/download-pdf/ratings/{data}',[VcRatingsDetail::class, 'downloadPDF']);
 Route::get('/preview-pdf/requests',[VcSolicitudes::class, 'printPDF']);
 Route::get('/preview-pdf/record-inv/{id}',[VcInventaryRegister::class, 'liveWirePDF']);
+Route::get('/preview-pdf/detail-products/{data}',[VcInventaryReports::class, 'printPDF']);
+Route::get('/download-pdf/detail-products/{data}',[VcInventaryReports::class, 'downloadPDF']);
 
 Route::get('/invoice/genera/{id}',[VcGeneraXML::class, 'setGeneraXML']);
 Route::get('/invoice/ride-pdf/{id}',[VcGeneraXML::class, 'ImprimeRide']);

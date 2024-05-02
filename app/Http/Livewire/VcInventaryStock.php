@@ -20,11 +20,11 @@ class VcInventaryStock extends Component
         2 => ['codigo' => 'II', 'nombre' => '(+)Inventario Inicial', 'valor' => '1'], 
         3 => ['codigo' => 'CL', 'nombre' => '(+)Compras Locales', 'valor' => '1'], 
         4 => ['codigo' => 'IA', 'nombre' => '(+)Ingreso por Ajuste', 'valor' => '1'], 
-        5 => ['codigo' => 'DI', 'nombre' => '(-)Devolución por Compra', 'valor' => '1'], 
-        6 => ['codigo' => 'VE', 'nombre' => '(-)Venta', 'valor' => '1'], 
-        7 => ['codigo' => 'EG', 'nombre' => '(-)Egreso por Ajuste', 'valor' => '1'], 
-        8 => ['codigo' => 'DE', 'nombre' => '(+)Devolución por Venta', 'valor' => '1'],
-        9 => ['codigo' => 'ED', 'nombre' => 'Stock Disponible', 'valor' => '0'],
+        5 => ['codigo' => 'DC', 'nombre' => '(-)Devolución por Compra', 'valor' => '-1'], 
+        6 => ['codigo' => 'VE', 'nombre' => '(-)Venta', 'valor' => '-1'], 
+        7 => ['codigo' => 'EA', 'nombre' => '(-)Egreso por Ajuste', 'valor' => '-1'], 
+        8 => ['codigo' => 'DV', 'nombre' => '(+)Devolución por Venta', 'valor' => '1'],
+        9 => ['codigo' => 'SD', 'nombre' => 'Stock Disponible', 'valor' => '0'],
     ];
 
     public function mount()
@@ -32,7 +32,7 @@ class VcInventaryStock extends Component
         $this->tblcategorias = TmGeneralidades::where('superior',11)->get();
         
         $ldate = date('Y-m-d H:i:s');
-        $ldate = date('Y',strtotime($ldate)).'-'.date('m',strtotime($ldate)).'-01';
+        $ldate = date('Y',strtotime($ldate)).'-'.'01'.'-01';
        
         $fechaini = date('Y-m-d',strtotime($ldate));
 
@@ -82,7 +82,9 @@ class VcInventaryStock extends Component
         ->when($this->filters['fechaini'],function($query){
             return $query->where('tr_inventario_dets.fecha','<',"{$this->filters['fechaini']}");
         })
-        ->selectRaw('sum(cantidad) as cantidad, g.id, talla, "SA" as mov')
+        ->selectRaw(" sum(case when movimiento = 'DI' Then cantidad*-1
+                          when movimiento = 'VE' Then cantidad*-1
+                          when movimiento = 'EA' Then cantidad*-1 else cantidad end) as cantidad, g.id, talla, 'SA' as mov")
         ->groupBy('g.id','talla')
         ->get()->toArray();
 
@@ -128,15 +130,15 @@ class VcInventaryStock extends Component
         foreach ($this->detalle as $cat => $record){
 
             $i     = 28;
-            $stock = 0;
             while ($i <= 50):
                 $stock = 0; 
                 $val = 0;               
                 foreach ($this->movimiento as $data){
-                    $val  = $this->detalle[$cat]['data'][$mov][$i];
+                    $mov    = $data['codigo'];
+                    $val    = $this->detalle[$cat]['data'][$mov][$i];
                     $stock  = $stock + ($val*intval($data['valor']));   
                 }                
-                $this->detalle[$cat]['data']['ED'][$i] = $stock;
+                $this->detalle[$cat]['data']['SD'][$i] = $stock;
                 $i=$i+2; 
             endwhile; 
         }

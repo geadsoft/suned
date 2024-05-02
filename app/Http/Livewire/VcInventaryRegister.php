@@ -281,8 +281,10 @@ class VcInventaryRegister extends Component
             'II' => 'Inventario Inicial',
             'CL' => 'Compras Locales',
             'IA' => 'Ingreso por Ajuste',
+            'DC' => 'Devolución por Compra',
             'VE' => 'Venta',
             'EA' => 'Egreso por Ajuste',
+            'DV' => 'Devolución por Venta',
         ];
 
         $invCab = TrInventarioCabs::find($selectId);
