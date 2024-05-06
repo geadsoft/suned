@@ -69,7 +69,7 @@ Route::get('/secretary/titles-file',[App\Http\Controllers\SecretariaController::
 Route::get('/secretary/requests',[App\Http\Controllers\SecretariaController::class, 'requests'])->name('requests');
 Route::get('/secretary/promotion',[App\Http\Controllers\SecretariaController::class, 'promotion'])->name('promotion');
 Route::get('/sri/create-invoice',[App\Http\Controllers\TrFacturasCabsController::class, 'index'])->name('index');
-Route::get('/sri/invoices',[App\Http\Controllers\TrFacturasCabsController::class, 'documents'])->name('documents');
+Route::get('/sri/invoices/{tipo}',[App\Http\Controllers\TrFacturasCabsController::class, 'documents'])->name('documents');
 Route::get('/inventary/products',[App\Http\Controllers\TmProductosController::class, 'index'])->name('index');
 Route::get('/inventary/products-add',[App\Http\Controllers\TmProductosController::class, 'add'])->name('add');
 Route::get('/inventary/products-edit/{id}',[App\Http\Controllers\TmProductosController::class, 'edit'])->name('edit');
@@ -79,6 +79,8 @@ Route::get('/inventary/movements',[App\Http\Controllers\TmProductosController::c
 Route::get('/products/kardex',[App\Http\Controllers\TmProductosController::class, 'kardex'])->name('kardex');
 Route::get('/inventary/stock',[App\Http\Controllers\TmProductosController::class, 'stock'])->name('stock');
 Route::get('/inventary/detail-products',[App\Http\Controllers\TmProductosController::class, 'report'])->name('report');
+Route::get('/sri/create-credits',[App\Http\Controllers\TrFacturasCabsController::class, 'ncredits'])->name('ncredits');
+
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
 Route::get('/liveWire-pdf/{data}',[VcReportCashReceints::class, 'liveWirePDF']);

@@ -14,7 +14,7 @@
             SRI
         @endslot
         @slot('title')
-            Nueva Factura
+            Factura
         @endslot
     @endcomponent
 

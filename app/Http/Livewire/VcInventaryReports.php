@@ -91,7 +91,7 @@ class VcInventaryReports extends Component
         ->join("tm_productos as p","p.id","=","d.producto_id")
         ->join("tm_generalidades as g","g.id","=","p.categoria_id")
         ->when($this->filters['referencia'],function($query){
-            return $query->where('tr_inventario_cabs.referencia', 'like' , "%{$this->filters['referencia']}%");
+            return $query->where('p.nombre', 'like' , "%{$this->filters['referencia']}%");
         })
         ->when($this->filters['categoria'],function($query){
             return $query->where('categoria_id',"{$this->filters['categoria']}");

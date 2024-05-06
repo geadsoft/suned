@@ -17,9 +17,14 @@ class TrFacturasCabsController extends Controller
         return view('/financial/createinvoice');
     }
 
-    public function documents()
+    public function documents($tipo)
     {
-        return view('/financial/docelectronics');
+        return view('/financial/docelectronics',['tipo' => $tipo]);
+    }
+
+    public function ncredits()
+    {
+        return view('/financial/createcredits');
     }
 
     /**

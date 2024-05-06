@@ -182,7 +182,7 @@
                                     </a>    
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link menu-link" href="/sri/invoices">
+                                    <a class="nav-link menu-link" href="/sri/invoices/FE">
                                         <span>Todos</span>
                                     </a>    
                                 </li>
@@ -194,12 +194,12 @@
                         <div class="collapse menu-dropdown" id="NCredito">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link menu-link" href="/headquarters/staff">
+                                    <a class="nav-link menu-link" href="/sri/create-credits">
                                         <span>Nuevo</span>
                                     </a>    
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link menu-link" href="">
+                                    <a class="nav-link menu-link" href="/sri/invoices/NE">
                                         <span>Todos</span>
                                     </a>    
                                 </li>

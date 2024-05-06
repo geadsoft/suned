@@ -14,11 +14,11 @@
             SRI
         @endslot
         @slot('title')
-            Facturas
+            Nota de Crédito
         @endslot
     @endcomponent
-    
-    @livewire('vc-doc-electronics',['tipo' => $tipo])
+
+    @livewire('vc-create-credits')
 
 @endsection
 @section('script')
@@ -28,12 +28,18 @@
 
     <script>
 
+        let url = "https://azur.com.ec/plataforma/api/v2/factura/emision";
+    
         window.addEventListener('show-form', event => {
-            $('#showCliente').modal('show');
+            $('#showFacturas').modal('show');
         })
 
         window.addEventListener('hide-form', event => {
-            $('#showCliente').modal('hide');
+            $('#showFacturas').modal('hide');
+        })
+
+        window.addEventListener('msg-grabar', event => {
+            swal("Buen Trabajo!", "Registro grabado con éxito!", "success");
         })
 
         window.addEventListener('msg-ride', event => {
