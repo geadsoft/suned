@@ -508,6 +508,22 @@ class VcStudentEnrollment extends Component
           ]);
 
         //Pension
+
+        $arrmes=[
+            1 => 'Enero',
+            2 => 'Febrero',
+            3 => 'Marzo',
+            4 => 'Abril',
+            5 => 'Mayo',
+            6 => 'Junio',
+            7 => 'Julio',
+            8 => 'Agosto',
+            9 => 'Septiembre',
+            10 => 'Octubre',
+            11 => 'Noviembre',
+            12 => 'Diciembre',
+        ];
+        
         for ($i=0; $i < $cuotas; $i++){
            
             if ($mes==13){
@@ -529,7 +545,7 @@ class VcStudentEnrollment extends Component
                 'debito' => $valorPension,
                 'credito' =>0.00,
                 'saldo' => $valorPension,
-                'glosa' => 'Pensión Cuota '.strval($i+1).' '.$nomperiodo,
+                'glosa' => 'Pensión Cuota '.$arrmes[$i+1].' '.$nomperiodo,
                 'estado' => 'P',
                 'usuario' => auth()->user()->name,
             ]);
@@ -541,7 +557,7 @@ class VcStudentEnrollment extends Component
                 'deudacab_id' => $deudaId,
                 'cobro_id' => 0,
                 'fecha' => strval($año)."-".str_pad($mes, 2, "0", STR_PAD_LEFT).'-01',
-                'detalle' => 'Pensión '.$this->meses[$mes]." ".$nomperiodo,
+                'detalle' => 'Pensión Cuota'.$arrmes[$i+1]." ".$nomperiodo,
                 'tipo' => "",
                 'referencia' => "",
                 'tipovalor' => "DB",
