@@ -523,6 +523,8 @@ class VcStudentEnrollment extends Component
             11 => 'Noviembre',
             12 => 'Diciembre',
         ];
+
+        $año = $codperiodo; 
         
         for ($i=0; $i < $cuotas; $i++){
            
