@@ -26,27 +26,39 @@
                             <!--end col-->
                             <div class="col-sm-7">
                                 <div class="row">
-                                    <div class="col-lg-3 col-sm-6">
-                                    </div>    
-                                    <div class="col-lg-3 col-sm-6">
-                                        <label for="cmbestab">Establecimiento</label>
-                                        <select type="select" class="form-select bg-light border-0" id="cmbestab"  wire:model.defer="establecimiento" required>
-                                            
-                                                <option value="{{$tblsedes->establecimiento}}">{{$tblsedes->establecimiento}}</option>
-                                        
-                                        </select>
+                                    <div class="col-lg-3">
                                     </div>
-                                    <div class="col-lg-3 col-sm-6">
-                                        <label for="cmbptoemision">Punto de Emisión</label>
-                                        <select type="select" class="form-select bg-light border-0" id="cmbptoemision" wire:model.defer="ptoemision" required>
-                                        
-                                                <option value="{{$tblsedes->punto_emision}}">{{$tblsedes->punto_emision}}</option>
-                                        
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6">
-                                        <label for="txtsecuencia">Secuencial</label>
-                                        <input type="text" class="form-control bg-light border-0" id="invoicenoInput" placeholder="Invoice No"  wire:model.defer="documento" readonly="readonly" required/>
+                                    <div class="col-lg-9">
+                                        <div class="table-responsive">
+                                            <table class="invoice-table table table-borderless table-nowrap mb-0">
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="3" class="text-center text-primary fs-14 p-1">
+                                                    <div class="card-header fs-15 p-1"><strong>FACTURA</strong></div></td>
+                                                <tr>
+                                                <tr class="text-left">
+                                                    <td><strong>Establecimiento</strong></td>
+                                                    <td><strong>Punto Emision</strong></td>
+                                                    <td style="width: 180px;"><strong>Secuencial</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                    <select type="select" class="form-select bg-light border-0" id="cmbestab"  wire:model.defer="establecimiento" required>
+                                                        <option value="{{$tblsedes->establecimiento}}">{{$tblsedes->establecimiento}}</option>
+                                                    </select>
+                                                    </td>
+                                                    <td>
+                                                    <select type="select" class="form-select bg-light border-0" id="cmbptoemision" wire:model.defer="ptoemision" required>
+                                                    <option value="{{$tblsedes->punto_emision}}">{{$tblsedes->punto_emision}}</option>
+                                                    </select>
+                                                    </td>
+                                                    <td>    
+                                                    <input type="text" class="form-control bg-light border-0" id="invoicenoInput" placeholder="Invoice No"  wire:model.defer="documento" readonly="readonly" required/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -119,16 +131,155 @@
                                 <div class="mb-3">
                                     <input type="text" class="form-control bg-light border-0" id="billingTaxno" placeholder="Email" wire:model="email" />
                                     <div class="invalid-feedback">
-                                        Please enter a tax number
+                                        Email
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="card-body p-4">
+
+                        @livewire('vc-detailinvoice',['facturaId' => $facturaId])
+
+                        <div class="row mt-3">
+                            <div class="col-lg-7">
+                                <div class="mb-3 sm-3">
+                                    <div class="card">
+                                        <h5 class="card-title flex-grow-1 mb-0"><i
+                                            class="align-middle me-1"></i>
+                                            Información Adicional</h5>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-1">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="mb-3">
+                                            <label for="periodoinput" class="form-label">Estudiante</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <div class="mb-3">
+                                                <select type="select" class="form-select bg-light border-0" id="estudianteInput" wire:model="estudianteId" required>
+                                                    <option value="">Seleccione Estudiante</option>
+                                                    @foreach ($tblstudent as $recno) 
+                                                        <option value="{{$recno->id}}">{{$recno->apellidos}} {{$recno->nombres}}</option>
+                                                    @endforeach 
+                                                </select>
+                                            </div>
+                                        </div> 
+                                    </div>                                   
+                                </div>
+                                <div class="mb-3 sm-3">
+                                    <div class="card">
+                                        <h5 class="card-title flex-grow-1 mb-0"><i
+                                            class="align-middle me-1"></i>
+                                            Forma de Pago</h5>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-sm-1"> 
+                                    </div>
+                                    <div class="col-sm-3"> 
+                                        <label for="billinginfo-firstName" class="form-label">Forma de Pago</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                    <select type="select" class="form-select bg-light border-0" id="selfpago-1" wire:model="formapago" required>
+                                        <option value="01">SIN UTILIZACION DEL SISTEMA FINANCIERO</option>
+                                        <option value="15">COMPENSACIÓN DE DEUDAS</option>
+                                        <option value="16">TARJETA DE DÉBITO</option>
+                                        <option value="17">DINERO ELECTRÓNICO</option>
+                                        <option value="18">TARJETA PREPAGO</option>
+                                        <option value="19">TARJETA DE CRÉDITO</option>
+                                        <option value="20">OTROS CON UTILIZACION DEL SISTEMA FINANCIERO</option>
+                                        <option value="21">ENDOSO DE TÍTULOS</option>
+                                    </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-sm-1"> 
+                                    </div>
+                                    <div class="col-sm-3">                                        
+                                        <label for="billinginfo-firstName" class="form-label">Plazo</label>
+                                    </div>
+                                    <div class="col-sm-3">                                        
+                                            <input class="form-control bg-light border-0 p-2" type="text" id="cardholderName" placeholder="Plazo" wire:model="dias" required>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <select class="form-select bg-light border-0" data-choices data-choices-search-false id="choices-payment-status" wire:model="plazo" required>
+                                            <option value="Dias">Dias</option>
+                                            <option value="Semana">Semana</option>
+                                            <option value="Meses">Meses</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-sm-1"> 
+                                    </div>
+                                    <div class="col-sm-3">                                        
+                                        <label for="billinginfo-firstName" class="form-label">Valor</label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                    <input type="number" class="form-control product-price bg-light border-0" id="productprice-1" step="0.01" placeholder="0.00" wire:model="montopago" required/>
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="input-group mb-1">
+                                    <label for="cart-subtotal" class="form-label p-1">Subtotal sin Impuesto:</label>
+                                    <input type="text" class="form-control bg-white border-0 text-end" id="cart-base0" placeholder="$0.00"  value="{{number_format($totales['subtotalsinImpto'],2)}}" readonly />
+                                </div>
+                                <div class="input-group mb-1">
+                                    <label for="cart-descuento" class="form-label p-1">Subtotal IVA:</label>
+                                    <input type="text" class="form-control bg-white border-0 text-end" id="cart-baseiva" placeholder="$0.00" value="{{number_format($totales['subtotalIVA'],2)}}" readonly />
+                                </div>
+                                <div class="input-group mb-1">
+                                    <label for="cart-descuento" class="form-label p-1">Subtotal 0%:</label>
+                                    <input type="text" class="form-control bg-white border-0 text-end" id="cart-baseiva0" placeholder="$0.00" value="{{number_format($totales['subtotal0'],2)}}" readonly />
+                                </div>
+                                <div class="input-group mb-1">
+                                    <label for="cart-descuento" class="form-label p-1">Subtotal no Objeto IVA:</label>
+                                    <input type="text" class="form-control bg-white border-0 text-end" id="cart-nosujeto" placeholder="$0.00" value="{{number_format($totales['subtotalIVA'],2)}}" readonly />
+                                </div>
+                                <div class="input-group mb-1">
+                                    <label for="cart-descuento" class="form-label p-1">Subtotal Exento de IVA:</label>
+                                    <input type="text" class="form-control bg-white border-0 text-end" id="cart-excento" placeholder="$0.00" value="{{number_format($totales['subtotalExcento'],2)}}" readonly />
+                                </div>
+                                <div class="input-group mb-1">
+                                    <label for="cart-descuento" class="form-label p-1">Descuentos:</label>
+                                    <input type="text" class="form-control bg-white border-0 text-end" id="cart-descuento" placeholder="$0.00" value="{{number_format($totales['descuentos'],2)}}" readonly />
+                                </div>
+                                <div class="input-group mb-1">
+                                    <label for="cart-descuento" class="form-label p-1">IVA:</label>
+                                    <input type="text" class="form-control bg-white border-0 text-end" id="cart-impuesto" placeholder="$0.00" value="{{number_format($totales['Iva'],2)}}" readonly />
+                                </div>
+                                <hr style="border-style:double">
+                                <div class="input-group mb-1 fs-16">
+                                    <label for="cart-descuento" class="form-label p-1">VALOR TOTAL:</label>
+                                    <input type="text" class="form-control bg-white border-0 text-end  fs-16" id="cart-total" placeholder="$0.00" value="{{number_format($totales['valortotal'],2)}}" readonly />
+                                </div>
+                                
+                            </div>
+
+                            <!--end col-->
+                        </div>
+                        <!--end row-->
+                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                        
+                            @if($facturaId==0)
+                            <button type="submit" class="btn btn-success"><i class="mdi mdi-*-* mdi-content-save fs-16 me-1"></i> Grabar </button>
+                            @endif
+                            @if($facturaId>0)
+                            <a href="/sri/create-invoice" class="btn btn-success"><i class="ri-file-line align-bottom me-1"></i> Nuevo</a>
+                            <a href="" wire:click.prevent="enviaRIDE({{$facturaId}})" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Firmar y Enviar</a>
+                            <a href="/invoice/genera/{{$facturaId}}" class="btn btn-primary" target="_blank"><i class="mdi mdi-*-* mdi-printer fs-16 me-1"></i>Imprimir</a>
+                            @endif
+                         </div>
+                    </div>
 
                 </form>
             </div>
         </div>
+        
         <!--end col-->
     </div>
     <div wire.ignore.self class="modal fade" id="showCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

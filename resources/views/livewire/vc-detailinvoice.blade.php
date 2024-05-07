@@ -5,7 +5,7 @@
         </div>
     </div>
     <div class="table-responsive">
-        <table class="invoice-table table table-borderless table-nowrap mb-0">
+        <table class="table table-borderless table-sm align-middle mb-0">
             <thead class="text-muted table-light">
                 <tr class="text-uppercase">
                     <!--<th scope="col" style="width: 40px;">
@@ -21,34 +21,29 @@
                     <th scope="col" style="width: 60px;">Cantidad</th>
                     <th scope="col" style="width: 145px;">Precio</th>
                     <th scope="col" style="width: 145px;">Total</th>
-                    <th scope="col">Acción</th>
+                    <th scope="col" style="width: 70px;"> Acción </th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($tbldetails as $key => $product) 
                     <tr class="text-center" wire:key="{{$key}}">
-                        <!--<th scope="row">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="chk_child" checked readonly>
-                            </div>
-                        </th>-->
-                        <td class="text-start">  
-                            <input type="text" class="form-control bg-light border-0" value="{{$product['linea']}}" readonly>
+                        <td class="text-start p-1">  
+                            <input type="text" class="form-control bg-light border-0 p-1" value="{{$product['linea']}}" readonly>
+                        </td>
+                        <td class="text-start p-1">  
+                            <input type="text" class="form-control bg-light border-0 p-1" value="{{$product['codigo']}}" readonly>
                         </td>
                         <td class="text-start">  
-                            <input type="text" class="form-control bg-light border-0" value="{{$product['codigo']}}" readonly>
-                        </td>
-                        <td class="text-start">  
-                            <input type="text" class="form-control bg-light border-0" value="{{$product['descripcion']}}" readonly>
+                            <input type="text" class="form-control bg-light border-0 p-1" value="{{$product['descripcion']}}" readonly>
                         </td>
                         <td> 
-                            <input type="text" class="form-control bg-light border-0" value="{{$product['cantidad']}}" readonly>
+                            <input type="text" class="form-control bg-light border-0 p-1" value="{{$product['cantidad']}}" readonly>
                         </td>
                         <td> 
-                            <input type="number" class="form-control product-price bg-light border-0" value="{{number_format($product['precio'],2)}}" readonly/>
+                            <input type="number" class="form-control product-price bg-light border-0 p-1" value="{{number_format($product['precio'],2)}}" readonly/>
                         </td>
                         <td>
-                            <input type="number" class="form-control product-price bg-light border-0" value="{{number_format($product['total'],2)}}" readonly/>
+                            <input type="number" class="form-control product-price bg-light border-0 p-1" value="{{number_format($product['total'],2)}}" readonly/>
                         </td>
                         <td> 
                             <button class="btn" wire:click.prevent="removeItem({{$product['linea']}})"><i class="ri-delete-back-2-fill fs-16 text-danger" title="Eliminar"></i></button>

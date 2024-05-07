@@ -24,7 +24,20 @@ class VcGeneraXML extends Component
 
     public function setGeneraXML($facturaid)
     {
-                
+        $documento = TrFacturasCabs::find($facturaid);     
+        
+        if($documento['tipo']=='FE'){
+            $this->GeneraXML_FE($facturaid);
+            return redirect()->to('/invoice/ride-pdf/'.$facturaid);
+        }else{
+            $this->GeneraXML_NE($facturaid);
+            return redirect()->to('/invoice/ride-pdf/'.$facturaid);
+        }
+    }
+
+    /* GENERAL XML DE FACTURA */
+    public function GeneraXML_FE($facturaid)
+    {
         /*<-- Datos Emisor */ 
 
         $emisor  =  TmSedes::where('id','>',0)->first();
@@ -269,16 +282,23 @@ class VcGeneraXML extends Component
 
 	    
         $ruta= $emisor['docgenerado'];
-        $xml->save($ruta."/".$clave.".xml");
+        /*$xml->save($ruta."/".$clave.".xml");*/
 
         /*$record = TrFacturasCabs::find($facturaid);
         $record->update([
             'autorizacion' => $clave,
         ]);*/
 
-        return redirect()->to('/invoice/ride-pdf/'.$facturaid);
-
+        
+        
     }
+
+    /* GENERA XML DE NOTA DE CREDIRO */
+    public function GeneraXML_NE($facturaid)
+    {
+        $emisor  =  TmSedes::where('id','>',0)->first();
+    }
+
 
     public function digitoVerificador($ncClaveAcceso)
     {
@@ -323,8 +343,9 @@ class VcGeneraXML extends Component
        
     }
 
-    public function ImprimeRide($facturaId)
+    public function imprimeRide($facturaId)
     {
+              
         $fpago=[
             '01'=>'Sin utilización del sistema financiero',
             '16'=>'Tarjetas de Debito',
@@ -344,14 +365,25 @@ class VcGeneraXML extends Component
         $factDet = TrFacturasDets::where('facturacab_id',$facturaId)->get();
         /*-->*/
 
-        $pdf = PDF::loadView('docelectronicos/ride_facturaxml',[
-            'emisor' => $emisor,
-            'faccab' => $factCab,
-            'facdet' => $factDet,
-            'fpago' => $fpago,
-        ]);
+        if($factCab['tipo']=='FE'){
+            $pdf = PDF::loadView('docelectronicos/ride_facturaxml',[
+                'emisor' => $emisor,
+                'faccab' => $factCab,
+                'facdet' => $factDet,
+                'fpago' => $fpago,
+            ]);
+        }else{
+            $pdf = PDF::loadView('docelectronicos/ride_notacreditoxml',[
+                'emisor' => $emisor,
+                'faccab' => $factCab,
+                'facdet' => $factDet,
+                'fpago' => $fpago,
+            ]);
+        }
     
         return $pdf->setPaper('a4')->stream('clave.pdf');
     }
+
+    
     
 }

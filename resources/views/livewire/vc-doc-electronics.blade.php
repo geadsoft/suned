@@ -68,7 +68,7 @@
                             <table class="table table-nowrap align-middle" id="orderTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
-                                        <th  data-sort="id"></th>
+                                        
                                         <th  data-sort="description">Fecha Emisión</th>
                                         <th  data-sort="modality">Serie</th>
                                         <th  data-sort="level">Secuencial</th>
@@ -84,7 +84,7 @@
                                 <tbody class="list form-check-all">
                                 @foreach ($tblrecords as $record)    
                                     <tr>
-                                        <td>{{$record->id}}</td>
+                                        
                                         <td> {{date('d/m/Y',strtotime($record->fecha))}}</td> 
                                         <td>{{$record->establecimiento}}-{{$record->puntoemision}}</td> 
                                         <td>{{$record->documento}}</td> 

@@ -47,7 +47,8 @@ class VcCreateCredits extends Component
 
     public function mount()
     {
-        $this->tblsedes  = TmSedes::where('id','>',0)->first();        
+        $this->tblsedes  = TmSedes::where('id','>',0)->first(); 
+        $this->loadSRI();       
     }
     
     public function render()
@@ -122,6 +123,12 @@ class VcCreateCredits extends Component
 
     public function createData(){
 
+        if ($this->totales['valortotal']==0){
+            $message = "No existen valores en el Documento!";
+            $this->dispatchBrowserEvent('msg-error', ['newName' => $message]);
+            return;
+        }
+
         $this ->validate([
             'establecimiento' => 'required',
             'ptoemision' => 'required',
@@ -169,7 +176,7 @@ class VcCreateCredits extends Component
         ]);
 
         $this->facturaId = $facturaCab->id;
-        $this->emitTo('vc-detailinvoice','setGrabaDetalle',$this->facturaId);
+        $this->emitTo('vc-detail-credits','setGrabaDetalle',$this->facturaId);
 
         /* Actualiza Secuencia */
         $record = TmSedes::find($this->tblsedes['id']);
@@ -179,6 +186,53 @@ class VcCreateCredits extends Component
 
         $this->dispatchBrowserEvent('msg-grabar');
 
+    }
+
+
+    public function loadSRI()
+    {
+        $API_KEY = 'API_11345_12398_6614599c307e6';
+        $url = 'https://azur.com.ec/plataforma/api/v2/consulta/comprobante';
+        $firmados = [];
+
+        $facturas  = TrFacturasCabs::where('estado','F')
+        ->get();
+
+        $ch = curl_init();
+        foreach($facturas as $recno){
+
+            $datos=[
+                "api_key" => $API_KEY,
+                "claveacceso" => $recno['autorizacion'],
+            ];
+            $fields = json_encode($datos);
+
+            /*Uso de API - AZUR*/
+            curl_setopt($ch, CURLOPT_URL,$url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($ch);
+            $respuesta = json_decode($response,true);
+            
+
+            if ($respuesta['estado_texto']=='Autorizado'){
+
+                $record = TrFacturasCabs::find($recno['id']);
+                $record->update([
+                    'estado' => 'A',
+                ]);
+                
+                $docfir['claveacceso'] = $recno['autorizacion'];
+                $docfir['xml'] = $respuesta['enlace_xml'];
+                array_push($firmados, $docfir);
+            }
+
+        }
+
+        curl_close($ch);
+        
     }
 
     public function enviaRIDE($facturaId){
@@ -325,6 +379,9 @@ class VcCreateCredits extends Component
                     'estado' => 'F',
                     'autorizacion' => $claveAcceso,
                 ]);
+
+                TrFacturasDets::where("facturacab_id",$facturaId)->update(["estado" => "F"]);
+
             }else{
 
                 $error=1;

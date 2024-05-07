@@ -14,7 +14,7 @@
                     <th scope="col" style="width: 60px;">Cantidad</th>
                     <th scope="col" style="width: 145px;">Precio</th>
                     <th scope="col" style="width: 145px;">Total</th>
-                    <th scope="col">Acción</th>
+                    <th scope="col" style="width: 70px;">Acción</th>
                 </tr>
             </thead>
             <tbody>

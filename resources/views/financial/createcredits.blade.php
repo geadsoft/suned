@@ -42,6 +42,10 @@
             swal("Buen Trabajo!", "Registro grabado con éxito!", "success");
         })
 
+        window.addEventListener('msg-error', event => {
+            swal("Error!", event.detail.newName, "warning");
+        })
+
         window.addEventListener('msg-ride', event => {
             var array;
             var mensaje;

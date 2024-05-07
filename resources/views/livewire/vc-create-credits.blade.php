@@ -33,8 +33,8 @@
                                             <table class="invoice-table table table-borderless table-nowrap mb-0">
                                             <tbody>
                                                 <tr>
-                                                    <td colspan="3" class="text-center text-primary fs-14">
-                                                    <strong>NOTA DE CRÉDITO</strong></td>
+                                                    <td colspan="3" class="text-center text-primary fs-14 p-1">
+                                                    <div class="card-header fs-15 p-1"><strong>NOTA DE CREDITO</strong></div></td>
                                                 <tr>
                                                 <tr class="text-left">
                                                     <td><strong>Establecimiento</strong></td>
@@ -69,7 +69,7 @@
                             <div class="col-lg-8 col-sm-6">
                                 <label for="invoicenoInput">Cliente</label>
                                 <div class="input-group bg-light border-0 mb-2">
-                                    <input type="text" class="form-control bg-light border-0" name="identidad" id="billinginfo-firstName" placeholder="Cliente" wire:model="cliente" required readonly>
+                                    <input type="text" class="form-control bg-light border-0" name="identidad" id="cliente" placeholder="Cliente" wire:model="cliente" required readonly>
                                     <a id="btnstudents" class ="input-group-text btn btn-soft-secondary" wire:click="buscar()"><i class="ri-user-add-line me-1"></i></a>
                                 </div>
                             </div>
@@ -89,7 +89,7 @@
                         <div class="row g-3">
                             <div class="col-lg-6 col-sm-6">
                                 <div class="mb-2">
-                                    <textarea class="form-control bg-light border-0" id="billingAddress" rows="3" placeholder="Dirección" wire:model="direccion" ></textarea>
+                                    <textarea class="form-control bg-light border-0" id="direccion" rows="3" placeholder="Dirección" wire:model="direccion" ></textarea>
                                     <div class="invalid-feedback">
                                         Dirección
                                     </div>
@@ -97,13 +97,13 @@
                             </div>
                             <div class="col-lg-6 col-sm-6">
                                 <div class="mb-2">
-                                    <input type="text" class="form-control bg-light border-0" data-plugin="cleave-phone" id="billingPhoneno" placeholder="+593-" wire:model="telefono" readonly/>
+                                    <input type="text" class="form-control bg-light border-0" data-plugin="cleave-phone" id="telefono" placeholder="+593-" wire:model="telefono" readonly/>
                                     <div class="invalid-feedback">
                                         Telefono
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <input type="text" class="form-control bg-light border-0" id="billingTaxno" placeholder="Email" wire:model="email" />
+                                    <input type="text" class="form-control bg-light border-0" id="email" placeholder="Email" wire:model="email" />
                                     <div class="invalid-feedback">
                                         Email
                                     </div>
@@ -114,11 +114,11 @@
                             <div class="col-lg-6 col-sm-6">
                                 <div class="mb-2 input-group">
                                 <label for="date-field">Factura Aplica &nbsp;</label>
-                                <input type="text" class="form-control bg-light border-0" id="billingTaxno" placeholder="Factura" wire:model="factura" readonly/>
+                                <input type="text" class="form-control bg-light border-0" id="factura" placeholder="Factura" wire:model="factura" readonly/>
                                 </div>
                                 <div class="mb-2 input-group">
                                     <label for="date-field">Fecha Factura &nbsp;</label>
-                                    <input type="date" class="form-control bg-light border-0" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha_factura" required readonly/>
+                                    <input type="date" class="form-control bg-light border-0" id="fechafactura" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha_factura" required readonly/>
                                     <div class="invalid-feedback">
                                         Fecha
                                     </div>
@@ -127,7 +127,7 @@
                             <div class="col-lg-6 col-sm-6">
                                 
                                 <div class="mb-3 input-group">
-                                    <textarea class="form-control bg-light border-0" id="billingAddress" rows="2" placeholder="Motivo" wire:model="motivo" required></textarea>
+                                    <textarea class="form-control bg-light border-0" id="motivo" rows="3" placeholder="Motivo" wire:model="motivo" required></textarea>
                                     <div class="invalid-feedback">
                                         Motivo
                                     </div>
@@ -268,7 +268,7 @@
                             <button type="submit" class="btn btn-success"><i class="mdi mdi-*-* mdi-content-save fs-16 me-1"></i> Grabar </button>
                             @endif
                             @if($facturaId>0)
-                            <a href="/sri/create-invoice" class="btn btn-success"><i class="ri-file-line align-bottom me-1"></i> Nuevo</a>
+                            <a href="/sri/create-credits" class="btn btn-success"><i class="ri-file-line align-bottom me-1"></i> Nuevo</a>
                             <a href="" wire:click.prevent="enviaRIDE({{$facturaId}})" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Firmar y Enviar</a>
                             <a href="/invoice/genera/{{$facturaId}}" class="btn btn-primary" target="_blank"><i class="mdi mdi-*-* mdi-printer fs-16 me-1"></i>Imprimir</a>
                             @endif

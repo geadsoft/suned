@@ -11,7 +11,7 @@ class VcDetailCredits extends Component
     public $tbldetails = [], $invCab;
     public $linea, $total=0, $cantidad=0;
     
-    protected $listeners = ['setDetalle','setGrabaDetalle','mount'];
+    protected $listeners = ['setGrabaDetalle'];
 
     public function mount($facturaId) {
 
@@ -23,7 +23,8 @@ class VcDetailCredits extends Component
                 'linea' => 1,
                 'productoid' => 0,
                 'codigo' => 'AF0001',
-                'descripcion' => 'Anulación de Factura No.',
+                'descripcion' => 'DESCUENTO EN FACTURA',
+                'unidad' => 'UND',
                 'cantidad' => 1,
                 'precio' => 0.00,
                 'total' => 0.00
@@ -62,10 +63,17 @@ class VcDetailCredits extends Component
 
         $cantidad = $this->tbldetails[$linea]['cantidad'];
         $precio = $this->tbldetails[$linea]['precio'];
+
         if (empty($cantidad)){
             $cantidad=0;
             $this->tbldetails[$linea]['cantidad']=0;
         }
+
+        if (empty($precio)){
+            $precio=0;
+            $this->tbldetails[$linea]['precio']=0;
+        }
+
         $total = $cantidad*$precio;
 
         $this->tbldetails[$linea]['total'] = floatval($total);
@@ -95,51 +103,56 @@ class VcDetailCredits extends Component
 
     }*/
 
-    public function setGrabaDetalle($iventarioId){
+    public function removeItem($linea){
 
-        $this->invCab = TrInventarioCabs::find($iventarioId);
-        $invTra = TrInventarioDets::where('inventariocab_id',$iventarioId)->get();
-        
-        if(!empty($invTra)){
-            TrInventarioDets::where('inventariocab_id',$iventarioId)->delete();
+        $recnoToDelete = $this->tbldetails;
+        foreach ($recnoToDelete as $index => $recno)
+        {
+            if ($recno['linea'] == $linea){
+                unset ($recnoToDelete[$index]);
+            } 
         }
 
+        $this->reset(['tbldetails']);
+        $this->tbldetails = $recnoToDelete;
+
+        $total = array_sum(array_column($this->tbldetails,'total'));
+        $arrtotales['TotalSinImpto'] = $total;
+        $arrtotales['Subtotal0'] = $total;
+        $arrtotales['Total'] = $total;
+
+        $this->emitTo('vc-createinvoice','setTotales',$arrtotales);
+    }
+
+    public function setGrabaDetalle($facturaId){
+
+        $this->facturaCab = TrFacturasCabs::find($facturaId);
         $this->createData();
     }
 
     public function createData(){
 
-        $total = 0;
-
-        foreach ($this->detalle as $index => $recno)
+        foreach ($this->tbldetails as $index => $recno)
         {
-            if ($recno['cantidad']>0){
+            TrFacturasDets::Create([
+                'periodo' => $this->facturaCab->periodo,
+                'mes' => $this->facturaCab->mes,
+                'facturacab_id' => $this->facturaCab->id,
+                'linea' => $recno['linea'],
+                'codigo' => $recno['codigo'],
+                'descripcion' => $recno['descripcion'],
+                'unidad' => $recno['unidad'],
+                'cantidad' => $recno['cantidad'],
+                'precio' => $recno['precio'],
+                'descuento' => 0,
+                'impuesto' => 0,
+                'total' => $recno['total'],
+                'estado' => 'C',
+                'usuario' => auth()->user()->name,
+            ]);
 
-                TrInventarioDets::Create([
-                    'periodo' => $this->invCab->periodo,
-                    'mes' => $this->invCab->mes,
-                    'inventariocab_id' => $this->invCab->id,
-                    'tipo' => $this->invCab->tipo,
-                    'documento' => $this->invCab->documento,
-                    'fecha' => $this->invCab->fecha,
-                    'movimiento' => $this->invCab->movimiento,
-                    'linea' => $recno['linea'],
-                    'producto_id' => $recno['productoid'],
-                    'unidad' => $recno['unidad'],
-                    'cantidad' => $recno['cantidad'],
-                    'precio' => $recno['precio'],
-                    'total' => $recno['total'],
-                    'estado' => 'G',
-                    'usuario' => auth()->user()->name,
-                ]);
-                
-                $total = $total + $recno['total'];
-
-            }
         }
 
     }
-
-
 
 }

@@ -299,6 +299,9 @@ class VcDocElectronics extends Component
                 $record->update([
                     'autorizacion' => $claveAcceso,
                 ]);
+
+                TrFacturasDets::where("facturacab_id",$facturaId)->update(["estado" => "F"]);
+                
             }else{
 
                 $error=1;

@@ -112,8 +112,10 @@ Route::get('/preview-pdf/record-inv/{id}',[VcInventaryRegister::class, 'liveWire
 Route::get('/preview-pdf/detail-products/{data}',[VcInventaryReports::class, 'printPDF']);
 Route::get('/download-pdf/detail-products/{data}',[VcInventaryReports::class, 'downloadPDF']);
 
+
 Route::get('/invoice/genera/{id}',[VcGeneraXML::class, 'setGeneraXML']);
-Route::get('/invoice/ride-pdf/{id}',[VcGeneraXML::class, 'ImprimeRide']);
+Route::get('/invoice/ride-pdf/{id}',[VcGeneraXML::class, 'imprimeRide']);
+
 
 Auth::routes();
 //Language Translation
