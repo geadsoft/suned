@@ -547,7 +547,7 @@ class VcStudentEnrollment extends Component
                 'debito' => $valorPension,
                 'credito' =>0.00,
                 'saldo' => $valorPension,
-                'glosa' => 'Pensión Cuota '.$arrmes[$i+1].' '.$nomperiodo,
+                'glosa' => 'Pensión Cuota '.$arrmes[$mes].' '.$nomperiodo,
                 'estado' => 'P',
                 'usuario' => auth()->user()->name,
             ]);
@@ -559,7 +559,7 @@ class VcStudentEnrollment extends Component
                 'deudacab_id' => $deudaId,
                 'cobro_id' => 0,
                 'fecha' => strval($año)."-".str_pad($mes, 2, "0", STR_PAD_LEFT).'-01',
-                'detalle' => 'Pensión Cuota'.$arrmes[$i+1]." ".$nomperiodo,
+                'detalle' => 'Pensión Cuota '.$arrmes[$mes]." ".$nomperiodo,
                 'tipo' => "",
                 'referencia' => "",
                 'tipovalor' => "DB",
