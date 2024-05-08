@@ -50,7 +50,7 @@ class VcPanel extends Component
         ->join('tm_personas as p','p.id','tm_matriculas.estudiante_id')
         ->where('tm_matriculas.periodo_id',$this->lnperiodoId)
         ->where("tipopersona","E")
-        ->where("p.estado","A")
+        ->where("tm_matriculas.estado","A")
         ->get();
         
         $this->hombres = $personas->where('genero','M')->count('id');
@@ -66,7 +66,7 @@ class VcPanel extends Component
         ->selectRaw("count(tm_matriculas.estudiante_id) as cantidad, Case When a.id is null then 'N' else 'A' End as tipo") 
         ->where('tm_matriculas.periodo_id',$this->lnperiodoId)
         ->where("tipopersona","E")
-        ->where("p.estado","A")
+        ->where("tm_matriculas.estado","A")
         ->whereRaw("tm_matriculas.modalidad_id in (2,4)")
         ->groupByRaw("Case When a.id is null then 'N' else 'A' End")
         ->get();
@@ -105,7 +105,7 @@ class VcPanel extends Component
         ->selectRaw('g.descripcion,p.genero, count(p.identificacion) as cantidad')
         ->where('tm_matriculas.periodo_id',$this->lnperiodoId)
         ->where("p.tipopersona","E")
-        ->where("p.estado","A")
+        ->where("tm_matriculas.estado","A")
         ->groupbyRaw('g.descripcion,p.genero')
         ->get();
 
