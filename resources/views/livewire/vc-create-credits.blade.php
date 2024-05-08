@@ -2,7 +2,7 @@
     <div class="row justify-content-center">
         <div class="col-xxl-10">
             <div class="card">
-                <form autocomplete="off" wire:submit.prevent="{{ 'createData' }}" id="invoice_form">
+                <form autocomplete="off" wire:submit.prevent="{{ 'createData' }}" id="invoice_form" class="was-validated">
                     <div class="card-body border-bottom border-bottom-dashed p-4">
                         <div class="row">
                             <div class="col-sm-5">
@@ -129,7 +129,6 @@
                                 <div class="mb-3 input-group">
                                     <textarea class="form-control bg-light border-0" id="motivo" rows="3" placeholder="Motivo" wire:model="motivo" required></textarea>
                                     <div class="invalid-feedback">
-                                        Motivo
                                     </div>
                                 </div>
                             </div>
