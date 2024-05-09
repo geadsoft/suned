@@ -14,7 +14,12 @@ class TrFacturasCabsController extends Controller
      */
     public function index()
     {
-        return view('/financial/createinvoice');
+        return view('/financial/createinvoice',['id' => 0]);
+    }
+
+    public function viewfe($id)
+    {
+        return view('/financial/createinvoice',['id' => $id]);
     }
 
     public function documents($tipo)
@@ -24,8 +29,14 @@ class TrFacturasCabsController extends Controller
 
     public function ncredits()
     {
-        return view('/financial/createcredits');
+        return view('/financial/createcredits',['id' => 0]);
     }
+
+    public function viewne($id)
+    {
+        return view('/financial/createcredits',['id' => $id]);
+    }
+
 
     /**
      * Show the form for creating a new resource.

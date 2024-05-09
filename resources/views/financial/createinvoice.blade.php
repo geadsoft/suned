@@ -18,7 +18,7 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-createinvoice')
+    @livewire('vc-createinvoice',['id' => $id])
 
 @endsection
 @section('script')

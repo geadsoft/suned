@@ -30,7 +30,8 @@ class VcCreateinvoice extends Component
     public $plazo='Dias';
     public $formapago=20;
     public $montopago=0;
-    public $facturaId=0, $periodoId=0, $estudianteId;
+    public $facturaId=0, $periodoId=0, $estudianteId, $estado='';
+    public $frmcontrol = 'enabled';
 
     public $totales = [
         'subtotalsinImpto' => 0,
@@ -50,13 +51,18 @@ class VcCreateinvoice extends Component
 
     protected $listeners = ['setPersona','setTotales'];
 
-    public function mount()
+    public function mount($id)
     {
         $this->tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         $periodo = TmPeriodosLectivos::where('estado','A')->first();
         
         $this->tblsedes      = TmSedes::where('id','>',0)->first();
         $this->loadSRI();
+
+        if($id>0){
+            $this->facturaId = $id;
+            $this->loaddata();
+        }
         
     }
     
@@ -86,13 +92,11 @@ class VcCreateinvoice extends Component
 
     public function add($tblsedes)
     {
-        /*foreach ($tblsedes as $dato)
-        {*/   
-            $this->record['documento'] = str_pad($tblsedes['secuencia_factura']+1, 9, "0", STR_PAD_LEFT);
-            $this->record['establecimiento'] = $tblsedes['establecimiento'];
-            $this->record['punto_emision'] = $tblsedes['punto_emision'];
-        /*}*/ 
         
+        $this->record['documento'] = str_pad($tblsedes['secuencia_factura']+1, 9, "0", STR_PAD_LEFT);
+        $this->record['establecimiento'] = $tblsedes['establecimiento'];
+        $this->record['punto_emision'] = $tblsedes['punto_emision'];
+
         $ldate = date('Y-m-d H:i:s');
         $this->fecha = date('Y-m-d',strtotime($ldate));
         $this->record['fecha']= $this->fecha;
@@ -103,12 +107,26 @@ class VcCreateinvoice extends Component
     }    
 
 
-    public function loaddata($tblrecords)
+    public function loaddata()
     {
-        foreach ($tblsedes as $dato)
-        {
-            $this->record['documento'] = $dato['secuencia_factura']+1;
-        }
+        $this->frmcontrol = 'disabled';
+        $this->record  = TrFacturasCabs::find($this->facturaId);
+
+        $ldate = $this->record['fecha'];
+        $this->fecha = date('Y-m-d',strtotime($ldate));
+        $this->record['fecha']= $this->fecha;
+        $this->establecimiento = $this->record['establecimiento'];
+        $this->ptoemision = $this->record['puntoemision'];
+        $this->documento = $this->record['documento'];
+
+        $this->totales['subtotalsinImpto'] = $this->record['subtotal'];
+        $this->totales['subtotal0'] = $this->record['subtotal'];
+        $this->totales['valortotal'] = $this->record['neto'];
+        $this->montopago = $this->record['neto'];
+        $this->estado = $this->record['estado'];
+               
+        $this->setPersona($this->record['persona_id'],$this->record['estudiante_id']);
+        
     }
 
     /*Cabecera Factura*/
@@ -134,7 +152,10 @@ class VcCreateinvoice extends Component
         ->get();
 
         $this->estudianteId = $estudianteId;
-        $this->updatedestudianteId($this->estudianteId);
+       
+        if ($this->facturaId==0){
+            $this->updatedestudianteId($this->estudianteId);
+        }
 
     }
 

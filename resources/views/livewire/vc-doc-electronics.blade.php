@@ -98,10 +98,13 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                            <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top" title="Ver">
-                                                <a href="" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle dropdown"><i class="ri-eye-fill  align-bottom me-1 fs-16"></i></a>
-                                            </li>
+                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Visualizar">
+                                                @if ($doctipo=='FE')
+                                                <a href="/invoice/view/{{$record->id}}" target="_blank" lass="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle dropdown"><i class="ri-eye-fill  align-bottom me-1 fs-16"></i></a>
+                                                @else
+                                                <a href="/credits/view/{{$record->id}}" target="_blank" lass="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle dropdown"><i class="ri-eye-fill  align-bottom me-1 fs-16"></i></a>
+                                                @endif
+                                            </li>                                            
                                             @if ($record->autorizacion=='')
                                             <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Firmar y Enviar">
@@ -131,9 +134,6 @@
                         </div>
                         {{$tblrecords->links('')}}
                     </div>
-                    
-                    
-
                 </div>
             </div>
 

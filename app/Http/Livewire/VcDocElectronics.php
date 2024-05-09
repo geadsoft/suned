@@ -9,6 +9,7 @@ use App\Models\TmPersonas;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class VcDocElectronics extends Component
 {
@@ -47,6 +48,9 @@ class VcDocElectronics extends Component
         
         $tblrecords = TrFacturasCabs::query()
         ->join("tm_personas as p","p.id","=","tr_facturas_cabs.persona_id")
+        ->when($this->filters['srv_nombre'],function($query){
+            return $query->where(DB::raw('concat(ltrim(rtrim(p.apellidos))," ",ltrim(rtrim(p.nombres)))'), 'LIKE' , "%{$this->filters['srv_nombre']}%");
+        })
         ->where('tipo',$this->doctipo)
         ->select('tr_facturas_cabs.*','p.apellidos','p.nombres')
         ->orderBy('documento','desc')

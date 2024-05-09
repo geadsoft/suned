@@ -18,7 +18,7 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-create-credits')
+    @livewire('vc-create-credits',['id' => $id])
 
 @endsection
 @section('script')

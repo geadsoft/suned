@@ -17,7 +17,7 @@ class VcDetailinvoice extends Component
     public $detCobros=[];
     public $tbldetails=[];
     public $tblstudent=[];
-    public $tblperiodos, $facturaCab;
+    public $tblperiodos, $facturaCab, $facturaId;
     public $filters = [
         'srv_personaid' => 0,
         'srv_periodoid' => '',
@@ -25,6 +25,15 @@ class VcDetailinvoice extends Component
     ];
 
     protected $listeners = ['setCobros','setGrabaDetalle'];
+
+    public function mount($facturaId)
+    {
+        if($facturaId>0){
+            $this->facturaId = $facturaId;
+            $this->loadDetalle();
+        }
+        
+    }
 
     public function render()
     {
@@ -89,6 +98,25 @@ class VcDetailinvoice extends Component
         $this->emitTo('vc-createinvoice','setTotales',$arrtotales);
 
     }
+
+    public function loadDetalle(){
+
+        $this->tbldetails = TrFacturasDets::where('facturacab_id',$this->facturaId)->get();
+        $total = 0;
+
+        foreach ($this->tbldetails as $index => $recno)
+        { 
+            $total= $total + $recno['total'];  
+        }
+
+        $arrtotales['TotalSinImpto'] = $total;
+        $arrtotales['Subtotal0'] = $total;
+        $arrtotales['Total'] = $total;
+
+        $this->emitTo('vc-createinvoice','setTotales',$arrtotales);
+
+    }
+
 
     public function removeItem($linea){
 

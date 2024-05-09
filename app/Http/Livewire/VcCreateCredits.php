@@ -25,7 +25,8 @@ class VcCreateCredits extends Component
     public $plazo='Dias';
     public $formapago=20;
     public $montopago=0;
-    public $facturaId=0, $periodoId=0, $estudianteId, $factura, $fecha_factura, $motivo;
+    public $facturaId=0, $periodoId=0, $estudianteId, $factura, $fecha_factura, $motivo, $estado='';
+    public $frmcontrol = 'enabled';
 
     public $totales = [
         'subtotalsinImpto' => 0,
@@ -38,17 +39,22 @@ class VcCreateCredits extends Component
         'valortotal' => 0,
     ];
 
-    public $producto_id, $cantidadDig, $precioventa, $descuento, $itemtotal, $subtotal=0; 
+    public $producto_id, $cantidadDig, $precioventa, $descuento, $itemtotal, $subtotal=0;
     public $detalleVtas = [], $tblsedes;
     public $tblperiodos;
     public $tblstudent=[];
 
     protected $listeners = ['setDocModifica','setTotales'];
 
-    public function mount()
+    public function mount($id)
     {
         $this->tblsedes  = TmSedes::where('id','>',0)->first(); 
-        $this->loadSRI();       
+        $this->loadSRI();   
+        
+        if($id>0){
+            $this->facturaId = $id;
+            $this->loaddata();
+        }
     }
     
     public function render()
@@ -80,9 +86,36 @@ class VcCreateCredits extends Component
 
     public function loaddata()
     {
+        $this->frmcontrol = 'disabled';
+        $this->record  = TrFacturasCabs::find($this->facturaId);
 
-        $this->record['documento'] = $this->tblsedes['secuencia_ncredito']+1;
-        
+        $ldate = $this->record['fecha'];
+        $this->fecha = date('Y-m-d',strtotime($ldate));
+        $this->record['fecha']= $this->fecha;
+        $this->establecimiento = $this->record['establecimiento'];
+        $this->ptoemision = $this->record['puntoemision'];
+        $this->documento = $this->record['documento'];
+
+        $this->totales['subtotalsinImpto'] = $this->record['subtotal'];
+        $this->totales['subtotal0'] = $this->record['subtotal'];
+        $this->totales['valortotal'] = $this->record['neto'];
+        $this->montopago = $this->record['neto'];
+        $this->estado = $this->record['estado'];   
+        $this->personaId = $this->record['persona_id'];
+
+        $this->tblstudent = TmPersonas::where('id',$this->record['estudiante_id'])->get();
+        $this->estudianteId = $this->record['estudiante_id'];
+
+        $this->cliente = $this->record->persona->apellidos.' '.$this->record->persona->nombres;
+        $this->ruc = $this->record->persona->identificacion;
+        $this->direccion =  $this->record->persona->direccion;
+        $this->telefono =  $this->record->persona->telefono;
+        $this->email =  $this->record->persona->email;
+        $this->factura = $this->record['docaplica'];
+        $fecha = $this->record['fecha_docaplica'];
+        $this->fecha_factura = date('Y-m-d',strtotime($fecha));
+        $this->motivo = $this->record['motivo'];
+
     }
 
     /*Doc Modificado*/

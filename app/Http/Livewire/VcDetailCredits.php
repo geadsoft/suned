@@ -9,7 +9,7 @@ use App\Models\TrFacturasDets;
 class VcDetailCredits extends Component
 {
     public $tbldetails = [], $invCab;
-    public $linea, $total=0, $cantidad=0;
+    public $linea, $total=0, $cantidad=0, $facturaId;
     
     protected $listeners = ['setGrabaDetalle'];
 
@@ -85,23 +85,11 @@ class VcDetailCredits extends Component
         $this->emitTo('vc-create-credits','setTotales',$arrtotales);
     }
 
-    /*public function setDetalle($productoId){
+    public function loadDetalle(){
 
-
-        $record = TmProductos::find($productoId);
-        $linea = $this->linea;
-      
-        $cantidad = floatval($this->detalle[$linea]);
-        $this->detalle[$linea]['productoid'] = $record->id;
-        $this->detalle[$linea]['producto'] = $record->nombre;
-        $this->detalle[$linea]['unidad'] = $record->unidad;
-        $this->detalle[$linea]['precio'] = $record->precio;
-        $this->detalle[$linea]['total'] =  $cantidad*floatval($record->precio);
+        $this->tbldetails = TrFacturasDets::where('facturacab_id',$this->facturaId)->get();
         
-        
-        $this->dispatchBrowserEvent('hide-form');
-
-    }*/
+    }
 
     public function removeItem($linea){
 

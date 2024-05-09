@@ -70,6 +70,10 @@ Route::get('/secretary/requests',[App\Http\Controllers\SecretariaController::cla
 Route::get('/secretary/promotion',[App\Http\Controllers\SecretariaController::class, 'promotion'])->name('promotion');
 Route::get('/sri/create-invoice',[App\Http\Controllers\TrFacturasCabsController::class, 'index'])->name('index');
 Route::get('/sri/invoices/{tipo}',[App\Http\Controllers\TrFacturasCabsController::class, 'documents'])->name('documents');
+Route::get('/invoice/view/{id}',[App\Http\Controllers\TrFacturasCabsController::class, 'viewfe'])->name('viewfe');
+Route::get('/credits/view/{id}',[App\Http\Controllers\TrFacturasCabsController::class, 'viewne'])->name('viewne');
+
+
 Route::get('/inventary/products',[App\Http\Controllers\TmProductosController::class, 'index'])->name('index');
 Route::get('/inventary/products-add',[App\Http\Controllers\TmProductosController::class, 'add'])->name('add');
 Route::get('/inventary/products-edit/{id}',[App\Http\Controllers\TmProductosController::class, 'edit'])->name('edit');
