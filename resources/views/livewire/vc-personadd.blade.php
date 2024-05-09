@@ -372,6 +372,7 @@
                                             <label for="pertipoident" class="form-label">Tipo de Identificación</label>
                                             <select class="form-select" data-choices data-choices-search-false id="pertipoident" wire:model.defer="representante.tipoidentificacion" required {{$eControl}}>
                                                 <option value="C">Cédula</option>
+                                                <option value="R">Ruc</option>
                                                 <option value="P">Pasaporte</option>
                                             </select>
                                         </div>
@@ -491,6 +492,7 @@
                                             <label for="pertipoident" class="form-label">Type of identification</label>
                                             <select class="form-select" data-choices data-choices-search-false id="pertipoident" wire:model.defer="familiar.tipoidentificacion" {{$eControl2}}>
                                                 <option value="C">Cédula</option>
+                                                <option value="R">Ruc</option>
                                                 <option value="P">Pasaporte</option>
                                             </select>
                                         </div>
