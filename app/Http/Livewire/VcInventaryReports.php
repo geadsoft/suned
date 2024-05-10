@@ -24,9 +24,30 @@ class VcInventaryReports extends Component
         'referencia' => '',
         'movimiento' => 'VE',
         'categoria' => '',
-        'talla' => '',
+        'talla' => '0',
         'fechaini' => '',
         'fechafin' => '',
+        'estudiante' => '',
+        'cantidad' => '',
+        'precio' => '',
+        'monto' => '',
+        'tipopago' => '',
+    ];
+
+    public $arrtalla=[
+        '0'=>'Seleccione Talla',
+        '28'=>28,
+        '30'=>30,
+        '32'=>32,
+        '34'=>34,
+        '36'=>36,
+        '38'=>38,
+        '40'=>40,
+        '42'=>42,
+        '44'=>44,
+        '46'=>46,
+        '48'=>48,
+        '50'=>50,
     ];
 
     public $movimiento=[
@@ -85,6 +106,7 @@ class VcInventaryReports extends Component
 
     public function consulta(){
 
+        
         /* Movimientos */
         $invtra = TrInventarioCabs::query()
         ->join("tr_inventario_dets as d","d.inventariocab_id","=","tr_inventario_cabs.id")
@@ -93,14 +115,29 @@ class VcInventaryReports extends Component
         ->when($this->filters['referencia'],function($query){
             return $query->where('p.nombre', 'like' , "%{$this->filters['referencia']}%");
         })
+        ->when($this->filters['estudiante'],function($query){
+            return $query->where('tr_inventario_cabs.referencia', 'like' , "%{$this->filters['estudiante']}%");
+        })
         ->when($this->filters['categoria'],function($query){
             return $query->where('categoria_id',"{$this->filters['categoria']}");
         })
         ->when($this->filters['movimiento'],function($query){
             return $query->where('d.movimiento',"{$this->filters['movimiento']}");
         })
-        ->when($this->filters['talla'],function($query){
-            return $query->where('d.talla',"{$this->filters['talla']}");
+        ->when(intval($this->filters['talla'])>0,function($query){
+            return $query->where('p.talla',"{$this->filters['talla']}");
+        })
+        ->when($this->filters['cantidad'],function($query){
+            return $query->where('d.cantidad',"{$this->filters['cantidad']}");
+        })
+        ->when($this->filters['precio'],function($query){
+            return $query->where('d.precio',"{$this->filters['precio']}");
+        })
+        ->when($this->filters['monto'],function($query){
+            return $query->where('d.total',"{$this->filters['monto']}");
+        })
+        ->when($this->filters['tipopago'],function($query){
+            return $query->where('tipopago',"{$this->filters['tipopago']}");
         })
         ->where('d.fecha','>=',date('Ymd',strtotime($this->filters['fechaini'])))
         ->where('d.fecha','<=',date('Ymd',strtotime($this->filters['fechafin'])))
@@ -108,9 +145,24 @@ class VcInventaryReports extends Component
         ->paginate(13);
 
 
-        $this->datos = json_encode($this->filters);
+        $arrdata[] = $this->filters;
+        $this->datos = json_encode($arrdata);
         
         return $invtra;
+
+    }
+
+    public function deleteFilters(){ 
+
+        $this->filters['referencia'] = '';
+        $this->filters['movimiento'] = '';
+        $this->filters['categoria'] = '';
+        $this->filters['talla'] = '0';
+        $this->filters['estudiante']  = '';
+        $this->filters['cantidad']  = '';
+        $this->filters['precio']  = '';
+        $this->filters['monto']  = '';
+        $this->filters['tipopago']  = '';
 
     }
 
@@ -118,12 +170,17 @@ class VcInventaryReports extends Component
     { 
         $data = json_decode($objdata);
 
-        $this->filters['referencia'] = $data->referencia;
-        $this->filters['movimiento'] = $data->movimiento;
-        $this->filters['categoria'] = $data->categoria;
-        $this->filters['talla'] = $data->talla;
-        $this->filters['fechaini'] = $data->fechaini;
-        $this->filters['fechafin']  = $data->fechafin;
+        $this->filters['referencia'] = $data[0]->referencia;
+        $this->filters['movimiento'] = $data[0]->movimiento;
+        $this->filters['categoria'] = $data[0]->categoria;
+        $this->filters['talla'] = $data[0]->talla;
+        $this->filters['fechaini'] = $data[0]->fechaini;
+        $this->filters['fechafin']  = $data[0]->fechafin;
+        $this->filters['estudiante']  = $data[0]->estudiante;
+        $this->filters['cantidad']  = $data[0]->cantidad;
+        $this->filters['precio']  = $data[0]->precio;
+        $this->filters['monto']  = $data[0]->monto;
+        $this->filters['tipopago']  = $data[0]->tipopago;
 
         $invtra  = $this->consulta();
 
@@ -137,15 +194,28 @@ class VcInventaryReports extends Component
             'DV' => '(+) Devolución por Venta',
         ];
 
-        $info['fechaini'] = $data->fechaini; 
-        $info['fechafin'] = $data->fechafin; 
-        $info['referencia'] = $data->referencia;
-        $info['movimiento'] = $transac[$data->movimiento];
+        $filtros = '';
+        foreach($this->filters as $key=>$value){
+            
+            if( $value!='' & str_contains($key, 'fecha') == false & $value!='Seleccione Talla'){
+                
+                if($key=='movimiento'){
+                    $filtros = $filtros.' '.$key.': '.$transac[$value].",\n";
+                }else{
+                    $filtros = $filtros.' '.$key.': '.$value.",\n";
+                }
+
+            }
+        }
+
+        $info['fechaini'] = $data[0]->fechaini; 
+        $info['fechafin'] = $data[0]->fechafin; 
 
         //Vista
         $pdf = PDF::loadView('reports/detail_producto',[
             'invtra' => $invtra,
             'info'  => $info,
+            'filtros' => $filtros,
         ]);
 
         return $pdf->setPaper('a4')->stream('Detalle Productos.pdf');
@@ -157,12 +227,17 @@ class VcInventaryReports extends Component
     { 
         $data = json_decode($objdata);
 
-        $this->filters['referencia'] = $data->referencia;
-        $this->filters['movimiento'] = $data->movimiento;
-        $this->filters['categoria'] = $data->categoria;
-        $this->filters['talla'] = $data->talla;
-        $this->filters['fechaini'] = $data->fechaini;
-        $this->filters['fechafin']  = $data->fechafin;
+        $this->filters['referencia'] = $data[0]->referencia;
+        $this->filters['movimiento'] = $data[0]->movimiento;
+        $this->filters['categoria'] = $data[0]->categoria;
+        $this->filters['talla'] = $data[0]->talla;
+        $this->filters['fechaini'] = $data[0]->fechaini;
+        $this->filters['fechafin']  = $data[0]->fechafin;
+        $this->filters['estudiante']  = $data[0]->estudiante;
+        $this->filters['cantidad']  = $data[0]->cantidad;
+        $this->filters['precio']  = $data[0]->precio;
+        $this->filters['monto']  = $data[0]->monto;
+        $this->filters['tipopago']  = $data[0]->tipopago;
 
         $invtra  = $this->consulta();
 
@@ -176,15 +251,28 @@ class VcInventaryReports extends Component
             'DV' => '(+) Devolución por Venta',
         ];
 
+        $filtros = '';
+        foreach($this->filters as $key=>$value){
+            
+            if( $value!='' & str_contains($key, 'fecha') == false & $value!='Seleccione Talla'){
+                
+                if($key=='movimiento'){
+                    $filtros = $filtros.' '.$key.': '.$transac[$value].",\n";
+                }else{
+                    $filtros = $filtros.' '.$key.': '.$value.",\n";
+                }
+
+            }
+        }
+
         $info['fechaini'] = date('d/m/Y',strtotime($data->fechaini)); 
         $info['fechafin'] = date('d/m/Y',strtotime($data->fechafin)); 
-        $info['referencia'] = $data->referencia;
-        $info['movimiento'] = $transac[$data->movimiento];
-
+        
         //Vista
         $pdf = PDF::loadView('reports/detail_producto',[
             'invtra' => $invtra,
             'info'  => $info,
+            'filtros' => $filtros,
         ]);
 
         return $pdf->download('Detalle de Productos.pdf');

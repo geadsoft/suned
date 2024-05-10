@@ -26,11 +26,9 @@
                 <td class="text-left text-muted"><span style="font-size: 12px"><strong>Fecha: {{date('d/m/Y',strtotime($info['fechaini']))}} - {{date('d/m/Y',strtotime($info['fechafin']))}}</strong></span></td>
             </tr>
             <tr>
-                <td class="text-left text-muted"><span style="font-size: 12px"><strong>Movimiento: {{$info['movimiento']}}</strong></span></td>
+                <td class="text-left text-muted"><span style="font-size: 12px"><strong>{{$filtros}}</strong></span></td>
             </tr>
-            <tr>
-                <td class="text-left text-muted"><span style="font-size: 12px"><strong>Referencia: {{$info['referencia']}}</strong></span></td>
-            </tr>
+            
                     
         </table>
         <br>
@@ -59,7 +57,7 @@
                 <tr>
                     <td>{{date('d/m/Y',strtotime($record['fecha']))}}</td>
                     <td>{{$record->referencia}}</td> 
-                    <td>{{$record->prducto}}</td> 
+                    <td>{{$record->nombre}}</td> 
                     <td>{{$record->talla}}</td>
                     <td>{{number_format($record->precio,2)}}</td>
                     <td>{{number_format($record->cantidad,2)}}</td>
