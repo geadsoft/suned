@@ -88,7 +88,14 @@
                                         <td> {{date('d/m/Y',strtotime($record->fecha))}}</td> 
                                         <td>{{$record->establecimiento}}-{{$record->puntoemision}}</td> 
                                         <td>{{$record->documento}}</td> 
-                                        <td>{{$record->apellidos}} {{$record->nombres}}</td>
+                                        <td>
+                                            <div>
+                                                {{$record->apellidos}} {{$record->nombres}}
+                                            </div>
+                                            <div>
+                                            <i class="las la-user-check fs-18"></i><a class="text-muted"> {{$record->estudiante->apellidos}} {{$record->estudiante->nombres}} </a>
+                                            <div>
+                                        </td>
                                         <td>{{$record->autorizacion}}</td>
                                         <td>{{number_format($record->subtotal,2)}}</td>
                                         <td>{{number_format($record->impuesto,2)}}</td>
