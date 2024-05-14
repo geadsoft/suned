@@ -73,7 +73,7 @@ class VcInventaryMovements extends Component
         ->when($this->filters['estado'],function($query){
             return $query->where('estado',"{$this->filters['estado']}");
         })
-        ->orderBy('fecha','desc','tr_inventario_cabs.documento','desc')
+        ->orderBy('tr_inventario_cabs.documento','desc','fecha','desc',)
         ->paginate(12);
 
         $this->registro = $tblrecords->where('estado','G')->count();
