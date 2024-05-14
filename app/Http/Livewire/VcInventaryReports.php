@@ -266,8 +266,8 @@ class VcInventaryReports extends Component
             }
         }
 
-        $info['fechaini'] = date('d/m/Y',strtotime($data->fechaini)); 
-        $info['fechafin'] = date('d/m/Y',strtotime($data->fechafin)); 
+        $info['fechaini'] = $data[0]->fechaini; 
+        $info['fechafin'] = $data[0]->fechafin; 
         
         //Vista
         $pdf = PDF::loadView('reports/detail_producto',[
