@@ -25,8 +25,10 @@ class VcInventaryMovements extends Component
         'II' => 'Inventario Inicial',
         'CL' => 'Compras Locales',
         'IA' => 'Ingreso por Ajuste',
+        'DC' => 'Devolución por Compra',
         'VE' => 'Venta',
         'EA' => 'Egreso por Ajuste',
+        'DV' => 'Devolución por Venta',
     ];
 
     public $fpago=[
@@ -71,6 +73,7 @@ class VcInventaryMovements extends Component
         ->when($this->filters['estado'],function($query){
             return $query->where('estado',"{$this->filters['estado']}");
         })
+        ->orderBy('fecha','desc','tr_inventario_cabs.documento')
         ->paginate(12);
 
         $this->registro = $tblrecords->where('estado','G')->count();
