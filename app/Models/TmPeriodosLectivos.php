@@ -16,6 +16,7 @@ class TmPeriodosLectivos extends Model
         'rector_id',
         'secretaria_id',
         'coordinador_id',
+        'mes_pension',
         'estado',
         'usuario',
     ];

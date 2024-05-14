@@ -120,6 +120,11 @@
                                 <div class="collapse menu-dropdown" id="administracion">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/academic/periods">
+                                                <i class="las la-calendar fs-20"></i> <span>Periodos Lectivos</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a class="nav-link menu-link" href="/academic/course">
                                                 <i class="las la-chalkboard fs-20"></i> <span>@lang('translation.course')</span>
                                             </a>

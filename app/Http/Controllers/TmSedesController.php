@@ -17,6 +17,11 @@ class TmSedesController extends Controller
         return view('sede/headquarters');
     }
 
+    public function periodos()
+    {
+        return view('academic/periods');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
