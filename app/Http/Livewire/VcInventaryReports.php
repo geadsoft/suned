@@ -142,7 +142,7 @@ class VcInventaryReports extends Component
         ->where('d.fecha','>=',date('Ymd',strtotime($this->filters['fechaini'])))
         ->where('d.fecha','<=',date('Ymd',strtotime($this->filters['fechafin'])))
         ->selectRaw('tr_inventario_cabs.*,p.nombre,p.talla,d.precio,d.cantidad,d.total')
-        ->orderBy('fecha','desc','tr_inventario_cabs.documento')
+        ->orderBy('fecha','desc','tr_inventario_cabs.documento','desc')
         ->paginate(13);
 
 
