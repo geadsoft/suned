@@ -15,7 +15,7 @@ class VcPeriods extends Component
     public $frmcontrol = 'enabled';
     public $selectId;
     public $record=[];
-    public $periodo;
+    public $codigo,$periodo;
     public $estado=[
         'A' => 'Activo',
         'C' => 'Cerrado',
@@ -36,6 +36,12 @@ class VcPeriods extends Component
         11=> 'Noviembre',
         12=> 'Diciembre',
     ];
+
+    public function mount(){
+
+        $data   = TmPeriodosLectivos::where('estado','A')->first();
+        $this->codigo = intval($data['periodo']);
+    }
 
     public function render()
     {
@@ -58,8 +64,8 @@ class VcPeriods extends Component
         $this->showEditModal = false;
         $this->frmcontrol = 'enabled';
         $this->reset(['record']);
-        $this->record['periodo']= '';
-        $this->record['descripcion']= '';
+        $this->record['periodo']= $this->codigo+1;
+        $this->record['descripcion']= strval($this->codigo+1).'-'.strval($this->codigo+2);
         $this->record['sede']= 1;
         $this->record['num_recibo']= 0;
         $this->record['num_matricula']= 0;

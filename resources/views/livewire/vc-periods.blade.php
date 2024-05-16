@@ -154,8 +154,8 @@
                                         </div>
                                     <div class="modal-footer">
                                         <div class="hstack gap-2 justify-content-end">
-                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-success" id="add-btn">Save Record</button>
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                                            <button type="submit" class="btn btn-success" id="add-btn">Grabar</button>
                                         </div>
                                     </div>
                                 </form>
