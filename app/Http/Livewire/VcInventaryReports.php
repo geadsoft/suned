@@ -10,7 +10,7 @@ use App\Models\TmGeneralidades;
 use Livewire\Component;
 use Livewire\WithPagination;
 use PDF;
-
+use Illuminate\Support\Facades\DB;
 
 class VcInventaryReports extends Component
 {
@@ -130,6 +130,22 @@ class VcInventaryReports extends Component
         ->join("tr_inventario_dets as d","d.inventariocab_id","=","tr_inventario_cabs.id")
         ->join("tm_productos as p","p.id","=","d.producto_id")
         ->join("tm_generalidades as g","g.id","=","p.categoria_id")
+        ->join(DB::raw("(
+        select 'II' as trans, 1 as variable
+        union all
+        select 'CL' as trans, 1 as variable
+        union all
+        select 'IA' as trans, 1 as variable
+        union all
+        select 'DC' as trans, -1 as variable
+        union all
+        select 'VE' as trans, 1 as variable
+        union all
+        select 'EA' as trans, 1 as variable
+        union all
+        select 'DV' as trans, -1 as variable) as tr"),function($join){
+            $join->on('tr.trans', '=', 'd.movimiento');
+        })
         ->when($this->filters['referencia'],function($query){
             return $query->where('p.nombre', 'like' , "%{$this->filters['referencia']}%");
         })
@@ -162,7 +178,7 @@ class VcInventaryReports extends Component
         })
         ->where('d.fecha','>=',date('Ymd',strtotime($this->filters['fechaini'])))
         ->where('d.fecha','<=',date('Ymd',strtotime($this->filters['fechafin'])))
-        ->selectRaw('tr_inventario_cabs.*,p.nombre,p.talla,d.precio,d.cantidad,d.total')
+        ->selectRaw('tr_inventario_cabs.*,p.nombre,p.talla,d.precio,(d.cantidad*tr.variable) as cantidad,(d.total*tr.variable) as total')
         ->orderBy('tr_inventario_cabs.documento','desc','fecha','desc')
         ->paginate(13);
 

@@ -62,17 +62,9 @@
                     <td>{{$record->nombre}}</td> 
                     <td>{{$record->talla}}</td>
                     <td>{{number_format($record->precio,2)}}</td>
-                    @if(array_search($record->movimiento,$arrsuma)>0)
-                        <td>{{number_format($record->cantidad,2)}}</td>
-                        <td>{{$record->tipopago}}</td>
-                        <td>{{number_format($record->total,2)}}</td>
-                    @endif
-                    @if(array_search($record->movimiento,$arresta)>0)
-                        <td>{{number_format($record->cantidad,2)*-1}}</td>
-                        <td>{{$record->tipopago}}</td>
-                        <td>{{number_format($record->total,2)*-1}}</td>
-                    @endif
-                    
+                    <td>{{number_format($record->cantidad,2)}}</td>
+                    <td>{{$record->tipopago}}</td>
+                    <td>{{number_format($record->total,2)}}</td>
                     <td>{{$record->usuario}}</td>
                 </tr>
             @endforeach
@@ -82,7 +74,10 @@
                     <td class="text-center">
                         <span><b>TOTALES<b></span>
                     </td> 
-                    <td colspan="6"></td>
+                    <td colspan="5"></td>
+                    <td>
+                        <span><strong>{{number_format($invtra->where('estado','P')->sum('cantidad'),2)}}<strong></span>
+                    <td>
                     <td colspan="1">
                         <span><strong>${{number_format($invtra->where('estado','P')->sum('total'),2)}}<strong></span>
                     </td> 
