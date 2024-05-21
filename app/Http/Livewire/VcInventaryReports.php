@@ -130,6 +130,57 @@ class VcInventaryReports extends Component
         ->join("tr_inventario_dets as d","d.inventariocab_id","=","tr_inventario_cabs.id")
         ->join("tm_productos as p","p.id","=","d.producto_id")
         ->join("tm_generalidades as g","g.id","=","p.categoria_id")
+        ->when($this->filters['referencia'],function($query){
+            return $query->where('p.nombre', 'like' , "%{$this->filters['referencia']}%");
+        })
+        ->when($this->filters['estudiante'],function($query){
+            return $query->where('tr_inventario_cabs.referencia', 'like' , "%{$this->filters['estudiante']}%");
+        })
+        ->when($this->filters['categoria'],function($query){
+            return $query->where('categoria_id',"{$this->filters['categoria']}");
+        })
+        ->when($this->filters['tipo'],function($query){
+            return $query->where('d.tipo',"{$this->filters['tipo']}");
+        })
+        ->when($this->filters['movimiento'],function($query){
+            return $query->where('d.movimiento',"{$this->filters['movimiento']}");
+        })
+        ->when(intval($this->filters['talla'])>0,function($query){
+            return $query->where('p.talla',"{$this->filters['talla']}");
+        })
+        ->when($this->filters['cantidad'],function($query){
+            return $query->where('d.cantidad',"{$this->filters['cantidad']}");
+        })
+        ->when($this->filters['precio'],function($query){
+            return $query->where('d.precio',"{$this->filters['precio']}");
+        })
+        ->when($this->filters['monto'],function($query){
+            return $query->where('d.total',"{$this->filters['monto']}");
+        })
+        ->when($this->filters['tipopago'],function($query){
+            return $query->where('tipopago',"{$this->filters['tipopago']}");
+        })
+        ->where('d.fecha','>=',date('Ymd',strtotime($this->filters['fechaini'])))
+        ->where('d.fecha','<=',date('Ymd',strtotime($this->filters['fechafin'])))
+        ->selectRaw('tr_inventario_cabs.*,p.nombre,p.talla,d.precio,d.cantidad,d.total')
+        ->orderBy('tr_inventario_cabs.documento','desc','fecha','desc')
+        ->paginate(11);
+
+
+        $arrdata[] = $this->filters;
+        $this->datos = json_encode($arrdata);
+        
+        return $invtra;
+
+    }
+
+    public function report(){ 
+
+        /* Movimientos */
+        $invtra = TrInventarioCabs::query()
+        ->join("tr_inventario_dets as d","d.inventariocab_id","=","tr_inventario_cabs.id")
+        ->join("tm_productos as p","p.id","=","d.producto_id")
+        ->join("tm_generalidades as g","g.id","=","p.categoria_id")
         ->join(DB::raw("(
         select 'II' as trans, 1 as variable
         union all
@@ -180,8 +231,7 @@ class VcInventaryReports extends Component
         ->where('d.fecha','<=',date('Ymd',strtotime($this->filters['fechafin'])))
         ->selectRaw('tr_inventario_cabs.*,p.nombre,p.talla,d.precio,(d.cantidad*tr.variable) as cantidad,(d.total*tr.variable) as total')
         ->orderBy('tr_inventario_cabs.documento','desc','fecha','desc')
-        ->paginate(13);
-
+        ->get();
 
         $arrdata[] = $this->filters;
         $this->datos = json_encode($arrdata);
@@ -222,7 +272,7 @@ class VcInventaryReports extends Component
         $this->filters['monto']  = $data[0]->monto;
         $this->filters['tipopago']  = $data[0]->tipopago;
 
-        $invtra  = $this->consulta();
+        $invtra  = $this->report();
 
         $transac=[
             'II' => '(+) Inventario Inicial', 
@@ -285,7 +335,7 @@ class VcInventaryReports extends Component
         $this->filters['monto']  = $data[0]->monto;
         $this->filters['tipopago']  = $data[0]->tipopago;
 
-        $invtra  = $this->consulta();
+        $invtra  = $this->report();
 
         $transac=[
             'II' => '(+) Inventario Inicial', 

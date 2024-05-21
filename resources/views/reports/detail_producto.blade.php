@@ -27,11 +27,14 @@
             </tr>
             <tr>
                 <td class="text-left text-muted"><span style="font-size: 12px"><strong>{{$filtros}}</strong></span></td>
-            </tr>
-            
-                    
+            </tr>                
         </table>
         <br>
+        <p class="text-left text-muted"><span style="font-size: 12px">
+        II - Inventario Inicial | CL - Compra Local | IA - Ingreso por Ajuste | DC - Devolución en Compra <br>
+        VE - Ventas | EA - Egresos por Ajuste | DV - Devolución en Venta
+        </span>
+        </p>
     </section>
 
     <section class="header" style ="top: -287px;">
