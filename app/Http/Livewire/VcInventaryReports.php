@@ -17,12 +17,13 @@ class VcInventaryReports extends Component
     
     use WithPagination;
 
-    public $tblcategoria;
+    public $tblcategoria, $tipo='EGR';
     public $datos='';
 
     public $filters=[
         'referencia' => '',
-        'movimiento' => 'VE',
+        'tipo' => 'EGR',
+        'movimiento' => '',
         'categoria' => '',
         'talla' => '0',
         'fechaini' => '',
@@ -50,15 +51,7 @@ class VcInventaryReports extends Component
         '50'=>50,
     ];
 
-    public $movimiento=[
-        2 => ['codigo' => 'II', 'nombre' => '(+) Inventario Inicial', 'valor' => '1'], 
-        3 => ['codigo' => 'CL', 'nombre' => '(+) Compras Locales', 'valor' => '1'], 
-        4 => ['codigo' => 'IA', 'nombre' => '(+) Ingreso por Ajuste', 'valor' => '1'], 
-        5 => ['codigo' => 'DC', 'nombre' => '(-) Devolución por Compra', 'valor' => '-1'], 
-        6 => ['codigo' => 'VE', 'nombre' => '(-) Venta', 'valor' => '-1'], 
-        7 => ['codigo' => 'EA', 'nombre' => '(-) Egreso por Ajuste', 'valor' => '-1'], 
-        8 => ['codigo' => 'DV', 'nombre' => '(+) Devolución por Venta', 'valor' => '1'],
-    ];
+    public $movimiento=[];
 
     public $fpago=[
         "NN" => 'Ninguno',
@@ -84,7 +77,9 @@ class VcInventaryReports extends Component
         $fechafin = date('Y-m-d',strtotime($ldate));
 
         $this->filters['fechaini'] = $fechaini;
-        $this->filters['fechafin'] = $fechafin;   
+        $this->filters['fechafin'] = $fechafin; 
+        $this->filters['tipo'] = $this->tipo; 
+        $this->updatedTipo('EGR');  
     
     }
 
@@ -104,6 +99,29 @@ class VcInventaryReports extends Component
         return 'vendor.livewire.bootstrap'; 
     }
 
+    public function updatedTipo($tipo){
+
+        $this->filters['tipo'] = $tipo;
+        $this->filters['movimiento'] = '';
+
+        if ($tipo=='ING'){
+            $this->movimiento=[
+                1 => ['codigo' => ' ', 'nombre' => 'Seleccione Movimiento', 'valor' => ''],
+                2 => ['codigo' => 'II', 'nombre' => '(+) Inventario Inicial', 'valor' => '1'], 
+                3 => ['codigo' => 'CL', 'nombre' => '(+) Compras Locales', 'valor' => '1'], 
+                4 => ['codigo' => 'IA', 'nombre' => '(+) Ingreso por Ajuste', 'valor' => '1'], 
+                5 => ['codigo' => 'DC', 'nombre' => '(-) Devolución por Compra', 'valor' => '-1'], 
+            ];
+        }else{
+            $this->movimiento=[
+                1 => ['codigo' => ' ', 'nombre' => 'Seleccione Movimiento', 'valor' => ''],
+                2 => ['codigo' => 'VE', 'nombre' => '(-) Venta', 'valor' => '-1'], 
+                3 => ['codigo' => 'EA', 'nombre' => '(-) Egreso por Ajuste', 'valor' => '-1'], 
+                4 => ['codigo' => 'DV', 'nombre' => '(+) Devolución por Venta', 'valor' => '1'],
+            ];
+        }
+    }
+
     public function consulta(){
 
         
@@ -120,6 +138,9 @@ class VcInventaryReports extends Component
         })
         ->when($this->filters['categoria'],function($query){
             return $query->where('categoria_id',"{$this->filters['categoria']}");
+        })
+        ->when($this->filters['tipo'],function($query){
+            return $query->where('d.tipo',"{$this->filters['tipo']}");
         })
         ->when($this->filters['movimiento'],function($query){
             return $query->where('d.movimiento',"{$this->filters['movimiento']}");
@@ -156,6 +177,7 @@ class VcInventaryReports extends Component
     public function deleteFilters(){ 
 
         $this->filters['referencia'] = '';
+        $this->filters['tipo'] = 'EGR';
         $this->filters['movimiento'] = '';
         $this->filters['categoria'] = '';
         $this->filters['talla'] = '0';
@@ -172,6 +194,7 @@ class VcInventaryReports extends Component
         $data = json_decode($objdata);
 
         $this->filters['referencia'] = $data[0]->referencia;
+        $this->filters['tipo'] = $data[0]->tipo;
         $this->filters['movimiento'] = $data[0]->movimiento;
         $this->filters['categoria'] = $data[0]->categoria;
         $this->filters['talla'] = $data[0]->talla;
@@ -212,11 +235,16 @@ class VcInventaryReports extends Component
         $info['fechaini'] = $data[0]->fechaini; 
         $info['fechafin'] = $data[0]->fechafin; 
 
+        $arrsuma=['II','CL','IA','DV'];
+        $arresta=['DC','VE','EA'];
+
         //Vista
         $pdf = PDF::loadView('reports/detail_producto',[
             'invtra' => $invtra,
             'info'  => $info,
             'filtros' => $filtros,
+            'arrsuma' => $arrsuma,
+            'arresta' => $arresta,
         ]);
 
         return $pdf->setPaper('a4')->stream('Detalle Productos.pdf');
@@ -229,6 +257,7 @@ class VcInventaryReports extends Component
         $data = json_decode($objdata);
 
         $this->filters['referencia'] = $data[0]->referencia;
+        $this->filters['tipo'] = $data[0]->tipo;
         $this->filters['movimiento'] = $data[0]->movimiento;
         $this->filters['categoria'] = $data[0]->categoria;
         $this->filters['talla'] = $data[0]->talla;
@@ -268,12 +297,17 @@ class VcInventaryReports extends Component
 
         $info['fechaini'] = $data[0]->fechaini; 
         $info['fechafin'] = $data[0]->fechafin; 
+
+        $arrsuma=['II','CL','IA','DV'];
+        $arresta=['DC','VE','EA'];
         
         //Vista
         $pdf = PDF::loadView('reports/detail_producto',[
             'invtra' => $invtra,
             'info'  => $info,
             'filtros' => $filtros,
+            'arrsuma' => $arrsuma,
+            'arresta' => $arresta,
         ]);
 
         return $pdf->download('Detalle de Productos.pdf');

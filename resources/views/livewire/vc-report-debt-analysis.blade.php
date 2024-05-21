@@ -10,7 +10,7 @@
                 </div>
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
-                        <div class="row g-3">
+                        <div class="row g-3 mb-3">
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" name="cmbperiodo" wire:model="filters.srv_periodoId" id="cmbperiodo">
@@ -74,7 +74,14 @@
                                 </div>
                             </div>
                         </div>
-                        
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" wire:model="filters.srv_grado">
+                                    <label class="form-check-label" for="estado">Mostrar Derecho de Grado</label>
+                                </div>
+                            </div>
+                        </div>
                         <!--end row-->
                     </form>
                 </div>

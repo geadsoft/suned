@@ -23,6 +23,7 @@ class VcReportDebtAnalysis extends Component
         'srv_curso' => '',
         'srv_mes' => '',
         'srv_periodo' => '',
+        'srv_grado' => false,
     ];
 
     public $mes = [
@@ -59,6 +60,7 @@ class VcReportDebtAnalysis extends Component
         $this->filters['srv_mes'] = intval(date('m',strtotime($ldate)));
         $this->filters['srv_periodo'] = intval(date('Y',strtotime($ldate)));
         $this->filters['mes_pension'] = $tblperiodos['mes_pension'];
+        $this->filters['srv_grado'] = false;
 
     }
 
@@ -91,7 +93,7 @@ class VcReportDebtAnalysis extends Component
     public function consulta(){
 
         $anio = $this->filters['srv_periodo'];
-        $mes  = $this->filters['srv_mes'];
+        $mes  = $this->filters['srv_mes'];        
 
         $this->lsfecha = strval($anio)."-".str_pad($mes, 2, "0", STR_PAD_LEFT).'-01';
         $this->lsfecha = date("Y-m-t", strtotime($this->lsfecha));
@@ -113,6 +115,12 @@ class VcReportDebtAnalysis extends Component
         })
         ->when($this->filters['srv_mes'],function($query){
             return $query->whereRaw("tr_deudas_cabs.fecha <= '".$this->lsfecha."'");
+        })
+        ->when($this->filters['srv_grado']==true,function($query){
+            return $query->whereRaw("left(referencia,3) = left(referencia,3)");
+        })
+        ->when($this->filters['srv_grado']==false,function($query){
+            return $query->whereRaw("left(referencia,3) <> 'DGR'");
         })
         ->where('saldo','>',0)
         ->where('m.estado','A')
@@ -158,6 +166,15 @@ class VcReportDebtAnalysis extends Component
         ->when($this->filters['srv_mes'],function($query){
             return $query->whereRaw("tr_deudas_cabs.fecha <= '".$this->lsfecha."'");
         })
+        ->when($this->filters['srv_grado']<>'',function($query){
+            return $query->whereRaw("left(referencia,3) <> 'DGR'");
+        })
+        ->when($this->filters['srv_grado']==true,function($query){
+            return $query->whereRaw("left(referencia,3) = left(referencia,3)");
+        })
+        ->when($this->filters['srv_grado']==false,function($query){
+            return $query->whereRaw("left(referencia,3) <> 'DGR'");
+        })
         ->where('saldo','>',0)
         ->where('m.estado','A')
         /*->whereraw("d.id is null and left(referencia,3) not in (case when ".$this->filters['srv_mes']."=12 then '' else 'DGR' end)")*/
@@ -183,6 +200,7 @@ class VcReportDebtAnalysis extends Component
         $this->filters['srv_mes']     = $data->srv_mes;
         $this->filters['srv_periodo'] = $data->srv_periodo;
         $this->filters['mes_pension'] = $data->mes_pension;
+        $this->filters['srv_grado']   = $data->srv_grado;
         
         
         $tblrecords = $this->reporte();

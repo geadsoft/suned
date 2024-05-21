@@ -42,6 +42,7 @@
             <thead class="table-light" style="background-color:#222454">
                 <tr>
                     <th style="color:#FFFFFF">Fecha</th>
+                    <th style="color:#FFFFFF">Mov.</th>
                     <th style="color:#FFFFFF">Referencia</th>
                     <th style="color:#FFFFFF">Producto</th>
                     <th style="color:#FFFFFF">Talla</th>
@@ -56,13 +57,22 @@
             @foreach ($invtra as $record)    
                 <tr>
                     <td>{{date('d/m/Y',strtotime($record['fecha']))}}</td>
+                    <td>{{$record->movimiento}}</td>
                     <td>{{$record->referencia}}</td> 
                     <td>{{$record->nombre}}</td> 
                     <td>{{$record->talla}}</td>
                     <td>{{number_format($record->precio,2)}}</td>
-                    <td>{{number_format($record->cantidad,2)}}</td>
-                    <td>{{$record->tipopago}}</td>
-                    <td>{{number_format($record->total,2)}}</td>
+                    @if(array_search($record->movimiento,$arrsuma)>0)
+                        <td>{{number_format($record->cantidad,2)}}</td>
+                        <td>{{$record->tipopago}}</td>
+                        <td>{{number_format($record->total,2)}}</td>
+                    @endif
+                    @if(array_search($record->movimiento,$arresta)>0)
+                        <td>{{number_format($record->cantidad,2)*-1}}</td>
+                        <td>{{$record->tipopago}}</td>
+                        <td>{{number_format($record->total,2)*-1}}</td>
+                    @endif
+                    
                     <td>{{$record->usuario}}</td>
                 </tr>
             @endforeach

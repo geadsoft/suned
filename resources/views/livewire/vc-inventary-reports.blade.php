@@ -13,6 +13,14 @@
                         <div class="row g-3 mb-3">
                             <div class="col-xxl-2 col-sm-2">
                                 <div>
+                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="tipo"> 
+                                        <option value="ING">Ingresos</option>
+                                        <option value="EGR">Egresos</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xxl-2 col-sm-2">
+                                <div>
                                     <select class="form-select" name="cmbgrupo" wire:model="filters.movimiento">
                                         @foreach ($movimiento as $data)
                                             <option value="{{$data['codigo']}}">{{$data['nombre']}}</option>
@@ -111,6 +119,7 @@
                             <thead class="text-muted table-light">
                                 <tr class="text-uppercase">
                                     <th style="width: 150px;">Fecha</th>
+                                    <th>Mov.</th>
                                     <th>Referencia</th>
                                     <th style="width: 400px;">Producto</th>
                                     <th class="text-end" style="width: 150px;">Talla</th>
@@ -124,6 +133,7 @@
                             @foreach ($invtra as $record)
                                 <tr>
                                     <td>{{date('d/m/Y',strtotime($record['fecha']))}}</td>
+                                    <td>{{$record['movimiento']}}</td>
                                     <td>{{$record['referencia']}}</td>
                                     <td>{{$record['nombre']}}</td>
                                     <td class="text-end">{{$record['talla']}}</td>
