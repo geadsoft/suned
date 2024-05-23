@@ -86,6 +86,23 @@ class VcInventaryRegisterdet extends Component
 
     }
 
+    public function removeItem($linea){
+
+        $recnoToDelete = $this->detalle;
+        foreach ($recnoToDelete as $index => $recno)
+        {
+            if ($recno['linea'] == $linea){
+                unset ($recnoToDelete[$index]);
+            } 
+        }
+
+        $this->reset(['detalle']);
+        $this->detalle = $recnoToDelete;
+        
+
+    
+    }
+
     public function setDetalle($productoId){
 
 

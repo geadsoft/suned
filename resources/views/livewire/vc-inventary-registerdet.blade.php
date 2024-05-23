@@ -47,7 +47,7 @@
                     <li class="list-inline-item" data-bs-toggle="tooltip"
                         data-bs-trigger="hover" data-bs-placement="top" title="Remove">
                         <a class="text-danger d-inline-block remove-item-btn"
-                            data-bs-toggle="modal" href="" wire:click.prevent="delete({{$recno['linea']}})">
+                            data-bs-toggle="modal" href="" wire:click.prevent="removeItem({{$recno['linea']}})">
                             <i class="ri-delete-back-2-fill fs-16"></i>
                         </a>
                     </li>
