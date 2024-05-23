@@ -220,24 +220,62 @@ class VcInventaryRegister extends Component
         $invtra = TrInventarioDets::where('inventariocab_id',$this->inventarioId)->get();
         
         if ($this->record['tipo']=='ING'){
-        
-            foreach ($invtra as $index => $record)
-            {
-                $producto = TmProductos::find($record['producto_id']);
-                $producto->update([
-                    'stock' => $producto['stock']+$record['cantidad'],
+            
+            if($this->record['movimiento'] == 'DC' || $this->record['movimiento'] == 'EA' ){
+
+                $error='';
+
+                /*Valida Stock*/
+                foreach ($invtra as $index => $record)
+                {
+                    $producto = TmProductos::find($record['producto_id']);
+                    $stock = $producto['stock'];
+                    
+                    if ($record['cantidad']>$stock & $producto['maneja_stock']==1){
+                        $error = $error.$producto['nombre'].', Cantidad Digitada: '.$record['cantidad'].' es mayor al Stock: '.$stock."\n";
+                    }
+                }
+
+                if (!empty($error)){
+                    $this->dispatchBrowserEvent('error-stock', ['newName' => $error]);
+                    return;
+                }
+
+                /* Actualiza Stock*/
+                foreach ($invtra as $index => $record)
+                {
+                    $producto = TmProductos::find($record['producto_id']);
+                    $producto->update([
+                        'stock' => $producto['stock']-$record['cantidad'],
+                    ]);
+                }
+
+                $invCab = TrInventarioCabs::find($this->inventarioId);
+                $invCab->update([
+                    'estado' => 'P',
                 ]);
+
+                TrInventarioDets::where("inventariocab_id",$this->inventarioId)->update(["estado" => "P"]);
+                
+            }else{
+
+                foreach ($invtra as $index => $record)
+                {
+                    $producto = TmProductos::find($record['producto_id']);
+                    $producto->update([
+                        'stock' => $producto['stock']+$record['cantidad'],
+                    ]);
+                }
+
+                $invCab = TrInventarioCabs::find($this->inventarioId);
+                $invCab->update([
+                    'estado' => 'P',
+                ]);
+
+                TrInventarioDets::where("inventariocab_id",$this->inventarioId)->update(["estado" => "P"]);
             }
 
-            $invCab = TrInventarioCabs::find($this->inventarioId);
-            $invCab->update([
-                'estado' => 'P',
-            ]);
-
-            TrInventarioDets::where("inventariocab_id",$this->inventarioId)->update(["estado" => "P"]);
-
-        }else{
-            
+        } else {
             $error='';
 
             /*Valida Stock*/

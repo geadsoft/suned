@@ -109,15 +109,15 @@ class VcInventaryReports extends Component
                 1 => ['codigo' => ' ', 'nombre' => 'Seleccione Movimiento', 'valor' => ''],
                 2 => ['codigo' => 'II', 'nombre' => '(+) Inventario Inicial', 'valor' => '1'], 
                 3 => ['codigo' => 'CL', 'nombre' => '(+) Compras Locales', 'valor' => '1'], 
-                4 => ['codigo' => 'IA', 'nombre' => '(+) Ingreso por Ajuste', 'valor' => '1'], 
-                5 => ['codigo' => 'DC', 'nombre' => '(-) Devolución por Compra', 'valor' => '-1'], 
+                4 => ['codigo' => 'IA', 'nombre' => '(+) Ingreso por Ajuste', 'valor' => '1'],
+                5 => ['codigo' => 'EA', 'nombre' => '(-) Egreso por Ajuste', 'valor' => '-1'],  
+                6 => ['codigo' => 'DC', 'nombre' => '(-) Devolución por Compra', 'valor' => '-1'], 
             ];
         }else{
             $this->movimiento=[
                 1 => ['codigo' => ' ', 'nombre' => 'Seleccione Movimiento', 'valor' => ''],
                 2 => ['codigo' => 'VE', 'nombre' => '(-) Venta', 'valor' => '-1'], 
-                3 => ['codigo' => 'EA', 'nombre' => '(-) Egreso por Ajuste', 'valor' => '-1'], 
-                4 => ['codigo' => 'DV', 'nombre' => '(+) Devolución por Venta', 'valor' => '1'],
+                3 => ['codigo' => 'DV', 'nombre' => '(+) Devolución por Venta', 'valor' => '1'],
             ];
         }
     }
@@ -192,9 +192,9 @@ class VcInventaryReports extends Component
         union all
         select 'VE' as trans, 1 as variable
         union all
-        select 'EA' as trans, 1 as variable
+        select 'EA' as trans, -1 as variable
         union all
-        select 'DV' as trans, -1 as variable) as tr"),function($join){
+        select 'DV' as trans, 1 as variable) as tr"),function($join){
             $join->on('tr.trans', '=', 'd.movimiento');
         })
         ->when($this->filters['referencia'],function($query){

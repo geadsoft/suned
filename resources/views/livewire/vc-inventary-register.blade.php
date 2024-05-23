@@ -67,12 +67,12 @@
                                                         <option value="II">Inventario Inicial</option>
                                                         <option value="CL">Compras Locales</option>
                                                         <option value="IA">Ingreso por Ajuste</option>
+                                                        <option value="EA">Egreso por Ajuste</option>
                                                         <option value="DC">Devolucion por Compra</option>
                                                     </select>
                                                     @else
                                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="record.movimiento" required>
                                                         <option value="VE">Ventas</option>
-                                                        <option value="EA">Egreso por Ajuste</option>
                                                         <option value="DV">Devolucion por Venta</option>
                                                     </select>
                                                     @endif
