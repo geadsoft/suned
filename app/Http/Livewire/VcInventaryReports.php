@@ -240,6 +240,71 @@ class VcInventaryReports extends Component
 
     }
 
+    public function resumen(){ 
+
+        /* Movimientos */
+        $invtra = TrInventarioCabs::query()
+        ->join("tr_inventario_dets as d","d.inventariocab_id","=","tr_inventario_cabs.id")
+        ->join("tm_productos as p","p.id","=","d.producto_id")
+        ->join("tm_generalidades as g","g.id","=","p.categoria_id")
+        ->join(DB::raw("(
+        select 'II' as trans, 1 as variable
+        union all
+        select 'CL' as trans, 1 as variable
+        union all
+        select 'IA' as trans, 1 as variable
+        union all
+        select 'DC' as trans, -1 as variable
+        union all
+        select 'VE' as trans, 1 as variable
+        union all
+        select 'EA' as trans, -1 as variable
+        union all
+        select 'DV' as trans, 1 as variable) as tr"),function($join){
+            $join->on('tr.trans', '=', 'd.movimiento');
+        })
+        ->when($this->filters['referencia'],function($query){
+            return $query->where('p.nombre', 'like' , "%{$this->filters['referencia']}%");
+        })
+        ->when($this->filters['estudiante'],function($query){
+            return $query->where('tr_inventario_cabs.referencia', 'like' , "%{$this->filters['estudiante']}%");
+        })
+        ->when($this->filters['categoria'],function($query){
+            return $query->where('categoria_id',"{$this->filters['categoria']}");
+        })
+        ->when($this->filters['tipo'],function($query){
+            return $query->where('d.tipo',"{$this->filters['tipo']}");
+        })
+        ->when($this->filters['movimiento'],function($query){
+            return $query->where('d.movimiento',"{$this->filters['movimiento']}");
+        })
+        ->when(intval($this->filters['talla'])>0,function($query){
+            return $query->where('p.talla',"{$this->filters['talla']}");
+        })
+        ->when($this->filters['cantidad'],function($query){
+            return $query->where('d.cantidad',"{$this->filters['cantidad']}");
+        })
+        ->when($this->filters['precio'],function($query){
+            return $query->where('d.precio',"{$this->filters['precio']}");
+        })
+        ->when($this->filters['monto'],function($query){
+            return $query->where('d.total',"{$this->filters['monto']}");
+        })
+        ->when($this->filters['tipopago'],function($query){
+            return $query->where('tipopago',"{$this->filters['tipopago']}");
+        })
+        ->where('d.fecha','>=',date('Ymd',strtotime($this->filters['fechaini'])))
+        ->where('d.fecha','<=',date('Ymd',strtotime($this->filters['fechafin'])))
+        ->selectRaw('tr_inventario_cabs.fecha, tr_inventario_cabs.documento, tr_inventario_cabs.tipopago ,sum((d.total*tr.variable)) as total')
+        ->groupBy('tr_inventario_cabs.fecha','tr_inventario_cabs.documento','tr_inventario_cabs.tipopago')
+        ->get();
+
+        $arrdata[] = $this->filters;
+        $this->datos = json_encode($arrdata);
+        
+        return $invtra;
+    }
+
     public function deleteFilters(){ 
 
         $this->filters['referencia'] = '';
@@ -273,7 +338,8 @@ class VcInventaryReports extends Component
         $this->filters['tipopago']  = $data[0]->tipopago;
 
         $invtra  = $this->report();
-
+        $resumen = $this->resumen()->groupBy('tipopago');
+        
         $transac=[
             'II' => '(+) Inventario Inicial', 
             'CL' => '(+) Compras Locales',  
@@ -304,13 +370,28 @@ class VcInventaryReports extends Component
         $arrsuma=['II','CL','IA','DV'];
         $arresta=['DC','VE','EA'];
 
+        $fpago=[
+            'NN' => 'Resumen de Ninguno',
+            'EFE' => 'Resumen de Efectivo',
+            'CHQ' => 'Resumen de Cheque',
+            'TAR' => 'Resumen de Tarjeta de Crédito',
+            'DEP' => 'Resumen de Deposito',
+            'TRA' => 'Resumen de Transferencia',
+            'APP' => 'Resumen de Aplicación Movil',
+        ];
+
+        $totalres = 0;
+
         //Vista
         $pdf = PDF::loadView('reports/detail_producto',[
-            'invtra' => $invtra,
-            'info'  => $info,
+            'invtra'  => $invtra,
+            'info'    => $info,
             'filtros' => $filtros,
             'arrsuma' => $arrsuma,
             'arresta' => $arresta,
+            'resumen' => $resumen,
+            'fpago' => $fpago,
+            'totalres' => $totalres,
         ]);
 
         return $pdf->setPaper('a4')->stream('Detalle Productos.pdf');
@@ -336,6 +417,7 @@ class VcInventaryReports extends Component
         $this->filters['tipopago']  = $data[0]->tipopago;
 
         $invtra  = $this->report();
+        $resumen = $this->resumen()->groupBy('tipopago');
 
         $transac=[
             'II' => '(+) Inventario Inicial', 
@@ -366,7 +448,19 @@ class VcInventaryReports extends Component
 
         $arrsuma=['II','CL','IA','DV'];
         $arresta=['DC','VE','EA'];
+
+        $fpago=[
+            'NN' => 'Resumen de Ninguno',
+            'EFE' => 'Resumen de Efectivo',
+            'CHQ' => 'Resumen de Cheque',
+            'TAR' => 'Resumen de Tarjeta de Crédito',
+            'DEP' => 'Resumen de Deposito',
+            'TRA' => 'Resumen de Transferencia',
+            'APP' => 'Resumen de Aplicación Movil',
+        ];
         
+        $totalres = 0;
+
         //Vista
         $pdf = PDF::loadView('reports/detail_producto',[
             'invtra' => $invtra,
@@ -374,6 +468,9 @@ class VcInventaryReports extends Component
             'filtros' => $filtros,
             'arrsuma' => $arrsuma,
             'arresta' => $arresta,
+            'resumen' => $resumen,
+            'fpago' => $fpago,
+            'totalres' => $totalres,
         ]);
 
         return $pdf->download('Detalle de Productos.pdf');

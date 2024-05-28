@@ -88,6 +88,44 @@
             </tfoot>
         </table>
     </section>
+    @foreach ($resumen as $key => $data)    
+    <section>
+        <table cellpadding="0" cellspancing="0" width="100%">
+            <tr>
+                <td width="40%" style="vertical-align: top; padding-top: 10px; position: relative">
+                    <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
+                        <thead class="table-light">
+                            <tr>
+                                <th colspan="4">{{$fpago[$key]}}</th>
+                            </tr>
+                            <tr style="background-color:#222454">
+                                <th style="color:#FFFFFF">Fecha</th>
+                                <th style="color:#FFFFFF">Documento</th>
+                                <th style="color:#FFFFFF">Valor</th>
+                            </tr>
+                        <thead>
+                        <tbody class="list">
+                        {{ $totalres = 0}} 
+                        @foreach ($data as $data) 
+                                <tr>
+                                    <td class="">{{date('d/m/Y',strtotime($data['fecha']))}}</td>
+                                    <td class="">{{$data['documento']}}</td>
+                                    <td>{{number_format($data['total'],2)}}</td>
+                                </tr>
+                                {{ $totalres = $totalres + $data['total'] }}
+                         @endforeach
+                         <tr>
+                            <td class=""></td>
+                            <td class="">TOTAL:</td>
+                            <td>{{number_format($totalres,2)}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>           
+            </tr>
+        </table>
+    </section>
+    @endforeach
 
     <div style="position: absolute;
       display: inline-block;
