@@ -13,6 +13,7 @@ class VcProductsAdd extends Component
     public $tblcategorias=[], $record=[];
     public $arrtalla=[
         '0'=>'Ninguna',
+        '26'=>26,
         '28'=>28,
         '30'=>30,
         '32'=>32,
