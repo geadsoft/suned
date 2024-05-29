@@ -15,6 +15,7 @@ class VcInventaryMovements extends Component
     use WithPagination;
 
     public $registro;
+    public $documento, $selectId;
 
     public $tipo = [
         'EGR' => 'Egreso',
@@ -109,35 +110,77 @@ class VcInventaryMovements extends Component
         return redirect()->to('/inventary/register-edit/'.$id);
     }
 
+    public function delete( $id ){
+        $this->selectId = $id;
+        $invCab = TrInventarioCabs::find($this->selectId);
+
+        $this->documento = $invCab['documento'];
+        $this->dispatchBrowserEvent('show-delete');
+    }
+    
+    
     public function procesar($id){
 
         $registroId = $id;
-        
+
         $invCab = TrInventarioCabs::find($registroId);
         $invtra = TrInventarioDets::where('inventariocab_id',$registroId)->get();
-
-        if($invCab['estado']=='P'){
-            return;
-        }
         
         if ($invCab['tipo']=='ING'){
-        
-            foreach ($invtra as $index => $record)
-            {
-                $producto = TmProductos::find($record['producto_id']);
-                $producto->update([
-                    'stock' => $producto['stock']+$record['cantidad'],
+            
+            if($invCab['movimiento'] == 'DC' || $invCab['movimiento'] == 'EA' ){
+
+                $error='';
+
+                /*Valida Stock*/
+                foreach ($invtra as $index => $record)
+                {
+                    $producto = TmProductos::find($record['producto_id']);
+                    $stock = $producto['stock'];
+                    
+                    if ($record['cantidad']>$stock & $producto['maneja_stock']==1){
+                        $error = $error.$producto['nombre'].', Cantidad Digitada: '.$record['cantidad'].' es mayor al Stock: '.$stock."\n";
+                    }
+                }
+
+                if (!empty($error)){
+                    $this->dispatchBrowserEvent('error-stock', ['newName' => $error]);
+                    return;
+                }
+
+                /* Actualiza Stock*/
+                foreach ($invtra as $index => $record)
+                {
+                    $producto = TmProductos::find($record['producto_id']);
+                    $producto->update([
+                        'stock' => $producto['stock']-$record['cantidad'],
+                    ]);
+                }
+
+                $invCab->update([
+                    'estado' => 'P',
                 ]);
+
+                TrInventarioDets::where("inventariocab_id",$this->inventarioId)->update(["estado" => "P"]);
+                
+            }else{
+
+                foreach ($invtra as $index => $record)
+                {
+                    $producto = TmProductos::find($record['producto_id']);
+                    $producto->update([
+                        'stock' => $producto['stock']+$record['cantidad'],
+                    ]);
+                }
+
+                $invCab->update([
+                    'estado' => 'P',
+                ]);
+
+                TrInventarioDets::where("inventariocab_id",$this->inventarioId)->update(["estado" => "P"]);
             }
 
-            $invCab->update([
-                'estado' => 'P',
-            ]);
-
-            TrInventarioDets::where("inventariocab_id",$registroId)->update(["estado" => "P"]);
-
-        }else{
-            
+        } else {
             $error='';
 
             /*Valida Stock*/
@@ -169,8 +212,7 @@ class VcInventaryMovements extends Component
                 'estado' => 'P',
             ]);
 
-            TrInventarioDets::where("inventariocab_id",$registroId)->update(["estado" => "P"]);
-
+            TrInventarioDets::where("inventariocab_id",$this->inventarioId)->update(["estado" => "P"]);
         }
 
         $message = "Documento ".$invCab['documento']." procesado con éxito!";
@@ -178,5 +220,53 @@ class VcInventaryMovements extends Component
 
     }
 
+    public function deleteData(){
+
+        $invcab = TrInventarioCabs::find($this->selectId);
+        $invtra = TrInventarioDets::where('inventariocab_id',$this->selectId)->get();
+        
+        if ($invcab['tipo']=='ING'){
+            
+            if($invcab['movimiento'] == 'DC' || $invcab['movimiento'] == 'EA' ){
+
+                /* Actualiza Stock*/
+                foreach ($invtra as $index => $record)
+                {
+                    $producto = TmProductos::find($record['producto_id']);
+                    $producto->update([
+                        'stock' => $producto['stock']+$record['cantidad'],
+                    ]);
+                }
+                
+            }else{
+
+                foreach ($invtra as $index => $record)
+                {
+                    $producto = TmProductos::find($record['producto_id']);
+                    $producto->update([
+                        'stock' => $producto['stock']-$record['cantidad'],
+                    ]);
+                }
+
+            }
+
+        } else {
+
+            /* Actualiza Stock*/
+            foreach ($invtra as $index => $record)
+            {
+                $producto = TmProductos::find($record['producto_id']);
+                $producto->update([
+                    'stock' => $producto['stock']+$record['cantidad'],
+                ]);
+            }
+
+        }
+
+        TrInventarioDets::where('inventariocab_id',$this->selectId)->delete();
+        TrInventarioCabs::find($this->selectId)->delete();
+        
+        $this->dispatchBrowserEvent('hide-delete');
+    }
 
 }
