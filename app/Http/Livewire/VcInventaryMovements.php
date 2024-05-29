@@ -225,9 +225,34 @@ class VcInventaryMovements extends Component
         $invcab = TrInventarioCabs::find($this->selectId);
         $invtra = TrInventarioDets::where('inventariocab_id',$this->selectId)->get();
         
-        if ($invcab['tipo']=='ING'){
-            
-            if($invcab['movimiento'] == 'DC' || $invcab['movimiento'] == 'EA' ){
+        if ($invcab['estado']=='P'){
+
+            if ($invcab['tipo']=='ING'){
+                
+                if($invcab['movimiento'] == 'DC' || $invcab['movimiento'] == 'EA' ){
+
+                    /* Actualiza Stock*/
+                    foreach ($invtra as $index => $record)
+                    {
+                        $producto = TmProductos::find($record['producto_id']);
+                        $producto->update([
+                            'stock' => $producto['stock']+$record['cantidad'],
+                        ]);
+                    }
+                    
+                }else{
+
+                    foreach ($invtra as $index => $record)
+                    {
+                        $producto = TmProductos::find($record['producto_id']);
+                        $producto->update([
+                            'stock' => $producto['stock']-$record['cantidad'],
+                        ]);
+                    }
+
+                }
+
+            } else {
 
                 /* Actualiza Stock*/
                 foreach ($invtra as $index => $record)
@@ -237,30 +262,8 @@ class VcInventaryMovements extends Component
                         'stock' => $producto['stock']+$record['cantidad'],
                     ]);
                 }
-                
-            }else{
-
-                foreach ($invtra as $index => $record)
-                {
-                    $producto = TmProductos::find($record['producto_id']);
-                    $producto->update([
-                        'stock' => $producto['stock']-$record['cantidad'],
-                    ]);
-                }
 
             }
-
-        } else {
-
-            /* Actualiza Stock*/
-            foreach ($invtra as $index => $record)
-            {
-                $producto = TmProductos::find($record['producto_id']);
-                $producto->update([
-                    'stock' => $producto['stock']+$record['cantidad'],
-                ]);
-            }
-
         }
 
         TrInventarioDets::where('inventariocab_id',$this->selectId)->delete();
