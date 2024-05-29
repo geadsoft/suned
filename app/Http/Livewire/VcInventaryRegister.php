@@ -13,7 +13,7 @@ use PDF;
 class VcInventaryRegister extends Component
 {
     public $linea, $status, $tipo='ING', $fecha, $inventarioId=0;
-    public $record=[], $action='';
+    public $record=[], $action='', $objPago=[];
     
     protected $listeners = ['view','setPersona'];
 
@@ -126,6 +126,11 @@ class VcInventaryRegister extends Component
         $this->tipo = 'ING';
 
         $this->emitTo('vc-inventary-registerdet','mount',0);
+
+        $pago['linea']=1;
+        $pago['tipopago']='NN';
+        $pago['valor']=0;
+        array_push($this->objPago,$pago);
     }
 
     public function edit()
@@ -133,6 +138,31 @@ class VcInventaryRegister extends Component
         $this->action = 'E';
         $this->status = 'enabled';       
         
+    }
+
+    public function addpago()
+    {
+        $linea = count($this->objPago);
+        $linea = $linea+1;
+
+        $pago['linea']=$linea;
+        $pago['tipopago']='EFE';
+        $pago['valor']=0;
+        array_push($this->objPago,$pago);        
+    }
+
+    public function delpago($linea)
+    {
+        $recnoToDelete = $this->objPago;
+        foreach ($recnoToDelete as $index => $recno)
+        {
+            if ($recno['linea'] == $linea){
+                unset ($recnoToDelete[$index]);
+            } 
+        }
+
+        $this->reset(['objPago']);
+        $this->objPago = $recnoToDelete;        
     }
 
     public function createData(){

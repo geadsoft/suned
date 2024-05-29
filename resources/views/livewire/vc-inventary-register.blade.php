@@ -82,36 +82,80 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-8">
-                                @if ($record['movimiento']=='VE')
-                                <label class="form-label" for="product-title-input">Razon Social</label>
-                                @else
-                                <label class="form-label" for="product-title-input">Referencia</label>
-                                @endif
-                                <div class="input-group mb-2">
-                                    <input type="text" class="form-control" name="identidad" id="billinginfo-firstName" placeholder="Razon Social" wire:model="record.referencia" required>
-                                    @if ($record['movimiento']=='VE')
-                                    <a id="btnstudents" class ="input-group-text btn btn-soft-secondary" wire:click="buscar()"><i class="ri-user-add-line me-1"></i></a>
-                                    @endif
+                            <div class="row">
+                                <div class="col-xl-7">
+                                    <div class="col-lg-12">
+                                        @if ($record['movimiento']=='VE')
+                                        <label class="form-label" for="product-title-input">Razon Social</label>
+                                        @else
+                                        <label class="form-label" for="product-title-input">Referencia</label>
+                                        @endif
+                                        <div class="input-group mb-2">
+                                            <input type="text" class="form-control" name="identidad" id="billinginfo-firstName" placeholder="Razon Social" wire:model="record.referencia" required>
+                                            @if ($record['movimiento']=='VE')
+                                            <a id="btnstudents" class ="input-group-text btn btn-soft-secondary" wire:click="buscar()"><i class="ri-user-add-line me-1"></i></a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="product-title-input">Observación</label>
+                                        <textarea class="form-control" id="billingAddress" rows="2" placeholder="Descripción de producto" wire:model="record.observacion"></textarea>
+                                    </div>
                                 </div>
-                                </div>
-                                <div class="col-lg-4">
+                                <div class="col-xl-5">
                                     <label class="form-label" for="product-title-input">Forma de Pago</label>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="record.tipopago" required>
-                                        <option value="NN">Ninguno</option>
-                                        <option value="EFE">Efectivo</option>
-                                        <option value="CHQ">Cheque</option>
-                                        <option value="TAR">Tarjeta</option>
-                                        <option value="DEP">Depósito</option>
-                                        <option value="TRA">Transferencia</option>
-                                        <option value="APP">App Movil</option>
-                                    </select>
+                                    <table class="table table-nowrap table-sm" id="orderTable">
+                                        <thead class="text-muted table-light">
+                                            <tr class="text-uppercase">
+                                                <th>Linea</th>
+                                                <th>Tipo Pago</th>
+                                                <th>Valor</th>
+                                                <th>Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($objPago as $key => $row)
+                                        <tr class="">
+                                            <td>{{$row['linea']}}</td>
+                                            <td style="width: 250px;">
+                                                <select type="select" class="form-select-sm bg-white border-0" name="cmbtipopago" id="cmbtipopago-{{$key+1}}" wire:model.prevent="objPago.{{$key}}.tipopago">
+                                                    <option value="EFE">Efectivo</option>
+                                                    <option value="CHQ">Cheque</option>
+                                                    <option value="TAR">Tarjeta</option>
+                                                    <option value="DEP">Depósito</option>
+                                                    <option value="TRA">Transferencia</option>
+                                                    <option value="CON">Convenio</option>
+                                                    <option value="APP">App Movil</option>
+                                                    <option value="RET">Retención</option>
+                                                    <option value="OTR">Convenio</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control-sm bg-white border-0" style="width: 90px;"  id="txtvalor-{{$key+1}}" step="0.01" wire:model.prevent="objPago.{{$key}}.valor"/>
+                                            </td>
+                                            <td class="pagos-removal">
+                                                <ul class="list-inline hstack gap-2 mb-0">
+                                                    <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                        data-bs-trigger="hover" data-bs-placement="top" title="Agregar">
+                                                        <a href="" wire:click="addpago" class="text-success d-inline-block remove-item-btn"
+                                                            data-bs-toggle="modal" >
+                                                            <i class="ri-add-circle-line fs-16"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                        data-bs-trigger="hover" data-bs-placement="top" title="Remover">
+                                                        <a href="" wire:click="delpago({{$row['linea']}})" class="text-danger d-inline-block remove-item-btn"
+                                                            data-bs-toggle="modal" >
+                                                            <i class="ri-close-circle-line fs-16"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="product-title-input">Observación</label>
-                                <textarea class="form-control" id="billingAddress" rows="2" placeholder="Descripción de producto" wire:model="record.observacion"></textarea>
                             </div>
                         </div>
                         
