@@ -103,6 +103,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-5">
+                                    
                                     <label class="form-label" for="product-title-input">Forma de Pago</label>
                                     <table class="table table-nowrap table-sm" id="orderTable">
                                         <thead class="text-muted table-light">
@@ -133,7 +134,9 @@
                                             <td>
                                                 <input type="number" class="form-control-sm bg-white border-0" style="width: 90px;"  id="txtvalor-{{$key+1}}" step="0.01" wire:model.prevent="objPago.{{$key}}.valor"/>
                                             </td>
+                                            
                                             <td class="pagos-removal">
+                                                @if ($status=='enabled')
                                                 <ul class="list-inline hstack gap-2 mb-0">
                                                     <li class="list-inline-item" data-bs-toggle="tooltip"
                                                         data-bs-trigger="hover" data-bs-placement="top" title="Agregar">
@@ -150,7 +153,9 @@
                                                         </a>
                                                     </li>
                                                 </ul>
+                                                @endif
                                             </td>
+                                            
                                         </tr>
                                         @endforeach
                                         </tbody>

@@ -7,5 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class TrInventarioFpago extends Model
 {
-    use HasFactory;
+    protected $table = 'tr_inventario_fpagos';
+    protected $primaryKey = "id";
+    protected $fillable = [
+        'inventariocab_id',
+        'linea',
+        'tipopago',
+        'valor',
+        'estado',
+        'usuario',
+    ];
+
 }

@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\TrInventarioCabs;
 use App\Models\TrInventarioDets;
+use App\Models\TrInventarioFpago;
 use App\Models\TmProductos;
 use App\Models\TmMatricula;
 
@@ -12,10 +13,10 @@ use PDF;
 
 class VcInventaryRegister extends Component
 {
-    public $linea, $status, $tipo='ING', $fecha, $inventarioId=0;
+    public $linea, $status, $tipo='ING', $fecha, $inventarioId=0, $total;
     public $record=[], $action='', $objPago=[];
     
-    protected $listeners = ['view','setPersona'];
+    protected $listeners = ['view','setPersona','setTotales'];
 
     public function mount($id){
         
@@ -56,12 +57,16 @@ class VcInventaryRegister extends Component
             $this->record['fecha'] = date('Y-m-d',strtotime($fecha));
             $this->tipo = $this->record['tipo'];
             $this->inventarioId = $this->record['id'];
+            $this->total= $this->record['neto'];
+
+            $this->objPago = TrInventarioFpago::where('inventariocab_id',$this->inventarioId)->get()->toArray();
 
         }
 
     }
 
     public function loadData($id){
+
         $this->action = '';
         $this->status = 'disabled';
         $this->record = TrInventarioCabs::find($id)->toArray();
@@ -70,13 +75,15 @@ class VcInventaryRegister extends Component
         $this->record['fecha'] = date('Y-m-d',strtotime($fecha));
         $this->tipo = $this->record['tipo'];
         $this->inventarioId = $this->record['id'];
+        $this->total= $this->record['neto'];
+
+        $this->objPago = TrInventarioFpago::where('inventariocab_id',$this->inventarioId)->get()->toArray();
     }
 
     public function view($linea){
 
         $this->linea = $linea;
         $this->dispatchBrowserEvent('show-form');
-        
         
     }
 
@@ -113,6 +120,7 @@ class VcInventaryRegister extends Component
         $this->status = 'enabled';       
         $this->record = TrInventarioCabs::find(0);
         $this->inventarioId = 0;
+        $this->total=0;
 
         $ldate = date('Y-m-d H:i:s');
         $this->record['documento'] = '';
@@ -126,6 +134,8 @@ class VcInventaryRegister extends Component
         $this->tipo = 'ING';
 
         $this->emitTo('vc-inventary-registerdet','mount',0);
+
+        $this->objPago=[];
 
         $pago['linea']=1;
         $pago['tipopago']='NN';
@@ -165,6 +175,14 @@ class VcInventaryRegister extends Component
         $this->objPago = $recnoToDelete;        
     }
 
+    /* Totales */
+    public function setTotales($total){
+
+        $this->total = $total;
+        $this->objPago[0]['valor']=$this->total;
+
+    }
+
     public function createData(){
         
         $this ->validate([
@@ -174,6 +192,15 @@ class VcInventaryRegister extends Component
             'record.referencia' => 'required',
             'record.tipopago' => 'required',
         ]);
+
+        $totalpago = array_sum(array_column($this->objPago,'valor'));
+
+        if ($this->total!=$totalpago){
+
+            $error = "Valor Cancelado es diferente al total del documento...";
+            $this->dispatchBrowserEvent('error-stock', ['newName' => $error]);
+            return;
+        }
 
         if($this->action!='E'){          
         
@@ -206,6 +233,18 @@ class VcInventaryRegister extends Component
                 'usuario' => auth()->user()->name,
             ]);
 
+            foreach ($this->objPago as $index => $recno)
+            {
+                TrInventarioFpago::Create([
+                    'inventariocab_id' => $invCab->id,
+                    'linea' => $recno['linea'],
+                    'tipopago' => $recno['tipopago'],
+                    'valor' => $recno['valor'],
+                    'estado' => 'G',
+                    'usuario' => auth()->user()->name,
+                ]);
+            }
+
             $this->inventarioId = $invCab->id;
             $this->emitTo('vc-inventary-registerdet','setGrabaDetalle',$this->inventarioId);
 
@@ -222,6 +261,15 @@ class VcInventaryRegister extends Component
     }
 
     public function updateData(){
+
+        $totalpago = array_sum(array_column($this->objPago,'valor'));
+
+        if ($this->total!=$totalpago){
+
+            $error = "Valor Cancelado es diferente al total del documento...";
+            $this->dispatchBrowserEvent('error-stock', ['newName' => $error]);
+            return;
+        }
 
         $invCab = TrInventarioCabs::find($this->inventarioId);
         $invCab->update([

@@ -83,7 +83,7 @@ class VcInventaryRegisterdet extends Component
         $total = $cantidad*$precio;
 
         $this->detalle[$linea]['total'] = floatval($total);
-
+        $this->emitTo('vc-inventary-register','setTotales',floatval($total));
     }
 
     public function removeItem($linea){
@@ -116,7 +116,8 @@ class VcInventaryRegisterdet extends Component
         $this->detalle[$linea]['precio'] = $record->precio;
         $this->detalle[$linea]['total'] =  $cantidad*floatval($record->precio);
         
-        
+        $total = $totalpago = array_sum(array_column($this->detalle,'total'));
+        $this->emitTo('vc-inventary-register','setTotales',floatval($total));
         $this->dispatchBrowserEvent('hide-form');
 
     }
