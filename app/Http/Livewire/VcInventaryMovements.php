@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\TrInventarioCabs;
 use App\Models\TrInventarioDets;
+use App\Models\TrInventarioFpago;
 use App\Models\TmProductos;
 
 use Livewire\Component;
