@@ -287,6 +287,21 @@ class VcInventaryRegister extends Component
         ]);
 
         $this->inventarioId = $invCab->id;
+
+        TrInventarioFpago::where('inventariocab_id',$this->inventarioId)->delete();
+
+        foreach ($this->objPago as $index => $recno)
+        {
+            TrInventarioFpago::Create([
+                'inventariocab_id' => $invCab->id,
+                'linea' => $recno['linea'],
+                'tipopago' => $recno['tipopago'],
+                'valor' => $recno['valor'],
+                'estado' => 'G',
+                'usuario' => auth()->user()->name,
+            ]);
+        }
+
         $this->emitTo('vc-inventary-registerdet','setGrabaDetalle',$this->inventarioId);
         
         $message = "Registro actualizado con éxito!";

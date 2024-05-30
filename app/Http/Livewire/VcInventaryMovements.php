@@ -266,6 +266,7 @@ class VcInventaryMovements extends Component
             }
         }
 
+        TrInventarioFpago::where('inventariocab_id',$this->selectId)->delete();
         TrInventarioDets::where('inventariocab_id',$this->selectId)->delete();
         TrInventarioCabs::find($this->selectId)->delete();
         
