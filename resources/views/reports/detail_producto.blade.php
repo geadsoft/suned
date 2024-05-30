@@ -73,11 +73,12 @@
             @endforeach
             </tbody>
             <tfoot>
-                <tr>
+                <tr> 
+                    <td colspan="3"></td>
                     <td class="text-center">
                         <span><b>TOTALES<b></span>
-                    </td> 
-                    <td colspan="5"></td>
+                    </td>
+                    <td></td>
                     <td>
                         <span><strong>{{number_format($invtra->where('estado','P')->sum('cantidad'),2)}}<strong></span>
                     <td>
@@ -88,6 +89,40 @@
             </tfoot>
         </table>
     </section>
+    <section>
+        <table cellpadding="0" cellspancing="0" width="100%">
+            <tr>
+                <td width="40%" style="vertical-align: top; padding-top: 10px; position: relative">
+                    <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
+                        <thead class="table-light">
+                            <tr>
+                                <th colspan="2">Formas de Pagos</th>
+                            </tr>
+                        <thead>
+                        <tbody class="list"> 
+                        {{ $totalres = 0}} 
+                        @foreach ($formapago as $data) 
+                            @if($data['total']>0)
+                                <tr>
+                                    <td class="">{{$fpago[$data['tipopago']]}}</td>
+                                    <td>{{number_format($data['total'],2)}}</td>
+                                </tr>
+                            @endif
+                            {{ $totalres = $totalres + $data['total'] }}
+                         @endforeach
+                            <tr>
+                                <td class=""></td>
+                                <td><strong>{{number_format($totalres,2)}}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td width="60%" style="vertical-align: top; padding-top: 10px; position: relative">
+                </td>          
+            </tr>
+        </table>
+    </section>
+
     @foreach ($resumen as $key => $data)    
     <section>
         <table cellpadding="0" cellspancing="0" width="100%">
@@ -96,7 +131,7 @@
                     <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
                         <thead class="table-light">
                             <tr>
-                                <th colspan="4">{{$fpago[$key]}}</th>
+                                <th colspan="4">Resumen de {{$fpago[$key]}}</th>
                             </tr>
                             <tr style="background-color:#222454">
                                 <th style="color:#FFFFFF">Fecha</th>
@@ -110,9 +145,9 @@
                                 <tr>
                                     <td class="">{{date('d/m/Y',strtotime($data['fecha']))}}</td>
                                     <td class="">{{$data['documento']}}</td>
-                                    <td>{{number_format($data['total'],2)}}</td>
+                                    <td>{{number_format($data['valor'],2)}}</td>
                                 </tr>
-                                {{ $totalres = $totalres + $data['total'] }}
+                                {{ $totalres = $totalres + $data['valor'] }}
                          @endforeach
                          <tr>
                             <td class=""></td>
