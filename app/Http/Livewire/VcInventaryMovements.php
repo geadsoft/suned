@@ -58,7 +58,7 @@ class VcInventaryMovements extends Component
     {
         
         $tblrecords = TrInventarioCabs::query()
-        ->join(DB::raw('(select inventariocab_id,group_concat(distinct tipopago) as fpago 
+        ->join(DB::raw('(select inventariocab_id,group_concat(distinct tipopago) as tipocobro 
         from tr_inventario_fpagos  
         group by 1) fp'), 
         function($join)

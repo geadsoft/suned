@@ -120,6 +120,7 @@
                                             <td>{{$row['linea']}}</td>
                                             <td style="width: 250px;">
                                                 <select type="select" class="form-select-sm bg-white border-0" name="cmbtipopago" id="cmbtipopago-{{$key+1}}" wire:model.prevent="objPago.{{$key}}.tipopago">
+                                                    <option value="NN">Ninguno</option>
                                                     <option value="EFE">Efectivo</option>
                                                     <option value="CHQ">Cheque</option>
                                                     <option value="TAR">Tarjeta</option>

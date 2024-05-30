@@ -135,7 +135,7 @@
                                         </td>
                                         <td>{{$record['referencia']}}</td>
                                         <td>{{$record['descripcion']}}</td>
-                                        <td>{{$record['fpago']}}</td>
+                                        <td>{{$record['tipocobro']}}</td>
                                         <td>{{number_format($record['neto'],2)}}</td>
                                         
                                         <td>
