@@ -170,7 +170,7 @@ class VcInventaryReports extends Component
         })*/
         ->where('d.fecha','>=',date('Ymd',strtotime($this->filters['fechaini'])))
         ->where('d.fecha','<=',date('Ymd',strtotime($this->filters['fechafin'])))
-        ->selectRaw('tr_inventario_cabs.*,fp.tipopago,p.nombre,p.talla,d.precio,d.cantidad,d.total')
+        ->selectRaw('tr_inventario_cabs.*,fp.tipopago as fpago,p.nombre,p.talla,d.precio,d.cantidad,d.total')
         ->orderBy('tr_inventario_cabs.documento','desc','fecha','desc')
         ->paginate(11);
 
@@ -244,7 +244,7 @@ class VcInventaryReports extends Component
         })*/
         ->where('d.fecha','>=',date('Ymd',strtotime($this->filters['fechaini'])))
         ->where('d.fecha','<=',date('Ymd',strtotime($this->filters['fechafin'])))
-        ->selectRaw('tr_inventario_cabs.*,fp.tipopago,p.nombre,p.talla,d.precio,(d.cantidad*tr.variable) as cantidad,(d.total*tr.variable) as total')
+        ->selectRaw('tr_inventario_cabs.*,fp.tipopago as fpago,p.nombre,p.talla,d.precio,(d.cantidad*tr.variable) as cantidad,(d.total*tr.variable) as total')
         ->orderBy('tr_inventario_cabs.documento','desc','fecha','desc')
         ->get();
 

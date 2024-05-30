@@ -139,7 +139,7 @@
                                     <td class="text-end">{{$record['talla']}}</td>
                                     <td class="text-end">{{number_format($record['precio'],2)}}</td>
                                     <td class="text-end">{{number_format($record['cantidad'],2)}}</td>
-                                    <td>{{$fpago[$record['tipopago']]}}</td>
+                                    <td>{{$record['fpago']}}</td>
                                     <td class="text-end">{{number_format($record['total'],2)}}</td>
                                 </tr>
                             @endforeach

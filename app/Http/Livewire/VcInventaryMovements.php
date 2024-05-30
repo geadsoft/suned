@@ -9,6 +9,7 @@ use App\Models\TmProductos;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class VcInventaryMovements extends Component
 {
@@ -57,6 +58,13 @@ class VcInventaryMovements extends Component
     {
         
         $tblrecords = TrInventarioCabs::query()
+        ->join(DB::raw('(select inventariocab_id,group_concat(distinct tipopago) as fpago 
+        from tr_inventario_fpagos  
+        group by 1) fp'), 
+        function($join)
+        {
+           $join->on('tr_inventario_cabs.id', '=', 'fp.inventariocab_id');
+        })
         ->when($this->filters['buscar'],function($query){
             return $query->where('referencia', 'like' , "%{$this->filters['buscar']}%");
         })

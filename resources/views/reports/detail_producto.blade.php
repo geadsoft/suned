@@ -66,7 +66,7 @@
                     <td>{{$record->talla}}</td>
                     <td>{{number_format($record->precio,2)}}</td>
                     <td>{{number_format($record->cantidad,2)}}</td>
-                    <td>{{$record->tipopago}}</td>
+                    <td>{{$record->fpago}}</td>
                     <td>{{number_format($record->total,2)}}</td>
                     <td>{{$record->usuario}}</td>
                 </tr>
