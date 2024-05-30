@@ -17,8 +17,8 @@
                             <div class="col-xxl-5 col-sm-6">
                                 <div class="search-box">
                                     <div class="input-group">
-                                        <input type="text" class="form-control form-control" id="producto" wire:model="filter.producto">
-                                        <a id="btnstudents" class ="input-group-text btn btn-info" wire:click="search()"><i class="ri-search-line me-1"></i>Buscar</a>
+                                        <input type="text" class="form-control form-control" id="buscar" wire:model="filters.buscar">
+                                        <a id="btnstudents" class ="input-group-text btn btn-info"><i class="ri-search-line me-1"></i>Buscar</a>
                                     </div>
                                 </div>
                             </div>
@@ -26,18 +26,14 @@
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-control" data-choices data-choices-search-false
-                                        name="choices-single-default" id="idStatus">
+                                        name="choices-single-default" id="idStatus" wire:model="filters.movimiento">
                                         <option value="">Seleccione Movimiento</option>
-                                        @if ($filters['tipo']=='ING')
-                                            <option value="II">Inventario Inicial</option>
-                                            <option value="CL">Compras Locales</option>
-                                            <option value="IA">Ingreso por Ajuste</option>
-                                            <option value="DE">Devolucion</option>
-                                        @endif
-                                        @if ($filters['tipo']=='EGR')
-                                            <option value="VE">Ventas</option>
-                                            <option value="EA">Egreso por Ajuste</option>
-                                        @endif
+                                        <option value="II">Inventario Inicial</option>
+                                        <option value="CL">Compras Locales</option>
+                                        <option value="IA">Ingreso por Ajuste</option>
+                                        <option value="DE">Devolucion</option>
+                                        <option value="VE">Ventas</option>
+                                        <option value="EA">Egreso por Ajuste</option>
                                     </select>
                                 </div>
                             </div>
@@ -45,7 +41,7 @@
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-control" data-choices data-choices-search-false
-                                        name="choices-single-default" id="idPayment">
+                                        name="choices-single-default" id="idPayment" wire:model="filters.estado">
                                         <option value="">Seleccione Estado</option>
                                         <option value="G">Grabado</option>
                                         <option value="P">Procesado</option>
@@ -68,12 +64,12 @@
                         <div class="row g-3">
                             <div class="col-xxl-2 col-sm-4">
                                 <div class="">
-                                        <input type="date" class="form-control" id="fechaini" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.fechaini"> 
+                                        <input type="date" class="form-control" id="fechaini" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.fecha_ini"> 
                                 </div>
                             </div>
                             <div class="col-xxl-2 col-sm-4">
                                 <div class="">
-                                        <input type="date" class="form-control" id="fechafin" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.fechafin"> 
+                                        <input type="date" class="form-control" id="fechafin" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.fecha_fin"> 
                                 </div>
                             </div>
                         </div>

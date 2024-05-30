@@ -44,7 +44,7 @@ class VcInventaryMovements extends Component
     ];
 
     public $filters=[
-        'producto_id' => '',
+        'buscar' => '',
         'tipo' => '',
         'movimiento' => '',
         'fecha_ini' => '',
@@ -56,8 +56,8 @@ class VcInventaryMovements extends Component
     {
         
         $tblrecords = TrInventarioCabs::query()
-        ->when($this->filters['producto_id'],function($query){
-            return $query->where('producto_id',"{$this->filters['producto_id']}");
+        ->when($this->filters['buscar'],function($query){
+            return $query->where('referencia', 'like' , "%{$this->filters['buscar']}%");
         })
         ->when($this->filters['tipo'],function($query){
             return $query->where('tipo',"{$this->filters['tipo']}");
@@ -66,10 +66,10 @@ class VcInventaryMovements extends Component
             return $query->where('movimiento',"{$this->filters['movimiento']}");
         })
         ->when($this->filters['fecha_ini'],function($query){
-            return $query->where('fecha','>',"{$this->filters['fecha_ini']}");
+            return $query->where('fecha','>=',"{$this->filters['fecha_ini']}");
         })
         ->when($this->filters['fecha_fin'],function($query){
-            return $query->where('fecha','<',"{$this->filters['fecha_fin']}");
+            return $query->where('fecha','<=',"{$this->filters['fecha_fin']}");
         })
         ->when($this->filters['estado'],function($query){
             return $query->where('estado',"{$this->filters['estado']}");
