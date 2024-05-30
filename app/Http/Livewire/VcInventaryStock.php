@@ -128,7 +128,7 @@ class VcInventaryStock extends Component
         /* Stock */
         foreach ($this->detalle as $cat => $record){
 
-            $i     = 28;
+            $i     = 26;
             while ($i <= 50):
                 $stock = 0; 
                 $val = 0;               
@@ -153,7 +153,7 @@ class VcInventaryStock extends Component
                     $cant = $cant + $this->detalle[$cat]['data'][$mov][0];
                 }else{
 
-                    $i = 28;
+                    $i = 26;
                     while ($i <= 50):
                         $cant = $cant + $this->detalle[$cat]['data'][$mov][$i];
                         $i=$i+2;
@@ -173,6 +173,7 @@ class VcInventaryStock extends Component
             'codigo' =>'',
             'nombre'=>'',
             '0'=>'0',
+            '26'=>0,
             '28'=>0,
             '30'=>0,
             '32'=>0,

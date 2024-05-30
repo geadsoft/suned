@@ -40,6 +40,7 @@
                                     <tr class="text-uppercase">
                                         <th>Movimiento</th>
                                         <th class="text-end">NN</th>
+                                        <th class="text-end">26</th>
                                         <th class="text-end">28</th>
                                         <th class="text-end">30</th>
                                         <th class="text-end">32</th>
@@ -62,6 +63,7 @@
                                             <tr>
                                                 <td>{{$detalle[$cat]['data'][$data['codigo']]['nombre']}}</td>
                                                 <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['0']}}</td>
+                                                <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['26']}}</td>
                                                 <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['28']}}</td>
                                                 <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['30']}}</td>
                                                 <td class="text-end">{{$detalle[$cat]['data'][$data['codigo']]['32']}}</td>
@@ -80,6 +82,7 @@
                                             <tr>
                                                 <td><strong>{{$detalle[$cat]['data'][$data['codigo']]['nombre']}}</strong></td>
                                                 <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['0']}}</strong></td>
+                                                <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['26']}}</strong></td>
                                                 <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['28']}}</strong></td>
                                                 <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['30']}}</strong></td>
                                                 <td class="text-end"><strong>{{$detalle[$cat]['data'][$data['codigo']]['32']}}</strong></td>
