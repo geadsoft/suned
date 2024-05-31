@@ -391,7 +391,30 @@ class VcInventaryReports extends Component
         $this->filters['tipopago']  = $data[0]->tipopago;
 
         $invtra  = $this->report();
-        $resumen = $this->resumen()->groupBy('tipopago');
+        
+        //Detalle Pago
+        $detCobro = $invtra->groupBy('id');
+
+        $idCobro = "";
+        foreach ($detCobro as $key => $value) {
+            $idCobro = $idCobro.strval($key).',';
+        }
+        $idCobro = substr($idCobro,0,-1);
+        $tbldetalle = TrInventarioFpago::query()
+        ->join("tr_inventario_cabs as c","c.id","=","tr_inventario_fpagos.inventariocab_id")
+        ->selectRaw("c.fecha, c.documento,tr_inventario_fpagos.*")
+        ->whereRaw("c.id in (".$idCobro.") and c.estado<>'A'")
+        ->get(); 
+
+        $resumen = $tbldetalle->groupBy('tipopago')->toArray();
+
+        $formapago = TrInventarioFpago::query()
+        ->join("tr_inventario_cabs as c","c.id","=","tr_inventario_fpagos.inventariocab_id")
+        ->selectRaw("tr_inventario_fpagos.tipopago,sum(valor) as total")
+        ->whereRaw("c.id in (".$idCobro.") and c.estado<>'A'")
+        ->groupBy("tr_inventario_fpagos.tipopago")
+        ->get()
+        ->toArray();
 
         $transac=[
             'II' => '(+) Inventario Inicial', 
@@ -424,13 +447,13 @@ class VcInventaryReports extends Component
         $arresta=['DC','VE','EA'];
 
         $fpago=[
-            'NN' => 'Resumen de Ninguno',
-            'EFE' => 'Resumen de Efectivo',
-            'CHQ' => 'Resumen de Cheque',
-            'TAR' => 'Resumen de Tarjeta de Crédito',
-            'DEP' => 'Resumen de Deposito',
-            'TRA' => 'Resumen de Transferencia',
-            'APP' => 'Resumen de Aplicación Movil',
+            'NN' => 'Ninguno',
+            'EFE' => 'Efectivo',
+            'CHQ' => 'Cheque',
+            'TAR' => 'Tarjeta de Crédito',
+            'DEP' => 'Deposito',
+            'TRA' => 'Transferencia',
+            'APP' => 'Aplicación Movil',
         ];
         
         $totalres = 0;
@@ -445,6 +468,7 @@ class VcInventaryReports extends Component
             'resumen' => $resumen,
             'fpago' => $fpago,
             'totalres' => $totalres,
+            'formapago' => $formapago,
         ]);
 
         return $pdf->download('Detalle de Productos.pdf');
