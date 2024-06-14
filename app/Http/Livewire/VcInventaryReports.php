@@ -184,6 +184,7 @@ class VcInventaryReports extends Component
 
     public function report(){ 
 
+        
         /* Movimientos */
         $invtra = TrInventarioCabs::query()
         ->join(DB::raw('(select inventariocab_id,group_concat(distinct tipopago) as tipopago 
@@ -272,6 +273,8 @@ class VcInventaryReports extends Component
 
     public function printPDF($objdata)
     { 
+        ini_set('max_execution_time', 60);
+        
         $data = json_decode($objdata);
 
         $this->filters['referencia'] = $data[0]->referencia;
@@ -375,6 +378,8 @@ class VcInventaryReports extends Component
 
     public function downloadPDF($objdata)
     { 
+        ini_set('max_execution_time', 60);
+
         $data = json_decode($objdata);
 
         $this->filters['referencia'] = $data[0]->referencia;
