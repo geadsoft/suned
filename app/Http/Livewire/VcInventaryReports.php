@@ -184,6 +184,7 @@ class VcInventaryReports extends Component
 
     public function report(){ 
 
+        
         /* Movimientos */
         $invtra = TrInventarioCabs::query()
         ->join(DB::raw('(select inventariocab_id,group_concat(distinct tipopago) as tipopago 
@@ -245,9 +246,9 @@ class VcInventaryReports extends Component
         ->where('d.fecha','>=',date('Ymd',strtotime($this->filters['fechaini'])))
         ->where('d.fecha','<=',date('Ymd',strtotime($this->filters['fechafin'])))
         ->selectRaw('tr_inventario_cabs.*,fp.tipopago as fpago,p.nombre,p.talla,d.precio,(d.cantidad*tr.variable) as cantidad,(d.total*tr.variable) as total')
-        ->orderBy('tr_inventario_cabs.documento','desc','fecha','desc')
+        ->orderBy('fecha')
         ->get();
-
+        
         $arrdata[] = $this->filters;
         $this->datos = json_encode($arrdata);
         
@@ -272,6 +273,8 @@ class VcInventaryReports extends Component
 
     public function printPDF($objdata)
     { 
+        /*ini_set('max_execution_time', 60);*/
+
         $data = json_decode($objdata);
 
         $this->filters['referencia'] = $data[0]->referencia;
@@ -288,9 +291,9 @@ class VcInventaryReports extends Component
         $this->filters['tipopago']  = $data[0]->tipopago;
 
         $invtra  = $this->report();
-
+        
         //Detalle Pago
-        $detCobro = $invtra->groupBy('id');
+        /*$detCobro = $invtra->groupBy('id');
 
         $idCobro = "";
         foreach ($detCobro as $key => $value) {
@@ -311,7 +314,38 @@ class VcInventaryReports extends Component
         ->whereRaw("c.id in (".$idCobro.") and c.estado<>'A'")
         ->groupBy("tr_inventario_fpagos.tipopago")
         ->get()
-        ->toArray();
+        ->toArray();*/
+        $fechaini = date('Ymd',strtotime($this->filters['fechaini']));
+        $fechafin = date('Ymd',strtotime($this->filters['fechafin'])); 
+
+        $sqldetPago = DB::select("call reporte_productos_detallepagos('".$fechaini."','".$fechafin."','','',0,'EGR','VE',0,0,0,0)");
+        $collection = collect($sqldetPago);
+
+        $grouped = $collection->groupBy('tipopago');
+                
+        $resumen=[];
+        foreach($grouped as $key => $tipopago){
+            
+            $detalle=[];
+            foreach($tipopago as $tpago){ 
+                $detpago['fecha'] = $tpago->fecha;
+                $detpago['documento'] = $tpago->documento;
+                $detpago['valor'] = $tpago->valor;                
+                array_push($detalle,$detpago);
+            }
+            $resumen[$key] = $detalle;
+        }
+       
+
+        $sqlPagos = DB::select("call reporte_productos('".$fechaini."','".$fechafin."','','',0,'EGR','VE',0,0,0,0)");
+        $formapago=[];
+        foreach($sqlPagos as $key){
+            
+            $array['tipopago'] = $key->tipopago;
+            $array['total'] = $key->total;
+            array_push($formapago,$array);
+        }
+        
 
         $transac=[
             'II' => '(+) Inventario Inicial', 
@@ -375,6 +409,8 @@ class VcInventaryReports extends Component
 
     public function downloadPDF($objdata)
     { 
+        ini_set('max_execution_time', 60);
+
         $data = json_decode($objdata);
 
         $this->filters['referencia'] = $data[0]->referencia;
@@ -391,6 +427,7 @@ class VcInventaryReports extends Component
         $this->filters['tipopago']  = $data[0]->tipopago;
 
         $invtra  = $this->report();
+        
         
         //Detalle Pago
         $detCobro = $invtra->groupBy('id');
