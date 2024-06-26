@@ -152,7 +152,7 @@
                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                     data-bs-trigger="hover" data-bs-placement="top" title="Eliminar">
                                     <a class="text-danger d-inline-block remove-item-btn"
-                                        data-bs-toggle="modal" href="">
+                                        data-bs-toggle="modal" href="" wire:click.prevent="deleteData({{$recno['id']}})">
                                         <i class="ri-delete-bin-5-fill fs-16"></i>
                                     </a>
                                 </li>

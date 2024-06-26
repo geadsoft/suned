@@ -132,5 +132,14 @@ class VcPersonsFamily extends Component
         $this->eControl2 = 'disabled'; 
     }
 
+    public function deleteData($familiarId){
+
+        TmFamiliarEstudiantes::where('persona_id',$familiarId)->delete();
+        TmPersonas::find($familiarId)->delete();
+        
+        $this->loadFamiliar();
+
+    }
+
 
 }
