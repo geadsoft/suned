@@ -280,18 +280,19 @@ class VcStatisticalGraphs extends Component
 
         //Cobro Mes
         $tblCobroMes = TrDeudasDets::query()
+        ->join('tr_cobros_cabs as cr','cr.id','=','tr_deudas_dets.cobro_id')
         ->join('tr_deudas_cabs as c','c.id','=','tr_deudas_dets.deudacab_id')
         ->join('tm_matriculas as m','m.id','=','c.matricula_id')
-        ->selectRaw('left(c.referencia,3) as tipo, month(tr_deudas_dets.fecha) as mes, sum(valor) as valor')
-        ->whereRaw("tr_deudas_dets.tipo = 'PAG' and tr_deudas_dets.estado = 'P' and year(tr_deudas_dets.fecha) = ".$this->filters['periodo'])
+        ->selectRaw('left(c.referencia,3) as tipo, month(cr.fechapago) as mes, sum(valor) as valor')
+        ->whereRaw("tr_deudas_dets.tipo = 'PAG' and tr_deudas_dets.estado = 'P' and year(cr.fechapago) = ".$this->filters['periodo'])
         ->when($this->filters['idperiodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['idperiodo']}");
         })
         ->when($this->filters['idgrupo'],function($query){
             return $query->where('m.modalidad_id',"{$this->filters['idgrupo']}");
         })
-        ->groupbyRaw("left(c.referencia,3), month(tr_deudas_dets.fecha), year(tr_deudas_dets.fecha)")
-        ->orderbyRaw("month(tr_deudas_dets.fecha),left(c.referencia,3)")
+        ->groupbyRaw("left(c.referencia,3), month(cr.fechapago), year(cr.fechapago)")
+        ->orderbyRaw("month(cr.fechapago),left(c.referencia,3)")
         ->get();
         
         if($tbldeudas!=null){
