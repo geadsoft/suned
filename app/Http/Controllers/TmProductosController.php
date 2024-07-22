@@ -51,4 +51,9 @@ class TmProductosController extends Controller
         return view('inventary/report');
     }
 
+    public function utilidad()
+    {
+        return view('inventary/utility');
+    }
+
 }
