@@ -273,8 +273,8 @@ class VcInventaryReports extends Component
 
     public function printPDF($objdata)
     { 
-        set_time_limit(0);
-        /*ini_set('max_execution_time', 360);*/
+        
+        ini_set('max_execution_time', 300);
 
         $data = json_decode($objdata);
 
@@ -410,7 +410,7 @@ class VcInventaryReports extends Component
 
     public function downloadPDF($objdata)
     { 
-        ini_set('max_execution_time', 60);
+        ini_set('max_execution_time', 300);
 
         $data = json_decode($objdata);
 
