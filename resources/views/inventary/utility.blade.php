@@ -43,6 +43,30 @@
             viewGraphs2(dataserie);
         })
 
+        window.addEventListener('graph-catutilidad', event => {
+            var dataserie 
+            dataserie = JSON.parse(event.detail.newObj);
+            viewGraphs3(dataserie);
+        })
+
+        window.addEventListener('graph-prdmonto', event => {
+            var dataserie 
+            dataserie = JSON.parse(event.detail.newObj);
+            viewGraphs4(dataserie);
+        })
+
+        window.addEventListener('graph-prdcantidad', event => {
+            var dataserie 
+            dataserie = JSON.parse(event.detail.newObj);
+            viewGraphs5(dataserie);
+        })
+
+        window.addEventListener('graph-prdutilidad', event => {
+            var dataserie 
+            dataserie = JSON.parse(event.detail.newObj);
+            viewGraphs6(dataserie);
+        })
+
     </script>
 
 @endsection

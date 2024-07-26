@@ -15,6 +15,7 @@ use App\Http\Livewire\VcSolicitudes;
 use App\Http\Livewire\VcGeneraXML;
 use App\Http\Livewire\VcInventaryRegister;
 use App\Http\Livewire\VcInventaryReports;
+use App\Http\Livewire\VcReportCostoGastos;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,6 +118,8 @@ Route::get('/preview-pdf/requests',[VcSolicitudes::class, 'printPDF']);
 Route::get('/preview-pdf/record-inv/{id}',[VcInventaryRegister::class, 'liveWirePDF']);
 Route::get('/preview-pdf/detail-products/{data}',[VcInventaryReports::class, 'printPDF']);
 Route::get('/download-pdf/detail-products/{data}',[VcInventaryReports::class, 'downloadPDF']);
+Route::get('/preview-pdf/report-utilitys/{data}',[VcReportCostoGastos::class, 'printPDF']);
+Route::get('/download-pdf/report-utilitys/{data}',[VcReportCostoGastos::class, 'downloadPDF']);
 
 
 Route::get('/invoice/genera/{id}',[VcGeneraXML::class, 'setGeneraXML']);
