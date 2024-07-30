@@ -16,8 +16,14 @@ class VcReportCostoGastos extends Component
     public $datos='';
 
     public function mount(){
-        $ldateini = date('Y-m-d H:i:s');
-        $ldatefin = date('Y-m-d H:i:s');
+        
+        $ldate = date('Y-m-d H:i:s');
+        $ldate = date('Y',strtotime($ldate)).'-'.date('m',strtotime($ldate)).'-01';
+       
+        $ldateini = date('Y-m-d',strtotime($ldate));
+
+        $ldate = date('Y-m-d H:i:s');
+        $ldatefin = date('Y-m-d',strtotime($ldate));
 
         $this->startDate = date('Y-m-d',strtotime($ldateini));
         $this->endDate = date('Y-m-d',strtotime($ldatefin));

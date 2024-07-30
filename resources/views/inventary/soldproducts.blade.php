@@ -34,10 +34,7 @@
         window.addEventListener('graph-vtaund', event => {
             var datacategories
             var dataserie 
-            datacategories = JSON.parse(event.detail.newObj1);
-            dataserie = JSON.parse(event.detail.newObj2);
-
-            alert(dataserie)            
+            dataserie = JSON.parse(event.detail.newObj);         
             viewGraphsVta1(dataserie);
         })
 

@@ -29,8 +29,8 @@
                                     <a href="/liveWire-pdf/" class="btn btn-danger" target="_blank"><i class="ri-printer-fill align-bottom me-1"></i> Print</a>
                                 </div>-->
                                 <div class="hstack text-nowrap gap-2">
-                                    <a href="/preview-pdf/report-utilitys/{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" target="_blank"><i class="ri-printer-fill fs-22 align-bottom fs-22"></i></a>
-                                    <a href="/download-pdf/report-utilitys/{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-download-2-line fs-22 align-bottom fs-22"></i></a>
+                                    <a href="/preview-pdf/report-soldproductos/{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" target="_blank"><i class="ri-printer-fill fs-22 align-bottom fs-22"></i></a>
+                                    <a href="/download-pdf/report-soldproductos/{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-download-2-line fs-22 align-bottom fs-22"></i></a>
                                     <a href="" wire:click.prevent="" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-file-excel-2-line align-bottom fs-22"></i></a>
                                 </div>
                             </div>
@@ -100,13 +100,8 @@
                                     <div class="card-body">
                                         <div class="w-100">
                                             <figure class="highcharts-figure">
-    <div id="container1"></div>
-    <p class="highcharts-description">
-        Bar chart showing horizontal columns. This chart type is often
-        beneficial for smaller screens, as the user can scroll through the data
-        vertically, and axis labels are easy to read.
-    </p>
-</figure>
+                                                <div id="container1"></div>
+                                            </figure>
                                         </div>
                                     </div>
                                 </div>

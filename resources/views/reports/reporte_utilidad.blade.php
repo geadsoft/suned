@@ -53,7 +53,7 @@
                     <td class="text-right">${{number_format($utilidad[0]['vtasnetas'],2)}}</td>
                 </tr>
                 <tr>
-                    <td>Costo de Netas</td>
+                    <td>Costo de Venta</td>
                     <td class="text-right">${{number_format($utilidad[0]['cstventa'],2)}}</td>
                 </tr>
                 <tr>

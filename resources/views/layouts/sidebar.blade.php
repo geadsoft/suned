@@ -429,7 +429,7 @@
                                     </ul>
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/inventary/detail-products">
+                                            <a class="nav-link menu-link" href="/report/sold-products">
                                                 <span>Productos mas Vendidos</span>
                                             </a>
                                         </li>
