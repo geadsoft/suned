@@ -18,6 +18,15 @@ function loadGraphs_Utilidad(graph1, graph2, graph3, graph4, graph5, graph6) {
 
 }
 
+function loadGraphs_Vtas(graph1, graph2, graph3) {
+
+    viewGraphsVta1(graph1)
+    viewGraphsVta2(graph2)
+    viewGraphsVta3(graph3)
+
+}
+
+
 function viewGraphs(objdata) {
 
 // Data retrieved from https://netmarketshare.com/
@@ -605,4 +614,74 @@ function viewGraphs6(objserie){
         ],
         
     });
+}
+
+function viewGraphsVta1(objserie){
+
+    Highcharts.chart('container1', {
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: 'Historic World Population by Region',
+            align: 'left'
+        },
+        subtitle: {
+            text: 'Source: <a ' +
+                'href="https://en.wikipedia.org/wiki/List_of_continents_and_continental_subregions_by_population"' +
+                'target="_blank">Wikipedia.org</a>',
+            align: 'left'
+        },
+        xAxis: {
+            categories: [],
+            title: {
+                text: null
+            },
+            gridLineWidth: 1,
+            lineWidth: 0
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Population (millions)',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            },
+            gridLineWidth: 0
+        },
+        tooltip: {
+            valueSuffix: ' millions'
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: '50%',
+                dataLabels: {
+                    enabled: true
+                },
+                groupPadding: 0.1
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+        credits: {
+            enabled: false
+        },
+        series: [{
+            name: 'Year 1990',
+            data: objserie
+        }]
+    });
+
 }

@@ -75,7 +75,7 @@ Route::get('/sri/invoices/{tipo}',[App\Http\Controllers\TrFacturasCabsController
 Route::get('/invoice/view/{id}',[App\Http\Controllers\TrFacturasCabsController::class, 'viewfe'])->name('viewfe');
 Route::get('/credits/view/{id}',[App\Http\Controllers\TrFacturasCabsController::class, 'viewne'])->name('viewne');
 Route::get('/report/utility',[App\Http\Controllers\TmProductosController::class, 'utilidad'])->name('utilidad');
-
+Route::get('/report/sold-products',[App\Http\Controllers\TmProductosController::class, 'productosVendidos'])->name('productosVendidos');
 
 Route::get('/inventary/products',[App\Http\Controllers\TmProductosController::class, 'index'])->name('index');
 Route::get('/inventary/products-add',[App\Http\Controllers\TmProductosController::class, 'add'])->name('add');

@@ -56,4 +56,9 @@ class TmProductosController extends Controller
         return view('inventary/utility');
     }
 
+    public function productosVendidos()
+    {
+        return view('inventary/soldproducts');
+    }
+
 }
