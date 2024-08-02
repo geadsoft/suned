@@ -6,19 +6,35 @@
                     <form>
                         <div class="row g-3">
                             <div class="col-xxl-2 col-sm-2">
-                                
                                 <div class="">
                                         <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="startDate"> 
                                 </div>
                             </div>
                             <div class="col-xxl-2 col-sm-2">
-                                
                                 <div class="">
                                         <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="endDate"> 
                                 </div>
                             </div>
                             <div class="col-xxl-2 col-sm-2">
-                                
+                                <input type="text" class="form-control" id="cantidad" placeholder="Cantidad"   data-provider="flatpickr" wire:model="vtatop"> 
+                            </div>
+                            <div class="col-xxl-2 col-sm-2">
+                                <select class="form-select" name="cmbgrupo" wire:model="categoria">
+                                    @foreach ($tblcategoria as $data)
+                                        <option value="{{$data['id']}}">{{$data['descripcion']}}</option>
+                                    @endforeach
+                                    <option value="0">Seleccione Categoria</option>
+                                </select>
+                            </div>
+                            <div class="col-xxl-2 col-sm-2">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="talla">
+                                    @foreach ($arrtalla as $key)
+                                        <option value="{{$key}}">{{$key}}</option>
+                                    @endforeach
+                                    <option value="0">Seleccione Talla</option>
+                                </select>
+                            </div>
+                            <div class="col-xxl-2 col-sm-2">
                                 <button type="button" class="btn btn-primary w-100" wire:click=""><i
                                         class="me-1 align-bottom"></i>Consultar
                                 </button>
