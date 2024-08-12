@@ -19,7 +19,7 @@ class VcInventaryReports extends Component
     use WithPagination;
 
     public $tblcategoria, $tipo='EGR';
-    public $datos='';
+    public $datos='', $tipo='';
 
     public $filters=[
         'referencia' => '',
@@ -65,9 +65,10 @@ class VcInventaryReports extends Component
 
     ];
 
-    public function mount()
+    public function mount($tipo)
     {
         $this->tblcategorias = TmGeneralidades::where('superior',11)->get();
+        $this->tipo = $tipo;
         
         $ldate = date('Y-m-d H:i:s');
         $ldate = date('Y',strtotime($ldate)).'-'.date('m',strtotime($ldate)).'-01';
@@ -185,6 +186,7 @@ class VcInventaryReports extends Component
     public function report(){ 
 
         
+        
         /* Movimientos */
         $invtra = TrInventarioCabs::query()
         ->join(DB::raw('(select inventariocab_id,group_concat(distinct tipopago) as tipopago 
@@ -271,7 +273,7 @@ class VcInventaryReports extends Component
 
     }
 
-    public function printPDF($objdata)
+    public function printPDF($objdata, $tipo)
     { 
         ini_set('memory_limit', '256M');
         ini_set('max_execution_time', 300);
@@ -292,30 +294,7 @@ class VcInventaryReports extends Component
         $this->filters['tipopago']  = $data[0]->tipopago;
 
         $invtra  = $this->report();
-        
-        //Detalle Pago
-        /*$detCobro = $invtra->groupBy('id');
 
-        $idCobro = "";
-        foreach ($detCobro as $key => $value) {
-            $idCobro = $idCobro.strval($key).',';
-        }
-        $idCobro = substr($idCobro,0,-1);
-        $tbldetalle = TrInventarioFpago::query()
-        ->join("tr_inventario_cabs as c","c.id","=","tr_inventario_fpagos.inventariocab_id")
-        ->selectRaw("c.fecha, c.documento,tr_inventario_fpagos.*")
-        ->whereRaw("c.id in (".$idCobro.") and c.estado<>'A'")
-        ->get(); 
-
-        $resumen = $tbldetalle->groupBy('tipopago')->toArray();
-
-        $formapago = TrInventarioFpago::query()
-        ->join("tr_inventario_cabs as c","c.id","=","tr_inventario_fpagos.inventariocab_id")
-        ->selectRaw("tr_inventario_fpagos.tipopago,sum(valor) as total")
-        ->whereRaw("c.id in (".$idCobro.") and c.estado<>'A'")
-        ->groupBy("tr_inventario_fpagos.tipopago")
-        ->get()
-        ->toArray();*/
         $fechaini = date('Ymd',strtotime($this->filters['fechaini']));
         $fechafin = date('Ymd',strtotime($this->filters['fechafin'])); 
 
@@ -390,16 +369,22 @@ class VcInventaryReports extends Component
 
         $totalres = 0;
 
+        if ($tipo=='PRD'){
+            $lsreport = 'reports/detail_producto'
+        }else{
+            $lsreport = 'reports/detail_movements'
+        }
+
         //Vista
-        $pdf = PDF::loadView('reports/detail_producto',[
+        $pdf = PDF::loadView($lsreport,[
             'invtra'  => $invtra,
             'info'    => $info,
             'filtros' => $filtros,
             'arrsuma' => $arrsuma,
             'arresta' => $arresta,
             'resumen' => $resumen,
-            'fpago' => $fpago,
-            'totalres' => $totalres,
+            'fpago'     => $fpago,
+            'totalres'  => $totalres,
             'formapago' => $formapago,
         ]);
 
@@ -408,7 +393,7 @@ class VcInventaryReports extends Component
     }
 
 
-    public function downloadPDF($objdata)
+    public function downloadPDF($objdata,$tipo)
     { 
         ini_set('memory_limit', '256M');
         ini_set('max_execution_time', 300);

@@ -16,7 +16,7 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-inventary-reports')
+    @livewire('vc-inventary-reports',['tipo' => $tipo])
 
 @endsection
 @section('script')

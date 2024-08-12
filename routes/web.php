@@ -88,7 +88,7 @@ Route::get('/products/kardex',[App\Http\Controllers\TmProductosController::class
 Route::get('/inventary/stock',[App\Http\Controllers\TmProductosController::class, 'stock'])->name('stock');
 Route::get('/inventary/detail-products',[App\Http\Controllers\TmProductosController::class, 'report'])->name('report');
 Route::get('/sri/create-credits',[App\Http\Controllers\TrFacturasCabsController::class, 'ncredits'])->name('ncredits');
-
+Route::get('/inventary/detail-movements',[App\Http\Controllers\TmProductosController::class, 'details'])->name('details');
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
 Route::get('/liveWire-pdf/{data}',[VcReportCashReceints::class, 'liveWirePDF']);
@@ -121,12 +121,14 @@ Route::get('/preview-pdf/detail-products/{data}',[VcInventaryReports::class, 'pr
 Route::get('/download-pdf/detail-products/{data}',[VcInventaryReports::class, 'downloadPDF']);
 Route::get('/preview-pdf/report-utilitys/{data}',[VcReportCostoGastos::class, 'printPDF']);
 Route::get('/download-pdf/report-utilitys/{data}',[VcReportCostoGastos::class, 'downloadPDF']);
-Route::get('/preview-pdf/report-soldproductos/{data}',[VcReportProductoVendido::class, 'printPDF']);
-Route::get('/download-pdf/report-soldproductos/{data}',[VcReportProductoVendido::class, 'downloadPDF']);
+Route::get('/preview-pdf/report-soldproductos/{data},"PRD"',[VcReportProductoVendido::class, 'printPDF']);
+Route::get('/download-pdf/report-soldproductos/{data},"PRD"',[VcReportProductoVendido::class, 'downloadPDF']);
 
 Route::get('/invoice/genera/{id}',[VcGeneraXML::class, 'setGeneraXML']);
 Route::get('/invoice/ride-pdf/{id}',[VcGeneraXML::class, 'imprimeRide']);
 
+Route::get('/preview-pdf/detail-movements/{data},"DET"',[VcInventaryReports::class, 'printPDF']);
+Route::get('/download-pdf/detail-movements/{data},"DET"',[VcInventaryReports::class, 'downloadPDF']);
 
 Auth::routes();
 //Language Translation

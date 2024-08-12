@@ -48,7 +48,7 @@ class TmProductosController extends Controller
 
     public function report()
     {
-        return view('inventary/report');
+        return view('inventary/report',['tipo' => 'PRD']);
     }
 
     public function utilidad()
@@ -59,6 +59,11 @@ class TmProductosController extends Controller
     public function productosVendidos()
     {
         return view('inventary/soldproducts');
+    }
+
+    public function details()
+    {
+        return view('inventary/report',['tipo' => 'DET']);
     }
 
 }
