@@ -319,7 +319,7 @@ class VcInventaryReports extends Component
         $fechaini = date('Ymd',strtotime($this->filters['fechaini']));
         $fechafin = date('Ymd',strtotime($this->filters['fechafin'])); 
 
-        $sqldetPago = DB::select("call reporte_productos_detallepagos('".$fechaini."','".$fechafin."','','',0,".$this->filters['tipo'].",".$this->filters['movimiento'].",0,0,0,0)");
+        $sqldetPago = DB::select("call reporte_productos_detallepagos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
         $collection = collect($sqldetPago);
 
         $grouped = $collection->groupBy('tipopago');
@@ -338,7 +338,7 @@ class VcInventaryReports extends Component
         }
        
 
-        $sqlPagos = DB::select("call reporte_productos('".$fechaini."','".$fechafin."','','',0,'EGR','VE',0,0,0,0)");
+        $sqlPagos = DB::select("call reporte_productos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
         $formapago=[];
         foreach($sqlPagos as $key){
             
