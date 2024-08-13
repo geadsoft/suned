@@ -300,37 +300,59 @@ class VcInventaryReports extends Component
         $this->filters['tipopago']  = $data[0]->tipopago;
 
         $invtra   = $this->report();
-        $fechaini = date('Ymd',strtotime($this->filters['fechaini']));
-        $fechafin = date('Ymd',strtotime($this->filters['fechafin'])); 
 
-        $sqldetPago = DB::select("call reporte_productos_detallepagos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
-        $collection = collect($sqldetPago);
+        if ($report=='PRD'){
 
-        $grouped = $collection->groupBy('tipopago');
+            $fechaini = date('Ymd',strtotime($this->filters['fechaini']));
+            $fechafin = date('Ymd',strtotime($this->filters['fechafin'])); 
+
+            $sqldetPago = DB::select("call reporte_productos_detallepagos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
+            $collection = collect($sqldetPago);
+
+            $grouped = $collection->groupBy('tipopago');
+                    
+            $resumen=[];
+            foreach($grouped as $key => $tipopago){
                 
-        $resumen=[];
-        foreach($grouped as $key => $tipopago){
-            
-            $detalle=[];
-            foreach($tipopago as $tpago){ 
-                $detpago['fecha'] = $tpago->fecha;
-                $detpago['documento'] = $tpago->documento;
-                $detpago['valor'] = $tpago->valor;                
-                array_push($detalle,$detpago);
+                $detalle=[];
+                foreach($tipopago as $tpago){ 
+                    $detpago['fecha'] = $tpago->fecha;
+                    $detpago['documento'] = $tpago->documento;
+                    $detpago['valor'] = $tpago->valor;                
+                    array_push($detalle,$detpago);
+                }
+                $resumen[$key] = $detalle;
             }
-            $resumen[$key] = $detalle;
-        }
-       
-
-        $sqlPagos = DB::select("call reporte_productos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
-        $formapago=[];
-        foreach($sqlPagos as $key){
-            
-            $array['tipopago'] = $key->tipopago;
-            $array['total'] = $key->total;
-            array_push($formapago,$array);
-        }
         
+
+            $sqlPagos = DB::select("call reporte_productos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
+            $formapago=[];
+            foreach($sqlPagos as $key){
+                
+                $array['tipopago'] = $key->tipopago;
+                $array['total'] = $key->total;
+                array_push($formapago,$array);
+            }
+            
+            $lsreport = 'reports/detail_producto';
+        }else{
+
+            $fechaini = date('Ymd',strtotime($this->filters['fechaini']));
+            $fechafin = date('Ymd',strtotime($this->filters['fechafin']));
+            
+            $sqlPagos = DB::select("call reporte_productos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
+            
+            $resumen  =[];
+            $formapago=[];
+            foreach($sqlPagos as $key){
+                
+                $array['tipopago'] = $key->tipopago;
+                $array['total'] = $key->total;
+                array_push($formapago,$array);
+            }
+
+            $lsreport = 'reports/detail_movimientos';
+        }
 
         $transac=[
             'II' => '(+) Inventario Inicial', 
@@ -371,12 +393,6 @@ class VcInventaryReports extends Component
             'TRA' => 'Transferencia',
             'APP' => 'Aplicación Movil',
         ];
-
-        if ($report=='PRD'){
-            $lsreport = 'reports/detail_producto';
-        }else{
-            $lsreport = 'reports/detail_movimientos';
-        }
 
         $totalmonto  = (array_sum(array_column($invtra,'total')));
         $totcantidad = (array_sum(array_column($invtra,'cantidad')));
@@ -423,40 +439,60 @@ class VcInventaryReports extends Component
         $this->filters['tipopago']  = $data[0]->tipopago;
 
         $invtra  = $this->report();
+
+        if ($report=='PRD'){
         
-        $fechaini = date('Ymd',strtotime($this->filters['fechaini']));
-        $fechafin = date('Ymd',strtotime($this->filters['fechafin'])); 
+            $fechaini = date('Ymd',strtotime($this->filters['fechaini']));
+            $fechafin = date('Ymd',strtotime($this->filters['fechafin'])); 
 
-        $sqldetPago = DB::select("call reporte_productos_detallepagos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
-        $collection = collect($sqldetPago);
+            $sqldetPago = DB::select("call reporte_productos_detallepagos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
+            $collection = collect($sqldetPago);
 
-        $grouped = $collection->groupBy('tipopago');
+            $grouped = $collection->groupBy('tipopago');
+                    
+            $resumen=[];
+            foreach($grouped as $key => $tipopago){
                 
-        $resumen=[];
-        foreach($grouped as $key => $tipopago){
-            
-            $detalle=[];
-            foreach($tipopago as $tpago){ 
-                $detpago['fecha'] = $tpago->fecha;
-                $detpago['documento'] = $tpago->documento;
-                $detpago['valor'] = $tpago->valor;                
-                array_push($detalle,$detpago);
+                $detalle=[];
+                foreach($tipopago as $tpago){ 
+                    $detpago['fecha'] = $tpago->fecha;
+                    $detpago['documento'] = $tpago->documento;
+                    $detpago['valor'] = $tpago->valor;                
+                    array_push($detalle,$detpago);
+                }
+                $resumen[$key] = $detalle;
             }
-            $resumen[$key] = $detalle;
-        }
-       
+        
 
-        $sqlPagos = DB::select("call reporte_productos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
-        $formapago=[];
-        foreach($sqlPagos as $key){
+            $sqlPagos = DB::select("call reporte_productos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
+            $formapago=[];
+            foreach($sqlPagos as $key){
+                
+                $array['tipopago'] = $key->tipopago;
+                $array['total'] = $key->total;
+                array_push($formapago,$array);
+            }
             
-            $array['tipopago'] = $key->tipopago;
-            $array['total'] = $key->total;
-            array_push($formapago,$array);
+            $lsreport = 'reports/detail_producto';
+        }else{
+
+            $fechaini = date('Ymd',strtotime($this->filters['fechaini']));
+            $fechafin = date('Ymd',strtotime($this->filters['fechafin']));
+            
+            $sqlPagos = DB::select("call reporte_productos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
+            
+            $resumen  =[];
+            $formapago=[];
+            foreach($sqlPagos as $key){
+                
+                $array['tipopago'] = $key->tipopago;
+                $array['total'] = $key->total;
+                array_push($formapago,$array);
+            }
+            
+            $lsreport = 'reports/detail_movimientos';
         }
         
-        
-
         $transac=[
             'II' => '(+) Inventario Inicial', 
             'CL' => '(+) Compras Locales',  
@@ -497,12 +533,6 @@ class VcInventaryReports extends Component
             'APP' => 'Aplicación Movil',
         ];
         
-        if ($report=='PRD'){
-            $lsreport = 'reports/detail_producto';
-        }else{
-            $lsreport = 'reports/detail_movimientos';
-        }
-
         $totalmonto  = (array_sum(array_column($invtra,'total')));
         $totcantidad = (array_sum(array_column($invtra,'cantidad')));
         $totalres = 0;
