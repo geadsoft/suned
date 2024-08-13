@@ -12,7 +12,11 @@
             Inventario
         @endslot
         @slot('title')
-            Detalle Productos
+            @if ($tipo=='PRD')
+                Detalle Productos
+            @else
+                Detalle Movimientos
+            @endif
         @endslot
     @endcomponent
 

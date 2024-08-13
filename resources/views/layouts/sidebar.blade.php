@@ -415,6 +415,13 @@
                                 <div class="collapse menu-dropdown" id="sidebarproduct">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/inventary/detail-movements">
+                                                <span>Detalle de Movimientos</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
                                             <a class="nav-link menu-link" href="/inventary/detail-products">
                                                 <span>Detalle de Productos</span>
                                             </a>

@@ -18,21 +18,21 @@ class VcInventaryReports extends Component
     
     use WithPagination;
 
-    public $tblcategoria, $tipo='EGR';
+    public $tblcategoria;
     public $datos='', $tipo='';
 
     public $filters=[
         'referencia' => '',
         'tipo' => 'EGR',
         'movimiento' => '',
-        'categoria' => '',
-        'talla' => '0',
+        'categoria' => 0,
+        'talla' => 0,
         'fechaini' => '',
         'fechafin' => '',
         'estudiante' => '',
-        'cantidad' => '',
-        'precio' => '',
-        'monto' => '',
+        'cantidad' => 0,
+        'precio' => 0,
+        'monto' => 0,
         'tipopago' => '',
     ];
 
@@ -157,13 +157,13 @@ class VcInventaryReports extends Component
         ->when(intval($this->filters['talla'])>0,function($query){
             return $query->where('p.talla',"{$this->filters['talla']}");
         })
-        ->when($this->filters['cantidad'],function($query){
+        ->when($this->filters['cantidad']>0,function($query){
             return $query->where('d.cantidad',"{$this->filters['cantidad']}");
         })
-        ->when($this->filters['precio'],function($query){
+        ->when($this->filters['precio']>0,function($query){
             return $query->where('d.precio',"{$this->filters['precio']}");
         })
-        ->when($this->filters['monto'],function($query){
+        ->when($this->filters['monto']>0,function($query){
             return $query->where('d.total',"{$this->filters['monto']}");
         })
         /*->when($this->filters['tipopago'],function($query){
@@ -185,10 +185,15 @@ class VcInventaryReports extends Component
 
     public function report(){ 
 
-        
-        
+        $fechaini = date('Ymd',strtotime($this->filters['fechaini']));
+        $fechafin = date('Ymd',strtotime($this->filters['fechafin'])); 
+
         /* Movimientos */
-        $invtra = TrInventarioCabs::query()
+        //$invtra = DB::select("call reporte_movimientos_inventario('".$fechaini."','".$fechafin."','".$this->filters['referencia']."','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
+        $invtra = DB::select("call reporte_movimientos_inventario(?,?,?,?,?,?,?,?,?,?,?)",array($fechaini,$fechafin,$this->filters['referencia'],$this->filters['estudiante'],$this->filters['categoria'],$this->filters['tipo'],$this->filters['movimiento'],$this->filters['talla'],$this->filters['cantidad'],$this->filters['precio'],$this->filters['monto']));
+        
+
+        /*$invtra = TrInventarioCabs::query()
         ->join(DB::raw('(select inventariocab_id,group_concat(distinct tipopago) as tipopago 
         from tr_inventario_fpagos  
         group by 1) fp'), 
@@ -244,12 +249,12 @@ class VcInventaryReports extends Component
         })
         /*->when($this->filters['tipopago'],function($query){
             return $query->where('tipopago',"{$this->filters['tipopago']}");
-        })*/
+        })
         ->where('d.fecha','>=',date('Ymd',strtotime($this->filters['fechaini'])))
         ->where('d.fecha','<=',date('Ymd',strtotime($this->filters['fechafin'])))
         ->selectRaw('tr_inventario_cabs.*,fp.tipopago as fpago,p.nombre,p.talla,d.precio,(d.cantidad*tr.variable) as cantidad,(d.total*tr.variable) as total')
         ->orderBy('fecha')
-        ->get();
+        ->get();*/
         
         $arrdata[] = $this->filters;
         $this->datos = json_encode($arrdata);
@@ -273,8 +278,9 @@ class VcInventaryReports extends Component
 
     }
 
-    public function printPDF($objdata, $tipo)
+    public function printPDF($report,$objdata)
     { 
+
         ini_set('memory_limit', '256M');
         ini_set('max_execution_time', 300);
 
@@ -293,8 +299,7 @@ class VcInventaryReports extends Component
         $this->filters['monto']  = $data[0]->monto;
         $this->filters['tipopago']  = $data[0]->tipopago;
 
-        $invtra  = $this->report();
-
+        $invtra   = $this->report();
         $fechaini = date('Ymd',strtotime($this->filters['fechaini']));
         $fechafin = date('Ymd',strtotime($this->filters['fechafin'])); 
 
@@ -367,13 +372,15 @@ class VcInventaryReports extends Component
             'APP' => 'Aplicación Movil',
         ];
 
-        $totalres = 0;
-
-        if ($tipo=='PRD'){
-            $lsreport = 'reports/detail_producto'
+        if ($report=='PRD'){
+            $lsreport = 'reports/detail_producto';
         }else{
-            $lsreport = 'reports/detail_movements'
+            $lsreport = 'reports/detail_movimientos';
         }
+
+        $totalmonto  = (array_sum(array_column($invtra,'total')));
+        $totcantidad = (array_sum(array_column($invtra,'cantidad')));
+        $totalres    = 0;
 
         //Vista
         $pdf = PDF::loadView($lsreport,[
@@ -386,6 +393,8 @@ class VcInventaryReports extends Component
             'fpago'     => $fpago,
             'totalres'  => $totalres,
             'formapago' => $formapago,
+            'totalmonto' => $totalmonto,
+            'totcantidad' => $totcantidad,
         ]);
 
         return $pdf->setPaper('a4')->stream('Detalle Productos.pdf');
@@ -393,7 +402,7 @@ class VcInventaryReports extends Component
     }
 
 
-    public function downloadPDF($objdata,$tipo)
+    public function downloadPDF($report,$objdata)
     { 
         ini_set('memory_limit', '256M');
         ini_set('max_execution_time', 300);
@@ -415,30 +424,38 @@ class VcInventaryReports extends Component
 
         $invtra  = $this->report();
         
-        
-        //Detalle Pago
-        $detCobro = $invtra->groupBy('id');
+        $fechaini = date('Ymd',strtotime($this->filters['fechaini']));
+        $fechafin = date('Ymd',strtotime($this->filters['fechafin'])); 
 
-        $idCobro = "";
-        foreach ($detCobro as $key => $value) {
-            $idCobro = $idCobro.strval($key).',';
+        $sqldetPago = DB::select("call reporte_productos_detallepagos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
+        $collection = collect($sqldetPago);
+
+        $grouped = $collection->groupBy('tipopago');
+                
+        $resumen=[];
+        foreach($grouped as $key => $tipopago){
+            
+            $detalle=[];
+            foreach($tipopago as $tpago){ 
+                $detpago['fecha'] = $tpago->fecha;
+                $detpago['documento'] = $tpago->documento;
+                $detpago['valor'] = $tpago->valor;                
+                array_push($detalle,$detpago);
+            }
+            $resumen[$key] = $detalle;
         }
-        $idCobro = substr($idCobro,0,-1);
-        $tbldetalle = TrInventarioFpago::query()
-        ->join("tr_inventario_cabs as c","c.id","=","tr_inventario_fpagos.inventariocab_id")
-        ->selectRaw("c.fecha, c.documento,tr_inventario_fpagos.*")
-        ->whereRaw("c.id in (".$idCobro.") and c.estado<>'A'")
-        ->get(); 
+       
 
-        $resumen = $tbldetalle->groupBy('tipopago')->toArray();
-
-        $formapago = TrInventarioFpago::query()
-        ->join("tr_inventario_cabs as c","c.id","=","tr_inventario_fpagos.inventariocab_id")
-        ->selectRaw("tr_inventario_fpagos.tipopago,sum(valor) as total")
-        ->whereRaw("c.id in (".$idCobro.") and c.estado<>'A'")
-        ->groupBy("tr_inventario_fpagos.tipopago")
-        ->get()
-        ->toArray();
+        $sqlPagos = DB::select("call reporte_productos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
+        $formapago=[];
+        foreach($sqlPagos as $key){
+            
+            $array['tipopago'] = $key->tipopago;
+            $array['total'] = $key->total;
+            array_push($formapago,$array);
+        }
+        
+        
 
         $transac=[
             'II' => '(+) Inventario Inicial', 
@@ -480,10 +497,18 @@ class VcInventaryReports extends Component
             'APP' => 'Aplicación Movil',
         ];
         
+        if ($report=='PRD'){
+            $lsreport = 'reports/detail_producto';
+        }else{
+            $lsreport = 'reports/detail_movimientos';
+        }
+
+        $totalmonto  = (array_sum(array_column($invtra,'total')));
+        $totcantidad = (array_sum(array_column($invtra,'cantidad')));
         $totalres = 0;
 
         //Vista
-        $pdf = PDF::loadView('reports/detail_producto',[
+        $pdf = PDF::loadView($lsreport,[
             'invtra' => $invtra,
             'info'  => $info,
             'filtros' => $filtros,
@@ -493,6 +518,8 @@ class VcInventaryReports extends Component
             'fpago' => $fpago,
             'totalres' => $totalres,
             'formapago' => $formapago,
+            'totalmonto' => $totalmonto,
+            'totcantidad' => $totcantidad,
         ]);
 
         return $pdf->download('Detalle de Productos.pdf');

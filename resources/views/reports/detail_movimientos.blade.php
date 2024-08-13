@@ -123,7 +123,7 @@
         </table>
     </section>
 
-    @foreach ($resumen as $key => $data)    
+    <!--@foreach ($resumen as $key => $data)    
     <section>
         <table cellpadding="0" cellspancing="0" width="100%">
             <tr>
@@ -160,7 +160,7 @@
             </tr>
         </table>
     </section>
-    @endforeach
+    @endforeach-->
 
     <div style="position: absolute;
       display: inline-block;

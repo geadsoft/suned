@@ -127,8 +127,8 @@ Route::get('/download-pdf/report-soldproductos/{data},"PRD"',[VcReportProductoVe
 Route::get('/invoice/genera/{id}',[VcGeneraXML::class, 'setGeneraXML']);
 Route::get('/invoice/ride-pdf/{id}',[VcGeneraXML::class, 'imprimeRide']);
 
-Route::get('/preview-pdf/detail-movements/{data},"DET"',[VcInventaryReports::class, 'printPDF']);
-Route::get('/download-pdf/detail-movements/{data},"DET"',[VcInventaryReports::class, 'downloadPDF']);
+Route::get('/preview-pdf/detail-movements/{report},{data}',[VcInventaryReports::class, 'printPDF']);
+Route::get('/download-pdf/detail-movements/{report},{data}',[VcInventaryReports::class, 'downloadPDF']);
 
 Auth::routes();
 //Language Translation
