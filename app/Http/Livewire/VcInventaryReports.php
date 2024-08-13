@@ -9,9 +9,10 @@ use App\Models\TmProductos;
 use App\Models\TmGeneralidades;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
 use PDF;
-use Illuminate\Support\Facades\DB;
+
 
 class VcInventaryReports extends Component
 {
@@ -281,7 +282,7 @@ class VcInventaryReports extends Component
     public function printPDF($report,$objdata)
     { 
 
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '512M');
         ini_set('max_execution_time', 300);
 
         $data = json_decode($objdata);
@@ -420,7 +421,7 @@ class VcInventaryReports extends Component
 
     public function downloadPDF($report,$objdata)
     { 
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '512M');
         ini_set('max_execution_time', 300);
 
         $data = json_decode($objdata);
@@ -489,7 +490,7 @@ class VcInventaryReports extends Component
                 $array['total'] = $key->total;
                 array_push($formapago,$array);
             }
-            
+
             $lsreport = 'reports/detail_movimientos';
         }
         
