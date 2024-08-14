@@ -13,7 +13,7 @@
                         <div class="row g-3 mb-3">
                             <div class="col-xxl-2 col-sm-2">
                                 <div>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="tipo"> 
+                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="doctipo"> 
                                         <option value="ING">Ingresos</option>
                                         <option value="EGR">Egresos</option>
                                     </select>

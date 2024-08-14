@@ -19,7 +19,7 @@ class VcInventaryReports extends Component
     
     use WithPagination;
 
-    public $tblcategoria;
+    public $tblcategoria, $doctipo='EGR';
     public $datos='', $tipo='';
 
     public $filters=[
@@ -102,7 +102,7 @@ class VcInventaryReports extends Component
         return 'vendor.livewire.bootstrap'; 
     }
 
-    public function updatedTipo($tipo){
+    public function updatedDoctipo($tipo){
 
         $this->filters['tipo'] = $tipo;
         $this->filters['movimiento'] = '';
