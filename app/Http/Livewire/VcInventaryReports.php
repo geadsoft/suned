@@ -82,7 +82,7 @@ class VcInventaryReports extends Component
         $this->filters['fechaini'] = $fechaini;
         $this->filters['fechafin'] = $fechafin; 
         $this->filters['tipo'] = $this->tipo; 
-        $this->updatedTipo('EGR');  
+        $this->updatedDoctipo('EGR');  
     
     }
 
