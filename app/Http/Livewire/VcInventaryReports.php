@@ -282,8 +282,8 @@ class VcInventaryReports extends Component
     public function printPDF($report,$objdata)
     { 
 
-        ini_set('memory_limit', '512M');
-        ini_set('max_execution_time', 300);
+        ini_set('memory_limit', '256M');
+        
 
         $data = json_decode($objdata);
 
@@ -421,9 +421,8 @@ class VcInventaryReports extends Component
 
     public function downloadPDF($report,$objdata)
     { 
-        ini_set('memory_limit', '512M');
-        ini_set('max_execution_time', 300);
-
+        ini_set('memory_limit', '256M');
+        
         $data = json_decode($objdata);
 
         $this->filters['referencia'] = $data[0]->referencia;
