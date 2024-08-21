@@ -18,6 +18,22 @@
                                 </div>
                             </div>
                             <div class="col-xxl-2 col-sm-2">
+                                <select class="form-select" name="cmbgrupo" wire:model="categoria">
+                                    @foreach ($tblcategoria as $data)
+                                        <option value="{{$data['id']}}">{{$data['descripcion']}}</option>
+                                    @endforeach
+                                    <option value="0">Seleccione Categoria</option>
+                                </select>
+                            </div>
+                            <div class="col-xxl-2 col-sm-2">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="talla">
+                                    @foreach ($arrtalla as $key)
+                                        <option value="{{$key}}">{{$key}}</option>
+                                    @endforeach
+                                    <option value="0">Seleccione Talla</option>
+                                </select>
+                            </div>
+                            <div class="col-xxl-2 col-sm-2">
                                 
                                 <button type="button" class="btn btn-primary w-100" wire:click=""><i
                                         class="me-1 align-bottom"></i>Consultar
@@ -34,7 +50,7 @@
                                     <a href="" wire:click.prevent="" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-file-excel-2-line align-bottom fs-22"></i></a>
                                 </div>
                             </div>
-                        </div>
+                        </div>   
                     </form>
                 </div>
                 <div class="card-body pt-0">

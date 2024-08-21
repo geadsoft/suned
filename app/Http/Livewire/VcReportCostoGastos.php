@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 use App\Models\TrInventarioDets;
+use App\Models\TmGeneralidades;
 
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -11,11 +12,31 @@ class VcReportCostoGastos extends Component
 {
     public $catMonto, $catCantidad, $catUtilidad, $prdMonto, $prdCantidad, $prdUtilidad;
     public $tblcatMonto, $tblcatCantidad, $tblcatUtilidad, $tblprdMonto, $tblprdCantidad, $tblprdUtitlidad;
-    public $startDate, $endDate;
+    public $startDate, $endDate, $talla=0, $categoria=0;
     public $tblrecords=[];
+    public $tblcategoria=[];
     public $datos='';
 
+    public $arrtalla=[
+        '28'=>28,
+        '30'=>30,
+        '32'=>32,
+        '34'=>34,
+        '36'=>36,
+        '38'=>38,
+        '40'=>40,
+        '42'=>42,
+        '44'=>44,
+        '46'=>46,
+        '48'=>48,
+        '50'=>50,
+    ];
+
     public function mount(){
+
+        $this->tblcategoria = TmGeneralidades::query()
+        ->where('superior',11)
+        ->get();
         
         $ldate = date('Y-m-d H:i:s');
         $ldate = date('Y',strtotime($ldate)).'-'.date('m',strtotime($ldate)).'-01';
@@ -31,7 +52,9 @@ class VcReportCostoGastos extends Component
 
     public function render()
     {
-        return view('livewire.vc-report-costo-gastos');
+        return view('livewire.vc-report-costo-gastos',[
+            'arrtalla' => $this->arrtalla
+        ]);
     }
 
     public function updatedStartDate() {
@@ -41,6 +64,19 @@ class VcReportCostoGastos extends Component
 
     }
 
+    public function updatedCategoria() {
+        
+        $this->consulta();
+        $this->actualizaGraph();
+
+    }
+
+    public function updatedTalla() {
+        
+        $this->consulta();
+        $this->actualizaGraph();
+
+    }
 
     public function consulta(){
 
@@ -57,6 +93,12 @@ class VcReportCostoGastos extends Component
         })
         ->when($this->endDate,function($query){
             return $query->where('tr_inventario_dets.fecha',"<=",date('Ymd',strtotime($this->endDate)));
+        })
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
         })
         ->where('tr_inventario_dets.movimiento','VE')
         ->selectRaw('g.descripcion, sum(total) as valor')
@@ -79,6 +121,12 @@ class VcReportCostoGastos extends Component
         ->when($this->endDate,function($query){
             return $query->where('tr_inventario_dets.fecha',"<=",date('Ymd',strtotime($this->endDate)));
         })
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
+        })
         ->where('tr_inventario_dets.movimiento','VE')
         ->selectRaw('g.descripcion, sum(cantidad) as valor')
         ->groupBy('g.descripcion')
@@ -99,6 +147,12 @@ class VcReportCostoGastos extends Component
         })
         ->when($this->endDate,function($query){
             return $query->where('tr_inventario_dets.fecha',"<=",date('Ymd',strtotime($this->endDate)));
+        })
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
         })
         ->where('tr_inventario_dets.movimiento','VE')
         ->selectRaw('g.descripcion, sum(total)-sum(tr_inventario_dets.costo_total) as valor')
@@ -122,6 +176,12 @@ class VcReportCostoGastos extends Component
         ->when($this->endDate,function($query){
             return $query->where('tr_inventario_dets.fecha',"<=",date('Ymd',strtotime($this->endDate)));
         })
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
+        })
         ->where('tr_inventario_dets.movimiento','VE')
         ->selectRaw('p.nombre, sum(total) as valor')
         ->groupBy('p.nombre')
@@ -142,6 +202,12 @@ class VcReportCostoGastos extends Component
         })
         ->when($this->endDate,function($query){
             return $query->where('tr_inventario_dets.fecha',"<=",date('Ymd',strtotime($this->endDate)));
+        })
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
         })
         ->where('tr_inventario_dets.movimiento','VE')
         ->selectRaw('p.nombre, sum(cantidad) as valor')
@@ -164,6 +230,12 @@ class VcReportCostoGastos extends Component
         ->when($this->endDate,function($query){
             return $query->where('tr_inventario_dets.fecha',"<=",date('Ymd',strtotime($this->endDate)));
         })
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
+        })
         ->where('tr_inventario_dets.movimiento','VE')
         ->selectRaw('p.nombre, sum(total)-sum(tr_inventario_dets.costo_total) as valor')
         ->groupBy('p.nombre')
@@ -178,6 +250,8 @@ class VcReportCostoGastos extends Component
         $arrdata = [
             'start_date' => $this->startDate,
             'end_date' => $this->endDate,
+            'categoria' => $this->categoria,
+            'talla' => $this->talla,
         ];
         $this->datos = json_encode($arrdata);
 
@@ -230,7 +304,9 @@ class VcReportCostoGastos extends Component
     public function printPDF($objdata)
     { 
         $data = json_decode($objdata);
-
+        $this->categoria = strval($data->categoria);
+        $this->talla = strval($data->talla);
+        
         $utilidad = TrInventarioDets::query()
         ->join("tm_productos as p","p.id","=","tr_inventario_dets.producto_id")
         ->join("tm_generalidades as g","g.id","=","p.categoria_id")
@@ -239,6 +315,12 @@ class VcReportCostoGastos extends Component
         })
         ->when($this->endDate,function($query){
             return $query->where('tr_inventario_dets.fecha',"<=",$data['end_date']);
+        })
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
         })
         ->where('tr_inventario_dets.movimiento','VE')
         ->selectRaw('sum(total) as vtasnetas, sum(tr_inventario_dets.costo_total) as cstventa')
@@ -250,6 +332,12 @@ class VcReportCostoGastos extends Component
         ->where('tr_inventario_dets.movimiento','VE')
         ->where('tr_inventario_dets.fecha','>=',$data->start_date)
         ->where('tr_inventario_dets.fecha','<=',$data->end_date)
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
+        })
         ->selectRaw('g.descripcion, sum(total) as valor')
         ->groupBy('g.descripcion')
         ->orderby('valor','desc')
@@ -271,6 +359,12 @@ class VcReportCostoGastos extends Component
         ->where('tr_inventario_dets.movimiento','VE')
         ->where('tr_inventario_dets.fecha','>=',$data->start_date)
         ->where('tr_inventario_dets.fecha','<=',$data->end_date)
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
+        })
         ->selectRaw('g.descripcion, sum(cantidad) as valor')
         ->groupBy('g.descripcion')
         ->orderby('valor','desc')
@@ -292,6 +386,12 @@ class VcReportCostoGastos extends Component
         ->where('tr_inventario_dets.movimiento','VE')
         ->where('tr_inventario_dets.fecha','>=',$data->start_date)
         ->where('tr_inventario_dets.fecha','<=',$data->end_date)
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
+        })
         ->selectRaw('g.descripcion, sum(total)-sum(tr_inventario_dets.costo_total) as valor')
         ->groupBy('g.descripcion')
         ->orderby('valor','desc')
@@ -313,6 +413,12 @@ class VcReportCostoGastos extends Component
         ->where('tr_inventario_dets.movimiento','VE')
         ->where('tr_inventario_dets.fecha','>=',$data->start_date)
         ->where('tr_inventario_dets.fecha','<=',$data->end_date)
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
+        })
         ->selectRaw('p.nombre, sum(total) as valor')
         ->groupBy('p.nombre')
         ->orderby('valor','desc')
@@ -335,6 +441,12 @@ class VcReportCostoGastos extends Component
         ->where('tr_inventario_dets.fecha','>=',$data->start_date)
         ->where('tr_inventario_dets.fecha','<=',$data->end_date)
         ->selectRaw('p.nombre, sum(cantidad) as valor')
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
+        })
         ->groupBy('p.nombre')
         ->orderby('valor','desc')
         ->take(5)
@@ -355,6 +467,12 @@ class VcReportCostoGastos extends Component
         ->where('tr_inventario_dets.movimiento','VE')
         ->where('tr_inventario_dets.fecha','>=',$data->start_date)
         ->where('tr_inventario_dets.fecha','<=',$data->end_date)
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
+        })
         ->selectRaw('p.nombre, sum(total)-sum(tr_inventario_dets.costo_total) as valor')
         ->groupBy('p.nombre')
         ->orderby('valor','desc')
@@ -364,7 +482,7 @@ class VcReportCostoGastos extends Component
         $urlgraph6 = "https://quickchart.io/chart?c={type:'bar',data:{labels:[1,2,3,4,5],datasets:[{label:'Monto',";
         
         $dataset = "data:[";
-        foreach($tblgraph1 as $recno){
+        foreach($tblgraph6 as $recno){
             $dataset = $dataset.strval($recno->valor).', '; 
         }
         $dataset = $dataset.']}]}}';  
@@ -393,7 +511,7 @@ class VcReportCostoGastos extends Component
     
     }
 
-    public function downloadPDF($objdata)
+    /*public function downloadPDF($objdata)
     { 
         $data = json_decode($objdata);
 
@@ -411,7 +529,7 @@ class VcReportCostoGastos extends Component
         ]);
 
         return $pdf->download('Detalle de Productos.pdf');
-    }
+    }*/
 
 
 }
