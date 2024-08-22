@@ -4,7 +4,7 @@
             <div class="card" id="paymentList">
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
-                        <div class="row g-3">
+                        <div class="row g-3 mb-3">
                             <div class="col-xxl-2 col-sm-2">
                                 
                                 <div class="">
@@ -50,7 +50,15 @@
                                     <a href="" wire:click.prevent="" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-file-excel-2-line align-bottom fs-22"></i></a>
                                 </div>
                             </div>
-                        </div>   
+                        </div> 
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" wire:model="detalle">
+                                    <label class="form-check-label" for="estado">Detalle Utilidad Productos</label>
+                                </div>
+                            </div>
+                        </div>  
                     </form>
                 </div>
                 <div class="card-body pt-0">

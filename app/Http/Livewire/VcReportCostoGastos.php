@@ -12,7 +12,7 @@ class VcReportCostoGastos extends Component
 {
     public $catMonto, $catCantidad, $catUtilidad, $prdMonto, $prdCantidad, $prdUtilidad;
     public $tblcatMonto, $tblcatCantidad, $tblcatUtilidad, $tblprdMonto, $tblprdCantidad, $tblprdUtitlidad;
-    public $startDate, $endDate, $talla=0, $categoria=0;
+    public $startDate, $endDate, $talla=0, $categoria=0, $detalle = true;
     public $tblrecords=[];
     public $tblcategoria=[];
     public $datos='';
@@ -72,6 +72,13 @@ class VcReportCostoGastos extends Component
     }
 
     public function updatedTalla() {
+        
+        $this->consulta();
+        $this->actualizaGraph();
+
+    }
+
+    public function updatedDetalle() {
         
         $this->consulta();
         $this->actualizaGraph();
@@ -252,6 +259,7 @@ class VcReportCostoGastos extends Component
             'end_date' => $this->endDate,
             'categoria' => $this->categoria,
             'talla' => $this->talla,
+            'detalle' => $this->detalle,
         ];
         $this->datos = json_encode($arrdata);
 
@@ -306,25 +314,68 @@ class VcReportCostoGastos extends Component
         $data = json_decode($objdata);
         $this->categoria = strval($data->categoria);
         $this->talla = strval($data->talla);
+        $this->detalle = strval($data->detalle);
         
-        $utilidad = TrInventarioDets::query()
-        ->join("tm_productos as p","p.id","=","tr_inventario_dets.producto_id")
-        ->join("tm_generalidades as g","g.id","=","p.categoria_id")
-        ->when($this->startDate,function($query){
-            return $query->where('tr_inventario_dets.fecha',">=",$data['start_date']);
-        })
-        ->when($this->endDate,function($query){
-            return $query->where('tr_inventario_dets.fecha',"<=",$data['end_date']);
-        })
-        ->when($this->categoria>0,function($query){
-            return $query->where('g.id',"=",$this->categoria);
-        })
-        ->when($this->talla>0,function($query){
-            return $query->where('p.talla',"=",$this->talla);
-        })
-        ->where('tr_inventario_dets.movimiento','VE')
-        ->selectRaw('sum(total) as vtasnetas, sum(tr_inventario_dets.costo_total) as cstventa')
-        ->get()->toArray();
+        if ($this->detalle == true){
+
+            $utilidad = TrInventarioDets::query()
+            ->join("tm_productos as p","p.id","=","tr_inventario_dets.producto_id")
+            ->join("tm_generalidades as g","g.id","=","p.categoria_id")
+            ->when($this->startDate,function($query){
+                return $query->where('tr_inventario_dets.fecha',">=",$data['start_date']);
+            })
+            ->when($this->endDate,function($query){
+                return $query->where('tr_inventario_dets.fecha',"<=",$data['end_date']);
+            })
+            ->when($this->categoria>0,function($query){
+                return $query->where('g.id',"=",$this->categoria);
+            })
+            ->when($this->talla>0,function($query){
+                return $query->where('p.talla',"=",$this->talla);
+            })
+            ->where('tr_inventario_dets.movimiento','VE')
+            ->selectRaw('p.nombre, sum(total) as vtasnetas, sum(tr_inventario_dets.costo_total) as cstventa')
+            ->groupBy('p.nombre')
+            ->get()
+            ->toArray();
+
+            $totalCosto = 0;
+            $totalVenta = 0;
+            foreach ($utilidad as $key => $row) {
+                $aux[$key] = $row['nombre']; 
+                $totalCosto = $totalCosto + $row['cstventa'];
+                $totalVenta = $totalVenta + $row['vtasnetas']; 
+            }
+
+            $arrtotal=[
+                'totcosto' => $totalCosto,
+                'totventa' => $totalVenta,
+            ];
+
+            array_multisort($aux, SORT_ASC, $utilidad);
+
+        } else {
+
+            $utilidad = TrInventarioDets::query()
+            ->join("tm_productos as p","p.id","=","tr_inventario_dets.producto_id")
+            ->join("tm_generalidades as g","g.id","=","p.categoria_id")
+            ->when($this->startDate,function($query){
+                return $query->where('tr_inventario_dets.fecha',">=",$data['start_date']);
+            })
+            ->when($this->endDate,function($query){
+                return $query->where('tr_inventario_dets.fecha',"<=",$data['end_date']);
+            })
+            ->when($this->categoria>0,function($query){
+                return $query->where('g.id',"=",$this->categoria);
+            })
+            ->when($this->talla>0,function($query){
+                return $query->where('p.talla',"=",$this->talla);
+            })
+            ->where('tr_inventario_dets.movimiento','VE')
+            ->selectRaw('sum(total) as vtasnetas, sum(tr_inventario_dets.costo_total) as cstventa')
+            ->get()->toArray();
+
+        }
 
         $tblgraph1 = TrInventarioDets::query()
         ->join("tm_productos as p","p.id","=","tr_inventario_dets.producto_id")
@@ -488,48 +539,96 @@ class VcReportCostoGastos extends Component
         $dataset = $dataset.']}]}}';  
         $urlgraph6 = $urlgraph6.$dataset;
 
+        if ($this->detalle == true){
 
-        //Vista
-        $pdf = PDF::loadView('reports/reporte_utilidad',[
-            'utilidad'  => $utilidad,
-            'tblgraph1' => $tblgraph1,
-            'tblgraph2' => $tblgraph2,
-            'tblgraph3' => $tblgraph3,
-            'tblgraph4' => $tblgraph4,
-            'tblgraph5' => $tblgraph5,
-            'tblgraph6' => $tblgraph6,
-            'data' => $data,
-            'urlgraph1' => $urlgraph1,
-            'urlgraph2' => $urlgraph2,
-            'urlgraph3' => $urlgraph3,
-            'urlgraph4' => $urlgraph4,
-            'urlgraph5' => $urlgraph5,
-            'urlgraph6' => $urlgraph6,
-        ]);
+            $pdf = PDF::loadView('reports/reporte_detalle_utilidad',[
+                'utilidad'  => $utilidad,
+                'data' => $data,
+                'arrtotal' => $arrtotal, 
+            ]);
 
-        return $pdf->setPaper('a4')->stream('Utilidad en Ventas.pdf');
-    
+            return $pdf->setPaper('a4')->stream('Detalle Utilidad en Ventas.pdf');
+
+        } else {
+
+            //Vista
+            $pdf = PDF::loadView('reports/reporte_utilidad',[
+                'utilidad'  => $utilidad,
+                'tblgraph1' => $tblgraph1,
+                'tblgraph2' => $tblgraph2,
+                'tblgraph3' => $tblgraph3,
+                'tblgraph4' => $tblgraph4,
+                'tblgraph5' => $tblgraph5,
+                'tblgraph6' => $tblgraph6,
+                'data' => $data,
+                'urlgraph1' => $urlgraph1,
+                'urlgraph2' => $urlgraph2,
+                'urlgraph3' => $urlgraph3,
+                'urlgraph4' => $urlgraph4,
+                'urlgraph5' => $urlgraph5,
+                'urlgraph6' => $urlgraph6,
+            ]);
+
+            return $pdf->setPaper('a4')->stream('Utilidad en Ventas.pdf');
+
+        }
+
     }
 
-    /*public function downloadPDF($objdata)
+    public function downloadPDF($objdata)
     { 
+                
         $data = json_decode($objdata);
 
+        $this->categoria = strval($data->categoria);
+        $this->talla = strval($data->talla);
+        $this->detalle = strval($data->detalle);
+
+        $utilidad = TrInventarioDets::query()
+        ->join("tm_productos as p","p.id","=","tr_inventario_dets.producto_id")
+        ->join("tm_generalidades as g","g.id","=","p.categoria_id")
+        ->when($this->startDate,function($query){
+            return $query->where('tr_inventario_dets.fecha',">=",$data['start_date']);
+        })
+        ->when($this->endDate,function($query){
+            return $query->where('tr_inventario_dets.fecha',"<=",$data['end_date']);
+        })
+        ->when($this->categoria>0,function($query){
+            return $query->where('g.id',"=",$this->categoria);
+        })
+        ->when($this->talla>0,function($query){
+            return $query->where('p.talla',"=",$this->talla);
+        })
+        ->where('tr_inventario_dets.movimiento','VE')
+        ->selectRaw('p.nombre, sum(total) as vtasnetas, sum(tr_inventario_dets.costo_total) as cstventa')
+        ->groupBy('p.nombre')
+        ->get()
+        ->toArray();
+        
+        $totalCosto = 0;
+        $totalVenta = 0;
+        foreach ($utilidad as $key => $row) {
+            $aux[$key] = $row['nombre']; 
+            $totalCosto = $totalCosto + $row['cstventa'];
+            $totalVenta = $totalVenta + $row['vtasnetas']; 
+        }
+
+        $arrtotal=[
+            'totcosto' => $totalCosto,
+            'totventa' => $totalVenta,
+        ];
+
+        array_multisort($aux, SORT_ASC, $utilidad);
+
         //Vista
-        $pdf = PDF::loadView('reports/detail_producto',[
-            'invtra' => $invtra,
-            'info'  => $info,
-            'filtros' => $filtros,
-            'arrsuma' => $arrsuma,
-            'arresta' => $arresta,
-            'resumen' => $resumen,
-            'fpago' => $fpago,
-            'totalres' => $totalres,
-            'formapago' => $formapago,
+        $pdf = PDF::loadView('reports/reporte_detalle_utilidad',[
+            'utilidad'  => $utilidad,
+            'data' => $data,
+            'arrtotal' => $arrtotal, 
         ]);
 
         return $pdf->download('Detalle de Productos.pdf');
-    }*/
+    }
 
 
 }
