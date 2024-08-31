@@ -19,6 +19,7 @@ class TrCobrosCabs extends Model
         'concepto',
         'monto',
         'estado',
+        'comentario',
         'usuario',
     ];
 

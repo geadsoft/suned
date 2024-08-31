@@ -10,9 +10,11 @@ use App\Models\TrDeudasCabs;
 use App\Models\TrDeudasDets;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmMatricula;
+use App\Mail\AnularCobro;
 use PDF;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class VcEncashment extends Component
 {
@@ -24,7 +26,7 @@ class VcEncashment extends Component
     public $nombre="";
     public $selectpago = false;
 
-    public $documento, $concepto, $fecha, $identificacion, $estudiante, $curso, $grupo, $grado, $comentario, $estado, $nromatricula, $fechapago;
+    public $documento, $concepto, $fecha, $identificacion, $estudiante, $curso, $grupo, $grado, $comentario, $estado, $nromatricula, $fechapago, $motivo;
 
     public $subtotal = 0;
     public $descuento = 0;
@@ -91,6 +93,11 @@ class VcEncashment extends Component
         $this->identificacion = $this->record->estudiante->identificacion;
         $this->estudiante = $this->record->estudiante->apellidos." ".$this->record->estudiante->nombres;
         $this->estado = $this->record['estado'];
+        $this->motivo = $this->record['comentario'];
+
+        if ($this->motivo==""){
+            $this->motivo="Anulado";
+        }
 
         $datacobro = TrCobrosCabs::join("tr_deudas_dets as dt","tr_cobros_cabs.id","=","dt.cobro_id")
         ->join("tr_deudas_cabs as dc","dc.id","=","dt.deudacab_id")
@@ -168,7 +175,11 @@ class VcEncashment extends Component
     }
 
     public function anularData(){
-        
+
+        $this ->validate([
+            'motivo' => 'required',
+        ]);
+
         $detdeudas = TrDeudasDets::where("cobro_id",$this->selectId)->get();
 
         if($this->estado=='A'){
@@ -192,6 +203,7 @@ class VcEncashment extends Component
             
             TrCobrosCabs::find($this->selectId)->update([
                 'estado' => 'P',
+                'comentario' => '',
             ]);
 
         }else{
@@ -215,12 +227,14 @@ class VcEncashment extends Component
             
             TrCobrosCabs::find($this->selectId)->update([
                 'estado' => 'A',
+                'comentario' => 'Recibo anulado por: '.$this->motivo,
             ]);
+
+            $this->enviarMail();
 
         }
 
-        $this->dispatchBrowserEvent('hide-anular');
-        
+        $this->dispatchBrowserEvent('hide-anular');        
         return redirect()->to('/financial/list-income');
 
     }
@@ -318,6 +332,14 @@ class VcEncashment extends Component
 
         $documento = 'Comprobante_'.$this->record['documento'].'.pdf';
         return $pdf->download($documento);
+    }
+
+    public function enviarMail()
+    {
+        $mail = auth()->user()->mail;
+        $user = auth()->user()->name;
+
+        $response = Mail::to('sams@americanschool.edu.ec')->send(new AnularCobro($mail,$user,$this->documento,$this->motivo));
     }
 
 

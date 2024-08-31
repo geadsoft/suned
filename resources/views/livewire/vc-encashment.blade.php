@@ -58,7 +58,6 @@
                                     </div>
                                     
                                 </div>
-                                        
                                 <div class="mb-3">
                                     <div class="card-header">
                                         <div class="d-flex align-items-center">
@@ -125,6 +124,7 @@
                                                     <span class="fs-15  d-block">Modalidad: {{$grupo}}</span>
                                                     <span class="text-muted fw-normal text-wrap mb-1 d-block">{{$curso}}</span>
                                                     <span class="text-muted fw-normal d-block">{{$comentario}}</span>
+                                                    <span class="text-danger fw-normal d-block">{{$motivo}}</span>
                                                 </label>
                                             </div>
                                         </div>
@@ -224,7 +224,7 @@
                                     <h5 class="mb-1">Billing Information</h5>
                                     <p class="text-muted mb-4">Please fill all information below</p>
                                 </div>
-
+                                
                                 <div>
                                     <div class="row">
                                         <div class="col-sm-4">
@@ -328,7 +328,7 @@
             <!-- end card -->
         </div>
         <!-- end col -->
-
+        
         <div class="col-xl-5">
             <div class="card">
                 <div class="card-header">
@@ -475,18 +475,28 @@
     <!--end delete modal -->
 
     <!-- Modal -->
-    <div wire.ignore.self class="modal fade flip" id="anulaCobro" tabindex="-1" aria-hidden="true" wire:model='selectId'>
+    <div wire.ignore class="modal fade flip" id="anulaCobro" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body p-5 text-center">
                     <lord-icon src="https://cdn.lordicon.com/tvyxmjyo.json" trigger="loop"
                         colors="primary:#405189,secondary:#f06548" style="width:150px;height:150px">
                     </lord-icon>
+                    <form class="was-validated" autocomplete="off" wire:submit.prevent="anularData()">
                     @if($estado!='A')
                     <div class="mt-4 text-center">
                         <h4>¿Seguro de anular el Recibo? {{$documento}}</h4>
-                        <p class="text-muted fs-15 mb-4">Esta opción cambiará el estado del registro del ingreso financiero 
+                        <p class="text-muted fs-15">Esta opción cambiará el estado del registro del ingreso financiero 
                         (recibo anulado o no), esta acción es reversible</p>
+                        
+                            <div class="mb-4">
+                                <label for="validationTextarea" class="form-label">Motivo de Anulación</label>
+                                <textarea class="form-control" id="validationTextarea" placeholder="Ingrese motivo..." wire:model.defer="motivo"
+                                    required></textarea>
+                                <div class="invalid-feedback">
+                                   Porfavor, Ingrese motivo de anulación del recibo
+                                </div>
+                            </div>
                     @else
                         <h4>¿Seguro de recuperar el Recibo? {{$documento}}</h4>
                         <p class="text-muted fs-15 mb-4">Esta opción cambiará el estado del registro del ingreso financiero 
@@ -497,11 +507,13 @@
                                 data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i>
                                 Cerrar</button>
                             
-                            <button class="btn btn-danger" id="delete-record"  wire:click="anularData()"> Si,
+                            <button type= "submit" class="btn btn-danger" id="delete-record"> Si,
                                 @if($estado!='A') Anular @else Recuperar @endif
                             </button>
                         </div>
+                        
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
