@@ -95,10 +95,6 @@ class VcEncashment extends Component
         $this->estado = $this->record['estado'];
         $this->motivo = $this->record['comentario'];
 
-        if ($this->motivo==""){
-            $this->motivo="Anulado";
-        }
-
         $datacobro = TrCobrosCabs::join("tr_deudas_dets as dt","tr_cobros_cabs.id","=","dt.cobro_id")
         ->join("tr_deudas_cabs as dc","dc.id","=","dt.deudacab_id")
         ->where('tr_cobros_cabs.id',$this->selectId)
@@ -176,9 +172,13 @@ class VcEncashment extends Component
 
     public function anularData(){
 
-        $this ->validate([
-            'motivo' => 'required',
-        ]);
+        if($this->estado!='A'){
+
+            $this ->validate([
+                'motivo' => 'required',
+            ]);
+
+        }
 
         $detdeudas = TrDeudasDets::where("cobro_id",$this->selectId)->get();
 
