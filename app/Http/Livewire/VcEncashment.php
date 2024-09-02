@@ -230,7 +230,7 @@ class VcEncashment extends Component
                 'comentario' => 'Recibo anulado por: '.$this->motivo,
             ]);
 
-            $this->enviarMail();
+            //$this->enviarMail();
 
         }
 
