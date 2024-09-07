@@ -42,6 +42,17 @@ class MovInventarioExport implements FromView, ShouldAutoSize
             12=> 'Diciembre',
     ];
 
+    public $fpago=[
+        "NN" => 'Ninguno',
+        "EFE" => 'Efectivo',
+        "CHQ" => 'Cheque',
+        "TAR" => 'Tarjeta',
+        "DEP" => 'Depósito',
+        "TRA" => 'Transferencia',
+        "APP" => 'App Movil',
+
+    ];
+
     public function __construct($filters)
     {
         $this->filters = json_decode($filters, true);
@@ -55,9 +66,9 @@ class MovInventarioExport implements FromView, ShouldAutoSize
 
         /* Movimientos */
         $invtra = DB::select("call reporte_movimientos_inventario(?,?,?,?,?,?,?,?,?,?,?)",array($fechaini,$fechafin,$this->filters['referencia'],$this->filters['estudiante'],$this->filters['categoria'],$this->filters['tipo'],$this->filters['movimiento'],$this->filters['talla'],$this->filters['cantidad'],$this->filters['precio'],$this->filters['monto']));        
-        $sqlPagos = DB::select("call reporte_productos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
+        $sqlPagos = DB::select("call reporte_productos(?,?,?,?,?,?,?,?,?,?,?)",array($fechaini,$fechafin,$this->filters['referencia'],$this->filters['estudiante'],$this->filters['categoria'],$this->filters['tipo'],$this->filters['movimiento'],$this->filters['talla'],$this->filters['cantidad'],$this->filters['precio'],$this->filters['monto']));
         
-        $sqldetPago = DB::select("call reporte_productos_detallepagos('".$fechaini."','".$fechafin."','','',0,'".$this->filters['tipo']."','".$this->filters['movimiento']."',0,0,0,0)");
+        $sqldetPago = DB::select("call reporte_productos_detallepagos(?,?,?,?,?,?,?,?,?,?,?)",array($fechaini,$fechafin,$this->filters['referencia'],$this->filters['estudiante'],$this->filters['categoria'],$this->filters['tipo'],$this->filters['movimiento'],$this->filters['talla'],$this->filters['cantidad'],$this->filters['precio'],$this->filters['monto']));
         $collection = collect($sqldetPago);
 
         $grouped = $collection->groupBy('tipopago');
@@ -100,6 +111,7 @@ class MovInventarioExport implements FromView, ShouldAutoSize
             'formapago' => $formapago,
             'totalres' => $totalres,
             'resumen' => $resumen,
+            'fpago' => $this->fpago,
         ]);
 
     }

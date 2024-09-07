@@ -57,14 +57,14 @@
     <tr></tr>
     <tr></tr>
     <tr><td><strong>Formas de Pago</strong></td></tr>
-    @foreach ($formapago as $key => $fpago) 
-        @if($fpago['total']>0)
+    @foreach ($formapago as $key => $pago) 
+        @if($pago['total']>0)
             <tr>
-                <td class="">{{$fpago[$fpago['tipopago']]}}</td>
-                <td>{{number_format($fpago['total'],2)}}</td>
+                <td class="">{{$fpago[$pago['tipopago']]}}</td>
+                <td>{{number_format($pago['total'],2)}}</td>
             </tr>
         @endif
-        {{ $totalres = $totalres + $fpago['total'] }}
+        {{ $totalres = $totalres + $pago['total'] }}
     @endforeach
     <tr>
         <td class=""></td>
@@ -74,18 +74,18 @@
     <tr></tr>
     @foreach ($resumen as $key => $data)
     <tr>
-        <th>Resumen de {{$fpago[$key]}}</th>
+        <th><strong>Resumen de {{$fpago[$key]}}</strong></th>
     </tr>
     <tr>
-        <th>Fecha</th>
-        <th>Documento</th>
-        <th>Valor</th>
+        <th><strong>Fecha</strong></th>
+        <th><strong>Documento</strong></th>
+        <th><strong>Valor</strong></th>
     </tr>
     {{ $totalres = 0}} 
         @foreach ($data as $data) 
             <tr>
-                <td class="">{{date('d/m/Y',strtotime($data['fecha']))}}</td>
-                <td class="">{{$data['documento']}}</td>
+                <td>{{date('d/m/Y',strtotime($data['fecha']))}}</td>
+                <td>{{$data['documento']}}</td>
                 <td>{{number_format($data['valor'],2)}}</td>
             </tr>
             {{ $totalres = $totalres + $data['valor'] }}
@@ -95,6 +95,6 @@
             <td>TOTAL:</td>
             <td>{{number_format($totalres,2)}}</td>
         </tr>
+        <tr></tr>
     @endforeach
-
 </table>
