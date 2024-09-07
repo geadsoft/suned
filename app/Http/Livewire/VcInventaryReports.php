@@ -11,8 +11,11 @@ use App\Models\TmGeneralidades;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
-use PDF;
 
+use App\Exports\MovInventarioExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\Exportable;
+use PDF;
 
 class VcInventaryReports extends Component
 {
@@ -557,5 +560,11 @@ class VcInventaryReports extends Component
 
     }
 
+    public function exportExcel(){
+
+        $data = json_encode($this->filters);
+        return Excel::download(new MovInventarioExport($data), 'Movimientos de Inventario.xlsx');
+
+    }
 
 }

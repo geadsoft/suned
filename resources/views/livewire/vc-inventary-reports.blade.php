@@ -52,13 +52,13 @@
                             <div class="col-md-auto ms-auto">
                                 <div class="hstack text-nowrap gap-2">
                                     @if ($tipo=='PRD')
-                                    <a href="/preview-pdf/detail-products/PRD,{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" target="_blank"><i class="ri-printer-fill fs-22 align-bottom fs-22"></i></a>
-                                    <a href="/download-pdf/detail-products/PRD,{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-download-2-line fs-22 align-bottom fs-22"></i></a>
+                                    <a href="/preview-pdf/detail-movements/PRD,{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" target="_blank"><i class="ri-printer-fill fs-22 align-bottom fs-22"></i></a>
+                                    <a href="/download-pdf/detail-movements/PRD,{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-download-2-line fs-22 align-bottom fs-22"></i></a>
                                     @else
                                     <a href="/preview-pdf/detail-movements/DET,{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" target="_blank"><i class="ri-printer-fill fs-22 align-bottom fs-22"></i></a>
                                     <a href="/download-pdf/detail-movements/DET,{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-download-2-line fs-22 align-bottom fs-22"></i></a>
                                     @endif
-                                    <a href="" wire:click.prevent="" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-file-excel-2-line align-bottom fs-22"></i></a>
+                                    <a href="" wire:click.prevent="exportExcel()" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-file-excel-2-line align-bottom fs-22"></i></a>
                                 </div>
                             </div>
                         </div>

@@ -9,10 +9,11 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
 </head>
 <body>
     <section class="header" style ="top: -287px;">
-        <table cellpadding="0" cellspancing="0" width="100%">
+        <table width="100%">
             <tr>
                 <td width="100%" style="vertical-align: top; padding-top: 10px">
                     <img src="../public/assets/images/banner-ueas.jpg" height="100px">
@@ -20,8 +21,7 @@
                     <strong>Detalle de Productos</strong>
                     </div>
                 </td>        
-            </tr>
-            <br>         
+            </tr>        
             <tr>
                 <td class="text-left text-muted"><span style="font-size: 12px"><strong>Fecha: {{date('d/m/Y',strtotime($info['fechaini']))}} - {{date('d/m/Y',strtotime($info['fechafin']))}}</strong></span></td>
             </tr>
@@ -29,7 +29,6 @@
                 <td class="text-left text-muted"><span style="font-size: 12px"><strong>{{$filtros}}</strong></span></td>
             </tr>                
         </table>
-        <br>
         <p class="text-left text-muted"><span style="font-size: 12px">
         II - Inventario Inicial | CL - Compra Local | IA - Ingreso por Ajuste | DC - Devolución en Compra <br>
         VE - Ventas | EA - Egresos por Ajuste | DV - Devolución en Venta
@@ -41,7 +40,7 @@
     </section>
 
     <section style ="margin-top: -110px;">
-        <table cellpadding="0" cellspacing="0" class="table table-borderless table-sm align-middle mb-0" style="font-size:10px">
+        <table class="table table-borderless table-sm align-middle mb-0" style="font-size:10px">
             <thead class="table-light" style="background-color:#222454">
                 <tr>
                     <th style="color:#FFFFFF">Fecha</th>
@@ -55,8 +54,8 @@
                     <th style="color:#FFFFFF">Monto</th>
                     <th style="color:#FFFFFF">Usuario</th>
                 </tr>
-            <thead>
-            <tbody class="list">
+            </thead>
+            <tbody>
             @foreach ($invtra as $record)    
                 <tr>
                     <td>{{date('d/m/Y',strtotime($record->fecha))}}</td>
@@ -75,31 +74,29 @@
             <tfoot>
                 <tr> 
                     <td colspan="3"></td>
-                    <td class="text-center">
-                        <span><b>TOTALES<b></span>
-                    </td>
+                    <td class="text-center">TOTALES</td>
                     <td></td>
                     <td>
-                        <span><strong>{{number_format($totcantidad,2)}}<strong></span>
+                        <strong>{{number_format($totcantidad,2)}}</strong>
                     <td>
                     <td colspan="1">
-                        <span><strong>${{number_format($totalmonto,2)}}<strong></span>
+                        <strong>${{number_format($totalmonto,2)}}</strong>
                     </td> 
                 </tr>
             </tfoot>
         </table>
     </section>
     <section>
-        <table cellpadding="0" cellspancing="0" width="100%">
+        <table width="100%">
             <tr>
                 <td width="40%" style="vertical-align: top; padding-top: 10px; position: relative">
-                    <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
+                    <table class="table table-sm align-middle" style="font-size:10px">
                         <thead class="table-light">
                             <tr>
                                 <th colspan="2">Formas de Pagos</th>
                             </tr>
-                        <thead>
-                        <tbody class="list"> 
+                        </thead>
+                        <tbody> 
                         {{ $totalres = 0}} 
                         @foreach ($formapago as $key => $data) 
                             @if($data['total']>0)
@@ -125,10 +122,10 @@
 
     @foreach ($resumen as $key => $data)    
     <section>
-        <table cellpadding="0" cellspancing="0" width="100%">
+        <table width="100%">
             <tr>
                 <td width="40%" style="vertical-align: top; padding-top: 10px; position: relative">
-                    <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
+                    <table class="table table-sm align-middle" style="font-size:10px">
                         <thead class="table-light">
                             <tr>
                                 <th colspan="4">Resumen de {{$fpago[$key]}}</th>
@@ -138,8 +135,8 @@
                                 <th style="color:#FFFFFF">Documento</th>
                                 <th style="color:#FFFFFF">Valor</th>
                             </tr>
-                        <thead>
-                        <tbody class="list">
+                        </thead>
+                        <tbody>
                         {{ $totalres = 0}} 
                         @foreach ($data as $data) 
                                 <tr>
@@ -168,7 +165,7 @@
       width: 100%;
       height: 30px;">
         <footer>
-            <table cellpadding="0" cellspacing="0" class="table table-nowrap align-middle" width="100%">
+            <table class="table table-nowrap align-middle" width="100%">
                 <tr style="font-size:10px">
                     <td width="40%">
                         <span>SAMS | School and Administrative Management System</span>
@@ -185,14 +182,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-    <script type="text/php">
+    <!--<script type="text/php">
         if ( isset($pdf) ) {
             $pdf->page_script('
                 $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
                 $pdf->text(510, 797, "Pág $PAGE_NUM de $PAGE_COUNT", $font, 8);
             ');
         }
-	</script>
+	</script>-->
 
 </body>
 </html>

@@ -17,6 +17,7 @@ use App\Http\Livewire\VcInventaryRegister;
 use App\Http\Livewire\VcInventaryReports;
 use App\Http\Livewire\VcReportCostoGastos;
 use App\Http\Livewire\VcReportProductoVendido;
+use App\Http\Controllers\PdfController;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,6 +130,9 @@ Route::get('/invoice/ride-pdf/{id}',[VcGeneraXML::class, 'imprimeRide']);
 
 Route::get('/preview-pdf/detail-movements/{report},{data}',[VcInventaryReports::class, 'printPDF']);
 Route::get('/download-pdf/detail-movements/{report},{data}',[VcInventaryReports::class, 'downloadPDF']);
+
+Route::get('pdf/{report},{data}', [PdfController::class, 'index']);
+
 
 Auth::routes();
 //Language Translation
