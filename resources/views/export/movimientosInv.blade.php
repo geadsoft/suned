@@ -33,7 +33,7 @@
             <th><strong>REFERENCIA</strong></th>
             <th><strong>PRODUCTO</strong></th>
             <th><strong>TALLA</strong></th>
-            <th><strong>PRECIO</strong>/th>
+            <th><strong>PRECIO</strong></th>
             <th><strong>CANTIDAD</strong></th>
             <th><strong>F. PAGO</strong></th>
             <th><strong>MONTO</strong></th>
