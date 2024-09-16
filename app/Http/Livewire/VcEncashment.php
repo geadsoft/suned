@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Mail;
 
 class VcEncashment extends Component
 {
-    public $selectId;
+    public $selectId=0;
     public $fila=1;
     public $record;
     public $persona;
