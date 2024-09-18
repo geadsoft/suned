@@ -70,19 +70,17 @@ class VcCreateinvoice extends Component
     {
         
         $tblpersonas   = TmPersonas::where('tipopersona',"C")->get();
-        $tbldeudas     = TrDeudasCabs::where('saldo',0)->get();
+        /*$tbldeudas     = TrDeudasCabs::where('saldo',0)->get();*/
         $this->record  = TrFacturasCabs::find(0);
-    
+        
         if ($this->record==null){
             $this->add($this->tblsedes);
         }else{
             $this->loaddata($tblpersonas);
         }
 
-        
         return view('livewire.vc-createinvoice',[
             'tblsedes' => $this->tblsedes,
-            'tbldeudas' => $tbldeudas,
             'detalleVtas' => $this->detalleVtas,
             'tblperiodos' => $this->tblperiodos,
             'totales' =>$this->totales,
