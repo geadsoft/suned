@@ -153,13 +153,15 @@ class VcEncashmentadd extends Component
     public function validapago($objDeuda){
 
         $pago  = 0;
-        $monto = 0;
-        foreach ($objDeuda as $deuda)
+        $monto = (array_sum(array_column($objDeuda,'valpago')));
+        $mNumber_monto = (float) str_replace(',', '', $monto);
+        $mNumber_pago = (float) str_replace(',', '', $this->cancela);
+        /*foreach ($objDeuda as $deuda)
         {
             $monto += floatval($deuda['valpago']);
-        }
-
-        if ($this->cancela>$monto){
+        }*/
+        
+        if ($mNumber_pago>$mNumber_monto){
             return true ; 
         }else{
             return false ; 
