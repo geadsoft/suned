@@ -322,6 +322,8 @@ class VcCreateinvoice extends Component
             ]);
         }
 
+        $this->econtrol = "readonly";
+        $this->facturar = "R";
     }
 
 
