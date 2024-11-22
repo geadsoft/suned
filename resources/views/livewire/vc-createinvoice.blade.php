@@ -99,6 +99,7 @@
                                         <input type="text" class="form-control bg-light border-0" name="identidad" id="billinginfo-firstName" placeholder="Cliente" wire:model="cliente" required readonly>
                                         <a id="btnstudents" class ="input-group-text btn btn-soft-secondary" wire:click="buscar()"><i class="ri-user-add-line me-1"></i></a>
                                     </div>
+                                    
                                 </div>
                                 <div class="col-lg-2 col-sm-6">
                                     <label for="date-field">Fecha</label>
@@ -110,14 +111,29 @@
                                 <div class="col-lg-6 col-sm-6">    
                                     <input type="text" class="form-control bg-light border-0" data-plugin="nui" id="nui" placeholder="Ruc" wire:model="ruc" readonly/>
                                 </div>
-                            </div>   
+                                <div class="col-lg-3 col-sm-3">    
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="opcione" wire:model.defer="facturar" value="E" wire:click.prevent="facturar('E')">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Estudiante
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="opcionr" wire:model.defer="facturar" value="R" wire:click.prevent="facturar('R')">
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Representante
+                                    </label>
+                                </div>  
+                                </div>
+                            </div>
                             <!--end row-->
                         </div>
                         <div class="card-body p-4 border-top border-top-dashed">
                             <div class="row g-3">
                                 <div class="col-lg-6 col-sm-6">
                                     <div class="mb-2">
-                                        <textarea class="form-control bg-light border-0" id="billingAddress" rows="3" placeholder="Dirección" wire:model="direccion" readonly></textarea>
+                                        <textarea class="form-control bg-light border-0" id="billingAddress" rows="3" placeholder="Dirección" wire:model="direccion" {{$econtrol}}></textarea>
                                         <div class="invalid-feedback">
                                             Dirección
                                         </div>
@@ -125,13 +141,13 @@
                                 </div>
                                 <div class="col-lg-6 col-sm-6">
                                     <div class="mb-2">
-                                        <input type="text" class="form-control bg-light border-0" data-plugin="cleave-phone" id="billingPhoneno" placeholder="+593-" wire:model="telefono" readonly/>
+                                        <input type="text" class="form-control bg-light border-0" data-plugin="cleave-phone" id="billingPhoneno" placeholder="+593-" wire:model="telefono" {{$econtrol}}/>
                                         <div class="invalid-feedback">
                                             Telefono
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control bg-light border-0" id="billingTaxno" placeholder="Email" wire:model="email" readonly/>
+                                        <input type="text" class="form-control bg-light border-0" id="billingTaxno" placeholder="Email" wire:model="email" {{$econtrol}}/>
                                         <div class="invalid-feedback">
                                             Email
                                         </div>

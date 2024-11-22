@@ -45,7 +45,7 @@ class VcCreateinvoice extends Component
     ];
 
     public $producto_id, $cantidadDig, $precioventa, $descuento, $itemtotal, $subtotal=0; 
-    public $detalleVtas = [], $tblsedes;
+    public $detalleVtas = [], $tblsedes, $facturar='R', $econtrol="readonly";
     public $tblperiodos;
     public $tblstudent=[];
 
@@ -131,6 +131,36 @@ class VcCreateinvoice extends Component
     public function buscar(){
 
         $this->dispatchBrowserEvent('show-form');
+    }
+
+    public function facturar($facturar){
+
+        if($this->personaId==0){
+            return;
+        }
+
+        $personaId = $this->personaId;
+
+        if ($facturar=='E'){
+
+            $this->facturar = 'E';
+            $this->econtrol = "";
+
+            $this->setPersona($this->estudianteId,$this->estudianteId);
+
+            $this->tblstudent = TmPersonas::query()
+            ->join("tm_familiar_estudiantes as f","f.estudiante_id","=","tm_personas.id")
+            ->where("f.persona_id",$personaId)
+            ->select("tm_personas.*")
+            ->get();
+
+        }else{
+
+            $this->facturar = 'R';
+            $this->econtrol = "readonly";
+            $this->setPersona($this->personaId,$this->estudianteId);
+        }
+        
     }
 
     public function setPersona($personaId,$estudianteId){
@@ -280,8 +310,17 @@ class VcCreateinvoice extends Component
         ]);
 
         /* Actualiza Cobros Facturados */
-
         $this->dispatchBrowserEvent('msg-grabar');
+
+        /* Actualiza ficha estudiante */
+        if ($this->facturar=='E'){
+            $record = TmPersonas::find($this->estudianteId);
+            $record->update([
+                'telefono' => $this->direccion,
+                'direccion' => $this->telefono,
+                'email' => $this->email,
+            ]);
+        }
 
     }
 
