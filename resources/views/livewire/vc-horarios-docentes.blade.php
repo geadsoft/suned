@@ -82,7 +82,7 @@
                 
                 <form autocomplete="off" wire:submit.prevent="">
                     <div class="modal-body">                                        
-                            @livewire('vc-modal-personas')                                       
+                            @livewire('vc-modal-personas',['tipo' => 'E'])                                       
                     </div>
                     <div class="modal-footer">
                         <div class="hstack gap-2 justify-content-end">

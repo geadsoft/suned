@@ -124,7 +124,8 @@
                                         <td>{{date('d/m/Y',strtotime($record['fecha']))}}</td>
                                         <td>
                                             <div><a href="/inventary/register-edit/{{$record['id']}}"
-                                                class="fw-medium link-primary">{{$record['tipo']}} {{$record['documento']}}</a><div>
+                                                class="fw-medium link-primary">{{$record['tipo']}} {{$record['documento']}}</a>
+                                            <div>
                                             <div>
                                                 @if($record['tipo']=='ING')
                                                 <i class="bx bx-log-out fs-18"></i><a class="text-muted"> {{$tipo[$record['tipo']]}} - {{$movimiento[$record['movimiento']]}}</a>
