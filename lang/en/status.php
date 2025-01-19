@@ -3,10 +3,11 @@
 return [
     "A" => "Activo",
     "I" => "Inactivo",
-    "E" => "Aliminado",
+    "E" => "Eliminado",
     "X" => "Anulado",
-    "S" => "Grabado",
-    "C" => "Cancelado",
+    "G" => "Grabado",
+    "C" => "Cerrado",
+    "P" => "Cancelado",
     "*" => "Abonado",
 ];
 ?>

@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
             start: new Date(y, m, 1),
             className: 'bg-soft-primary',
             location: 'San Francisco, US',
-            allDay: false,
+            allDay: true,
             extendedProps: {
                 department: 'All Day Event'
             },
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
             id: 112,
             title: 'Meeting With Designer',
             start: new Date(y, m, d, 12, 30),
-            allDay: false,
+            allDay: true,
             className: 'bg-soft-success',
             location: 'Head Office, US',
             extendedProps: {
@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
             id: 875,
             title: 'Birthday Party',
             start: new Date(y, m, d + 1, 19, 0),
-            allDay: false,
+            allDay: true,
             className: 'bg-soft-success',
             location: 'Los Angeles, US',
             extendedProps: {
@@ -226,7 +226,9 @@ document.addEventListener("DOMContentLoaded", function () {
         itemSelector: '.external-event',
         eventData: function (eventEl) {
             return {
+                id: Math.floor(Math.random() * 11000),
                 title: eventEl.innerText,
+                allDay: true,
                 start: new Date(),
                 className: eventEl.getAttribute('data-class')
             };
@@ -280,6 +282,21 @@ document.addEventListener("DOMContentLoaded", function () {
             var newView = getInitialView();
             calendar.changeView(newView);
         },
+        eventResize: function(info) {
+            var indexOfSelectedEvent = defaultEvents.findIndex(function (x) {
+                return x.id == info.event.id
+            });
+            if (defaultEvents[indexOfSelectedEvent]) {
+                defaultEvents[indexOfSelectedEvent].title = info.event.title;
+                defaultEvents[indexOfSelectedEvent].start = info.event.start;
+                defaultEvents[indexOfSelectedEvent].end = (info.event.end) ? info.event.end : null;
+                defaultEvents[indexOfSelectedEvent].allDay = info.event.allDay;
+                defaultEvents[indexOfSelectedEvent].className = info.event.classNames[0];
+                defaultEvents[indexOfSelectedEvent].description = (info.event._def.extendedProps.description) ? info.event._def.extendedProps.description : '';
+                defaultEvents[indexOfSelectedEvent].location = (info.event._def.extendedProps.location) ? info.event._def.extendedProps.location : '';
+            }
+            upcomingEvent(defaultEvents);
+        },
         eventClick: function (info) {
             document.getElementById("edit-event-btn").removeAttribute("hidden");
             document.getElementById('btn-save-event').setAttribute("hidden", true);
@@ -324,8 +341,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     day = '0' + day;
                 return [year, month, day].join('-');
             };
-            var r_date = ed_date == null ? (str_dt(st_date)) : (str_dt(st_date)) + ' to ' + (str_dt(ed_date));
-            var er_date = ed_date == null ? (date_r(st_date)) : (date_r(st_date)) + ' to ' + (date_r(ed_date));
+            var updateDay = null
+            if(ed_date != null){
+                var endUpdateDay = new Date(ed_date);
+                updateDay = endUpdateDay.setDate(endUpdateDay.getDate() - 1);
+            }
+            
+            var r_date = ed_date == null ? (str_dt(st_date)) : (str_dt(st_date)) + ' to ' + (str_dt(updateDay));
+            var er_date = ed_date == null ? (date_r(st_date)) : (date_r(st_date)) + ' to ' + (date_r(updateDay));
 
             flatpickr(start_date, {
                 defaultDate: er_date,
@@ -393,8 +416,9 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         events: defaultEvents,
         eventReceive: function (info) {
+            var newid = parseInt(info.event.id);
             var newEvent = {
-                id: Math.floor(Math.random() * 11000),
+                id: newid,
                 title: info.event.title,
                 start: info.event.start,
                 allDay: info.event.allDay,
@@ -431,7 +455,11 @@ document.addEventListener("DOMContentLoaded", function () {
         var updatedCategory = document.getElementById('event-category').value;
         var start_date = (document.getElementById("event-start-date").value).split("to");
         var updateStartDate = new Date(start_date[0].trim());
-        var updateEndDate = (start_date[1]) ? new Date(start_date[1].trim()) : '';
+
+        var newdate = new Date(start_date[1]);
+        newdate.setDate(newdate.getDate() + 1);
+
+        var updateEndDate = (start_date[1]) ? newdate : '';
 
         var end_date = null;
         var event_location = document.getElementById("event-location").value;
@@ -626,20 +654,28 @@ function upcomingEvent(a) {
         return (new Date(o1.start)) - (new Date(o2.start));
     });
     document.getElementById("upcoming-event-list").innerHTML = null;
-    a.forEach(function (element) {
+    Array.from(a).forEach(function (element) {
         var title = element.title;
-        var e_dt = element.end ? element.end : null;
+        if (element.end) {
+            endUpdatedDay = new Date(element.end);
+            var updatedDay = endUpdatedDay.setDate(endUpdatedDay.getDate() - 1);
+          }
+        var e_dt = updatedDay ? updatedDay : undefined;
         if (e_dt == "Invalid Date" || e_dt == undefined) {
             e_dt = null;
         } else {
-            e_dt = new Date(e_dt).toLocaleDateString('en', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric'
-            });
+            const newDate = new Date(e_dt).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
+            e_dt = new Date(newDate)
+              .toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
+              .split(" ")
+              .join(" ");
         }
-        var st_date = str_dt(element.start);
-        var ed_date = str_dt(element.end);
+        var st_date = element.start ? str_dt(element.start) : null;
+        var ed_date = updatedDay ? str_dt(updatedDay) : null;
         if (st_date === ed_date) {
             e_dt = null;
         }
@@ -647,18 +683,22 @@ function upcomingEvent(a) {
         if (startDate === "Invalid Date" || startDate === undefined) {
             startDate = null;
         } else {
-            startDate = new Date(startDate).toLocaleDateString('en', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric'
-            });
+            const newDate = new Date(startDate).toLocaleDateString('en', { year: 'numeric', month: 'numeric', day: 'numeric' });
+            startDate = new Date(newDate)
+              .toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
+              .split(" ")
+              .join(" ");
         }
 
         var end_dt = (e_dt) ? " to " + e_dt : '';
         var category = (element.className).split("-");
         var description = (element.description) ? element.description : "";
         var e_time_s = tConvert(getTime(element.start));
-        var e_time_e = tConvert(getTime(element.end));
+        var e_time_e = tConvert(getTime(updatedDay));
         if (e_time_s == e_time_e) {
             var e_time_s = "Full day event";
             var e_time_e = null;

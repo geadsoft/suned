@@ -30,6 +30,7 @@
 
             <div id="two-column-menu">
             </div>
+            @if(auth()->user()->perfil=="U")
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span>@lang('translation.home')</span></li>
                 <li class="nav-item">
@@ -42,6 +43,11 @@
                         <i class="las la-chart-pie fs-20"></i> <span>Gráficos</span>
                     </a>
                 </li>
+                <!--<li class="nav-item">
+                    <a class="nav-link menu-link" href="/academic/calendario">
+                        <i class=""></i> <span>Calendario</span>
+                    </a>
+                </li>-->
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>MODULOS</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#academico" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="academico">
@@ -136,7 +142,7 @@
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link menu-link" href="/headquarters/schedules">
-                                                <i class="las la-stopwatch fs-20"></i> <span>Horarios Escolares</span>
+                                                <i class="las la-stopwatch fs-20"></i> <span>Horario de Clase</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
@@ -495,6 +501,370 @@
                     </div>
                 </li>
             </ul>
+            @endif
+            @if(auth()->user()->perfil=="E")
+            <ul class="navbar-nav" id="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/academic/calendario">
+                        <i class="las la-tachometer-alt fs-20"></i> <span>Agenda Escolar</span>
+                    </a>
+                </li>
+                <li class="menu-title"><i class="ri-more-fill"></i> <span>MODULOS</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#actividades" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="actividades">
+                        <i class="las la-calendar-check fs-20"></i><span>Actividades</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="actividades">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Ver Actividades<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Visualización Rapida<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#mensajeria" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="mensajeria">
+                        <i class="las la-sms fs-20"></i><span>Mensajeria</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="mensajeria">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Bandeja de Entrada<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#clase" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="clase">
+                        <i class="las la-video fs-20"></i><span>Clases Virtuales</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="clase">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Unirse a Clase Virtual<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#recursos" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="recursos">
+                        <i class="las la-file-alt fs-20"></i><span>Recursos</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="recursos">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Recursos por Materia<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#eventos" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="eventos">
+                        <i class="las la-calendar fs-20"></i><span>Eventos</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="eventos">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Ver Eventos<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#notificaciones" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="notificaciones">
+                        <i class="las la-bell fs-20"></i><span>Notificaciones</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="notificaciones">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Ver Notificaciones<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#calificacion" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="calificacion">
+                        <i class="las la-award fs-20"></i><span>Calificaciones</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="calificacion">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Detalle por Materia<span></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Resumen Parcial<span></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Resumen Trimestral<span></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Reporte de Conducta<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#faltas" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="faltas">
+                        <i class="las la-tasks fs-20"></i><span>Justificativo de Faltas</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="faltas">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Justificar<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            @endif
+            @if(auth()->user()->perfil=="D")
+            <ul class="navbar-nav" id="navbar-nav">
+                <li class="menu-title"><i class="ri-more-fill"></i> <span>MODULOS</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#academico" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="academico">
+                        <i class=" las la-graduation-cap fs-20"></i><span>Academico</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="academico">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="#sidebarPerson" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPerson">
+                                    <i class=""></i> <span>Estudiantes</span>
+                                </a>
+                                <div class="collapse menu-dropdown" id="sidebarPerson">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="/academic/students" class="nav-link" role="button">Fichas</a>
+                                        </li>                                        
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="#sidebarAsistencia" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAsistencia">
+                                    <i class=""></i> <span>Asistencias</span>
+                                </a>
+                                <div class="collapse menu-dropdown" id="sidebarAsistencia">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/academic/tuition">
+                                                </i>Asistencia Diaria<span></span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/academic/tuition">
+                                                </i>Justificar Faltas<span></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="#sidebarCalifica" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCalifica">
+                                    <i class=""></i> <span>Calificaciones</span>
+                                </a>
+                                <div class="collapse menu-dropdown" id="sidebarCalifica">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/academic/tuition">
+                                                </i>Calificar Actividades<span></span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/academic/tuition">
+                                                </i>Calificar Examenes<span></span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/academic/tuition">
+                                                </i>Calificar Supletorios<span></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>                           
+                        </ul>
+                    </div>                   
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/activities/activity">
+                        <i class="las la-calendar-check fs-20"></i>Actividades</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#reportefin" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="reportefin">
+                        <i class="las la-list-alt fs-20"></i><span>Reporte Finales</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="reportefin">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="">
+                                    </i>Informe Final de Calificaciones<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#personalizar" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="personalizar">
+                        <i class="las la-tools fs-20"></i><span>Personalizar</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="personalizar">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="">
+                                    </i>Personalizar Materia<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#mensajeria" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="mensajeria">
+                        <i class="las la-sms fs-20"></i><span>Mensajeria</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="mensajeria">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Bandeja de Entrada<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <!--<li class="nav-item">
+                    <a class="nav-link menu-link" href="#clase" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="clase">
+                        <i class="las la-video fs-20"></i><span>Clasess Virtuales</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="clase">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/activities/virtual-classes">
+                                    </i>Unirse a Clase Virtual<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>-->
+                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="/activities/virtual-classes">
+                        <i class="las la-calendar-check fs-20"></i>Clases Virtuales</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#examen" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="examen">
+                        <i class="las la-paste fs-20"></i><span>Exámenes</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="examen">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/activities/exams">
+                                    </i>Exámenes<span></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/activities/supplementary-exam">
+                                    </i>Supletorios<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPages">
+                        <i class="las la-calendar-check"></i> <span data-key="t-pages">Reportes</span>
+                    </a>
+                    <div class="menu-dropdown collapse" id="sidebarPages" style="">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="#cursos" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="cursos" data-key="t-profile">Cursos</a>
+                                <div class="menu-dropdown collapse" id="cursos" style="">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="pages-profile.html" class="nav-link" data-key="t-simple-page">Estudiante Parcial</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Estudiante Trimestral</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#calificacion" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="calificacion" data-key="t-profile">Calificaciones</a>
+                                <div class="menu-dropdown collapse" id="calificacion" style="">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="pages-profile.html" class="nav-link" data-key="t-simple-page">Totales</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Detalladas</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Examenes</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a href="" class="nav-link" data-key="t-team">Informe Docente Parcial</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="" class="nav-link" data-key="t-timeline">Informe Docente Trimestral</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="" class="nav-link" data-key="t-faqs">Reporte de Asistencia Docente</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="" class="nav-link" data-key="t-pricing">Reporte por Docente Anual</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/academic/calendario">
+                        <i class="las la-calendar-alt fs-20"></i>Eventos / Comunicados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/">
+                        <i class="las la-edit fs-20"></i>Proyecto Final</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/">
+                        <i class="las la-award fs-20"></i>Evaluacion Nivel / Subnivel</span>
+                    </a>
+                </li>                
+            </ul>
+            @endif
         </div>
         <!-- Sidebar -->
     </div>

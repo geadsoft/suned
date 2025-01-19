@@ -32,7 +32,7 @@ class VcPanel extends Component
     public function mount(){    
 
         $año     = date('Y');
-        $periodo = TmPeriodosLectivos::where("periodo",$año)->first();
+        $periodo = TmPeriodosLectivos::where("estado","A")->first();
         $anioant = TmPeriodosLectivos::where('periodo',$periodo->periodo-1)->first();
 
         $ldate     = date('Y-m-d H:i:s');

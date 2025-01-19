@@ -44,6 +44,10 @@ Route::get('/academic/representatives',[App\Http\Controllers\TmPersonasControlle
 Route::get('/academic/tuition',[App\Http\Controllers\TmMatriculaController::class, 'index'])->name('index');
 Route::get('/academic/student-enrollment/{id}',[App\Http\Controllers\TmMatriculaController::class, 'addtuition'])->name('addtuition');
 Route::get('/academic/student-enrollment',[App\Http\Controllers\TmMatriculaController::class, 'newtuition'])->name('newtuition');
+Route::get('/academic/calendario',[App\Http\Controllers\TmSedesController::class, 'calendario'])->name('calendario');
+
+
+
 Route::get('/headquarters/headquarters-add',[App\Http\Controllers\TmSedesController::class, 'index'])->name('index');
 Route::get('/headquarters/pension',[App\Http\Controllers\TmPensionesCabController::class, 'index'])->name('index');
 Route::get('/headquarters/educational-services',[App\Http\Controllers\TmServiciosController::class, 'index'])->name('index');
@@ -90,6 +94,16 @@ Route::get('/inventary/stock',[App\Http\Controllers\TmProductosController::class
 Route::get('/inventary/detail-products',[App\Http\Controllers\TmProductosController::class, 'report'])->name('report');
 Route::get('/sri/create-credits',[App\Http\Controllers\TrFacturasCabsController::class, 'ncredits'])->name('ncredits');
 Route::get('/inventary/detail-movements',[App\Http\Controllers\TmProductosController::class, 'details'])->name('details');
+Route::get('/activities/activity',[App\Http\Controllers\DocentesController::class, 'activity_index'])->name('activity_index');
+Route::get('/activities/activity-add',[App\Http\Controllers\DocentesController::class, 'activity_add'])->name('activity_add');
+Route::get('/activities/activity-edit/{id}',[App\Http\Controllers\DocentesController::class, 'activity_edit'])->name('activity_edit');
+Route::get('/activities/activity-view/{id}',[App\Http\Controllers\DocentesController::class, 'activity_view'])->name('activity_view');
+Route::get('/activities/virtual-classes',[App\Http\Controllers\DocentesController::class, 'classes_index'])->name('classes_index');
+Route::get('/activities/exams',[App\Http\Controllers\DocentesController::class, 'exams_index'])->name('exams_index');
+Route::get('/activities/exam-add',[App\Http\Controllers\DocentesController::class, 'exams_add'])->name('exams_add');
+Route::get('/activities/exam-edit/{id}',[App\Http\Controllers\DocentesController::class, 'exams_edit'])->name('exams_edit');
+Route::get('/activities/exam-view/{id}',[App\Http\Controllers\DocentesController::class, 'exams_view'])->name('exams_view');
+
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
 Route::get('/liveWire-pdf/{data}',[VcReportCashReceints::class, 'liveWirePDF']);

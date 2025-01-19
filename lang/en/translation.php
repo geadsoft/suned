@@ -247,6 +247,14 @@ return [
     "services"=>"Servicios Educativos",
     "create_invoice"=>"Crear Factura",
     "list-income"=>"Listado de Ingresos",
+    "Monday" => "Lunes",
+    "Tuesday" => "Martes",
+    "Wednesday" => "Miercoles",
+    "Thursday" => "Jueves",
+    "Friday" => "Viernes",
+    "Saturday" => "Sabado",
+    "Sunday" => "Domingo",
+
 
 ];
 ?>

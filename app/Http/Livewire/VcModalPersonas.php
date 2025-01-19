@@ -50,7 +50,7 @@ class VcModalPersonas extends Component
         ->when($this->filters['srv_nombre'],function($query){
             return $query->whereRaw("concat(apellidos,'',nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
-        ->select('id','apellidos','nombres','identificacion')
+        ->selectRaw("id,apellidos,nombres,identificacion, 0 as estudiante_id")
         ->where('estado','A')
         ->limit(15)
         ->get();
@@ -83,6 +83,8 @@ class VcModalPersonas extends Component
     }
 
     public function setPersona($personaId,$estudianteId){
+
+        
 
         if ($this->filters['srv_tipo']=='D'){
             $this->emitTo('vc-horarios-docentes','setDocente',$personaId);
