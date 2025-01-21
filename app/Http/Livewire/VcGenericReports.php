@@ -6,8 +6,10 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TrDeudasCabs;
 use App\Models\TmCursos;
 
+
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 use PDF;
 
 class VcGenericReports extends Component
@@ -125,8 +127,14 @@ class VcGenericReports extends Component
         } else {
 
             $tblrecords = TrDeudasCabs::query()
-            ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
-            ->join("tr_deudas_dets as dt","dt.deudacab_id","=","tr_deudas_cabs.id")
+            ->join(DB::raw("(select deudacab_id, sum(case when tipo = 'PAG' then valor else 0 end) as credito,
+                sum(case when tipo = 'DES' then valor else 0 end) descuento 
+                from tr_deudas_dets d
+                where d.estado = 'P' 
+                group by deudacab_id) as dt"),function($join){
+                $join->on('dt.deudacab_id', '=', 'tr_deudas_cabs.id');
+            })
+            ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")           
             ->join("tm_personas as p","p.id","=","m.estudiante_id")
             ->join("tm_cursos as c","c.id","=","m.curso_id")
             ->join("tm_servicios as s","s.id","=","c.servicio_id")
@@ -147,10 +155,10 @@ class VcGenericReports extends Component
                 return $query->whereRaw("left(tr_deudas_cabs.referencia,3) = '{$this->referencia}'");
             })
             ->where('p.estado','A')
-            ->where('dt.tipo','PAG')
-            ->whereRaw('dt.valor '.$this->relacion.floatval($this->valor))
+            /*->where('dt.tipo','PAG')*/
+            ->whereRaw('dt.credito '.$this->relacion.floatval($this->valor))
             ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
-            'c.paralelo','tr_deudas_cabs.glosa','dt.referencia','debito','credito','descuento','saldo')
+            'c.paralelo','tr_deudas_cabs.glosa','debito','dt.credito','dt.descuento','saldo')
             ->orderBy('p.apellidos')
             ->orderBY('p.nombres')
             ->orderBy('tr_deudas_cabs.fecha')
@@ -170,8 +178,21 @@ class VcGenericReports extends Component
 
 
     public function reporte(){
+
+        if ($this->tipo!='credito'){
+            $campo = $this->tipo;
+        }else{
+            $campo = "dt.credito ";
+        }
                
         $tblrecords = TrDeudasCabs::query()
+        ->join(DB::raw("(select deudacab_id, sum(case when tipo = 'PAG' then valor else 0 end) as credito,
+            sum(case when tipo = 'DES' then valor else 0 end) descuento 
+            from tr_deudas_dets d
+            where d.estado = 'P' 
+            group by deudacab_id) as dt"),function($join){
+            $join->on('dt.deudacab_id', '=', 'tr_deudas_cabs.id');
+        })
         ->join("tm_matriculas as m","m.id","=","tr_deudas_cabs.matricula_id")
         ->join("tm_personas as p","p.id","=","m.estudiante_id")
         ->join("tm_cursos as c","c.id","=","m.curso_id")
@@ -193,9 +214,9 @@ class VcGenericReports extends Component
             return $query->whereRaw("left(tr_deudas_cabs.referencia,3) = '{$this->referencia}'");
         })
         ->where('p.estado','A')
-        ->whereRaw($this->tipo.$this->relacion.floatval($this->valor))
+        ->whereRaw($campo.$this->relacion.floatval($this->valor))
         ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'p.identificacion', 'g.descripcion as grupo', 's.descripcion as curso', 
-        'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo')
+        'c.paralelo','tr_deudas_cabs.glosa', 'debito','dt.credito','dt.descuento','saldo')
         ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, p.apellidos asc, tr_deudas_cabs.fecha')
         ->get();
          
