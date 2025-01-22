@@ -103,6 +103,8 @@ Route::get('/activities/exams',[App\Http\Controllers\DocentesController::class, 
 Route::get('/activities/exam-add',[App\Http\Controllers\DocentesController::class, 'exams_add'])->name('exams_add');
 Route::get('/activities/exam-edit/{id}',[App\Http\Controllers\DocentesController::class, 'exams_edit'])->name('exams_edit');
 Route::get('/activities/exam-view/{id}',[App\Http\Controllers\DocentesController::class, 'exams_view'])->name('exams_view');
+Route::get('/teachers/courses',[App\Http\Controllers\DocentesController::class, 'courses_index'])->name('courses_index');
+Route::get('/courses/course-view/{id}',[App\Http\Controllers\DocentesController::class, 'courses_view'])->name('courses_view');
 
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);

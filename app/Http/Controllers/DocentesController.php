@@ -132,4 +132,16 @@ class DocentesController extends Controller
         return view('teachers/examenview',['id' => $id]);
     }
 
+    //Cursos Asignados
+    public function courses_index()
+    {
+        return view('teachers/cursos');
+    }
+
+    public function courses_view($id)
+    {
+        return view('teachers/cursosview',['id' => $id]);
+    }
+
+
 }

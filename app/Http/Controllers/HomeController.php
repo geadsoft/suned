@@ -39,7 +39,20 @@ class HomeController extends Controller
     public function root()
     {
         //return view('index');
-        return view('config/panel');
+        $perfil = auth()->user()->perfil;
+        
+        if ($perfil == 'U'){
+            return view('config/panel');
+        }
+
+        if ($perfil == 'D'){
+            return view('teachers/cursos');
+        }
+
+        if ($perfil == 'E'){
+            return view('studens/calendar');
+        }
+        
     }
 
     /*Language Translation*/
