@@ -9,30 +9,26 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Actividades
+            Sede Educativa
         @endslot
         @slot('title')
-            Crear Actividades
+            Sistema Educativo
         @endslot
     @endcomponent
 
-    @livewire('vc-actividad-add',['id' => $id])
+    @livewire('vc-sistema-educativo')
 
 @endsection
 @section('script')
-    <!--ecommerce-customer init js -->
-
-    
-    <script src="{{ URL::asset('assets/libs/@ckeditor/@ckeditor.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/js/pages/ecommerce-product-create.init.js') }}"></script>
-    <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/libs/list.js/list.js.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    
+    <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
     <script>
        
-       window.addEventListener('msg-grabar', event => {
+        window.addEventListener('msg-grabar', event => {
             swal("Buen Trabajo!", event.detail.newName, "success");
         })
 

@@ -693,17 +693,17 @@
                                 <div class="collapse menu-dropdown" id="sidebarCalifica">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/academic/tuition">
+                                            <a class="nav-link menu-link" href="/academic/qualify-activity">
                                                 </i>Calificar Actividades<span></span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/academic/tuition">
+                                            <a class="nav-link menu-link" href="/academic/qualify-exams">
                                                 </i>Calificar Examenes<span></span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/academic/tuition">
+                                            <a class="nav-link menu-link" href="/academic/qualify-suplerory">
                                                 </i>Calificar Supletorios<span></span>
                                             </a>
                                         </li>
@@ -791,7 +791,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/activities/supplementary-exam">
+                                <a class="nav-link menu-link" href="/activities/suppletory">
                                     </i>Supletorios<span></span>
                                 </a>
                             </li>

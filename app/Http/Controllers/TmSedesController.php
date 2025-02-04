@@ -27,6 +27,11 @@ class TmSedesController extends Controller
         return view('academic/calendario');
     }
 
+    public function system()
+    {
+        return view('academic/sistema');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

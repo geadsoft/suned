@@ -30,7 +30,7 @@
                 <label for="perident" class="form-label">
                 Identificación</label>
                 <input type="text" class="form-control" id="perident"
-                    placeholder="Enter your firstname" wire:model.defer="familiar.identificacion" {{$eControl2}}>
+                    placeholder="Enter your firstname" wire:model.defer="familiar.identificacion" {{$eControl2}} wire:focusout='loadNui()'>
             </div>
         </div>
         <div class="col-lg-4">
@@ -170,7 +170,7 @@
             @if ($familiarId==0)
                 <button type="submit" class="btn btn-soft-primary" wire:click="createData()">Grabar</button>
             @else 
-                <button class="btn btn-soft-primary" wire:click="updateData()">Grabar</button>
+                <button class="btn btn-soft-primary" wire:click="updateData()">Actualizar</button>
             @endif
         </div>
     </div>

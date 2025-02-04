@@ -45,12 +45,15 @@ Route::get('/academic/tuition',[App\Http\Controllers\TmMatriculaController::clas
 Route::get('/academic/student-enrollment/{id}',[App\Http\Controllers\TmMatriculaController::class, 'addtuition'])->name('addtuition');
 Route::get('/academic/student-enrollment',[App\Http\Controllers\TmMatriculaController::class, 'newtuition'])->name('newtuition');
 Route::get('/academic/calendario',[App\Http\Controllers\TmSedesController::class, 'calendario'])->name('calendario');
-
-
+Route::get('/academic/qualify-activity',[App\Http\Controllers\DocentesController::class, 'calificar_actividad'])->name('calificar_actividad');
+Route::get('/academic/qualify-exams',[App\Http\Controllers\DocentesController::class, 'calificar_examen'])->name('calificar_examen');
+Route::get('/academic/qualify-suppletory',[App\Http\Controllers\DocentesController::class, 'calificar_supletorio'])->name('calificar_supletorio');
 
 Route::get('/headquarters/headquarters-add',[App\Http\Controllers\TmSedesController::class, 'index'])->name('index');
 Route::get('/headquarters/pension',[App\Http\Controllers\TmPensionesCabController::class, 'index'])->name('index');
 Route::get('/headquarters/educational-services',[App\Http\Controllers\TmServiciosController::class, 'index'])->name('index');
+Route::get('/headquarters/educational-system',[App\Http\Controllers\TmSedesController::class, 'system'])->name('system');
+
 Route::get('/financial/encashment/{id}',[App\Http\Controllers\TrCobrosCabsController::class, 'viewtuition'])->name('viewtuition');
 Route::get('/financial/encashment',[App\Http\Controllers\TrCobrosCabsController::class, 'loadtuition'])->name('loadtuition');
 Route::get('/financial/encashment-add/{periodoid}/{matriculaid}',[App\Http\Controllers\TrCobrosCabsController::class, 'addencashment'])->name('addescashment');
@@ -105,6 +108,10 @@ Route::get('/activities/exam-edit/{id}',[App\Http\Controllers\DocentesController
 Route::get('/activities/exam-view/{id}',[App\Http\Controllers\DocentesController::class, 'exams_view'])->name('exams_view');
 Route::get('/teachers/courses',[App\Http\Controllers\DocentesController::class, 'courses_index'])->name('courses_index');
 Route::get('/courses/course-view/{id}',[App\Http\Controllers\DocentesController::class, 'courses_view'])->name('courses_view');
+Route::get('/activities/suppletory',[App\Http\Controllers\DocentesController::class, 'suppletory_index'])->name('suppletory_index');
+Route::get('/activities/suppletory-add',[App\Http\Controllers\DocentesController::class, 'suppletory_add'])->name('suppletory_add');
+Route::get('/activities/suppletory-edit/{id}',[App\Http\Controllers\DocentesController::class, 'suppletory_edit'])->name('suppletory_edit');
+Route::get('/activities/suppletory-view/{id}',[App\Http\Controllers\DocentesController::class, 'suppletory_view'])->name('suppletory_view');
 
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
@@ -149,8 +156,15 @@ Route::get('/download-pdf/detail-movements/{report},{data}',[VcInventaryReports:
 
 Route::get('pdf/{report},{data}', [PdfController::class, 'index']);
 
+/*Route::middleware(['auth'],['roles:D'])->group(function(){
+    Route::get('/teachers/login', [App\Http\Controllers\DocentesController::class, 'index'])->name('login');
+});*/
+Route::get('/teachers/login', [App\Http\Controllers\DocentesController::class, 'index'])->name('login');
+Route::post('/teachers/login', 'App\Http\Controllers\LoginController@login');
+Auth::Routes();
 
-Auth::routes();
+
+
 //Language Translation
 Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
 

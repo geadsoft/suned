@@ -50,6 +50,18 @@ class VcPersonsFamily extends Component
 
     }
 
+    public function loadNui(){
+
+        $records = TmPersonas::where("identificacion",$this->familiar['identificacion'])->first();
+        if (!empty($records)){
+
+            $this->familiarId = $records['id'];
+            $this->familiar = TmPersonas::find($this->familiarId)->toArray();
+            
+        }
+
+    }
+
     public function newData(){
 
         $this->familiarId = 0;
@@ -126,6 +138,22 @@ class VcPersonsFamily extends Component
             'etnia' => $this->familiar['etnia'],
             'parentesco' => $this->familiar['parentesco'],
             ]);
+
+        $familiar = TmFamiliarEstudiantes::query()
+        ->where("estudiante_id",$this->personaId)
+        ->where("persona_id",$this->familiarId)
+        ->first();
+
+        if (empty($familiar)){
+
+            TmFamiliarEstudiantes::Create([
+                'estudiante_id'=> $this->personaId,
+                'persona_id'=> $this->familiarId,
+                'informacion'=>'',
+                'usuario' => auth()->user()->name,
+            ]);
+
+        }
          
         $this->newData(); 
         $this->loadFamiliar();

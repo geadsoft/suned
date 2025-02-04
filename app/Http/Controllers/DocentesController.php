@@ -13,7 +13,7 @@ class DocentesController extends Controller
      */
     public function index()
     {
-        //
+        return view('auth.auth-signin-cover');
     }
 
     /**
@@ -132,6 +132,26 @@ class DocentesController extends Controller
         return view('teachers/examenview',['id' => $id]);
     }
 
+    public function suppletory_index()
+    {
+        return view('teachers/supletorios');
+    }
+
+    public function suppletory_add()
+    {
+        return view('teachers/supletorioadd',['id' => 0]);
+    }
+
+    public function suppletory_edit($id)
+    {
+        return view('teachers/supletorioadd',['id' => $id]);
+    }
+
+    public function suppletory_view($id)
+    {
+        return view('teachers/supletorioview',['id' => $id]);
+    }
+
     //Cursos Asignados
     public function courses_index()
     {
@@ -141,6 +161,22 @@ class DocentesController extends Controller
     public function courses_view($id)
     {
         return view('teachers/cursosview',['id' => $id]);
+    }
+
+    //Calificacion
+    public function calificar_actividad()
+    {
+        return view('teachers/calificaractividad');
+    }
+
+    public function calificar_examen()
+    {
+        return view('teachers/calificarexamen');
+    }
+
+    public function calificar_supletorio()
+    {
+        return view('teachers/calificarsupletorio');
     }
 
 
