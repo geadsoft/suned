@@ -67,7 +67,6 @@ class VcPersonadd extends Component
         'AP' => 'Apoderado',
         'OT' => 'Otro',
         'NN' => 'Selecione Relacion',
-
     ];
 
     public $personaId, $nombres, $apellidos, $tipoident, $identificacion, $genero, $fechanace, $nacionalidad, $telefono, $etnia;

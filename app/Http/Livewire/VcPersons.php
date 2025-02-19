@@ -67,7 +67,10 @@ class VcPersons extends Component
 
     public function render()
     {
-        
+        if ($this->filters['srv_estado']==''){
+            $this->filters['srv_estado'] = "A";
+        }
+
         $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
         $tblgenerals = TmGeneralidades::where('superior',1)->get();
         $tblcursos   = TmCursos::query()
@@ -721,6 +724,15 @@ class VcPersons extends Component
 
     public function exportExcel(){
 
+        $this->filters['srv_estado'] = '';
+        $data = json_encode($this->filters);
+        return Excel::download(new ListaMatriculasExport($data), 'Reporte Matriculas.xlsx');
+        
+    }
+
+    public function excelActivos(){
+
+        $this->filters['srv_estado'] = 'A';
         $data = json_encode($this->filters);
         return Excel::download(new ListaMatriculasExport($data), 'Reporte Matriculas.xlsx');
 

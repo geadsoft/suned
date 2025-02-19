@@ -13,11 +13,12 @@ class VcPersonsFamily extends Component
     public $familiares, $familiar;
     public $eControl2 = 'disabled';
     public $tblgenerals;
-    public $relacion=[
-        'MA'=>'Madre',
-        'PA'=>'Padre',
-        'AP'=>'Apoderado',
-        'OT'=> 'Otro'
+    public $relacion = [
+        'MA' => 'Madre',
+        'PA' => 'Padre',
+        'AP' => 'Apoderado',
+        'OT' => 'Otro',
+        'NN' => 'Selecione Relacion',
     ];
     
     public function mount($personaId)
@@ -67,12 +68,12 @@ class VcPersonsFamily extends Component
         $this->familiarId = 0;
         $this->familiar['nombres'] = '';
         $this->familiar['apellidos'] = '';
-        $this->familiar['tipoidentificacion'] = '';
+        $this->familiar['tipoidentificacion'] = 'C';
         $this->familiar['identificacion'] = '';
         $this->familiar['genero'] = '';
         $this->familiar['nacionalidad_id'] = '';
         $this->familiar['telefono'] = '';
-        $this->familiar['parentesco'] = '';
+        $this->familiar['parentesco'] = 'NN';
         $this->familiar['email'] = '';
         $this->familiar['direccion'] = '';
         $this->eControl2 = '';

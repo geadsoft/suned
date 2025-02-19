@@ -703,7 +703,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/academic/qualify-suplerory">
+                                            <a class="nav-link menu-link" href="/academic/qualify-suppletory">
                                                 </i>Calificar Supletorios<span></span>
                                             </a>
                                         </li>
@@ -822,13 +822,13 @@
                                 <div class="menu-dropdown collapse" id="calificacion" style="">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="pages-profile.html" class="nav-link" data-key="t-simple-page">Totales</a>
+                                            <a href="/report/total-qualify" class="nav-link" data-key="t-simple-page">Totales</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Detalladas</a>
+                                            <a href="/report/detail-qualify" class="nav-link" data-key="t-settings">Detalladas</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Examenes</a>
+                                            <a href="/report/exams-qualify" class="nav-link" data-key="t-settings">Examenes</a>
                                         </li>
                                     </ul>
                                 </div>

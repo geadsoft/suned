@@ -15,26 +15,19 @@
                             <div class="mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino"  wire:change="consulta()">
-                                    <option value="1T" selected>Primer Trimestre</option>
-                                    <option value="2T">Segundo Trimestre</option>
-                                    <option value="3T">Tercer Trimestre</option>
+                                    <option value="ES" selected>Examén Supletorio</option>
+                                    <option value="ER">Examén Remedial</option>
+                                    <option value="EG">Examèn de Gracia</option>
                                 </select>
                             </div>
-                            <div class="row mb-3">
+                            <!--<div class="row mb-3">
                                 <div class="col-sm-6">
-                                    <label for="choices-publish-status-input" class="form-label fw-semibold">Bloque</label>
+                                    <label for="choices-publish-status-input" class="form-label fw-semibold">Exámen</label>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque"  wire:change="consulta()">
-                                        <option value="1P" selected>Primer Parcial</option>
+                                        <option value="3E" selected>Exámen Tercer Trimestre</option>
                                     </select>
                                 </div>
-                                <div class="col-sm-6">
-                                    <label for="choices-publish-status-input" class="form-label fw-semibold">Tipo Actividad</label>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.actividad"  wire:change="consulta()">
-                                        <option value="AI">Actividad Individual</option>
-                                        <option value="AG">Actividad Grupal</option>
-                                    </select>
-                                </div>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                     <!-- end card -->
@@ -56,28 +49,28 @@
                             <table class="table table-bordered table-sm" id="orderTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
-                                        <th style="width: 150px;">Estudiante</th>
-                                        @foreach ($tbltarea as $data)
-                                            <th style="width: 60px;">{{$data['nombre']}} ( {{$data['puntaje']}} )</th>
+                                        <th style="width: 100px;">Estudiante</th>
+                                        @foreach ($tblactividad as $data)
+                                            <th style="width: 90px;">{{$data->nombre}} ( {{$data->puntaje}} )</th>
                                         @endforeach
-                                        <th style="width: 60px;" class="text-center">Promedio</th>
+                                        <th style="width: 90px;" class="text-center">Promedio</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tbl-notas">
-                                @foreach ($tblrecords as $fil => $record)
+                                <tbody>
+                                @foreach ($tblrecords as $fil => $data)
                                 <tr id="{{$fil}}" class="detalle">
                                     <td>
-                                        <input type="text" class="form-control bg-white border-0" id="nombre-{{$fil}}" value="{{$record["nombres"]}}" disabled/>
+                                        <input type="text" class="form-control product-price bg-white border-0" id="nombre-{{$fil}}" value="{{$data["nombres"]}}" disabled/>
                                     </td>
-                                    
-                                    @foreach ($tbltarea as $col => $tarea)
-                                    <td>
-                                        <input type="number" step="0.01" class="form-control product-price bg-white border-0"
-                                        id="{{$fil}}-{{$col}}" wire:model="tblrecords.{{$fil}}.{{$col}}" />
-                                    </td>
+                                    @foreach ($tblactividad as $actividad)
+                                        <td>
+                                            <input type="number" step="0.01" class="form-control product-price bg-white border-0"
+                                            id="col-{{$fil}}" wire:model="tblrecords.{{$fil}}.{{$actividad['id']}}" />
+                                        </td>
                                     @endforeach
-                                    <td>
-                                        <input type="text" class="form-control bg-white border-0" id="promedio-{{$fil}}" value="{{$record["promedio"]}}" disabled/>
+                                    <td>   
+                                        <input type="number" step="0.01" class="form-control product-price border-0 bg-white fw-semibold text-center"
+                                            id="promedio-{{$fil}}" value="{{$data["promedio"]}}" disabled/>
                                     </td>
                                 </tr>
                                  @endforeach

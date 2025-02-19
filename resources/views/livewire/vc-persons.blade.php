@@ -75,8 +75,14 @@
                                     <li><a class="dropdown-item" href="/download-pdf/list-familys/{{$datos}}"><i class="ri-article-line align-bottom me-2 text-muted"></i> Listado de Representantes </a></li>
                                     <li><a class="dropdown-item" href="/download-pdf/student-file/{{$datos}}"><i class="ri-account-pin-circle-fill align-bottom me-2 text-muted"></i> Ficha de Estudiantes </a></li>
                                 </ul>
-                                <a href="" wire:click.prevent="exportExcel()" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-file-excel-2-line align-bottom fs-22"></i></a>
-                            </div>
+                                <button type="button" data-bs-toggle="dropdown" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle dropdown">
+                                <i class="ri-file-excel-2-line align-bottom fs-22"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="" wire:click.prevent="exportExcel()"><i class="ri-contacts-fill align-bottom me-2 text-muted"></i>Todos</a></li>
+                                    <li><a class="dropdown-item" href="" wire:click.prevent="excelActivos()"><i class="ri-user-follow-fill align-bottom me-2 text-muted"></i>Activos</a></li>
+                                </ul>
+                                </div>
                         </div>
                     </div>
                     <div class="col-md-4">

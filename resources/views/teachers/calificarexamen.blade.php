@@ -12,11 +12,11 @@
             Academico
         @endslot
         @slot('title')
-            Calificar Actividades
+            Calificar Exámenes
         @endslot
     @endcomponent
 
-    @livewire('vc-qualify-activity')
+    @livewire('vc-qualify-exams')
 
 @endsection
 @section('script')
@@ -85,11 +85,6 @@
                 })
         }) 
 
-        window.addEventListener('row-delete', event => {
-
-            $("#orderTable > tbody tr").remove();
-
-        })
 
     </script>
     

@@ -10,7 +10,7 @@ use Livewire\Component;
 class VcExamenAdd extends Component
 {
     
-    public $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
+    public $actividadId=0, $paralelo, $termino="1T", $bloque="3E", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $tblparalelo=[];
     public $array_attach=[];
 

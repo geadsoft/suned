@@ -48,6 +48,7 @@ class ListaMatriculasExport implements FromView, ShouldAutoSize
     public function __construct($filters)
     {
         $this->filters = json_decode($filters, true);
+        
     }
 
 
@@ -74,13 +75,16 @@ class ListaMatriculasExport implements FromView, ShouldAutoSize
         ->when($this->filters['srv_curso'],function($query){
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
         })
+        ->when($this->filters['srv_estado'],function($query){
+            return $query->where('m.estado',"{$this->filters['srv_estado']}");
+        })
         ->selectRaw("tm_personas.*, g.descripcion as grupo, s.descripcion as curso, c.paralelo, m.documento as nromatricula 
         ,m.created_at as creado, weekday(m.fecha) as diapersona, weekday(m.fecha) as diamatricula, 
         g2.descripcion as nacionalidad, m.fecha as fechamatricula, month(m.fecha) as mes, 
         r.nombres as nomrepre, r.apellidos as aperepre, r.identificacion as idenrepre, r.parentesco as parenrepre,
         m.registro as tipomatricula, s.nivel_id")
         ->where('tm_personas.tipopersona','=','E')
-        ->where('tm_personas.estado',$this->filters['srv_estado'])
+        /*->where('tm_personas.estado',$this->filters['srv_estado'])*/
         ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc')
         ->get();
 
@@ -138,11 +142,12 @@ class ListaMatriculasExport implements FromView, ShouldAutoSize
         }
 
          /*Resumen Estudiante por Nivel de Estudio*/
-         $resumen = [];
-         $totalMatricula = 0;
+         
          foreach($resumenN as $mes => $recno){
+            $resumen = [];
             $resumen['mes'] = $mes;
             $resumen['estudiantes'] = 0;
+            $totalMatricula = 0;
             $total = 0;
             foreach($recno as $nivel => $data){
                 $resumen[$nivel] = count($data);
@@ -168,7 +173,6 @@ class ListaMatriculasExport implements FromView, ShouldAutoSize
             $objcurso = TmCursos::find($this->filters['srv_curso']);
             $consulta['curso'] = $objcurso->servicio['descripcion']." ".$objcurso['paralelo'];
         }
-
 
         return view('export.matriculas',[
             'tblrecords'   => $grupo,

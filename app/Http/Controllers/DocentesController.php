@@ -179,5 +179,10 @@ class DocentesController extends Controller
         return view('teachers/calificarsupletorio');
     }
 
+    public function calificacion_total()
+    {
+        return view('reports/calificacion_total');
+    }
+
 
 }

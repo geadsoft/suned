@@ -48,6 +48,7 @@ Route::get('/academic/calendario',[App\Http\Controllers\TmSedesController::class
 Route::get('/academic/qualify-activity',[App\Http\Controllers\DocentesController::class, 'calificar_actividad'])->name('calificar_actividad');
 Route::get('/academic/qualify-exams',[App\Http\Controllers\DocentesController::class, 'calificar_examen'])->name('calificar_examen');
 Route::get('/academic/qualify-suppletory',[App\Http\Controllers\DocentesController::class, 'calificar_supletorio'])->name('calificar_supletorio');
+Route::get('/report/total-qualify',[App\Http\Controllers\DocentesController::class, 'calificacion_total'])->name('calificacion_total');
 
 Route::get('/headquarters/headquarters-add',[App\Http\Controllers\TmSedesController::class, 'index'])->name('index');
 Route::get('/headquarters/pension',[App\Http\Controllers\TmPensionesCabController::class, 'index'])->name('index');
