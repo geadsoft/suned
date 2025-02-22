@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Livewire;
-
 use Livewire\Component;
+use App\Models\TmSedes;
 use App\Models\TmPersonas;
 use App\Models\TrCobrosCabs;
 use App\Models\TrCobrosDets;
@@ -11,6 +11,12 @@ use App\Models\TrDeudasDets;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmGeneralidades;
 use App\Models\TmMatricula;
+use App\Models\TdFacturaEstudiantes;
+use App\Models\TrFacturasCabs;
+use App\Models\TrFacturasDets;
+
+use Illuminate\Support\Facades\DB;
+
 
 class VcEncashmentadd extends Component
 {
@@ -26,7 +32,17 @@ class VcEncashmentadd extends Component
     public $tblCobro, $objPago=[];
     public $estudiante_id=0, $grupo, $curso, $concepto, $comentario, $matricula_id, $nromatricula;
     public $tipopago='EFE', $entidadbco=0, $entidadtar=0, $valor=0, $referencia='', $cancela=0;
-
+    public $establecimiento, $ptoemision, $generaFactura=false, $dias=0, $plazo='Dias', $formapago=20;
+    public $factura=[
+        'persona_id' => 0,
+        'nui' => '',
+        'cliente' => '',
+        'direccion' => '',
+        'telefono' => '',
+        'email' => '',
+        'documento' => '',        
+    ];
+   
     public $totalPago = 0;
     public $valpago   = 0;
     public $despago   = 0;
@@ -38,7 +54,7 @@ class VcEncashmentadd extends Component
         $ldate = date('Y-m-d H:i:s');
         $this->fecha = date('Y-m-d',strtotime($ldate));
         $this->fechapago = date('Y-m-d',strtotime($ldate));
-
+        $this->tblsedes  = TmSedes::where('id','>',0)->first();
         
         $tblmatricula  = TmMatricula::find($matriculaid);
         $tblpersona    = TmPersonas::find($tblmatricula['estudiante_id']);
@@ -73,6 +89,10 @@ class VcEncashmentadd extends Component
     }
 
     public function add(){
+
+        $this->establecimiento = $this->tblsedes['establecimiento'];
+        $this->ptoemision = $this->tblsedes['punto_emision'];
+        $this->secuencia = str_pad($this->tblsedes['secuencia_factura']+1, 9, "0", STR_PAD_LEFT);
         
         $this->reset(['record']);
         $this->record['fecha']= $this->fecha;
@@ -81,7 +101,26 @@ class VcEncashmentadd extends Component
         $this->record['concepto']= "";
         $this->record['monto']= 0;  
         $this->record['estado']= 'P';
+        $this->record['fechapago']= $this->fechapago;
 
+        $datosfact = TdFacturaEstudiantes::query()
+        ->join("tm_personas as p","p.id","=","td_factura_estudiantes.persona_id")
+        ->select("p.*")
+        ->where("estudiante_id",$this->estudiante_id)
+        ->orderBy("td_factura_estudiantes.created_at","desc")
+        ->first();
+
+        if (!Empty($datosfact)){
+
+            $this->generaFactura = true;
+            $this->factura['persona_id'] = $datosfact['id'];
+            $this->factura['nui'] = $datosfact['identificacion']; 
+            $this->factura['cliente'] = $datosfact['nombres'].' '.$datosfact['apellidos'];
+            $this->factura['direccion'] = $datosfact['direccion'];
+            $this->factura['telefono'] = $datosfact['telefono']; 
+            $this->factura['email'] = $datosfact['email'];  
+            $this->factura['documento'] = $this->establecimiento.' '.$this->ptoemision.' '.$this->secuencia; 
+        }
     }
 
 
@@ -296,7 +335,18 @@ class VcEncashmentadd extends Component
         
         }
         
-        return redirect()->to('/financial/encashment');
+        if ($this->generaFactura==true){
+            $this->generaFact();
+        }else{
+
+            $mensaje = "Registro Grabado con Exito...."."\n";
+            $mensaje = $mensaje."Comprobante N° ".$this->document."\n";
+            
+            $this->dispatchBrowserEvent('msg-confirm', ['newName' => $mensaje]);
+
+        }
+
+        //return redirect()->to('/financial/encashment');
     }
 
     public function setCedula($data){
@@ -345,6 +395,169 @@ class VcEncashmentadd extends Component
 
     }
 
+    public function generaFact(){
+
+        $sqlQuery = DB::select("call sp_genera_factura_cobro(".$this->selectId.")");
+        foreach ($sqlQuery as $factura){
+            $this->enviaRIDE($factura->facturaId);
+        }
+        
+    }
+
+
+    public function enviaRIDE($facturaId){
+
+        $API_KEY = 'API_11345_12398_6614599c307e6';
+        $facCab = TrFacturasCabs::find($facturaId);
+        $facDet = TrFacturasDets::where('facturacab_id',$facturaId)->get();
+
+        $array=[
+            'api_key' => $API_KEY,
+            'codigoDoc' => '01',
+            'emisor' => '',
+            'comprador' => '',
+            'items' => '',
+            'pagos' => '',
+            'informacion_adicional'=>'',
+        ];
+
+        $emisor=[
+            "manejo_interno_secuencia"=> "NO",
+            "secuencial"=>  $facCab['documento'],
+            "fecha_emision"=> date('Y/m/d',strtotime( $facCab['fecha'])),
+        ];
+
+        switch ($facCab->persona->tipoidentificacion) {
+            case 'C':
+                $tipoident  = '05';
+                break;
+            case 'R':
+                $tipoident  = '04';
+                break;
+            case 'P':
+                $tipoident  = '06';
+                break;
+        }
+
+        $comprador=[
+            "tipo_identificacion"=>$tipoident, 
+            "identificacion"=>$facCab->persona->identificacion,
+            "razon_social"=>$facCab->persona->apellidos.' '.$facCab->persona->nombres,
+            "direccion"=>$facCab->persona->direccion,
+            "telefono"=>$facCab->persona->telefono,
+            "celular"=> null,
+            "correo"=>$facCab->persona->email,
+        ];
+
+        $arraydet=[];
+        foreach ($facDet as $recno)
+        {
+            $items=[
+                "codigo_principal"=> $recno['codigo'],
+                "codigo_auxiliar"=> null,
+                "descripcion"=>$recno['descripcion'],
+                "tipoproducto"=> 2,
+                "tipo_iva"=> 0,
+                "precio_unitario"=> floatVal($recno['precio']),
+                "cantidad"=> floatVal($recno['cantidad']),
+                "descuento"=> 0.00,
+                "tipo_ice"=> 0,
+                "valor_ice"=> 0.00,
+                "tarifa_ice"=> 0,
+            ];
+            array_push($arraydet, $items);
+        }
+
+        $pagos=[];
+        $pago=[
+            "tipo"=>'20',
+            "total"=>floatVal($facCab->neto),
+        ];
+        array_push($pagos, $pago);
+        
+        $informacion=[];
+        if ($facCab['periodo_id']>0){
+            $periodo = TmPeriodosLectivos::find($facCab['periodo_id']);
+            $datos=[
+                "nombre"=> 'Periodo',
+                "detalle"=> $periodo['descripcion'],
+            ];
+            array_push($informacion, $datos);
+        }
+
+        if ($facCab['estudiante_id']>0){
+            $persona = TmPersonas::find($facCab['estudiante_id']);
+            $datos=[
+                "nombre"=> 'Estudiante',
+                "detalle"=> $persona ['apellidos'].' '.$persona ['nombres'],
+            ];
+            array_push($informacion, $datos);
+        }  
+        
+        $array['emisor'] = $emisor;
+        $array['comprador'] = $comprador;
+        $array['items'] = $arraydet;
+        $array['pagos'] = $pagos;
+        $array['informacion_adicional'] = $informacion;
+
+        $fields = json_encode($array);
+        $fields = str_replace("\/","/",$fields);
+
+        /*Uso de API - AZUR*/
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://azur.com.ec/plataforma/api/v2/factura/emision");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($ch);
+
+        if(curl_errno($ch)){
+            echo curl_errno($ch);
+        }else{
+            $respuesta = json_decode($response,true);
+        }
+
+        curl_close($ch);
+        
+        $claveAcceso = '';
+        $mensaje = '';
+        $error = 0;
+
+        if($respuesta == null){
+            $mensaje = 'Error al Generar y Firmar Documento';
+            $error = 1;
+        }else{
+            
+            if($respuesta['creado']==true){
+            
+                $claveAcceso = $respuesta['claveacceso'];
+                $mensaje = 'Documento firmado....';
     
+                /* actualiza clave en factura*/
+                $record = TrFacturasCabs::find($facturaId);
+                $record->update([
+                    'estado' => 'F',
+                    'autorizacion' => $claveAcceso,
+                ]);
+            }else{
+
+                $error=1;
+                foreach ($respuesta['errors'] as $key)
+                {
+                    $mensaje = $mensaje.' '.$key."\n";
+                }
+            }       
+        
+        }
+        
+        $mensaje = "Registro Grabado con Exito...."."\n";
+        $mensaje = $mensaje."Comprobante N° ". $this->document."\n";
+        $mensaje = $mensaje."Factura N° ".$facCab['establecimiento'].'-'.$facCab['puntoemision'].'-'.$facCab['documento']."\n";
+        
+        $this->dispatchBrowserEvent('msg-confirm', ['newName' => $mensaje]);
+
+    }
 
 }

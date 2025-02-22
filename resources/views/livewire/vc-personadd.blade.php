@@ -32,10 +32,10 @@
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3" id="pills-bill-medical-tab" data-bs-toggle="pill"
-                                        data-bs-target="#pills-bill-medical" type="button" role="tab"
-                                        aria-controls="pills-bill-medical" aria-selected="false"><i
+                                        data-bs-target="#pills-bill-factura" type="button" role="tab"
+                                        aria-controls="pills-bill-factura" aria-selected="false"><i
                                             class="ri-bank-card-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Datos Medicos</button>
+                                            Datos Facturacion</button>
                                 </li>
                             </ul>
                         </div>
@@ -476,6 +476,19 @@
 
                             </div>
                             <!-- end tab pane -->
+
+                            <div class="tab-pane fade" id="pills-bill-factura" role="tabpanel" aria-labelledby="pills-bill-factura-tab">
+                                <div class="row">
+                                    <div class="card-header">
+                                        <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
+                                            class="mdi mdi-account-tie align-middle me-1 text-success"></i>
+                                            Datos de Facturación</h5>
+                                    </div>
+                                </div>
+                                
+                                @livewire('vc-persons-billing',['personaId' => $personaId])
+
+                            </div>
 
                             <div class="tab-pane fade" id="pills-bill-responsible" role="tabpanel"
                                 aria-labelledby="pills-bill-responsible-tab">

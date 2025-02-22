@@ -24,6 +24,7 @@
     <!--ecommerce-customer init js -->
     <script src="{{ URL::asset('assets/js/pages/financial-encashment.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script>
@@ -103,6 +104,50 @@
             Livewire.emit('postAdded',deuda_list);
         
         })
+
+
+        window.addEventListener('msg-confirm', event => {
+
+                        
+            Swal.fire({
+                title: event.detail.newName,
+                text: "",
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonText: 'OK',
+                cancelButtonText: 'No, cancel!',
+                confirmButtonClass: 'btn btn-primary w-xs me-2 mt-2',
+                cancelButtonClass: 'btn btn-danger w-xs mt-2',
+                buttonsStyling: false,
+                showCloseButton: true
+            }).then(function (result) {
+                if (result.value) {
+
+                    window.location.href = '/financial/encashment';
+
+                    /*Swal.fire({
+                        title: 'Deleted!',
+                        text: 'Your file has been deleted.',
+                        icon: 'success',
+                        confirmButtonClass: 'btn btn-primary w-xs mt-2',
+                        buttonsStyling: false
+                    })*/
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    Swal.fire({
+                    title: 'Cancelado',
+                    text: 'Calificaciones sin registrar...',
+                    icon: 'error',
+                    confirmButtonClass: 'btn btn-primary mt-2',
+                    buttonsStyling: false
+                    })
+                }
+            });
+
+        })
+
 
     </script>    
     

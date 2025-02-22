@@ -302,8 +302,7 @@
                                             <div class="mb-3">
                                                  <label for="billinginfo-firstName" class="form-label">ID</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="billinginfo-firstName" placeholder="Enter ID" value="">
-                                                    
+                                                    <input type="text" class="form-control" id="billinginfo-firstName" placeholder="Enter ID" value='{{$factura['nui']}}' disabled>                                                    
                                                     <a id="btnbuscar" class ="input-group-text btn btn-soft-secondary"><i class="ri-user-search-fill me-1"></i></a>
                                                 </div>
                                             </div>
@@ -313,7 +312,7 @@
                                             <div class="mb-3">
                                                 <label for="billinginfo-lastName" class="form-label">Cliente</label>
                                                 <input type="text" class="form-control" id="billinginfo-lastName"
-                                                    placeholder="Enter last name" value="">
+                                                    placeholder="Enter last name" value='{{$factura['cliente']}}' disabled/>
                                             </div>
                                         </div>
                                     </div>
@@ -324,22 +323,22 @@
                                                 <label for="billinginfo-email" class="form-label">Email
                                                     <span class="text-muted">(Optional)</span></label>
                                                 <input type="email" class="form-control" id="billinginfo-email"
-                                                    placeholder="Enter email">
+                                                    placeholder="Enter email" value='{{$factura['email']}}' disabled/>
                                             </div>
-                                        </div>
+                                        </div> 
 
                                         <div class="col-sm-6">
                                             <div class="mb-3">
                                                 <label for="billinginfo-phone" class="form-label">Teléfono</label>
                                                 <input type="text" class="form-control" id="billinginfo-phone"
-                                                    placeholder="Enter phone no.">
+                                                    placeholder="Enter phone no." value='{{$factura['telefono']}}' disabled>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="billinginfo-address" class="form-label">Dirección</label>
-                                        <textarea class="form-control" id="billinginfo-address" placeholder="Enter address" rows="3"></textarea>
+                                        <textarea class="form-control" id="billinginfo-address" placeholder="Enter address" rows="3" disabled>{{$factura['direccion']}}</textarea>
                                     </div>
 
                                     <div class="mt-4">
@@ -354,7 +353,7 @@
                                                         <!--<span class="fs-21 float-end mt-2 text-wrap d-block fw-semibold">$24.99</span>-->
                                                         <input type="text" class="form-control bg-white border-0 text-end fs-21 float-end mt-2 text-wrap d-block fw-semibold" id="cart-totalfact" placeholder="$0.00" readonly />
                                                         <span class="fs-15 mb-1 text-wrap d-block">Total</span>
-                                                        <span class="text-muted fw-normal text-wrap d-block">Fact. No. 001-001-000001234</span>
+                                                        <span class="text-muted fw-normal text-wrap d-block">Fact. No. {{$factura['documento']}}</span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -404,7 +403,11 @@
                         </div>
                         <div class="flex-shrink-0">
                             <div class="form-check form-check-success" >
-                                <input class="form-check-input" type="checkbox" name="chkbill" id="chkbill" onchange="chkbill()">
+                                @if ($generaFactura==true)
+                                    <input class="form-check-input" type="checkbox" name="chkbill" id="chkbill" onchange="chkbill()" checked>
+                                @else
+                                    <input class="form-check-input" type="checkbox" name="chkbill" id="chkbill" onchange="chkbill()">
+                                @endif
                                 <label class="form-check-label fs-15" for="chkbill">Facturar</label>
                             </div>
                         </div>
