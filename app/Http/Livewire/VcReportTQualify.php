@@ -15,7 +15,9 @@ class VcReportTQualify extends Component
     
     //public $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $nivel,$subtitulo,$docente,$asignatura,$curso;
+    public $asignaturaId=0;
 
+    public $tblasignatura=[];
     public $tblparalelo=[];
     public $tblactividad=[];
     public $tblrecords=[];
@@ -33,14 +35,7 @@ class VcReportTQualify extends Component
     public function mount()
     {
         
-        $this->tblparalelo = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",2913)
-        ->selectRaw('d.id, concat(m.descripcion," - ",s.descripcion," ",c.paralelo) as descripcion')
-        ->get();
+        $this->docenteId = auth()->user()->personaId;
 
         if (!empty($this->tblparalelo)){
             $this->filters['paralelo'] = $this->tblparalelo[0]["id"];
@@ -51,16 +46,39 @@ class VcReportTQualify extends Component
 
     public function render()
     {
+        $this->tblasignatura = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("d.docente_id",$this->docenteId)
+        ->selectRaw('m.id, m.descripcion')
+        ->groupBy('m.id','m.descripcion')
+        ->get();
+
         $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",2913)
-        ->selectRaw('d.id, concat(m.descripcion," - ",s.descripcion," ",c.paralelo) as descripcion')
+        ->where("d.docente_id",$this->docenteId)
+        ->where("m.id",$this->asignaturaId)
+        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
         return view('livewire.vc-report-t-qualify');
+    }
+
+    public function updatedasignaturaId($id){
+
+        $this->tblparalelo = TmHorarios::query()
+        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
+        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("d.docente_id",$this->docenteId)
+        ->where("m.id",$id)
+        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
+        ->get();
+
     }
 
     public function consulta(){

@@ -10,22 +10,24 @@ use Livewire\Component;
 class VcExamenAdd extends Component
 {
     
-    public $actividadId=0, $paralelo, $termino="1T", $bloque="3E", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
-    public $tblparalelo=[];
+    public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="3E", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
+    public $tblparalelo=[], $tblasignatura=[];
     public $array_attach=[];
+    public $docenteId;
 
     public function mount($id)
     {
+        $this->docenteId = auth()->user()->personaId;
         $this->attach_add();
 
-        $this->tblparalelo = TmHorarios::query()
+        /*$this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
         ->where("d.docente_id",2913)
         ->selectRaw('d.id, concat(m.descripcion," - ",s.descripcion," ",c.paralelo) as descripcion')
-        ->get();
+        ->get();*/
 
         if (!empty($this->tblparalelo)){
             $this->paralelo = $this->tblparalelo[0]["id"];
@@ -39,7 +41,17 @@ class VcExamenAdd extends Component
     
     public function render()
     {
-        return view('livewire.vc-examen-add');
+        $this->tblasignatura = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("d.docente_id",$this->docenteId)
+        ->selectRaw('m.id, m.descripcion')
+        ->groupBy('m.id','m.descripcion')
+        ->get();
+
+        return view('livewire.vc-examen-add',[
+            'tblasignatura' => $this->tblasignatura,
+        ]);
     }
 
 
@@ -51,6 +63,9 @@ class VcExamenAdd extends Component
         ->where("tm_actividades.id",$id)
         ->first()
         ->toArray();
+
+        $this->asignaturaId = $record['asignatura_id'];
+        $this->updatedasignaturaId($this->asignaturaId);
 
         $this->actividadId = $id;
         $this->paralelo = $record['paralelo'];
@@ -69,6 +84,23 @@ class VcExamenAdd extends Component
         $this->descripcion=".";
 
     }
+
+    public function updatedasignaturaId($id){
+
+        $this->tblparalelo = TmHorarios::query()
+        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
+        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("d.docente_id",$this->docenteId)
+        ->where("m.id",$id)
+        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
+        ->get();
+
+        $message = "";
+        $this->dispatchBrowserEvent('chk-editor', ['newName' => $message]);
+    }
+
 
     public function createData(){
 

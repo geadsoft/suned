@@ -10,11 +10,12 @@ use Livewire\Component;
 
 class VcQualifySupletory extends Component
 {
-    public $actividadId=0, $paralelo, $termino="1T", $bloque="ES", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
-    public $tblparalelo=[];
+    public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="ES", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
+    public $tblparalelo=[], $tblasignatura=[];
     public $tblactividad=[];
     public $tblrecords=[];
     public $personas=[];
+    public $docenteId;
 
     public $filters=[
         'paralelo' => 0, 
@@ -27,15 +28,7 @@ class VcQualifySupletory extends Component
 
     public function mount()
     {
-        
-        $this->tblparalelo = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",2913)
-        ->selectRaw('d.id, concat(m.descripcion," - ",s.descripcion," ",c.paralelo) as descripcion')
-        ->get();
+        $this->docenteId = auth()->user()->personaId;
 
         if (!empty($this->tblparalelo)){
             $this->filters['paralelo'] = $this->tblparalelo[0]["id"];
@@ -46,13 +39,22 @@ class VcQualifySupletory extends Component
 
     public function render()
     {
+        $this->tblasignatura = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("d.docente_id",$this->docenteId)
+        ->selectRaw('m.id, m.descripcion')
+        ->groupBy('m.id','m.descripcion')
+        ->get();
+
         $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",2913)
-        ->selectRaw('d.id, concat(m.descripcion," - ",s.descripcion," ",c.paralelo) as descripcion')
+        ->where("d.docente_id",$this->docenteId)
+        ->where("m.id",$this->asignaturaId)
+        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
         return view('livewire.vc-qualify-supletory',[
@@ -60,6 +62,20 @@ class VcQualifySupletory extends Component
             'tblactividad' => $this->tblactividad,
             'tblparalelo' => $this->tblparalelo,
         ]);
+
+    }
+
+    public function updatedasignaturaId($id){
+
+        $this->tblparalelo = TmHorarios::query()
+        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
+        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("d.docente_id",$this->docenteId)
+        ->where("m.id",$id)
+        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
+        ->get();
 
     }
 
