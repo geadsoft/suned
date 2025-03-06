@@ -34,6 +34,8 @@
                                 <div class="col-sm-6">
                                     <label for="choices-publish-status-input" class="form-label fw-semibold">Exámen</label>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="bloque" {{$control}}>
+                                        <option value="1E" selected>Primer Trimestre</option>
+                                        <option value="2E" selected>Segundo Trimestre</option>
                                         <option value="3E" selected>Tercer Trimestre</option>
                                     </select>
                                 </div>

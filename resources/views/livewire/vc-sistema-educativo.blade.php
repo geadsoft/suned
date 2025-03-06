@@ -21,14 +21,14 @@
                                 </div>
                                 <div class="col-sm-10"> 
                                     <div class="mb-3">
-                                        <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="$periodo" required>
+                                        <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="periodo" required>
                                              @foreach ($plectivo as $lectivo) 
                                             <option value="{{$lectivo->id}}">{{$lectivo->descripcion}}</option>
                                             @endforeach
                                         </select>
                                     </div> 
                                     <div class="mb-3">
-                                        <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="$periodo" required>
+                                        <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="metodo">
                                             <option value="T" selected>TRIMESTRE</option>
                                             <option value="Q">QUIMESTRE</option>
                                         </select>
@@ -69,9 +69,12 @@
                             <div class="mb-3">
                                 <table class="table table-nowrap align-middle table-sm" id="orderTable">
                                     <thead class="text-muted table-light">
-                                        <tr class="text-uppercase">
+                                        <tr class="text-uppercase text-center">
                                             <th style="width: 150px;">Linea</th>
                                             <th>Descripción</th>
+                                            <th style="width: 70px;">1er T.</th>
+                                            <th style="width: 70px;">2do T.</th>
+                                            <th style="width: 70px;">3er T.</th>
                                             <th style="width: 150px;">Acción</th>
                                         </tr>
                                     </thead>
@@ -82,7 +85,16 @@
                                         <input type="text" id="linea-{{$key}}" wire:model.prevent="arrparcial.{{$key}}.linea" class="form-control" disabled>
                                     </td>
                                     <td>
-                                        <input type="text" id="name-{{$key}}" wire:model.prevent="arrparcial.{{$key}}.descripcion" class="form-control">
+                                        <input type="check" id="name-{{$key}}" wire:model.prevent="arrparcial.{{$key}}.descripcion" class="form-control">
+                                    </td>
+                                    <td class="text-center">
+                                        <input class="form-check-input" type="checkbox" name="chkbill" id="1er-{{$key}}" wire:model.prevent="arrparcial.{{$key}}.1er">
+                                    </td>
+                                    <td class="text-center">
+                                        <input class="form-check-input" type="checkbox" name="chkbill" id="2do-{{$key}}" wire:model.prevent="arrparcial.{{$key}}.2do">
+                                    </td>
+                                    <td class="text-center">
+                                       <input class="form-check-input" type="checkbox" name="chkbill" id="3er-{{$key}}" wire:model.prevent="arrparcial.{{$key}}.3er">
                                     </td>
                                     <td>
                                         <ul class="list-inline hstack gap-2 mb-0">

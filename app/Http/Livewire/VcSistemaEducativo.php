@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class VcSistemaEducativo extends Component
 {
-    public $periodo, $plectivo;
+    public $periodo, $plectivo, $metodo;
     public $arrmetodo=[];
     public $arrparcial=[];
     public $arractividad=[];
@@ -29,8 +29,15 @@ class VcSistemaEducativo extends Component
         ]);
     }
 
+
+    public function updatedmetodo()
+    {
+        $this->addarr($this->metodo);
+    }
+
     public function addarr($ciclo)
     {
+        $this->arrparcial=[];
 
         if ($ciclo=="Q"){
 
@@ -69,6 +76,9 @@ class VcSistemaEducativo extends Component
             $array = [
                 'linea' =>  $x+1,
                 'descripcion' => 'Parcial '.$x+1,
+                '1er' => false,
+                '2do' => false,
+                '3er' => false,
             ];
             array_push($this->arrparcial, $array);
         };
@@ -89,5 +99,7 @@ class VcSistemaEducativo extends Component
         
     
     }
+
+
 
 }

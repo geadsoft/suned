@@ -166,9 +166,9 @@ class VcReportDebtAnalysis extends Component
         ->when($this->filters['srv_mes'],function($query){
             return $query->whereRaw("tr_deudas_cabs.fecha <= '".$this->lsfecha."'");
         })
-        ->when($this->filters['srv_grado']<>'',function($query){
+        /*->when($this->filters['srv_grado']<>'',function($query){
             return $query->whereRaw("left(referencia,3) <> 'DGR'");
-        })
+        })*/
         ->when($this->filters['srv_grado']==true,function($query){
             return $query->whereRaw("left(referencia,3) = left(referencia,3)");
         })

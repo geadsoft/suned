@@ -196,15 +196,6 @@ class VcQualifyActivity extends Component
 
         }
 
-        /*$this->arrnotas = $notas;
-        foreach ($notas as $record)
-        {
-            $index = $record['persona_id'];
-            $actidadId = $record['actividad_id'];
-            $nota =  $record['nota'];
-            
-            $this->tblrecords[$index][$actidadId] = $nota; 
-        }*/
 
     }
 
