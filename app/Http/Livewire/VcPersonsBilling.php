@@ -22,15 +22,21 @@ class VcPersonsBilling extends Component
         'NN' => 'Selecione Relacion',
     ];
     
+    protected $listeners = ['setGrabaFactura'];
+
     public function mount($personaId)
     {
-        
+
         $this->tblgenerals = TmGeneralidades::where('superior',7)->get();
 
         if($personaId>0){
             $this->personaId = $personaId;
             $this->loadFamiliar();
+        }else{
+            $this->familiares = [];
+            $this->eControl2 = '';
         }
+
         
     }
 
@@ -47,7 +53,7 @@ class VcPersonsBilling extends Component
         $this->familiares = TdFacturaEstudiantes::query()
         ->join("tm_personas as p","p.id","=","td_factura_estudiantes.persona_id")
         ->where('estudiante_id',$this->personaId)
-        ->select('p.*')
+        ->selectRaw('p.id,p.nombres,p.apellidos,p.tipoidentificacion,p.identificacion,p.genero,p.nacionalidad_id,p.telefono,p.parentesco,p.email,p.direccion')
         ->get()->toArray(); 
 
     }
@@ -68,6 +74,7 @@ class VcPersonsBilling extends Component
     public function newData(){
 
         $this->familiarId = 0;
+        $this->familiar['id'] = 0;
         $this->familiar['nombres'] = '';
         $this->familiar['apellidos'] = '';
         $this->familiar['tipoidentificacion'] = 'C';
@@ -92,44 +99,150 @@ class VcPersonsBilling extends Component
         
     }
 
-    public function createData(){
+    public function setGrabaFactura($personaId){
 
-        if ($this->exists==true){
-            $this->updateData();
-        } 
-        else {
 
-            $familiar = TmPersonas::Create([
-                'nombres' => $this -> familiar['nombres'],
-                'apellidos' => $this -> familiar['apellidos'],
-                'tipoidentificacion' => $this -> familiar['tipoidentificacion'],
-                'identificacion' => $this -> familiar['identificacion'],
-                'genero' => '',
-                'fechanacimiento' => "1900-01-01",
-                'nacionalidad_id' => $this -> familiar['nacionalidad_id'],
-                'telefono' => $this -> familiar['telefono'],
-                'email' => $this -> familiar['email'],
-                'etnia' => "",
-                'parentesco' => $this -> familiar['parentesco'],
-                'tipopersona' => "F",
-                'relacion_id' => 0,
-                'direccion' => $this->familiar['direccion'],
-                'usuario' => auth()->user()->name,
-                'estado' => "A",
-            ]);
+        foreach ($this->familiares as $index => $recno)
+        {
+           
+            if ($recno['id']>0){
 
-            TdFacturaEstudiantes::Create([
-                'estudiante_id'=> $this->personaId,
-                'persona_id'=> $familiar['id'],
-                'informacion'=>'',
-                'usuario' => auth()->user()->name,
-            ]);
+                $record = TmPersonas::find($recno['id']);
+                $record->update([
+                    'nombres' => $recno['nombres'],
+                    'apellidos' => $recno['apellidos'],
+                    'tipoidentificacion' => $recno['tipoidentificacion'],
+                    'identificacion' => $recno['identificacion'],
+                    'genero' => $recno['genero'],
+                    'telefono' => $recno['telefono'],
+                    'direccion' => $recno['direccion'],
+                    'email' => $recno['email'],
+                    ]);
 
-            $this->newData(); 
-            $this->loadFamiliar();
-            $this->eControl2 = 'disabled'; 
+                $factura = TdFacturaEstudiantes::query()
+                ->where("estudiante_id",$personaId)
+                ->where("persona_id",$recno['id'])
+                ->first();
+
+                if (empty($factura)){
+
+                    TdFacturaEstudiantes::Create([
+                        'estudiante_id'=> $personaId,
+                        'persona_id'=> $recno['id'],
+                        'informacion'=>'',
+                        'usuario' => auth()->user()->name,
+                    ]);
+
+                }
+
+            }else{
+
+                $records = TmPersonas::where("identificacion",$recno['identificacion'])->first();
+
+                if (!empty($records)){
+                    
+                    TdFacturaEstudiantes::Create([
+                        'estudiante_id'=> $personaId,
+                        'persona_id'=> $records['id'],
+                        'informacion'=>'',
+                        'usuario' => auth()->user()->name,
+                    ]);
+
+                }else{
+
+                    $familiar = TmPersonas::Create([
+                        'nombres' => $recno['nombres'],
+                        'apellidos' => $recno['apellidos'],
+                        'tipoidentificacion' => $recno['tipoidentificacion'],
+                        'identificacion' => $recno['identificacion'],
+                        'genero' => '',
+                        'fechanacimiento' => "1900-01-01",
+                        'nacionalidad_id' => $recno['nacionalidad_id'],
+                        'telefono' => $recno['telefono'],
+                        'email' => $recno['email'],
+                        'etnia' => "",
+                        'parentesco' => $recno['parentesco'],
+                        'tipopersona' => "F",
+                        'relacion_id' => 0,
+                        'direccion' => $recno['direccion'],
+                        'usuario' => auth()->user()->name,
+                        'estado' => "A",
+                    ]);
+
+                    TdFacturaEstudiantes::Create([
+                        'estudiante_id'=> $personaId,
+                        'persona_id'=> $familiar['id'],
+                        'informacion'=>'',
+                        'usuario' => auth()->user()->name,
+                    ]);
+                }
+            }
+
 
         }
+
+        
+    }
+
+    public function createData(){
+    
+        $recnoToDelete = $this->familiares;
+        foreach ($recnoToDelete as $index => $recno)
+        {
+            if ($recno['id'] == $this->familiarId){
+                unset ($recnoToDelete[$index]);
+            } 
+        }
+        $this->reset(['familiares']);
+        $this->familiares = $recnoToDelete;
+
+        array_push($this->familiares,$this->familiar);
+        $this->newData();
+
+        /*if ($this->modulo="Matricula"){
+
+            $this->familiares =  $this->familiar;
+
+        }else{
+
+            if ($this->exists==true){
+                $this->updateData();
+            } 
+            else {
+
+                $familiar = TmPersonas::Create([
+                    'nombres' => $this -> familiar['nombres'],
+                    'apellidos' => $this -> familiar['apellidos'],
+                    'tipoidentificacion' => $this -> familiar['tipoidentificacion'],
+                    'identificacion' => $this -> familiar['identificacion'],
+                    'genero' => '',
+                    'fechanacimiento' => "1900-01-01",
+                    'nacionalidad_id' => $this -> familiar['nacionalidad_id'],
+                    'telefono' => $this -> familiar['telefono'],
+                    'email' => $this -> familiar['email'],
+                    'etnia' => "",
+                    'parentesco' => $this -> familiar['parentesco'],
+                    'tipopersona' => "F",
+                    'relacion_id' => 0,
+                    'direccion' => $this->familiar['direccion'],
+                    'usuario' => auth()->user()->name,
+                    'estado' => "A",
+                ]);
+
+                TdFacturaEstudiantes::Create([
+                    'estudiante_id'=> $this->personaId,
+                    'persona_id'=> $familiar['id'],
+                    'informacion'=>'',
+                    'usuario' => auth()->user()->name,
+                ]);
+
+                $this->newData(); 
+                $this->loadFamiliar();
+                $this->eControl2 = 'disabled'; 
+
+            }
+
+        }*/
 
     }
 

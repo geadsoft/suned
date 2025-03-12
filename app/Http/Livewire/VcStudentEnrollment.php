@@ -194,6 +194,10 @@ class VcStudentEnrollment extends Component
         }
 
         $this->dispatchBrowserEvent('get-data');
+
+        $this->dispatchBrowserEvent('msg-grabar');
+        return redirect()->to('/academic/tuition');
+
     }
 
     public function postAdded($objData, $objPers)
@@ -360,8 +364,7 @@ class VcStudentEnrollment extends Component
         }
         /* Fin Representante */
 
-        $this->dispatchBrowserEvent('msg-grabar');
-        return redirect()->to('/academic/tuition');
+        $this->emitTo('vc-persons-billing','setGrabaFactura',$this->estudiante_id );
         
     }
 

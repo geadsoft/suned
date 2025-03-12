@@ -11,16 +11,16 @@ use App\Models\TdCalificacionActividades;
 use Livewire\Component;
 use PDF;
 
-use App\Exports\CalificacionesTotalesExport;
+use App\Exports\CalificacionesDetalladas;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\Exportable;
 
-class VcReportTQualify extends Component
+
+class VcReportPartialTeacher extends Component
 {
-    
     use Exportable;
 
-    public $nivel,$subtitulo="",$docente="",$materia="",$curso="";
+    public $nivel,$subtitulo="",$docente="",$materia="",$curso="", $periodolectivo="";
     public $asignaturaId=0, $fechaActual, $horaactual, $datos, $colspan=3;
 
     public $tblasignatura=[];
@@ -38,20 +38,16 @@ class VcReportTQualify extends Component
         'actividad' => 'AI',
     ];
 
-    protected $listeners = ['setData'];
-
     public function mount()
     {
-        
-        $this->docenteId = auth()->user()->personaId;
+
         $this->filters['docenteId'] = auth()->user()->personaId;
         $this->fechaActual = date("d/m/Y");
         $this->horaActual  = date("H:i:s");
 
         $periodo = TmPeriodosLectivos::where("estado","A")
         ->first();
-        $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion'].'/ - ';
-
+        $this->periodolectivo = "Periodo Lectivo ".$periodo['descripcion'];
 
         if (!empty($this->tblparalelo)){
             $this->filters['paralelo'] = $this->tblparalelo[0]["id"];
@@ -59,13 +55,14 @@ class VcReportTQualify extends Component
         }
 
     }
-
+    
     public function render()
     {
+        
         $this->tblasignatura = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->docenteId)
+        ->where("d.docente_id",$this->filters['docenteId'])
         ->selectRaw('m.id, m.descripcion')
         ->groupBy('m.id','m.descripcion')
         ->get();
@@ -75,12 +72,12 @@ class VcReportTQualify extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->docenteId)
+        ->where("d.docente_id",$this->filters['docenteId'])
         ->where("m.id",$this->asignaturaId)
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
-
-        return view('livewire.vc-report-t-qualify');
+        
+        return view('livewire.vc-report-partial-teacher');
     }
 
     public function updatedasignaturaId($id){
@@ -90,7 +87,7 @@ class VcReportTQualify extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->docenteId)
+        ->where("d.docente_id",$this->filters['docenteId'])
         ->where("m.id",$id)
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
@@ -122,7 +119,7 @@ class VcReportTQualify extends Component
 
     public function consulta(){
 
-        $docente = TmPersonas::find($this->docenteId);
+        $docente = TmPersonas::find($this->filters['docenteId']);
         $this->fechaActual = date("d/m/Y");
         $this->horaActual  = date("H:i:s");
 
@@ -132,7 +129,7 @@ class VcReportTQualify extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->docenteId)
+        ->where("d.docente_id",$this->filters['docenteId'])
         ->where("d.id",$this->filters['paralelo'])
         ->selectRaw('d.id, m.descripcion as asignatura,s.descripcion as servicio,c.paralelo, n.descripcion as nivel, tm_horarios.periodo_id')
         ->first();
@@ -193,6 +190,8 @@ class VcReportTQualify extends Component
 
             $this->tblrecords[$key]['promedio'] = 0.00;
             $this->tblrecords[$key]['cualitativa'] = "";
+            $this->tblrecords[$key]['recomendacion'] = "";
+            $this->tblrecords[$key]['planmejora'] = "";
         }
         $this->tblrecords['ZZ']['id'] = 0;
         $this->tblrecords['ZZ']['personaId'] = 0;
@@ -211,6 +210,8 @@ class VcReportTQualify extends Component
 
         $this->tblrecords['ZZ']['promedio'] = 0.00;
         $this->tblrecords['ZZ']['cualitativa'] = "";
+        $this->tblrecords['ZZ']['recomendacion'] = "";
+        $this->tblrecords['ZZ']['planmejora'] = "";
         
         
     }
@@ -242,7 +243,7 @@ class VcReportTQualify extends Component
                         return $query->where('bloque',"{$this->filters['bloque']}");
                     })
                     ->where("tipo","AC")
-                    ->where("docente_id",$this->docenteId)
+                    ->where("docente_id",$this->filters['docenteId'])
                     ->where("actividad_id",$actividadId)
                     ->where("persona_id",$personaId)
                     ->select("n.*")
@@ -318,6 +319,8 @@ class VcReportTQualify extends Component
 
             $tblrecords[$key]['promedio'] = 0.00;
             $tblrecords[$key]['cualitativa'] = "";
+            $tblrecords[$key]['recomendacion'] = "";
+            $tblrecords[$key]['planmejora'] = "";
         }
 
         $tblrecords['ZZ']['id'] = 0;
@@ -337,6 +340,8 @@ class VcReportTQualify extends Component
 
         $tblrecords['ZZ']['promedio'] = 0.00;
         $tblrecords['ZZ']['cualitativa'] = "";
+        $tblrecords['ZZ']['recomendacion'] = "";
+        $tblrecords['ZZ']['planmejora'] = "";
 
 
         // Asigna Notas //
@@ -433,6 +438,7 @@ class VcReportTQualify extends Component
             'docente' => $docente['apellidos'].' '.$docente['nombres'],
             'materia' => $titulo['asignatura'],
             'curso' => $titulo['servicio'].' '.$titulo['paralelo'],
+            'periodolectivo' => $periodo['descripcion'],
         ];
        
         $tblactividad = $this->actividad();
@@ -440,7 +446,7 @@ class VcReportTQualify extends Component
 
         $tblrecords = $this->reporte();
 
-        $pdf = PDF::loadView('pdf/reporte_calificacion_total',[
+        $pdf = PDF::loadView('pdf/reporte_informe_parcial',[
             'tblrecords' => $tblrecords,
             'tblgrupo' => $tblgrupo,
             'datos' => $datos,
@@ -448,14 +454,8 @@ class VcReportTQualify extends Component
             'horaActual' => $horaActual,
         ]);
 
-        return $pdf->setPaper('a4')->stream('Calificaciones Totales.pdf');
+        return $pdf->setPaper('a4')->stream('Informe Docente Parcial.pdf');
     }
 
-    public function exportExcel(){
 
-        $data = json_encode($this->filters);
-        return Excel::download(new CalificacionesTotalesExport($data), 'Calificaciones Totales.xlsx');
-
-    }
-    
 }

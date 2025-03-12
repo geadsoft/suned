@@ -26,6 +26,9 @@ function backTab(SelectTab) {
         case 'pills-bill-registration':
             document.getElementById('pills-bill-registration-tab').click()
             break
+        case 'pills-bill-factura':
+                document.getElementById('pills-bill-factura-tab').click()
+                break
         case 'pills-bill-finish':
             document.getElementById('pills-bill-finish-tab').click()
             break
@@ -81,10 +84,12 @@ function selecTab(SelectTab) {
             break
         case 'pills-bill-registration':
             
-            
-           
             document.getElementById('pills-bill-registration-tab').click()
             break
+        case 'pills-bill-factura':
+            
+            document.getElementById('pills-bill-factura-tab').click()
+
         case 'pills-bill-finish':
             
             var pernombres   = document.getElementById("pernombres").value

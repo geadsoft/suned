@@ -13,41 +13,48 @@
                                         data-bs-target="#pills-bill-info" type="button" role="tab"
                                         aria-controls="pills-bill-info" aria-selected="false"><i
                                             class=" ri-open-source-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Student ID</button>
+                                            Identificación</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3 active" id="pills-bill-student-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-students" type="button" role="tab"
                                         aria-controls="pills-bill-students" aria-selected="true"><i
                                             class="ri-user-2-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Student</button>
+                                            Estudiante</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3" id="pills-bill-responsible-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-responsible" type="button" role="tab"
                                         aria-controls="pills-bill-responsible" aria-selected="false"><i
                                             class="ri-bank-card-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Representative</button>
+                                            Representante</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3" id="pills-bill-family-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-family" type="button" role="tab"
                                         aria-controls="pills-bill-family" aria-selected="false"><i
                                             class="ri-parent-fill fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Family Data</button>
+                                            Familiares</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link fs-15 p-3" id="pills-bill-factura-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-bill-factura" type="button" role="tab"
+                                        aria-controls="pills-bill-factura" aria-selected="false"><i
+                                            class="ri-shopping-cart-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
+                                            Facturación</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3" id="pills-bill-registration-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-registration" type="button" role="tab"
                                         aria-controls="pills-bill-registration" aria-selected="false"><i
                                             class="ri-file-user-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Registration</button>
+                                            Registro</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3" id="pills-bill-finish-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-finish" type="button" role="tab" aria-controls="pills-finish"
                                         aria-selected="false"><i
-                                            class="ri-checkbox-circle-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>Confirmation</button>
+                                            class="ri-checkbox-circle-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>Confirmación</button>
                                 </li>
                             </ul>
                         </div>
@@ -311,10 +318,10 @@
                                 <div class="d-flex align-items-start gap-3 mt-4">
                                     <button type="button" class="btn btn-light btn-label previestab"
                                         data-previous="pills-bill-students-tab" onclick="backTab('pills-bill-students')"><i
-                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back Student ID</button>
+                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Volver Identificación</button>
                                     <button type="button" class="btn btn-primary btn-label right ms-auto nexttab"
                                         data-nexttab="pills-responsible-tab" onclick="selecTab('pills-bill-responsible')"><i
-                                            class="ri-bank-card-line label-icon align-middle fs-16 ms-2"></i>Continue to Representative</button>
+                                            class="ri-bank-card-line label-icon align-middle fs-16 ms-2"></i>Continue a Representante</button>
                                 </div>    
                             </div>
 
@@ -338,13 +345,35 @@
                                 <div class="d-flex align-items-start gap-3 mt-4">
                                     <button type="button" class="btn btn-light btn-label previestab"
                                         data-previous="pills-bill-info-tab" onclick="backTab('pills-bill-students')"><i
-                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back Student</button>
+                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Volver Estudiante</button>
                                     <button type="button" class="btn btn-primary btn-label right ms-auto nexttab"
                                         data-nexttab="pills-bill-registration-tab" onclick="selecTab('pills-bill-family')"><i
-                                            class="ri-file-user-line label-icon align-middle fs-16 ms-2"></i>Continue to FamilyData</button>
+                                            class="ri-file-user-line label-icon align-middle fs-16 ms-2"></i>Continue a Familiares</button>
                                 </div>    
                             </div>
                             <!-- end tab pane -->
+
+                            <div class="tab-pane fade" id="pills-bill-factura" role="tabpanel" aria-labelledby="pills-bill-factura-tab">
+                                <div class="row">
+                                    <div class="card-header">
+                                        <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
+                                            class="mdi mdi-account-tie align-middle me-1 text-success"></i>
+                                            Datos de Facturación</h5>
+                                    </div>
+                                </div>
+                                
+                                @livewire('vc-persons-billing',['personaId' => $estudiante_id])
+
+                                <div class="d-flex align-items-start gap-3 mt-4">
+                                    <button type="button" class="btn btn-light btn-label previestab"
+                                        data-previous="pills-family-tab" onclick="backTab('pills-bill-family')"><i
+                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Volver Familiares</button>
+                                    <button type="button" class="btn btn-primary btn-label right ms-auto nexttab"
+                                        data-nexttab="pills-registration-tab" onclick="selecTab('pills-bill-registration')"><i
+                                            class="ri-bank-card-line label-icon align-middle fs-16 ms-2"></i>Continue a Registro</button>
+                                </div> 
+
+                            </div>
 
                             <div class="tab-pane fade" id="pills-bill-family" role="tabpanel" aria-labelledby="pills-bill-family-tab">
                                 <div class="row">
@@ -523,10 +552,10 @@
                                 <div class="d-flex align-items-start gap-3 mt-4">
                                     <button type="button" class="btn btn-light btn-label previestab"
                                         data-previous="pills-bill-info-tab" onclick="backTab('pills-bill-responsible')"><i
-                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back Representative</button>
+                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Volver Representante</button>
                                     <button type="button" class="btn btn-primary btn-label right ms-auto nexttab"
-                                        data-nexttab="pills-bill-registration-tab" onclick="selecTab('pills-bill-registration')"><i
-                                            class="ri-file-user-line label-icon align-middle fs-16 ms-2"></i>Continue to Registration</button>
+                                        data-nexttab="pills-bill-factura-tab" onclick="selecTab('pills-bill-factura')"><i
+                                            class="ri-file-user-line label-icon align-middle fs-16 ms-2"></i>Continue a Facturación</button>
                                 </div>
                             </div>
                             
@@ -606,11 +635,11 @@
 
                                 <div class="d-flex align-items-start gap-3 mt-4">
                                     <button type="button" class="btn btn-light btn-label previestab"
-                                        data-previous="pills-bill-registration-tab" onclick="backTab('pills-bill-family')"><i
-                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back to Family Data</button>
+                                        data-previous="pills-bill-registration-tab" onclick="backTab('pills-bill-factura')"><i
+                                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Volver Facturación</button>
                                     <button type="button" class="btn btn-primary btn-label right ms-auto nexttab"
                                         data-nexttab="pills-finish-tab" onclick="selecTab('pills-bill-finish')"><i
-                                            class="ri-contacts-book-line label-icon align-middle fs-16 ms-2"></i>Complete Registration</button>
+                                            class="ri-contacts-book-line label-icon align-middle fs-16 ms-2"></i>Registro Completo</button>
                                 </div>
                             </div>
                             <!-- end tab pane -->

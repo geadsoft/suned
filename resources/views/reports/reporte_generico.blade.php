@@ -103,7 +103,7 @@
                     <td width="40%">
                         <span>SAMS | School and Administrative Management System</span>
                     </td>
-                    <td width="40%" class="text-left">
+                    <td width="30%" class="text-left">
                         Usuario:<span> {{auth()->user()->name}} </span>
                     </td>
                 </tr>

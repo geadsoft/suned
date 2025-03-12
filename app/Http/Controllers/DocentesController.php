@@ -181,7 +181,12 @@ class DocentesController extends Controller
 
     public function calificacion_total()
     {
-        return view('reports/calificacion_total');
+        return view('teachers/calificacion_total');
+    }
+
+    public function calificacion_detallada()
+    {
+        return view('teachers/calificacion_detallada');
     }
 
     public function calificacion_examen()
@@ -189,5 +194,14 @@ class DocentesController extends Controller
         return view('teachers/calificacion_examen');
     }
 
+    public function informe_parcial()
+    {
+        return view('teachers/informe_parcial');
+    }
+
+    public function informe_trimestral()
+    {
+        return view('teachers/informe_trimestral');
+    }
 
 }

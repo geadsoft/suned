@@ -10,7 +10,7 @@
             <div class="col-xl-6">
                 <div class="input-group mb-3">
                     <label for="" class="form-label fs-15 mt-2  me-5">NUI</label>
-                    <input type="number" class="form-control" placeholder="Enter your Numers" wire:model.defer="search_nui" {{$eControl2}}>
+                    <input type="number" class="form-control" placeholder="Ingrese identificación.." wire:model.defer="search_nui" {{$eControl2}}>
                     <a id="btnstudents" class ="input-group-text btn btn-soft-info" wire:click="loadNui()"><i class="ri-search-line me-1"></i>Buscar</a>
                 </div>
             </div>
@@ -23,14 +23,14 @@
                 <label for="pernombres" class="form-label">
                 Nombre</label>
                 <input type="text" class="form-control" id="txtpersonaid" wire:model.defer="persona_id" style="display:none">
-                <input type="text" class="form-control" id="pernombres" placeholder="Enter your Names" wire:model.defer="familiar.nombres" {{$eControl2}}>
+                <input type="text" class="form-control" id="pernombres" placeholder="Ingrese los nombres" wire:model.defer="familiar.nombres" {{$eControl2}}>
             </div>
         </div>
         
         <div class="col-lg-6">
             <div class="mb-3">
                 <label for="perapellidos" class="form-label">Apellidos</label>
-                <input type="text" class="form-control" id="perapellidos" placeholder="Enter your Surnames" wire:model.defer="familiar.apellidos" {{$eControl2}}>
+                <input type="text" class="form-control" id="perapellidos" placeholder="Ingrese los apellidos" wire:model.defer="familiar.apellidos" {{$eControl2}}>
             </div>
         </div>
         <div class="col-lg-2">
@@ -48,7 +48,7 @@
                 <label for="perident" class="form-label">
                 Identificación</label>
                 <input type="text" class="form-control" id="perident"
-                    placeholder="Enter your firstname" wire:model.defer="familiar.identificacion" {{$eControl2}}>
+                    placeholder="Ingrese cédula o ruc" wire:model.defer="familiar.identificacion" {{$eControl2}}>
             </div>
         </div>
         <!--<div class="col-lg-4">
@@ -76,7 +76,7 @@
             <div class="mb-3">
                 <label for="pertelefono" class="form-label">Teléfono</label>
                 <input type="text" class="form-control" id="pertelefono"
-                    placeholder="Enter your phone number" wire:model.defer="familiar.telefono" {{$eControl2}}>
+                    placeholder="Ingrese número de teléfono" wire:model.defer="familiar.telefono" {{$eControl2}}>
             </div>
         </div>                                   
         
@@ -97,14 +97,14 @@
             <div class="mb-3">
                 <label for="peremail" class="form-label">Email</label>
                 <input type="email" class="form-control" id="peremail"
-                    placeholder="Enter Email" wire:model.defer="familiar.email" {{$eControl2}}>
+                    placeholder="Ingrese correo electrónico" wire:model.defer="familiar.email" {{$eControl2}}>
             </div>
         </div>
         <div class="col-xxl-7">
             <div class="mb-3">
                 <label for="perdireccion" class="form-label">Dirección</label>
                 <input type="text" class="form-control" id="perdireccion"
-                    placeholder="Enter Direction" wire:model.defer="familiar.direccion" {{$eControl2}}>
+                    placeholder="Ingrese dirección" wire:model.defer="familiar.direccion" {{$eControl2}}>
             </div>
         </div>
     </div>
@@ -157,11 +157,12 @@
     <div class="col-lg-12">
         <div class="hstack gap-2 justify-content-end">
             <button type="button" wire:click="newData()" class="btn btn-soft-success" id="newfamily-btn" data-bs-target=""><i class="ri-add-fill me-1"></i>Nuevo</button>       
-            @if ( $this->exists==false)
+            <button type="button" class="btn btn-soft-primary" wire:click="createData()">Grabar</button>
+            <!--@if ( $this->exists==false)
                 <button type="submit" class="btn btn-soft-primary" wire:click="createData()">Grabar</button>
             @else 
                 <button class="btn btn-soft-primary" wire:click="updateData()">Actualizar</button>
-            @endif
+            @endif-->
         </div>
     </div>
 </div>

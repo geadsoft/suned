@@ -98,7 +98,7 @@ class VcQualifyExams extends Component
             return $query->where('actividad',"{$this->filters['actividad']}");
         })
         ->where("tipo","ET")
-        ->where("docente_id",2913)
+        ->where("docente_id",$this->docenteId)
         ->get();
             
         $this->add();

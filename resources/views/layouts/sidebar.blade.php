@@ -719,6 +719,17 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="/activities/virtual-classes">
+                        <i class="las la-calendar-check fs-20"></i>Clases Virtuales</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/academic/calendario">
+                        <i class="las la-calendar-alt fs-20"></i>Eventos / Comunicados</span>
+                    </a>
+                </li>
+
+                <!--<li class="nav-item">
                     <a class="nav-link menu-link" href="#reportefin" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="reportefin">
                         <i class="las la-list-alt fs-20"></i><span>Reporte Finales</span>
                     </a>
@@ -731,7 +742,7 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li>-->
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#personalizar" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="personalizar">
                         <i class="las la-tools fs-20"></i><span>Personalizar</span>
@@ -774,11 +785,7 @@
                         </ul>
                     </div>
                 </li>-->
-                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/activities/virtual-classes">
-                        <i class="las la-calendar-check fs-20"></i>Clases Virtuales</span>
-                    </a>
-                </li>
+                
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#examen" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="examen">
                         <i class="las la-paste fs-20"></i><span>Exámenes</span>
@@ -822,36 +829,41 @@
                                 <div class="menu-dropdown collapse" id="calificacion" style="">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="/report/total-qualify" class="nav-link" data-key="t-simple-page">Totales</a>
+                                            <a href="/report/total-rating" class="nav-link" data-key="t-simple-page">Totales</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="/report/detail-qualify" class="nav-link" data-key="t-settings">Detalladas</a>
+                                            <a href="/report/detailed-rating" class="nav-link" data-key="t-settings">Detalladas</a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="/report/exams-qualify" class="nav-link" data-key="t-settings">Examenes</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/report/exams-qualify" class="nav-link" data-key="t-settings">Finales</a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a href="" class="nav-link" data-key="t-team">Informe Docente Parcial</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="" class="nav-link" data-key="t-timeline">Informe Docente Trimestral</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="" class="nav-link" data-key="t-faqs">Reporte de Asistencia Docente</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="" class="nav-link" data-key="t-pricing">Reporte por Docente Anual</a>
+                                <a href="#reportdocente" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="reportdocente" data-key="t-profile">Docente</a>
+                                <div class="menu-dropdown collapse" id="reportdocente" style="">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="/report/partial-teacher" class="nav-link" data-key="t-team">Informe Parcial</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/report/quarterly-teacher" class="nav-link" data-key="t-timeline">Informe Trimestral</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link" data-key="t-faqs">Reporte de Asistencia</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link" data-key="t-pricing">Reporte Anual</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
                         </ul>
                     </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="/academic/calendario">
-                        <i class="las la-calendar-alt fs-20"></i>Eventos / Comunicados</span>
-                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/">

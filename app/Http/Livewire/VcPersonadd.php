@@ -267,6 +267,8 @@ class VcPersonadd extends Component
                 'foto' => $nameFile,
                 ]);
             
+            $this->emitTo('vc-persons-billing','setGrabaFactura',$this->personaId);
+                    
         }
 
         foreach ($this->directions as $data){
@@ -388,7 +390,7 @@ class VcPersonadd extends Component
         $tmatricula->update([
             'comentario' => $this->comentario
         ]);
-        
+
         $this->dispatchBrowserEvent('msg-actualizar');
         return redirect()->to('/academic/students');
 

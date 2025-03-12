@@ -17,6 +17,9 @@ use App\Http\Livewire\VcInventaryRegister;
 use App\Http\Livewire\VcInventaryReports;
 use App\Http\Livewire\VcReportCostoGastos;
 use App\Http\Livewire\VcReportProductoVendido;
+use App\Http\Livewire\VcReportExamsQualify;
+use App\Http\Livewire\VcReportDetailQualify;
+use App\Http\Livewire\VcReportPartialTeacher;
 use App\Http\Controllers\PdfController;
 
 /*
@@ -48,8 +51,13 @@ Route::get('/academic/calendario',[App\Http\Controllers\TmSedesController::class
 Route::get('/academic/qualify-activity',[App\Http\Controllers\DocentesController::class, 'calificar_actividad'])->name('calificar_actividad');
 Route::get('/academic/qualify-exams',[App\Http\Controllers\DocentesController::class, 'calificar_examen'])->name('calificar_examen');
 Route::get('/academic/qualify-suppletory',[App\Http\Controllers\DocentesController::class, 'calificar_supletorio'])->name('calificar_supletorio');
-Route::get('/report/total-qualify',[App\Http\Controllers\DocentesController::class, 'calificacion_total'])->name('calificacion_total');
+Route::get('/report/total-rating',[App\Http\Controllers\DocentesController::class, 'calificacion_total'])->name('calificacion_total');
 Route::get('/report/exams-qualify',[App\Http\Controllers\DocentesController::class, 'calificacion_examen'])->name('calificacion_examen');
+Route::get('/report/detailed-rating',[App\Http\Controllers\DocentesController::class, 'calificacion_detallada'])->name('calificacion_detallada');
+Route::get('/report/partial-teacher',[App\Http\Controllers\DocentesController::class, 'informe_parcial'])->name('informe_parcial');
+Route::get('/report/quarterly-teacher',[App\Http\Controllers\DocentesController::class, 'informe_trimestral'])->name('informe_trimestral');
+
+
 
 Route::get('/headquarters/headquarters-add',[App\Http\Controllers\TmSedesController::class, 'index'])->name('index');
 Route::get('/headquarters/pension',[App\Http\Controllers\TmPensionesCabController::class, 'index'])->name('index');
@@ -149,6 +157,11 @@ Route::get('/preview-pdf/report-utilitys/{data}',[VcReportCostoGastos::class, 'p
 Route::get('/download-pdf/report-utilitys/{data}',[VcReportCostoGastos::class, 'downloadPDF']);
 Route::get('/preview-pdf/report-soldproductos/{data},"PRD"',[VcReportProductoVendido::class, 'printPDF']);
 Route::get('/download-pdf/report-soldproductos/{data},"PRD"',[VcReportProductoVendido::class, 'downloadPDF']);
+Route::get('/preview-pdf/calificacion_examen/{data}',[VcReportExamsQualify::class, 'printPDF']);
+Route::get('/preview-pdf/detailed-rating/{data}',[VcReportDetailQualify::class, 'printPDF']);
+Route::get('/preview-pdf/total-rating/{data}',[VcReportTQualify::class, 'printPDF']);
+Route::get('/preview-pdf/partial-teacher/{data}',[VcReportPartialTeacher::class, 'printPDF']);
+Route::get('/preview-pdf/quarterly-teacher/{data}',[VcReportQuarterlyTeacher::class, 'printPDF']);
 
 Route::get('/invoice/genera/{id}',[VcGeneraXML::class, 'setGeneraXML']);
 Route::get('/invoice/ride-pdf/{id}',[VcGeneraXML::class, 'imprimeRide']);

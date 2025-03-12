@@ -51,8 +51,7 @@
                             <div class="row g-3 mb-3">
                             <div class="col-md-auto ms-auto text-end">
                                 <div class="hstack text-nowrap gap-2">
-                                    <a href="/preview-pdf/calificacion_total" wire:click.prevent="imprimir()" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-printer-fill fs-22"></i></a>
-                                    <!--<a href="" wire:click.prevent="exportExcel()" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-file-excel-2-line align-bottom fs-22"></i></a>-->
+                                    <a href="/preview-pdf/calificacion_examen/{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" target="_blank"><i class="ri-printer-fill fs-22"></i></a>
                                 </div>
                             </div>
                             </div>
@@ -86,19 +85,12 @@
                                 @foreach ($tblrecords as $fil => $data)
                                 <tr id="{{$fil}}" class="detalle">
                                     @if ($fil=='ZZ')
-                                    <td>
-                                        <input type="text" class="form-control bg-white border-0 text-end" id="nombre-{{$fil}}" value="{{$data["nombres"]}}" disabled/>
-                                    </td>
+                                        <td>{{$data["nombres"]}}</td>
                                     @else
-                                    <td>
-                                        <input type="text" class="form-control bg-white border-0" id="nombre-{{$fil}}" value="{{$data["nombres"]}}" disabled/>
-                                    </td>
+                                        <td>{{$data["nombres"]}}</td>
                                     @endif
                                     @foreach ($tblexamen as $col => $tarea)
-                                    <td>
-                                        <input type="number" step="0.01" min="" max="10" class="form-control product-price bg-white border-0 text-end"
-                                        id="{{$fil}}-{{$col}}" value="{{number_format($tblrecords[$fil][$col],2)}}"  disabled/>
-                                    </td>
+                                    <td class="text-end">{{number_format($tblrecords[$fil][$col],2)}}</td>
                                     @endforeach
                                 </tr>
                                  @endforeach

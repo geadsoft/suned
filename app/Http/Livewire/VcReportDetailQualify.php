@@ -11,17 +11,24 @@ use App\Models\TdCalificacionActividades;
 use Livewire\Component;
 use PDF;
 
-class VcReportExamsQualify extends Component
+use App\Exports\CalificacionesDetalladas;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\Exportable;
+
+class VcReportDetailQualify extends Component
 {
     
+    use Exportable;
+
     public $nivel,$subtitulo="",$docente="",$materia="",$curso="";
-    public $asignaturaId=0, $fechaActual, $horaactual, $datos;
+    public $asignaturaId=0, $fechaActual, $horaactual, $datos, $colspan=3;
 
     public $tblasignatura=[];
     public $tblparalelo=[];
     public $tblexamen=[];
     public $tblrecords=[];
     public $personas=[];
+    public $tblgrupo=[];
 
     public $filters=[
         'docenteId' => 0,
@@ -30,8 +37,6 @@ class VcReportExamsQualify extends Component
         'bloque' => '1P',
         'actividad' => 'AI',
     ];
-
-    protected $listeners = ['setData'];
 
     public function mount()
     {
@@ -73,7 +78,7 @@ class VcReportExamsQualify extends Component
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
         
-        return view('livewire.vc-report-exams-qualify');
+        return view('livewire.vc-report-detail-qualify');
     }
 
     public function updatedasignaturaId($id){
@@ -87,6 +92,29 @@ class VcReportExamsQualify extends Component
         ->where("m.id",$id)
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
+
+    }
+
+    public function actividad(){
+
+        $record = TmActividades::query()
+        ->when($this->filters['paralelo'],function($query){
+            return $query->where('paralelo',"{$this->filters['paralelo']}");
+        })
+        ->when($this->filters['termino'],function($query){
+            return $query->where('termino',"{$this->filters['termino']}");
+        })
+        ->when($this->filters['bloque'],function($query){
+            return $query->where('bloque',"{$this->filters['bloque']}");
+        })
+        ->selectRaw("id,nombre,actividad,puntaje")
+        ->where("tipo","AC")
+        ->where("docente_id",$this->filters['docenteId'])
+        ->orderByRaw("actividad desc")
+        ->get();
+
+        $this->colspan = $this->colspan+count($record)+2;
+        return  $record;
 
     }
 
@@ -115,19 +143,9 @@ class VcReportExamsQualify extends Component
         $this->materia = $titulo['asignatura'];
         $this->curso = $titulo['servicio'].' '.$titulo['paralelo'];
 
-        $this->tblexamen = TmActividades::query()
-        ->when($this->filters['paralelo'],function($query){
-            return $query->where('paralelo',"{$this->filters['paralelo']}");
-        })
-        ->when($this->filters['termino'],function($query){
-            return $query->where('termino',"{$this->filters['termino']}");
-        })
-        ->when($this->filters['actividad'],function($query){
-            return $query->where('actividad',"{$this->filters['actividad']}");
-        })
-        ->where("tipo","ET")
-        ->where("docente_id",$this->docenteId)
-        ->get();
+        $record = $this->actividad();
+
+        $this->tblgrupo = $record->groupBy('actividad')->toBase();
             
         $this->add();
         $this->asignarNotas();
@@ -151,6 +169,10 @@ class VcReportExamsQualify extends Component
         ->orderBy("p.apellidos")
         ->get();
 
+        /*if (count($this->tblgrupo)>0){
+            dd($this->tblgrupo);
+        }*/
+
         // Actualiza Datos Estudiantes
         foreach ($this->personas as $key => $data)
         {   
@@ -160,10 +182,18 @@ class VcReportExamsQualify extends Component
             $this->tblrecords[$key]['nui'] = $data->identificacion;
             $this->tblrecords[$key]['nombres'] = $data->apellidos.' '.$data->nombres;
            
-            foreach ($this->tblexamen as $col => $actividad)
-            {
-                $this->tblrecords[$key][$col] = 0.00;    
+            foreach ($this->tblgrupo as $key2 => $grupo){
+
+                foreach ($grupo as $key3 => $actividad){
+                    $col = $key2.$key3;
+                    $this->tblrecords[$key][$col] = 0.00;                   
+                }
+                $col = $key2."-prom";
+                $this->tblrecords[$key][$col] = 0;
             }
+
+            $this->tblrecords[$key]['promedio'] = 0.00;
+            $this->tblrecords[$key]['cualitativa'] = "";
         }
         
     }
@@ -172,38 +202,48 @@ class VcReportExamsQualify extends Component
 
         foreach ($this->personas as $key => $data)
         {
-            $personaId =  $data->id; 
+            $personaId =  $data->id;
+            $promedio  = 0; 
 
-            foreach ($this->tblexamen as $col => $actividad)
-            {
-                $actividadId =  $actividad['id'];
-                
-                /*Notas*/
-                $notas = TmActividades::query()
-                ->join('td_calificacion_actividades as n','n.actividad_id','=','tm_actividades.id')
-                ->when($this->filters['paralelo'],function($query){
-                    return $query->where('paralelo',"{$this->filters['paralelo']}");
-                })
-                ->when($this->filters['termino'],function($query){
-                    return $query->where('termino',"{$this->filters['termino']}");
-                })
-                ->when($this->filters['actividad'],function($query){
-                    return $query->where('actividad',"{$this->filters['actividad']}");
-                })
-                ->where("tipo","ET")
-                ->where("docente_id",$this->docenteId)
-                ->where("actividad_id",$actividadId)
-                ->where("persona_id",$personaId)
-                ->select("n.*")
-                ->get();  
+            foreach ($this->tblgrupo as $key2 => $grupo){
 
-                foreach ($notas as $record)
-                {
-                    $nota =  $record['nota'];
-                    $this->tblrecords[$key][$col] = floatval($nota); 
+                $suma = 0;
+
+                foreach ($grupo as $key3 => $actividad){
+                   
+                    $actividadId =  $actividad['id'];
+
+                    $notas = TmActividades::query()
+                    ->join('td_calificacion_actividades as n','n.actividad_id','=','tm_actividades.id')
+                    ->when($this->filters['paralelo'],function($query){
+                        return $query->where('paralelo',"{$this->filters['paralelo']}");
+                    })
+                    ->when($this->filters['termino'],function($query){
+                        return $query->where('termino',"{$this->filters['termino']}");
+                    })
+                    ->when($this->filters['bloque'],function($query){
+                        return $query->where('bloque',"{$this->filters['bloque']}");
+                    })
+                    ->where("tipo","AC")
+                    ->where("docente_id",$this->docenteId)
+                    ->where("actividad_id",$actividadId)
+                    ->where("persona_id",$personaId)
+                    ->select("n.*")
+                    ->first();
+                                        
+                    $nota =  $notas['nota'];
+                    $col = $key2.$key3;
+                    $this->tblrecords[$key][$col] = floatval($nota);
+                    $suma = $suma + floatval($nota);
                 }
-
+                $col = $key2."-prom";
+                $this->tblrecords[$key][$col] = $suma/($key3+1);
+                $promedio = $promedio+$suma/($key3+1);
             }
+            if ($promedio>0){
+                $this->tblrecords[$key]['promedio'] = $promedio/count($this->tblgrupo);
+            }
+            
         }
 
         $this->datos = json_encode($this->filters);
@@ -214,14 +254,8 @@ class VcReportExamsQualify extends Component
     public function reporte(){
 
 
-        $tblexamen = TmActividades::query()
-        ->where('paralelo',$this->filters['paralelo'])
-        ->where('termino',$this->filters['termino'])
-        ->where('actividad',$this->filters['actividad'])
-        ->where("tipo","ET")
-        ->where("docente_id",$this->filters['docenteId'])
-        ->get();
-
+        $tblactividad = $this->actividad();
+        $tblgrupo = $tblactividad->groupBy('actividad')->toBase();
 
         /* Estudiantes */
         $tblrecords=[];
@@ -247,41 +281,65 @@ class VcReportExamsQualify extends Component
             $tblrecords[$key]['nui'] = $data->identificacion;
             $tblrecords[$key]['nombres'] = $data->apellidos.' '.$data->nombres;
            
-            foreach ($tblexamen as $col => $actividad)
-            {
-                $tblrecords[$key][$col] = 0.00;    
+            foreach ($tblgrupo as $key2 => $grupo){
+
+                foreach ($grupo as $key3 => $actividad){
+                    $col = $key2.$key3;
+                    $tblrecords[$key][$col] = 0.00;                   
+                }
+                $col = $key2."-prom";
+                $tblrecords[$key][$col] = 0;
             }
+
+            $tblrecords[$key]['promedio'] = 0.00;
+            $tblrecords[$key]['cualitativa'] = "";
         }
 
         // Asigna Notas //
         foreach ($personas as $key => $data)
         {
-            $personaId =  $data->id; 
+            $personaId =  $data->id;
+            $promedio  = 0; 
 
-            foreach ($tblexamen as $col => $actividad)
-            {
-                $actividadId =  $actividad['id'];
-                
-                /*Notas*/
-                $notas = TmActividades::query()
-                ->join('td_calificacion_actividades as n','n.actividad_id','=','tm_actividades.id')
-                ->where('paralelo',$this->filters['paralelo'])
-                ->where('termino',$this->filters['termino'])
-                ->where('actividad',$this->filters['actividad'])
-                ->where("tipo","ET")
-                ->where("docente_id",$this->filters['docenteId'])
-                ->where("actividad_id",$actividadId)
-                ->where("persona_id",$personaId)
-                ->select("n.*")
-                ->get();  
+            foreach ($tblgrupo as $key2 => $grupo){
 
-                foreach ($notas as $record)
-                {
-                    $nota =  $record['nota'];
-                    $tblrecords[$key][$col] = floatval($nota); 
+                $suma = 0;
+
+                foreach ($grupo as $key3 => $actividad){
+                   
+                    $actividadId =  $actividad['id'];
+
+                    $notas = TmActividades::query()
+                    ->join('td_calificacion_actividades as n','n.actividad_id','=','tm_actividades.id')
+                    ->when($this->filters['paralelo'],function($query){
+                        return $query->where('paralelo',"{$this->filters['paralelo']}");
+                    })
+                    ->when($this->filters['termino'],function($query){
+                        return $query->where('termino',"{$this->filters['termino']}");
+                    })
+                    ->when($this->filters['bloque'],function($query){
+                        return $query->where('bloque',"{$this->filters['bloque']}");
+                    })
+                    ->where("tipo","AC")
+                    ->where("docente_id",$this->filters['docenteId'])
+                    ->where("actividad_id",$actividadId)
+                    ->where("persona_id",$personaId)
+                    ->select("n.*")
+                    ->first();
+                                        
+                    $nota =  $notas['nota'];
+                    $col = $key2.$key3;
+                    $tblrecords[$key][$col] = floatval($nota);
+                    $suma = $suma + floatval($nota);
                 }
-
+                $col = $key2."-prom";
+                $tblrecords[$key][$col] = $suma/($key3+1);
+                $promedio = $promedio+$suma/($key3+1);
             }
+            if ($promedio>0){
+                $tblrecords[$key]['promedio'] = $promedio/count($tblgrupo);
+            }
+            
         }
 
         return $tblrecords;
@@ -324,27 +382,30 @@ class VcReportExamsQualify extends Component
             'curso' => $titulo['servicio'].' '.$titulo['paralelo'],
         ];
        
-        $tblexamen = TmActividades::query()
-        ->where('paralelo',$this->filters['paralelo'])
-        ->where('termino',$this->filters['termino'])
-        ->where('actividad',$this->filters['actividad'])
-        ->where("tipo","ET")
-        ->where("docente_id",$this->filters['docenteId'])
-        ->get();
+        $tblactividad = $this->actividad();
+        $tblgrupo = $tblactividad->groupBy('actividad')->toBase();
 
         $tblrecords = $this->reporte();
 
-        $pdf = PDF::loadView('pdf/reporte_calificacion_examen',[
+        $pdf = PDF::loadView('pdf/reporte_calificacion_detallada',[
             'tblrecords' => $tblrecords,
-            'tblexamen' => $tblexamen,
+            'tblgrupo' => $tblgrupo,
             'datos' => $datos,
             'fechaActual' => $fechaActual,
             'horaActual' => $horaActual,
         ]);
 
-        return $pdf->setPaper('a4')->stream('Calificación de Exámenes.pdf');
+        return $pdf->setPaper('a4','landscape')->stream('Calificación Detallada.pdf');
     }
 
+    public function exportExcel(){
 
-    
+        $data = json_encode($this->filters);
+        return Excel::download(new CalificacionesDetalladas($data), 'Calificaciones Detalladas.xlsx');
+
+    }
+
 }
+
+
+
