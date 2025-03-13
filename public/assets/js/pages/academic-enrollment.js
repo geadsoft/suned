@@ -89,6 +89,7 @@ function selecTab(SelectTab) {
         case 'pills-bill-factura':
             
             document.getElementById('pills-bill-factura-tab').click()
+            break
 
         case 'pills-bill-finish':
             
