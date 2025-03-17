@@ -6,6 +6,7 @@ use App\Models\TmServicios;
 use App\Models\TmCalendarioGrados;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 
 class VcNivelCalendar extends Component
 {
@@ -13,11 +14,15 @@ class VcNivelCalendar extends Component
     public $modalidad=[], $grado=[];
     public $tbldetails=[];
 
-    protected $listeners = ['setGrabaDetalle'];
+    protected $listeners = ['setGrabaDetalle','setGrado'];
 
-    public function mount()
+    public function mount($eventoId)
     {
         $this->modalidad = TmGeneralidades::where('superior',1)->get();
+        if ($eventoId>0){
+            dd($eventoId);
+            $this->setGrado();
+        }
         
     }
     
@@ -73,5 +78,43 @@ class VcNivelCalendar extends Component
         }
 
     }
+
+    public function setGrado($eventoId)
+    {
+
+        $record = TmCalendarioGrados::query()
+        ->where('calendario_id',$eventoId)
+        ->first();
+
+        $this->modalidadId = $record['modalidad_id'];
+
+        $this->grado = TmCalendarioGrados::query()
+        ->leftjoin(DB::raw("(select g.descripcion as nivel, s.descripcion as grado, s.id 
+            from tm_servicios s
+            inner join tm_generalidades as g on g.id = s.nivel_id
+            where s.modalidad_id = ".$this->modalidadId."
+        ) as f"),function($join){
+            $join->on('f.id', '=', 'tm_calendario_grados.grado_id');
+        })
+        ->selectRaw('f.nivel, f.grado, f.id as gradoId, case when tm_calendario_grados.id > 0 then true else false end as seleccion')
+        ->get();
+
+
+        foreach ($this->grado as $recno){
+
+            $array=[
+                'seleccionar' => $recno['seleccion'],
+                'nivel' => $recno['nivel'],
+                'grado_id' => $recno['gradoId'],
+                'grado_id' => $recno['id'],
+            ];
+            array_push($this->tbldetails,$array);
+        }
+        
+        dd($this->tbldetails);
+
+    }
+
+
 
 }

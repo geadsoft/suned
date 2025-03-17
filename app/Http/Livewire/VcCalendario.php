@@ -70,8 +70,9 @@ class VcCalendario extends Component
     }
 
     public function postAdded($idEvent){
+
        
-        $this->$showEditModal = true;
+        $this->showEditModal = true;
         $calendario = TmCalendarioEventos::find($idEvent);
 
         $startDate = date('Y-m-d',strtotime($calendario['start_date']));
@@ -84,7 +85,7 @@ class VcCalendario extends Component
         $this->enddate = $endDate;
         $this->comentario = $calendario['descripcion'];
 
-        /*$this->dispatchBrowserEvent('show-form');*/
+        $this->emitTo('vc-nivel-calendar','setGrado',$this->eventoId);
         
     }
 

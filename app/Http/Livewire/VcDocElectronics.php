@@ -48,8 +48,12 @@ class VcDocElectronics extends Component
         
         $tblrecords = TrFacturasCabs::query()
         ->join("tm_personas as p","p.id","=","tr_facturas_cabs.persona_id")
+        ->join("tm_personas as s","s.id","=","tr_facturas_cabs.estudiante_id")
         ->when($this->filters['srv_nombre'],function($query){
             return $query->where(DB::raw('concat(ltrim(rtrim(p.apellidos))," ",ltrim(rtrim(p.nombres)))'), 'LIKE' , "%{$this->filters['srv_nombre']}%");
+        })
+        ->when($this->filters['srv_nombre'],function($query){
+            return $query->orWhere(DB::raw('concat(ltrim(rtrim(s.apellidos))," ",ltrim(rtrim(s.nombres)))'), 'LIKE' , "%{$this->filters['srv_nombre']}%");
         })
         ->where('tipo',$this->doctipo)
         ->select('tr_facturas_cabs.*','p.apellidos','p.nombres')

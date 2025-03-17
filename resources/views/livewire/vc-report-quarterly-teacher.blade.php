@@ -112,7 +112,7 @@
                                     <td class="text-center">{{$record["prom70"]}}</td>
                                     @foreach ($tblexamen as $col => $tarea)
                                         <?php
-                                        $column = 'ex'.$col;
+                                        $column = 'EX'.$tarea['id'];
                                         ?>
                                         <td class="text-end">{{number_format($tblrecords[$fil][$column],2)}}</td>
                                     @endforeach

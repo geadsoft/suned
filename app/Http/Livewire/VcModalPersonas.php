@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 use App\Models\TmPersonas;
 
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class VcModalPersonas extends Component
@@ -62,11 +63,13 @@ class VcModalPersonas extends Component
     public function loadclientes(){
 
         $tbldata = TmPersonas::query()
-        ->join("tm_familiar_estudiantes as f","f.estudiante_id","=","tm_personas.id")
-        ->join("tm_personas as p","p.id","=","f.persona_id")
-        ->when($this->filters['srv_tipo'],function($query){
-            return $query->where('p.tipopersona',"{$this->filters['srv_tipo']}");
+        ->join(DB::raw("(select estudiante_id,persona_id from tm_familiar_estudiantes
+            union all
+            select estudiante_id,persona_id from td_factura_estudiantes
+        ) as f"),function($join){
+            $join->on('f.estudiante_id', '=', 'tm_personas.id');
         })
+        ->join("tm_personas as p","p.id","=","f.persona_id")
         ->when($this->filters['srv_nui'],function($query){
             return $query->where('tm_personas.identificacion',"{$this->filters['srv_nui']}");
         })        
@@ -76,6 +79,7 @@ class VcModalPersonas extends Component
         ->selectRaw('p.id,p.apellidos,p.nombres,p.identificacion,f.estudiante_id,tm_personas.nombres as nomestudent,tm_personas.apellidos as apeestudent'  )
         ->where('p.estado','A')
         ->limit(15)
+        ->orderByRaw('tm_personas.apellidos,tm_personas.nombres')
         ->get();
 
         return $tbldata;

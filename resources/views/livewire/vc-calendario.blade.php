@@ -179,7 +179,7 @@
                             </div> <!-- end modal-content-->
                             <div class="col-xl-6" id="detail-col2">
                                 <div class="modal-body p-4">
-                                    @livewire('vc-nivel-calendar')
+                                    @livewire('vc-nivel-calendar',['eventoId' => $eventoId])
                                 </div>
                             </div>
                         </div>

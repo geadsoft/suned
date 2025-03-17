@@ -653,8 +653,56 @@
                     <a class="nav-link menu-link" href="#academico" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="academico">
                         <i class=" las la-graduation-cap fs-20"></i><span>Academico</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="academico">
+                    <div class="menu-dropdown collapse" id="academico" style="">
                         <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/information-student">Estudiantes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#sidebarAsistencia" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="asistencia" data-key="t-profile">Asistencias</a>
+                                <div class="menu-dropdown collapse" id="sidebarAsistencia" style="">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/academic/daily-attendance">
+                                                </i>Asistencia Diaria<span></span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/academic/justify-faults">
+                                                </i>Justificar Faltas<span></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#sidebarCalifica" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="calificacion" data-key="t-profile">Calificaciones</a>
+                                <div class="menu-dropdown collapse" id="sidebarCalifica" style="">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/academic/qualify-activity">
+                                                </i>Calificar Actividades<span></span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/academic/qualify-exams">
+                                                </i>Calificar Examenes<span></span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/academic/qualify-suppletory">
+                                                </i>Calificar Supletorios<span></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!--<div class="collapse menu-dropdown" id="academico">
+                        <ul class="nav nav-sm flex-column">
+                            
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="#sidebarPerson" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPerson">
                                     <i class=""></i> <span>Estudiantes</span>
@@ -674,12 +722,12 @@
                                 <div class="collapse menu-dropdown" id="sidebarAsistencia">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/academic/tuition">
+                                            <a class="nav-link menu-link" href="/academic/daily-attendance">
                                                 </i>Asistencia Diaria<span></span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/academic/tuition">
+                                            <a class="nav-link menu-link" href="/academic/justify-faults">
                                                 </i>Justificar Faltas<span></span>
                                             </a>
                                         </li>
@@ -711,7 +759,7 @@
                                 </div>
                             </li>                           
                         </ul>
-                    </div>                   
+                    </div>-->                  
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/activities/activity">

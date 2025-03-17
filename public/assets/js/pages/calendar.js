@@ -295,6 +295,7 @@ var T_check = null;
         },
         eventClick: function (info) {
 
+
             document.getElementById("edit-event-btn").removeAttribute("hidden");
             document.getElementById('btn-save-event').setAttribute("hidden", true);
             document.getElementById("edit-event-btn").setAttribute("data-id", "edit-event");
@@ -304,7 +305,7 @@ var T_check = null;
             /*flatPickrInit();
             flatpicekrValueClear();*/
                         
-            addEvent.show();
+            //addEvent.show();
             formEvent.reset();
             selectedEvent = info.event;
 
@@ -419,6 +420,7 @@ var T_check = null;
 
             // formEvent.classList.add("view-event");
             document.getElementById('btn-delete-event').removeAttribute('hidden');
+            viewEvent(selectedEvent.id);
             
         },
         dateClick: function (info) {
@@ -643,7 +645,7 @@ function editEvent(data) {
         document.getElementById("btn-save-event").innerHTML = "Actualizar";
         data.removeAttribute("hidden");
         eventTyped();
-        viewEvent(selectedEvent.id);
+        //viewEvent(selectedEvent.id);
     } else {
         data.innerHTML = "Edit";
         data.setAttribute("data-id", 'edit-event');
@@ -676,6 +678,7 @@ function eventTyped() {
     document.getElementById("detail-col1").classList.replace("col-xl-12", "col-xl-6");
     document.getElementById('detail-col2').removeAttribute("hidden");
     document.getElementById('btn-save-event').removeAttribute("hidden");
+
     
 }
 

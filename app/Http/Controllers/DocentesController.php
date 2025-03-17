@@ -204,4 +204,20 @@ class DocentesController extends Controller
         return view('teachers/informe_trimestral');
     }
 
+    public function asistencia_diaria()
+    {
+        return view('teachers/asistencia_diaria');
+    }
+
+    public function justificar_faltas()
+    {
+        return view('teachers/justificar_faltas');
+    } 
+    
+    public function estudiantes()
+    {
+        return view('teachers/estudiantes');
+    } 
+    
+
 }

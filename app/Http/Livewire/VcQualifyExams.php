@@ -68,7 +68,7 @@ class VcQualifyExams extends Component
 
     }
 
-    public function updatedasignaturaId($id){
+    /*public function updatedasignaturaId($id){
 
         $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
@@ -80,7 +80,7 @@ class VcQualifyExams extends Component
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
-    }
+    }*/
 
     public function consulta(){
 
