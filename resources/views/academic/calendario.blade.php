@@ -26,6 +26,10 @@
     <script src="{{ URL::asset('assets/js/pages/calendar.js') }}"></script> 
 
     <script>
+
+        window.addEventListener('show-event', event => {
+            $('#view-event').modal('show');
+        })
        
         window.addEventListener('show-form', event => {
             $('#event-modal').modal('show');
@@ -37,6 +41,11 @@
 
         function viewEvent(idEvent) {
             Livewire.emit('postAdded',idEvent);
+        }
+
+        function newEvent() {
+            
+            Livewire.emit('newEvent');
         }
 
         window.addEventListener('load-calendar', event => {

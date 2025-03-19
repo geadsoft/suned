@@ -10,17 +10,17 @@ use Illuminate\Support\Facades\DB;
 
 class VcNivelCalendar extends Component
 {
-    public $modalidadId;
+    public $modalidadId, $eventoId;
     public $modalidad=[], $grado=[];
     public $tbldetails=[];
 
     protected $listeners = ['setGrabaDetalle','setGrado'];
 
-    public function mount($eventoId)
+    public function mount($idEvento)
     {
         $this->modalidad = TmGeneralidades::where('superior',1)->get();
-        if ($eventoId>0){
-            dd($eventoId);
+        if ($idEvento>0){
+            dd($idEvento);
             $this->setGrado();
         }
         
@@ -28,7 +28,9 @@ class VcNivelCalendar extends Component
     
     public function render()
     {
-        return view('livewire.vc-nivel-calendar');
+        return view('livewire.vc-nivel-calendar',[
+            'tbldetails' => $this->tbldetails,
+        ]);
     }
 
     public function updatedModalidadId($id)
@@ -38,11 +40,13 @@ class VcNivelCalendar extends Component
         ->join('tm_generalidades as g','g.id','=','tm_servicios.nivel_id')
         ->where('tm_servicios.modalidad_id',$id)
         ->selectRaw('g.descripcion as nivel, tm_servicios.descripcion as grado, tm_servicios.id')
+        ->orderBy('tm_servicios.id')
         ->get();
 
         foreach ($this->grado as $recno){
             $array=[
                 'seleccionar' => false,
+                'id' => 0,
                 'nivel' => $recno['nivel'],
                 'grado' => $recno['grado'],
                 'grado_id' => $recno['id'],
@@ -65,7 +69,12 @@ class VcNivelCalendar extends Component
         
         foreach ($this->tbldetails as $index => $recno)
         {
-            if ($recno['seleccionar']==true){
+
+            if ($recno['id']>0 && $recno['seleccionar']==false){
+                TmCalendarioGrados::find($recno['id'])->delete();
+            }
+            
+            if ($recno['id']==0 && $recno['seleccionar']==true){
 
                 TmCalendarioGrados::Create([
                     'calendario_id' => $calendarioId,
@@ -75,44 +84,57 @@ class VcNivelCalendar extends Component
                 ]);
 
             }
+
         }
 
     }
 
-    public function setGrado($eventoId)
+    public function setGrado($idEvento)
     {
+        $this->tbldetails = [];
+        $this->eventoId  = $idEvento;
+        $this->modalidad = TmGeneralidades::where('superior',1)->get();
 
-        $record = TmCalendarioGrados::query()
-        ->where('calendario_id',$eventoId)
-        ->first();
+        if ($this->eventoId>0){
+            $record = TmCalendarioGrados::query()
+            ->where('calendario_id',$this->eventoId)
+            ->first();
 
-        $this->modalidadId = $record['modalidad_id'];
+            $this->modalidadId = $record['modalidad_id'];
+        }else{
+            $this->modalidadId = 0;
+        }
 
         $this->grado = TmCalendarioGrados::query()
-        ->leftjoin(DB::raw("(select g.descripcion as nivel, s.descripcion as grado, s.id 
+        ->rightjoin(DB::raw("(select g.descripcion as nivel, s.descripcion as grado, s.id 
             from tm_servicios s
             inner join tm_generalidades as g on g.id = s.nivel_id
             where s.modalidad_id = ".$this->modalidadId."
         ) as f"),function($join){
             $join->on('f.id', '=', 'tm_calendario_grados.grado_id');
+            $join->where('tm_calendario_grados.calendario_id',$this->eventoId);
         })
-        ->selectRaw('f.nivel, f.grado, f.id as gradoId, case when tm_calendario_grados.id > 0 then true else false end as seleccion')
+        ->selectRaw('f.nivel, f.grado, f.id as gradoId, case when tm_calendario_grados.id > 0 then true else false end as seleccion, ifnull(tm_calendario_grados.id,0) as id')
+        ->orderBy('f.id')
         ->get();
 
-
         foreach ($this->grado as $recno){
+            
+            $seleccionar = false;
+            if ($recno['seleccion']==1){
+                $seleccionar = true;
+            }
 
             $array=[
-                'seleccionar' => $recno['seleccion'],
+                'id' => $recno['id'],
+                'seleccionar' => $seleccionar,
                 'nivel' => $recno['nivel'],
+                'grado' => $recno['grado'],
                 'grado_id' => $recno['gradoId'],
-                'grado_id' => $recno['id'],
             ];
             array_push($this->tbldetails,$array);
         }
         
-        dd($this->tbldetails);
-
     }
 
 

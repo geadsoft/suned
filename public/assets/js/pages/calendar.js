@@ -246,7 +246,7 @@ var T_check = null;
 
     function addNewEvent(info) {
 
-        document.getElementById('form-event').reset();
+        /*document.getElementById('form-event').reset();
         document.getElementById('btn-delete-event').setAttribute('hidden', true);
         addEvent.show();
 
@@ -257,7 +257,9 @@ var T_check = null;
         newEventData = info;
         document.getElementById("edit-event-btn").setAttribute("data-id", "new-event");
         document.getElementById('edit-event-btn').click();
-        document.getElementById("edit-event-btn").setAttribute("hidden", true);
+        document.getElementById("edit-event-btn").setAttribute("hidden", true);*/
+        
+        newEvent();
 
     }
 
@@ -295,12 +297,13 @@ var T_check = null;
         },
         eventClick: function (info) {
 
-
-            document.getElementById("edit-event-btn").removeAttribute("hidden");
+            
+            /*document.getElementById("edit-event-btn").removeAttribute("hidden");
             document.getElementById('btn-save-event').setAttribute("hidden", true);
             document.getElementById("edit-event-btn").setAttribute("data-id", "edit-event");
-            document.getElementById("edit-event-btn").innerHTML = "Edit";
+            document.getElementById("edit-event-btn").innerHTML = "Edit";*/
 
+           
             eventClicked();
             /*flatPickrInit();
             flatpicekrValueClear();*/
@@ -419,9 +422,9 @@ var T_check = null;
             modalTitle.innerText = selectedEvent.title;
 
             // formEvent.classList.add("view-event");
-            document.getElementById('btn-delete-event').removeAttribute('hidden');
+            //document.getElementById('btn-delete-event').removeAttribute('hidden');
             viewEvent(selectedEvent.id);
-            
+                        
         },
         dateClick: function (info) {
             addNewEvent(info);
@@ -535,7 +538,7 @@ var T_check = null;
         }
     });
 
-    document.getElementById("btn-delete-event").addEventListener("click", function (e) {
+    /*document.getElementById("btn-delete-event").addEventListener("click", function (e) {
         if (selectedEvent) {
             for (var i = 0; i < defaultEvents.length; i++) {
                 if (defaultEvents[i].id == selectedEvent.id) {
@@ -543,12 +546,12 @@ var T_check = null;
                     i--;
                 }
             }
-            /*upcomingEvent(defaultEvents);*/
+            upcomingEvent(defaultEvents);
             selectedEvent.remove();
             selectedEvent = null;
             addEvent.hide();
         }
-    });
+    });*/
     document.getElementById("btn-new-event").addEventListener("click", function (e) {
         /*flatpicekrValueClear();
         flatPickrInit();*/

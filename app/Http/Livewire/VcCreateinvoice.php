@@ -9,7 +9,7 @@ use App\Models\TrDeudasCabs;
 use App\Models\TmPeriodosLectivos;
 use Illuminate\Support\Facades\Http;
 
-
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class VcCreateinvoice extends Component
@@ -173,8 +173,19 @@ class VcCreateinvoice extends Component
         $this->telefono =  $record['telefono'];
         $this->email =  $record['email'];
 
-        $this->tblstudent = TmPersonas::query()
+        /*$this->tblstudent = TmPersonas::query()
         ->join("tm_familiar_estudiantes as f","f.estudiante_id","=","tm_personas.id")
+        ->where("f.persona_id",$personaId)
+        ->select("tm_personas.*")
+        ->get();*/
+
+        $this->tblstudent = TmPersonas::query()
+        ->join(DB::raw("(select estudiante_id,persona_id from tm_familiar_estudiantes
+            union all
+            select estudiante_id,persona_id from td_factura_estudiantes
+        ) as f"),function($join){
+            $join->on('f.estudiante_id', '=', 'tm_personas.id');
+        })
         ->where("f.persona_id",$personaId)
         ->select("tm_personas.*")
         ->get();

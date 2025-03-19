@@ -80,8 +80,8 @@
                             <div class="col-xl-6" id="detail-col1">
                                 <div class="modal-body p-4">
                                     <form autocomplete="off" wire:submit.prevent="{{ $showEditModal ? 'updateData' : 'createData' }}" class="needs-validation" name="event-form" id="form-event" novalidate>
-                                        <div class="text-end">
-                                            <a href="#" class="btn btn-sm btn-soft-primary" id="edit-event-btn" data-id="edit-event" onclick="editEvent(this)" role="button">Edit</a>
+                                        <!--<div class="text-end">
+                                            <a href="#" class="btn btn-sm btn-soft-primary" id="edit-event-btn" data-id="edit-event" onclick="editEvent(this)" wire:click='postAdded(1)' role="button">Edit</a>
                                         </div>
                                         <div class="event-details">
                                             <div class="d-flex mb-2">
@@ -104,7 +104,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!--<div class="d-flex align-items-center mb-2">
+                                            <div class="d-flex align-items-center mb-2">
                                                 <div class="flex-shrink-0 me-3">
                                                     <i class="ri-time-line text-muted fs-16"></i>
                                                 </div>
@@ -119,7 +119,7 @@
                                                 <div class="flex-grow-1">
                                                     <h6 class="d-block fw-semibold mb-0"> <span id="event-location-tag"></span></h6>
                                                 </div>
-                                            </div>-->
+                                            </div>
                                             <div class="d-flex mb-3">
                                                 <div class="flex-shrink-0 me-3">
                                                     <i class="ri-discuss-line text-muted fs-16"></i>
@@ -128,12 +128,12 @@
                                                     <p class="d-block text-muted mb-0" id="event-description-tag">{{$comentario}}</p>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>-->
                                         <div class="row event-form">
                                             <div class="col-12">
                                                 <div class="mb-3">
                                                     <label class="text">Actividad</label>
-                                                    <select class="form-select d-none" name="actividad" id="event-category"  wire:model.defer="actividad"  required>
+                                                    <select class="form-select" name="actividad" id="event-category"  wire:model.defer="actividad"  required {{$eControl}}>
                                                         <option value="NO">Notificación</option>
                                                         <option value="CO">Comunicado</option>
                                                         <option value="RE">Reunión</option>
@@ -146,7 +146,7 @@
                                             <div class="col-12">
                                                 <div class="mb-3">
                                                     <label class="text">Nombre</label>
-                                                    <input class="form-control d-none" placeholder="Enter event name" type="text" name="title" id="event-title" wire:model.defer="evento"  required/>
+                                                    <input class="form-control" placeholder="Enter event name" type="text" name="title" id="event-title" wire:model.defer="evento"  required/>
                                                     <div class="invalid-feedback">Por favor proporcione un nombre de evento válido</div>
                                                 </div>
                                             </div><!--end col-->
@@ -171,15 +171,23 @@
                                             </div><!--end col-->
                                         </div><!--end row-->
                                         <div class="hstack gap-2 justify-content-end">
-                                            <button type="button" class="btn btn-soft-danger" id="btn-delete-event"><i class="ri-close-line align-bottom"></i> Eliminar</button>
+                                            
+                                            <input type="button" id="btn-delete-event" value="Botón 2" style="display: none;"/>
+                                            @if ($showEditModal==false)
+                                            <button type="button" class="btn btn-soft-primary" id="btn-cancel-event" wire:click='cerrarModal()'>Cancelar</button>
                                             <button type="submit" class="btn btn-success" id="btn-save-event">Grabar</button>
+                                            @else
+                                                <button type="button" class="btn btn-soft-danger" id="btn-delete-event" wire:click='deleteData()'><i class="ri-close-line align-bottom"></i> Eliminar</button>
+                                                <button type="button" class="btn btn-soft-primary" id="btn-cancel-event" wire:click='cerrarModal()'>Cancelar</button>
+                                                <button type="submit" class="btn btn-success" id="btn-save-event">Actualizar</button>
+                                            @endif
                                         </div>
                                     </form>
                                 </div>
                             </div> <!-- end modal-content-->
                             <div class="col-xl-6" id="detail-col2">
                                 <div class="modal-body p-4">
-                                    @livewire('vc-nivel-calendar',['eventoId' => $eventoId])
+                                    @livewire('vc-nivel-calendar',['idEvento' => $eventoId])
                                 </div>
                             </div>
                         </div>
@@ -188,13 +196,60 @@
             </div> <!-- end modal-->
             <!-- end modal-->
 
-
-
-
-
-
-
-
+            <!-- Modal -->
+            <div wire.ignore.self class="modal fade flip" id="view-event" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header p-3 bg-soft-info">
+                            <h5 class="modal-title" id="modal-title">{{$evento}}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12" id="detail-col1">
+                                <div class="modal-body p-4">
+                                    <form autocomplete="off" class="needs-validation" name="event-form" id="form-event" novalidate>
+                                        <div class="text-end">
+                                            <!--<a href="#" class="btn btn-sm btn-soft-primary" id="edit-event-btn" data-id="edit-event" wire:click='editEvent()' role="button">Edit</a>-->
+                                            <button type="button" class="btn btn-sm btn-soft-primary" data-bs-dismiss="modal" aria-hidden="true" wire:click='editEvent()'>Edit</button>
+                                        </div>
+                                        <div class="event-details">
+                                            <div class="d-flex mb-2">
+                                                <div class="flex-grow-1 d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <i class="ri-calendar-event-line text-muted fs-16"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h6 class="d-block fw-semibold mb-0" id="event-start-date-tag">{{$startdate}}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex mb-2">
+                                                <div class="flex-grow-1 d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <i class="ri-calendar-event-line text-muted fs-16"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h6 class="d-block fw-semibold mb-0" id="event-end-date-tag">{{$enddate}}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex mb-3">
+                                                <div class="flex-shrink-0 me-3">
+                                                    <i class="ri-discuss-line text-muted fs-16"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <p class="d-block text-muted mb-0" id="event-description-tag">{{$comentario}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div> 
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div> <!-- end row-->
