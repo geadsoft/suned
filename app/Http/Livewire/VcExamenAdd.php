@@ -4,34 +4,33 @@ namespace App\Http\Livewire;
 
 use App\Models\TmHorarios;
 use App\Models\TmActividades;
+use App\Models\TdPeriodoSistemaEducativos;
+use App\Models\TmPeriodosLectivos;
 
 use Livewire\Component;
 
 class VcExamenAdd extends Component
 {
     
-    public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="3E", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
+    public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="3E", $tipo="EX", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $tblparalelo=[], $tblasignatura=[];
+    public $periodoId, $tbltermino, $tblbloque=[];
     public $array_attach=[];
     public $docenteId;
 
     public function mount($id)
     {
         $this->docenteId = auth()->user()->personaId;
+
+        $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
+        $this->periodoId = $tblperiodos['id'];
+
+        $this->tbltermino = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','EA')
+        ->get();
+
         $this->attach_add();
-
-        /*$this->tblparalelo = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",2913)
-        ->selectRaw('d.id, concat(m.descripcion," - ",s.descripcion," ",c.paralelo) as descripcion')
-        ->get();*/
-
-        if (!empty($this->tblparalelo)){
-            $this->paralelo = $this->tblparalelo[0]["id"];
-        }
 
         if ($id>0){
             $this->edit($id);
@@ -41,6 +40,18 @@ class VcExamenAdd extends Component
     
     public function render()
     {
+        $this->tblbloque=[];
+        foreach($this->tbltermino as $data){
+            if ($this->termino == $data['codigo']){
+                $arrbloque['codigo'] = str_replace('T','E',$data['codigo']);
+                $arrbloque['descripcion'] = 'Examen '.$data['descripcion'];
+
+                array_push($this->tblbloque,$arrbloque);
+            }
+        }
+
+        $this->updatedasignaturaId($this->asignaturaId);
+        
         $this->tblasignatura = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
@@ -52,6 +63,7 @@ class VcExamenAdd extends Component
         return view('livewire.vc-examen-add',[
             'tblasignatura' => $this->tblasignatura,
         ]);
+
     }
 
 
@@ -86,6 +98,8 @@ class VcExamenAdd extends Component
     }
 
     public function updatedasignaturaId($id){
+
+        $this->asignaturaId = $id;
 
         $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 use App\Models\TmHorarios;
 use App\Models\TmActividades;
+use App\Models\TmPeriodosLectivos;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -21,6 +22,15 @@ class VcClasesVirtual extends Component
 
     use WithPagination;
 
+    public function mount()
+    {
+        $this->docenteId = auth()->user()->personaId;
+
+        $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
+        $this->periodoId = $tblperiodos['id'];
+
+    }
+
     public function render()
     {
         
@@ -33,7 +43,8 @@ class VcClasesVirtual extends Component
         ->when($this->filters['paralelo'],function($query){
             return $query->where('a.paralelo',"{$this->filters['paralelo']}");
         })
-        ->where("a.docente_id",2913)
+        ->where("a.docente_id",$this->docenteId)
+        ->where("tm_horarios.periodo_id",$this->periodoId)
         ->where("a.tipo","CV")
         ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
         ->paginate(12);
@@ -56,7 +67,8 @@ class VcClasesVirtual extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",2913)
+        ->where("d.docente_id",$this->docenteId)
+        ->where("tm_horarios.periodo_id",$this->periodoId)
         ->selectRaw('d.id, concat(m.descripcion," - ",s.descripcion," ",c.paralelo) as descripcion')
         ->get();
         
@@ -91,7 +103,7 @@ class VcClasesVirtual extends Component
         }else {
             
             TmActividades::Create([
-                'docente_id' => 2913,
+                'docente_id' => $this->docenteId,
                 'paralelo' => $this->record['paralelo'],
                 'termino' => $this->record['termino'],
                 'bloque' => $this->record['bloque'],

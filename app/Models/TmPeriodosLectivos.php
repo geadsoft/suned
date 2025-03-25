@@ -17,6 +17,10 @@ class TmPeriodosLectivos extends Model
         'secretaria_id',
         'coordinador_id',
         'mes_pension',
+        'evaluacion',
+        'evaluacion_formativa',
+        'evaluacion_sumativa',
+        'aperturado',
         'estado',
         'usuario',
     ];

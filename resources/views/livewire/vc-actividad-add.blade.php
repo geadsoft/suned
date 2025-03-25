@@ -25,23 +25,32 @@
                             <div class="mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="termino" required {{$control}}>
-                                    <option value="1T" selected>Primer Trimestre</option>
+                                    @foreach ($tbltermino as $terminos) 
+                                    <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
+                                    @endforeach 
+                                    <!--<option value="1T" selected>Primer Trimestre</option>
                                     <option value="2T">Segundo Trimestre</option>
-                                    <option value="3T">Tercer Trimestre</option>
+                                    <option value="3T">Tercer Trimestre</option>-->
                                 </select>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-6">
                                     <label for="choices-publish-status-input" class="form-label fw-semibold">Bloque</label>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="bloque" {{$control}}>
-                                        <option value="1P" selected>Primer Parcial</option>
+                                        @foreach ($tblbloque as $bloques) 
+                                        <option value="{{$bloques->codigo}}">{{$bloques->descripcion}}</option>
+                                        @endforeach 
+                                        <!--<option value="1P" selected>Primer Parcial</option>-->
                                     </select>
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="choices-publish-status-input" class="form-label fw-semibold">Tipo Actividad</label>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="tipo">
-                                        <option value="AI">Actividad Individual</option>
-                                        <option value="AG">Actividad Grupal</option>
+                                        @foreach ($tblactividad as $actividades) 
+                                        <option value="{{$actividades->codigo}}">{{$actividades->descripcion}}</option>
+                                        @endforeach 
+                                        <!--<option value="AI">Actividad Individual</option>
+                                        <option value="AG">Actividad Grupal</option>-->
                                     </select>
                                 </div>
                             </div>

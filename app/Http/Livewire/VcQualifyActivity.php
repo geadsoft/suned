@@ -5,6 +5,8 @@ use App\Models\TmHorarios;
 use App\Models\TmHorariosDocentes;
 use App\Models\TmActividades;
 use App\Models\TdCalificacionActividades;
+use App\Models\TdPeriodoSistemaEducativos;
+use App\Models\TmPeriodosLectivos;
 
 use Livewire\Component;
 
@@ -13,6 +15,7 @@ class VcQualifyActivity extends Component
 
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $tblparalelo=[], $tblasignatura=[];
+    public $periodoId, $tbltermino, $tblbloque, $tblactividades;
     public $tblactividad=[];
     public $tblrecords=[];
     public $personas=[];
@@ -33,15 +36,36 @@ class VcQualifyActivity extends Component
     {
         $this->docenteId = auth()->user()->personaId;
 
-        if (!empty($this->tblparalelo)){
+        $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
+        $this->periodoId = $tblperiodos['id'];
+
+        $this->tbltermino = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','EA')
+        ->get();
+
+        $this->termino = $this->tbltermino[0]['codigo'];
+
+        $this->tblactividades = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','AC')
+        ->get();
+
+        /*if (!empty($this->tblparalelo)){
             $this->filters['paralelo'] = $this->tblparalelo[0]["id"];
             $this->consulta();
-        }
+        }*/
 
     }
 
     public function render()
     {   
+        $this->tblbloque = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','PA')
+        ->where('evaluacion',$this->termino)
+        ->get();
+        
         $this->tblasignatura = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")

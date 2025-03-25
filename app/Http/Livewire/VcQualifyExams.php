@@ -11,7 +11,7 @@ use Livewire\Component;
 class VcQualifyExams extends Component
 {
     
-    public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="3E", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
+    public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="3E", $tipo="EX", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $tblparalelo=[], $tblasignatura=[];
     public $tblexamen=[];
     public $tblrecords=[];
@@ -24,7 +24,7 @@ class VcQualifyExams extends Component
         'paralelo' => 0, 
         'termino' => '3T',
         'bloque' => '3E',
-        'actividad' => 'AI',
+        'actividad' => 'EX',
     ];
 
     protected $listeners = ['setData'];
@@ -67,20 +67,6 @@ class VcQualifyExams extends Component
         ]);
 
     }
-
-    /*public function updatedasignaturaId($id){
-
-        $this->tblparalelo = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->docenteId)
-        ->where("m.id",$id)
-        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
-        ->get();
-
-    }*/
 
     public function consulta(){
 

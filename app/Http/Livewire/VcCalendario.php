@@ -18,11 +18,13 @@ class VcCalendario extends Component
 
     public function mount()
     {
-        $tblperiodos = TmPeriodosLectivos::where("estado",'A')->first();
+        $this->docenteId = auth()->user()->personaId;
+        
+        $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
+        $this->periodoId = $tblperiodos['id'];
         $this->periodo = $tblperiodos['periodo'];
         $this->mes = date('m');
         $this->loadEvent();
-        
     }
 
     public function render()

@@ -5,15 +5,19 @@ use App\Models\TmHorarios;
 use App\Models\TmHorariosDocentes;
 use App\Models\TmActividades;
 use App\Models\TmAsignaturas;
+use App\Models\TdPeriodoSistemaEducativos;
+use App\Models\TmPeriodosLectivos;
 
 use Livewire\Component;
 
 class VcActividadView extends Component
 {
     public $asignatura, $curso,  $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $descripcion="", $estado="A";
+    public $periodoId, $tbltermino, $tblbloque, $tblactividad;
     public $array_attach=[];
+    public $arrtermino, $arrbloque, $arractividad;
     
-    public $arrtermino=[
+    /*public $arrtermino=[
         '1T' => 'Primer Trimestre',
         '2T' => 'Segundo Trimestre',
         '3T' => 'Tercer Trimestre',
@@ -28,7 +32,7 @@ class VcActividadView extends Component
     public $arractividad=[
         'AI' => 'Actividad Individual',
         'AG' => 'Actividad Grupal',
-    ];
+    ];*/
 
     public $arrestado=[
         'A' => 'Activo',
@@ -40,7 +44,43 @@ class VcActividadView extends Component
     public function mount($id)
     {
 
-       $this->edit($id);
+        $this->docenteId = auth()->user()->personaId;
+
+        $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
+        $this->periodoId = $tblperiodos['id'];
+
+        $this->tbltermino = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','EA')
+        ->get();
+
+        foreach ($this->tbltermino as $data){
+            $this->arrtermino[$data['codigo']] = $data['descripcion'];
+        }
+
+        $this->termino = $this->tbltermino[0]['codigo'];
+
+
+        $this->tblbloque = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','PA')
+        ->where('evaluacion',$this->termino)
+        ->get();
+
+        foreach ($this->tblbloque as $data){
+            $this->arrbloque[$data['codigo']] = $data['descripcion'];
+        }
+
+        $this->tblactividad = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','AC')
+        ->get();
+
+        foreach ($this->tblactividad as $data){
+            $this->arractividad[$data['codigo']] = $data['descripcion'];
+        }
+
+        $this->edit($id);
 
     }
 
@@ -70,7 +110,6 @@ class VcActividadView extends Component
         $this->descripcion=".";
         $day = date('l', strtotime($this->fecha));
         //dd($day);
-
 
         $tblmateria = TmAsignaturas::find($record['asignatura_id']);
         $this->asignatura =  $tblmateria['descripcion'];

@@ -25,18 +25,18 @@
                             <div class="row mb-3">
                                 <div class="col-sm-6">
                                      <label for="choices-publish-status-input" class="form-label fw-semibold">Trimestre</label>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="termino" required {{$control}}>
-                                        <option value="1T" selected>Primer Trimestre</option>
-                                        <option value="2T">Segundo Trimestre</option>
-                                        <option value="3T">Tercer Trimestre</option>
+                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="termino" required {{$control}}>
+                                        @foreach ($tbltermino as $terminos) 
+                                        <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
+                                        @endforeach 
                                     </select>
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="choices-publish-status-input" class="form-label fw-semibold">Exámen</label>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="bloque" {{$control}}>
-                                        <option value="1E" selected>Primer Trimestre</option>
-                                        <option value="2E" selected>Segundo Trimestre</option>
-                                        <option value="3E" selected>Tercer Trimestre</option>
+                                        @foreach ($tblbloque as $bloques) 
+                                        <option value="{{$bloques['codigo']}}">{{$bloques['descripcion']}}</option>
+                                        @endforeach 
                                     </select>
                                 </div>
                             </div>

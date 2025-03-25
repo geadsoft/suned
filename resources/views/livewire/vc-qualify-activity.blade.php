@@ -25,23 +25,26 @@
                             <div class="mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino"  wire:change="consulta()">
-                                    <option value="1T" selected>Primer Trimestre</option>
-                                    <option value="2T">Segundo Trimestre</option>
-                                    <option value="3T">Tercer Trimestre</option>
+                                    @foreach ($tbltermino as $terminos) 
+                                    <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
+                                    @endforeach 
                                 </select>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-6">
                                     <label for="choices-publish-status-input" class="form-label fw-semibold">Bloque</label>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque"  wire:change="consulta()">
-                                        <option value="1P" selected>Primer Parcial</option>
+                                        @foreach ($tblbloque as $bloques) 
+                                        <option value="{{$bloques->codigo}}">{{$bloques->descripcion}}</option>
+                                        @endforeach 
                                     </select>
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="choices-publish-status-input" class="form-label fw-semibold">Tipo Actividad</label>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.actividad"  wire:change="consulta()">
-                                        <option value="AI">Actividad Individual</option>
-                                        <option value="AG">Actividad Grupal</option>
+                                        @foreach ($tblactividades as $actividades) 
+                                        <option value="{{$actividades->codigo}}">{{$actividades->descripcion}}</option>
+                                        @endforeach 
                                     </select>
                                 </div>
                             </div>
