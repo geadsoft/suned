@@ -65,7 +65,7 @@ class VcSistemaEducativo extends Component
         $detalle = TdPeriodoSistemaEducativos::where('periodo_id',$this->periodoId)->get();
 
         if ($this->metodo==''){
-            $this->addarr($this->metodo);
+            $this->addarr('T');
         }
 
         foreach ($detalle as $key => $value) {
