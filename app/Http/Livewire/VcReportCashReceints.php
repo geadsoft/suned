@@ -233,6 +233,7 @@ class VcReportCashReceints extends Component
         }
 
         $objperiodo = TmPeriodosLectivos::find($this->filters['srv_periodo']);
+        $this->datosfilters['periodo']   = 'TODOS';
         if ($objperiodo!=""){
             $this->datosfilters['periodo'] =  $objperiodo['descripcion'];
         }
@@ -388,6 +389,7 @@ class VcReportCashReceints extends Component
         }
 
         $objperiodo = TmPeriodosLectivos::find($this->filters['srv_periodo']);
+        $this->datosfilters['periodo']   = 'TODOS';
         if ($objperiodo!=""){
             $this->datosfilters['periodo'] =  $objperiodo['descripcion'];
         }
