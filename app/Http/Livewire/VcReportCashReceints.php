@@ -233,8 +233,10 @@ class VcReportCashReceints extends Component
         }
 
         $objperiodo = TmPeriodosLectivos::find($this->filters['srv_periodo']);
-        $this->datosfilters['periodo'] =  $objperiodo['descripcion'];
-
+        if ($objperiodo!=""){
+            $this->datosfilters['periodo'] =  $objperiodo['descripcion'];
+        }
+        
         $this->datosfilters['fecha']   =  date('d/m/Y',strtotime($this->filters['srv_fecha'])) ;
 
         foreach ($tblrecords as $record)
@@ -386,7 +388,9 @@ class VcReportCashReceints extends Component
         }
 
         $objperiodo = TmPeriodosLectivos::find($this->filters['srv_periodo']);
-        $this->datosfilters['periodo'] =  $objperiodo['descripcion'];
+        if ($objperiodo!=""){
+            $this->datosfilters['periodo'] =  $objperiodo['descripcion'];
+        }
 
         $this->datosfilters['fecha']   =  date('d/m/Y',strtotime($this->filters['srv_fecha'])) ;
 
