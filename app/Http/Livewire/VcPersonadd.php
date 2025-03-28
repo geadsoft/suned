@@ -248,6 +248,7 @@ class VcPersonadd extends Component
         }
 
         if ($this->personaId){
+
             $record = TmPersonas::find($this->personaId);
             $record->update([
                 'nombres' => $this -> nombres,
@@ -267,7 +268,7 @@ class VcPersonadd extends Component
                 'foto' => $nameFile,
                 ]);
             
-            $this->emitTo('vc-persons-billing','setGrabaFactura',$this->personaId);
+            //$this->emitTo('vc-persons-billing','setGrabaFactura',$this->personaId);
                     
         }
 
@@ -304,12 +305,13 @@ class VcPersonadd extends Component
             
         }
 
+
         foreach ($this->familiares as $data){
 
             if ($data['id']>0){
 
-                $record = TmPersonas::find($data['persona_id']);
-                $record->update([
+                $family = TmPersonas::find($data['persona_id']);
+                $family->update([
                     'nombres' => $data['nombres'],
                     'apellidos' => $data['apellidos'],
                     'identificacion' => $data['identificacion'],
@@ -371,8 +373,8 @@ class VcPersonadd extends Component
         }
 
         //Representante
-        $record = TmPersonas::find($this->representante['id']);
-        $record->update([
+        $recordR = TmPersonas::find($this->representante['id']);
+        $recordR->update([
             'nombres'   => $this->representante['nombres'],
             'apellidos' => $this->representante['apellidos'],
             'tipoidentificacion' => $this->representante['tipoidentificacion'],
@@ -384,6 +386,10 @@ class VcPersonadd extends Component
             'email'      => $this->representante['email'],
             'parentesco' => $this->representante['parentesco'],
         ]);
+        
+        /*if ($this->personaId>0){
+            $this->emitTo('vc-persons-billing','setGrabaFactura',$this->personaId);
+        }*/
 
         //Comentario Matricula
         $tmatricula = TmMatricula::find($this->matricula['id']);

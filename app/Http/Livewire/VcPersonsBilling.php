@@ -53,7 +53,7 @@ class VcPersonsBilling extends Component
         $this->familiares = TdFacturaEstudiantes::query()
         ->join("tm_personas as p","p.id","=","td_factura_estudiantes.persona_id")
         ->where('estudiante_id',$this->personaId)
-        ->selectRaw('p.id,p.nombres,p.apellidos,p.tipoidentificacion,p.identificacion,p.genero,p.nacionalidad_id,p.telefono,p.parentesco,p.email,p.direccion')
+        ->selectRaw('p.id,p.nombres,p.apellidos,p.tipoidentificacion,p.identificacion,p.genero,p.nacionalidad_id,p.telefono,p.parentesco,p.email,p.direccion,p.tipopersona')
         ->get()->toArray(); 
 
     }
@@ -105,7 +105,7 @@ class VcPersonsBilling extends Component
         foreach ($this->familiares as $index => $recno)
         {
            
-            if ($recno['id']>0){
+            if ($recno['id']>0 && $recno['tipopersona']=='F'){
 
                 $record = TmPersonas::find($recno['id']);
                 $record->update([
