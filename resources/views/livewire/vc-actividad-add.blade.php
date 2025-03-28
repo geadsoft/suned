@@ -123,7 +123,7 @@
                                 <tr class="det-{{$recno['linea']}}">
                                 <td>
                                     <div class="input-group">
-                                    <input type="file" id="file-{{$recno['linea']}}" wire:model.prevent="" class="form-control">
+                                    <input type="file" id="file-{{$recno['linea']}}" wire:model.prevent="array_attach.{{$key}}.adjunto" class="form-control">
                                     <a id="btnadd-{{$recno['linea']}}" class ="btn" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-16"></i></a>
                                     <a id="btndel-{{$recno['linea']}}" class ="btn" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-16"></i></a>
                                     </div>

@@ -6,17 +6,38 @@ use App\Models\TmHorarios;
 use App\Models\TmActividades;
 use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmPeriodosLectivos;
+use Illuminate\Support\Facades\Http;
 
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use Str;
 
 class VcActividadAdd extends Component
 {
+    use WithFileUploads;
+
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $periodoId, $tbltermino, $tblbloque, $tblactividad;
     public $tblparalelo=[], $tblasignatura=[];
     public $array_attach=[];
     public $docenteId;
+
+    private function token(){
+
+        $client_id = \Config('services.google.client_id');
+        $client_secret = \Config('services.google.client_secret');
+        $refresh_token = \Config('services.google.refresh_token');
+        $response = Http::post('https://oauth2.googleapis.com/token',[
+            'client_id' => $client_id,
+            'client_secret' => $client_secret,
+            'refresh_token' => $refresh_token,
+            'grant_type' => 'refresh_token'
+        ]);
+
+        $accessToken = json_decode((string)$response->getBody(),true)['access_token'];
+        return $accessToken;
+    }
 
     public function mount($id)
     {
@@ -67,9 +88,12 @@ class VcActividadAdd extends Component
         ->groupBy('m.id','m.descripcion')
         ->get();
 
+        $this->updatedasignaturaId($this->asignaturaId);
+
         return view('livewire.vc-actividad-add',[
             'tblasignatura' => $this->tblasignatura,
         ]);
+
     }
 
     public function edit($id){
@@ -104,6 +128,8 @@ class VcActividadAdd extends Component
 
     public function updatedasignaturaId($id){
 
+        $this->asignaturaId = $id;
+
         $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
@@ -122,7 +148,33 @@ class VcActividadAdd extends Component
 
     public function createData(){
 
-        $this ->validate([
+        $accessToken = $this->token();
+
+        foreach ($this->array_attach as $attach){
+            $file = $attach['adjunto'];
+            $name = Str::sLug($file->getClientOriginalName());
+            $mime = $file->getClientMimeType();
+        }
+
+            $reponse = Http::withHeaders([
+                'Autorization' => 'Bearer '.$accessToken,
+                'Content-Type' => 'Application/json'
+            ])->post('https://www.gooleapis.com/drive/v3/file',[
+                'data' => $name,
+                'mimeType' => $mime,
+                'uploadType' => 'media',
+            ]);
+
+            if ($reponse->successful()){
+                $msgfile = "Archivo cargado a Google Drive";
+            }else{
+                $msgfile = "Cargar fallida en Google Drive";
+            }
+
+            $message = "Registro grabado con éxito!"."/n".$msgfile;
+            $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+
+        /*$this ->validate([
             'paralelo' => 'required',
             'termino' => 'required',
             'nombre' => 'required',
@@ -138,7 +190,7 @@ class VcActividadAdd extends Component
         }else {
             
             TmActividades::Create([
-                'docente_id' => 2913,
+                'docente_id' => $this->docenteId,
                 'paralelo' => $this->paralelo,
                 'termino' => $this->termino,
                 'bloque' => $this->bloque,
@@ -154,11 +206,31 @@ class VcActividadAdd extends Component
                 'usuario' => auth()->user()->name,
             ]);
 
-            $message = "Registro grabado con éxito!";
+            $accessToken = $this->token();
+
+            $name = Str::sLug($file->getClientOriginalName());
+            $mime = $file->getClientMimeType();
+
+            $reponse = Https::withHeaders([
+                'Autorization' => 'Bearer '.$accessToken,
+                'Content-Type' => 'Application/json'
+            ])->post('https://www.gooleapis.com/drive/v3/file',[
+                'data' => $name,
+                'mimeType' => $mime,
+                'uploadType' => 'resumable',
+            ]);
+
+            if ($reponse->successful()){
+                $msgfile = "Archivo cargado a Google Drive"
+            }else{
+                $msgfile = "Cargar fallida en Google Drive"
+            }
+
+            $message = "Registro grabado con éxito!"."/n".$msgfile;
             $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
             return redirect()->to('/activities/activity');
-        }
+        }*/
         
     }
 
@@ -196,7 +268,7 @@ class VcActividadAdd extends Component
         ];
 
         array_push($this->array_attach,$attach);
-
+        
     }
 
 
