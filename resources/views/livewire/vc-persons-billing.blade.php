@@ -155,9 +155,15 @@
         </div>
     </div>
     <div class="col-lg-12">
+        @if ($this->error>0)
+        <div class="alert alert-danger alert-dismissible alert-label-icon rounded-label fade show" role="alert">
+            <i class="ri-error-warning-line label-icon"></i><strong>Error!</strong> - Existen Campo Vacios
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
         <div class="hstack gap-2 justify-content-end">
             <button type="button" wire:click="newData()" class="btn btn-soft-success" id="newfamily-btn" data-bs-target=""><i class="ri-add-fill me-1"></i>Nuevo</button>       
-            <button type="button" class="btn btn-soft-primary" wire:click="createData()">Grabar</button>
+            <button type="button" class="btn btn-soft-primary" wire:click="createData()">Agregar</button>
             <!--@if ( $this->exists==false)
                 <button type="submit" class="btn btn-soft-primary" wire:click="createData()">Grabar</button>
             @else 

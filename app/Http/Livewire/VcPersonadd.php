@@ -387,9 +387,9 @@ class VcPersonadd extends Component
             'parentesco' => $this->representante['parentesco'],
         ]);
         
-        /*if ($this->personaId>0){
+        if ($this->personaId>0){
             $this->emitTo('vc-persons-billing','setGrabaFactura',$this->personaId);
-        }*/
+        }
 
         //Comentario Matricula
         $tmatricula = TmMatricula::find($this->matricula['id']);
@@ -500,8 +500,7 @@ class VcPersonadd extends Component
         $this->dispatchBrowserEvent('active-tab'); 
         
     }
-
-
+    
 
 
 
