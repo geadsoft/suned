@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\TmHorarios;
 use App\Models\TmActividades;
+use App\Models\TmFiles;
 use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmPeriodosLectivos;
 use Illuminate\Support\Facades\Http;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Http;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 use Str;
 
 class VcActividadAdd extends Component
@@ -124,6 +126,29 @@ class VcActividadAdd extends Component
 
         $this->descripcion=".";
 
+        $tblfiles = TmFiles::query()
+        ->where('actividad_id',$id)
+        ->where('persona_id',$this->docenteId)
+        ->get();
+
+        $this->array_attach = [];
+        foreach($tblfiles as $key => $files){
+
+            $linea = count($this->array_attach);
+            $linea = $linea+1;
+
+            $attach=[
+                'id' => $files['id'],
+                'linea' => $linea,
+                'adjunto' => $files['nombre'],
+                'drive_id' => $files['drive_id'],
+            ];
+
+            array_push($this->array_attach,$attach);
+
+        }
+
+
     }
 
     public function updatedasignaturaId($id){
@@ -148,33 +173,7 @@ class VcActividadAdd extends Component
 
     public function createData(){
 
-        $accessToken = $this->token();
-
-        foreach ($this->array_attach as $attach){
-            $file = $attach['adjunto'];
-            $name = Str::sLug($file->getClientOriginalName());
-            $mime = $file->getClientMimeType();
-        }
-
-            $reponse = Http::withHeaders([
-                'Autorization' => 'Bearer '.$accessToken,
-                'Content-Type' => 'Application/json'
-            ])->post('https://www.gooleapis.com/drive/v3/file',[
-                'data' => $name,
-                'mimeType' => $mime,
-                'uploadType' => 'media',
-            ]);
-
-            if ($reponse->successful()){
-                $msgfile = "Archivo cargado a Google Drive";
-            }else{
-                $msgfile = "Cargar fallida en Google Drive";
-            }
-
-            $message = "Registro grabado con éxito!"."/n".$msgfile;
-            $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
-
-        /*$this ->validate([
+        $this ->validate([
             'paralelo' => 'required',
             'termino' => 'required',
             'nombre' => 'required',
@@ -189,7 +188,7 @@ class VcActividadAdd extends Component
 
         }else {
             
-            TmActividades::Create([
+            $tblData = TmActividades::Create([
                 'docente_id' => $this->docenteId,
                 'paralelo' => $this->paralelo,
                 'termino' => $this->termino,
@@ -206,7 +205,9 @@ class VcActividadAdd extends Component
                 'usuario' => auth()->user()->name,
             ]);
 
-            $accessToken = $this->token();
+            $this->apiDrive($tblData->id);
+
+            /*$accessToken = $this->token();
 
             $name = Str::sLug($file->getClientOriginalName());
             $mime = $file->getClientMimeType();
@@ -229,9 +230,93 @@ class VcActividadAdd extends Component
             $message = "Registro grabado con éxito!"."/n".$msgfile;
             $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
-            return redirect()->to('/activities/activity');
-        }*/
+            return redirect()->to('/activities/activity');*/
+        }
         
+    }
+
+    public function apiDrive($selectId){
+ 
+        
+        $accessToken = $this->token();
+        $fileId  ="";
+        $msgfile ="";
+
+        foreach ($this->array_attach as $attach){
+
+            if ($attach['id']>0) { 
+                continue;
+            }
+            
+            $file = $attach['adjunto'];
+            $name = Str::sLug($file->getClientOriginalName());
+            $ext =  Str::sLug($file->getClientOriginalExtension());
+            $mime = $file->getClientMimeType();
+
+            $filesave = $name.'.'.$ext;
+
+            $contents = Storage::disk('public')->exists('archivos/'.$filesave);
+            if ($contents){
+                Storage::disk('public')->delete('archivos/'.$filesave);
+            }
+
+            // Guarda el archivo localmente
+            $pathfile = $file->storeAs('archivos', $filesave,'public');
+            $fileContent = file_get_contents($file->getRealPath());
+
+            // Configuración de los metadatos
+            $metadata = [
+                'name' => $name . '.' . $ext,  // Nombre del archivo
+                'mimeType' => $mime,  // Tipo MIME del archivo
+            ];
+
+            // Preparar el cuerpo multipart
+            $boundary = '----WebKitFormBoundary' . md5(time());  // Crear un boundary único
+
+            // Cuerpo multipart con los metadatos y el contenido del archivo
+            $body = "--$boundary\r\n";
+            $body .= "Content-Type: application/json; charset=UTF-8\r\n\r\n";
+            $body .= json_encode($metadata) . "\r\n";  // Metadatos del archivo
+            $body .= "--$boundary\r\n";
+            $body .= "Content-Type: $mime\r\n";
+            $body .= "Content-Transfer-Encoding: base64\r\n\r\n";
+            $body .= base64_encode($fileContent) . "\r\n";  // El contenido del archivo
+            $body .= "--$boundary--\r\n";
+
+            // Realizar la solicitud POST a la API de Google Drive
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $accessToken,
+                'Content-Type' => 'multipart/related; boundary=' . $boundary,  // Definir el tipo multipart
+            ])->withBody($body, 'multipart/related')  // Usar el cuerpo con los metadatos y el archivo
+            ->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
+
+            if ($response->successful()){
+                $fileId = json_decode($response->body())->id;
+                $msgfile = " Archivo cargado a Google Drive";
+            }else{
+                $msgfile = " Cargar fallida en Google Drive";
+            }
+
+            $contents = Storage::disk('public')->exists('archivos/'.$filesave);
+            if ($contents){
+                Storage::disk('public')->delete('archivos/'.$filesave);
+            }
+
+            TmFiles::Create([
+                'actividad_id' => $selectId,
+                'persona_id' => $this->docenteId,
+                'nombre' => $name,
+                'drive_id' => $fileId,
+                'usuario' => auth()->user()->name,
+            ]);
+
+        }
+
+        $message = "Registro grabado con éxito!"."\n".$msgfile;
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+
+        return redirect()->to('/activities/activity');
+
     }
 
 
@@ -250,8 +335,11 @@ class VcActividadAdd extends Component
             'usuario' => auth()->user()->name,
         ]);
 
-        $message = "Registro actualizado con éxito!";
-        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+
+        $this->apiDrive($this->actividadId);
+
+        //$message = "Registro actualizado con éxito!";
+        //$this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
         return redirect()->to('/activities/activity');
 
@@ -263,8 +351,10 @@ class VcActividadAdd extends Component
         $linea = $linea+1;
 
         $attach=[
+            'id' => 0,
             'linea' => $linea,
             'adjunto' => "",
+            'drive_id' => "",
         ];
 
         array_push($this->array_attach,$attach);

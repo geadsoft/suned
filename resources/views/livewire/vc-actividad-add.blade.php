@@ -121,6 +121,17 @@
                                 <tbody>
                                 @foreach ($array_attach as $key => $recno) 
                                 <tr class="det-{{$recno['linea']}}">
+                                @if ($recno['drive_id']!="")
+                                <td>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon3">Archivo</span>
+                                        <input type="text" id="file-{{$recno['linea']}}" wire:model.prevent="array_attach.{{$key}}.adjunto" class="form-control">
+                                        <a href="" id="drive-{{$recno['linea']}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" wire:click="download()"><i class="ri-download-2-line fs-18"></i></a>
+                                        <a id="btnadd-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-success rounded-circle" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-18"></i></a>
+                                        <a id="btndel-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-danger rounded-circle" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-18"></i></a>
+                                    </div>
+                                </td>
+                                @else
                                 <td>
                                     <div class="input-group">
                                     <input type="file" id="file-{{$recno['linea']}}" wire:model.prevent="array_attach.{{$key}}.adjunto" class="form-control">
@@ -128,6 +139,7 @@
                                     <a id="btndel-{{$recno['linea']}}" class ="btn" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-16"></i></a>
                                     </div>
                                 </td>
+                                @endif
                                 </tr>
                                  @endforeach
                                 </tbody>
@@ -135,7 +147,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold" for="product-title-input">Link externo</label>
-                            <input type="text" class="form-control" id="product-title-input" value="" placeholder="Ingrese enlace externo" wire:model.defer="enlace">
+                            <input type="text" class="form-control" id="product-title-input" placeholder="Ingrese enlace externo" pattern="https://.*" size="30" wire:model.defer="enlace">
                             <div class="invalid-feedback">Por favor ingrese enlace externo.</div>
                         </div>
                         @if ($this->actividadId>0)
