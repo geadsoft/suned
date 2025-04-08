@@ -159,8 +159,6 @@ class VcActividadAdd extends Component
             $this->attach_add();
         }
 
-        //$message = "aaaa";
-        //$this->dispatchBrowserEvent('editor-load', ['newName' => $message]);
         $this->setEditorData($this->texteditor);
 
     }
@@ -168,7 +166,6 @@ class VcActividadAdd extends Component
     public function setEditorData($data){
         $this->texteditor = $data;
     }
-
 
     public function updatedasignaturaId($id){
 
@@ -245,6 +242,10 @@ class VcActividadAdd extends Component
         foreach ($this->array_attach as $attach){
 
             if ($attach['id']>0) { 
+                continue;
+            }
+
+            if ($attach['adjunto']=="") { 
                 continue;
             }
             
