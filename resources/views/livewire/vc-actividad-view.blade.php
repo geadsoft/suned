@@ -87,13 +87,17 @@
                                     <tr class="det-{{$recno['linea']}}">
                                     <td>
                                         <div class="input-group">
-                                        <input type="file" id="file-{{$recno['linea']}}" wire:model.prevent="" class="form-control">
+                                            <span class="input-group-text" id="basic-addon3">Archivo</span>
+                                            <input type="text" id="file-{{$recno['linea']}}" wire:model.prevent="array_attach.{{$key}}.adjunto" class="form-control" disabled>
+                                            <!--<a href="" id="drive-{{$recno['linea']}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" wire:click="download()"><i class="ri-download-2-line fs-18"></i></a>
+                                            <a id="btnadd-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-success rounded-circle" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-18"></i></a>
+                                            <a id="btndel-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-danger rounded-circle" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-18"></i></a>-->
                                         </div>
                                     </td>
                                     </tr>
                                     @endforeach
                                     </tbody>
-                                </table>
+                                </table> 
                                  <!-- warning Alert -->
                                  @if (empty($array_attach))
                                     <div class="alert alert-warning" role="alert">

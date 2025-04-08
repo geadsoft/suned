@@ -10,7 +10,7 @@ class VcActividades extends Component
 {
     use WithPagination;
 
-    public $actividadId;
+    public $actividadId, $docenteId;
 
     public $arrtermino=[
         '1T' => 'Primer Trimestre',
@@ -43,16 +43,17 @@ class VcActividades extends Component
     ];
 
     public function mount(){
+
+        $this->docenteId = auth()->user()->personaId;
         
         $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",2913)
+        ->where("d.docente_id",$this->docenteId)
         ->selectRaw('d.id, concat(m.descripcion," - ",s.descripcion," ",c.paralelo) as descripcion')
-        ->get();
-        
+        ->get(); 
     }
     
     
@@ -77,9 +78,10 @@ class VcActividades extends Component
         ->when($this->filters['bloque'],function($query){
             return $query->where('bloque',"{$this->filters['bloque']}");
         })
-        ->where("a.docente_id",2913)
+        ->where("a.docente_id",$this->docenteId)
         ->where("a.tipo","AC")
         ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
+        ->orderby("a.id","desc")
         ->paginate(12);
         
         return view('livewire.vc-actividades',[

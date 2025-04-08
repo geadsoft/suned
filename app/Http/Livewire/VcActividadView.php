@@ -7,6 +7,7 @@ use App\Models\TmActividades;
 use App\Models\TmAsignaturas;
 use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmPeriodosLectivos;
+use App\Models\TmFiles;
 
 use Livewire\Component;
 
@@ -97,6 +98,28 @@ class VcActividadView extends Component
         ->where("tm_actividades.id",$id)
         ->first()
         ->toArray();
+
+        $tblfiles = TmFiles::query()
+        ->where('actividad_id',$id)
+        ->where('persona_id',$this->docenteId)
+        ->get();
+
+        $this->array_attach = [];
+        foreach($tblfiles as $key => $files){
+
+            $linea = count($this->array_attach);
+            $linea = $linea+1;
+
+            $attach=[
+                'id' => $files['id'],
+                'linea' => $linea,
+                'adjunto' => $files['nombre'],
+                'drive_id' => $files['drive_id'],
+            ];
+
+            array_push($this->array_attach,$attach);
+
+        }
 
         $this->termino = $record['termino'];
         $this->bloque = $record['bloque'];

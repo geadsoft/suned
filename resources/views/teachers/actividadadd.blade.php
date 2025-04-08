@@ -24,6 +24,7 @@
 
     
     <script src="{{ URL::asset('assets/libs/@ckeditor/@ckeditor.min.js') }}"></script>
+    <!--<script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>-->
     <script src="{{ URL::asset('assets/js/pages/ecommerce-product-create.init.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
@@ -36,15 +37,24 @@
             swal("Buen Trabajo!", event.detail.newName, "success");
         })
 
-        window.addEventListener('chk-editor', event => {
-
-            ClassicEditor.create(document.querySelector('#ckeditor-classic')).then(function (editor) {
-            editor.ui.view.editable.element.style.height = '200px';
-            })["catch"](function (error) {
-            console.error(error);
-            });
-
-         })
+        document.addEventListener('livewire:load', function () {
+            ClassicEditor
+                .create(document.querySelector('#editor'))
+                .then(function(editor){
+                    editor.model.document.on('change:data',()=> {
+                        Livewire.emit('updateEditorData', editor.getData());
+                    })
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        })
+        
+        Livewire.on('setEditorData', (datosDelEditor) => {
+            alert(datosDelEditor);
+            const editor = ClassicEditor.instances['editor']; // Si tienes múltiples instancias, usa el selector correspondiente
+            editor.setData(datosDelEditor);
+        });
 
     </script>
     

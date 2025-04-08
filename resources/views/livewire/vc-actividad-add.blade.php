@@ -109,11 +109,12 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="mb-3">
+                        <div style="display: none">{{$texteditor}}</div>
+                        <div class="mb-3" wire:ignore>
                             <label class="form-label fw-semibold">Descripción de Actividad</label>
-                            <div id="ckeditor-classic">
-                                <p></p>
-                            </div>
+                            <textarea id="editor" wire:model="texteditor">
+                                
+                            </textarea>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Adjuntos</label>

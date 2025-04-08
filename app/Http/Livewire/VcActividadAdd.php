@@ -20,10 +20,12 @@ class VcActividadAdd extends Component
     use WithFileUploads;
 
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
-    public $periodoId, $tbltermino, $tblbloque, $tblactividad;
+    public $periodoId, $tbltermino, $tblbloque, $tblactividad, $texteditor;
     public $tblparalelo=[], $tblasignatura=[];
     public $array_attach=[];
     public $docenteId;
+
+    protected $listeners = ['updateEditorData'];
 
     private function token(){
 
@@ -98,6 +100,11 @@ class VcActividadAdd extends Component
 
     }
 
+    public function updateEditorData($data)
+    {
+        $this->texteditor = $data;
+    }
+
     public function edit($id){
         
         $record = TmActividades::query()
@@ -118,7 +125,7 @@ class VcActividadAdd extends Component
         $this->nombre = $record['nombre'];
         $this->puntaje = $record['puntaje'];
         $this->enlace = $record['enlace'];
-        $this->descripcion = $record['descripcion'];
+        $this->texteditor = $record['descripcion'];
         $this->control="disabled";
 
         $fecha = date('Y-m-d',strtotime($record['fecha']));
@@ -148,11 +155,20 @@ class VcActividadAdd extends Component
 
         }
 
-        if ($tblfiles==null){
+        if (count($tblfiles)==0){
             $this->attach_add();
         }
 
+        //$message = "aaaa";
+        //$this->dispatchBrowserEvent('editor-load', ['newName' => $message]);
+        $this->setEditorData($this->texteditor);
+
     }
+
+    public function setEditorData($data){
+        $this->texteditor = $data;
+    }
+
 
     public function updatedasignaturaId($id){
 
@@ -170,26 +186,32 @@ class VcActividadAdd extends Component
         ->get();
 
         $message = "";
-        $this->dispatchBrowserEvent('chk-editor', ['newName' => $message]);
+        //$this->dispatchBrowserEvent('chk-editor', ['newName' => $message]);
     }
 
 
     public function createData(){
+
+        //dd($this->paralelo,$this->termino,$this->nombre,$this->fecha,$this->puntaje);
 
         $this ->validate([
             'paralelo' => 'required',
             'termino' => 'required',
             'nombre' => 'required',
             'fecha' => 'required',
-            'puntaje' => 'required',
-            'nombre' => 'required',
+            'puntaje' => 'required'
         ]);
+
+        //dd('ingresa');
 
         if ($this->actividadId>0){
 
             $this->updateData();            
 
         }else {
+
+            //$purifier = new HTMLPurifier();
+            //$cleanHtml = $purifier->purify($request->input('content'));
             
             $tblData = TmActividades::Create([
                 'docente_id' => $this->docenteId,
@@ -199,7 +221,7 @@ class VcActividadAdd extends Component
                 'tipo' => 'AC',
                 'actividad' => $this->tipo,
                 'nombre' => $this->nombre,
-                'descripcion' => "",
+                'descripcion' => $this->texteditor,
                 'fecha' => $this->fecha,
                 'subir_archivo' => $this->archivo,
                 'puntaje' => $this->puntaje,
@@ -210,30 +232,6 @@ class VcActividadAdd extends Component
 
             $this->apiDrive($tblData->id);
 
-            /*$accessToken = $this->token();
-
-            $name = Str::sLug($file->getClientOriginalName());
-            $mime = $file->getClientMimeType();
-
-            $reponse = Https::withHeaders([
-                'Autorization' => 'Bearer '.$accessToken,
-                'Content-Type' => 'Application/json'
-            ])->post('https://www.gooleapis.com/drive/v3/file',[
-                'data' => $name,
-                'mimeType' => $mime,
-                'uploadType' => 'resumable',
-            ]);
-
-            if ($reponse->successful()){
-                $msgfile = "Archivo cargado a Google Drive"
-            }else{
-                $msgfile = "Cargar fallida en Google Drive"
-            }
-
-            $message = "Registro grabado con éxito!"."/n".$msgfile;
-            $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
-
-            return redirect()->to('/activities/activity');*/
         }
         
     }
@@ -251,8 +249,10 @@ class VcActividadAdd extends Component
             }
             
             $file = $attach['adjunto'];
-            $name = Str::sLug($file->getClientOriginalName());
-            $ext =  Str::sLug($file->getClientOriginalExtension());
+
+            $name = $file->getClientOriginalName();
+            $name = pathinfo($name, PATHINFO_FILENAME);
+            $ext =  $file->getClientOriginalExtension();
             $mime = $file->getClientMimeType();
 
             $filesave = $name.'.'.$ext;
@@ -325,11 +325,11 @@ class VcActividadAdd extends Component
     public function updateData(){
 
         $record = TmActividades::find($this->actividadId);
-            
+
         $record->update([
             'actividad' => $this->tipo,
             'nombre' => $this->nombre,
-            'descripcion' => "",
+            'descripcion' => $this->texteditor,
             'fecha' => $this->fecha,
             'subir_archivo' => $this->archivo,
             'puntaje' => $this->puntaje,
