@@ -308,7 +308,7 @@ class VcActividadAdd extends Component
             TmFiles::Create([
                 'actividad_id' => $selectId,
                 'persona_id' => $this->docenteId,
-                'nombre' => $name,
+                'nombre' => $name.'.'.$ext,
                 'drive_id' => $fileId,
                 'usuario' => auth()->user()->name,
             ]);
