@@ -80,7 +80,7 @@ class VcPersonsBilling extends Component
         $this->familiar['apellidos'] = '';
         $this->familiar['tipoidentificacion'] = 'C';
         $this->familiar['identificacion'] = '';
-        $this->familiar['genero'] = '';
+        $this->familiar['genero'] = 'F';
         $this->familiar['nacionalidad_id'] = 35;
         $this->familiar['telefono'] = '';
         $this->familiar['parentesco'] = 'NN';
@@ -270,10 +270,27 @@ class VcPersonsBilling extends Component
 
     public function deleteData($familiarId){
 
-        TdFacturaEstudiantes::where('persona_id',$familiarId)->delete();
-        TmPersonas::find($familiarId)->delete();
-        
-        $this->loadFamiliar();
+        if ($familiarId>0){
+
+            TdFacturaEstudiantes::where('persona_id',$familiarId)->delete();
+            TmPersonas::find($familiarId)->delete();
+
+            $this->loadFamiliar();
+
+        }else{
+
+            $recnoToDelete = $this->familiares;
+            foreach ($recnoToDelete as $index => $recno)
+            {
+                if ($recno['id'] == $familiarId){
+                    unset ($recnoToDelete[$index]);
+                } 
+            }
+
+            $this->reset(['familiares']);
+            $this->familiares = $recnoToDelete;
+
+        }
 
     }
 

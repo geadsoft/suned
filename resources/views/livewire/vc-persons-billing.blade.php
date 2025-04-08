@@ -51,7 +51,7 @@
                     placeholder="Ingrese cédula o ruc" wire:model.defer="familiar.identificacion" {{$eControl2}}>
             </div>
         </div>
-        <!--<div class="col-lg-4">
+        <div class="col-lg-2">
             <div class="mb-3">
                 <label for="pergenero" class="form-label">Genero</label>
                 <select class="form-select" data-choices data-choices-search-false id="pergenero" wire:model.defer="familiar.genero" {{$eControl2}}>
@@ -60,7 +60,7 @@
                 </select>
             </div>
         </div>
-        <div class="col-lg-4">
+        <!--<div class="col-lg-4">
             <div class="mb-3">
                 <label for="pernacionalidad" class="form-label">Nacionalidad</label>
                 <select class="form-select" data-choices data-choices-search-false id="pernacionalidad" wire:model.defer="familiar.nacionalidad_id" {{$eControl2}}>
@@ -93,7 +93,7 @@
                 </select>
             </div>
         </div>-->
-        <div class="col-xxl-6">
+        <div class="col-xxl-4">
             <div class="mb-3">
                 <label for="peremail" class="form-label">Email</label>
                 <input type="email" class="form-control" id="peremail"
