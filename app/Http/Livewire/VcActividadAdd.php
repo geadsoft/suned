@@ -148,6 +148,9 @@ class VcActividadAdd extends Component
 
         }
 
+        if ($tblfiles==null){
+            $this->attach_add();
+        }
 
     }
 
