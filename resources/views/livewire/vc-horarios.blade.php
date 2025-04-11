@@ -29,7 +29,6 @@
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
-                                        <option value="">Seleccionar Grupo</option>
                                         @foreach ($tblgenerals as $general)
                                             @if ($general->superior == 1)
                                             <option value="{{$general->id}}">{{$general->descripcion}}</option>
@@ -40,7 +39,7 @@
                             </div>
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
-                                    <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
+                                    <select class="form-select" name="cmbgrupo" wire:model="filters.srv_nivel">
                                         <option value="">Seleccionar Nivel</option>
                                         @foreach ($tblgenerals as $general)
                                             @if ($general->superior ==2)
@@ -50,9 +49,9 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-xxl-2 col-sm-4">
+                            <!--<div class="col-xxl-2 col-sm-4">
                                 <div>
-                                    <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
+                                    <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grado">
                                         <option value="">Seleccionar Grado</option>
                                         @foreach ($tblgenerals as $general)
                                             @if ($general->superior ==3)
@@ -61,7 +60,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="col-xxl-1 col-sm-4">
                                 <div>
                                     <button type="button" class="btn btn-primary w-100" wire:click="deleteFilters()"> <i
