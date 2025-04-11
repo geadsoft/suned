@@ -5,14 +5,16 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TmMatricula;
 use App\Models\TrDeudasCabs;
 
+
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class VcPanel extends Component
 {
     public $lnperiodoId, $periodoOld, $hombres, $mujeres;
     public $chartsmatricula=[], $chartsregistros=[], $chartsmodalidad=[], $chartspension=[];
-    public $glosa, $ejercicio, $mes;
+    public $glosa, $ejercicio, $mes, $user;
 
     public $objmes = [
         1 => 'Enero',
@@ -42,6 +44,9 @@ class VcPanel extends Component
         $this->ejercicio  = $periodo['periodo'];
         $this->lnperiodoId = $periodo['id'];
         $this->periodoOld  = $anioant['id'];
+        $this->user =  Auth::user();
+
+        //dd($this->user->getAllPermissions());
     }
     
     public function render()
@@ -94,7 +99,9 @@ class VcPanel extends Component
         $this->matricula();
         $this->deudaPension();
 
-        return view('livewire.vc-panel');
+        return view('livewire.vc-panel',[
+            'user' => $this->user,
+        ]);
     }
 
     public function matricula(){

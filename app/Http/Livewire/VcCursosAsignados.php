@@ -4,12 +4,17 @@ namespace App\Http\Livewire;
 use App\Models\TmHorarios;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 
 class VcCursosAsignados extends Component
 {
-
+    public $user;
     use WithPagination;
+
+    public function mount(){    
+        $this->user =  Auth::user();
+    }
 
     public function render()
     {
@@ -25,7 +30,8 @@ class VcCursosAsignados extends Component
         ->paginate(12);
         
         return view('livewire.vc-cursos-asignados',[
-            'tblrecords' => $tblrecords
+            'tblrecords' => $tblrecords,
+            'user' =>$this->user
         ]);
 
     }
