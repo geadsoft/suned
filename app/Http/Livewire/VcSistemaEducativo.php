@@ -30,7 +30,10 @@ class VcSistemaEducativo extends Component
 
     public function mount()
     {
-        $this->plectivo = TmPeriodosLectivos::where('estado','<>','C')->get();
+        $this->plectivo = TmPeriodosLectivos::query()
+        ->where('estado','<>','C')
+        ->orWhere('aperturado',1)
+        ->get();
         $this->periodoId = $this->plectivo[0]['id'];
         
         $this->metodo = 'T';
