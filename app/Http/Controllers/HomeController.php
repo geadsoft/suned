@@ -40,20 +40,14 @@ class HomeController extends Controller
     public function root()
     {
         //return view('index');
-        $perfil = auth()->user()->perfil;
         
-        if ($perfil == 'U'){
+        /*if (auth()->user()->can('Panel Principal')){
             return view('config/panel');
-        }
+        };*/
 
-        if ($perfil == 'D'){
-            return view('teachers/cursos');
-        }
-
-        if ($perfil == 'E'){
-            return view('studens/calendar');
-        }
-        
+        if (auth()->user()->can('Calendario')){
+            return view('/academic/view_calendar');
+        };
     }
 
     /*Language Translation*/

@@ -66,7 +66,7 @@
                                         <td class="lead_score">{{$record->nacionalidad->descripcion}}</td>
                                         <td class="tags">{{$record->telefono}}</td>
                                         <td class="tags">{{$record->email}}</td>
-                                        <td class="tags">{{$record->tipo}}</td>
+                                        <td class="tags">{{$arrtipo[$record->tipopersona]}}</td>
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
@@ -76,7 +76,7 @@
                                                 </li>
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                    <a class="edit-item-btn" href="/academic/agent-edit/{{$record->identificacion}}"><i
+                                                    <a class="edit-item-btn" href="" wire:click.prevent="edit({{ $record->id }})"><i
                                                             class="ri-pencil-fill align-bottom text-muted"></i></a>
                                                 </li>
                                             </ul>

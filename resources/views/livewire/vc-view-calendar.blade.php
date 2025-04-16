@@ -6,11 +6,10 @@
                 <div class="col-xl-3">
                     <div class="card card-h-100">
                         <div class="card-body">
-                            <button class="btn btn-primary w-100" id="btn-new-event"><i
-                                    class="mdi mdi-plus"></i> Crear Nuevo Evento</button>
+                            <!--<button class="btn btn-primary w-100" id="btn-new-event"><i
+                                    class="mdi mdi-plus"></i> Crear Nuevo Evento</button>-->
                             <div id="external-events">
                                 <br>
-                                <p class="text-muted">Arrastra y suelta tu evento o haz clic en el calendario</p>
                                 <div class="external-event bg-soft-success text-success" data-class="bg-soft-success">
                                     <i class="mdi mdi-checkbox-blank-circle font-size-11 me-2"></i>Notificación
                                 </div>
@@ -77,6 +76,7 @@
                     </body>
                 </div><!-- end col -->
             </div><!--end row-->
+            
             
 
             <div style='clear:both'></div>
@@ -223,7 +223,7 @@
                                     <form autocomplete="off" class="needs-validation" name="event-form" id="form-event" novalidate>
                                         <div class="text-end">
                                             <!--<a href="#" class="btn btn-sm btn-soft-primary" id="edit-event-btn" data-id="edit-event" wire:click='editEvent()' role="button">Edit</a>-->
-                                            <button type="button" class="btn btn-sm btn-soft-primary" data-bs-dismiss="modal" aria-hidden="true" wire:click='editEvent()'>Edit</button>
+                                            <!--<button type="button" class="btn btn-sm btn-soft-primary" data-bs-dismiss="modal" aria-hidden="true" wire:click='editEvent()'>Edit</button>-->
                                         </div>
                                         <div class="event-details">
                                             <div class="d-flex mb-2">

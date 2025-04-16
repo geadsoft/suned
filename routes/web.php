@@ -49,6 +49,7 @@ Route::get('/academic/tuition',[App\Http\Controllers\TmMatriculaController::clas
 Route::get('/academic/student-enrollment/{id}',[App\Http\Controllers\TmMatriculaController::class, 'addtuition'])->name('addtuition');
 Route::get('/academic/student-enrollment',[App\Http\Controllers\TmMatriculaController::class, 'newtuition'])->name('newtuition');
 Route::get('/academic/calendario',[App\Http\Controllers\TmSedesController::class, 'calendario'])->name('calendario');
+Route::get('/academic/calendario-view',[App\Http\Controllers\TmSedesController::class, 'calendario_view'])->name('calendario_view');
 Route::get('/academic/qualify-activity',[App\Http\Controllers\DocentesController::class, 'calificar_actividad'])->name('calificar_actividad');
 Route::get('/academic/qualify-exams',[App\Http\Controllers\DocentesController::class, 'calificar_examen'])->name('calificar_examen');
 Route::get('/academic/qualify-suppletory',[App\Http\Controllers\DocentesController::class, 'calificar_supletorio'])->name('calificar_supletorio');
@@ -69,6 +70,13 @@ Route::get('/headquarters/headquarters-add',[App\Http\Controllers\TmSedesControl
 Route::get('/headquarters/pension',[App\Http\Controllers\TmPensionesCabController::class, 'index'])->name('index');
 Route::get('/headquarters/educational-services',[App\Http\Controllers\TmServiciosController::class, 'index'])->name('index');
 Route::get('/headquarters/educational-system',[App\Http\Controllers\TmSedesController::class, 'system'])->name('system');
+Route::get('/headquarters/staff',[App\Http\Controllers\TmPersonasController::class, 'personal'])->name('personal');
+Route::get('/headquarters/staff-add',[App\Http\Controllers\TmPersonasController::class, 'addpersonal'])->name('addpersonal');
+Route::get('/headquarters/staff-edit/{id}',[App\Http\Controllers\TmPersonasController::class, 'editpersonal'])->name('editpersonal');
+Route::get('/headquarters/schedules',[App\Http\Controllers\TmHorariosController::class, 'index'])->name('index');
+Route::get('/headquarters/schedules-add',[App\Http\Controllers\TmHorariosController::class, 'addhorarios'])->name('addhorarios');
+Route::get('/headquarters/schedules-edit/{id}',[App\Http\Controllers\TmHorariosController::class, 'edithorarios'])->name('edithorarios');
+Route::get('/headquarters/subjects',[App\Http\Controllers\TmAsignaturasController::class, 'index'])->name('index');
 
 Route::get('/financial/encashment/{id}',[App\Http\Controllers\TrCobrosCabsController::class, 'viewtuition'])->name('viewtuition');
 Route::get('/financial/encashment',[App\Http\Controllers\TrCobrosCabsController::class, 'loadtuition'])->name('loadtuition');
@@ -82,12 +90,7 @@ Route::get('/financial/list-income',[App\Http\Controllers\TrCobrosCabsController
 Route::get('/report/generic-reports',[App\Http\Controllers\TmMatriculaController::class, 'reportegenerico'])->name('reportegenerico');
 Route::get('/secretary/certificate',[App\Http\Controllers\SecretariaController::class, 'certificados'])->name('certificados');
 Route::get('/secretary/documentation',[App\Http\Controllers\SecretariaController::class, 'documentos'])->name('documentos');
-Route::get('/headquarters/staff',[App\Http\Controllers\TmPersonasController::class, 'personal'])->name('personal');
-Route::get('/headquarters/staff-add',[App\Http\Controllers\TmPersonasController::class, 'addpersonal'])->name('addpersonal');
-Route::get('/headquarters/schedules',[App\Http\Controllers\TmHorariosController::class, 'index'])->name('index');
-Route::get('/headquarters/schedules-add',[App\Http\Controllers\TmHorariosController::class, 'addhorarios'])->name('addhorarios');
-Route::get('/headquarters/schedules-edit/{id}',[App\Http\Controllers\TmHorariosController::class, 'edithorarios'])->name('edithorarios');
-Route::get('/headquarters/subjects',[App\Http\Controllers\TmAsignaturasController::class, 'index'])->name('index');
+
 Route::get('/academic/ratings',[App\Http\Controllers\TmCalificaciones::class, 'index'])->name('index');
 Route::get('/academic/ratings-add',[App\Http\Controllers\TmCalificaciones::class, 'addCalificacion'])->name('addCalificacion');
 Route::get('/secretary/ratings',[App\Http\Controllers\SecretariaController::class, 'ratings'])->name('ratings');

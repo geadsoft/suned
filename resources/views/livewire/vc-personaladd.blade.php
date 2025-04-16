@@ -3,7 +3,7 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body checkout-tab">
-                    <form autocomplete="off" wire:submit.prevent="{{ 'createData' }}">
+                    <form autocomplete="off" wire:submit.prevent="{{ $editar ? 'updateData' : 'createData' }}">
                         @csrf
                         <div class="step-arrow-nav mt-n3 mx-n3 mb-3">
 
@@ -155,11 +155,25 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-10">
+                                        <div class="col-lg-2">
+                                            <div class="mb-3">
+                                                <label for="txttelefono" class="form-label">Teléfono</label>
+                                                <input type="text" class="form-control" id="txttelefono"
+                                                    placeholder="Ingrese su número de telefono" wire:model.defer="record.telefono" {{$eControl}}>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
                                             <div class="mb-3">
                                                 <label for="cmbetnia" class="form-label">Dirección</label>
                                                 <input type="text" class="form-control" id="txtdireccion"
                                                     placeholder="Ingrese su dirección domiciliaria" wire:model.defer="record.direccion" {{$eControl}}>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="mb-3">
+                                                <label for="txtemail" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="txtemail"
+                                                    placeholder="Enter your email" wire:model.defer="record.email" {{$eControl}}>
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
@@ -185,7 +199,7 @@
                                     </div>    
 
                                 </div>
-                                <div class="row">
+                                <!--<div class="row">
                                     <div class="card-header">
                                         <h5 class="card-title flex-grow-1 mb-0 text-primary fs-14"><i
                                             class="mdi mdi-phone-sync align-middle me-1 text-success"></i>
@@ -206,10 +220,14 @@
                                         </div>
                                         
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="card-body p-4">
                                     <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                        <button type="submit" class="btn btn-success"><i class="ri-save-line align-bottom me-1"></i> Grabar Personal</button>
+                                        @if($editar==true)
+                                            <button type="submit" class="btn btn-success"><i class="ri-save-line align-bottom me-1"></i> Actualizar </button>
+                                        @else
+                                            <button type="submit" class="btn btn-success"><i class="ri-save-line align-bottom me-1"></i> Grabar </button>
+                                        @endif
                                     </div>
                                 </div>    
                             </div>

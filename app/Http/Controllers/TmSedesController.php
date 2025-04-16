@@ -27,6 +27,11 @@ class TmSedesController extends Controller
         return view('academic/calendario');
     }
 
+    public function calendario_view()
+    {
+        return view('academic/calendarioview');
+    }
+
     public function system()
     {
         return view('academic/sistema');

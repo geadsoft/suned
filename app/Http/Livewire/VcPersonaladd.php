@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 use App\Models\TmPersonas;
 use App\Models\TmGeneralidades;
 use App\Models\TmFamiliarEstudiantes;
+use App\Models\User;
 
 
 use Livewire\Component;
@@ -19,25 +20,36 @@ class VcPersonaladd extends Component
 
     public $record=[];
     public $personaId, $tipo, $eControl='', $fControl='', $fileimg='', $foto;
+    public $editar;
 
-    public function mount($tipo){
+    public function mount($personaId){
 
-        $this->record  = TmPersonas::find(0);
-        $this->record['nombres'] = "";
-        $this->record['apellidos'] = "";
-        $this->record['tipoidentificacion'] = "C";
-        $this->record['identificacion'] = "";
-        $this->record['fechanacimiento'] = "";
-        $this->record['nacionalidad_id'] = 35;
-        $this->record['genero'] = "M";
-        $this->record['telefono'] = "";
-        $this->record['direccion'] = "";
-        $this->record['email'] = "";
-        $this->record['etnia'] = "ME";
-        $this->record['tipopersona'] = "A";
-        $this->record['estado'] = "A";
-        $this->record['foto'] = "";
-        $this->tipo = $tipo;
+        if ($personaId==0){
+
+            $this->record  = TmPersonas::find(0);
+            $this->record['nombres'] = "";
+            $this->record['apellidos'] = "";
+            $this->record['tipoidentificacion'] = "C";
+            $this->record['identificacion'] = "";
+            $this->record['fechanacimiento'] = "";
+            $this->record['nacionalidad_id'] = 35;
+            $this->record['genero'] = "M";
+            $this->record['telefono'] = "";
+            $this->record['direccion'] = "";
+            $this->record['email'] = "";
+            $this->record['etnia'] = "ME";
+            $this->record['tipopersona'] = "A";
+            $this->record['estado'] = "A";
+            $this->record['foto'] = "";
+
+        } else {
+            
+            $this->personaId = $personaId;
+            $this->editData();
+        }
+
+        
+        //$this->tipo = $tipo;
 
     }
 
@@ -59,6 +71,31 @@ class VcPersonaladd extends Component
 
     public function paginationView(){
         return 'vendor.livewire.bootstrap'; 
+    }
+
+    public function editData(){
+
+        $personal = TmPersonas::find($this->personaId);
+
+        $fecha = date('Y-m-d',strtotime($personal->fechanacimiento));
+
+        $this->record['nombres'] = $personal->nombres;
+        $this->record['apellidos'] = $personal->apellidos;
+        $this->record['tipoidentificacion'] = $personal->tipoidentificacion;
+        $this->record['identificacion'] = $personal->identificacion;
+        $this->record['fechanacimiento'] =  $fecha;
+        $this->record['nacionalidad_id'] = $personal->nacionalidad_id;
+        $this->record['genero'] = $personal->genero;
+        $this->record['telefono'] = $personal->telefono;
+        $this->record['direccion'] = $personal->direccion;
+        $this->record['email'] = $personal->email;
+        $this->record['etnia'] = $personal->etnia;
+        $this->record['tipopersona'] = $personal->tipopersona;
+        $this->record['estado'] = $personal->estado;
+        $this->record['foto'] = $personal->foto;
+        $this->editar = true;
+
+
     }
     
     public function createData(){
@@ -104,6 +141,33 @@ class VcPersonaladd extends Component
             'foto' => $this -> record['foto'],
         ]);
 
+        $dominio = str_contains($this->record['email'],'@americanschool.edu.ec');
+        if ($dominio){
+
+            $pos = strpos($this->record['nombres'], ' ');
+            if ($pos==0){
+                $name = $this->record['nombres'];
+            }else{
+                $name = substr($this->record['nombres'],0,$pos);
+            }
+
+            $pos = strpos($this->record['apellidos'], ' ');
+            if ($pos==0){
+                $name = $name.' '.$this->record['apellidos'];
+            }else{
+                $name = $name.' '.substr($this->record['apellidos'],0,$pos);
+            }
+
+            User::Create([
+                'name' => $name,
+                'email' => $this->record['email'],
+                'password' => bcrypt($this->record['identificacion']) ,
+                'perfil' => 'U',
+                'personaId' => $this->personaId,
+                'acceso' => 1,
+            ]);
+        } 
+
         $this->dispatchBrowserEvent('msg-save');  
         return redirect()->to('/headquarters/staff');
         
@@ -111,30 +175,57 @@ class VcPersonaladd extends Component
 
     public function updateData(){
 
-        if ($this->personaId){
-            $record = TmPersonas::find($this->personaId);
-            $record->update([
-                'nombres' => $this -> nombres,
-                'apellidos' => $this -> apellidos,
-                'tipoidentificacion' => $this -> tipoident,
-                'identificacion' => $this->identificacion, 
-                'fechanacimiento' => $this ->fechanace,
-                'nacionalidad_id' => $this ->nacionalidad,
-                'genero' => $this -> genero,
-                'telefono' => $this -> telefono,
-                'direccion' => $this -> direccion,
-                'email' => $this -> email,
-                'etnia' => $this -> etnia,
-                'parentesco' => "",
-                'tipopersona' => "E",
-                'relacion_id' => 0,
-                'foto' => $nameFile,
-                ]);
-            
+        $record = TmPersonas::find($this->personaId);
+        $record->update([
+            'nombres' => $this -> record['nombres'],
+            'apellidos' => $this -> record['apellidos'],
+            'tipoidentificacion' => $this -> record['tipoidentificacion'],
+            'identificacion' => $this -> record['identificacion'],
+            'genero' => $this -> record['genero'],
+            'fechanacimiento' => $this -> record['fechanacimiento'],
+            'nacionalidad_id' => $this -> record['nacionalidad_id'],
+            'telefono' => $this -> record['telefono'],
+            'email' => $this -> record['email'],
+            'etnia' => $this -> record['etnia'],
+            'direccion' => $this -> record['direccion'],
+            'tipopersona' => $this -> record['tipopersona'],
+            'parentesco' => "NN",
+            'relacion_id' => 0,
+            'usuario' => auth()->user()->name,
+            'estado' => $this -> record['estado'],
+            'foto' => $this -> record['foto'],
+            ]);
+
+        $users   = User::where('personaid',$this->personaId)->get();
+        $dominio = str_contains($this->record['email'],'@americanschool.edu.ec');
+        if (count($users)==0 && $dominio){
+
+            $pos = strpos($this->record['nombres'], ' ');
+            if ($pos==0){
+                $name = $this->record['nombres'];
+            }else{
+                $name = substr($this->record['nombres'],0,$pos);
             }
+
+            $pos = strpos($this->record['apellidos'], ' ');
+            if ($pos==0){
+                $name = $name.' '.$this->record['apellidos'];
+            }else{
+                $name = $name.' '.substr($this->record['apellidos'],0,$pos);
+            }
+
+            User::Create([
+                'name' => $name,
+                'email' => $this->record['email'],
+                'password' => bcrypt($this->record['identificacion']) ,
+                'perfil' => 'U',
+                'personaId' => $this->personaId,
+                'acceso' => 1,
+            ]);
+        }       
         
-        $this->dispatchBrowserEvent('msg-actualizar');
-        return redirect()->to('/academic/students');
+        $this->dispatchBrowserEvent('msg-updated');
+        return redirect()->to('/headquarters/staff');
 
     }
 

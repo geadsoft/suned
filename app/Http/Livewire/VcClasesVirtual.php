@@ -11,7 +11,7 @@ use Livewire\WithPagination;
 class VcClasesVirtual extends Component
 {
     
-    public $showEditModal, $paralelo, $actividadId=0;
+    public $showEditModal, $paralelo, $actividadId=0, $tblasignatura, $asignaturaId;
 
     public $record=[];
     public $tblparalelo=[];
@@ -21,6 +21,8 @@ class VcClasesVirtual extends Component
     ];
 
     use WithPagination;
+
+    protected $listeners = ['setCursoId'];
 
     public function mount()
     {
@@ -33,6 +35,14 @@ class VcClasesVirtual extends Component
 
     public function render()
     {
+        /*$this->tblasignatura = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("d.docente_id",$this->docenteId)
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->selectRaw('m.id, m.descripcion')
+        ->groupBy('m.id','m.descripcion')
+        ->get();*/
         
         $tblrecords = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
@@ -58,9 +68,9 @@ class VcClasesVirtual extends Component
         return 'vendor.livewire.bootstrap'; 
     }
 
-    public function add(){
+    /*public function updatedasignaturaId($id){
 
-        $ldate = date('Y-m-d H:i:s');
+        $this->asignaturaId = $id;
 
         $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
@@ -69,8 +79,32 @@ class VcClasesVirtual extends Component
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
         ->where("d.docente_id",$this->docenteId)
         ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->selectRaw('d.id, concat(m.descripcion," - ",s.descripcion," ",c.paralelo) as descripcion')
+        ->where("m.id",$id)
+        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
+
+    }*/
+
+    public function setCursoId($cursoId){
+        
+        dd(1);
+        $this->record['paralelo'] = $cursoId;
+        
+    }
+
+    public function add(){
+
+        $ldate = date('Y-m-d H:i:s');
+
+        /*$this->tblparalelo = TmHorarios::query()
+        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
+        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("d.docente_id",$this->docenteId)
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->selectRaw('d.id, concat(m.descripcion," - ",s.descripcion," ",c.paralelo) as descripcion')
+        ->get();*/
         
         $this->showEditModal = false;
         $this->reset(['record']);

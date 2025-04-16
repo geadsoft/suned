@@ -16,7 +16,7 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-personaladd',['tipo' => $tipo])
+    @livewire('vc-personaladd',['personaId' => $id])
 
 @endsection
 @section('script')
@@ -37,6 +37,10 @@
 
         window.addEventListener('msg-save', event => {
             swal("Buen trabajo!", "¡Registro guardado exitosamente!", "success");
+        })
+
+        window.addEventListener('msg-updated', event => {
+            swal("Buen trabajo!", "¡Registro actualizado exitosamente!", "success");
         })
 
     </script>

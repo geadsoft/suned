@@ -8,8 +8,9 @@ use App\Models\TmPeriodosLectivos;
 
 use Livewire\Component;
 
-class VcCalendario extends Component
+class VcViewCalendar extends Component
 {
+    
     public $showEditModal = false, $eControl = 'disabled', $periodo, $mes;
     public $actividad='GE', $evento, $startdate, $enddate, $comentario, $selectId, $eventoId;
     public $arrevent=[], $lstevent;
@@ -30,7 +31,7 @@ class VcCalendario extends Component
     public function render()
     {
                   
-        return view('livewire.vc-calendario');
+        return view('livewire.vc-view-calendar');
 
     }
 
@@ -235,5 +236,5 @@ class VcCalendario extends Component
 
 
     }
-
+    
 }

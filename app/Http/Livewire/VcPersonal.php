@@ -10,12 +10,17 @@ class VcPersonal extends Component
 {   
     use WithPagination;
 
-    
+    public $arrtipo=[
+        'A' => 'Administrativo',
+        'D' => 'Docente',
+        'P' => 'Apoyo Profesional',
+        'M' => 'Mantenimiento y Operaciones'
+    ];
   
     public function render()
     {
         
-        $tblrecords = TmPersonas::whereRaw("tipopersona <> 'E' and tipopersona <> 'R'")
+        $tblrecords = TmPersonas::whereRaw("tipopersona in ('A','D','P','M')")
         ->orderBy('apellidos','asc')->paginate(13);
         
         return view('livewire.vc-personal',[
@@ -28,12 +33,9 @@ class VcPersonal extends Component
         return 'vendor.livewire.bootstrap'; 
     }
 
-    public function edit(TmPersonas $tblrecords ){
-        
-        $this->record  = $tblrecords->toArray();
-        $this->selectId = $this -> record['id'];
+    public function edit($personalId){
 
-        return redirect()->to('/academic/person-add');
+        return redirect()->to('/headquarters/staff-edit/'.$personalId);
 
     }
 

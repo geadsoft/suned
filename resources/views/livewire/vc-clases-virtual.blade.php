@@ -121,14 +121,8 @@
                                         </div>
                                     </div>
                                     <div class="modal-body card-body border border-dashed border-end-0 border-start-0">
-                                        <div class="mb-3">
-                                            <label for="choices-publish-status-input" class="form-label fw-semibold">Clases Virtuales</label>
-                                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="record.paralelo" required>
-                                            @foreach ($tblparalelo as $paralelo) 
-                                                <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
-                                                @endforeach 
-                                            </select>
-                                        </div>
+                                        
+                                        @livewire('vc-asignatura-cursos') 
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold" for="product-title-input">Enlace</label>
                                             <input type="text" class="form-control" id="product-title-input" value="" placeholder="Ingrese enlace externo" wire:model.defer="record.enlace" required>
