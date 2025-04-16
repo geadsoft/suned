@@ -41,9 +41,9 @@ class HomeController extends Controller
     {
         //return view('index');
         
-        /*if (auth()->user()->can('Panel Principal')){
+        if (auth()->user()->can('Panel Principal')){
             return view('config/panel');
-        };*/
+        };
 
         if (auth()->user()->can('Calendario')){
             return view('/academic/view_calendar');
