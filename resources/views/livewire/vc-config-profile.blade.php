@@ -172,7 +172,7 @@
                                         <div class="mb-3">
                                             <label for="emailInput" class="form-label">Email</label>
                                             <input type="email" class="form-control" id="emailInput"
-                                                placeholder="Enter your email" wire:model.defer="personas.email" disabled>
+                                                placeholder="Enter your email" value='{{auth()->user()->email}}' disabled>
                                         </div>
                                     </div>
                                     <!--end col-->                                    
@@ -180,7 +180,7 @@
                                         <div class="mb-3">
                                             <label for="designationInput" class="form-label">Fecha Registro</label>
                                             <input type="text" class="form-control" id="designationInput"
-                                                placeholder="Designation" value = "{{date('d/m/Y',strtotime($personas['created_at']))}}" disabled>
+                                                placeholder="Designation" value = "{{date('d/m/Y',strtotime(auth()->user()->created_at))}}" disabled>
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -189,6 +189,31 @@
                                             <label for="websiteInput1" class="form-label">Website</label>
                                             <input type="text" class="form-control" id="websiteInput1"
                                                 placeholder="www.example.com" value="www.americanschool.edu.ec" disabled/>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="cmbetnia" class="form-label">Genero</label>
+                                            <select class="form-select data-choices data-choices-search-false" id="cmbtipopersona" wire:model.defer="personas.genero">
+                                                <option value="M">Masculino</option>
+                                                <option value="F">Femenino</option>
+                                            </select>
+                                        </div>
+                                        </div>
+                                    <!--end col-->
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="cmbetnia" class="form-label">Tipo</label>
+                                            <select class="form-select data-choices data-choices-search-false" id="cmbtipopersona" wire:model.defer="personas.tipopersona">
+                                                <option value="A">Administrativo</option>
+                                                <option value="D">Docente</option>
+                                                <option value="E">Estudiante</option>
+                                                <option value="P">Apoyo Profesional</option>
+                                                <option value="M">Mantenimiento y Operaciones</option>
+                                                <option value="R">Representante</option>
+                                                <option value="F">Familiar</option>
+                                                <option value="S">Sistemas</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <!--end col-->

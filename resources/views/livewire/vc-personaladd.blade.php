@@ -176,7 +176,18 @@
                                                     placeholder="Enter your email" wire:model.defer="record.email" {{$eControl}}>
                                             </div>
                                         </div>
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-4">
+                                            <div class="mb-3">
+                                                <label for="cmbetnia" class="form-label">Genero</label>
+                                                <select class="form-select data-choices data-choices-search-false" id="cmbtipopersona" wire:model.defer="record.tipopersona" {{$eControl}}>
+                                                    <option value="A">Administrativo</option>
+                                                    <option value="D">Docente</option>
+                                                    <option value="P">Apoyo Profesional</option>
+                                                    <option value="M">Mantenimiento y Operaciones</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
                                             <div class="mb-3">
                                                 <label for="cmbetnia" class="form-label">Tipo Personal</label>
                                                 <select class="form-select data-choices data-choices-search-false" id="cmbtipopersona" wire:model.defer="record.tipopersona" {{$eControl}}>

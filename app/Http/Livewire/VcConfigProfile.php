@@ -45,19 +45,83 @@ class VcConfigProfile extends Component
     public function load()
     {
         $personaId = auth()->user()->personaId;
-        $this->personas = TmPersonas::find(2913)->toArray();
-        
-        $this->foto = $this->personas['foto'];
 
-        $contents   = Storage::disk('public')->exists('fotos/'.$this->foto);
+        if ($personaId>0){
+
+            $this->personas = TmPersonas::find($personaId)->toArray();
         
-        if($contents==false){
-            $this->foto='';
+            $this->foto = $this->personas['foto'];
+
+            $contents   = Storage::disk('public')->exists('fotos/'.$this->foto);
+            
+            if($contents==false){
+                $this->foto='';
+            }
+
+        } else {
+            
+            $this->personas['nombres'] = "";
+            $this->personas['apellidos'] = "";
+            $this->personas['identificacion'] = "";
+            $this->personas['telefono'] = "";
+            $this->personas['email'] = "";
+            $this->personas['direccion'] = "";
+            $this->personas['tipopersona'] = "A";
+
         }
+
         
     }
 
+    public function createData(){
+
+        $personas = TmPersonas::Create([
+            'nombres' => $this -> personas['nombres'],
+            'apellidos' => $this -> personas['apellidos'],
+            'tipoidentificacion' => 'C',
+            'identificacion' => $this -> personas['identificacion'],
+            'genero' => $this -> personas['genero'],
+            'fechanacimiento' => null,
+            'nacionalidad_id' => 35,
+            'telefono' => $this -> personas['telefono'],
+            'email' => $this -> personas['email'],
+            'etnia' => 'ME',
+            'direccion' => $this -> personas['direccion'],
+            'tipopersona' => $this -> personas['tipopersona'],
+            'parentesco' => "NN",
+            'relacion_id' => 0,
+            'usuario' => auth()->user()->name,
+            'estado' => 'A',
+            'foto' => $this -> personas['foto'],
+        ]);
+
+        auth()->user()->update([
+            'personaId' => $persona->id,
+        ]);
+
+        $this->dispatchBrowserEvent('msg-actualizar');
+
+    }
+
+
     public function updateData(){
+
+        /*$this ->validate([
+            'personas.nombres' => 'required',
+            'personas.apellidos' => 'required',
+            'personas.identificacion' => 'required',
+            'personas.telefono' => 'required',
+            'personas.direccion' => 'required',
+            'personas.genero' => 'required',
+            'personas.tipopersona' => 'required',
+            'personas.foto' => ['image', 'mimes:jpg,jpeg,png', 'max:1024'],
+        ]);*/
+
+        if (auth()->user()->personaId == 0){
+
+            $this->createData();
+            return;
+        }
 
         $nameFile='';
 
@@ -85,7 +149,7 @@ class VcConfigProfile extends Component
         }
 
         $this->dispatchBrowserEvent('msg-actualizar');
-        return redirect()->to('/academic/students');
+        //return redirect()->to('/academic/students');
 
     }
 
