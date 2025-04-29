@@ -46,7 +46,7 @@ class HomeController extends Controller
         };
 
         if (auth()->user()->can('Calendario')){
-            return view('/academic/view_calendar');
+            return view('/academic/calendarioview');
         };
     }
 

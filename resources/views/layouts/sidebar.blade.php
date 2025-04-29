@@ -689,25 +689,25 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="#sidebaruser" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarreport">
-                                    <i class="las la-user-check fs-20"></i> <span>Usuarios</span>
+                                    <i class="las la-user-check fs-20"></i> <span>Gestión de Accesos</span>
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebaruser">
                                     <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/config/users">
-                                                <span>Registrar</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/config/rols">
-                                                </i> <span>Roles</span>
-                                            </a>
-                                        </li>
                                         <li class="nav-item">
                                             <a class="nav-link menu-link" href="/config/permissions">
                                                 <span>Permisos</span>
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/config/rols">
+                                                </i><span>Roles</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/config/users">
+                                                <span>Usuarios</span>
+                                            </a>
+                                        </li>                                        
                                     </ul>
                                 </div>
                             </li>

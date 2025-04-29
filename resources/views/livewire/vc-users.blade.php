@@ -4,10 +4,10 @@
             <div class="card" id="orderList">
                 <div class="card-header  border-0">
                     <div class="d-flex align-items-center">
-                        <h5 class="card-title mb-0 flex-grow-1">Registro de Roles</h5>
+                        <h5 class="card-title mb-0 flex-grow-1">Registro de Usuario</h5>
                         <div class="flex-shrink-0">
                             <button type="button" wire:click.prevent="add()" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn"
-                                data-bs-target=""><i class="ri-add-line align-bottom me-1"></i> Crear Rol
+                                data-bs-target=""><i class="ri-add-line align-bottom me-1"></i> Crear Usuario
                             </button>
                         </div>
                     </div>
@@ -22,39 +22,66 @@
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
                                         <th class="sort" data-sort="id"> ID</th>
-                                        <th class="sort" data-sort="descripcion">Descripción</th>
-                                        <th class="sort" data-sort="descripcion">Permisos</th>
+                                        <th class="sort" data-sort="descripcion">Nombre</th>
+                                        <th class="sort" data-sort="descripcion">Email</th>
+                                        <th class="sort" data-sort="descripcion">Accesos</th>
+                                        <th class="sort" data-sort="descripcion">Estado</th>
                                         <th class="sort" data-sort="accion">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all">
-                                @foreach ($tblrecords as $record)    
+                                @foreach ($tblusers as $users)    
                                     <tr>
-                                        <td><span>{{$record->id}}</span></td>
-                                        <td><span>{{$record->name}}</span></td>      
-                                      
+                                        <td><span>{{$users->id}}</span></td>
+                                        <!--<td><span>{{$users->name}}</span></td>-->
                                         <td>
-                                            <textarea class="form-control bg-white border-0" id="exampleFormControlTextarea5" rows="5" disabled>{{$record->permissions->pluck('name')->implode(', ')}}</textarea>                                     
-                                        </td>                                    
+                                            <div class="d-flex gap-2 align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <img src="assets/images/users/avatar-3.jpg" alt="" class="avatar-xs rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    {{$users->name}}
+                                                </div>
+                                            </div>
+                                        </td>      
+                                        <td><span>{{$users->email}}</span></td>
+                                        <td>
+                                            <div>
+                                            <i class="las la-user-check fs-18"></i><a class="text-muted"> Rol =></a> {{$users->roles->pluck('name')->implode(', ')}}
+                                            <div>
+                                            @if (count($users->permissions)>0)
+                                            <div>
+                                            <i class="las la-user-tag fs-18"></i><a class="text-muted"> Permisos =></a> {{$users->permissions->pluck('name')->implode(', ')}}
+                                            <div> 
+                                            @endif                                       
+                                        </td> 
+
+                                        <td class="text-success"><i class="ri-checkbox-circle-line fs-17 align-middle"></i> Paid</td>                                   
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                    <a href="" wire:click.prevent="edit({{ $record }})">
-                                                        <i class="ri-pencil-fill fs-16"></i>
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Editar Roles">
+                                                    <a class="text-success btn btn-icon btn-ghost-secondary rounded-circle" href="" wire:click.prevent="editRol({{ $users }})">
+                                                        <i class="las la-user-check fs-18"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="list-inline-item edit" data-bs-toggle="tooltip"
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Editar Permisos">
+                                                    <a class="text-secondary btn btn-icon btn-ghost-secondary rounded-circle" wire:click.prevent="editPermiso({{ $users }})">
+                                                        <i class="las la-user-tag fs-18"></i>
                                                     </a>
                                                 </li>
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                    <a class="text-danger d-inline-block remove-item-btn"
-                                                        data-bs-toggle="modal" href="" wire:click.prevent="delete({{ $record->id }})">
-                                                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                    <a class="text-danger remove-item-btn btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
+                                                        data-bs-toggle="modal" href="" wire:click.prevent="delete({{ $users->id }})">
+                                                        <i class="las la-user-times fs-18"></i>
                                                     </a>
+                                                    
                                                 </li>
                                             </ul>
                                         </td>
-                                    </tr>
-                                                                        
+                                    </tr>                                   
                                 @endforeach
                                 </tbody>
                             </table>
@@ -72,9 +99,10 @@
                             </div>
                         </div>
 
-                        {{$tblrecords->links('')}}
+                        {{$tblusers->links('')}}
 
                     </div>
+
 
                     <div wire.ignore.self class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable" >
@@ -102,11 +130,23 @@
                                             @endif
                                         </div>
                                         <div class="mb-3">
-                                            <label for="record.name" class="form-label">Description</label>
+                                            <label for="record.user" class="form-label">Usuario</label>
                                             <input type="text" wire:model.defer="record.name" class="form-control" name="record.name"
-                                                placeholder="Enter name" required />
+                                                placeholder="Ingrese nombre" required />
                                         </div>
-                                        <h5 class="modal-title mb-3">Asignar Permisos</h5>
+                                        @if($showEditModal==false)
+                                        <div class="mb-3">
+                                            <label for="record.email" class="form-label">Email</label>
+                                            <input type="email" wire:model.defer="record.email" class="form-control" name="record.email"
+                                                placeholder="Ingrese correo electronico" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="record.clave" class="form-label">Contraseña</label>
+                                            <input type="text" wire:model.defer="record.clave" class="form-control" name="record.clave"
+                                                placeholder="Ingrese contraseña" required />
+                                        </div>
+                                        @endif
+                                        <h5 class="modal-title mb-3">Asignar Rol</h5>
                                         @livewire('vc-view-rol-permissions')
                                     </div>
                                     <div class="modal-footer">
@@ -119,6 +159,7 @@
                             </div>
                         </div>
                     </div>
+
 
                     <!-- Modal -->
                     <div wire.ignore.self class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true" wire:model='selectId'>
@@ -154,3 +195,4 @@
     <!--end row-->
 
 </div>
+

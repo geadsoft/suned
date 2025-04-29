@@ -47,69 +47,9 @@ class TmPersonasController extends Controller
         return view('/sede/personaladd',['id' => $personaId]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function perfil()
     {
-        //
+        return view('/config/perfil');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\TmPersonas  $tmPersonas
-     * @return \Illuminate\Http\Response
-     */
-    public function show(TmPersonas $tmPersonas)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\TmPersonas  $tmPersonas
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(TmPersonas $tmPersonas)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TmPersonas  $tmPersonas
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, TmPersonas $tmPersonas)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\TmPersonas  $tmPersonas
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(TmPersonas $tmPersonas)
-    {
-        //
-    }
+    
 }

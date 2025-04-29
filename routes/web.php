@@ -38,6 +38,9 @@ Route::get('/headquarters/campus',[App\Http\Controllers\TmEmpresasController::cl
 Route::get('/config/generality',[App\Http\Controllers\TmGeneralidadesController::class, 'index'])->name('index');
 Route::get('/config/zone',[App\Http\Controllers\TmZonasController::class, 'index'])->name('index');
 Route::get('/config/rols',[App\Http\Controllers\RolesController::class, 'index'])->name('index');
+Route::get('/config/users',[App\Http\Controllers\RolesController::class, 'users'])->name('users');
+Route::get('/config/profile',[App\Http\Controllers\TmPersonasController::class, 'perfil'])->name('perfil');
+
 
 Route::get('/academic/periods',[App\Http\Controllers\TmSedesController::class, 'periodos'])->name('periodos');
 Route::get('/academic/course',[App\Http\Controllers\TmCursosController::class, 'course'])->name('course');

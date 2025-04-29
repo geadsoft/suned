@@ -9,14 +9,14 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Configuración
+            Gestión de Accesos
         @endslot
         @slot('title')
-            Roles
+            Usuarios
         @endslot
     @endcomponent
 
-    @livewire('vc-roles')
+    @livewire('vc-users')
 
 @endsection
 
@@ -58,15 +58,6 @@
             swal("Buen trabajo!", "¡Registro actualizado exitosamente!", "success");
         })
 
-        /*window.addEventListener('msg-alert', event => {
-            Swal.fire({
-                    title: 'Error!',
-                    text:  event.detail.newName,
-                    icon: 'warning',
-                    confirmButtonClass: 'btn btn-primary w-xs mt-2',
-                    buttonsStyling: false
-                })
-        })*/
          window.addEventListener('msg-alert', event => {
             swal("No se puede Eliminar!",event.detail.newName, "error");
         })
