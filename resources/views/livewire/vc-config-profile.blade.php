@@ -197,7 +197,7 @@
                                             <label for="exampleFormControlTextarea"
                                                 class="form-label">Perfil</label>
                                             <textarea class="form-control" id="exampleFormControlTextarea" placeholder="Enter your description"
-                                                rows="3">Hi I'm Anna Adame,It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is European languages are members of the same family.</textarea>
+                                                rows="3"></textarea>
                                         </div>
                                     </div>
                                     <!--end col-->
