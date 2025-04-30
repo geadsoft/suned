@@ -110,6 +110,11 @@ class DocentesController extends Controller
         return view('teachers/clasevirtual');
     }
 
+    public function classes_join()
+    {
+        return view('teachers/unirsevirtual');
+    }
+
 
     //Actividades
     public function exams_index()

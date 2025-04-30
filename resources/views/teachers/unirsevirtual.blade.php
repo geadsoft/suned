@@ -12,11 +12,11 @@
             Clases
         @endslot
         @slot('title')
-            Clases Virtuales
+            Unirse a Clase Virtual
         @endslot
     @endcomponent
 
-    @livewire('vc-clases-virtual')
+    @livewire('vc-view-virtual')
 
 @endsection
 @section('script')
@@ -25,23 +25,5 @@
     <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-    <script>
-
-        window.addEventListener('msg-grabar', event => {
-            swal("Buen Trabajo!", event.detail.newName, "success");
-        })
-
-        window.addEventListener('show-form', event => {
-            $('#showModal').modal('show');
-        })
-
-         window.addEventListener('hide-form', event => {
-            $('#showModal').modal('hide');
-        })
-
-       
-
-    </script>
     
 @endsection

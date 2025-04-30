@@ -12,6 +12,7 @@ use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 
 class VcPersonaladd extends Component
 {
@@ -161,7 +162,7 @@ class VcPersonaladd extends Component
             User::Create([
                 'name' => $name,
                 'email' => $this->record['email'],
-                'password' => bcrypt($this->record['identificacion']) ,
+                'password' => Hash::make($this->record['identificacion']),
                 'perfil' => 'U',
                 'personaId' => $this->personaId,
                 'acceso' => 1,
@@ -217,7 +218,7 @@ class VcPersonaladd extends Component
             User::Create([
                 'name' => $name,
                 'email' => $this->record['email'],
-                'password' => bcrypt($this->record['identificacion']) ,
+                'password' => Hash::make($this->record['identificacion']),
                 'perfil' => 'U',
                 'personaId' => $this->personaId,
                 'acceso' => 1,

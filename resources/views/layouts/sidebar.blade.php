@@ -428,12 +428,40 @@
                     </a>
                 </li>
                 @endcan
-                @can('Clases Vituales')
+                @can('Clases Virtuales')
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/activities/virtual-classes">
+                    <!--<a class="nav-link menu-link" href="/activities/virtual-classes">
                         <i class="las la-calendar-check fs-20"></i>Clases Virtuales</span>
+                    </a>-->
+                    <a class="nav-link menu-link" href="#clase" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="clase">
+                        <i class="las la-video fs-20"></i><span>Clases Virtuales</span>
                     </a>
+                    @can('Registrar Clase Virtual')
+                    <div class="collapse menu-dropdown" id="clase">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/activities/virtual-classes">
+                                    </i>Registrar Clase Virtual<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    @endcan
+                    @can('Iniciar Clase Virtual')
+                    <div class="collapse menu-dropdown" id="clase">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/virtual-classes/join">
+                                    </i>Iniciar Clase Virtual<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    @endcan
                 </li>
+
+
+
                 @endcan
                 @can('Eventos Comunicados')
                 <li class="nav-item">
@@ -715,14 +743,9 @@
                     </div>
                 </li>
                 @endcan
-
-
-
             </ul>
 
 
-
-            
             @if(auth()->user()->perfil=="E")
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="nav-item">
@@ -770,6 +793,15 @@
                     <a class="nav-link menu-link" href="#clase" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="clase">
                         <i class="las la-video fs-20"></i><span>Clases Virtuales</span>
                     </a>
+                    <div class="collapse menu-dropdown" id="clase">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Registrar Clase Virtual<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="collapse menu-dropdown" id="clase">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">

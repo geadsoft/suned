@@ -124,6 +124,7 @@ Route::get('/activities/activity-add',[App\Http\Controllers\DocentesController::
 Route::get('/activities/activity-edit/{id}',[App\Http\Controllers\DocentesController::class, 'activity_edit'])->name('activity_edit');
 Route::get('/activities/activity-view/{id}',[App\Http\Controllers\DocentesController::class, 'activity_view'])->name('activity_view');
 Route::get('/activities/virtual-classes',[App\Http\Controllers\DocentesController::class, 'classes_index'])->name('classes_index');
+Route::get('/virtual-classes/join',[App\Http\Controllers\DocentesController::class, 'classes_join'])->name('classes_join');
 Route::get('/activities/exams',[App\Http\Controllers\DocentesController::class, 'exams_index'])->name('exams_index');
 Route::get('/activities/exam-add',[App\Http\Controllers\DocentesController::class, 'exams_add'])->name('exams_add');
 Route::get('/activities/exam-edit/{id}',[App\Http\Controllers\DocentesController::class, 'exams_edit'])->name('exams_edit');

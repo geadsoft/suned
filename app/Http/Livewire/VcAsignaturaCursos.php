@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmHorarios;
+use App\Models\TmActividades;
 
 use Livewire\Component;
 
@@ -10,6 +11,8 @@ class VcAsignaturaCursos extends Component
 {
     public $tblasignatura, $asignaturaId, $cursoId;
     public $tblparalelo=[];
+
+    protected $listeners = ['setGrabar'];
 
     public function mount()
     {
@@ -54,11 +57,32 @@ class VcAsignaturaCursos extends Component
 
     }
 
-    public function updatedCursoId($id){
+ 
+    public function setGrabar($enlace){
 
-        $this->emitTo('vc-clases-virtual','setCursoId',$id);
-      
+        $ldate = date('Y-m-d H:i:s');
+
+        TmActividades::Create([
+            'docente_id' => $this->docenteId,
+            'paralelo' => $this->cursoId,
+            'termino' => '',
+            'bloque' => '',
+            'tipo' => 'CV',
+            'actividad' => 'AI',
+            'nombre' => 'Clase Virtual',
+            'descripcion' => "",
+            'enlace' => $enlace,
+            'fecha' => date('Y-m-d',strtotime($ldate)),
+            'subir_archivo' => 'NO',
+            'puntaje' => 0,
+            'estado' => "A",
+            'usuario' => auth()->user()->name,
+        ]);
+       
+        $this->emitTo('vc-clases-virtual','setMensaje');
+        
     }
+
 
 
 }

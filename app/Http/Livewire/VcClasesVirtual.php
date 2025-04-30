@@ -22,7 +22,7 @@ class VcClasesVirtual extends Component
 
     use WithPagination;
 
-    protected $listeners = ['setCursoId'];
+    protected $listeners = ['setMensaje'];
 
     public function mount()
     {
@@ -35,15 +35,7 @@ class VcClasesVirtual extends Component
 
     public function render()
     {
-        /*$this->tblasignatura = TmHorarios::query()
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->docenteId)
-        ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->selectRaw('m.id, m.descripcion')
-        ->groupBy('m.id','m.descripcion')
-        ->get();*/
-        
+            
         $tblrecords = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
@@ -68,43 +60,10 @@ class VcClasesVirtual extends Component
         return 'vendor.livewire.bootstrap'; 
     }
 
-    /*public function updatedasignaturaId($id){
-
-        $this->asignaturaId = $id;
-
-        $this->tblparalelo = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->docenteId)
-        ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->where("m.id",$id)
-        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
-        ->get();
-
-    }*/
-
-    public function setCursoId($cursoId){
-        
-        dd(1);
-        $this->record['paralelo'] = $cursoId;
-        
-    }
 
     public function add(){
 
         $ldate = date('Y-m-d H:i:s');
-
-        /*$this->tblparalelo = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->docenteId)
-        ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->selectRaw('d.id, concat(m.descripcion," - ",s.descripcion," ",c.paralelo) as descripcion')
-        ->get();*/
         
         $this->showEditModal = false;
         $this->reset(['record']);
@@ -125,40 +84,17 @@ class VcClasesVirtual extends Component
 
     public function createData(){
 
-        $this ->validate([
-            'record.paralelo' => 'required',
-            'record.enlace' => 'required',
-        ]);
+        $this->emitTo('vc-asignatura-cursos','setGrabar',$this->record['enlace']);
+                
+    }
 
-        if ($this->actividadId>0){
+    public function setMensaje(){
 
-            $this->updateData();            
+        $message = "Registro grabado con éxito!";
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
-        }else {
-            
-            TmActividades::Create([
-                'docente_id' => $this->docenteId,
-                'paralelo' => $this->record['paralelo'],
-                'termino' => $this->record['termino'],
-                'bloque' => $this->record['bloque'],
-                'tipo' => $this->record['tipo'],
-                'actividad' => $this->record['actividad'],
-                'nombre' => 'Clase Virtual',
-                'descripcion' => "",
-                'enlace' => $this->record['enlace'],
-                'fecha' => $this->record['fecha'],
-                'subir_archivo' => 'NO',
-                'puntaje' => 0,
-                'estado' => "A",
-                'usuario' => auth()->user()->name,
-            ]);
+        $this->dispatchBrowserEvent('hide-form');
 
-            $message = "Registro grabado con éxito!";
-            $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
-
-            return redirect()->to('/activities/virtual-classes');
-        }
-        
     }
 
 

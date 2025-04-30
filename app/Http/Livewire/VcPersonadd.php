@@ -8,11 +8,13 @@ use App\Models\TmGeneralidades;
 use App\Models\TmDomicilioEstudiantes;
 use App\Models\TmFamiliarEstudiantes;
 use Illuminate\Support\Arr;
+use App\Models\User;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 
 class VcPersonadd extends Component
 {
@@ -213,7 +215,7 @@ class VcPersonadd extends Component
             $this->record['foto'] = $nameFile;
         }
 
-        TmPersonas::Create([
+        $personas = TmPersonas::Create([
             'nombres' => $this -> record['nombres'],
             'apellidos' => $this -> record['apellidos'],
             'tipoidentificacion' => $this -> record['tipoidentificacion'],
@@ -229,6 +231,34 @@ class VcPersonadd extends Component
             'estado' => $this -> record['estado'],
             'foto' => $this -> record['foto'],
         ]);
+
+        $users   = User::where('personaid',$personas->id)->get();
+        $dominio = str_contains($this->record['email'],'@americanschool.edu.ec');
+        if (count($users)==0 && $dominio){
+
+            $pos = strpos($this->record['nombres'], ' ');
+            if ($pos==0){
+                $name = $this->record['nombres'];
+            }else{
+                $name = substr($this->record['nombres'],0,$pos);
+            }
+
+            $pos = strpos($this->record['apellidos'], ' ');
+            if ($pos==0){
+                $name = $name.' '.$this->record['apellidos'];
+            }else{
+                $name = $name.' '.substr($this->record['apellidos'],0,$pos);
+            }
+
+            User::Create([
+                'name' => $name,
+                'email' => $this->record['email'],
+                'password' => Hash::make($this->record['identificacion']),
+                'perfil' => 'U',
+                'personaId' => $personas->id,
+                'acceso' => 1,
+            ]);
+        }
 
         $this->dispatchBrowserEvent('hide-form', ['message'=> 'added successfully!']);  
         
@@ -268,7 +298,33 @@ class VcPersonadd extends Component
                 'foto' => $nameFile,
                 ]);
             
-            //$this->emitTo('vc-persons-billing','setGrabaFactura',$this->personaId);
+                $users   = User::where('personaid',$this->personaId)->get();
+                $dominio = str_contains($this->email,'@americanschool.edu.ec');
+                if (count($users)==0 && $dominio){
+        
+                    $pos = strpos($this -> nombres, ' ');
+                    if ($pos==0){
+                        $name = $this -> nombres;
+                    }else{
+                        $name = substr($this -> nombres,0,$pos);
+                    }
+        
+                    $pos = strpos($this -> apellidos, ' ');
+                    if ($pos==0){
+                        $name = $name.' '.$this -> apellidos;
+                    }else{
+                        $name = $name.' '.substr($this -> apellidos,0,$pos);
+                    }
+        
+                    User::Create([
+                        'name' => $name,
+                        'email' => $this -> email,
+                        'password' => Hash::make($this->identificacion),
+                        'perfil' => 'U',
+                        'personaId' => $this->personaId,
+                        'acceso' => 1,
+                    ]);
+                }
                     
         }
 
