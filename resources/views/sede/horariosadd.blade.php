@@ -28,6 +28,14 @@
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
     <script>
+
+        window.addEventListener('msg-grabar', event => {
+            swal("Buen Trabajo!", event.detail.newName, "success");
+        })
+
+        window.addEventListener('msg-grabar-asignatura', event => {
+            swal("Buen Trabajo!", event.detail.newName, "success");
+        })
        
         window.addEventListener('show-form', event => {
                 $('#addDocentes').modal('show');

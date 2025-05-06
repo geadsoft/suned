@@ -114,13 +114,14 @@ class VcHorariosClase extends Component
 
         }
 
+        $message = "Asignaturas grabadas con éxito!"."\n".'Asigne docente para cada asignatura.';
+        $this->dispatchBrowserEvent('msg-grabar-asignatura', ['newName' => $message]);
+
         $this->emitTo('vc-horarios-docentes','setHorario',$this->horarioId);
         
     }
 
     public function editData(){
-
-        dd($this->horarios);
 
         foreach($this->horarios as $key => $recno){
 
@@ -163,6 +164,9 @@ class VcHorariosClase extends Component
             }
 
         }
+
+        $message = "Asignaturas actualizadas con éxito!"."\n".'Asigne docente para cada asignatura.';
+        $this->dispatchBrowserEvent('msg-grabar-asignatura', ['newName' => $message]);
 
         $this->emitTo('vc-horarios-docentes','setHorario',$this->horarioId);
 

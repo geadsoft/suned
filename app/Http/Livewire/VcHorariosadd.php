@@ -121,6 +121,9 @@ class VcHorariosadd extends Component
             'curso_id' => $this -> cursoId,
             'usuario' => auth()->user()->name,
         ]);
+
+        $message = "Horario de Escolar grabado con éxito!, debe asignar materias.";
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
         
         $this->selectId = $tmhorarios['id'];
         $this->emitTo('vc-horarios-clase','setHorario',$this->selectId);
@@ -135,6 +138,9 @@ class VcHorariosadd extends Component
             'periodo_id' => $this -> periodoId,
             'curso_id' => $this -> cursoId,
         ]);
+
+        $message = "Horario de Escolar actualizado con éxito!";
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
     }
 
