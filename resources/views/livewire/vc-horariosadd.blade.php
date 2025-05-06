@@ -120,12 +120,12 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="text-end">
-                                                <button type="submit" class="btn btn-success w-sm">Grabar</button>
-                                                <a class="btn btn-secondary w-sm"><i class="me-1 align-bottom"></i>Cancelar</a>
-                                            </div>
+                                        </div>                                        
+                                        <div class="d-flex align-items-start gap-3 mt-4">
+                                            <a type="button" href="/headquarters/schedules" class="btn btn-light btn-label previestab"
+                                                data-previous="pills-bill-registration-tab"><i
+                                                    class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Volver Horario de Clases</a>
+                                            <button type="submit" class="btn btn-success w-sm right ms-auto"><i class="ri-save-3-fill label-icon align-middle fs-16 me-2"></i>Grabar</button>
                                         </div>
                                     </div>
                                 </div>

@@ -63,10 +63,15 @@
             </table>
         </div>
     </div>
-    <div class="card-body">
+    <!--<div class="card-body">
         <div class="text-end">
             <a id="btnexit" class ="btn btn-primary w-sm" wire:click="exit()">Cerrar</a>
         </div>
+    </div>-->
+    <div class="d-flex align-items-start gap-3 mt-4">
+        <a type="button" href="/headquarters/schedules" class="btn btn-light btn-label previestab"
+            data-previous="pills-bill-registration-tab"><i
+                class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Volver Horario de Clases</a>
     </div>
 
     <div wire.ignore.self class="modal fade" id="addDocentes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -53,10 +53,10 @@
             </table>
         </div>
     </div>
-    <div class="card-body">
-        <div class="text-end">
-            <!--<button  class="btn btn-success w-sm">Grabar</button>-->
-            <a id="btnsave" class ="btn btn-success w-sm" wire:click="createData()">Grabar <i class="ri-save-fill"></i></a>
-        </div>
+    <div class="d-flex align-items-start gap-3 mt-4">
+        <a type="button" href="/headquarters/schedules" class="btn btn-light btn-label previestab"
+            data-previous="pills-bill-registration-tab"><i
+                class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Volver Horario de Clases</a>
+        <a id="btnsave" class ="btn btn-success w-sm right ms-auto" wire:click="createData()"><i class="ri-save-3-fill label-icon align-middle fs-16 me-2"></i>Grabar</a>
     </div>
 </div>
