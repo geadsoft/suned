@@ -21,6 +21,7 @@ class VcViewRolPermissions extends Component
     public function roles($id)
     {
         $this->selectId = $id;
+        $this->arrpermisos = [];
 
         if ($this->selectId==0){
 
@@ -65,6 +66,7 @@ class VcViewRolPermissions extends Component
     public function permisos($id)
     {
         $this->selectId = $id;
+        $this->arrpermisos = [];
 
         if ($this->selectId==0){
 
