@@ -21,12 +21,12 @@
                             <table class="table table-nowrap align-middle" id="orderTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
-                                        <th class="sort" data-sort="id"> ID</th>
-                                        <th class="sort" data-sort="descripcion">Nombre</th>
-                                        <th class="sort" data-sort="descripcion">Email</th>
-                                        <th class="sort" data-sort="descripcion">Accesos</th>
-                                        <th class="sort" data-sort="descripcion">Estado</th>
-                                        <th class="sort" data-sort="accion">Acción</th>
+                                        <th data-sort="id"> ID</th>
+                                        <th data-sort="descripcion" style="width: 200px;">Nombre</th>
+                                        <th data-sort="descripcion" style="width: 300px;">Email</th>
+                                        <th data-sort="descripcion">Accesos</th>
+                                        <th data-sort="descripcion">Estado</th>
+                                        <th data-sort="accion" class="text-center">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all">
@@ -51,24 +51,27 @@
                                             <div>
                                             @if (count($users->permissions)>0)
                                             <div>
-                                            <i class="las la-user-tag fs-18"></i><a class="text-muted"> Permisos =></a> {{$users->permissions->pluck('name')->implode(', ')}}
+                                            <i class="las la-user-tag fs-18"></i><a class="text-muted"> Permisos =></a>
+                                             {{$users->permissions->pluck('name')->implode(', ')}}
                                             <div> 
                                             @endif                                       
                                         </td> 
 
-                                        <td class="text-success"><i class="ri-checkbox-circle-line fs-17 align-middle"></i> Paid</td>                                   
+                                        <td class="status">
+                                            <span class="badge badge-soft-success text-uppercase">Activo</span>
+                                        </td>                                   
                                         <td>
-                                            <ul class="list-inline hstack gap-2 mb-0">
+                                            <ul class="text-center list-inline mb-0">
                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Editar Roles">
                                                     <a class="text-success btn btn-icon btn-ghost-secondary rounded-circle" href="" wire:click.prevent="editRol({{ $users }})">
-                                                        <i class="las la-user-check fs-18"></i>
+                                                        <i class="mdi mdi-checkbox-marked-circle-plus-outline fs-18"></i>
                                                     </a>
                                                 </li>
                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Editar Permisos">
                                                     <a class="text-secondary btn btn-icon btn-ghost-secondary rounded-circle" wire:click.prevent="editPermiso({{ $users }})">
-                                                        <i class="las la-user-tag fs-18"></i>
+                                                        <i class="mdi mdi-tag-plus-outline fs-18"></i>
                                                     </a>
                                                 </li>
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"

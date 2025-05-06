@@ -7,7 +7,7 @@
                         <h5 class="card-title mb-0 flex-grow-1">Registro de Actividades</h5>
                         <div class="flex-shrink-0">
                             <button type="button" wire:click.prevent="add()" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn"
-                                data-bs-target=""><i class="ri-add-line align-bottom me-1"></i> Uniser a Clase Virtual
+                                data-bs-target=""><i class="ri-add-line align-bottom me-1"></i> Nueva Clase Virtual
                             </button>
                         </div>
                     </div>

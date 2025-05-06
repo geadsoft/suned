@@ -47,6 +47,13 @@
                     </a>
                 </li>
                 @endcan
+                
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/student/subject">
+                        <i class="las la-chart-pie fs-20"></i> <span>Asignaturas</span>
+                    </a>
+                </li>
+                
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>MODULOS</span></li>
                 @can('Academico')
                 <li class="nav-item">
@@ -682,7 +689,7 @@
                 </li>
                 @endcan
 
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link menu-link" href="/">
                         <i class="las la-edit fs-20"></i>Proyecto Final</span>
                     </a>
@@ -691,7 +698,7 @@
                     <a class="nav-link menu-link" href="/">
                         <i class="las la-award fs-20"></i>Evaluacion Nivel / Subnivel</span>
                     </a>
-                </li> 
+                </li>--> 
 
                 @can('Sistemas')
                 <!--Sistemas-->

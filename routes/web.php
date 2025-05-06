@@ -136,6 +136,9 @@ Route::get('/activities/suppletory-add',[App\Http\Controllers\DocentesController
 Route::get('/activities/suppletory-edit/{id}',[App\Http\Controllers\DocentesController::class, 'suppletory_edit'])->name('suppletory_edit');
 Route::get('/activities/suppletory-view/{id}',[App\Http\Controllers\DocentesController::class, 'suppletory_view'])->name('suppletory_view');
 
+Route::get('/student/subject',[App\Http\Controllers\EstudiantesController::class, 'subject'])->name('subject');
+Route::get('/student/subject-view/{data}',[App\Http\Controllers\EstudiantesController::class, 'subject_view'])->name('subject_view');
+
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
 Route::get('/liveWire-pdf/{data}',[VcReportCashReceints::class, 'liveWirePDF']);
