@@ -19,14 +19,14 @@
                                         data-bs-target="#pills-bill-horarios" type="button" role="tab"
                                         aria-controls="pills-bill-horarios" aria-selected="false" $tabHorario><i
                                             class="ri-bank-card-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Horarios Escolares</button>
+                                            Asignaturas</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link fs-15 p-3" id="pills-bill-docente-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-docente" type="button" role="tab"
                                         aria-controls="pills-bill-docente" aria-selected="false" $tabDocente><i
                                             class=" ri-folder-user-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
-                                            Asignación Docente</button>
+                                            Docentes</button>
                                 </li>
                             </ul>
                         </div>
