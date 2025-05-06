@@ -127,7 +127,7 @@
                                             <ul class="list-inline hstack gap-2 mb-0">                                           
                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                    <a href="" wire:click.prevent="edit({{ $record }})">
+                                                    <a href="" wire:click.prevent="edit({{ $record->id }})">
                                                         <i class="ri-pencil-fill fs-16"></i>
                                                     </a>
                                                 </li>

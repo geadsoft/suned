@@ -120,6 +120,8 @@ class VcHorariosClase extends Component
 
     public function editData(){
 
+        dd($this->horarios);
+
         foreach($this->horarios as $key => $recno){
 
             foreach ($this->objdetalle as $linea => $asignatura){

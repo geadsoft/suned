@@ -51,6 +51,7 @@ class VcHorarios extends Component
         ->when((int)$this->filters['srv_nivel']>0,function($query){
             return $query->where('s.nivel_id',"{$this->filters['srv_nivel']}");
         })
+        ->select('tm_horarios.*')
         ->paginate(10);
 
         $this->datos = TmHorariosDocentes::selectRaw('horario_id, count(asignatura_id) as materias, count(docente_id) as docentes')
@@ -68,11 +69,9 @@ class VcHorarios extends Component
         return 'vendor.livewire.bootstrap'; 
     }
 
-    public function edit(TmHorarios $tblrecords ){
+    public function edit($horarioId){
         
-        $this->record  = $tblrecords->toArray();
-       
-        $this->selectId = $this -> record['id'];
+        $this->selectId = $horarioId;
         return redirect()->to('/headquarters/schedules-edit/'.$this->selectId);
 
     }
