@@ -122,7 +122,19 @@ class VcPersonaladd extends Component
             $this->record['foto'] = $nameFile;
         }
 
-        TmPersonas::Create([
+        //Valida si existe mail registrado
+        $user = User::query()
+        ->where('email',$this->record['email'])
+        ->first();
+
+        if ($user) {
+
+            $message = "El colaborador con el email " . $this->record['email'] . " existe.";
+            $this->dispatchBrowserEvent('msg-error', ['newName' => $message]);
+            return;
+        } 
+
+        $persona = TmPersonas::Create([
             'nombres' => $this -> record['nombres'],
             'apellidos' => $this -> record['apellidos'],
             'tipoidentificacion' => $this -> record['tipoidentificacion'],
@@ -142,39 +154,27 @@ class VcPersonaladd extends Component
             'foto' => $this -> record['foto'],
         ]);
 
-        $dominio = str_contains($this->record['email'],'@americanschool.edu.ec');
-        if ($dominio){
-
-            $pos = strpos($this->record['nombres'], ' ');
-            if ($pos==0){
-                $name = $this->record['nombres'];
-            }else{
-                $name = substr($this->record['nombres'],0,$pos);
-            }
-
-            $pos = strpos($this->record['apellidos'], ' ');
-            if ($pos==0){
-                $name = $name.' '.$this->record['apellidos'];
-            }else{
-                $name = $name.' '.substr($this->record['apellidos'],0,$pos);
-            }
-
-            User::Create([
-                'name' => $name,
-                'email' => $this->record['email'],
-                'password' => Hash::make($this->record['identificacion']),
-                'perfil' => 'U',
-                'personaId' => $this->personaId,
-                'acceso' => 1,
-            ]);
-        } 
-
+        $this->pesonaId = $persona->id;
+        $this->crearUsuario();                
+        
         $this->dispatchBrowserEvent('msg-save');  
         return redirect()->to('/headquarters/staff');
         
     }
 
     public function updateData(){
+
+        $user = User::query()
+        ->where('email',$this->record['email'])
+        ->where('personaId','<>',$this->personaId)
+        ->first();
+        
+        if ($user) {
+
+            $message = "El colaborador con el email " . $this->record['email'] . " existe.";
+            $this->dispatchBrowserEvent('msg-error', ['newName' => $message]);
+            return;
+        } 
 
         $record = TmPersonas::find($this->personaId);
         $record->update([
@@ -197,6 +197,26 @@ class VcPersonaladd extends Component
             'foto' => $this -> record['foto'],
             ]);
 
+        $this->crearUsuario();     
+        
+        $this->dispatchBrowserEvent('msg-updated');
+        return redirect()->to('/headquarters/staff');
+
+    }
+
+    public function validaNui(){
+
+       
+        $records = TmPersonas::where("identificacion",$this -> record['identificacion'])->first();
+        
+        if ($records != null){
+            $this->dispatchBrowserEvent('msg-validanui');
+        }
+    }
+
+
+    public function crearUsuario(){
+
         $users   = User::where('personaid',$this->personaId)->get();
         $dominio = str_contains($this->record['email'],'@americanschool.edu.ec');
         if (count($users)==0 && $dominio){
@@ -215,7 +235,7 @@ class VcPersonaladd extends Component
                 $name = $name.' '.substr($this->record['apellidos'],0,$pos);
             }
 
-            User::Create([
+            $users = User::Create([
                 'name' => $name,
                 'email' => $this->record['email'],
                 'password' => Hash::make($this->record['identificacion']),
@@ -223,21 +243,13 @@ class VcPersonaladd extends Component
                 'personaId' => $this->personaId,
                 'acceso' => 1,
             ]);
-        }       
-        
-        $this->dispatchBrowserEvent('msg-updated');
-        return redirect()->to('/headquarters/staff');
 
-    }
-
-    public function validaNui(){
-
-       
-        $records = TmPersonas::where("identificacion",$this -> record['identificacion'])->first();
-        
-        if ($records != null){
-            $this->dispatchBrowserEvent('msg-validanui');
+            if ($this->record['tipopersona']=='D'){
+                $users->assignRole('Docente');
+            }
+                
         }
+
     }
 
 

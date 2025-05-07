@@ -17,4 +17,9 @@ class EstudiantesController extends Controller
         return view('student/asignaturasview',['data' => $data]);
     }
 
+    public function school_schedule()
+    {      
+        return view('student/horarios');
+    }
+
 }

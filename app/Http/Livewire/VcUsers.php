@@ -20,7 +20,8 @@ class VcUsers extends Component
 
     public function render()
     {
-        $tblusers = User::paginate(10);   
+        $tblusers = User::orderBy('id','desc')
+        ->paginate(10);   
                 
         return view('livewire.vc-users',[
             'tblusers'  => $tblusers

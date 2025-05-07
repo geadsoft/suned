@@ -40,6 +40,10 @@
         window.addEventListener('msg-actualizar', event => {
             swal("Good job!", "Record updated successfully!", "success");
         })
+
+        window.addEventListener('msg-error', event => {
+            swal("Error!", event.detail.newName, "warning");
+        })
         
     </script>
 

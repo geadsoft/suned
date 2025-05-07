@@ -9,5 +9,6 @@ return [
     "C" => "Cerrado",
     "P" => "Cancelado",
     "*" => "Abonado",
+    "F" => "Finalizado",
 ];
 ?>

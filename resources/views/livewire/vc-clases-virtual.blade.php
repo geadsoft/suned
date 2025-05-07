@@ -46,7 +46,7 @@
                                         <th>Asignatura</th>
                                         <th>Curso</th>
                                         <th>Paralelo</th>
-                                        <th>Enlace</th>
+                                        <th colspan="2">Enlace</th>
                                         <th>Estado</th>
                                         <th>Acción</th>
                                     </tr>
@@ -58,10 +58,19 @@
                                         <td>{{$record['curso']}}</td>
                                         <td>{{$record['aula']}}</td>
                                         <td>{{$record['enlace']}}</td>
-                                        <td><span class="badge badge-soft-success text-uppercase">@lang('status.'.($record->estado))</span></td>
                                         <td>
-                                            <ul class="list-inline hstack gap-2 mb-0">
-                                                
+                                            @if ($record['estado']=='A')
+                                                <a class="btn btn-success btn-sm" id="external-url" href="{{$record['enlace']}}" target="_blank" src="about:blank">Ir a la reunión <i class="fas fa-external-link-alt"></i></a></td>
+                                            @endif
+                                        <td> 
+                                        @if ($record['estado']=='A')
+                                            <span class="badge badge-soft-success text-uppercase">@lang('status.'.($record->estado))</span>
+                                        @else
+                                            <span class="badge badge-soft-warning text-uppercase">@lang('status.'.($record->estado))</span>
+                                        @endif                                        
+                                        </td>
+                                        <td>
+                                            <ul class="list-inline hstack gap-2 mb-0">                                        
                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Editar">
                                                     <a href="" wire:click.prevent="edit({{$record['id']}})" data-bs-toggle="modal"

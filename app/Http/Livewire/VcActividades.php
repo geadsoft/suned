@@ -5,6 +5,7 @@ use App\Models\TmHorarios;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class VcActividades extends Component
 {
@@ -44,7 +45,14 @@ class VcActividades extends Component
 
     public function mount(){
 
+        $ldate = date('Y-m-d H:i:s');
+        $fecha = date('Y-m-d',strtotime($ldate));
+
         $this->docenteId = auth()->user()->personaId;
+
+        DB::table('tm_actividades')
+        ->where('fecha','<',$fecha)
+        ->update(['estado' => 'F']);
         
         $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")

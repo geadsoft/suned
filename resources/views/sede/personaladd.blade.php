@@ -43,6 +43,10 @@
             swal("Buen trabajo!", "¡Registro actualizado exitosamente!", "success");
         })
 
+        window.addEventListener('msg-error', event => {
+            swal("Error!", event.detail.newName, "warning");
+        })
+
     </script>
     
 @endsection

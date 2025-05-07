@@ -41,6 +41,7 @@ class VcViewVirtual extends Component
         ->where("tm_horarios.curso_id",$this->cursoId)
         ->where("tm_horarios.periodo_id",$this->periodoId)
         ->where("a.tipo","CV")
+        ->where("a.estado","A")
         ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
         ->paginate(12);
 

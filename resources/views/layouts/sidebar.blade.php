@@ -428,6 +428,14 @@
                 </li>
                 @endcan
 
+                @can('Horario Escolar')
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/student/school-schedule">
+                        <i class="las la-calendar-check fs-20"></i>Horario Escolar</span>
+                    </a>
+                </li>
+                @endcan
+
                 @can('Actividades')
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/activities/activity">

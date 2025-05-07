@@ -7,6 +7,7 @@ use App\Models\TmPeriodosLectivos;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class VcClasesVirtual extends Component
 {
@@ -26,10 +27,17 @@ class VcClasesVirtual extends Component
 
     public function mount()
     {
+        $ldate = date('Y-m-d H:i:s');
+        $fecha = date('Y-m-d',strtotime($ldate));
+
         $this->docenteId = auth()->user()->personaId;
 
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
+
+        DB::table('tm_actividades')
+        ->where('fecha','<',$fecha)
+        ->update(['estado' => 'F']);
 
     }
 
@@ -48,6 +56,7 @@ class VcClasesVirtual extends Component
         ->where("a.docente_id",$this->docenteId)
         ->where("tm_horarios.periodo_id",$this->periodoId)
         ->where("a.tipo","CV")
+        ->where("a.estado","A")
         ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
         ->paginate(12);
 
