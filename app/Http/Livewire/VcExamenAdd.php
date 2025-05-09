@@ -12,14 +12,19 @@ use Livewire\Component;
 class VcExamenAdd extends Component
 {
     
-    public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="3E", $tipo="EX", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
+    public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="3E", $tipo="EX", $nombre, $fecha, $hora;
+    public $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $tblparalelo=[], $tblasignatura=[];
     public $periodoId, $tbltermino, $tblbloque=[];
     public $array_attach=[];
     public $docenteId;
 
     public function mount($id)
-    {
+    {   
+        $ldate = date('Y-m-d H:i:s');
+        $this->fecha = date('Y-m-d',strtotime($ldate));
+        $this->hora = date('H:i');
+
         $this->docenteId = auth()->user()->personaId;
 
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
@@ -88,10 +93,12 @@ class VcExamenAdd extends Component
         $this->puntaje = $record['puntaje'];
         $this->enlace = $record['enlace'];
         $this->descripcion = $record['descripcion'];
+        $this->estado = $record['estado'];
+
         $this->control="disabled";
 
-        $fecha = date('Y-m-d',strtotime($record['fecha']));
-        $this->fecha = $fecha;
+        $this->fecha = date('Y-m-d',strtotime($record['fecha']));
+        $this->hora = date('H:i',strtotime($record['fecha']));
 
         $this->descripcion=".";
 
@@ -142,7 +149,7 @@ class VcExamenAdd extends Component
                 'actividad' => $this->tipo,
                 'nombre' => $this->nombre,
                 'descripcion' => "",
-                'fecha' => $this->fecha,
+                'fecha' => $this->fecha.' '.$this->hora,
                 'subir_archivo' => $this->archivo,
                 'puntaje' => $this->puntaje,
                 'enlace' => $this->enlace,
@@ -167,10 +174,11 @@ class VcExamenAdd extends Component
             'actividad' => $this->tipo,
             'nombre' => $this->nombre,
             'descripcion' => "",
-            'fecha' => $this->fecha,
+            'fecha' => $this->fecha.' '.$this->hora,
             'subir_archivo' => $this->archivo,
             'puntaje' => $this->puntaje,
             'enlace' => $this->enlace,
+            'estado' => $this->estado,
             'usuario' => auth()->user()->name,
         ]);
 

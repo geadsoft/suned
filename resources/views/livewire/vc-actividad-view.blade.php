@@ -37,6 +37,9 @@
                                         <label for="fecha-input" class="form-label form-control border-0 fw-semibold fs-14">Fecha Limite</label>
                                     </div>
                                     <div class="mb-3">
+                                        <label for="fecha-input" class="form-label form-control border-0 fw-semibold fs-14">Hora Limite</label>
+                                    </div>
+                                    <div class="mb-3">
                                         <label for="descripcion-input" class="form-label form-control border-0 fw-semibold fs-14">Descripcion de Actividad</label>
                                     </div>
                                     <div class="mb-3">
@@ -69,6 +72,9 @@
                                         <label class="form-control border-0 fs-14"> @lang('translation.'.(date('l',strtotime($fecha)))),
                                             {{date('d',strtotime($fecha))}} de @lang('months.'.(date('m',strtotime($fecha)))) del {{date('Y',strtotime($fecha))}}
                                         </label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-control border-0 fs-14">  {{date('H:i',strtotime($fecha))}}  </label>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-control border-0 fs-14">{{$descripcion}}</label>

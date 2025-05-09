@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\DB;
 class VcClasesVirtual extends Component
 {
     
-    public $showEditModal, $paralelo, $actividadId=0, $tblasignatura, $asignaturaId;
-
+    public $showEditModal, $paralelo, $actividadId=0, $tblasignatura, $asignaturaId=0, $display="display: none";
+    
     public $record=[];
     public $tblparalelo=[];
 
@@ -42,8 +42,18 @@ class VcClasesVirtual extends Component
     }
 
     public function render()
-    {
-            
+    {   
+        $this->display = "display: none";
+
+        $this->tblasignatura = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("d.docente_id",$this->docenteId)
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->selectRaw('m.id, m.descripcion')
+        ->groupBy('m.id','m.descripcion')
+        ->get();
+
         $tblrecords = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
@@ -60,6 +70,8 @@ class VcClasesVirtual extends Component
         ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
         ->paginate(12);
 
+        $this->updatedasignaturaId($this->asignaturaId);
+
         return view('livewire.vc-clases-virtual',[
             'tblrecords' =>  $tblrecords
         ]);
@@ -69,6 +81,22 @@ class VcClasesVirtual extends Component
         return 'vendor.livewire.bootstrap'; 
     }
 
+    public function updatedasignaturaId($id){
+        
+        $this->asignaturaId = $id;
+
+        $this->tblparalelo = TmHorarios::query()
+        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
+        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("d.docente_id",$this->docenteId)
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("m.id",$id)
+        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
+        ->get();
+        
+    }
 
     public function add(){
 

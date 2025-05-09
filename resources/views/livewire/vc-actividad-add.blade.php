@@ -1,12 +1,12 @@
 <div>
-    <form id="createactivity-form" autocomplete="off" wire:submit.prevent="{{ 'createData' }}" class="needs-validation" >
+    <form id="createactivity-form" autocomplete="off" wire:submit.prevent="{{ 'createData' }}" class="needs-validation">
         <div class="row">
             <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body">
                             <div class="mb-3">
-                                <label for="choices-publish-status-input" class="form-label fw-semibold">Asignatura</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="asignaturaId" {{$control}}>
+                                <label for="asignatura-select" class="form-label fw-semibold">Asignatura</label>
+                                <select class="form-select" id="asignatura-select" data-choices data-choices-search-false wire:model="asignaturaId" {{$control}}>
                                    <option value="">Seleccione Asignatura</option>
                                    @foreach ($tblasignatura as $asignatura) 
                                     <option value="{{$asignatura->id}}">{{$asignatura->descripcion}}</option>
@@ -14,8 +14,8 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="paralelo" required {{$control}}>
+                                <label for="paralelo-select" class="form-label fw-semibold">Paralelos Asignados</label>
+                                <select class="form-select" id="paralelo-select" data-choices data-choices-search-false wire:model.defer="paralelo" {{$control}} required>
                                    <option value="">Seleccione Paralelo</option>
                                    @foreach ($tblparalelo as $paralelo) 
                                     <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
@@ -23,42 +23,36 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="termino" required {{$control}}>
+                                <label for="termino" class="form-label fw-semibold">Término</label>
+                                <select class="form-select" id="termino" data-choices data-choices-search-false wire:model.defer="termino" {{$control}} required>
                                     @foreach ($tbltermino as $terminos) 
                                     <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
                                     @endforeach 
-                                    <!--<option value="1T" selected>Primer Trimestre</option>
-                                    <option value="2T">Segundo Trimestre</option>
-                                    <option value="3T">Tercer Trimestre</option>-->
                                 </select>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-6">
-                                    <label for="choices-publish-status-input" class="form-label fw-semibold">Bloque</label>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="bloque" {{$control}}>
+                                    <label for="bloque-select" class="form-label fw-semibold">Bloque</label>
+                                    <select class="form-select" id="bloque-select" data-choices data-choices-search-false wire:model.defer="bloque" {{$control}}>
                                         @foreach ($tblbloque as $bloques) 
                                         <option value="{{$bloques->codigo}}">{{$bloques->descripcion}}</option>
                                         @endforeach 
-                                        <!--<option value="1P" selected>Primer Parcial</option>-->
                                     </select>
                                 </div>
                                 <div class="col-sm-6">
-                                    <label for="choices-publish-status-input" class="form-label fw-semibold">Tipo Actividad</label>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="tipo">
+                                    <label for="tipo-select" class="form-label fw-semibold">Tipo Actividad</label>
+                                    <select class="form-select" id="tipo-select" data-choices data-choices-search-false wire:model.defer="tipo">
                                         @foreach ($tblactividad as $actividades) 
                                         <option value="{{$actividades->codigo}}">{{$actividades->descripcion}}</option>
                                         @endforeach 
-                                        <!--<option value="AI">Actividad Individual</option>
-                                        <option value="AG">Actividad Grupal</option>-->
                                     </select>
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold" for="product-title-input">Nombre Actividad</label>
-                                    <input type="text" class="form-control" id="product-title-input" value="" placeholder="Ingrese nombre de actividad" wire:model.defer="nombre" required>
+                                    <label class="actividad" for="product-title-input">Nombre Actividad</label>
+                                    <input type="text" class="form-control" id="actividad-input" value="" placeholder="Ingrese nombre de actividad" wire:model.defer="nombre" required>
                                     <div class="invalid-feedback">Por favor ingrese un nombre de actividad.</div>
                                 </div>
                             </div>
@@ -66,10 +60,6 @@
                         </div>
                     </div>
                     <!-- end card -->
-
-                    <!--<div class="text-end mb-3">
-                        <button type="submit" class="btn btn-success w-sm">Submit</button>
-                    </div>-->
             </div>
             <!-- end col -->
 
@@ -80,21 +70,25 @@
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <label for="txtfecha" class="form-label fw-semibold">Fecha Máxima de Entrega</label>
-                            <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha" required> 
+                            <label for="fechaMaxima" class="form-label fw-semibold">Fecha Máxima de Entrega</label>
+                            <input type="date" class="form-control" id="fechaMaxima" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha" required> 
                         </div>
-
+                        <!-- Input Time -->
                         <div class="mb-3">
-                            <label for="choices-publish-status-input" class="form-label fw-semibold">Permitir la subida de archivos</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="archivo">
+                            <label for="horamaxima" class="form-label">Hora Máxima de Entrega</label>
+                            <input type="time" class="form-control" id="horamaxima" wire:model.defer="hora" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="archivo-select" class="form-label fw-semibold">Permitir la subida de archivos</label>
+                            <select class="form-select" id="archivo-select" data-choices data-choices-search-false wire:model.defer="archivo">
                                 <option value="SI" selected>SI</option>
                                 <option value="NO">NO</option>
                             </select>
                         </div>
 
                         <div class="mb-3">
-                            <label for="choices-publish-visibility-input" class="form-label fw-semibold">Puntaje</label>
-                            <input id="calificacion-insumo" type="number" min="1" max="10" step="1" class="form-control" value="10" wire:model.defer="puntaje" required>    
+                            <label for="puntaje-input" class="form-label fw-semibold">Puntaje</label>
+                            <input id="puntaje-input" type="number" min="1" max="10" step="1" class="form-control" value="10" wire:model.defer="puntaje" required>    
                         </div>
                         <br>
                     </div>
@@ -154,9 +148,9 @@
                         @if ($this->actividadId>0)
                         <div class="mb-3">
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Estado Actividad</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="tipo">
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="estado">
                                 <option value="A">Activo</option>
-                                <option value="I">Inactivo</option>
+                                <option value="F">Finalizado</option>
                             </select>
                         </div>
                         @endif

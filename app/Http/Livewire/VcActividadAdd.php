@@ -19,7 +19,8 @@ class VcActividadAdd extends Component
 {
     use WithFileUploads;
 
-    public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
+    public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $hora;
+    public $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $periodoId, $tbltermino, $tblbloque, $tblactividad, $texteditor;
     public $tblparalelo=[], $tblasignatura=[];
     public $array_attach=[];
@@ -45,6 +46,11 @@ class VcActividadAdd extends Component
 
     public function mount($id)
     {
+        
+        $ldate = date('Y-m-d H:i:s');
+        $this->fecha = date('Y-m-d',strtotime($ldate));
+        $this->hora = date('H:i');
+
         $this->docenteId = auth()->user()->personaId;
 
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
@@ -126,10 +132,13 @@ class VcActividadAdd extends Component
         $this->puntaje = $record['puntaje'];
         $this->enlace = $record['enlace'];
         $this->texteditor = $record['descripcion'];
+        $this->estado = $record['estado'];
+
+
         $this->control="disabled";
 
-        $fecha = date('Y-m-d',strtotime($record['fecha']));
-        $this->fecha = $fecha;
+        $this->fecha = date('Y-m-d',strtotime($record['fecha']));
+        $this->hora = date('H:i',strtotime($record['fecha']));
 
         $this->descripcion=".";
 
@@ -183,13 +192,11 @@ class VcActividadAdd extends Component
         ->get();
 
         $message = "";
-        //$this->dispatchBrowserEvent('chk-editor', ['newName' => $message]);
+        
     }
 
 
     public function createData(){
-
-        //dd($this->paralelo,$this->termino,$this->nombre,$this->fecha,$this->puntaje);
 
         $this ->validate([
             'paralelo' => 'required',
@@ -199,16 +206,11 @@ class VcActividadAdd extends Component
             'puntaje' => 'required'
         ]);
 
-        //dd('ingresa');
-
         if ($this->actividadId>0){
 
             $this->updateData();            
 
         }else {
-
-            //$purifier = new HTMLPurifier();
-            //$cleanHtml = $purifier->purify($request->input('content'));
             
             $tblData = TmActividades::Create([
                 'docente_id' => $this->docenteId,
@@ -219,7 +221,7 @@ class VcActividadAdd extends Component
                 'actividad' => $this->tipo,
                 'nombre' => $this->nombre,
                 'descripcion' => $this->texteditor,
-                'fecha' => $this->fecha,
+                'fecha' => $this->fecha.' '.$this->hora,
                 'subir_archivo' => $this->archivo,
                 'puntaje' => $this->puntaje,
                 'enlace' => $this->enlace,
@@ -331,18 +333,16 @@ class VcActividadAdd extends Component
             'actividad' => $this->tipo,
             'nombre' => $this->nombre,
             'descripcion' => $this->texteditor,
-            'fecha' => $this->fecha,
+            'fecha' => $this->fecha.' '.$this->hora,
             'subir_archivo' => $this->archivo,
             'puntaje' => $this->puntaje,
             'enlace' => $this->enlace,
+            'estado' => $this->estado,
             'usuario' => auth()->user()->name,
         ]);
 
 
         $this->apiDrive($this->actividadId);
-
-        //$message = "Registro actualizado con éxito!";
-        //$this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
         return redirect()->to('/activities/activity');
 

@@ -37,7 +37,7 @@ class VcActividadView extends Component
 
     public $arrestado=[
         'A' => 'Activo',
-        'I' => 'Inactivo',
+        'F' => 'Finalizado',
         'C' => 'Cerrado',
     ];
 
@@ -128,9 +128,11 @@ class VcActividadView extends Component
         $this->fecha = $record['fecha'];
         $this->puntaje = $record['puntaje'];
         $this->enlace = $record['enlace'];
-        $this->descripcion = $record['descripcion'];
+        $this->descripcion = strip_tags($record['descripcion']); 
+        $this->estado = $record['estado'];
 
-        $this->descripcion=".";
+
+        //$this->descripcion=".";
         $day = date('l', strtotime($this->fecha));
         //dd($day);
 

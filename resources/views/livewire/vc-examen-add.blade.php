@@ -58,6 +58,10 @@
                                     <label for="txtfecha" class="form-label fw-semibold">Fecha Máxima de Entrega</label>
                                     <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha" required> 
                                 </div>
+                                <div class="mb-3">
+                                    <label for="horamaxima" class="form-label">Hora Máxima de Entrega</label>
+                                    <input type="time" class="form-control" id="horamaxima" wire:model.defer="hora" required>
+                                </div>
                                 <div class="col-sm-4">
                                     <label for="choices-publish-status-input" class="form-label fw-semibold">Permitir la subida de archivos</label>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="archivo">

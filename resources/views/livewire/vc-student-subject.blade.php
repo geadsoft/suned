@@ -1,7 +1,7 @@
 <div>
    
     <div class="row mt-4">
-         @foreach ($tblrecords as $record) 
+         @foreach ($tblrecords as $key => $record) 
         <div class="col-xl-3 col-lg-6">
             <div class="card ribbon-box right overflow-hidden">
                 <div class="card-body text-center p-4">
@@ -27,7 +27,8 @@
                         </div>
                         <div class="col-lg-4">
                             @if($record['clases']>0)
-                                <h5><i class="ri-vidicon-line fs-18 text-success"></i></h5>
+                                <!--<h5><i class="ri-vidicon-line fs-18 text-success"  href="" target="_blank" src="about:blank"></i></h5>-->
+                                <h5><a id="btn-{{$key}}" href="{{$record['enlace']}}" target="_blank" src="about:blank"><i class="ri-vidicon-line fs-18 text-success"></i></a></h5>
                             @else
                                 <h5><i class="las la-video-slash fs-18"></i></h5>
                             @endif

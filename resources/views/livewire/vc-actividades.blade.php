@@ -93,7 +93,11 @@
                                         <td>{{$arrbloque[$record['bloque']]}}</td>
                                         <td>{{$arractividad[$record['actividad']]}}</td>
                                         <td>{{$record['nombre']}}</td>
-                                        <td><span class="badge badge-soft-success text-uppercase">@lang('status.'.($record->estado))</span></td>
+                                        @if ($record->estado=='A')
+                                            <td><span class="badge badge-soft-success text-uppercase">@lang('status.'.($record->estado))</span></td>
+                                        @else
+                                            <td><span class="badge badge-soft-danger text-uppercase">@lang('status.'.($record->estado))</span></td>
+                                        @endif
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"

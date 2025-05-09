@@ -4,7 +4,7 @@
             <div class="card" id="orderList">
                 <div class="card-header  border-0">
                     <div class="d-flex align-items-center">
-                        <h5 class="card-title mb-0 flex-grow-1">Registro de Actividades</h5>
+                        <h5 class="card-title mb-0 flex-grow-1">Historial Clases Virtuales</h5>
                         <div class="flex-shrink-0">
                             <button type="button" wire:click.prevent="add()" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn"
                                 data-bs-target=""><i class="ri-add-line align-bottom me-1"></i> Nueva Clase Virtual
@@ -15,15 +15,22 @@
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
                         <div class="row g-3 mb-3">
-                            <div class="col-xxl-5 col-sm-6">
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.paralelo">
+                            <div class="col-xxl-3 col-sm-4">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="asignaturaId">
                                     <option value="">Seleccione Paralelo</option>
+                                   @foreach ($tblasignatura as $materia) 
+                                    <option value="{{$materia->id}}">{{$materia->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="col-xxl-3 col-sm-4">
+                                <select class="form-select" id="paralelo-select" data-choices data-choices-search-false wire:model="filters.paralelo">
+                                   <option value="">Seleccione Paralelo</option>
                                    @foreach ($tblparalelo as $paralelo) 
                                     <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
                                     @endforeach 
                                 </select>
-                            </div>
-                            <!--end col-->
+                            </div>                            
                             <div class="col-xxl-1 col-sm-4">
                                 <div>
                                     <button type="button" class="btn btn-primary w-100" onclick="SearchData();"> <i
@@ -52,7 +59,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all">
-                                @foreach ($tblrecords as $record)
+                                @foreach ($tblrecords as $key => $record)
                                     <tr>
                                         <td>{{$record['asignatura']}}</td>
                                         <td>{{$record['curso']}}</td>
@@ -60,7 +67,7 @@
                                         <td>{{$record['enlace']}}</td>
                                         <td>
                                             @if ($record['estado']=='A')
-                                                <a class="btn btn-success btn-sm" id="external-url" href="{{$record['enlace']}}" target="_blank" src="about:blank">Ir a la reunión <i class="fas fa-external-link-alt"></i></a></td>
+                                                <a class="btn btn-secondary btn-sm" id="btn-{{$key}}" href="{{$record['enlace']}}" target="_blank" src="about:blank">Ir a la reunión <i class="fas fa-external-link-alt"></i></a></td>
                                             @endif
                                         <td> 
                                         @if ($record['estado']=='A')
@@ -92,15 +99,13 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                            <div class="noresult" style="display: none">
+                            <div class="noresult" style="{{$display}}">
                                 <div class="text-center">
                                     <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
                                         colors="primary:#405189,secondary:#0ab39c" style="width:75px;height:75px">
                                     </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted">We've searched more than 150+ Orders We did
-                                        not find any
-                                        orders for you search.</p>
+                                    <h5 class="mt-2">¡Lo sentimos! No se encontraron resultados.</h5>
+                                    <p class="text-muted">Hemos buscado según los filtros aplicados. No encontramos ninguno para su búsqueda</p>
                                 </div>
                             </div>
                         </div>

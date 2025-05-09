@@ -72,12 +72,18 @@ class VcStudentSubject extends Component
             ->where('fecha',$this->fecha)
             ->get();
 
+
             $actividad = TmActividades::query()
             ->where('docente_id',$recno->docente_id) 
             ->where('paralelo',$asignatura->id)
-            ->where('tipo','CV')
+            ->where('tipo','AC')
             ->where('fecha',$this->fecha)
             ->get();
+
+            $enlace="";
+            if (count($clases)>0){{
+                $enlace = $clases[0]['enlace'];
+            }}
 
             $array['id'] = $recno->id;
             $array['asignatura_id'] = $recno->asignatura_id;
@@ -86,6 +92,7 @@ class VcStudentSubject extends Component
             $array['docente'] = $recno->docente;
             $array['actividad'] = count($actividad);
             $array['clases'] = count($clases);
+            $array['enlace'] = $enlace;
             $array['data'] = json_encode([
                 'horarioId' => $recno->id,
                 'docenteId' => $recno->docente_id,
