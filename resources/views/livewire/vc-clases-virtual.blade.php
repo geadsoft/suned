@@ -14,10 +14,38 @@
                 </div>
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
+                        @if ($cursosTodos==true) 
+                            <div class="row g-3 mb-3">
+                                <div class="col-xxl-3 col-sm-4">
+                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.paralelo">
+                                        <option value="">Seleccione Paralelo</option>
+                                        @foreach ($tblparalelo as $paralelo) 
+                                            <option value="{{$paralelo->id}}">{{$paralelo->descripcion}} {{$paralelo->paralelo}}</option>
+                                        @endforeach 
+                                    </select>
+                                </div>
+                                <div class="col-xxl-3 col-sm-4">
+                                    <select class="form-select" id="paralelo-select" data-choices data-choices-search-false wire:model="asignaturaId">
+                                    <option value="">Seleccione Asignatura</option> 
+                                        @foreach ($tblasignatura as $materia) 
+                                            <option value="{{$materia->id}}">{{$materia->descripcion}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>                            
+                                <div class="col-xxl-1 col-sm-4">
+                                    <div>
+                                        <button type="button" class="btn btn-primary w-100" onclick="SearchData();"> <i
+                                                class="ri-equalizer-fill me-1 align-bottom"></i>
+                                            Filters
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
                         <div class="row g-3 mb-3">
                             <div class="col-xxl-3 col-sm-4">
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="asignaturaId">
-                                    <option value="">Seleccione Paralelo</option>
+                                    <option value="">Seleccione Asignatura</option>
                                    @foreach ($tblasignatura as $materia) 
                                     <option value="{{$materia->id}}">{{$materia->descripcion}}</option>
                                     @endforeach 
@@ -39,8 +67,8 @@
                                     </button>
                                 </div>
                             </div>
-                            <!--end col-->
                         </div>
+                        @endif
                         <!--end row-->
                     </form>
                 </div>

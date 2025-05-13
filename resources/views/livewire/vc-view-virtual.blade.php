@@ -41,7 +41,7 @@
                             <table class="table table-nowrap align-middle" id="orderTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
-                                        <th>Fecha</th>
+                                        <!--<th>Fecha</th>-->
                                         <th>Asignatura</th>
                                         <th>Curso</th>
                                         <th>Paralelo</th>
@@ -51,7 +51,7 @@
                                 <tbody class="list form-check-all">
                                 @foreach ($tblrecords as $record)
                                     <tr>
-                                        <td> {{date('d/m/Y',strtotime($record['fecha']))}}</td>
+                                        <!--<td> {{date('d/m/Y',strtotime($record['fecha']))}}</td>-->
                                         <td>{{$record['asignatura']}}</td>
                                         <td>{{$record['curso']}}</td>
                                         <td>{{$record['aula']}}</td>

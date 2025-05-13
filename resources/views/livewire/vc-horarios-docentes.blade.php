@@ -23,7 +23,7 @@
     </div>
     <div class="card-body pt-0">
         <div class="table-responsive table-card mb-1">
-            <table class="table table-nowrap align-middle" id="orderTable">
+            <table class="table table-nowrap table-sm align-middle" id="orderTable">
                 <thead class="text-muted table-light">
                     <tr class="text-uppercase">
                         <th class="sort">Componente Plan de Estudios</th>

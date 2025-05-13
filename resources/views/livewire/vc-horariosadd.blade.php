@@ -134,8 +134,8 @@
                                 aria-labelledby="pills-bill-horarios-tab">
                                 <div class="mb-3">
                                     <br>
-                                    <h5 class="mb-1"></h5>
-                                    <p class="text-muted mb-4"></p>
+                                    <h5 class="mb-1"> {{$nombreCurso}}  </h5>
+                                    <p class="text-muted mb-4">{{$nombreGrupo}}</p>
                                 </div>
                                 @livewire('vc-horarios-clase',['horarioId' => $selectId])
                             </div>
@@ -143,8 +143,8 @@
                                 aria-labelledby="pills-bill-docente-tab">
                                 <div class="mb-3">
                                     <br>
-                                    <h5 class="mb-1"></h5>
-                                    <p class="text-muted mb-4"></p>
+                                    <h5 class="mb-1"> {{$nombreCurso}} </h5>
+                                    <p class="text-muted mb-4">{{$nombreGrupo}}</p>
                                 </div>
                                 @livewire('vc-horarios-docentes',['horarioId' => $selectId])
                             </div>

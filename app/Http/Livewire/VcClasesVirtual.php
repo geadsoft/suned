@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\DB;
 class VcClasesVirtual extends Component
 {
     
-    public $showEditModal, $paralelo, $actividadId=0, $tblasignatura, $asignaturaId=0, $display="display: none";
+    public $showEditModal, $paralelo, $actividadId=0, $asignaturaId=0, $display="display: none";
+    public $cursosTodos;
     
     public $record=[];
     public $tblparalelo=[];
+    public $tblasignatura=[];
 
     public $filters=[
         'paralelo' => '',
@@ -35,9 +37,10 @@ class VcClasesVirtual extends Component
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
 
-        DB::table('tm_actividades')
-        ->where('fecha','<',$fecha)
-        ->update(['estado' => 'F']);
+        $this->cursosTodos = false;
+        if (auth()->user()->can('Ver Cursos CV')) {
+            $this->cursosTodos = true;
+        };
 
     }
 
@@ -45,32 +48,61 @@ class VcClasesVirtual extends Component
     {   
         $this->display = "display: none";
 
-        $this->tblasignatura = TmHorarios::query()
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->docenteId)
-        ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->selectRaw('m.id, m.descripcion')
-        ->groupBy('m.id','m.descripcion')
-        ->get();
+        if ($this->cursosTodos){
 
-        $tblrecords = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->join("tm_actividades as a","a.paralelo","=","d.id")
-        ->when($this->filters['paralelo'],function($query){
-            return $query->where('a.paralelo',"{$this->filters['paralelo']}");
-        })
-        ->where("a.docente_id",$this->docenteId)
-        ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->where("a.tipo","CV")
-        ->where("a.estado","A")
-        ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
-        ->paginate(12);
+            $this->loadCursos();
 
-        $this->updatedasignaturaId($this->asignaturaId);
+            $tblrecords = TmHorarios::query()
+            ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
+            ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
+            ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+            ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+            ->join("tm_actividades as a","a.paralelo","=","d.id")
+            ->when($this->filters['paralelo'],function($query){
+                return $query->where('tm_horarios.id',"{$this->filters['paralelo']}");
+            })
+            ->when($this->asignaturaId,function($query){
+                return $query->where('d.id',"{$this->asignaturaId}");
+            })
+            ->where("tm_horarios.periodo_id",$this->periodoId)
+            ->where("a.tipo","CV")
+            ->where("a.estado","A")
+            ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
+            ->orderby('m.descripcion')
+            ->paginate(12);
+
+            $this->updatedParalelo($this->filters['paralelo']);
+
+        }else{
+            
+            $this->tblasignatura = TmHorarios::query()
+            ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+            ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+            ->where("d.docente_id",$this->docenteId)
+            ->where("tm_horarios.periodo_id",$this->periodoId)
+            ->selectRaw('m.id, m.descripcion')
+            ->groupBy('m.id','m.descripcion')
+            ->get();
+
+            $tblrecords = TmHorarios::query()
+            ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
+            ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
+            ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+            ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+            ->join("tm_actividades as a","a.paralelo","=","d.id")
+            ->when($this->filters['paralelo'],function($query){
+                return $query->where('a.paralelo',"{$this->filters['paralelo']}");
+            })
+            ->where("a.docente_id",$this->docenteId)
+            ->where("tm_horarios.periodo_id",$this->periodoId)
+            ->where("a.tipo","CV")
+            ->where("a.estado","A")
+            ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
+            ->orderby('m.descripcion')
+            ->paginate(12);
+
+            $this->updatedasignaturaId($this->asignaturaId);
+        }
 
         return view('livewire.vc-clases-virtual',[
             'tblrecords' =>  $tblrecords
@@ -132,6 +164,47 @@ class VcClasesVirtual extends Component
 
         $this->dispatchBrowserEvent('hide-form');
 
+    }
+
+    public function loadCursos(){
+
+        $this->tblparalelo = TmActividades::query()
+        ->join('tm_horarios_docentes as d', function($join)
+        {
+            $join->on('d.id', '=', 'tm_actividades.paralelo');
+            $join->on('d.docente_id', '=','tm_actividades.docente_id');
+        })
+        ->join('tm_horarios as h','h.id','=','d.horario_id')
+        ->join('tm_servicios as s','s.id','=','h.servicio_id')
+        ->join('tm_cursos as c','c.id','=','h.curso_id')
+        ->where('tm_actividades.tipo','CV')
+        ->select('h.id','s.descripcion','c.paralelo')
+        ->groupBy('h.id','s.descripcion','c.paralelo')
+        ->orderBy('s.descripcion')
+        ->get();
+       
+
+    }
+
+    public function updatedParalelo($id){
+        
+        $this->filters['paralelo'] = $id;
+
+        $this->tblasignatura = TmActividades::query()
+        ->join('tm_horarios_docentes as d', function($join)
+        {
+            $join->on('d.id', '=', 'tm_actividades.paralelo');
+            $join->on('d.docente_id', '=','tm_actividades.docente_id');
+        })
+        ->join('tm_horarios as h','h.id','=','d.horario_id')
+        ->join('tm_asignaturas as m','m.id','=','d.asignatura_id')
+        ->where('tm_actividades.tipo','CV')
+        ->where('h.id',$id)
+        ->select('d.id','m.descripcion')
+        ->groupBy('d.id','m.descripcion')
+        ->orderBy('m.descripcion')
+        ->get();
+        
     }
 
 

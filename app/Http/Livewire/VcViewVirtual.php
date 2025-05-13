@@ -43,6 +43,7 @@ class VcViewVirtual extends Component
         ->where("a.tipo","CV")
         ->where("a.estado","A")
         ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
+        ->orderby("m.descripcion")
         ->paginate(12);
 
         return view('livewire.vc-view-virtual',[

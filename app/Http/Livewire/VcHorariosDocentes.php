@@ -37,7 +37,11 @@ class VcHorariosDocentes extends Component
     public function setHorario($horarioId){
         
         $this->horarioId    = $horarioId;
-        $this->tblrecords = TmHorariosDocentes::where('horario_id',$this->horarioId)->get();
+        $this->tblrecords = TmHorariosDocentes::query()
+        ->join("tm_asignaturas as m","m.id","=","tm_horarios_docentes.asignatura_id")
+        ->orderby("m.descripcion")
+        ->select("tm_horarios_docentes.*")
+        ->where('horario_id',$this->horarioId)-> get();
     
     }
 

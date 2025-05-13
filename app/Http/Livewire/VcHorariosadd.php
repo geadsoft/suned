@@ -18,6 +18,7 @@ class VcHorariosadd extends Component
     public $tblservicios=null;
     public $selectId,$grupoId,$servicioId,$nivelId,$gradoId,$especialidadId,$periodoId,$cursoId;
     public $tabHorario, $tabDocente, $edit=false;
+    public $nombreCurso, $nombreGrupo;
     
     public function mount($horarioId){
 
@@ -64,6 +65,12 @@ class VcHorariosadd extends Component
 
         $this->cursoId    = $tblrecords['curso_id']; 
         $this->edit = true;
+
+        $servicio = TmServicios::find($this->servicioId);
+        $curso = TmCursos::find($this->cursoId);
+        $grupo = TmGeneralidades::find($this->grupoId);
+        $this->nombreCurso = $servicio->descripcion.' - '.$curso->paralelo;
+        $this->nombreGrupo = $grupo->descripcion;
     }
 
     public function loadHorario(){
