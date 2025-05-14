@@ -40,6 +40,14 @@
             $('#showModal').modal('hide');
         })
 
+        window.addEventListener('show-delete', event => {
+            $('#deleteRecno').modal('show');
+        })
+
+        window.addEventListener('hide-delete', event => {
+            $('#deleteRecno').modal('hide');
+        })
+
        
 
     </script>

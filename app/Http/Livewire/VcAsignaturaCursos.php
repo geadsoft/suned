@@ -3,16 +3,17 @@
 namespace App\Http\Livewire;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmHorarios;
+
 use App\Models\TmActividades;
 
 use Livewire\Component;
 
 class VcAsignaturaCursos extends Component
 {
-    public $tblasignatura, $asignaturaId, $cursoId;
+    public $selectId, $tblasignatura, $asignaturaId, $cursoId;
     public $tblparalelo=[];
 
-    protected $listeners = ['setGrabar'];
+    protected $listeners = ['setEdit','setGrabar','setUpdate'];
 
     public function mount()
     {
@@ -57,6 +58,23 @@ class VcAsignaturaCursos extends Component
 
     }
 
+    public function setEdit($id){
+
+        $this->selectId = $id;
+        $actividad = TmActividades::find($id);
+
+        $data = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->where('d.id',$actividad['paralelo'])
+        ->where('d.docente_id',$this->docenteId)
+        ->first();
+
+        $this->asignaturaId = $data['asignatura_id'];
+        $this->updatedasignaturaId($this->asignaturaId);
+
+        $this->cursoId = $actividad['paralelo'];
+
+    }
  
     public function setGrabar($enlace){
 
@@ -83,6 +101,15 @@ class VcAsignaturaCursos extends Component
         
     }
 
+     public function setUpdate($enlace){
 
+        $record = TmActividades::find($this->selectId);
+        $record->update([
+            'paralelo' => $this->cursoId,
+            'enlace' => $enlace,
+        ]);
+
+        $this->emitTo('vc-clases-virtual','setMensaje');
+     }
 
 }

@@ -13,7 +13,7 @@ class VcClasesVirtual extends Component
 {
     
     public $showEditModal, $paralelo, $actividadId=0, $asignaturaId=0, $display="display: none";
-    public $cursosTodos;
+    public $cursosTodos, $selectId;
     
     public $record=[];
     public $tblparalelo=[];
@@ -157,9 +157,45 @@ class VcClasesVirtual extends Component
                 
     }
 
+    public function edit($id){
+
+        $this->showEditModal = true;
+
+        $actividad = TmActividades::find($id);
+        $this->record['enlace'] =  $actividad['enlace'];
+
+        $this->dispatchBrowserEvent('show-form');
+        $this->emitTo('vc-asignatura-cursos','setEdit',$id);
+    }
+
+    public function updateData(){
+
+        $this->emitTo('vc-asignatura-cursos','setUpdate',$this->record['enlace']);
+                
+    }
+
+    public function delete($Id){
+
+        $this->selectId = $Id;
+        $this->dispatchBrowserEvent('show-delete');
+
+    }
+    
+    public function deleteData(){
+
+        TmActividades::find($this->selectId)->delete();
+        $this->dispatchBrowserEvent('hide-delete');
+
+    }
+
     public function setMensaje(){
 
         $message = "Registro grabado con éxito!";
+
+        if ($this->showEditModal){
+            $message = "Registro actualizado con éxito!";
+        }
+
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
         $this->dispatchBrowserEvent('hide-form');

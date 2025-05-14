@@ -51,7 +51,6 @@ class VcSchoolSchedule extends Component
         ->get();
 
         $detalle = $materias->groupby('dia');
-        
 
         foreach ($detalle as $dia => $recno){
 
@@ -61,12 +60,20 @@ class VcSchoolSchedule extends Component
                 ->join('tm_personas as p','p.id','=','tm_horarios_docentes.docente_id')
                 ->where('horario_id',$data->id)
                 ->where('asignatura_id',$data->asignatura_id)
+                ->select('tm_horarios_docentes.id','p.apellidos','p.nombres')
                 ->first();
+
+                $actividades = TmActividades::query()
+                ->where('docente_id',$this->personaId)
+                ->where('id',$persona->id)
+                ->where('estado','A')
+                ->get()
+                ->toArray();
 
                 $this->objdetalle[$linea][$dia] = [
                     'asignatura' => $data->asignatura,
                     'docente' => $persona->apellidos.' '.$persona->nombres,
-                    'actividad' => 0,
+                    'actividades' => $actividades,
                     'recursos' => 0,
                     'clase' => false ,
                 ]; 
