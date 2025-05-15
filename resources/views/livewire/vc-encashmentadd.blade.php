@@ -404,9 +404,9 @@
                         <div class="flex-shrink-0">
                             <div class="form-check form-check-success" >
                                 @if ($generaFactura==true)
-                                    <input class="form-check-input" type="checkbox" name="chkbill" id="chkbill" onchange="chkbill()" checked>
+                                    <input class="form-check-input" type="checkbox" name="chkbill" id="chkbill" onchange="chkbill()" wire:model.defer="generaFactura">
                                 @else
-                                    <input class="form-check-input" type="checkbox" name="chkbill" id="chkbill" onchange="chkbill()">
+                                    <input class="form-check-input" type="checkbox" name="chkbill" id="chkbill" onchange="chkbill()" wire:model.defer="generaFactura">
                                 @endif
                                 <label class="form-check-label fs-15" for="chkbill">Facturar</label>
                             </div>

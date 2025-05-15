@@ -33,6 +33,10 @@
             swal("Buen Trabajo!", event.detail.newName, "success");
         })
 
+        window.addEventListener('entrega', event => {
+            addElement(event.detail.newName)
+        })
+
         document.addEventListener('livewire:load', function () {
             ClassicEditor
                 .create(document.querySelector('#editor'))
@@ -52,6 +56,12 @@
             editor.setData(datosDelEditor);
         });
         
+        function addElement($text)
+        {
+            var $string = $text
+             document.getElementById("elemnt").innerHTML += $string;
+        }
+
     </script>
     
 @endsection
