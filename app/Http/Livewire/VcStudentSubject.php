@@ -69,7 +69,7 @@ class VcStudentSubject extends Component
             ->where('docente_id',$recno->docente_id) 
             ->where('paralelo',$asignatura->id)
             ->where('tipo','CV')
-            //->where('fecha',$this->fecha)
+            ->where('estado','A')
             ->get();
 
 
@@ -77,7 +77,8 @@ class VcStudentSubject extends Component
             ->where('docente_id',$recno->docente_id) 
             ->where('paralelo',$asignatura->id)
             ->where('tipo','AC')
-            ->where('fecha',$this->fecha)
+            ->where('fecha','>=',$this->fecha)
+            ->where('estado','A')
             ->get();
 
             $enlace="";

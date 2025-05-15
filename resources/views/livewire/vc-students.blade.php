@@ -44,7 +44,7 @@
                                         <th data-sort="name" scope="col">Identificación</th>
                                         <th data-sort="email_id" scope="col">Apellidos</th>
                                         <th data-sort="company_name" scope="col">Nombres</th>
-                                        <th data-sort="usuario" scope="col">Usuario</th>
+                                       
                                         <th data-sort="tags" scope="col">Curso</th>
                                         <th data-sort="paralelo" scope="col">Paralelo</th>
                                         <th scope="col">Acción</th>
@@ -61,7 +61,7 @@
                                         <td>{{$record->identificacion}}</td>
                                         <td>{{$record->apellidos}}</td>
                                         <td>{{$record->nombres}}</td>
-                                        <td></td>
+                                       
                                         <td>{{$record->descripcion}}</td>
                                         <td>{{$record->paralelo}}</td>
                                         <td class="text-center">
@@ -73,7 +73,6 @@
                                 @endforeach    
                                 </tbody>
                             </table>
-                            
                             <div class="noresult" style="display: none">
                                 <div class="text-center">
                                     <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
@@ -87,13 +86,8 @@
                                 </div>
                             </div>
                         </div>
-                        
+                        {{$tblrecords->links('')}}
                     </div>
-                    
-                    
-
-                    
-
                 </div>
             <!--</div>-->
             <!--end card-->

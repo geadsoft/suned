@@ -8,6 +8,8 @@ use App\Models\TmHorarios;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
+
 use PDF;
 
 class VcStudents extends Component
@@ -26,7 +28,7 @@ class VcStudents extends Component
     public function mount(){
         
         $año   = date('Y');
-        $periodo = TmPeriodosLectivos::where("estado","A")->first();
+        $periodo = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->filters['periodoId'] = $periodo['id']; 
         $this->filters['docenteId'] = auth()->user()->personaId;    
 
@@ -62,6 +64,16 @@ class VcStudents extends Component
         ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
         ->join("tm_cursos as c","c.id","=","m.curso_id")
         ->join("tm_servicios as s","s.id","=","c.servicio_id")
+        ->join(DB::raw('(select h.curso_id from tm_horarios h
+                inner join tm_horarios_docentes d on d.horario_id = h.id
+                where d.docente_id = '.$this->filters['docenteId'].' and 
+                h.periodo_id = '.$this->filters['periodoId'].'
+                group by h.curso_id)
+               cursos'), 
+        function($join)
+        {
+           $join->on('cursos.curso_id', '=', 'm.curso_id');
+        })
         ->when($this->filters['periodoId'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['periodoId']}");
         })

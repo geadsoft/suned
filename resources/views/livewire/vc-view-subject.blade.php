@@ -46,7 +46,7 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1 overflow-hidden">
-                                    <h5 class="fs-13 mb-1"><a href="#" class="text-body text-truncate d-block"><a class="text-secondary fw-semibold text-uppercase">{{$record->nombre}}</a> Fecha: {{date('d/m/Y',strtotime($record->created_at))}} <strong>Hasta:</strong> {{date('d/m/Y',strtotime($record->fecha))}}</a></h5>
+                                    <h5 class="fs-13 mb-1"><a href="/student/deliver-activity/{{$record->id}}" class="text-secondary fw-semibold text-uppercase">{{$record->nombre}}</a> Fecha: {{date('d/m/Y',strtotime($record->created_at))}} <strong>Hasta:</strong> {{date('d/m/Y',strtotime($record->fecha))}}</a></h5>
                                     <div>
                                         <span class="badge badge-soft-success text-uppercase fs-12">{{$record->actividad}}</span>
                                         <span class="badge badge-soft-primary fs-12">No Calificado</span>

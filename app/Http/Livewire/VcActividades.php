@@ -52,6 +52,7 @@ class VcActividades extends Component
 
         DB::table('tm_actividades')
         ->where('fecha','<',$fecha)
+        ->where('tipo','AC')
         ->update(['estado' => 'F']);
         
         $this->tblparalelo = TmHorarios::query()

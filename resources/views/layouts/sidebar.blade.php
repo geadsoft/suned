@@ -111,7 +111,7 @@
                                 </div>
                             </li>
                             @endcan
-                            @can('Calificacion')
+                            @can('Calificaciones')
                             <li class="nav-item">
                                 <a href="#sidebarCalifica" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="calificacion" data-key="t-profile">Calificaciones</a>
                                 <div class="menu-dropdown collapse" id="sidebarCalifica" style="">

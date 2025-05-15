@@ -139,6 +139,7 @@ Route::get('/activities/suppletory-view/{id}',[App\Http\Controllers\DocentesCont
 Route::get('/student/subject',[App\Http\Controllers\EstudiantesController::class, 'subject'])->name('subject');
 Route::get('/student/subject-view/{data}',[App\Http\Controllers\EstudiantesController::class, 'subject_view'])->name('subject_view');
 Route::get('/student/school-schedule',[App\Http\Controllers\EstudiantesController::class, 'school_schedule'])->name('school_schedule');
+Route::get('/student/deliver-activity/{id}',[App\Http\Controllers\EstudiantesController::class, 'deliver_activity'])->name('deliver_activity');
 
 
 

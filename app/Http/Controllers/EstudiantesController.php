@@ -22,4 +22,11 @@ class EstudiantesController extends Controller
         return view('student/horarios');
     }
 
+    public function deliver_activity($id)
+    {      
+        return view('student/entregar_actividad',['id' => $id]);
+    }
+
+    
+
 }
