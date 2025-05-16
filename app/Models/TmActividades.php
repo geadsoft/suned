@@ -24,6 +24,8 @@ class TmActividades extends Model
         'subir_archivo',
         'puntaje',
         'enlace',
+        'fecha_entrega',
+        'comentario',
         'estado',
         'usuario',
     ];

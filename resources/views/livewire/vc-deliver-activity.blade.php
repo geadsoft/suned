@@ -21,7 +21,7 @@
                                             <div class="vr"></div>
                                             <div class="text-muted">Fecha Registro: <span class="fw-medium " id="create-date">{{date('d/m/Y',strtotime($record->created_at))}}</span></div>
                                             <div class="vr"></div>
-                                            <div class="text-muted">Fecha Vencimiento: <span class="fw-medium" id="due-date">{{date('d/m/Y',strtotime($record->fecha))}}</span></div>
+                                            <div class="text-muted">Fecha Maxima Entrega: <span class="fw-medium" id="due-date">{{date('d/m/Y H:i:s',strtotime($record->fecha))}}</span></div>
                                             <div class="vr"></div>
                                         
                                         </div>
@@ -71,11 +71,19 @@
                             <div class="table-responsive">
                                 <table class="table mb-0 table-borderless">
                                     <tbody>
+                                        @if($estado=="No Entregado")
                                         <tr>
                                             <th style="width: 350px;"><span class="">Estado de la Entrega</span></th>
-                                            <td>No Entregado</td>
+                                            <td>{{$estado}}</td>
                                             <td>.</td>
                                         </tr>
+                                        @else
+                                        <tr class="alert-success">
+                                            <th style="width: 350px;"><span class="">Estado de la Entrega</span></th>
+                                            <td>{{$estado}}</td>
+                                            <td>.</td>
+                                        </tr>
+                                        @endif
                                         <tr>
                                             <th><span class="">Estado de la Calificación</span></th>
                                             <td>No Calificado</td>
@@ -83,14 +91,27 @@
                                         <tr>
                                             <th><span class="">Fecha de Entrega</span></th>
                                             <td>@lang('translation.'.(date('l',strtotime($record->fecha)))),
-                                            {{date('d',strtotime($record->fecha))}} de @lang('months.'.(date('m',strtotime($record->fecha)))) del {{date('Y',strtotime($record->fecha))}}</td>
+                                            {{date('d',strtotime($record->fecha))}} de @lang('months.'.(date('m',strtotime($record->fecha)))) del {{date('Y',strtotime($record->fecha))}}
+                                            {{date('H:i',strtotime($record->fecha))}}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th><span class="">Tiempo Restante</span></th>
-                                            <td>.</td>
+                                            <td>{{$tiempo}}</td>
                                         </tr>
                                         <tr>
                                             <th><span class="">Ultima Modificación</span></th>
+                                            @if ($record->fecha_entrega==null)
+                                                <td>-</td>
+                                            @else
+                                            <td>@lang('translation.'.(date('l',strtotime($record->fecha_entrega)))),
+                                            {{date('d',strtotime($record->fecha_entrega))}} de @lang('months.'.(date('m',strtotime($record->fecha_entrega)))) del {{date('Y',strtotime($record->fecha_entrega))}}
+                                            {{date('H:i',strtotime($record->fecha_entrega))}}
+                                            @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><span class="">Comentario de la Entrega</span></th>
                                             <td>.</td>
                                         </tr>
                                     </tbody>
@@ -98,19 +119,37 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div class="row mb-3">
                         <div class="col-xl-3"> 
+                            @if($display_estado<>"") 
                             <span class="">Texto en Linea</span>
+                            @endif
                         </div>
                         <div class="col-xl-9"> 
-                            <textarea id="editor" style="visibility:hidden;" wire:model="texteditor">   
-                            </textarea>
+                            <div id="editorContainer" style="display: none;" wire:ignore>
+                                <textarea id="editor" wire:model="texteditor"></textarea>
+                            </div>
                         </div>
                     </div>
+                     @if($display_estado<>"") 
                     <div class="row mb-3">
                         <div class="col-xl-3"> 
                             <span class="">Archivos Enviados</span>
+                        </div>
+                        <div class="col-xl-9 "> 
+                            
+                            <div class="mt-4 mt-md-0 text-end">
+                                <div class="flex-shrink-0">
+                                    <button type="button" class="btn btn-soft-info btn-sm" wire:click="attach_add()">
+                                    <i class=" ri-add-circle-line me-1 align-bottom"></i>Agregar Archivo</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-xl-3"> 
+                            <span class=""></span>
                         </div>
                         <div class="col-xl-9"> 
                             <div class="table-responsive table-card mb-1">
@@ -124,16 +163,16 @@
                                             <span class="input-group-text" id="basic-addon3">Archivo</span>
                                             <input type="text" id="file-{{$recno['linea']}}" wire:model.prevent="array_attach.{{$key}}.adjunto" class="form-control">
                                             <a href="" id="drive-{{$recno['linea']}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" wire:click="download()"><i class="ri-download-2-line fs-18"></i></a>
-                                            <a id="btnadd-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-success rounded-circle" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-18"></i></a>
-                                            <a id="btndel-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-danger rounded-circle" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-18"></i></a>
+                                            <!--<a id="btnadd-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-success rounded-circle" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-18"></i></a>
+                                            <a id="btndel-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-danger rounded-circle" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-18"></i></a>-->
                                         </div>
                                     </td>
                                     @else
                                     <td>
                                         <div class="input-group">
                                         <input type="file" id="file-{{$recno['linea']}}" wire:model.prevent="array_attach.{{$key}}.adjunto" class="form-control">
-                                        <a id="btnadd-{{$recno['linea']}}" class ="btn" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-16"></i></a>
-                                        <a id="btndel-{{$recno['linea']}}" class ="btn" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-16"></i></a>
+                                        <!--<a id="btnadd-{{$recno['linea']}}" class ="btn" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-16"></i></a>
+                                        <a id="btndel-{{$recno['linea']}}" class ="btn" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-16"></i></a>-->
                                         </div>
                                     </td>
                                     @endif
@@ -142,10 +181,17 @@
                                     </tbody>
                                 </table>
                             </div>
+                            
+                            <div class="hstack gap-2 d-print-none mt-4">
+                                <button type="button" class="btn btn-soft-danger" wire:click="createData()"><i class="ri-send-plane-fill align-bottom me-1"></i>Enviar</button>
+                                <button type="button" class="btn btn-soft-primary"><i class="align-bottom me-1"></i>Cancelar</button>
+                            </div>
+                            
                         </div>
-                    </div>            
-                    <div class="text-center">
-                        <button type="button" class="btn btn-primary" wire:click='entrega'><i class="ri-upload-2-line align-bottom me-1"></i>Agregar Entrega</button>
+                    </div>
+                    @endif      
+                    <div class="text-center" style="{{$display_estado}}">
+                        <button type="button" class="btn btn-primary" id="btnentrega" wire:click='entrega' ><i class="ri-upload-2-line align-bottom me-1"></i>Agregar Entrega</button>
                     </div>
                 </div><!--end card-body-->
                 

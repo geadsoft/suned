@@ -13,6 +13,7 @@ class TmFiles extends Model
         'actividad_id',
         'persona_id',
         'nombre',
+        'entrega',
         'drive_id',
         'usuario',
     ];
