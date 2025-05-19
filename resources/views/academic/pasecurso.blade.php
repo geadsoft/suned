@@ -12,7 +12,7 @@
             Sede
         @endslot
         @slot('title')
-            Pase de Curso
+            Pase de Modalidad
         @endslot
     @endcomponent
 

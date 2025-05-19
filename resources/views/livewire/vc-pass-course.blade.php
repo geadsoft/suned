@@ -7,7 +7,7 @@
                         <div class="d-flex align-items-center">
                             <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
                             class="ri-shopping-bag-line me-1 text-success"></i>
-                            Pase de Curso</h5>
+                            Cambiar Modalidad de Estudio</h5>
                             <div class="flex-shrink-0">
                                 <div class="text-end">
                                     <button type="submit" class="btn btn-success w-sm">Grabar</button>
