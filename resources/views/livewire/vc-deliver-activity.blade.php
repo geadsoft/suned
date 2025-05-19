@@ -48,21 +48,25 @@
                     <div class="card">
                         <h6 class="fw-semibold text-uppercase">Archivos Adjunto</h6>
                         <div class="card-body">
-                            <div class="d-flex align-items-center border border-dashed p-2 rounded">
-                                <div class="flex-shrink-0 avatar-sm">
-                                    <div class="avatar-title bg-light rounded">
-                                        <i class="{{$arrdoc['xls']}} fs-20 {{$arrcolor['xls']}}"></i>
+                            @foreach($files as $file)
+                                <div class="d-flex align-items-center border border-dashed p-2 rounded">
+                                    
+                                    <div class="flex-shrink-0 avatar-sm">
+                                        <div class="avatar-title bg-light rounded">
+                                            <i class="{{$arrdoc[$file->extension]}} fs-20 {{$arrcolor[$file->extension]}}"></i>
+                                        </div>
                                     </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-1"><a href="javascript:void(0);">{{$file->nombre}}</a></h6>
+                                        <small class="text-muted">@lang('translation.'.(date('l',strtotime($record->fecha)))),
+                                                {{date('d',strtotime($record->fecha))}} de @lang('months.'.(date('m',strtotime($record->fecha)))) del {{date('Y',strtotime($record->fecha))}}</small>
+                                    </div>
+                                    <div class="hstack gap-3 fs-16">
+                                        <a type="button" class="text-muted" wire:click='download_drive({{$file->id}})'><i class="ri-download-2-line"></i></a>
+                                    </div>
+
                                 </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h6 class="mb-1"><a href="javascript:void(0);">Velzon-admin.zip</a></h6>
-                                    <small class="text-muted">@lang('translation.'.(date('l',strtotime($record->fecha)))),
-                                            {{date('d',strtotime($record->fecha))}} de @lang('months.'.(date('m',strtotime($record->fecha)))) del {{date('Y',strtotime($record->fecha))}}</small>
-                                </div>
-                                <div class="hstack gap-3 fs-16">
-                                    <a href="" class="text-muted"><i class="ri-download-2-line"></i></a>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                     <div class="mt-4" style="{{$display_estado}}">
@@ -110,9 +114,55 @@
                                             @endif
                                             </td>
                                         </tr>
+                                        @if ($record->fecha_entrega<>null)
+                                            <th><span class="">Archivos Enviados</span></th>
+                                            <td>
+                                                <div class="profile-timeline">
+                                                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                                                        <div class="accordion-item border-0">
+                                                            <div class="accordion-header" id="headingOne">
+                                                                <a class="accordion-button p-2 shadow-none" data-bs-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                                    <div class="d-flex align-items-center">
+                                                                        <div class="flex-shrink-0 avatar-xs">
+                                                                            <div class="avatar-title bg-success rounded-circle">
+                                                                                <i class="ri-folder-5-line"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="flex-grow-1 ms-3">
+                                                                            <h6 class="fs-15 mb-0 fw-semibold"></span></h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        @foreach($entregas as $entrega)
+                                                    
+                                               
+                                                        <div class="accordion-item border-0">
+                                                            <div class="accordion-header" id="headingFive">
+                                                                <a class="accordion-button p-2 shadow-none" data-bs-toggle="collapse" href="#collapseFile" aria-expanded="false">
+                                                                    <div class="d-flex align-items-center">
+                                                                        <div class="flex-shrink-0 avatar-xs">
+                                                                            <div class="avatar-title bg-light {{$arrcolor[$entrega->extension]}} rounded-circle fs-15">
+                                                                                <i class="{{$arrdoc[$entrega->extension]}}"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="flex-grow-1 ms-3">
+                                                                            <h6 class="fs-14 mb-0 fw-semibold">{{$entrega->nombre}}</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                         @endforeach
+                                                    </div>
+                                                    <!--end accordion-->
+                                                </div>
+                                            </td>
+                                        @endif
                                         <tr>
                                             <th><span class="">Comentario de la Entrega</span></th>
-                                            <td>.</td>
+                                            <td>{{$record->comentario}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -162,9 +212,9 @@
                                         <div class="input-group">
                                             <span class="input-group-text" id="basic-addon3">Archivo</span>
                                             <input type="text" id="file-{{$recno['linea']}}" wire:model.prevent="array_attach.{{$key}}.adjunto" class="form-control">
-                                            <a href="" id="drive-{{$recno['linea']}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" wire:click="download()"><i class="ri-download-2-line fs-18"></i></a>
-                                            <!--<a id="btnadd-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-success rounded-circle" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-18"></i></a>
-                                            <a id="btndel-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-danger rounded-circle" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-18"></i></a>-->
+                                            <!--<a href="" id="drive-{{$recno['linea']}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" wire:click="download()"><i class="ri-download-2-line fs-18"></i></a>
+                                            <a id="btnadd-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-success rounded-circle" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-18"></i></a>-->
+                                            <a id="btndel-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-danger rounded-circle" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-delete-bin-5-line fs-18"></i></a>
                                         </div>
                                     </td>
                                     @else
@@ -183,7 +233,7 @@
                             </div>
                             
                             <div class="hstack gap-2 d-print-none mt-4">
-                                <button type="button" class="btn btn-soft-danger" wire:click="createData()"><i class="ri-send-plane-fill align-bottom me-1"></i>Enviar</button>
+                                <button type="button" class="btn btn-soft-success" wire:click="createData()"><i class="ri-send-plane-fill align-bottom me-1"></i>Enviar</button>
                                 <button type="button" class="btn btn-soft-primary"><i class="align-bottom me-1"></i>Cancelar</button>
                             </div>
                             
@@ -191,7 +241,11 @@
                     </div>
                     @endif      
                     <div class="text-center" style="{{$display_estado}}">
+                        @if ($record->fecha_entrega==null)
                         <button type="button" class="btn btn-primary" id="btnentrega" wire:click='entrega' ><i class="ri-upload-2-line align-bottom me-1"></i>Agregar Entrega</button>
+                        @else
+                        <button type="button" class="btn btn-primary" id="btnentrega" wire:click='entrega' ><i class="ri-edit-2-fill align-bottom me-1"></i>Editar Entrega</button>
+                        @endif
                     </div>
                 </div><!--end card-body-->
                 

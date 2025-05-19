@@ -311,6 +311,7 @@ class VcActividadAdd extends Component
                 'actividad_id' => $selectId,
                 'persona_id' => $this->docenteId,
                 'nombre' => $name.'.'.$ext,
+                'extension' => $ext,
                 'drive_id' => $fileId,
                 'usuario' => auth()->user()->name,
             ]);

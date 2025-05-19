@@ -37,6 +37,11 @@ class TmSedesController extends Controller
         return view('academic/sistema');
     }
 
+    public function pasecurso()
+    {
+        return view('academic/pasecurso');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

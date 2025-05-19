@@ -94,7 +94,7 @@
                                             </div>
                                             <div>
                                             <i class="las la-user-check fs-18"></i><a class="text-muted"> {{$record->estudiante->apellidos}} {{$record->estudiante->nombres}} </a>
-                                            <div>
+                                            </div>
                                         </td>
                                         <td>{{$record->autorizacion}}</td>
                                         <td>{{number_format($record->subtotal,2)}}</td>

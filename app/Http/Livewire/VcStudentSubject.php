@@ -6,6 +6,7 @@ use App\Models\TmHorariosDocentes;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmMatricula;
 use App\Models\TmActividades;
+use App\Models\TmPaseCursos;
 
 
 use Livewire\Component;
@@ -27,7 +28,19 @@ class VcStudentSubject extends Component
         $matricula = TmMatricula::where('estudiante_id',$this->personaId)
         ->where('periodo_id',$this->periodoId)
         ->orderBy('periodo_id','desc')->first();
+
         $this->cursoId = $matricula['curso_id'];
+
+        //Si tiene pase de curso en otra modalidad
+        $pasecurso = TmPaseCursos::query()
+        ->where('matricula_id',$matricula->id)
+        ->where('estado','A')
+        ->first();
+
+        if (!empty($pasecurso)){
+            
+            $this->cursoId = $pasecurso->curso_id;
+        }
 
         $this->loadAsignaturas();
 

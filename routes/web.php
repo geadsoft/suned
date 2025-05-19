@@ -60,6 +60,7 @@ Route::get('/academic/qualify-suppletory',[App\Http\Controllers\DocentesControll
 Route::get('/academic/daily-attendance',[App\Http\Controllers\DocentesController::class, 'asistencia_diaria'])->name('asistencia_diaria');
 Route::get('/academic/justify-faults',[App\Http\Controllers\DocentesController::class, 'justificar_faltas'])->name('justificar_faltas');
 Route::get('/academic/information-student',[App\Http\Controllers\DocentesController::class, 'estudiantes'])->name('estudiantes');
+Route::get('/academic/pass-course',[App\Http\Controllers\TmSedesController::class, 'pasecurso'])->name('pasecurso');
 
 
 Route::get('/report/total-rating',[App\Http\Controllers\DocentesController::class, 'calificacion_total'])->name('calificacion_total');

@@ -92,6 +92,11 @@
                                 <a class="nav-link menu-link" href="/academic/information-student">Estudiantes</a>
                             </li>
                             @endcan
+                             @can('Pase Modalidad')
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/pass-course">Pase de Modalidad</a>
+                            </li>
+                            @endcan
                             @can('Asistencia')
                             <li class="nav-item">
                                 <a href="#sidebarAsistencia" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="asistencia" data-key="t-profile">Asistencias</a>

@@ -17,7 +17,7 @@ class VcDeliverActivity extends Component
     
     public $selectId, $record, $display_estado="", $display_text="display:none";
     public $data, $personaId, $tiempo, $estado="No Entregado";
-    public $array_attach=[];
+    public $array_attach=[], $files=[], $entregas=[];
     public $showEditor = false;
 
     public $arrdoc = [
@@ -26,8 +26,9 @@ class VcDeliverActivity extends Component
         'xls' => 'ri-file-excel-2-line',
         'xlsx' => 'ri-file-excel-2-line',
         'ppt' => ' ri-file-ppt-2-line',
-        'pptx' => ' ri-file-ppt-2-line',
-        'pdf' => ' ri-file-pdf-line',
+        'pptx' => 'ri-file-ppt-2-line',
+        'pdf' => 'ri-file-pdf-line',
+        'html' => 'ri-file-code-line',
     ];
 
     public $arrcolor = [  
@@ -38,6 +39,7 @@ class VcDeliverActivity extends Component
         'ppt' => ' text-danger',
         'pptx' => 'text-danger',
         'pdf' => 'text-danger',
+        'html' => 'text-info',
     ];
 
     private function token(){
@@ -61,8 +63,9 @@ class VcDeliverActivity extends Component
         $this->selectId  = $id;
         $this->personaId = auth()->user()->personaId;
 
-        $this->load();
         $this->attach_add();
+        $this->load();
+        
     }
     
     public function render()
@@ -73,7 +76,7 @@ class VcDeliverActivity extends Component
     public function load(){
 
         $this->record = TmActividades::find($this->selectId);
-        $this->texteditor = "";
+        $this->texteditor = $this->record->comentario;
         $this->data = json_encode($this->record['descripcion']);
         
         $fechaInicial  = date('Y-m-d H:i:s');
@@ -84,6 +87,36 @@ class VcDeliverActivity extends Component
 
         if ($this->record['fecha_entrega']<>null){
             $this->estado = "Enviado para Calificar";
+        }
+
+        //Archivos Adjuntos
+        $this->files = TmFiles::query()
+        ->where('actividad_id',$this->selectId)
+        ->where('entrega',0)
+        ->get();
+
+        //Entregas Realizadas
+        $this->entregas = TmFiles::query()
+        ->where('actividad_id',$this->selectId)
+        ->where('entrega',1)
+        ->get();
+
+        if (count($this->entregas)>0){
+
+            $this->array_attach=[];
+
+            foreach( $this->entregas as $key => $file){
+                $attach=[
+                'id' => $file->id,
+                'linea' => $key+1,
+                'adjunto' => $file->nombre,
+                'drive_id' => $file->drive_id,
+                ];
+
+                array_push($this->array_attach,$attach);
+
+            }
+
         }
 
     }
@@ -146,6 +179,7 @@ class VcDeliverActivity extends Component
         {
             if ($recno['linea'] == $linea){
                 unset ($recnoToDelete[$index]);
+                TmFiles::find($recno['id'])->delete();
             } 
         }
 
@@ -230,6 +264,7 @@ class VcDeliverActivity extends Component
                 'actividad_id' => $selectId,
                 'persona_id' => $this->personaId,
                 'nombre' => $name.'.'.$ext,
+                'extension' => $ext,
                 'entrega' => true,
                 'drive_id' => $fileId,
                 'usuario' => auth()->user()->name,
@@ -239,6 +274,36 @@ class VcDeliverActivity extends Component
 
         $message = "Registro grabado con éxito!"."\n".$msgfile;
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+
+    }
+
+    public function download_drive($id){
+
+        $file = TmFiles::find($id);
+
+        $accessToken = $this->token();
+        
+        // Obtener el contenido del archivo
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->get("https://www.googleapis.com/drive/v3/files/{$file->drive_id}?alt=media");
+
+        if ($response->successful()) {
+            $fileName = $file->nombre;
+
+            // Guardar en el disco 'public' dentro de la carpeta 'archivos'
+            $filePath = 'archivos/' . $fileName;
+            Storage::disk('public')->put($filePath, $response->body());
+
+            // Descargar el archivo (desde almacenamiento local)
+            return response()->download(storage_path('app/public/' . $filePath));
+
+            $contents = Storage::disk('public')->exists('archivos/'.$fileName);
+            if ($contents){
+                Storage::disk('public')->delete('archivos/'.$fileName);
+            }
+
+        }
 
     }
     

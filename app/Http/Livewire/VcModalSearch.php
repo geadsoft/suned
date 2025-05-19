@@ -84,14 +84,21 @@ class VcModalSearch extends Component
 
     public function setPersona($matriculaId){
 
+        
+        
         if ($this->opcion=='INV'){
             $this->emitTo('vc-inventary-register','setPersona',$matriculaId);
-        }else{
+        }
+        
+        if ($this->opcion=='null'){
             $this->emitTo('vc-certificados','setPersona',$matriculaId);
             $this->dispatchBrowserEvent('hide-form');
         }
 
-       
+       if ($this->opcion=='PASE'){
+            $this->emitTo('vc-pass-course','setPersona',$matriculaId);
+            $this->dispatchBrowserEvent('hide-form');
+        }
 
     }
 

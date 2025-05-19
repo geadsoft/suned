@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 use App\Models\TmHorarios;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmMatricula;
+use App\Models\TmPaseCursos;
 
 
 use Livewire\Component;
@@ -27,6 +28,15 @@ class VcViewVirtual extends Component
         ->where('periodo_id',$this->periodoId)
         ->orderBy('periodo_id','desc')->first();
         $this->cursoId = $matricula['curso_id'];
+
+        $pasecurso = TmPaseCursos::query()
+        ->where('matricula_id',$matricula->id)
+        ->where('estado','A')
+        ->first();
+
+        if (!empty($pasecurso)){
+            $this->cursoId = $pasecurso->curso_id;
+        }
 
     }
 
