@@ -129,10 +129,16 @@ class VcHorariosClase extends Component
                 if ($linea==$recno['linea']){
                     
                     $record = TmHorariosAsignaturas::find($recno['id']);
-                    $record->update([
-                        'asignatura_id' => $asignatura[$recno['dia']],
-                    ]);
-                    
+                    if ($asignatura[$recno['dia']]==''){
+                         
+                            $record->update([
+                            'asignatura_id' => null,
+                            ]);
+                    }else{
+                            $record->update([
+                            'asignatura_id' => $asignatura[$recno['dia']],
+                        ]);
+                    }
                 }
             }
 
