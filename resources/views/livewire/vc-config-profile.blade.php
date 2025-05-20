@@ -204,7 +204,7 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="cmbetnia" class="form-label">Tipo</label>
-                                            <select class="form-select data-choices data-choices-search-false" id="cmbtipopersona" wire:model.defer="personas.tipopersona">
+                                            <select class="form-select data-choices data-choices-search-false" id="cmbtipopersona" wire:model.defer="personas.tipopersona" disabled>
                                                 <option value="A">Administrativo</option>
                                                 <option value="D">Docente</option>
                                                 <option value="E">Estudiante</option>

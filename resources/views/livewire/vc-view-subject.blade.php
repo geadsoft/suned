@@ -24,13 +24,46 @@
                 </div>
                 <div class="card-body p-4">
                     <h6>Recursos</h6>
-                    <div class="table-responsive">
+                    @if (count($recursos)==0)
+                    <div><span class="badge badge-soft-warning fs-12">No Asignados</span></div>
+                    @else
+                        @foreach ($recursos as $recurso)
+                        <div class="vstack gap-2">
+                            <div class="border rounded border-dashed p-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="avatar-sm">
+                                            <div class="avatar-title bg-light text-secondary rounded fs-24">
+                                                <i class="ri-external-link-line"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 overflow-hidden">
+                                    <h5 class="fs-13 mb-1"><a class="text-secondary fw-semibold text-uppercase">{{$recurso->nombre}}</a></h5>
+                                        <div>
+                                            <a class="badge bg-soft-primary text-primary" id="external-url" href="{{$recurso->enlace}}" target="_blank" src="about:blank">Ir a Link <i class="ri-arrow-right-up-line align-bottom"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    @endif
+
+
+                    <!--<div class="table-responsive">
                         <table class="table align-middle table-nowrap mb-0">
                             <tbody id="file-list">
+                                @if (count($actividad)==0)
                                 <tr><td><span class="badge badge-soft-warning fs-12">No Asignados</span></td></tr>
+                                @else
+                                    @foreach ($actividad as $record)
+                                        {{$record->enlace}}
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="card-body p-4">
                     <h6>Actividades</h6>
@@ -41,7 +74,7 @@
                                 <div class="flex-shrink-0 me-3">
                                     <div class="avatar-sm">
                                         <div class="avatar-title bg-light text-secondary rounded fs-24">
-                                            <i class="ri-file-shield-2-line"></i>
+                                            <i class="ri-folder-5-line"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -49,7 +82,15 @@
                                     <h5 class="fs-13 mb-1"><a href="/student/deliver-activity/{{$record->id}}" class="text-secondary fw-semibold text-uppercase">{{$record->nombre}}</a> Fecha: {{date('d/m/Y',strtotime($record->created_at))}} <strong>Hasta:</strong> {{date('d/m/Y',strtotime($record->fecha))}}</a></h5>
                                     <div>
                                         <span class="badge badge-soft-success text-uppercase fs-12">{{$record->actividad}}</span>
+                                        @if ($record->fechaEntrega==null && $record->nota==null)
                                         <span class="badge badge-soft-primary fs-12">No Calificado</span>
+                                        @endif
+                                        @if ($record->fechaEntrega<>null && $record->nota==0)
+                                        <span class="badge badge-soft-primary fs-12">Enviado para Calificar</span>
+                                        @endif
+                                        @if ($record->nota>0)
+                                        <span class="badge badge-soft-primary fs-12">Calificado</span>
+                                        @endif
                                         <span class="badge badge-soft-success fs-12">Abierta</span>
                                     </div>
                                 </div>

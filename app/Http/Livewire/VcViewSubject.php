@@ -11,13 +11,14 @@ use Livewire\Component;
 
 class VcViewSubject extends Component
 {
-    public $horarioId, $docenteId, $paraleloId;
-    public $clases=[], $actividad=[];
+    public $personaId, $horarioId, $docenteId, $paraleloId;
+    public $clases=[], $actividad=[], $recursos=[];
     public $fecha, $asignatura = "";
     
     public function mount($data)
     {
-            
+        $this->personaId = auth()->user()->personaId;
+
         $datos = json_decode($data);
         $this->horarioId = $datos->horarioId;
         $this->docenteId = $datos->docenteId;
@@ -56,9 +57,23 @@ class VcViewSubject extends Component
         ->get();
 
         $this->actividad = TmActividades::query()
+        ->leftJoin('td_actividades_entregas as e', function($join)
+        {
+            $join->on('e.actividad_id', '=', 'tm_actividades.id');
+            $join->where('e.persona_id',$this->personaId);
+        })
+        ->selectRaw('tm_actividades.*, e.fecha as fechaEntrega, e.nota')
         ->where('docente_id',$this->docenteId) 
         ->where('paralelo',$this->paraleloId)
         ->where('tipo','AC')
+        ->whereRaw("tm_actividades.fecha >= '".$this->fecha."'")
+        ->get();
+
+        $this->recursos= TmActividades::query()
+        ->where('docente_id',$this->docenteId) 
+        ->where('paralelo',$this->paraleloId)
+        ->where('tipo','AC')
+        ->where('enlace','<>',"''")
         ->whereRaw("fecha >= '".$this->fecha."'")
         ->get();
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 use App\Models\TmActividades;
+use App\Models\TdActividadesEntregas;
 use App\Models\TmFiles;
 use Illuminate\Support\Facades\Http;
 
@@ -16,7 +17,7 @@ class VcDeliverActivity extends Component
     use WithFileUploads;
     
     public $selectId, $record, $display_estado="", $display_text="display:none";
-    public $data, $personaId, $tiempo, $estado="No Entregado";
+    public $data, $personaId, $tiempo, $estado="No Entregado", $texteditor;
     public $array_attach=[], $files=[], $entregas=[];
     public $showEditor = false;
 
@@ -41,6 +42,8 @@ class VcDeliverActivity extends Component
         'pdf' => 'text-danger',
         'html' => 'text-info',
     ];
+
+    protected $listeners = ['updateEditorData'];
 
     private function token(){
 
@@ -70,13 +73,23 @@ class VcDeliverActivity extends Component
     
     public function render()
     {
+        
         return view('livewire.vc-deliver-activity');
+        
+    }
+
+    public function updateEditorData($data)
+    {
+        $this->texteditor = $data;
+    }
+
+    public function setEditorData($data){
+        $this->texteditor = $data;
     }
 
     public function load(){
 
         $this->record = TmActividades::find($this->selectId);
-        $this->texteditor = $this->record->comentario;
         $this->data = json_encode($this->record['descripcion']);
         
         $fechaInicial  = date('Y-m-d H:i:s');
@@ -85,27 +98,33 @@ class VcDeliverActivity extends Component
         $segundos = strtotime($fechaFinal) - strtotime($fechaInicial);
         $this->tiempo = $this->seg_a_dhms( $segundos );
 
-        if ($this->record['fecha_entrega']<>null){
+        $this->entrega = TdActividadesEntregas::query()
+        ->where('actividad_id',$this->selectId)
+        ->where('persona_id',$this->personaId)
+        ->first();
+
+        if (!empty($this->entrega)){
             $this->estado = "Enviado para Calificar";
+            $this->texteditor = $this->entrega->comentario;
         }
 
         //Archivos Adjuntos
-        $this->files = TmFiles::query()
+        $this->adjuntos = TmFiles::query()
         ->where('actividad_id',$this->selectId)
         ->where('entrega',0)
         ->get();
 
         //Entregas Realizadas
-        $this->entregas = TmFiles::query()
+        $this->files = TmFiles::query()
         ->where('actividad_id',$this->selectId)
         ->where('entrega',1)
         ->get();
 
-        if (count($this->entregas)>0){
+        if (count($this->files)>0){
 
             $this->array_attach=[];
 
-            foreach( $this->entregas as $key => $file){
+            foreach( $this->files as $key => $file){
                 $attach=[
                 'id' => $file->id,
                 'linea' => $key+1,
@@ -134,14 +153,18 @@ class VcDeliverActivity extends Component
 
         $fecha = date('Y-m-d H:i:s');
 
-        $record = TmActividades::find($this->selectId);
-        $record->update([
-            'fecha_entrega' => $fecha,
+        $record = TdActividadesEntregas::Create([
+            'fecha' => $fecha,
+            'actividad_id' => $this->selectId,
+            'persona_id' => $this->personaId,
             'comentario' => $this->texteditor,
+            'nota' => 0,
+            'usuario' => auth()->user()->name,
         ]);
 
         $this->apiDrive($this->selectId);
 
+        return redirect(request()->header('Referer'));
     } 
 
     public function entrega(){
@@ -305,6 +328,10 @@ class VcDeliverActivity extends Component
 
         }
 
+    }
+
+    public function cancel(){
+        return redirect(request()->header('Referer'));
     }
     
 }

@@ -37,44 +37,32 @@
             addElement(event.detail.newName)
         })
 
-        /*document.addEventListener('livewire:load', function () {
-            ClassicEditor
-                .create(document.querySelector('#editor'))
-                .then(function(editor){
-                    editor.model.document.on('change:data',()=> {
-                        Livewire.emit('updateEditorData', editor.getData());
-                    })
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        })*/
         document.addEventListener('DOMContentLoaded', function () {
-    let editorInstance = null;
+            let editorInstance = null;
 
-    document.getElementById('btnentrega').addEventListener('click', function () {
-        const container = document.getElementById('editorContainer');
-        
-        // Mostrar el contenedor
-        container.style.display = 'block';
+            document.getElementById('btnentrega').addEventListener('click', function () {
+                const container = document.getElementById('editorContainer');
+                
+                // Mostrar el contenedor
+                container.style.display = 'block';
 
-        // Solo inicializar el editor si no ha sido creado aún
-        if (!editorInstance) {
-            ClassicEditor
-                .create(document.querySelector('#editor'))
-                .then(function (editor) {
-                    editorInstance = editor;
+                // Solo inicializar el editor si no ha sido creado aún
+                if (!editorInstance) {
+                    ClassicEditor
+                        .create(document.querySelector('#editor'))
+                        .then(function (editor) {
+                            editorInstance = editor;
 
-                    editor.model.document.on('change:data', () => {
-                        Livewire.emit('updateEditorData', editor.getData());
-                    });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
-    });
-});
+                            editor.model.document.on('change:data', () => {
+                                Livewire.emit('updateEditorData', editor.getData());
+                            });
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                }
+            });
+        });
         
         Livewire.on('setEditorData', (datosDelEditor) => {
             alert(datosDelEditor);

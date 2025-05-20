@@ -48,7 +48,7 @@
                     <div class="card">
                         <h6 class="fw-semibold text-uppercase">Archivos Adjunto</h6>
                         <div class="card-body">
-                            @foreach($files as $file)
+                            @foreach($adjuntos as $file)
                                 <div class="d-flex align-items-center border border-dashed p-2 rounded">
                                     
                                     <div class="flex-shrink-0 avatar-sm">
@@ -105,16 +105,16 @@
                                         </tr>
                                         <tr>
                                             <th><span class="">Ultima Modificación</span></th>
-                                            @if ($record->fecha_entrega==null)
+                                            @if (empty($entrega))
                                                 <td>-</td>
                                             @else
                                             <td>@lang('translation.'.(date('l',strtotime($record->fecha_entrega)))),
-                                            {{date('d',strtotime($record->fecha_entrega))}} de @lang('months.'.(date('m',strtotime($record->fecha_entrega)))) del {{date('Y',strtotime($record->fecha_entrega))}}
-                                            {{date('H:i',strtotime($record->fecha_entrega))}}
+                                            {{date('d',strtotime($entrega->fecha))}} de @lang('months.'.(date('m',strtotime($entrega->fecha)))) del {{date('Y',strtotime($entrega->fecha))}}
+                                            {{date('H:i',strtotime($entrega->fecha))}}
                                             @endif
                                             </td>
                                         </tr>
-                                        @if ($record->fecha_entrega<>null)
+                                        @if (!empty($entrega))
                                             <th><span class="">Archivos Enviados</span></th>
                                             <td>
                                                 <div class="profile-timeline">
@@ -135,7 +135,7 @@
                                                                 </a>
                                                             </div>
                                                         </div>
-                                                        @foreach($entregas as $entrega)
+                                                        @foreach($files as $file)
                                                     
                                                
                                                         <div class="accordion-item border-0">
@@ -143,12 +143,12 @@
                                                                 <a class="accordion-button p-2 shadow-none" data-bs-toggle="collapse" href="#collapseFile" aria-expanded="false">
                                                                     <div class="d-flex align-items-center">
                                                                         <div class="flex-shrink-0 avatar-xs">
-                                                                            <div class="avatar-title bg-light {{$arrcolor[$entrega->extension]}} rounded-circle fs-15">
-                                                                                <i class="{{$arrdoc[$entrega->extension]}}"></i>
+                                                                            <div class="avatar-title bg-light {{$arrcolor[$file->extension]}} rounded-circle fs-15">
+                                                                                <i class="{{$arrdoc[$file->extension]}}"></i>
                                                                             </div>
                                                                         </div>
                                                                         <div class="flex-grow-1 ms-3">
-                                                                            <h6 class="fs-14 mb-0 fw-semibold">{{$entrega->nombre}}</h6>
+                                                                            <h6 class="fs-14 mb-0 fw-semibold">{{$file->nombre}}</h6>
                                                                         </div>
                                                                     </div>
                                                                 </a>
@@ -162,7 +162,9 @@
                                         @endif
                                         <tr>
                                             <th><span class="">Comentario de la Entrega</span></th>
-                                            <td>{{$record->comentario}}</td>
+                                            @if (!empty($entrega))
+                                            <td>{{ strip_tags(str_replace('</p>', "\n", $entrega->comentario)) }}</td>
+                                            @endif
                                         </tr>
                                     </tbody>
                                 </table>
@@ -234,14 +236,14 @@
                             
                             <div class="hstack gap-2 d-print-none mt-4">
                                 <button type="button" class="btn btn-soft-success" wire:click="createData()"><i class="ri-send-plane-fill align-bottom me-1"></i>Enviar</button>
-                                <button type="button" class="btn btn-soft-primary"><i class="align-bottom me-1"></i>Cancelar</button>
+                                <button type="button" class="btn btn-soft-primary" wire:click="cancel()"><i class="align-bottom me-1"></i>Cancelar</button>
                             </div>
                             
                         </div>
                     </div>
                     @endif      
                     <div class="text-center" style="{{$display_estado}}">
-                        @if ($record->fecha_entrega==null)
+                        @if (empty($entrega))
                         <button type="button" class="btn btn-primary" id="btnentrega" wire:click='entrega' ><i class="ri-upload-2-line align-bottom me-1"></i>Agregar Entrega</button>
                         @else
                         <button type="button" class="btn btn-primary" id="btnentrega" wire:click='entrega' ><i class="ri-edit-2-fill align-bottom me-1"></i>Editar Entrega</button>

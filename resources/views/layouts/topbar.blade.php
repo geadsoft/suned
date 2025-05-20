@@ -170,6 +170,13 @@
                 </div>
                 
                 <div class="dropdown ms-sm-3 header-item topbar-user">
+                    @php
+                        $datos=null;
+                        $personaId = Auth::user()->personaId;
+                        if ( $personaId>0 ){
+                            $datos = Auth::user()->datos($personaId);
+                        }
+                    @endphp
                     <button type="button" class="btn" id="page-header-user-dropdown"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
@@ -177,10 +184,17 @@
                                 src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('assets/images/users/avatar-1.jpg') }} @endif"
                                 alt="Header Avatar">
                             <span class="text-start ms-xl-2">
-                                <span
-                                    class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->name }}</span>
-                                <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">Founder</span>
-                                
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->name }}</span>
+                                @if ($datos==null)
+                                <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">Programador</span>
+                                @else
+                                    @if ($datos['tipo']=='E')
+                                    <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{$datos['modalidad']}}</span>
+                                    <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{$datos['curso']}}</span>
+                                    @else
+                                    <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{$datos['rol']}}</span>
+                                    @endif
+                                @endif
                             </span>
                         </span>
                     </button>

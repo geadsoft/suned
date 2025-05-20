@@ -26,7 +26,7 @@ return new class extends Migration
             $table->datetime('fecha');
             $table->string('subir_archivo',2);
             $table->double('puntaje',14,2);
-            $table->string('enlace',80);
+            $table->string('enlace',300);
             $table->string('estado',1);
             $table->string('usuario');
             $table->timestamps();
