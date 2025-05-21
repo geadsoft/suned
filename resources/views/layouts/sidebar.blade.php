@@ -47,13 +47,27 @@
                     </a>
                 </li>
                 @endcan
-                
+                @can('Calendario')
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/academic/calendarioview">
+                        <i class="las la-chart-pie fs-20"></i> <span>Calendario</span>
+                    </a>
+                </li>
+                @endcan
+                @can('Asignaturas')
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/student/subject">
                         <i class="las la-chart-pie fs-20"></i> <span>Asignaturas</span>
                     </a>
                 </li>
-                
+                @endcan
+                @can('Calendario')
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/academic/calendarioview">
+                        <i class="las la-chart-pie fs-20"></i> <span>Calendario</span>
+                    </a>
+                </li>
+                @endcan
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>MODULOS</span></li>
                 @can('Academico')
                 <li class="nav-item">
