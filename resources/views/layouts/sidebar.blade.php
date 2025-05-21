@@ -50,7 +50,7 @@
                 @can('Calendario')
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/academic/calendarioview">
-                        <i class="las la-chart-pie fs-20"></i> <span>Calendario</span>
+                        <i class="las la-calendar-day fs-20"></i> <span>Calendario</span>
                     </a>
                 </li>
                 @endcan
