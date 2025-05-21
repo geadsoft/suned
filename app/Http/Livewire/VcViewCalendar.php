@@ -5,6 +5,8 @@ use App\Models\TmGeneralidades;
 use App\Models\TmCalendarioEventos;
 use App\Models\TmCalendarioGrados;
 use App\Models\TmPeriodosLectivos;
+use App\Models\TmMatricula;
+use App\Models\TmPersonas;
 
 use Livewire\Component;
 
@@ -14,17 +16,19 @@ class VcViewCalendar extends Component
     public $showEditModal = false, $eControl = 'disabled', $periodo, $mes;
     public $actividad='GE', $evento, $startdate, $enddate, $comentario, $selectId, $eventoId;
     public $arrevent=[], $lstevent;
+    public $modalidadId, $gradoId;
 
     protected $listeners = ['postAdded','newEvent'];
 
     public function mount()
     {
-        $this->docenteId = auth()->user()->personaId;
+        $this->personaId = auth()->user()->personaId;
         
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
         $this->periodo = $tblperiodos['periodo'];
         $this->mes = date('m');
+
         $this->loadEvent();
     }
 
@@ -125,11 +129,37 @@ class VcViewCalendar extends Component
 
     public function loadEvent(){
 
-        $this->eventos = TmCalendarioEventos::query()
-        ->where('periodo',$this->periodo)
-        ->where('mes',$this->mes)
-        ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
-        ->get();
+        $persona = TmPersonas::find($this->personaId);
+
+        if ($persona->tipopersona=='E'){
+
+            $matricula = TmMatricula::query()
+            ->where('periodo_id',$periodoId)
+            ->where('estudiante_id',$id)
+            ->first();
+
+            $this->modalidadId = $matricula->modalidad_id;
+            $this->gradoId = $matricula->grado_id;
+
+            $this->eventos = TmCalendarioEventos::query()
+            ->join('tm_calendario_grados as g','g.calendario_id','=','tm_calendario_eventos.id')
+            ->where('periodo',$this->periodo)
+            ->where('mes',$this->mes)
+            ->where('g.modalidad_id',$this->modalidadId)
+            ->where('g.grado_id',$this->gradoId)
+            ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
+            ->get();
+
+        }else{
+
+             $this->eventos = TmCalendarioEventos::query()
+            ->where('periodo',$this->periodo)
+            ->where('mes',$this->mes)
+            ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
+            ->get();
+
+        }
+
 
         $this->arrayObject($this->eventos);
 
