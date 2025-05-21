@@ -61,13 +61,6 @@
                     </a>
                 </li>
                 @endcan
-                @can('Calendario')
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="/academic/calendarioview">
-                        <i class="las la-chart-pie fs-20"></i> <span>Calendario</span>
-                    </a>
-                </li>
-                @endcan
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>MODULOS</span></li>
                 @can('Academico')
                 <li class="nav-item">
