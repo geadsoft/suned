@@ -134,8 +134,8 @@ class VcViewCalendar extends Component
         if ($persona->tipopersona=='E'){
 
             $matricula = TmMatricula::query()
-            ->where('periodo_id',$periodoId)
-            ->where('estudiante_id',$id)
+            ->where('periodo_id',$this->periodoId)
+            ->where('estudiante_id',$this->personaId)
             ->first();
 
             $this->modalidadId = $matricula->modalidad_id;
