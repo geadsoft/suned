@@ -223,6 +223,11 @@ class DocentesController extends Controller
     {
         return view('teachers/estudiantes');
     } 
+
+    public function calendario_view()
+    {
+        return view('/academic/calendarioview');
+    } 
     
 
 }

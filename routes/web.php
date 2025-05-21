@@ -61,6 +61,7 @@ Route::get('/academic/daily-attendance',[App\Http\Controllers\DocentesController
 Route::get('/academic/justify-faults',[App\Http\Controllers\DocentesController::class, 'justificar_faltas'])->name('justificar_faltas');
 Route::get('/academic/information-student',[App\Http\Controllers\DocentesController::class, 'estudiantes'])->name('estudiantes');
 Route::get('/academic/pass-course',[App\Http\Controllers\TmSedesController::class, 'pasecurso'])->name('pasecurso');
+Route::get('/academic/calendar-events',[App\Http\Controllers\DocentesController::class, 'calendario_view'])->name('calendario_view');
 
 
 Route::get('/report/total-rating',[App\Http\Controllers\DocentesController::class, 'calificacion_total'])->name('calificacion_total');
