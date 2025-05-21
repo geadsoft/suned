@@ -20,7 +20,6 @@ class VcNivelCalendar extends Component
     {
         $this->modalidad = TmGeneralidades::where('superior',1)->get();
         if ($idEvento>0){
-            dd($idEvento);
             $this->setGrado();
         }
         
@@ -35,6 +34,8 @@ class VcNivelCalendar extends Component
 
     public function updatedModalidadId($id)
     {
+        $this->tbldetails=[];
+        
         $this->modalidadId = $id;
         $this->grado = TmServicios::query()
         ->join('tm_generalidades as g','g.id','=','tm_servicios.nivel_id')
