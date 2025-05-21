@@ -57,7 +57,7 @@
                 @can('Asignaturas')
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/student/subject">
-                        <i class="las la-chart-pie fs-20"></i> <span>Asignaturas</span>
+                        <i class="las la-school fs-20"></i> <span>Asignaturas</span>
                     </a>
                 </li>
                 @endcan
