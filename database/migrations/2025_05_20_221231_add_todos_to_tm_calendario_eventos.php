@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('tm_files', function (Blueprint $table) {
-            $table->boolean('entrega')->after('nombre')->default(false);
+        Schema::table('tm_calendario_eventos', function (Blueprint $table) {
+            $table->boolean('todos')->after('descripcion')->default(true);
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('tm_files', function (Blueprint $table) {
-            $table->dropColumn('entrega');
+        Schema::table('tm_calendario_eventos', function (Blueprint $table) {
+            $table->dropColumn('todos');
         });
     }
 };

@@ -4,13 +4,14 @@ namespace App\Http\Livewire;
 use App\Models\TmGeneralidades;
 use App\Models\TmServicios;
 use App\Models\TmCalendarioGrados;
+use App\Models\TmCalendarioEventos; 
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
 class VcNivelCalendar extends Component
 {
-    public $modalidadId, $eventoId;
+    public $modalidadId, $eventoId, $todos=true, $eControl='disabled';
     public $modalidad=[], $grado=[];
     public $tbldetails=[];
 
@@ -30,6 +31,16 @@ class VcNivelCalendar extends Component
         return view('livewire.vc-nivel-calendar',[
             'tbldetails' => $this->tbldetails,
         ]);
+    }
+
+    public function updatedTodos($boolean)
+    {
+        if ($boolean){
+            $this->eControl="disabled";
+        }else{
+            $this->eControl="";
+        }
+        
     }
 
     public function updatedModalidadId($id)
@@ -88,20 +99,36 @@ class VcNivelCalendar extends Component
 
         }
 
+        $record = TmCalendarioEventos::find($calendarioId);
+        $record->update([
+            'todos' => $this->todos,            
+        ]);
+
+        $this->eControl=true;
     }
 
     public function setGrado($idEvento)
     {
+
         $this->tbldetails = [];
         $this->eventoId  = $idEvento;
         $this->modalidad = TmGeneralidades::where('superior',1)->get();
 
         if ($this->eventoId>0){
-            $record = TmCalendarioGrados::query()
-            ->where('calendario_id',$this->eventoId)
-            ->first();
 
-            $this->modalidadId = $record['modalidad_id'];
+            $calendario = TmCalendarioEventos::find($idEvento);
+            $this->todos = $calendario->todos;
+
+            if ($this->todos==true){
+                $this->modalidadId = 0;
+            }else{
+                $record = TmCalendarioGrados::query()
+                ->where('calendario_id',$this->eventoId)
+                ->first();
+
+                $this->modalidadId = $record['modalidad_id'];
+            }
+        
         }else{
             $this->modalidadId = 0;
         }
@@ -135,6 +162,8 @@ class VcNivelCalendar extends Component
             ];
             array_push($this->tbldetails,$array);
         }
+
+        $this->updatedTodos($this->todos);
         
     }
 
