@@ -7,6 +7,7 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TmMatricula;
 use App\Models\TmActividades;
 use App\Models\TmCambiaModalidad;
+use App\Models\TmHorariosAsignaturas;
 
 use Livewire\Component;
 
@@ -67,15 +68,27 @@ class VcSchoolSchedule extends Component
                 ->select('tm_horarios_docentes.id','p.apellidos','p.nombres','tm_horarios_docentes.docente_id')
                 ->first();
 
+                $hora = TmHorariosAsignaturas::query()
+                ->join('td_periodo_sistema_educativos as h','h.id','=','tm_horarios_asignaturas.hora_id')
+                ->select('h.hora_ini','h.hora_fin')
+                ->where('horario_id',$data->id)
+                ->where('asignatura_id',$data->asignatura_id)
+                ->where('dia',$dia)
+                ->where('linea',$data->linea)
+                ->first();
+
                 $actividades = TmActividades::query()
                 ->where('docente_id',$persona->docente_id)
                 ->where('id',$persona->id)
                 ->where('estado','A')
                 ->get()
                 ->toArray();
+                
 
                 $this->objdetalle[$linea][$dia] = [
                     'asignatura' => $data->asignatura,
+                    'hora_ini' => $hora->hora_ini,
+                    'hora_fin' => $hora->hora_fin,
                     'docente' => $persona->apellidos.' '.$persona->nombres,
                     'actividades' => $actividades,
                     'recursos' => 0,

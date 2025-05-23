@@ -397,6 +397,14 @@
                                             </div>
                                             <div class="flex-grow-1 ms-3">
                                                 <h6 class="fs-14 mb-1">{{$objdetalle[$lin][6]['asignatura']}}</h6>
+                                                <div class="d-flex">
+                                                        <div class="flex-shrink-0 avatar-xxs text-muted">
+                                                            <i class="ri-time-line"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <small class="text-muted">{{$objdetalle[$lin][6]['hora_ini']}} - {{$objdetalle[$lin][6]['hora_fin']}}</small>
+                                                        </div>
+                                                    </div>
                                                 <p class="text-muted mb-0">{{$objdetalle[$lin][6]['docente']}}</p>
                                             </div>
                                         </a>
