@@ -50,6 +50,19 @@ class HomeController extends Controller
         };
     }
 
+    public function home()
+    {
+        
+        if (auth()->user()->can('Panel Principal')){
+            return view('config/panel');
+        };
+
+        if (auth()->user()->can('Calendario')){
+            return view('/academic/calendarioview');
+        };
+
+    }
+
     /*Language Translation*/
     public function lang($locale)
     {
@@ -137,4 +150,5 @@ class HomeController extends Controller
             }
         }
     }
+
 }

@@ -28,6 +28,14 @@
 
     <script>
        
+       window.addEventListener('show-form', event => {
+            $('#horaModal').modal('show');
+        })
+
+        window.addEventListener('hide-form', event => {
+            $('#horaModal').modal('hide');
+        })
+
         window.addEventListener('msg-grabar', event => {
             swal("Buen Trabajo!", event.detail.newName, "success");
         })

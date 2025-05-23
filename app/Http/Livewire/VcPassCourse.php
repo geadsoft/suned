@@ -102,16 +102,6 @@ class VcPassCourse extends Component
         
         $this->datos['seccionId'] =  $id;
 
-        /*$personas = TmMatricula::query()
-        ->join('tm_personas as p','p.id','=','tm_matriculas.estudiante_id')
-        ->where('periodo_id',$this->periodoId)
-        ->where('modalidad_id',$this->grupoId)
-        ->where('nivel_id',$this->datos['nivelId'])
-        ->where('grado_id',$this->datos['gradoId'])
-        ->where('curso_id',$id)
-        ->select('tm_matriculas.id','tm_matriculas.documento','p.nombres','p.apellidos')
-        ->get();*/
-
     }
 
     public function buscar(){
@@ -134,6 +124,8 @@ class VcPassCourse extends Component
         $this->personaId = $matricula->estudiante_id;
         $this->persona = $matricula->estudiante->nombres.' '.$matricula->estudiante->apellidos;
 
+        $pase =  TmPaseCursos::query();
+        
 
     }
     

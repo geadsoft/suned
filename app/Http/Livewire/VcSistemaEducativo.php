@@ -3,17 +3,20 @@
 namespace App\Http\Livewire;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TdPeriodoSistemaEducativos;
+use App\Models\TmGeneralidades;
 
 
 use Livewire\Component;
 
 class VcSistemaEducativo extends Component
 {
-    public $periodoId, $plectivo, $metodo, $aperturado, $eformativa, $esumativa, $detalle=[];
+    public $periodoId, $plectivo, $metodo, $aperturado, $eformativa, $esumativa, $detalle=[], $modalidadId, $hora_ini, $hora_fin;
     public $arrmetodo=[];
     public $arrparcial=[];
     public $arractividad=[];
     public $arrescala=[];
+    public $arrhora=[];
+    public $tblmodalidad=[];
 
     public $evaluacion = [
         'T' => 'TRIMESTRE',
@@ -37,17 +40,18 @@ class VcSistemaEducativo extends Component
         $this->periodoId = $this->plectivo[0]['id'];
         
         $this->metodo = 'T';
-        //$this->addarr($this->metodo);
         $this->loadData();
 
     }
 
     public function render()
     {
+                
         return view('livewire.vc-sistema-educativo',[
             'arrmetodo' => $this->arrmetodo,
             'arrparcial' => $this->arrparcial,
             'arractividad' => $this->arractividad,
+            'tblmodalidad' =>  $this->tblmodalidad,
         ]);
     }
 
@@ -58,14 +62,24 @@ class VcSistemaEducativo extends Component
         $this->arrmetodo=[];
         $this->arractividad=[];
         $this->arrescala=[];
+
+        $this->tblmodalidad = TmGeneralidades::query()
+        ->where('superior',1)
+        ->get();
         
         $record = TmPeriodosLectivos::find($this->periodoId);
         $this->metodo = $record['evaluacion'];
         $this->esumativa = $record['evaluacion_sumativa'];
         $this->eformativa = $record['evaluacion_formativa'];
         $this->aperturado = $record['aperturado'];
+        $this->modalidadId = $this->tblmodalidad[0]['id'];
 
         $detalle = TdPeriodoSistemaEducativos::where('periodo_id',$this->periodoId)->get();
+        
+        $this->arrhora = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','HC')
+        ->get();
 
         if ($this->metodo==''){
             $this->metodo = 'T';
@@ -229,6 +243,31 @@ class VcSistemaEducativo extends Component
 
         array_push($this->arrescala,$recno);
         
+    }
+
+    public function addhora(){
+
+        $this->dispatchBrowserEvent('show-form');
+
+    }
+
+    public function grabaHora(){
+
+       TdPeriodoSistemaEducativos::Create([
+            'periodo_id' => $this->periodoId,
+            'tipo' => 'HC',
+            'codigo' => '',
+            'evaluacion' => '',
+            'descripcion' => '',
+            'nota' => 0,
+            'modalidad_id' => $this->modalidadId,
+            'hora_ini' =>$this->hora_ini,
+            'hora_fin' =>$this->hora_fin,
+            'usuario' => auth()->user()->name,
+        ]);
+
+        $this->dispatchBrowserEvent('hide-form');
+        return redirect(request()->header('Referer'));
     }
 
     public function createData(){

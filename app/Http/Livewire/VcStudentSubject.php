@@ -25,15 +25,15 @@ class VcStudentSubject extends Component
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
 
-        $matricula = TmMatricula::where('estudiante_id',$this->personaId)
-        ->where('periodo_id',$this->periodoId)
-        ->orderBy('periodo_id','desc')->first();
+        $modalidad = TmCambiaModalidad::query()
+        ->where('persona_id',$this->personaId)
+        ->first();
 
-        $this->cursoId = $matricula['curso_id'];
+        $this->cursoId = $modalidad->curso_id;
 
         //Si tiene pase de curso en otra modalidad
         $pasecurso = TmPaseCursos::query()
-        ->where('matricula_id',$matricula->id)
+        ->where('matricula_id',$modalidad->matricula_id)
         ->where('estado','A')
         ->first();
 

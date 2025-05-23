@@ -6,6 +6,7 @@ use App\Models\TmHorariosDocentes;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmMatricula;
 use App\Models\TmActividades;
+use App\Models\TmCambiaModalidad;
 
 use Livewire\Component;
 
@@ -22,10 +23,11 @@ class VcSchoolSchedule extends Component
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
 
-        $matricula = TmMatricula::where('estudiante_id',$this->personaId)
-        ->where('periodo_id',$this->periodoId)
-        ->orderBy('periodo_id','desc')->first();
-        $this->cursoId = $matricula['curso_id'];
+        $matricula = TmCambiaModalidad::query()
+        ->where('persona_id',$this->personaId)
+        ->first();
+
+        $this->cursoId = $matricula->curso_id;
 
         $this->loadAsignaturas();
 

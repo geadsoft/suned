@@ -2,15 +2,17 @@
 
 namespace App\Http\Livewire;
 use App\Models\TmAsignaturas;
+use App\Models\TmHorarios;
 use App\Models\TmHorariosAsignaturas;
 use App\Models\TmHorariosDocentes;
+use App\Models\TdPeriodoSistemaEducativos;
 
 use Livewire\Component;
 
 class VcHorariosClase extends Component
 {
     public $objdetalle, $filas, $horarioId, $detalle=[], $edit=false;
-    public $horarios;
+    public $horarios, $horas=[];
     
     public function mount($horarioId){
 
@@ -37,6 +39,14 @@ class VcHorariosClase extends Component
         $this->horarios = TmHorariosAsignaturas::where('horario_id',$this->horarioId)
         ->get()->toArray();
 
+        $horario = TmHorarios::find($horarioId);
+
+        $this->horas = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$horario->periodo_id)
+        ->where('modalidad_id',$horario->grupo_id)
+        ->where('tipo',"HC")
+        ->get();
+
         if (!empty($this->horarios)){
 
             $this->edit = true;
@@ -54,7 +64,7 @@ class VcHorariosClase extends Component
 
         for ($i = 1; $i <= $this->filas; $i++) {
             $horario = [];
-            for ($col = 1; $col <= 5; $col++) {
+            for ($col = 1; $col <= 6; $col++) {
                 $horario[$col] = "";
             }
             array_push($this->objdetalle, $horario);
@@ -87,6 +97,7 @@ class VcHorariosClase extends Component
                 }else {
                     $objdata['asignatura_id'] = $asignatura[$col];
                 }
+                $objdata['hora_id'] = $asignatura[$col];
                 $objdata['usuario'] = auth()->user()->name;
                 array_push($this->detalle, $objdata);
             }

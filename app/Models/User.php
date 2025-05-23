@@ -11,6 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmMatricula;
 use App\Models\TmPersonas;
+use App\Models\TmCambiaModalidad;
 
 
 class User extends Authenticatable
@@ -27,6 +28,12 @@ class User extends Authenticatable
         'R' => 'Representante',
         'F' => 'Familiar',
     ];
+
+    public $record=[
+        'modalidadId' => 0,
+        'gradoId' => 0,
+        'cursoId' => 0,
+    ];   
 
     /**
      * The attributes that are mass assignable.
@@ -61,46 +68,32 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function datos($id)
+    public function createData($id)
     {   
-      
-        $persona = TmPersonas::find($id);
-              
-        $tipo = $this->tipo[$persona->tipopersona];
-        $modalidad = '';
-        $curso = '';
 
-        if ($persona->tipopersona=='E'){
+        $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
+        $periodoId   = $tblperiodos['id'];    
 
-            $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
-            $periodoId = $tblperiodos['id'];    
+        $matricula = TmMatricula::query()
+        ->join('tm_generalidades as d','d.id','=','tm_matriculas.modalidad_id')
+        ->join('tm_servicios as s','s.id','=','tm_matriculas.grado_id')
+        ->selectRaw('tm_matriculas.id, d.descripcion as nommodalidad, s.descripcion as nomservicio,tm_matriculas.modalidad_id,tm_matriculas.grado_id,tm_matriculas.curso_id')
+        ->where('periodo_id',$periodoId)
+        ->where('estudiante_id',$id)
+        ->first();
 
-            $matricula = TmMatricula::query()
-            ->join('tm_generalidades as d','d.id','=','tm_matriculas.modalidad_id')
-            ->join('tm_servicios as s','s.id','=','tm_matriculas.grado_id')
-            ->selectRaw('d.descripcion as nommodalidad, s.descripcion as nomservicio')
-            ->where('periodo_id',$periodoId)
-            ->where('estudiante_id',$id)
-            ->first();
-
-            return [
-                'tipo' => $persona->tipopersona,
-                'rol' => auth()->user()->roles->pluck('name')->implode(', '),
-                'modalidad' => $matricula->nommodalidad,
-                'curso' => $matricula->nomservicio,
-            ];
-
-        }else{
-
-            return [
-                'tipo' => $persona->tipopersona,
-                'rol' => auth()->user()->roles->pluck('name')->implode(', '),
-                'modalidad' => '',
-                'curso' => '',
-            ];
-            
-        }
-
+        TmCambiaModalidad::Create([
+            'persona_id' => $id,
+            'matricula_id' => $matricula->id,
+            'modalidad_id' => $matricula->modalidad_id,
+            'grado_id' => $matricula->grado_id,
+            'curso_id' => $matricula->curso_id,
+            'modalidad' => $matricula->nommodalidad,
+            'curso' => $matricula->nomservicio,
+            'paralelo' => auth()->user()->name,
+        ]);
         
     }
+
+
 }

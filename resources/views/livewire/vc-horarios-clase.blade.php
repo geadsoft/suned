@@ -27,6 +27,7 @@
             <table class="table table-nowrap align-middle" id="orderTable">
                 <thead class="text-muted table-light">
                     <tr class="text-uppercase">
+                        <th class="sort" style="width: 200px;">Hora</th>
                         <th class="sort">Lunes</th>
                         <th class="sort">Martes</th>
                         <th class="sort">Miercoles</th>
@@ -36,17 +37,25 @@
                 </thead>
                 <tbody class="list form-check-all">
                     @foreach ($objdetalle as $fil => $record)    
-                    <tr>
-                            @for ($col=1;$col<=5;$col++)
-                            <td>
-                                <select id="f{{$fil}}-col{{$col}}" class="form-select" data-choices data-choices-search-false id="cmbgrupo" wire:model="objdetalle.{{$fil}}.{{$col}}">
-                                <option value=""> - </option>
-                                @foreach ($tblmaterias as $materia)
-                                    <option value="{{$materia->id}}">{{$materia->descripcion}}</option>
-                                @endforeach
-                                </select>
-                            </td>
-                            @endfor
+                    <tr>    
+                        <td>
+                            <select id="hora{{$fil}}" class="form-select" data-choices data-choices-search-false id="cmbgrupo" wire:model="objdetalle.{{$fil}}.6">
+                            <option value=""> - </option>
+                            @foreach ($horas as $hora)
+                                <option value="{{$hora->id}}">{{$hora->hora_ini}} - {{$hora->hora_fin}}</option>
+                            @endforeach
+                            </select>
+                        </td>
+                        @for ($col=1;$col<=5;$col++)
+                        <td>
+                            <select id="f{{$fil}}-col{{$col}}" class="form-select" data-choices data-choices-search-false id="cmbgrupo" wire:model="objdetalle.{{$fil}}.{{$col}}">
+                            <option value=""> - </option>
+                            @foreach ($tblmaterias as $materia)
+                                <option value="{{$materia->id}}">{{$materia->descripcion}}</option>
+                            @endforeach
+                            </select>
+                        </td>
+                        @endfor
                     </tr>
                     @endforeach
                 </tbody>

@@ -16,6 +16,9 @@ class TdPeriodoSistemaEducativos extends Model
         'evaluacion',
         'descripcion',
         'nota',
+        'modalidad_id',
+        'hora_ini',
+        'hora_fin',
         'usuario',
     ];
 

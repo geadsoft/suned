@@ -7,6 +7,7 @@ use App\Models\TmCalendarioGrados;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmMatricula;
 use App\Models\TmPersonas;
+use App\Models\TmCambiaModalidad;
 
 use Livewire\Component;
 
@@ -40,7 +41,7 @@ class VcViewCalendar extends Component
 
     }
 
-    public function createData(){
+    /*public function createData(){
 
         $this ->validate([
             'actividad' => 'required',
@@ -67,10 +68,10 @@ class VcViewCalendar extends Component
         $this->dispatchBrowserEvent('hide-form');
         $this->loadEvent();  
         
-    }
+    }*/
 
 
-    public function updateData(){
+    /*public function updateData(){
 
         $this ->validate([
             'actividad' => 'required',
@@ -92,22 +93,22 @@ class VcViewCalendar extends Component
         $this->dispatchBrowserEvent('hide-form');
         $this->loadEvent();
         
-    }
+    }*/
 
-    public function cerrarModal(){
+    /*public function cerrarModal(){
         $this->dispatchBrowserEvent('hide-form');
-    }
+    }*/
 
-    public function deleteData(){
+    /*public function deleteData(){
 
         TmCalendarioGrados::where('calendario_id',$this->eventoId)->delete();
         TmCalendarioEventos::find($this->eventoId)->delete();
         
         $this->dispatchBrowserEvent('hide-form');
         $this->loadEvent();
-    }
+    }*/
 
-    public function newEvent(){
+    /*public function newEvent(){
 
         $this->showEditModal = false;
         $this->eControl = '';
@@ -126,7 +127,7 @@ class VcViewCalendar extends Component
         $this->emitTo('vc-nivel-calendar','setGrado',$this->eventoId);
         $this->dispatchBrowserEvent('show-form');
 
-    }
+    }*/
 
     public function loadEvent(){
 
@@ -135,13 +136,25 @@ class VcViewCalendar extends Component
 
         if ($persona->tipopersona=='E'){
 
-            $matricula = TmMatricula::query()
+            /*$matricula = TmMatricula::query()
             ->where('periodo_id',$this->periodoId)
             ->where('estudiante_id',$this->personaId)
             ->first();
 
             $this->modalidadId = $matricula->modalidad_id;
-            $this->gradoId = $matricula->grado_id;
+            $this->gradoId = $matricula->grado_id;*/
+
+            $matricula = TmCambiaModalidad::query()
+            ->where('persona_id',$this->personaId)
+            ->first();
+
+            if(empty($matricula)){
+                $this->modalidadId = 0;
+                $this->gradoId = 0;
+            }else{
+                $this->modalidadId = $matricula['modalidadId'];
+                $this->gradoId = $matricula['gradoId'];
+            }
 
             // Eventos Todos
             $evenTodos = TmCalendarioEventos::query()

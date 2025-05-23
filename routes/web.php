@@ -33,6 +33,7 @@ use App\Http\Controllers\PdfController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/cambia/modalidad',[App\Http\Controllers\HomeController::class, 'cambiaModalida'])->name('cambiaModalida');
 
 Route::get('/headquarters/campus',[App\Http\Controllers\TmEmpresasController::class, 'index'])->name('index');
 Route::get('/config/generality',[App\Http\Controllers\TmGeneralidadesController::class, 'index'])->name('index');
@@ -204,8 +205,8 @@ Auth::Routes();
 
 //Language Translation
 Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
-
 Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
 
 //Update User Details
 Route::post('/update-profile/{id}', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('updateProfile');

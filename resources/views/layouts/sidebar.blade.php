@@ -49,7 +49,7 @@
                 @endcan
                 @can('Calendario')
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/academic/calendar-events">
+                    <a class="nav-link" href="{{ route('calendario_view') }}">
                         <i class="las la-calendar-day fs-20"></i> <span>Calendario</span>
                     </a>
                 </li>
