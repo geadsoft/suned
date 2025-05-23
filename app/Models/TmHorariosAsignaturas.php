@@ -14,6 +14,7 @@ class TmHorariosAsignaturas extends Model
         'linea',
         'dia',
         'asignatura_id',
+        'hora_id',
         'usuario',
     ];
 

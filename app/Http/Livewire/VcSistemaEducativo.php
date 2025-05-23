@@ -46,7 +46,12 @@ class VcSistemaEducativo extends Component
 
     public function render()
     {
-                
+        $this->tblmodalidad = TmGeneralidades::query()
+        ->where('superior',1)
+        ->get();
+
+        $this->updatedModalidadId($this->modalidadId);
+        
         return view('livewire.vc-sistema-educativo',[
             'arrmetodo' => $this->arrmetodo,
             'arrparcial' => $this->arrparcial,
@@ -79,6 +84,7 @@ class VcSistemaEducativo extends Component
         $this->arrhora = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
         ->where('tipo','HC')
+        ->where('modalidad_id',$this->modalidadId)
         ->get();
 
         if ($this->metodo==''){
@@ -171,6 +177,16 @@ class VcSistemaEducativo extends Component
 
         $this->addarr($this->metodo);
         
+    }
+
+    public function updatedModalidadId($id){
+
+        $this->arrhora = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','HC')
+        ->where('modalidad_id',$id)
+        ->get();
+
     }
 
     public function addarr($ciclo)

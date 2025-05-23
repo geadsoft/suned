@@ -12,7 +12,7 @@ use Livewire\Component;
 class VcHorariosClase extends Component
 {
     public $objdetalle, $filas, $horarioId, $detalle=[], $edit=false;
-    public $horarios, $horas=[];
+    public $horarios, $horas=[], $modalidadId;
     
     public function mount($horarioId){
 
@@ -40,6 +40,7 @@ class VcHorariosClase extends Component
         ->get()->toArray();
 
         $horario = TmHorarios::find($horarioId);
+        $this->modalidadId = $horario->grupo_id;
 
         $this->horas = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$horario->periodo_id)
@@ -52,6 +53,7 @@ class VcHorariosClase extends Component
             $this->edit = true;
             foreach ($this->horarios as $data){
                 $this->objdetalle[$data['linea']][$data['dia']] = $data['asignatura_id']; 
+                $this->objdetalle[$data['linea']][7] = $data['hora_id']; 
             } 
 
         }
@@ -64,7 +66,7 @@ class VcHorariosClase extends Component
 
         for ($i = 1; $i <= $this->filas; $i++) {
             $horario = [];
-            for ($col = 1; $col <= 6; $col++) {
+            for ($col = 1; $col <= 7; $col++) {
                 $horario[$col] = "";
             }
             array_push($this->objdetalle, $horario);
@@ -87,17 +89,19 @@ class VcHorariosClase extends Component
         /*Asignaturas*/
         foreach ($this->objdetalle as $key => $asignatura){
             $objdata = [];
-            for ($col = 1; $col <= 5; $col++) {
+            for ($col = 1; $col <= 6; $col++) {
                 
                 $objdata['horario_id'] = $this->horarioId;
                 $objdata['linea'] = $key;
                 $objdata['dia'] = $col;
                 if ($asignatura[$col] == ''){
                     $objdata['asignatura_id'] = null;
+                    $objdata['hora_id'] = null;
                 }else {
                     $objdata['asignatura_id'] = $asignatura[$col];
+                    $objdata['hora_id'] = $asignatura[7];
                 }
-                $objdata['hora_id'] = $asignatura[$col];
+                
                 $objdata['usuario'] = auth()->user()->name;
                 array_push($this->detalle, $objdata);
             }
@@ -136,21 +140,28 @@ class VcHorariosClase extends Component
 
         foreach($this->horarios as $key => $recno){
 
-            foreach ($this->objdetalle as $linea => $asignatura){
-                if ($linea==$recno['linea']){
-                    
-                    $record = TmHorariosAsignaturas::find($recno['id']);
-                    if ($asignatura[$recno['dia']]==''){
-                         
-                            $record->update([
-                            'asignatura_id' => null,
-                            ]);
-                    }else{
-                            $record->update([
-                            'asignatura_id' => $asignatura[$recno['dia']],
-                        ]);
-                    }
-                }
+            $record = TmHorariosAsignaturas::find($recno['id']);
+
+
+            if($this->objdetalle[$recno['linea']][$recno['dia']]==""){
+                $record->update([
+                    'asignatura_id' => null,
+                ]);  
+            }else{
+
+                 $record->update([
+                    'asignatura_id' => $this->objdetalle[$recno['linea']][$recno['dia']],
+                ]);
+            }
+
+            if($this->objdetalle[$recno['linea']][7]==""){
+                $record->update([
+                    'hora_id' => null,
+                ]);  
+            }else{
+                 $record->update([
+                    'hora_id' => $this->objdetalle[$recno['linea']][7],
+                ]);
             }
 
         }

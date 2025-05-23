@@ -28,33 +28,49 @@
                 <thead class="text-muted table-light">
                     <tr class="text-uppercase">
                         <th class="sort" style="width: 200px;">Hora</th>
+                        @if($modalidadId==3)
+                            <th class="sort">Sabado</th>
+                        @else
                         <th class="sort">Lunes</th>
                         <th class="sort">Martes</th>
                         <th class="sort">Miercoles</th>
                         <th class="sort">Jueves</th>
                         <th class="sort">Viernes</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody class="list form-check-all">
                     @foreach ($objdetalle as $fil => $record)    
                     <tr>    
                         <td>
-                            <select id="hora{{$fil}}" class="form-select" data-choices data-choices-search-false id="cmbgrupo" wire:model="objdetalle.{{$fil}}.6">
+                            <select id="hora{{$fil}}" class="form-select" data-choices data-choices-search-false id="cmbgrupo" wire:model="objdetalle.{{$fil}}.7">
                             <option value=""> - </option>
                             @foreach ($horas as $hora)
                                 <option value="{{$hora->id}}">{{$hora->hora_ini}} - {{$hora->hora_fin}}</option>
                             @endforeach
                             </select>
                         </td>
-                        @for ($col=1;$col<=5;$col++)
-                        <td>
-                            <select id="f{{$fil}}-col{{$col}}" class="form-select" data-choices data-choices-search-false id="cmbgrupo" wire:model="objdetalle.{{$fil}}.{{$col}}">
-                            <option value=""> - </option>
-                            @foreach ($tblmaterias as $materia)
-                                <option value="{{$materia->id}}">{{$materia->descripcion}}</option>
-                            @endforeach
-                            </select>
-                        </td>
+                        @for ($col=1;$col<=6;$col++)
+                            @if($modalidadId==3 && $col==6)
+                            <td>
+                                <select id="f{{$fil}}-col{{$col}}" class="form-select" data-choices data-choices-search-false id="cmbgrupo" wire:model="objdetalle.{{$fil}}.{{$col}}">
+                                <option value=""> - </option>
+                                @foreach ($tblmaterias as $materia)
+                                    <option value="{{$materia->id}}">{{$materia->descripcion}}</option>
+                                @endforeach
+                                </select>
+                            </td>
+                            @endif
+                            @if($modalidadId!=3 && $col<=5)
+                            <td>
+                                <select id="f{{$fil}}-col{{$col}}" class="form-select" data-choices data-choices-search-false id="cmbgrupo" wire:model="objdetalle.{{$fil}}.{{$col}}">
+                                <option value=""> - </option>
+                                @foreach ($tblmaterias as $materia)
+                                    <option value="{{$materia->id}}">{{$materia->descripcion}}</option>
+                                @endforeach
+                                </select>
+                            </td>
+                            @endif
                         @endfor
                     </tr>
                     @endforeach
