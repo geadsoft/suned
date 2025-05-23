@@ -3,6 +3,7 @@
     <div class="row mt-4">
         <div class="col-xl-12 col-lg-12">
             <div class="row row-cols-xxl-5 row-cols-lg-3 row-cols-md-2 row-cols-1">
+                        @if ($modalidadId <> 3)
                         <div class="col">
                             <div class="card">
                                 <a class="card-body alert-dark" data-bs-toggle="collapse" href="#lunes" role="button" aria-expanded="false" aria-controls="lunes">
@@ -100,7 +101,7 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="collapse border-top border-top-dashed" id="martes{{$lin}}">
+                                    <!--<div class="collapse border-top border-top-dashed" id="martes{{$lin}}">
                                         <div class="card-body">
                                             <h6 class="fs-14 mb-1">Por Finalizar<small class="badge bg-danger-subtle text-danger">4 Day</small></h6>
                                             <p class="text-muted">As a company grows however, you find it's not as easy to shout across</p>
@@ -144,7 +145,7 @@
                                             <button class="btn btn-warning btn-sm w-100"><i class="ri-phone-line align-bottom me-1"></i> Call</button>
                                             <button class="btn btn-info btn-sm w-100"><i class="ri-question-answer-line align-bottom me-1"></i> Message</button>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 @endif
                                 @endforeach
@@ -174,7 +175,7 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="collapse border-top border-top-dashed" id="miercoles{{$lin}}">
+                                    <!--<div class="collapse border-top border-top-dashed" id="miercoles{{$lin}}">
                                         <div class="card-body">
                                             <h6 class="fs-14 mb-1">Nesta Technologies <small class="badge bg-danger-subtle text-danger">4 Days</small></h6>
                                             <p class="text-muted">As a company grows however, you find it's not as easy to shout across</p>
@@ -218,7 +219,7 @@
                                             <button class="btn btn-warning btn-sm w-100"><i class="ri-phone-line align-bottom me-1"></i> Call</button>
                                             <button class="btn btn-info btn-sm w-100"><i class="ri-question-answer-line align-bottom me-1"></i> Message</button>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 @endif
                                 @endforeach
@@ -249,7 +250,7 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="collapse border-top border-top-dashed" id="jueves{{$lin}}">
+                                    <!--<div class="collapse border-top border-top-dashed" id="jueves{{$lin}}">
                                         <div class="card-body">
                                             <h6 class="fs-14 mb-1">Nesta Technologies <small class="badge bg-danger-subtle text-danger">4 Days</small></h6>
                                             <p class="text-muted">As a company grows however, you find it's not as easy to shout across</p>
@@ -293,7 +294,7 @@
                                             <button class="btn btn-warning btn-sm w-100"><i class="ri-phone-line align-bottom me-1"></i> Call</button>
                                             <button class="btn btn-info btn-sm w-100"><i class="ri-question-answer-line align-bottom me-1"></i> Message</button>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 @endif
                                 @endforeach
@@ -324,7 +325,7 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="collapse border-top border-top-dashed" id="viernes{{$lin}}">
+                                    <!--<div class="collapse border-top border-top-dashed" id="viernes{{$lin}}">
                                         <div class="card-body">
                                             <h6 class="fs-14 mb-1">Nesta Technologies <small class="badge bg-danger-subtle text-danger">4 Days</small></h6>
                                             <p class="text-muted">As a company grows however, you find it's not as easy to shout across</p>
@@ -368,13 +369,89 @@
                                             <button class="btn btn-warning btn-sm w-100"><i class="ri-phone-line align-bottom me-1"></i> Call</button>
                                             <button class="btn btn-info btn-sm w-100"><i class="ri-question-answer-line align-bottom me-1"></i> Message</button>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 @endif
                                 @endforeach
                             </div>
                         </div>
                         <!--end col-->
+                        @else
+
+                        <div class="col">
+                            <div class="card">
+                                <a class="card-body alert-dark" data-bs-toggle="collapse" href="#sabado" role="button" aria-expanded="false" aria-controls="viernes">
+                                    <h5 class="card-title text-uppercase text-center fw-semibold mb-1 fs-15">Sábado</h5>
+                                </a>
+                            </div>
+                            <!--end card-->
+                            <div class="collapse show" id="sabado">
+                                @foreach ($objdetalle as $lin => $record)
+                                @if(isset($objdetalle[$lin][6]))
+                                <div class="card mb-1">
+                                    <div class="card-body">
+                                        <a class="d-flex align-items-center" data-bs-toggle="collapse" href="#sabado{{$lin}}" role="button" aria-expanded="false" aria-controls="leadDiscovered1">
+                                            <div class="flex-shrink-0">
+                                                <!--<img src="{{ URL::asset('assets/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle">-->
+                                                <img src="{{ URL::asset('assets/images/svg/crypto-icons/audr.svg') }}" alt="" class="avatar-xs rounded-circle">
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h6 class="fs-14 mb-1">{{$objdetalle[$lin][6]['asignatura']}}</h6>
+                                                <p class="text-muted mb-0">{{$objdetalle[$lin][6]['docente']}}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <!--<div class="collapse border-top border-top-dashed" id="sabado{{$lin}}">
+                                        <div class="card-body">
+                                            <h6 class="fs-14 mb-1">Nesta Technologies <small class="badge bg-danger-subtle text-danger">4 Days</small></h6>
+                                            <p class="text-muted">As a company grows however, you find it's not as easy to shout across</p>
+                                            <ul class="list-unstyled vstack gap-2 mb-0">
+                                                <li>
+                                                    <div class="d-flex">
+                                                        <div class="flex-shrink-0 avatar-xxs text-muted">
+                                                            <i class="ri-question-answer-line"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="mb-0">Meeting with Thomas</h6>
+                                                            <small class="text-muted">Yesterday at 9:12AM</small>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="d-flex">
+                                                        <div class="flex-shrink-0 avatar-xxs text-muted">
+                                                            <i class="ri-mac-line"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="mb-0">Product Demo</h6>
+                                                            <small class="text-muted">Monday at 04:41PM</small>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="d-flex">
+                                                        <div class="flex-shrink-0 avatar-xxs text-muted">
+                                                            <i class="ri-earth-line"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <h6 class="mb-0">Marketing Team Meeting</h6>
+                                                            <small class="text-muted">Monday at 04:41PM</small>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="card-footer hstack gap-2">
+                                            <button class="btn btn-warning btn-sm w-100"><i class="ri-phone-line align-bottom me-1"></i> Call</button>
+                                            <button class="btn btn-info btn-sm w-100"><i class="ri-question-answer-line align-bottom me-1"></i> Message</button>
+                                        </div>
+                                    </div>-->
+                                </div>
+                                @endif
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
                     </div>
             <!--<div class="card">
                 <div class="card-header align-items-center d-flex">

@@ -13,6 +13,7 @@ use Livewire\Component;
 class VcSchoolSchedule extends Component
 {
     public $objdetalle=[];
+    public $modalidadId;
     
     public function mount()
     {
@@ -28,6 +29,7 @@ class VcSchoolSchedule extends Component
         ->first();
 
         $this->cursoId = $matricula->curso_id;
+        $this->modalidadId = $matricula->modalidad_id;
 
         $this->loadAsignaturas();
 
@@ -62,11 +64,11 @@ class VcSchoolSchedule extends Component
                 ->join('tm_personas as p','p.id','=','tm_horarios_docentes.docente_id')
                 ->where('horario_id',$data->id)
                 ->where('asignatura_id',$data->asignatura_id)
-                ->select('tm_horarios_docentes.id','p.apellidos','p.nombres')
+                ->select('tm_horarios_docentes.id','p.apellidos','p.nombres','tm_horarios_docentes.docente_id')
                 ->first();
 
                 $actividades = TmActividades::query()
-                ->where('docente_id',$this->personaId)
+                ->where('docente_id',$persona->docente_id)
                 ->where('id',$persona->id)
                 ->where('estado','A')
                 ->get()
