@@ -5,6 +5,7 @@ use App\Models\TmSedes;
 use App\Models\TmPersonas;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmHorarios;
+use App\Models\TmGeneralidades;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -16,6 +17,8 @@ class VcStudents extends Component
 {
     use WithPagination;
 
+    public $modalidadId;
+    public $tblmodalidad;
     public $tblcursos;
     
     public $filters = [
@@ -49,6 +52,7 @@ class VcStudents extends Component
     
     public function render()
     {
+        $this->tblmodalidad = TmGeneralidades::where('superior',1)->get();
         
         $this->tblcursos = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
@@ -56,12 +60,14 @@ class VcStudents extends Component
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
         ->where("d.docente_id",$this->filters['docenteId'])
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->groupByRaw(' c.id, descripcion')
         ->get();
 
         $tblrecords = TmPersonas::query()
         ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
+        ->join("tm_generalidades as g","g.id","=","m.modalidad_id")
         ->join("tm_cursos as c","c.id","=","m.curso_id")
         ->join("tm_servicios as s","s.id","=","c.servicio_id")
         ->join(DB::raw('(select h.curso_id from tm_horarios h
@@ -74,6 +80,9 @@ class VcStudents extends Component
         {
            $join->on('cursos.curso_id', '=', 'm.curso_id');
         })
+        ->when($this->modalidadId,function($query){
+            return $query->where('m.modalidad_id',"{$this->modalidadId}");
+        })
         ->when($this->filters['periodoId'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['periodoId']}");
         })
@@ -81,7 +90,7 @@ class VcStudents extends Component
             return $query->where('m.curso_id',"{$this->filters['cursoId']}");
         })
         ->where('tm_personas.tipopersona','=','E')
-        ->select('tm_personas.*','m.id as matriculaId','m.estudiante_id','s.descripcion','c.paralelo')
+        ->select('tm_personas.*','m.id as matriculaId','m.estudiante_id','s.descripcion','c.paralelo','g.descripcion as modalidad')
         ->orderBy('apellidos','asc')
         ->paginate(12);
 

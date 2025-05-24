@@ -3,7 +3,7 @@
         <div class="col-lg-12">
             <div class="card" id="orderList">
                 <div class="card-header  border-0">
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center mb-3">
                         <h5 class="card-title mb-0 flex-grow-1">Clases Virtuales</h5>
                         <div class="flex-shrink-0">
                             

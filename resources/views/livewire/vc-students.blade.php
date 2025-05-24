@@ -15,17 +15,28 @@
             <div class="card" id="contactList">-->
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <div class="row mb-3">
-                        <label for="record.superior" class="form-label">Cursos Asignados</label>
-                        <div class="col-sm-4">
-                                <div>
-                                    <select class="form-select" name="cmbgrupo" wire:model="filters.cursoId">
-                                        <option value="">Todos Cursos</option>
-                                        @foreach ($tblcursos as $curso)
-                                            <option value="{{$curso->id}}">{{$curso->descripcion}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                        <div class="col-sm-3">
+                            <div>
+                                <label for="record.superior" class="form-label">Modalidad</label>
+                                <select class="form-select" name="cmbgrupo" wire:model="modalidadId">
+                                    <option value="">Todos</option>
+                                    @foreach ($tblmodalidad as $modalidad)
+                                        <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
+                                    @endforeach
+                                </select>
                             </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div>
+                                <label for="record.superior" class="form-label">Cursos Asignados</label>
+                                <select class="form-select" name="cmbgrupo" wire:model="filters.cursoId">
+                                    <option value="">Todos Cursos</option>
+                                    @foreach ($tblcursos as $curso)
+                                        <option value="{{$curso->id}}">{{$curso->descripcion}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -34,17 +45,17 @@
                             <table class="table align-middle table-nowrap table-sm mb-0" id="customerTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
-                                        <th scope="col" style="width: 50px;">
+                                        <!--<th scope="col" style="width: 50px;">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox"
                                                     id="checkAll" value="option">
                                             </div>
-                                        </th>
+                                        </th>-->
                                         <!--<th class="sort" data-sort="id" scope="col">ID</th>-->
                                         <th data-sort="name" scope="col">Identificación</th>
                                         <th data-sort="email_id" scope="col">Apellidos</th>
                                         <th data-sort="company_name" scope="col">Nombres</th>
-                                       
+                                        <th data-sort="company_name" scope="col">Modalidad</th>
                                         <th data-sort="tags" scope="col">Curso</th>
                                         <th data-sort="paralelo" scope="col">Paralelo</th>
                                         <th scope="col">Acción</th>
@@ -53,15 +64,15 @@
                                 <tbody class="list form-check-all">
                                 @foreach ($tblrecords as $record)
                                     <tr>
-                                        <th scope="row">
+                                        <!--<th scope="row">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" name="chk_child" value="option1">
                                             </div>
-                                        </th>
+                                        </th>-->
                                         <td>{{$record->identificacion}}</td>
                                         <td>{{$record->apellidos}}</td>
                                         <td>{{$record->nombres}}</td>
-                                       
+                                        <td>{{$record->modalidad}}</td>
                                         <td>{{$record->descripcion}}</td>
                                         <td>{{$record->paralelo}}</td>
                                         <td class="text-center">
