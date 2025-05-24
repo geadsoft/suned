@@ -10,8 +10,10 @@ use Livewire\Component;
 
 class VcAsignaturaCursos extends Component
 {
-    public $selectId, $tblasignatura, $asignaturaId, $cursoId;
+    public $selectId, $tblmodalidad, $tblasignatura = [], $modalidadId, $asignaturaId, $cursoId;
     public $tblparalelo=[];
+    public $eSelectA = 'disabled';
+    public $eSelectC = 'disabled';    
 
     protected $listeners = ['setEdit','setGrabar','setUpdate'];
 
@@ -26,24 +28,59 @@ class VcAsignaturaCursos extends Component
     
     public function render()
     {   
-        $this->tblasignatura = TmHorarios::query()
+        $this->tblmodalidad = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
+        ->where("d.docente_id",$this->docenteId)
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->selectRaw('g.id, g.descripcion')
+        ->groupBy('g.id','g.descripcion')
+        ->get();
+
+        /*$this->tblasignatura = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
         ->where("d.docente_id",$this->docenteId)
         ->where("tm_horarios.periodo_id",$this->periodoId)
         ->selectRaw('m.id, m.descripcion')
         ->groupBy('m.id','m.descripcion')
-        ->get();
-
+        ->get();*/
+        
+        $this->updatedmodalidadId($this->modalidadId);
         $this->updatedasignaturaId($this->asignaturaId);
 
         return view('livewire.vc-asignatura-cursos');
     }
 
+    public function updatedmodalidadId($id){
+
+        $this->modalidadId = $id;
+        $this->eSelectA = 'disabled';
+
+        if ($this->modalidadId>0){
+            $this->eSelectA = '';  
+        }
+
+        $this->tblasignatura = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("d.docente_id",$this->docenteId)
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.grupo_id",$this->modalidadId)
+        ->selectRaw('m.id, m.descripcion')
+        ->groupBy('m.id','m.descripcion')
+        ->get();
+
+    }
 
     public function updatedasignaturaId($id){
 
         $this->asignaturaId = $id;
+        $this->eSelectC = 'disabled'; 
+
+        if ($this->asignaturaId>0){
+            $this->eSelectC = '';  
+        }
 
         $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
@@ -52,6 +89,7 @@ class VcAsignaturaCursos extends Component
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
         ->where("d.docente_id",$this->docenteId)
         ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.grupo_id",$this->modalidadId)
         ->where("m.id",$id)
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();

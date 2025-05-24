@@ -17,6 +17,14 @@
                         @if ($cursosTodos==true) 
                             <div class="row g-3 mb-3">
                                 <div class="col-xxl-3 col-sm-4">
+                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="modalidadId">
+                                        <option value="">Seleccione Modalidad</option>
+                                    @foreach ($tblmodalidad as $modalidad) 
+                                        <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
+                                        @endforeach 
+                                    </select>
+                                </div>
+                                <div class="col-xxl-3 col-sm-4">
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.paralelo">
                                         <option value="">Seleccione Paralelo</option>
                                         @foreach ($tblparalelo as $paralelo) 
@@ -43,6 +51,14 @@
                             </div>
                         @else
                         <div class="row g-3 mb-3">
+                            <div class="col-xxl-3 col-sm-4">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="modalidadId">
+                                    <option value="">Seleccione Modalidad</option>
+                                   @foreach ($tblmodalidad as $modalidad) 
+                                    <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
                             <div class="col-xxl-3 col-sm-4">
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="asignaturaId">
                                     <option value="">Seleccione Asignatura</option>
@@ -78,6 +94,7 @@
                             <table class="table table-nowrap align-middle" id="orderTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
+                                        <th>Modalidad</th>
                                         <th>Asignatura</th>
                                         <th>Curso</th>
                                         <th>Paralelo</th>
@@ -89,6 +106,7 @@
                                 <tbody class="list form-check-all">
                                 @foreach ($tblrecords as $key => $record)
                                     <tr>
+                                        <td>{{$record['modalidad']}}</td>
                                         <td>{{$record['asignatura']}}</td>
                                         <td>{{$record['curso']}}</td>
                                         <td>{{$record['aula']}}</td>

@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 use App\Models\TmHorarios;
 use App\Models\TmActividades;
 use App\Models\TmPeriodosLectivos;
+use App\Models\TmGeneralidades;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -13,11 +14,12 @@ class VcClasesVirtual extends Component
 {
     
     public $showEditModal, $paralelo, $actividadId=0, $asignaturaId=0, $display="display: none";
-    public $cursosTodos, $selectId;
+    public $cursosTodos, $selectId, $modalidadId;
     
     public $record=[];
     public $tblparalelo=[];
     public $tblasignatura=[];
+    public $tblmodalidad=[];
 
     public $filters=[
         'paralelo' => '',
@@ -48,11 +50,14 @@ class VcClasesVirtual extends Component
     {   
         $this->display = "display: none";
 
+        $this->tblmodalidad = TmGeneralidades::where('superior',1)->get();
+
         if ($this->cursosTodos){
 
             $this->loadCursos();
 
             $tblrecords = TmHorarios::query()
+            ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
             ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
             ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
             ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
@@ -64,11 +69,14 @@ class VcClasesVirtual extends Component
             ->when($this->asignaturaId,function($query){
                 return $query->where('d.id',"{$this->asignaturaId}");
             })
+            ->when($this->modalidadId,function($query){
+                return $query->where('tm_horarios.grupo_id',"{$this->modalidadId}");
+            })
             ->where("tm_horarios.periodo_id",$this->periodoId)
             ->where("a.tipo","CV")
             ->where("a.estado","A")
-            ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
-            ->orderby('m.descripcion')
+            ->selectRaw('g.descripcion as modalidad, m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
+            ->orderbyRaw('g.descripcion, m.descripcion')
             ->paginate(12);
 
             $this->updatedParalelo($this->filters['paralelo']);
@@ -80,16 +88,21 @@ class VcClasesVirtual extends Component
             ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
             ->where("d.docente_id",$this->docenteId)
             ->where("tm_horarios.periodo_id",$this->periodoId)
+            ->where("tm_horarios.grupo_id",$this->modalidad)
             ->selectRaw('m.id, m.descripcion')
             ->groupBy('m.id','m.descripcion')
             ->get();
 
             $tblrecords = TmHorarios::query()
+            ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
             ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
             ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
             ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
             ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
             ->join("tm_actividades as a","a.paralelo","=","d.id")
+            ->when($this->modalidadId,function($query){
+                return $query->where('tm_horarios.grupo_id',"{$this->modalidadId}");
+            })
             ->when($this->filters['paralelo'],function($query){
                 return $query->where('a.paralelo',"{$this->filters['paralelo']}");
             })
@@ -97,8 +110,8 @@ class VcClasesVirtual extends Component
             ->where("tm_horarios.periodo_id",$this->periodoId)
             ->where("a.tipo","CV")
             ->where("a.estado","A")
-            ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
-            ->orderby('m.descripcion')
+            ->selectRaw('g.descripcion as modalidad, m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
+            ->orderbyRaw('g.descripcion,m.descripcion')
             ->paginate(12);
 
             $this->updatedasignaturaId($this->asignaturaId);
@@ -113,6 +126,12 @@ class VcClasesVirtual extends Component
         return 'vendor.livewire.bootstrap'; 
     }
 
+    
+    public function updatedmodalidadId($id){
+        $this->loadCursos();
+    }
+
+
     public function updatedasignaturaId($id){
         
         $this->asignaturaId = $id;
@@ -124,6 +143,7 @@ class VcClasesVirtual extends Component
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
         ->where("d.docente_id",$this->docenteId)
         ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.grupo_id",$this->modalidadId)
         ->where("m.id",$id)
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
@@ -214,6 +234,7 @@ class VcClasesVirtual extends Component
         ->join('tm_servicios as s','s.id','=','h.servicio_id')
         ->join('tm_cursos as c','c.id','=','h.curso_id')
         ->where('tm_actividades.tipo','CV')
+        ->where('h.grupo_id',$this->modalidadId)
         ->select('h.id','s.descripcion','c.paralelo')
         ->groupBy('h.id','s.descripcion','c.paralelo')
         ->orderBy('s.descripcion')
