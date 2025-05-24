@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Livewire;
+use App\Models\TmGeneralidades;
 use App\Models\TmHorarios;
 use App\Models\TmHorariosDocentes;
 use App\Models\TmActividades;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class VcDailyAttendance extends Component
 {
+    public $modalidadId, $tblmodalidad;
     public $asignaturaId;
     public $tblrecords=[];
     
@@ -34,7 +36,8 @@ class VcDailyAttendance extends Component
 
     public function render()
     {
-        
+        $this->tblmodalidad = TmGeneralidades::where('superior',1)->get();
+
         $this->tblasignatura = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")

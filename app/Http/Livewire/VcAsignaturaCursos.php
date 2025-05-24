@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Livewire;
+use App\Models\TmGeneralidades;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmHorarios;
 
@@ -98,8 +99,12 @@ class VcAsignaturaCursos extends Component
 
     public function setEdit($id){
 
+        $this->tblmodalidad = TmGeneralidades::where('superior',1);
+
         $this->selectId = $id;
         $actividad = TmActividades::find($id);
+
+        $this->docenteId = $actividad->docente_id;
 
         $data = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
@@ -107,6 +112,8 @@ class VcAsignaturaCursos extends Component
         ->where('d.docente_id',$this->docenteId)
         ->first();
 
+        $this->modalidadId = $data['grupo_id'];
+        $this->updatedmodalidadId($this->modalidadId);
         $this->asignaturaId = $data['asignatura_id'];
         $this->updatedasignaturaId($this->asignaturaId);
 

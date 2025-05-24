@@ -486,6 +486,20 @@
                     </div>
                     @endcan
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#faltas" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="faltas">
+                        <i class="las la-tasks fs-20"></i><span>Justificativo de Faltas</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="faltas">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/tuition">
+                                    </i>Justificar<span></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
 
 
