@@ -45,7 +45,7 @@ class VcStudents extends Component
         ->groupByRaw(' c.id, descripcion')
         ->get();
 
-        $this->filters['cursoId'] = $this->tblcursos[0]['id'];
+        //$this->filters['cursoId'] = $this->tblcursos[0]['id'];
 
     }
 
