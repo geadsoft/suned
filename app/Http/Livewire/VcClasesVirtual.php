@@ -88,7 +88,7 @@ class VcClasesVirtual extends Component
             ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
             ->where("d.docente_id",$this->docenteId)
             ->where("tm_horarios.periodo_id",$this->periodoId)
-            ->where("tm_horarios.grupo_id",$this->modalidad)
+            ->where("tm_horarios.grupo_id",$this->modalidadId)
             ->selectRaw('m.id, m.descripcion')
             ->groupBy('m.id','m.descripcion')
             ->get();
