@@ -17,7 +17,7 @@ class VcStudents extends Component
 {
     use WithPagination;
 
-    public $modalidadId;
+    public $modalidadId='';
     public $tblmodalidad;
     public $tblcursos;
     
@@ -91,7 +91,7 @@ class VcStudents extends Component
         })
         ->where('tm_personas.tipopersona','=','E')
         ->select('tm_personas.*','m.id as matriculaId','m.estudiante_id','s.descripcion','c.paralelo','g.descripcion as modalidad')
-        ->orderBy('apellidos','asc')
+        ->orderByRaw('g.descripcion,apellidos asc')
         ->paginate(12);
 
         
