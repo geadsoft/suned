@@ -7,6 +7,7 @@ use App\Models\TmServicios;
 use App\Models\TmCursos;
 use App\Models\TmHorarios;
 use App\Models\TmHorariosDocentes;
+use App\Models\TmHorariosAsignaturas;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -15,6 +16,7 @@ class VcHorarios extends Component
 {
 
     use WithPagination;
+    public $selectId;
     public $tblgenerals=null, $datos;
     public $tblperiodos=null;
     public $tblcursos=null;
@@ -74,6 +76,30 @@ class VcHorarios extends Component
         $this->selectId = $horarioId;
         return redirect()->to('/headquarters/schedules-edit/'.$this->selectId);
 
+    }
+
+    public function delete($id){
+        
+        $this->selectId = $id;
+        $actividad = TmHorariosDocentes::query()
+        ->join("tm_actividades as a","a.paralelo","=","tm_horarios_docentes.id")
+        ->where("tm_horarios_docentes.horario_id",$this->selectId)
+        ->get();
+
+        if ($actividad->isNotEmpty()){
+            $this->dispatchBrowserEvent('msg-error');
+        }else{
+            $this->dispatchBrowserEvent('show-delete');
+        }
+
+    }
+
+     public function deleteData(){
+
+        TmHorariosDocentes::where('horario_id', $this->selectId)->delete();
+        TmHorariosAsignaturas::where('horario_id', $this->selectId)->delete();
+        TmHorarios::find($this->selectId)->delete();
+        $this->dispatchBrowserEvent('hide-delete');
     }
 
 }
