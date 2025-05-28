@@ -600,7 +600,7 @@
                 
                 <form autocomplete="off" wire:submit.prevent="">
                     <div class="modal-body">                                        
-                            @livewire('vc-modal-search',['opcion' => 'cert'])                                      
+                            @livewire('vc-modal-search',['opcion' => 'CERT'])                                      
                     </div>
                     <div class="modal-footer">
                         <div class="hstack gap-2 justify-content-end">

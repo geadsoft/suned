@@ -90,7 +90,7 @@ class VcModalSearch extends Component
             $this->emitTo('vc-inventary-register','setPersona',$matriculaId);
         }
         
-        if ($this->opcion=='null'){
+        if ($this->opcion=='CERT'){
             $this->emitTo('vc-certificados','setPersona',$matriculaId);
             $this->dispatchBrowserEvent('hide-form');
         }
