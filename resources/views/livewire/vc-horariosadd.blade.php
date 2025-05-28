@@ -8,21 +8,21 @@
                         <div class="step-arrow-nav mt-n3 mx-n3 mb-3">
                             <ul class="nav nav-pills nav-justified custom-nav nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link fs-15 p-3 active" id="pills-bill-info-tab" data-bs-toggle="pill"
+                                    <button class="nav-link fs-15 p-3 {{$tab1}}" id="pills-bill-info-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-info" type="button" role="tab"
                                         aria-controls="pills-bill-info" aria-selected="true"><i
                                             class=" ri-open-source-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
                                             Datos Generales</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link fs-15 p-3" id="pills-bill-horarios-tab" data-bs-toggle="pill"
+                                    <button class="nav-link fs-15 p-3 {{$tab2}}" id="pills-bill-horarios-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-horarios" type="button" role="tab"
                                         aria-controls="pills-bill-horarios" aria-selected="false" $tabHorario><i
                                             class="ri-bank-card-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
                                             Asignaturas</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link fs-15 p-3" id="pills-bill-docente-tab" data-bs-toggle="pill"
+                                    <button class="nav-link fs-15 p-3 {{$tab3}}" id="pills-bill-docente-tab" data-bs-toggle="pill"
                                         data-bs-target="#pills-bill-docente" type="button" role="tab"
                                         aria-controls="pills-bill-docente" aria-selected="false" $tabDocente><i
                                             class=" ri-folder-user-line fs-16 p-2 bg-soft-primary text-primary rounded-circle align-middle me-2"></i>
@@ -31,7 +31,7 @@
                             </ul>
                         </div>
                         <div class="tab-content">
-                            <div class="tab-pane fade show active" id="pills-bill-info" role="tabpanel"
+                            <div class="{{$clasTab1}}" id="pills-bill-info" role="tabpanel"
                                 aria-labelledby="pills-bill-info-tab">
                                 <div class="mb-3">
                                     <br>
@@ -130,7 +130,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="pills-bill-horarios" role="tabpanel"
+                            <div class="{{$clasTab2}}" id="pills-bill-horarios" role="tabpanel"
                                 aria-labelledby="pills-bill-horarios-tab">
                                 <div class="mb-3">
                                     <br>
@@ -139,7 +139,7 @@
                                 </div>
                                 @livewire('vc-horarios-clase',['horarioId' => $selectId])
                             </div>
-                            <div class="tab-pane fade" id="pills-bill-docente" role="tabpanel"
+                            <div class="{{$clasTab3}}" id="pills-bill-docente" role="tabpanel"
                                 aria-labelledby="pills-bill-docente-tab">
                                 <div class="mb-3">
                                     <br>
@@ -156,6 +156,28 @@
                 <!-- end card body -->
             </div>
             <!-- end card -->
+
+            <div wire.ignore.self class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true" wire:model='asignaturaDocenteId'>
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body p-5 text-center">
+                            <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                                colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px">
+                            </lord-icon>
+                            <div class="mt-4 text-center">
+                                <h4>¿Estas a punto de eliminar el registro? {{ $asignaturaDocenteId }}</h4>
+                                <p class="text-muted fs-15 mb-4">Eliminar el registro eliminará toda su información de nuestra base de datos..</p>
+                                <div class="hstack gap-2 justify-content-center remove">
+                                    <button class="btn btn-link link-success fw-medium text-decoration-none"
+                                        data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i>
+                                        Cerrar</button>
+                                    <button class="btn btn-danger" id="delete-record"  wire:click="deleteData({{$asignaturaDocenteId}})"> Si, Eliminarlo</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- end col -->
 

@@ -7,6 +7,8 @@ use App\Models\TmHorarios;
 use App\Models\TmCursos;
 use App\Models\TmServicios;
 use App\Models\TmAsignaturas;
+use App\Models\TmHorariosDocentes;
+use App\Models\TmActividades;
 
 use Livewire\Component;
 
@@ -18,7 +20,13 @@ class VcHorariosadd extends Component
     public $tblservicios=null;
     public $selectId,$grupoId,$servicioId,$nivelId,$gradoId,$especialidadId,$periodoId,$cursoId;
     public $tabHorario, $tabDocente, $edit=false;
-    public $nombreCurso, $nombreGrupo;
+    public $nombreCurso, $nombreGrupo, $asignaturaDocenteId;
+    public $clasTab1="tab-pane fade show active";
+    public $clasTab2="tab-pane fade";
+    public $clasTab3="tab-pane fade";
+    public $tab1='active', $tab2, $tab3;
+
+    protected $listeners = ['setDelete','deleteData'];
     
     public function mount($horarioId){
 
@@ -150,6 +158,34 @@ class VcHorariosadd extends Component
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
     }
+    
 
+    public function setDelete($id){
 
+        $this->asignaturaDocenteId = $id;
+        $actividad = TmActividades::where('paralelo',$id)->get();
+
+        if (!empty($actividad)){
+            $this->dispatchBrowserEvent('msg-error');
+        }else{
+            $this->dispatchBrowserEvent('msg-confirm');
+        }
+       
+        $this->clasTab1 = "tab-pane fade";
+        $this->clasTab2 = "tab-pane fade";
+        $this->clasTab3 = "tab-pane fade show active";
+        $this->tab1='';
+        $this->tab2='';
+        $this->tab3="active";
+
+    }
+
+    public function deleteData(){
+
+        TmHorariosDocentes::find($this->asignaturaDocenteId)->delete();
+        $this->loadData();
+
+    } 
+
+    
 }

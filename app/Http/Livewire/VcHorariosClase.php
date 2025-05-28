@@ -96,9 +96,13 @@ class VcHorariosClase extends Component
                 $objdata['dia'] = $col;
                 if ($asignatura[$col] == ''){
                     $objdata['asignatura_id'] = null;
-                    $objdata['hora_id'] = null;
                 }else {
                     $objdata['asignatura_id'] = $asignatura[$col];
+                }
+                
+                if ($asignatura[7] == ''){
+                    $objdata['hora_id'] = null;
+                }else {
                     $objdata['hora_id'] = $asignatura[7];
                 }
                 
@@ -133,7 +137,7 @@ class VcHorariosClase extends Component
         $this->dispatchBrowserEvent('msg-grabar-asignatura', ['newName' => $message]);
 
         $this->emitTo('vc-horarios-docentes','setHorario',$this->horarioId);
-        
+        $this->setHorario($this->horarioId);
     }
 
     public function editData(){

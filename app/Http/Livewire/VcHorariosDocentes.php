@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class VcHorariosDocentes extends Component
 {
-    public $tblrecords=[], $selectId;
+    public $tblrecords=[], $selectId, $asignaturaDocenteId;
     
     protected $listeners = ['setHorario','setDocente'];
 
@@ -59,4 +59,13 @@ class VcHorariosDocentes extends Component
     public function exit(){
         return redirect()->to('/headquarters/schedules');
     }
+
+    public function delete($id){
+
+        $this->asignaturaDocenteId = $id;
+        $this->emitUp('setDelete', $id);
+        
+    }
+
+
 }

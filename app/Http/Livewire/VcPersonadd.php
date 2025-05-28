@@ -268,6 +268,7 @@ class VcPersonadd extends Component
 
         } 
 
+     
         if($this->fileimg ?? null){
             $this ->validate([
                 'fileimg' => ['image', 'mimes:jpg,jpeg,png', 'max:1024'],
@@ -298,7 +299,22 @@ class VcPersonadd extends Component
                 'foto' => $nameFile,
                 ]);
             
-            $this->crearUsuario();        
+            $this->crearUsuario(); 
+            
+            $user = User::query()
+            ->where('personaId',$this->personaId)
+            ->where('email','<>',$this->email)
+            ->first();
+
+            if (!empty($user)){
+
+                $datausers = User::find($user->id);
+                $datausers->update([
+                    'email' => $this -> email,
+                ]);
+
+            }
+
         }
 
         foreach ($this->directions as $data){
