@@ -187,7 +187,7 @@ class VcHorariosadd extends Component
     public function deleteData(){
 
         TmHorariosDocentes::find($this->asignaturaDocenteId)->delete();
-        $this->loadData();
+        return redirect(request()->header('Referer'));
 
     } 
 
