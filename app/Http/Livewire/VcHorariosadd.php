@@ -163,9 +163,13 @@ class VcHorariosadd extends Component
     public function setDelete($id){
 
         $this->asignaturaDocenteId = $id;
-        $actividad = TmActividades::where('paralelo',$id)->get();
+         $actividad = TmHorariosDocentes::query()
+        ->join("tm_actividades as a","a.paralelo","=","tm_horarios_docentes.id")
+        ->where("tm_horarios_docentes.horario_id",$this->selectId)
+        ->where("a.paralelo",$this->asignaturaDocenteId)
+        ->get();
 
-        if (!empty($actividad)){
+        if ($actividad->isNotEmpty()){
             $this->dispatchBrowserEvent('msg-error');
         }else{
             $this->dispatchBrowserEvent('msg-confirm');
