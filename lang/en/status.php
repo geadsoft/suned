@@ -10,5 +10,6 @@ return [
     "P" => "Cancelado",
     "*" => "Abonado",
     "F" => "Finalizado",
+    "R" => "Retirado",
 ];
 ?>

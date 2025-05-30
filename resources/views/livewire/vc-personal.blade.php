@@ -21,7 +21,7 @@
                         <div class="col-md-4">
                             <div class="search-box">
                                 <input type="text" class="form-control search"
-                                    placeholder="Search for contact...">
+                                    placeholder="Buscar por apellidos o nombres..." wire:model="buscarDato">
                                 <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
@@ -55,6 +55,7 @@
                                         <th class="sort" data-sort="tags" scope="col">Teléfono</th>
                                         <th class="sort" data-sort="tags" scope="col">Email</th>
                                         <th class="sort" data-sort="tags" scope="col">Tipo</th>
+                                        <th class="sort" data-sort="tags" scope="col">Estado</th>
                                         <th scope="col">Acción</th>
                                     </tr>
                                 </thead>
@@ -67,18 +68,32 @@
                                         <td class="tags">{{$record->telefono}}</td>
                                         <td class="tags">{{$record->email}}</td>
                                         <td class="tags">{{$arrtipo[$record->tipopersona]}}</td>
+                                        <td class="tags">
+                                            @if ($record->estado=="R")
+                                            <span class="badge badge-soft-danger text-uppercase">@lang('status.'.($record->estado))</span>
+                                            @else
+                                            <span class="badge badge-soft-success text-uppercase">@lang('status.'.($record->estado))</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top" title="View">
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Visualizar">
                                                     <a href="" wire:click.prevent="view({{ $record->id }})" class="view-item-btn"><i
                                                             class="ri-eye-fill align-bottom text-muted"></i></a>
                                                 </li>
+                                                @if ($record->estado<>"R")
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Editar">
                                                     <a class="edit-item-btn" href="" wire:click.prevent="edit({{ $record->id }})"><i
                                                             class="ri-pencil-fill align-bottom text-muted"></i></a>
                                                 </li>
+                                                <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Retirar">
+                                                    <a class="text-danger" href="" wire:click.prevent="retirar({{ $record->id }})"><i
+                                                            class="ri-user-unfollow-fill align-bottom"></i></a>
+                                                </li>
+                                                @endif
                                             </ul>
                                         </td>
                                     </tr>

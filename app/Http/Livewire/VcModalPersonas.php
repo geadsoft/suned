@@ -10,13 +10,15 @@ class VcModalPersonas extends Component
 {
     public $selectId, $tblrecords=[];
     public $filters = [
+        'srv_view' => '',
         'srv_tipo' => 'D',
         'srv_nombre' => '',
         'srv_nui' => '',
     ];
 
-    public function mount($tipo)
+    public function mount($vista,$tipo)
     {
+        $this->filters['srv_view'] = $vista;
         $this->filters['srv_tipo'] = $tipo;
     }
 
@@ -88,9 +90,25 @@ class VcModalPersonas extends Component
 
     public function setPersona($personaId,$estudianteId){
 
-        
+        switch ($this->filters['srv_view']) {
+        case 'horarios-docentes':
+            $this->emitTo('vc-horarios-docentes','setDocente',$personaId);
+            $this->dispatchBrowserEvent('hide-form');
+            $this->filters['srv_nombre'] = '';
+            break;
+        case 'createinvoice':
+            $this->emitTo('vc-createinvoice','setPersona',$personaId,$estudianteId);
+            $this->dispatchBrowserEvent('hide-form');
+            $this->filters['srv_nombre'] = '';
+            break;
+        case 'remove-teacher':
+            $this->emitTo('vc-remove-teacher','setDocente',$personaId);
+            $this->dispatchBrowserEvent('hide-form');
+            $this->filters['srv_nombre'] = '';
+            break;
+        }
 
-        if ($this->filters['srv_tipo']=='D'){
+        /*if ($this->filters['srv_tipo']=='D'){
             $this->emitTo('vc-horarios-docentes','setDocente',$personaId);
             $this->dispatchBrowserEvent('hide-form');
             $this->filters['srv_nombre'] = '';
@@ -98,7 +116,7 @@ class VcModalPersonas extends Component
             $this->emitTo('vc-createinvoice','setPersona',$personaId,$estudianteId);
             $this->dispatchBrowserEvent('hide-form');
             $this->filters['srv_nombre'] = '';
-        }        
+        } */       
         
     }
 

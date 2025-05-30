@@ -83,6 +83,8 @@ Route::get('/headquarters/schedules',[App\Http\Controllers\TmHorariosController:
 Route::get('/headquarters/schedules-add',[App\Http\Controllers\TmHorariosController::class, 'addhorarios'])->name('addhorarios');
 Route::get('/headquarters/schedules-edit/{id}',[App\Http\Controllers\TmHorariosController::class, 'edithorarios'])->name('edithorarios');
 Route::get('/headquarters/subjects',[App\Http\Controllers\TmAsignaturasController::class, 'index'])->name('index');
+Route::get('/headquarters/remove-teacher/{id}',[App\Http\Controllers\TmPersonasController::class, 'retirar'])->name('retirar');
+
 
 Route::get('/financial/encashment/{id}',[App\Http\Controllers\TrCobrosCabsController::class, 'viewtuition'])->name('viewtuition');
 Route::get('/financial/encashment',[App\Http\Controllers\TrCobrosCabsController::class, 'loadtuition'])->name('loadtuition');

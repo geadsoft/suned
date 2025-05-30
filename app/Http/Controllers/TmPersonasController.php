@@ -51,5 +51,10 @@ class TmPersonasController extends Controller
     {
         return view('/config/perfil');
     }
+
+    public function retirar($personaId)
+    {
+        return view('/teachers/retirar-docente',['id' => $personaId]);
+    }
     
 }
