@@ -142,7 +142,7 @@ class VcHorariosClase extends Component
 
     public function editData(){
 
-        NombreDelModelo::where('horario_id', $this->horarioId)->delete();
+        TmHorariosAsignaturas::where('horario_id', $this->horarioId)->delete();
 
         /*Asignaturas*/
         foreach ($this->objdetalle as $key => $asignatura){
