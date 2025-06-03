@@ -201,11 +201,19 @@ class VcHorariosClase extends Component
         }*/
 
         /*Docente por Asignatura*/
-        $tbldata = TmHorariosAsignaturas::where('horario_id',$this->horarioId)
-        ->where('asignatura_id','<>','null')
-        ->select('asignatura_id')
-        ->groupBy('asignatura_id')
+        $tbldata = TmHorariosAsignaturas::query()
+        ->leftJoin('tm_horarios_docentes as d', function ($join) {
+            $join->on('d.asignatura_id', '=', 'tm_horarios_asignaturas.asignatura_id')
+                ->where('d.horario_id', $this->horarioId); // Filtro en el LEFT JOIN
+        })
+        ->where('tm_horarios_asignaturas.horario_id',$this->horarioId)
+        ->where('tm_horarios_asignaturas.asignatura_id','<>','null')
+        ->select('tm_horarios_asignaturas.asignatura_id',"d.docente_id")
+        ->groupBy('tm_horarios_asignaturas.asignatura_id','d.docente_id')
         ->get()->toArray();
+
+        
+        TmHorariosDocentes::where('horario_id', $this->horarioId)->delete();
 
         $objdocente=[];
         foreach ($tbldata as $recno){
@@ -219,7 +227,7 @@ class VcHorariosClase extends Component
                 TmHorariosDocentes::Create([
                     'horario_id' => $this->horarioId,
                     'asignatura_id' => $recno['asignatura_id'],
-                    'docente_id' => null,
+                    'docente_id' => $recno['docente_id'],
                     'usuario' => auth()->user()->name,
                 ]);
 
