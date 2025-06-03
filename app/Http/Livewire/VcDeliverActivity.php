@@ -17,7 +17,7 @@ class VcDeliverActivity extends Component
     use WithFileUploads;
     
     public $selectId, $record, $display_estado="", $display_text="display:none";
-    public $data, $personaId, $tiempo, $estado="No Entregado", $texteditor;
+    public $data, $personaId, $tiempo, $estado="No Entregado", $texteditor="";
     public $array_attach=[], $files=[], $entregas=[];
     public $showEditor = false;
 
