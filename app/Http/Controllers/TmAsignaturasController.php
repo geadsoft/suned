@@ -17,6 +17,11 @@ class TmAsignaturasController extends Controller
         return view('sede/asignaturas');
     }
 
+    public function personalizar()
+    {
+        return view('teachers/personalizar_asignatura');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

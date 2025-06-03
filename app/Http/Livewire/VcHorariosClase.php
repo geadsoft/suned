@@ -142,7 +142,37 @@ class VcHorariosClase extends Component
 
     public function editData(){
 
-        foreach($this->horarios as $key => $recno){
+        NombreDelModelo::where('horario_id', $this->horarioId)->delete();
+
+        /*Asignaturas*/
+        foreach ($this->objdetalle as $key => $asignatura){
+            $objdata = [];
+            for ($col = 1; $col <= 6; $col++) {
+                
+                $objdata['horario_id'] = $this->horarioId;
+                $objdata['linea'] = $key;
+                $objdata['dia'] = $col;
+                if ($asignatura[$col] == ''){
+                    $objdata['asignatura_id'] = null;
+                }else {
+                    $objdata['asignatura_id'] = $asignatura[$col];
+                }
+                
+                if ($asignatura[7] == ''){
+                    $objdata['hora_id'] = null;
+                }else {
+                    $objdata['hora_id'] = $asignatura[7];
+                }
+                
+                $objdata['usuario'] = auth()->user()->name;
+                array_push($this->detalle, $objdata);
+            }
+            
+        }
+
+        TmHorariosAsignaturas::insert($this->detalle);
+
+        /*foreach($this->horarios as $key => $recno){
 
             $record = TmHorariosAsignaturas::find($recno['id']);
 
@@ -168,7 +198,7 @@ class VcHorariosClase extends Component
                 ]);
             }
 
-        }
+        }*/
 
         /*Docente por Asignatura*/
         $tbldata = TmHorariosAsignaturas::where('horario_id',$this->horarioId)

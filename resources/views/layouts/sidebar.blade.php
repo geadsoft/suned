@@ -99,7 +99,7 @@
                                 <a class="nav-link menu-link" href="/academic/information-student">Estudiantes</a>
                             </li>
                             @endcan
-                             @can('Pase Modalidad')
+                            @can('Pase Modalidad')
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="/academic/pass-course">Pase de Modalidad</a>
                             </li>
@@ -141,6 +141,11 @@
                                         <li class="nav-item">
                                             <a class="nav-link menu-link" href="/academic/qualify-suppletory">
                                                 </i>Calificar Supletorios<span></span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/academic/qualify-suppletory">
+                                                </i>Calificar Conducta<span></span>
                                             </a>
                                         </li>
                                     </ul>
@@ -519,8 +524,8 @@
                     <div class="collapse menu-dropdown" id="personalizar">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="">
-                                    </i>Personalizar Materia<span></span>
+                                <a class="nav-link menu-link" href="/subjects/personalize">
+                                    </i>Asignaturas<span></span>
                                 </a>
                             </li>
                         </ul>
@@ -667,10 +672,22 @@
                                 <div class="menu-dropdown collapse" id="cursos" style="">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
+                                            <a href="pages-profile.html" class="nav-link" data-key="t-simple-page">Asignaturas Parcial</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Asignaturas Trimestral</a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a href="pages-profile.html" class="nav-link" data-key="t-simple-page">Estudiante Parcial</a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Estudiante Trimestral</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Estudiante Total</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Conducta</a>
                                         </li>
                                     </ul>
                                 </div>
