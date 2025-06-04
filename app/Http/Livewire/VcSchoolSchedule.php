@@ -8,6 +8,7 @@ use App\Models\TmMatricula;
 use App\Models\TmActividades;
 use App\Models\TmCambiaModalidad;
 use App\Models\TmHorariosAsignaturas;
+use App\Models\TmPersonalizaAsignaturas;
 
 use Livewire\Component;
 
@@ -49,9 +50,13 @@ class VcSchoolSchedule extends Component
         $materias = TmHorarios::query()
         ->join("tm_horarios_asignaturas as a","a.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","a.asignatura_id")
+         ->leftJoin('tm_personaliza_asignaturas as p', function ($join) {
+            $join->on('p.asignatura_id', '=', 'm.id')
+                 ->on('p.periodo_id','=','a.horario_id');
+        })
         ->where("tm_horarios.curso_id",$this->cursoId)
         ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->selectRaw("tm_horarios.id, a.dia, a.linea, a.asignatura_id, m.descripcion as asignatura")
+        ->selectRaw("tm_horarios.id, a.dia, a.linea, a.asignatura_id, m.descripcion as asignatura, p.abreviatura")
         ->orderByRaw('a.dia, a.linea')
         ->get();
 
@@ -83,16 +88,24 @@ class VcSchoolSchedule extends Component
                 ->where('estado','A')
                 ->get()
                 ->toArray();
-                
 
+                $horaIni = "";
+                $horaFin = "";
+
+                if ($hora){
+                    $horaIni = $hora->hora_ini;
+                    $horaFin = $hora->hora_fin;
+                }
+                
                 $this->objdetalle[$linea][$dia] = [
                     'asignatura' => $data->asignatura,
-                    'hora_ini' => $hora->hora_ini,
-                    'hora_fin' => $hora->hora_fin,
+                    'hora_ini' => $horaIni,
+                    'hora_fin' => $horaFin,
                     'docente' => $persona->apellidos.' '.$persona->nombres,
                     'actividades' => $actividades,
                     'recursos' => 0,
-                    'clase' => false ,
+                    'clase' => false,
+                    'abreviatura' => $data->abreviatura,
                 ]; 
 
             }
