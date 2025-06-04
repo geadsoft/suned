@@ -6,6 +6,7 @@ use App\Models\TmHorarios;
 use App\Models\TmHorariosAsignaturas;
 use App\Models\TmHorariosDocentes;
 use App\Models\TdPeriodoSistemaEducativos;
+use App\Models\TmActividades;
 
 use Livewire\Component;
 
@@ -211,9 +212,8 @@ class VcHorariosClase extends Component
         ->select('tm_horarios_asignaturas.asignatura_id',"d.docente_id")
         ->groupBy('tm_horarios_asignaturas.asignatura_id','d.docente_id')
         ->get()->toArray();
-
-        
-        TmHorariosDocentes::where('horario_id', $this->horarioId)->delete();
+     
+        //TmHorariosDocentes::where('horario_id', $this->horarioId)->delete();
 
         $objdocente=[];
         foreach ($tbldata as $recno){
@@ -233,6 +233,29 @@ class VcHorariosClase extends Component
 
             }
 
+        }
+
+        //Asignatura no asignadas en Horario Clase
+        $temp = TmHorariosDocentes::query()
+        ->leftJoin('tm_horarios_asignaturas as d', function ($join) {
+            $join->on('d.asignatura_id', '=', 'tm_horarios_docentes.asignatura_id')
+                 ->on('d.horario_id','=','tm_horarios_docentes.horario_id');
+        })
+        ->where("tm_horarios_docentes.horario_id",$this->horarioId)
+        ->whereRaw("d.asignatura_id is null")
+        ->select("tm_horarios_docentes.*")
+        ->get();
+
+        foreach ($temp as $recno){
+
+            $actividades = TmActividades::query()
+            ->where("paralelo",$recno->id)
+            ->where("docente_id",$recno->docente_id)
+            ->get();
+
+            if ($actividades->isEmpty()){
+                TmHorariosDocentes::find($recno->id)->delete();
+            }
         }
 
         $message = "Asignaturas actualizadas con éxito!"."\n".'Asigne docente para cada asignatura.';
