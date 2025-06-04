@@ -37,49 +37,7 @@
                                         </a>
                                     </div>
                                     <div class="collapse border-top border-top-dashed" id="lunes{{$lin}}">
-                                        <!--<div class="card-body">
-                                            <h6 class="fs-14 mb-1">Nesta Technologies <small class="badge bg-danger-subtle text-danger">4 Days</small></h6>
-                                            <p class="text-muted">As a company grows however, you find it's not as easy to shout across</p>
-                                            <ul class="list-unstyled vstack gap-2 mb-0">
-                                                <li>
-                                                    <div class="d-flex">
-                                                        <div class="flex-shrink-0 avatar-xxs text-muted">
-                                                            <i class="ri-question-answer-line"></i>
-                                                        </div>
-                                                        <div class="flex-grow-1">
-                                                            <h6 class="mb-0">Meeting with Thomas</h6>
-                                                            <small class="text-muted">Yesterday at 9:12AM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="d-flex">
-                                                        <div class="flex-shrink-0 avatar-xxs text-muted">
-                                                            <i class="ri-mac-line"></i>
-                                                        </div>
-                                                        <div class="flex-grow-1">
-                                                            <h6 class="mb-0">Product Demo</h6>
-                                                            <small class="text-muted">Monday at 04:41PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="d-flex">
-                                                        <div class="flex-shrink-0 avatar-xxs text-muted">
-                                                            <i class="ri-earth-line"></i>
-                                                        </div>
-                                                        <div class="flex-grow-1">
-                                                            <h6 class="mb-0">Marketing Team Meeting</h6>
-                                                            <small class="text-muted">Monday at 04:41PM</small>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="card-footer hstack gap-2">
-                                            <button class="btn btn-warning btn-sm w-100"><i class="ri-phone-line align-bottom me-1"></i> Call</button>
-                                            <button class="btn btn-info btn-sm w-100"><i class="ri-question-answer-line align-bottom me-1"></i> Message</button>
-                                        </div>-->
+                                        
                                     </div>
                                 </div>
                                 @endif
@@ -97,8 +55,8 @@
                             <div class="collapse show" id="martes">
                                 @foreach ($objdetalle as $lin => $record)
                                 @if(isset($objdetalle[$lin][2]))
-                                <div class="card mb-1 ribbon-box ribbon-fill ribbon-sm">
-                                    <div class="ribbon ribbon-info"><i class="ri-flashlight-fill"></i></div>                                    
+                                <div class="card mb-1">
+                                                                        
                                     <div class="card-body">
                                         <a class="d-flex align-items-center" data-bs-toggle="collapse" href="#martes{{$lin}}" role="button" aria-expanded="false" aria-controls="leadDiscovered1">
                                             <div class="flex-shrink-0">
