@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="card-body p-4">
-                    <h6>Recursos</h6>
+                    <h6>Enlaces</h6>
                     @if (count($recursos)==0)
                     <div><span class="badge badge-soft-warning fs-12">No Asignados</span></div>
                     @else
@@ -64,7 +64,7 @@
                             </tbody>
                         </table>
                     </div>-->
-                </div>
+                </div>                
                 <div class="card-body p-4">
                     <h6>Actividades</h6>
                     @foreach ($actividad as $record)
@@ -79,7 +79,7 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1 overflow-hidden">
-                                    <h5 class="fs-13 mb-1"><a href="/student/deliver-activity/{{$record->id}}" class="text-secondary fw-semibold text-uppercase">{{$record->nombre}}</a> Fecha: {{date('d/m/Y',strtotime($record->created_at))}} <strong>Hasta:</strong> {{date('d/m/Y',strtotime($record->fecha))}}</a></h5>
+                                    <h5 class="fs-13 mb-1"><a href="/student/deliver-activity/{{$record->id}},{{$datos}}" class="text-secondary fw-semibold text-uppercase">{{$record->nombre}}</a> Fecha: {{date('d/m/Y',strtotime($record->created_at))}} <strong>Hasta:</strong> {{date('d/m/Y',strtotime($record->fecha))}}</a></h5>
                                     <div>
                                         <span class="badge badge-soft-success text-uppercase fs-12">{{$record->actividad}}</span>
                                         @if ($record->fechaEntrega==null && $record->nota==null)

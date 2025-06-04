@@ -248,7 +248,9 @@
                         @else
                         <button type="button" class="btn btn-primary" id="btnentrega" wire:click='entrega' ><i class="ri-edit-2-fill align-bottom me-1"></i>Editar Entrega</button>
                         @endif
+                        <button type="button" class="btn btn-soft-primary" wire:click="retornar()"><i class="align-bottom me-1"></i>Cancelar</button>
                     </div>
+                    
                 </div><!--end card-body-->
                 
                 

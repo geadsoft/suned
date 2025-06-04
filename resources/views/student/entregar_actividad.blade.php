@@ -16,7 +16,10 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-deliver-activity',['id' => $id])
+    @livewire('vc-deliver-activity',[
+        'id' => $id,
+        'data' => $data,
+    ])
 
 @endsection
 @section('script')

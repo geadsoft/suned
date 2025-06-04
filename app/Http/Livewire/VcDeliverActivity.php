@@ -18,7 +18,7 @@ class VcDeliverActivity extends Component
     
     public $selectId, $record, $display_estado="", $display_text="display:none";
     public $data, $personaId, $tiempo, $estado="No Entregado", $texteditor="";
-    public $array_attach=[], $files=[], $entregas=[];
+    public $array_attach=[], $files=[], $entregas=[], $datos=[];
     public $showEditor = false;
 
     public $arrdoc = [
@@ -61,10 +61,11 @@ class VcDeliverActivity extends Component
         return $accessToken;
     }
     
-    public function mount($id){
+    public function mount($id, $data){
 
         $this->selectId  = $id;
         $this->personaId = auth()->user()->personaId;
+        $this->datos = $data;
 
         $this->attach_add();
         $this->load();
@@ -332,6 +333,11 @@ class VcDeliverActivity extends Component
 
     public function cancel(){
         return redirect(request()->header('Referer'));
+    }
+
+    public function retornar(){
+
+        return redirect('/student/subject-view/'.$this->datos);
     }
     
 }

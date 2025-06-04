@@ -12,7 +12,7 @@ use Livewire\Component;
 class VcViewSubject extends Component
 {
     public $personaId, $horarioId, $docenteId, $paraleloId;
-    public $clases=[], $actividad=[], $recursos=[];
+    public $clases=[], $actividad=[], $recursos=[], $datos=[];
     public $fecha, $asignatura = "";
     
     public function mount($data)
@@ -20,12 +20,13 @@ class VcViewSubject extends Component
         $this->personaId = auth()->user()->personaId;
 
         $datos = json_decode($data);
-        $this->horarioId = $datos->horarioId;
-        $this->docenteId = $datos->docenteId;
+        $this->horarioId  = $datos->horarioId;
+        $this->docenteId  = $datos->docenteId;
         $this->paraleloId = $datos->asignaturaId;
 
         $ldate = date('Y-m-d H:i:s');
         $this->fecha = date('Y-m-d',strtotime($ldate));
+        $this->datos = $data;
         $this->load();
     }
     
@@ -73,7 +74,7 @@ class VcViewSubject extends Component
         ->where('docente_id',$this->docenteId) 
         ->where('paralelo',$this->paraleloId)
         ->where('tipo','AC')
-        ->where('enlace','<>',"''")
+        ->whereRaw("enlace <> ''")
         ->whereRaw("fecha >= '".$this->fecha."'")
         ->get();
 
