@@ -7,6 +7,7 @@ use App\Models\TmHorariosAsignaturas;
 use App\Models\TmHorariosDocentes;
 use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmActividades;
+use Illuminate\Support\Facades\DB;
 
 use Livewire\Component;
 
@@ -38,7 +39,7 @@ class VcHorariosClase extends Component
 
         $this->horarioId = $horarioId;
         $this->horarios = TmHorariosAsignaturas::where('horario_id',$this->horarioId)
-        ->get()->toArray();
+        ->get()->toarray();
 
         $horario = TmHorarios::find($horarioId);
         $this->modalidadId = $horario->grupo_id;
@@ -49,6 +50,10 @@ class VcHorariosClase extends Component
         ->where('tipo',"HC")
         ->get();
 
+        $this->filas = TmHorariosAsignaturas::where('horario_id', $this->horarioId)->max('linea');
+        $this->filas = $this->filas+1;
+        $this->newdetalle();
+        
         if (!empty($this->horarios)){
 
             $this->edit = true;
@@ -146,6 +151,7 @@ class VcHorariosClase extends Component
         TmHorariosAsignaturas::where('horario_id', $this->horarioId)->delete();
 
         /*Asignaturas*/
+        $this->detalle = [];
         foreach ($this->objdetalle as $key => $asignatura){
             $objdata = [];
             for ($col = 1; $col <= 6; $col++) {
@@ -173,63 +179,26 @@ class VcHorariosClase extends Component
 
         TmHorariosAsignaturas::insert($this->detalle);
 
-        /*foreach($this->horarios as $key => $recno){
-
-            $record = TmHorariosAsignaturas::find($recno['id']);
-
-
-            if($this->objdetalle[$recno['linea']][$recno['dia']]==""){
-                $record->update([
-                    'asignatura_id' => null,
-                ]);  
-            }else{
-
-                 $record->update([
-                    'asignatura_id' => $this->objdetalle[$recno['linea']][$recno['dia']],
-                ]);
-            }
-
-            if($this->objdetalle[$recno['linea']][7]==""){
-                $record->update([
-                    'hora_id' => null,
-                ]);  
-            }else{
-                 $record->update([
-                    'hora_id' => $this->objdetalle[$recno['linea']][7],
-                ]);
-            }
-
-        }*/
-
         /*Docente por Asignatura*/
-        $tbldata = TmHorariosAsignaturas::query()
+        $tbldata = DB::table('tm_horarios_asignaturas as a')
         ->leftJoin('tm_horarios_docentes as d', function ($join) {
-            $join->on('d.asignatura_id', '=', 'tm_horarios_asignaturas.asignatura_id')
-                ->where('d.horario_id', $this->horarioId); // Filtro en el LEFT JOIN
+            $join->on('d.asignatura_id', '=', 'a.asignatura_id')
+                ->on('d.horario_id', '=', 'a.horario_id');
         })
-        ->where('tm_horarios_asignaturas.horario_id',$this->horarioId)
-        ->where('tm_horarios_asignaturas.asignatura_id','<>','null')
-        ->select('tm_horarios_asignaturas.asignatura_id',"d.docente_id")
-        ->groupBy('tm_horarios_asignaturas.asignatura_id','d.docente_id')
-        ->get()->toArray();
+        ->where('a.horario_id',$this->horarioId)
+        ->whereNotNull('a.asignatura_id')
+        ->whereNull('d.asignatura_id')
+        ->select('a.asignatura_id', 'd.docente_id')
+        ->get();
      
-        $objdocente=[];
         foreach ($tbldata as $recno){
-
-            $record = TmHorariosDocentes::where('horario_id',$this->horarioId)
-            ->where('asignatura_id',$recno['asignatura_id'])
-            ->first();
-
-            if ($record){
                 
-                TmHorariosDocentes::Create([
-                    'horario_id' => $this->horarioId,
-                    'asignatura_id' => $recno['asignatura_id'],
-                    'docente_id' => $recno['docente_id'],
-                    'usuario' => auth()->user()->name,
-                ]);
-
-            }
+            TmHorariosDocentes::Create([
+                'horario_id' => $this->horarioId,
+                'asignatura_id' => $recno->asignatura_id,
+                'docente_id' => $recno->docente_id,
+                'usuario' => auth()->user()->name,
+            ]);
 
         }
 
