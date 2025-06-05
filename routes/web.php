@@ -146,6 +146,7 @@ Route::get('/student/subject-view/{data}',[App\Http\Controllers\EstudiantesContr
 Route::get('/student/school-schedule',[App\Http\Controllers\EstudiantesController::class, 'school_schedule'])->name('school_schedule');
 Route::get('/student/deliver-activity/{id},{data}',[App\Http\Controllers\EstudiantesController::class, 'deliver_activity'])->name('deliver_activity');
 
+Route::get('/descargar-archivo/{id}', [ArchivoController::class, 'descargar'])->name('archivo.descargar');
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
 Route::get('/liveWire-pdf/{data}',[VcReportCashReceints::class, 'liveWirePDF']);
