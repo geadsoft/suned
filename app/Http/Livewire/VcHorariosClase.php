@@ -213,16 +213,14 @@ class VcHorariosClase extends Component
         ->groupBy('tm_horarios_asignaturas.asignatura_id','d.docente_id')
         ->get()->toArray();
      
-        //TmHorariosDocentes::where('horario_id', $this->horarioId)->delete();
-
         $objdocente=[];
         foreach ($tbldata as $recno){
 
             $record = TmHorariosDocentes::where('horario_id',$this->horarioId)
             ->where('asignatura_id',$recno['asignatura_id'])
-            ->get()->toArray();
+            ->first();
 
-            if (empty($record)){
+            if ($record){
                 
                 TmHorariosDocentes::Create([
                     'horario_id' => $this->horarioId,
