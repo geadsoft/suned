@@ -86,10 +86,9 @@
                                             </a>
                                             </h6>
                                         </div>
-                                        <div class="hstack gap-3 fs-16">
+                                        <!--<div class="hstack gap-3 fs-16">
                                             <a type="button" class="text-muted" wire:click='download_drive({{$recno['id']}})'><i class="ri-download-2-line"></i></a>
-                                        </div>
-
+                                        </div>-->
                                     </div>
                                     @endforeach
                                     </tbody>
