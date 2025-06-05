@@ -50,10 +50,6 @@ class VcSchoolSchedule extends Component
         $materias = TmHorarios::query()
         ->join("tm_horarios_asignaturas as a","a.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","a.asignatura_id")
-         ->leftJoin('tm_personaliza_asignaturas as p', function ($join) {
-            $join->on('p.asignatura_id', '=', 'm.id')
-                 ->on('p.periodo_id','=','a.horario_id');
-        })
         ->where("tm_horarios.curso_id",$this->cursoId)
         ->where("tm_horarios.periodo_id",$this->periodoId)
         ->selectRaw("tm_horarios.id, a.dia, a.linea, a.asignatura_id, m.descripcion as asignatura, p.abreviatura")
@@ -105,7 +101,6 @@ class VcSchoolSchedule extends Component
                     'actividades' => $actividades,
                     'recursos' => 0,
                     'clase' => false,
-                    'abreviatura' => $data->abreviatura,
                 ]; 
 
             }
