@@ -52,7 +52,7 @@ class VcSchoolSchedule extends Component
         ->join("tm_asignaturas as m","m.id","=","a.asignatura_id")
         ->where("tm_horarios.curso_id",$this->cursoId)
         ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->selectRaw("tm_horarios.id, a.dia, a.linea, a.asignatura_id, m.descripcion as asignatura, p.abreviatura")
+        ->selectRaw("tm_horarios.id, a.dia, a.linea, a.asignatura_id, m.descripcion as asignatura")
         ->orderByRaw('a.dia, a.linea')
         ->get();
 
