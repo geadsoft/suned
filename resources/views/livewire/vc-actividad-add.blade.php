@@ -121,7 +121,7 @@
                                     <div class="input-group">
                                         <span class="input-group-text" id="basic-addon3">Archivo</span>
                                         <input type="text" id="file-{{$recno['linea']}}" wire:model.prevent="array_attach.{{$key}}.adjunto" class="form-control">
-                                        <a href="" id="drive-{{$recno['linea']}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" wire:click='download_drive({{$recno['id']}})'><i class="ri-download-2-line fs-18"></i></a>
+                                        <a href="#" id="drive-{{$recno['linea']}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" wire:click.prevent='download_drive({{$recno['id']}})'><i class="ri-download-2-line fs-18"></i></a>
                                         <a id="btnadd-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-success rounded-circle" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-18"></i></a>
                                         <a id="btndel-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-danger rounded-circle" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-18"></i></a>
                                     </div>

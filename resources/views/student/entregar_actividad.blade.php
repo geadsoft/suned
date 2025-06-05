@@ -40,6 +40,11 @@
             addElement(event.detail.newName)
         })
 
+        window.addEventListener('iniciar-descarga', event => {
+            const url = event.detail.url;
+            window.open(url, '_blank');
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
             let editorInstance = null;
 

@@ -37,6 +37,11 @@
             swal("Buen Trabajo!", event.detail.newName, "success");
         })
 
+        window.addEventListener('iniciar-descarga', event => {
+            const url = event.detail.url;
+            window.open(url, '_blank');
+        });
+
         document.addEventListener('livewire:load', function () {
             ClassicEditor
                 .create(document.querySelector('#editor'))
@@ -56,10 +61,7 @@
             editor.setData(datosDelEditor);
         });
 
-        window.addEventListener('iniciar-descarga', event => {
-            const url = event.detail.url;
-            window.open(url, '_blank');
-        });
+       
 
     </script>
     

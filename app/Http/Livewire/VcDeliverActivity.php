@@ -17,7 +17,7 @@ class VcDeliverActivity extends Component
     use WithFileUploads;
     
     public $selectId, $record, $display_estado="", $display_text="display:none";
-    public $data, $personaId, $tiempo, $estado="No Entregado", $texteditor="";
+    public $data, $personaId, $tiempo, $estado="No Entregado", $texteditor="", $descripcion;
     public $array_attach=[], $files=[], $entregas=[], $datos=[];
     public $showEditor = false;
 
@@ -74,24 +74,24 @@ class VcDeliverActivity extends Component
     
     public function render()
     {
-        
+
         return view('livewire.vc-deliver-activity');
         
     }
 
-    public function updateEditorData($data)
+    public function updateEditorData($editor)
     {
-        $this->texteditor = $data;
+        $this->texteditor = $editor;
     }
 
-    public function setEditorData($data){
-        $this->texteditor = $data;
+    public function setEditorData($editor){
+        $this->texteditor = $editor;
     }
 
     public function load(){
 
         $this->record = TmActividades::find($this->selectId);
-        $this->data = json_encode($this->record['descripcion']);
+        $this->descripcion = json_encode($this->record['descripcion']);
         
         $fechaInicial  = date('Y-m-d H:i:s');
         $fechaFinal = $this->record['fecha'];
@@ -172,8 +172,8 @@ class VcDeliverActivity extends Component
         
         $this->display_estado="display:none";
        
-        $message = json_decode($this->data);
-        $this->dispatchBrowserEvent('entrega', ['newName' => $message]);
+        //$message = json_decode($this->descripcion);
+        //$this->dispatchBrowserEvent('entrega', ['newName' => $message]);
     }
 
     public function attach_add()
@@ -190,8 +190,6 @@ class VcDeliverActivity extends Component
 
         array_push($this->array_attach,$attach);
         
-        $message = json_decode($this->data);
-        $this->dispatchBrowserEvent('entrega', ['newName' => $message]);
         
     }
 

@@ -386,6 +386,8 @@ class VcActividadAdd extends Component
     public function download_drive($id){
 
         $url = route('archivo.descargar', ['id' => $id]);
+
+        // Emitir evento para el navegador
         $this->dispatchBrowserEvent('iniciar-descarga', ['url' => $url]);
 
     }

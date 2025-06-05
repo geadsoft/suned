@@ -1,4 +1,5 @@
 <div>
+    <form id="deliver-form">
     <div class="row">
         <div class="col-lg-12">
             <div class="card mt-n4 mx-n4 mb-n5">
@@ -40,13 +41,24 @@
         <div class="col-xxl-12">
             <div class="card">
                 <div class="card-body p-4">
-                    <h6 class="fw-semibold text-uppercase mb-3">Descripción</h6>
-                    <body onload="addElement({{$data}})">
-                        <div id="elemnt">
+                    <h6 class="card fw-semibold text-uppercase mb-3">Descripción</h6>
+                    <body onload="addElement({{$descripcion}})">
+                        <div id="elemnt" wire:ignore>
                         </div>
                     </body>
+                    @if ($record->enlace<>'')
+                    <h6 class="card fw-semibold text-uppercase mb-3">Link</h6>
+                    <div class="d-flex mb-3">
+                        <div class="flex-grow-1 ms-3">
+                            <p class="text-muted mb-2">{{$record->enlace}}</p>
+                        </div>
+                        <div>
+                            <a href="{{$record->enlace}}" class="badge bg-primary-subtle text-primary" target="_blank" src="about:blank">Abri Enlace<i class="ri-arrow-right-up-line align-bottom"></i></a>
+                        </div>
+                    </div>
+                    @endif
                     <div class="card">
-                        <h6 class="fw-semibold text-uppercase">Archivos Adjunto</h6>
+                        <h6 class="card fw-semibold text-uppercase">Archivos Adjunto</h6>
                         <div class="card-body">
                             @foreach($adjuntos as $file)
                                 <div class="d-flex align-items-center border border-dashed p-2 rounded">
@@ -57,14 +69,17 @@
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-1"><a href="javascript:void(0);">{{$file->nombre}}</a></h6>
+                                        <h6 class="mb-1">
+                                            <a href="{{ route('archivo.descargar', ['id' => $file->id]) }}" target="_blank">
+                                                {{$file->nombre}}
+                                            </a>
+                                        </h6>
                                         <small class="text-muted">@lang('translation.'.(date('l',strtotime($record->fecha)))),
                                                 {{date('d',strtotime($record->fecha))}} de @lang('months.'.(date('m',strtotime($record->fecha)))) del {{date('Y',strtotime($record->fecha))}}</small>
                                     </div>
-                                    <div class="hstack gap-3 fs-16">
+                                    <!--<div class="hstack gap-3 fs-16">
                                         <a type="button" class="text-muted" wire:click='download_drive({{$file->id}})'><i class="ri-download-2-line"></i></a>
-                                    </div>
-
+                                    </div>-->
                                 </div>
                             @endforeach
                         </div>
@@ -387,6 +402,7 @@
             </div>
         </div>-->
     </div>
+    </form>
     
 
 </div>
