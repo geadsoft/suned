@@ -80,7 +80,7 @@
                                             </div>
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <h6 class="mb-1"><a href="" wire:click='download_drive({{$recno['id']}})'>{{$recno['adjunto']}}</a></h6>
+                                            <h6 class="mb-1"><a href="#" wire:click.prevent='download_drive({{$recno['id']}})'>{{$recno['adjunto']}}</a></h6>
                                         </div>
                                         <div class="hstack gap-3 fs-16">
                                             <a type="button" class="text-muted" wire:click='download_drive({{$recno['id']}})'><i class="ri-download-2-line"></i></a>
