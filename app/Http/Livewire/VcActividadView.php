@@ -152,7 +152,8 @@ class VcActividadView extends Component
         $this->fecha = $record['fecha'];
         $this->puntaje = $record['puntaje'];
         $this->enlace = $record['enlace'];
-        $this->descripcion = strip_tags($record['descripcion']); 
+        $this->descripcion = json_encode($record['descripcion']);
+
         $this->estado = $record['estado'];
 
         $day = date('l', strtotime($this->fecha));

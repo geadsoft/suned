@@ -9,82 +9,64 @@
                                             class="ri-calendar-check-fill align-middle me-1 text-primary fs-20"></i>Ver Actividad</h5>
                             </div>
                         </div>
-                        <div class="card-body border border-dashed border-end-0 border-start-0">  
+                        <div class="card-body border border-dashed border-end-0 border-start-0"> 
                             <div class="row align-items-start mb-3">
-                                <div class="col-sm-2">
-                                    <div class="mb-1">
-                                        <label for="asignatura-input" class="form-label form-control border-0 fw-semibold fs-14">Asignatura</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="curso-input" class="form-label form-control border-0 fw-semibold fs-14">Curso</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="termino-input" class="form-label form-control border-0 fw-semibold fs-14">Termino</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="bloque-input" class="form-label form-control border-0 fw-semibold fs-14">Bloque</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="tipo-input" class="form-label form-control border-0 fw-semibold fs-14">Tipo Actividad</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="nombre-input" class="form-label form-control border-0 fw-semibold fs-14">Nombre Actividad</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="puntaj-input" class="form-label form-control border-0 fw-semibold fs-14">Puntaje</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="fecha-input" class="form-label form-control border-0 fw-semibold fs-14">Fecha Limite</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="fecha-input" class="form-label form-control border-0 fw-semibold fs-14">Hora Limite</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="descripcion-input" class="form-label form-control border-0 fw-semibold fs-14">Descripcion de Actividad</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="estado-input" class="form-label form-control border-0 fw-semibold fs-14">Estado</label>
-                                    </div>
-                                </div>
-                                <div class="col-sm-10">  
-                                    <div class="mb-1">
-                                        <label class="form-control border-0 fs-14">{{$asignatura}}</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-control border-0 fs-14">{{$curso}}</label>
-                                    </div>
-                                    <div class="mb-1">
-                                      <label class="form-control border-0 fs-14">{{$arrtermino[$termino]}}</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-control border-0 fs-14">{{$arrbloque[$bloque]}}</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-control border-0 fs-14">{{$arractividad[$tipo]}}</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-control border-0 fs-14">{{$nombre}}</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-control border-0 fs-14">{{$puntaje}}</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-control border-0 fs-14"> @lang('translation.'.(date('l',strtotime($fecha)))),
-                                            {{date('d',strtotime($fecha))}} de @lang('months.'.(date('m',strtotime($fecha)))) del {{date('Y',strtotime($fecha))}}
-                                        </label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-control border-0 fs-14">  {{date('H:i',strtotime($fecha))}}  </label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-control border-0 fs-14">{{$descripcion}}</label>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="border-0 fs-14 badge bg-primary text-wrap">{{$arrestado[$estado]}}</label>
-                                    </div>
+                                <div class="table-responsive">
+                                    <table class="table table-borderless table-nowrap">
+                                    <tbody>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Asignatura</td>
+                                            <td class="fs-14">{{$asignatura}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Curso</td>
+                                            <td class="fs-14">{{$curso}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Termino</td>
+                                            <td class="fs-14">{{$arrtermino[$termino]}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Bloque</td>
+                                            <td class="fs-14">{{$arrbloque[$bloque]}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Tipo Actividad</td>
+                                            <td class="fs-14">{{$arractividad[$tipo]}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Nombre Actividad</td>
+                                            <td class="fs-14">{{$nombre}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Puntaje</td>
+                                            <td class="fs-14">{{$puntaje}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Fecha Limite</td>
+                                            <td class="fs-14">@lang('translation.'.(date('l',strtotime($fecha)))),
+                                            {{date('d',strtotime($fecha))}} de @lang('months.'.(date('m',strtotime($fecha)))) del {{date('Y',strtotime($fecha))}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Hora Limite</td>
+                                            <td class="fs-14">{{date('H:i',strtotime($fecha))}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Descripcion de Actividad</td>
+                                            <td class="fs-14">
+                                                <body onload="addElement({{$descripcion}})">
+                                                <div id="elemnt"></div>
+                                                </body>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Estado</td>
+                                            <td class="border-0 fs-14 badge bg-primary">{{$arrestado[$estado]}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                                 </div>
                             </div>
-
                             <div class="mb-3">
                                 <label class="form-label form-control border-0 fw-semibold fs-14">Archivos Adjuntos</label>
                                 <table class="table table-nowrap align-middle" id="orderTable">
@@ -127,22 +109,24 @@
                             <div class="mb-3">
                                 <label class="form-label form-control border-0 fw-semibold fs-14">Links Externos</label>
                                 <!--<input type="text" class="form-control" id="product-title-input" placeholder="Ingrese enlace externo" pattern="https://.*" size="30" wire:model.defer="enlace" disabled>-->
-                                <div class="card-body">
+                                 @if($enlace<>'')
+                                
                                     <div class="d-flex mb-3">
                                         <div class="flex-grow-1 ms-3">
                                             <p class="text-muted mb-2">{{$enlace}}</p>
                                         </div>
                                         <div>
+                                           
                                             <a href="{{$enlace}}" class="badge bg-primary-subtle text-primary" target="_blank" src="about:blank">Abri Enlace<i class="ri-arrow-right-up-line align-bottom"></i></a>
+                                            
                                         </div>
                                     </div>
-                                </div>
+                                
+                                @endif
+
+
                             </div>
-                            <!--<div class="mb-3">
-                                <label class="form-label fw-semibold" for="product-title-input">Envíos de Estudiantes</label>
-                                <input type="text" class="form-control" id="product-title-input" value="" placeholder="Ingrese enlace externo" wire:model.defer="enlace">
-                            </div>-->
-                            @if (empty($array_entregas))
+                            @if ($this->array_entregas->isEmpty())
                             <div class="alert alert-warning" role="alert">
                                 <strong> Esta actividad no tiene respuestas de estudiantes. </strong>
                             </div>

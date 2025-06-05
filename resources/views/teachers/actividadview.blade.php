@@ -34,6 +34,16 @@
             swal("Buen Trabajo!", event.detail.newName, "success");
         })
 
+        window.addEventListener('textArea', event => {
+            addElement(event.detail.newName)
+        })
+
+        function addElement($text)
+        {
+            var $string = $text
+             document.getElementById("elemnt").innerHTML += $string;
+        }
+
     </script>
     
 @endsection
