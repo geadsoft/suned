@@ -72,14 +72,6 @@
                                 <table class="table table-nowrap align-middle" id="orderTable">
                                     <tbody>
                                     @foreach ($array_attach as $key => $recno) 
-                                    <!--<tr class="det-{{$recno['linea']}}">
-                                    <td>
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="basic-addon3">Archivo</span>
-                                            <input type="text" id="file-{{$recno['linea']}}" wire:model.prevent="array_attach.{{$key}}.adjunto" class="form-control" disabled>
-                                        </div>
-                                    </td>
-                                    </tr>-->
                                     <div class="d-flex align-items-center border border-dashed p-2 rounded">
                                         
                                         <div class="flex-shrink-0 avatar-sm">
@@ -88,7 +80,7 @@
                                             </div>
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <h6 class="mb-1"><a href="javascript:void(0);">{{$recno['adjunto']}}</a></h6>
+                                            <h6 class="mb-1"><a href="" wire:click='download_drive({{$recno['id']}})'>{{$recno['adjunto']}}</a></h6>
                                         </div>
                                         <div class="hstack gap-3 fs-16">
                                             <a type="button" class="text-muted" wire:click='download_drive({{$recno['id']}})'><i class="ri-download-2-line"></i></a>
