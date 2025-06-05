@@ -22,7 +22,7 @@ use App\Http\Livewire\VcReportDetailQualify;
 use App\Http\Livewire\VcReportPartialTeacher;
 use App\Http\Livewire\VcStudents;
 use App\Http\Controllers\PdfController;
-use App\Http\Controllers\ArchivoController
+use App\Http\Controllers\ArchivoController;
 
 /*
 |--------------------------------------------------------------------------
