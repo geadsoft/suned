@@ -174,31 +174,8 @@ class VcActividadView extends Component
 
     public function download_drive($id){
 
-        $file = TmFiles::find($id);
-
-        $accessToken = $this->token();
-        
-        // Obtener el contenido del archivo
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $accessToken,
-        ])->get("https://www.googleapis.com/drive/v3/files/{$file->drive_id}?alt=media");
-
-        if ($response->successful()) {
-            $fileName = $file->nombre;
-
-            // Guardar en el disco 'public' dentro de la carpeta 'archivos'
-            $filePath = 'archivos/' . $fileName;
-            Storage::disk('public')->put($filePath, $response->body());
-
-            // Descargar el archivo (desde almacenamiento local)
-            return response()->download(storage_path('app/public/' . $filePath));
-
-            $contents = Storage::disk('public')->exists('archivos/'.$fileName);
-            if ($contents){
-                Storage::disk('public')->delete('archivos/'.$fileName);
-            }
-
-        }
+        $url = route('archivo.descargar', ['id' => $id]);
+        $this->dispatchBrowserEvent('iniciar-descarga', ['url' => $url]);
 
     }
 

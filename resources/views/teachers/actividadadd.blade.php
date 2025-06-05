@@ -56,6 +56,11 @@
             editor.setData(datosDelEditor);
         });
 
+        window.addEventListener('iniciar-descarga', event => {
+            const url = event.detail.url;
+            window.open(url, '_blank');
+        });
+
     </script>
     
 @endsection

@@ -44,6 +44,11 @@
              document.getElementById("elemnt").innerHTML += $string;
         }
 
+        window.addEventListener('iniciar-descarga', event => {
+            const url = event.detail.url;
+            window.open(url, '_blank');
+        });
+
     </script>
     
 @endsection
