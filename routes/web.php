@@ -146,6 +146,7 @@ Route::get('/student/subject',[App\Http\Controllers\EstudiantesController::class
 Route::get('/student/subject-view/{data}',[App\Http\Controllers\EstudiantesController::class, 'subject_view'])->name('subject_view');
 Route::get('/student/school-schedule',[App\Http\Controllers\EstudiantesController::class, 'school_schedule'])->name('school_schedule');
 Route::get('/student/deliver-activity/{id},{data}',[App\Http\Controllers\EstudiantesController::class, 'deliver_activity'])->name('deliver_activity');
+Route::get('/student/activities',[App\Http\Controllers\EstudiantesController::class, 'student_activities'])->name('student_activities');
 
 Route::get('/descargar-archivo/{id}', [ArchivoController::class, 'descargar'])->name('archivo.descargar');
 

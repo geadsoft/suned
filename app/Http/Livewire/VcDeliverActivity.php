@@ -334,8 +334,7 @@ class VcDeliverActivity extends Component
     }
 
     public function retornar(){
-
-        return redirect('/student/subject-view/'.$this->datos);
+        return redirect('student/activities');
     }
     
 }

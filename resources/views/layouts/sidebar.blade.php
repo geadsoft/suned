@@ -460,6 +460,13 @@
                     </a>
                 </li>
                 @endcan
+                @can('Tareas')
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/student/activities">
+                        <i class="ri-honour-line fs-20"></i>Actividades</span>
+                    </a>
+                </li>
+                @endcan
                 @can('Clases Virtuales')
                 <li class="nav-item">
                     <!--<a class="nav-link menu-link" href="/activities/virtual-classes">

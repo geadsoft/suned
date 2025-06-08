@@ -30,6 +30,9 @@ class EstudiantesController extends Controller
         ]);
     }
 
-    
+     public function student_activities()
+    {      
+        return view('student/actividades');
+    }
 
 }
