@@ -94,7 +94,7 @@ class VcStudentActivities extends Component
         ->where("h.curso_id",$this->cursoId)     
         ->orderBy("fecha","desc")
         ->count();
-        
+                
         return view('livewire.vc-student-activities',[
             'tblrecords' => $tblrecords,
         ]);
@@ -120,7 +120,7 @@ class VcStudentActivities extends Component
             break;
         default:
             $this->tab1 = "active";
-    }
+        }
 
         $this->filters['actividad'] = $data;
 

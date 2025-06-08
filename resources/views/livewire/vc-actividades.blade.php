@@ -92,13 +92,13 @@
                                     <i class="ri-parent-line me-1 align-bottom"></i> Grupal
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <!--<li class="nav-item">
                                 <a class="nav-link {{$tab4}} py-3 Pickups" data-bs-toggle="tab" id="Pickups" href="#pickups"
                                     role="tab" aria-selected="false" wire:click="pendientes">
                                     <i class=" ri-notification-badge-line align-bottom"></i> Sin Calificar <span
                                         class="badge bg-danger align-middle ms-1">{{$pendientes}}</span>
                                 </a>
-                            </li>
+                            </li>-->
                         </ul>
                         <div class="table-responsive table-card mb-1">
                             <table class="table table-nowrap align-middle" id="orderTable">
