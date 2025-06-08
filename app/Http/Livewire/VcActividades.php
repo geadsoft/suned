@@ -92,6 +92,7 @@ class VcActividades extends Component
         ->where("tm_horarios.periodo_id",$this->periodoId)
         ->selectRaw('s.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->groupBy("s.id","s.descripcion","c.paralelo")
+        ->orderBy("s.descripcion")
         ->get(); 
 
         $this->tblasignaturas = TmHorarios::query()
