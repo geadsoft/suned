@@ -78,12 +78,12 @@ class VcSchoolSchedule extends Component
                 ->where('linea',$data->linea)
                 ->first();
 
-                $actividades = TmActividades::query()
+                /*$actividades = TmActividades::query()
                 ->where('docente_id',$persona->docente_id)
                 ->where('id',$persona->id)
                 ->where('estado','A')
                 ->get()
-                ->toArray();
+                ->toArray();*/
 
                 $horaIni = "";
                 $horaFin = "";
@@ -98,7 +98,7 @@ class VcSchoolSchedule extends Component
                     'hora_ini' => $horaIni,
                     'hora_fin' => $horaFin,
                     'docente' => $persona->apellidos.' '.$persona->nombres,
-                    'actividades' => $actividades,
+                    'actividades' => '',
                     'recursos' => 0,
                     'clase' => false,
                 ]; 
