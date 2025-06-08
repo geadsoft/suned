@@ -84,9 +84,13 @@ class VcSchoolSchedule extends Component
                 ->where('estado','A')
                 ->get()
                 ->toArray();*/
-
+                $docente = "Sin Asignar";
                 $horaIni = "";
                 $horaFin = "";
+
+                if ($hora){
+                    $docente = $persona->apellidos.' '.$persona->nombres;
+                }
 
                 if ($hora){
                     $horaIni = $hora->hora_ini;
@@ -97,7 +101,7 @@ class VcSchoolSchedule extends Component
                     'asignatura' => $data->asignatura,
                     'hora_ini' => $horaIni,
                     'hora_fin' => $horaFin,
-                    'docente' => $persona->apellidos.' '.$persona->nombres,
+                    'docente' => $docente,
                     'actividades' => '',
                     'recursos' => 0,
                     'clase' => false,
