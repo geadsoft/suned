@@ -14,14 +14,14 @@
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
                         <div class="row g-3 mb-3">
-                            <div class="col-xxl-2 col-sm-2">
+                            <div class="col-xxl-2 col-sm-6">
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.modalidadId">
                                     @foreach ($tblmodalidad as $modalidad) 
                                     <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
                                     @endforeach 
                                 </select>
                             </div>
-                            <div class="col-xxl-2 col-sm-6">
+                            <div class="col-xxl-3 col-sm-6">
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.paralelo">
                                     <option value="">Seleccione Curso</option>
                                    @foreach ($tblparalelo as $paralelo) 
