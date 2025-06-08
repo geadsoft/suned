@@ -14,24 +14,29 @@
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
                         <div class="row g-3 mb-3">
-                            <div class="col-xxl-5 col-sm-6">
+                            <div class="col-xxl-2 col-sm-2">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.modalidadId">
+                                    @foreach ($tblmodalidad as $modalidad) 
+                                    <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="col-xxl-2 col-sm-6">
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.paralelo">
-                                    <option value="">Seleccione Paralelo</option>
+                                    <option value="">Seleccione Curso</option>
                                    @foreach ($tblparalelo as $paralelo) 
                                     <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
                                     @endforeach 
                                 </select>
                             </div>
-                            <div class="col-xxl-2 col-sm-4">
-                                <div>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.tipo">
-                                        <option value="">Seleccione Actividad</option>
-                                        <option value="AI">Actividad Individual</option>
-                                        <option value="AG">Actividad Grupal</option>
-                                    </select>
-                                </div>
+                            <div class="col-xxl-2 col-sm-6">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.asignaturaId">
+                                    <option value="">Seleccione Asignatura</option>
+                                   @foreach ($tblasignaturas as $asignatura) 
+                                    <option value="{{$asignatura->id}}">{{$asignatura->descripcion}}</option>
+                                    @endforeach 
+                                </select>
                             </div>
-                            <!--end col-->
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino">
@@ -68,6 +73,33 @@
                 </div>
                 <div class="card-body pt-0">
                     <div>
+                        <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link {{$tab1}} All py-3" data-bs-toggle="tab" id="All" href="#home1" role="tab"
+                                    aria-selected="true" wire:click="filtrar('')">
+                                    <i class="ri-indent-decrease me-1 align-bottom"></i> Todas
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{$tab2}} py-3 Delivered" data-bs-toggle="tab" id="Delivered" href="#"
+                                    role="tab" aria-selected="false" wire:click="filtrar('AI')">
+                                    <i class="ri-user-line me-1 align-bottom"></i> Individual
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{$tab3}} py-3 Returns" data-bs-toggle="tab" id="Returns" href="#returns"
+                                    role="tab" aria-selected="false" wire:click="filtrar('AG')">
+                                    <i class="ri-parent-line me-1 align-bottom"></i> Grupal
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{$tab4}} py-3 Pickups" data-bs-toggle="tab" id="Pickups" href="#pickups"
+                                    role="tab" aria-selected="false" wire:click="pendientes">
+                                    <i class=" ri-notification-badge-line align-bottom"></i> Sin Calificar <span
+                                        class="badge bg-danger align-middle ms-1">{{$pendientes}}</span>
+                                </a>
+                            </li>
+                        </ul>
                         <div class="table-responsive table-card mb-1">
                             <table class="table table-nowrap align-middle" id="orderTable">
                                 <thead class="text-muted table-light">
@@ -169,5 +201,7 @@
         
     </div>
     <!--end row-->
+
+
 </div>
 

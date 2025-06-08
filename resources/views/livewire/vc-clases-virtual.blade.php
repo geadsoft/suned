@@ -1,4 +1,5 @@
 <div>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card" id="orderList">
@@ -16,15 +17,15 @@
                     <form>
                         @if ($cursosTodos==true) 
                             <div class="row g-3 mb-3">
-                                <div class="col-xxl-3 col-sm-4">
+                                <div class="col-xxl-2 col-sm-2">
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="modalidadId">
                                         <option value="">Seleccione Modalidad</option>
-                                    @foreach ($tblmodalidad as $modalidad) 
+                                        @foreach ($tblmodalidad as $modalidad) 
                                         <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
                                         @endforeach 
                                     </select>
                                 </div>
-                                <div class="col-xxl-3 col-sm-4">
+                                <div class="col-xxl-2 col-sm-2">
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.paralelo">
                                         <option value="">Seleccione Paralelo</option>
                                         @foreach ($tblparalelo as $paralelo) 
