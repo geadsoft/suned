@@ -153,6 +153,8 @@ class VcTuitions extends Component
 
     public function updateData(){
 
+        
+
         $this->dispatchBrowserEvent('get-data');
         
     }
@@ -199,6 +201,14 @@ class VcTuitions extends Component
         $this->gradoId = $objData['gradoid'];
         $this->cursoId = $objData['cursoid'];
 
+        $this ->validate([
+            'grupoId' => 'required',
+            'nivelId' => 'required',
+            'gradoId' => 'required',
+            'cursoId' => 'required',
+        ]);
+
+        
         $valoresnex = TmPensionesDet::join("tm_pensiones_cabs","tm_pensiones_cabs.id","=","tm_pensiones_dets.pension_id")
         ->where([
                 ['tm_pensiones_cabs.periodo_id',$this->periodoId],
