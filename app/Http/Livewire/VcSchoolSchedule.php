@@ -88,7 +88,7 @@ class VcSchoolSchedule extends Component
                 $horaIni = "";
                 $horaFin = "";
 
-                if ($hora){
+                if ($persona){
                     $docente = $persona->apellidos.' '.$persona->nombres;
                 }
 
