@@ -94,7 +94,7 @@
                                     
                                     @foreach ($tbltarea as $col => $tarea)
                                     <td>
-                                        <input type="number" step="0.01" class="form-control product-price bg-white border-0"
+                                        <input type="number" step="1" min="0" max="10" value="0" class="form-control product-price bg-white border-0"
                                         id="{{$fil}}-{{$col}}" wire:model="tblrecords.{{$fil}}.{{$col}}" />
                                     </td>
                                     @endforeach
