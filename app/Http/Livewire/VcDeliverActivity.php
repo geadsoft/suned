@@ -45,7 +45,7 @@ class VcDeliverActivity extends Component
         'html' => 'text-info',
     ];
 
-    protected $listeners = ['updateEditorData'];
+    protected $listeners = ['updateEditorData','cancel'];
 
     private function token(){
 
@@ -156,24 +156,44 @@ class VcDeliverActivity extends Component
 
         $fecha = date('Y-m-d H:i:s');
 
-        $record = TdActividadesEntregas::Create([
-            'fecha' => $fecha,
-            'actividad_id' => $this->selectId,
-            'persona_id' => $this->personaId,
-            'comentario' => $this->texteditor,
-            'nota' => 0,
-            'usuario' => auth()->user()->name,
-        ]);
+        if ($this->showEditor){
 
-        $this->apiDrive($this->selectId);
+            $entregaId = $this->entrega->id;
+            $record = TdActividadesEntregas::find($entregaId);
+            $record->update([
+                'comentario' => $this->texteditor,
+            ]);
 
-        return redirect(request()->header('Referer'));
+        }else{
+
+            $record = TdActividadesEntregas::Create([
+                'fecha' => $fecha,
+                'actividad_id' => $this->selectId,
+                'persona_id' => $this->personaId,
+                'comentario' => $this->texteditor,
+                'nota' => 0,
+                'usuario' => auth()->user()->name,
+            ]);
+
+        }
+
+        $msgfile = $this->apiDrive($this->selectId);
+
+        $message = "Registro grabado con éxito!"."\n".$msgfile;
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+
+        //return redirect(request()->header('Referer'));
+       
     } 
 
     public function entrega(){
         
         $this->display_estado="display:none";
-       
+        
+        if (!empty($this->entrega)){
+            $this->showEditor=true;
+        }
+            
         //$message = json_decode($this->descripcion);
         //$this->dispatchBrowserEvent('entrega', ['newName' => $message]);
     }
@@ -296,8 +316,10 @@ class VcDeliverActivity extends Component
 
         }
 
-        $message = "Registro grabado con éxito!"."\n".$msgfile;
-        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+        return $msgfile;
+
+        /*$message = "Registro grabado con éxito!"."\n".$msgfile;
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);*/
 
     }
 

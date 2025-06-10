@@ -106,7 +106,7 @@
                                                 @if (is_null($record->nota) && is_null($record->fechaentrega))
                                                     <span class="badge badge-soft-warning text-uppercase">Pendiente</span>
                                                 @endif
-                                                @if (is_null($record->nota) && !empty($record->fechaentrega))
+                                                @if ($record->nota==0 && !empty($record->fechaentrega))
                                                     <span class="badge badge-soft-info text-uppercase">Por Calificar</span>
                                                 @endif
                                                 @if ($record->nota>0)

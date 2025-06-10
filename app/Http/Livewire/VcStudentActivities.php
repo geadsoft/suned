@@ -114,16 +114,22 @@ class VcStudentActivities extends Component
         switch ($data) {
         case "AI":
             $this->tab2 = "active";
+            $this->filters['actividad'] = $data;
             break;
         case "AG":
             $this->tab3 = "active";
+            $this->filters['actividad'] = $data;
             break;
         default:
             $this->tab1 = "active";
+            $this->filters=[
+                'actividad' => "",
+                'asignaturaId' => "",
+                'pendientes' => "",
+            ];
         }
 
-        $this->filters['actividad'] = $data;
-
+        
     }
 
     public function pendientes(){
