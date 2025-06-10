@@ -27,7 +27,7 @@ class ArchivoController extends Controller
 
     public function descargar($id)
     {
-        $file = TmFiles::find($id);
+        /*$file = TmFiles::find($id);
         $accessToken = $this->token();
 
         $response = Http::withHeaders([
@@ -43,7 +43,61 @@ class ArchivoController extends Controller
             return response()->download(storage_path('app/public/' . $filePath))->deleteFileAfterSend(true);
         }
 
-        return abort(404, 'Archivo no disponible.');
-    }
+        return abort(404, 'Archivo no disponible.');*/
+
+        $file = TmFiles::find($id);
+
+        if (!$file || !$file->drive_id) {
+            return abort(404, 'Archivo no disponible.');
+        }
+
+        $accessToken = $this->token();
+
+        // Obtener metadata para saber el tipo MIME real del archivo
+        $metadataResponse = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->get("https://www.googleapis.com/drive/v3/files/{$file->drive_id}?fields=name,mimeType");
+
+        if (!$metadataResponse->successful()) {
+            return abort(404, 'No se pudo obtener la metadata del archivo.');
+        }
+
+        $mimeType = $metadataResponse['mimeType'];
+        $baseName = pathinfo($file->nombre, PATHINFO_FILENAME);
+
+        // Determinar la extensión basada en el tipo MIME
+        $extension = match ($mimeType) {
+            'application/pdf' => 'pdf',
+            'application/msword' => 'doc', // Word clásico
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
+            'application/vnd.ms-excel',
+            'application/vnd.ms-excel' => 'xls', // Excel clásico
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx',
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            default => 'bin',
+        };
+
+        $fileName = $baseName . '.' . $extension;
+        $filePath = 'archivos/' . $fileName;
+
+        // Descargar el archivo desde Google Drive
+        $fileResponse = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->get("https://www.googleapis.com/drive/v3/files/{$file->drive_id}?alt=media");
+
+        if (!$fileResponse->successful()) {
+            return abort(404, 'No se pudo descargar el archivo desde Drive.');
+        }
+
+        // Guardar temporalmente el archivo en disco
+        Storage::disk('public')->put($filePath, $fileResponse->body());
+
+        // Enviar la descarga con headers personalizados
+        return response()->download(storage_path('app/public/' . $filePath), $fileName, [
+            'Content-Type' => $mimeType,
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+        ])->deleteFileAfterSend(true);
+        }
 
 }
