@@ -267,7 +267,7 @@ class VcReportTQualify extends Component
                     ->first();
                                         
                     $nota =  0;
-                    if(is_null($nota)){
+                    if(is_null($notas)){
                         $nota = $notas['nota'];
                     }
 
@@ -393,7 +393,11 @@ class VcReportTQualify extends Component
                     ->select("n.*")
                     ->first();
                                         
-                    $nota =  $notas['nota'];
+                    $nota =  0;
+                    if(is_null($notas)){
+                        $nota = $notas['nota'];
+                    }
+
                     $col = $key2.$key3;
                     $tblrecords[$key][$col] = floatval($nota);
                     $suma = $suma + floatval($nota);
