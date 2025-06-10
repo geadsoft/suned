@@ -15,7 +15,7 @@ class VcQualifyActivity extends Component
 
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $tblparalelo=[], $tblasignatura=[];
-    public $periodoId, $tbltermino, $tblbloque, $tblactividades;
+    public $periodoId, $modalidadId, $tbltermino, $tblbloque, $tblactividades;
     public $tblactividad=[];
     public $tblrecords=[];
     public $personas=[];
@@ -25,7 +25,7 @@ class VcQualifyActivity extends Component
 
     public $filters=[
         'paralelo' => 0, 
-        'termino' => '3T',
+        'termino' => '1T',
         'bloque' => '1P',
         'actividad' => 'AI',
     ];
@@ -51,15 +51,19 @@ class VcQualifyActivity extends Component
         ->where('tipo','AC')
         ->get();
 
-        /*if (!empty($this->tblparalelo)){
-            $this->filters['paralelo'] = $this->tblparalelo[0]["id"];
-            $this->consulta();
-        }*/
-
     }
 
     public function render()
     {   
+        $this->tblmodalidad = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("d.docente_id",$this->docenteId)
+        ->selectRaw('g.id, g.descripcion')
+        ->groupBy('g.id','g.descripcion')
+        ->get();
+        
         $this->tblbloque = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
         ->where('tipo','PA')
@@ -69,6 +73,7 @@ class VcQualifyActivity extends Component
         $this->tblasignatura = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("tm_horarios.periodo_id",$this->periodoId)
         ->where("d.docente_id",$this->docenteId)
         ->selectRaw('m.id, m.descripcion')
         ->groupBy('m.id','m.descripcion')
@@ -79,6 +84,8 @@ class VcQualifyActivity extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->docenteId)
         ->where("m.id",$this->asignaturaId)
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
@@ -99,6 +106,8 @@ class VcQualifyActivity extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->docenteId)
         ->where("m.id",$id)
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
