@@ -81,9 +81,10 @@
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <h6 class="mb-1">
-                                            <a href="{{ route('archivo.descargar', ['id' => $recno['id']]) }}" target="_blank">
+                                            <!--<a href="{{ route('archivo.descargar', ['id' => $recno['id']]) }}" target="_blank">
                                                 {{ $recno['adjunto'] }}
-                                            </a>
+                                            </a>-->
+                                            <a href="{{ route('archivo.descargar', ['id' => $recno['id']]) }}" download> {{$file->nombre}}</a>
                                             </h6>
                                         </div>
                                         <!--<div class="hstack gap-3 fs-16">
