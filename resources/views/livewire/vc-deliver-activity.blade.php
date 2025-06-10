@@ -70,9 +70,10 @@
                                     </div>
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="mb-1">
-                                            <a href="{{ route('archivo.descargar', ['id' => $file->id]) }}" target="_blank">
+                                            <!--<a href="{{ route('archivo.descargar', ['id' => $file->id]) }}" target="_blank">
                                                 {{$file->nombre}}
-                                            </a>
+                                            </a>-->
+                                            <a href="{{ route('archivo.descargar', ['id' => $file->id]) }}" download> {{$file->nombre}}</a>
                                         </h6>
                                         <small class="text-muted">@lang('translation.'.(date('l',strtotime($record->fecha)))),
                                                 {{date('d',strtotime($record->fecha))}} de @lang('months.'.(date('m',strtotime($record->fecha)))) del {{date('Y',strtotime($record->fecha))}}</small>
