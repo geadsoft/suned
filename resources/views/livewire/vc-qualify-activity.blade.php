@@ -75,7 +75,7 @@
                     <div class="card-body">
                         
                         <div class="mb-3">
-                            <table class="table table-borderless table-sm align-middle mb-0" id="orderTable">
+                            <table class="table table-bordered table-sm align-middle mb-0" id="orderTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
                                         <th style="width: 150px;">Estudiante</th>
