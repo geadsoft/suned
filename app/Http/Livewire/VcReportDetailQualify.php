@@ -245,7 +245,7 @@ class VcReportDetailQualify extends Component
                     ->where("persona_id",$personaId)
                     ->select("n.*")
                     ->first();
-                                        
+                    
                     $nota =  0;
                     if(is_null($notas)){
                         $nota = $notas['nota'];
