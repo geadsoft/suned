@@ -105,7 +105,7 @@
                                                             <!--@if($record->estado=='A' && is_null($record->fechaentrega))
                                                             <span class="badge badge-soft-success text-uppercase">@lang('status.'.($record->estado))</span>
                                                             @else-->
-                                                                @if (is_null($record->nota) && is_null($record->fechaentrega))
+                                                                @if (is_null($record->nota) && empty($record->fechaentrega))
                                                                     <span class="badge badge-soft-warning text-uppercase">Sin Entrega</span>
                                                                 @endif
                                                                 @if ($record->nota==0 && !empty($record->fechaentrega))
