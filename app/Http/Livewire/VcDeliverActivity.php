@@ -30,8 +30,8 @@ class VcDeliverActivity extends Component
         'pptx' => 'ri-file-ppt-2-line',
         'pdf' => 'ri-file-pdf-line',
         'html' => 'ri-file-code-line',
-        'jpg' => 'ri-picture-in-picture-fill'
-        'png' => 'ri-picture-in-picture-fill'
+        'jpg' => 'ri-picture-in-picture-fill',
+        'png' => 'ri-picture-in-picture-fill',
     ];
 
     public $arrcolor = [  
