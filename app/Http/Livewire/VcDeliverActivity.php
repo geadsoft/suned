@@ -31,12 +31,14 @@ class VcDeliverActivity extends Component
         'pdf' => 'ri-file-pdf-line',
         'html' => 'ri-file-code-line',
         'jpg' => 'ri-picture-in-picture-fill'
+        'png' => 'ri-picture-in-picture-fill'
     ];
 
     public $arrcolor = [  
         'doc' => 'text-primary',
         'docx' => 'text-primary',
         'jpg' => 'text-warning',
+        'png' => 'text-warning',
         'xls' => 'text-success',
         'xlsx' => 'text-success',
         'ppt' => ' text-danger',
