@@ -246,7 +246,11 @@ class VcReportDetailQualify extends Component
                     ->select("n.*")
                     ->first();
                                         
-                    $nota =  $notas['nota'];
+                    $nota =  0;
+                    if(is_null($nota)){
+                        $nota = $notas['nota'];
+                    }
+
                     $col = $key2.$key3;
                     $this->tblrecords[$key][$col] = floatval($nota);
                     $suma = $suma + floatval($nota);
