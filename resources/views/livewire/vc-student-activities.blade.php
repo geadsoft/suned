@@ -102,10 +102,8 @@
                                                                 , <small class="text-muted"> {{date('H:i',strtotime($record->fecha))}}</small></td>
                                                         <td class="amount">{{$record->nota}}</td>
                                                         <td class="status">
-                                                            <!--@if($record->estado=='A' && is_null($record->fechaentrega))
-                                                            <span class="badge badge-soft-success text-uppercase">@lang('status.'.($record->estado))</span>
-                                                            @else-->
-                                                                @if (is_null($record->nota) && empty($record->fechaentrega))
+                                                            
+                                                                @if (empty($record->nota) && empty($record->fechaentrega))
                                                                     <span class="badge badge-soft-warning text-uppercase">Sin Entrega</span>
                                                                 @endif
                                                                 @if ($record->nota==0 && !empty($record->fechaentrega))
@@ -114,7 +112,7 @@
                                                                 @if ($record->nota>0)
                                                                     <span class="badge badge-soft-success text-uppercase">Calificado</span>
                                                                 @endif
-                                                            <!--@endif-->
+                                                            
                                                         </td>
                                                     </tr>
                                                     @endforeach
