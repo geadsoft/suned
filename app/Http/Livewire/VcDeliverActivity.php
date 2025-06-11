@@ -181,7 +181,7 @@ class VcDeliverActivity extends Component
 
         $msgfile = $this->apiDrive($this->selectId);
 
-        $message = "Registro grabado con éxito!"."\n".$msgfile;
+        $message = nl2br("Registro grabado con éxito!\n".$msgfile);
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
         //return redirect(request()->header('Referer'));

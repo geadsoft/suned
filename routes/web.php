@@ -80,6 +80,7 @@ Route::get('/headquarters/educational-system',[App\Http\Controllers\TmSedesContr
 Route::get('/headquarters/staff',[App\Http\Controllers\TmPersonasController::class, 'personal'])->name('personal');
 Route::get('/headquarters/staff-add',[App\Http\Controllers\TmPersonasController::class, 'addpersonal'])->name('addpersonal');
 Route::get('/headquarters/staff-edit/{id}',[App\Http\Controllers\TmPersonasController::class, 'editpersonal'])->name('editpersonal');
+Route::get('/headquarters/staff-view/{id}',[App\Http\Controllers\TmPersonasController::class, 'viewpersonal'])->name('viewpersonal');
 Route::get('/headquarters/schedules',[App\Http\Controllers\TmHorariosController::class, 'index'])->name('index');
 Route::get('/headquarters/schedules-add',[App\Http\Controllers\TmHorariosController::class, 'addhorarios'])->name('addhorarios');
 Route::get('/headquarters/schedules-edit/{id}',[App\Http\Controllers\TmHorariosController::class, 'edithorarios'])->name('edithorarios');

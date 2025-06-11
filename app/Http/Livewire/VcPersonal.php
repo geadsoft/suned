@@ -45,6 +45,12 @@ class VcPersonal extends Component
 
     }
 
+    public function view($personalId){
+
+        return redirect()->to('/headquarters/staff-view/'.$personalId);
+
+    }
+
      public function retirar($personalId){
 
         $personal = TmPersonas::find($personalId);

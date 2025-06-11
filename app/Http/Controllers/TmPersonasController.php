@@ -39,12 +39,26 @@ class TmPersonasController extends Controller
 
     public function addpersonal()
     {
-        return view('/sede/personaladd',['id' => 0]);
+        return view('/sede/personaladd',[
+            'id' => 0,
+            'action' => 'add'
+        ]);
     }
 
     public function editpersonal($personaId)
     {
-        return view('/sede/personaladd',['id' => $personaId]);
+        return view('/sede/personaladd',[
+            'id' => $personaId,
+            'action' => 'edit'
+        ]);
+    }
+
+    public function viewpersonal($personaId)
+    {
+        return view('/sede/personaladd',[
+            'id' => $personaId,
+            'action' => 'view'
+        ]);
     }
 
     public function perfil()

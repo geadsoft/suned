@@ -16,7 +16,10 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-personaladd',['personaId' => $id])
+    @livewire('vc-personaladd',[
+        'personaId' => $id,
+        'action' => $action
+    ])
 
 @endsection
 @section('script')

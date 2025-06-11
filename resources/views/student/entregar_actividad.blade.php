@@ -37,7 +37,7 @@
             /*swal("Buen Trabajo!", event.detail.newName, "success");*/
             Swal.fire({
             title: 'Buen Trabajo!',
-            text:  event.detail.newName,
+            html:  event.detail.newName,
             icon: 'success',
             confirmButtonClass: 'btn btn-primary w-xs mt-2',
             confirmButtonText: 'OK'

@@ -62,6 +62,7 @@
                                             class="mdi mdi-account-tie align-middle me-1 text-success"></i>
                                             Datos Personales</h5>
                                     </div>
+                                    <fieldset @disabled($formDisabled)>
                                     <div class="card-body row">
                                         <div class="col-lg-8">
                                             <div class="row">
@@ -197,7 +198,7 @@
                                             </div>
                                         </div>
                                     </div>    
-
+                                    </fieldset>
                                 </div>
                                 <!--<div class="row">
                                     <div class="card-header">
@@ -222,12 +223,15 @@
                                     </div>
                                 </div>-->
                                 <div class="card-body p-4">
-                                    <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                                    <div class="hstack gap-2 justify-content-end d-print-none mt-4">    
+                                        @if ($formDisabled==false)
                                         @if($editar==true)
                                             <button type="submit" class="btn btn-success"><i class="ri-save-line align-bottom me-1"></i> Actualizar </button>
                                         @else
                                             <button type="submit" class="btn btn-success"><i class="ri-save-line align-bottom me-1"></i> Grabar </button>
                                         @endif
+                                        @endif
+                                        <a class="btn btn-secondary w-sm" href="/headquarters/staff"><i class="me-1 align-bottom"></i>Cancelar</a>
                                     </div>
                                 </div>    
                             </div>

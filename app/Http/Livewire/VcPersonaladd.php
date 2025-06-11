@@ -22,8 +22,9 @@ class VcPersonaladd extends Component
     public $record=[];
     public $personaId, $tipo, $eControl='', $fControl='', $fileimg='', $foto;
     public $editar;
+    public bool $formDisabled = false;
 
-    public function mount($personaId){
+    public function mount($personaId, $action){
 
         if ($personaId==0){
 
@@ -49,6 +50,10 @@ class VcPersonaladd extends Component
             $this->editData();
         }
 
+        if ($action=='view'){
+           
+            $this->formDisabled = true;
+        }
         
         //$this->tipo = $tipo;
 

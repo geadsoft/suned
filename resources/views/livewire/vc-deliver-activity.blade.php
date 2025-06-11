@@ -242,6 +242,9 @@
                                         <!--<a id="btnadd-{{$recno['linea']}}" class ="btn" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-16"></i></a>
                                         <a id="btndel-{{$recno['linea']}}" class ="btn" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-16"></i></a>-->
                                         </div>
+                                        <div wire:loading wire:target="array_attach.{{$key}}.adjunto" class="text-danger">
+                                            Cargando archivo...
+                                        </div>
                                     </td>
                                     @endif
                                     </tr>
