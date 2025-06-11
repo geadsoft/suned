@@ -75,6 +75,7 @@ class VcQualifyActivity extends Component
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
         ->where("tm_horarios.periodo_id",$this->periodoId)
         ->where("d.docente_id",$this->docenteId)
+        ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->selectRaw('m.id, m.descripcion')
         ->groupBy('m.id','m.descripcion')
         ->get();

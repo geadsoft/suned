@@ -21,7 +21,7 @@ class VcActividadAdd extends Component
 
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $hora;
     public $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
-    public $periodoId, $tbltermino, $tblbloque, $tblactividad, $texteditor;
+    public $periodoId, $modalidadId, $tbltermino, $tblbloque, $tblactividad, $texteditor;
     public $tblparalelo=[], $tblasignatura=[];
     public $array_attach=[];
     public $docenteId;
@@ -88,12 +88,22 @@ class VcActividadAdd extends Component
         ->where('tipo','PA')
         ->where('evaluacion',$this->termino)
         ->get();
+
+        $this->tblmodalidad = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("d.docente_id",$this->docenteId)
+        ->selectRaw('g.id, g.descripcion')
+        ->groupBy('g.id','g.descripcion')
+        ->get();
         
         $this->tblasignatura = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->docenteId)
         ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where('tm_horarios.grupo_id',$this->modalidadId)
+        ->where("d.docente_id",$this->docenteId)
         ->selectRaw('m.id, m.descripcion')
         ->groupBy('m.id','m.descripcion')
         ->get();
@@ -185,8 +195,9 @@ class VcActividadAdd extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->docenteId)
         ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where('tm_horarios.grupo_id',$this->modalidadId)
+        ->where("d.docente_id",$this->docenteId)        
         ->where("m.id",$id)
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();

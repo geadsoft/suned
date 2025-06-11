@@ -5,6 +5,15 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="mb-3">
+                                <label for="choices-publish-status-input" class="form-label fw-semibold">Modalidad</label>
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
+                                   <option value="">Seleccione Modalidad</option>
+                                   @foreach ($tblmodalidad as $modalidad) 
+                                    <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label for="asignatura-select" class="form-label fw-semibold">Asignatura</label>
                                 <select class="form-select" id="asignatura-select" data-choices data-choices-search-false wire:model="asignaturaId" {{$control}}>
                                    <option value="">Seleccione Asignatura</option>
