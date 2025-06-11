@@ -21,12 +21,12 @@ class VcActividadAdd extends Component
 
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $hora;
     public $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
-    public $periodoId, $modalidadId, $tbltermino, $tblbloque, $tblactividad, $texteditor;
+    public $periodoId, $modalidadId, $tbltermino, $tblbloque, $tblactividad, $texteditor="";
     public $tblparalelo=[], $tblasignatura=[];
     public $array_attach=[];
     public $docenteId;
 
-    protected $listeners = ['updateEditorData'];
+    protected $listeners = ['updateEditorData','retornar'];
 
     private function token(){
 
@@ -119,18 +119,23 @@ class VcActividadAdd extends Component
     public function updateEditorData($data)
     {
         $this->texteditor = $data;
+       
     }
 
     public function edit($id){
         
         $record = TmActividades::query()
         ->join("tm_horarios_docentes as d","d.id","=","tm_actividades.paralelo")
-        ->select("tm_actividades.*","d.horario_id","d.asignatura_id")
+        ->join("tm_horarios as h","h.id","=","d.horario_id")
+        ->select("tm_actividades.*","d.horario_id","d.asignatura_id","h.grupo_id")
         ->where("tm_actividades.id",$id)
         ->first()
         ->toArray();
 
+        $this->modalidadId  = $record['grupo_id'];
         $this->asignaturaId = $record['asignatura_id'];
+
+
         $this->updatedasignaturaId($this->asignaturaId);
 
         $this->actividadId = $id;
@@ -184,6 +189,7 @@ class VcActividadAdd extends Component
 
     public function setEditorData($data){
         $this->texteditor = $data;
+        
     }
 
     public function updatedasignaturaId($id){
@@ -217,9 +223,12 @@ class VcActividadAdd extends Component
             'puntaje' => 'required'
         ]);
 
+        $msgfile="";
+
         if ($this->actividadId>0){
 
-            $this->updateData();            
+            $this->updateData();
+            $msgfile = $this->apiDrive($this->actividadId);            
 
         }else {
             
@@ -240,9 +249,12 @@ class VcActividadAdd extends Component
                 'usuario' => auth()->user()->name,
             ]);
 
-            $this->apiDrive($tblData->id);
-
+            $msgfile = $this->apiDrive($tblData->id);
+            
         }
+
+        $message = nl2br("Registro grabado con éxito!\n".$msgfile);
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
         
     }
 
@@ -330,10 +342,8 @@ class VcActividadAdd extends Component
 
         }
 
-        $message = "Registro grabado con éxito!"."\n".$msgfile;
-        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
-
-        return redirect()->to('/activities/activity');
+       return  $msgfile;
+        //return redirect()->to('/activities/activity');
 
     }
 
@@ -354,10 +364,6 @@ class VcActividadAdd extends Component
             'usuario' => auth()->user()->name,
         ]);
 
-
-        $this->apiDrive($this->actividadId);
-
-        return redirect()->to('/activities/activity');
 
     }
         
@@ -401,6 +407,10 @@ class VcActividadAdd extends Component
         // Emitir evento para el navegador
         $this->dispatchBrowserEvent('iniciar-descarga', ['url' => $url]);
 
+    }
+
+    public function retornar(){
+        return redirect()->to('/activities/activity');
     }
 
 }

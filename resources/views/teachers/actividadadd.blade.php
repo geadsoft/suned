@@ -27,14 +27,25 @@
     <!--<script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>-->
     <script src="{{ URL::asset('assets/js/pages/ecommerce-product-create.init.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
-
+     <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     
 
     <script>
        
         window.addEventListener('msg-grabar', event => {
-            swal("Buen Trabajo!", event.detail.newName, "success");
+            /*swal("Buen Trabajo!", event.detail.newName, "success");*/
+            Swal.fire({
+            title: 'Buen Trabajo!',
+            html:  event.detail.newName,
+            icon: 'success',
+            confirmButtonClass: 'btn btn-primary w-xs mt-2',
+            confirmButtonText: 'OK'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.emit('retornar'); // Actualiza la misma página
+            }
+            });
         })
 
         window.addEventListener('iniciar-descarga', event => {

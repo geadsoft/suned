@@ -71,7 +71,7 @@
                                 <label class="form-label form-control border-0 fw-semibold fs-14">Archivos Adjuntos</label>
                                 <table class="table table-nowrap align-middle" id="orderTable">
                                     <tbody>
-                                    @foreach ($array_attach as $key => $recno) 
+                                    @foreach ($array_attach as $key => $file) 
                                     <div class="d-flex align-items-center border border-dashed p-2 rounded">
                                         
                                         <div class="flex-shrink-0 avatar-sm">
@@ -81,14 +81,14 @@
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <h6 class="mb-1">
-                                            <!--<a href="{{ route('archivo.descargar', ['id' => $recno['id']]) }}" target="_blank">
-                                                {{ $recno['adjunto'] }}
+                                            <!--<a href="{{ route('archivo.descargar', ['id' => $file['id']]) }}" target="_blank">
+                                                {{ $file['adjunto'] }}
                                             </a>-->
-                                            <a href="{{ route('archivo.descargar', ['id' => $recno['id']]) }}" download> {{$file->nombre}}</a>
+                                            <a href="{{ route('archivo.descargar', ['id' => $file['id']]) }}" download> {{$file['adjunto']}}</a>
                                             </h6>
                                         </div>
                                         <!--<div class="hstack gap-3 fs-16">
-                                            <a type="button" class="text-muted" wire:click='download_drive({{$recno['id']}})'><i class="ri-download-2-line"></i></a>
+                                            <a type="button" class="text-muted" wire:click='download_drive({{$file['id']}})'><i class="ri-download-2-line"></i></a>
                                         </div>-->
                                     </div>
                                     @endforeach
