@@ -6,7 +6,7 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Modalidad</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId" {{$control}}>
                                    <option value="">Seleccione Modalidad</option>
                                    @foreach ($tblmodalidad as $modalidad) 
                                     <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
