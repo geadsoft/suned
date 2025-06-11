@@ -955,7 +955,7 @@
                     <div class="collapse menu-dropdown" id="faltas">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/academic/tuition">
+                                <a class="nav-link menu-link" href="#">
                                     </i>Justificar<span></span>
                                 </a>
                             </li>
