@@ -9,37 +9,20 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Actividades
+            Asignaturas
         @endslot
         @slot('title')
-            Mis Actividades
+            Recursos
         @endslot
     @endcomponent
 
-    @livewire('vc-actividades')
+    @livewire('vc-resources')
 
 @endsection
 @section('script')
     <!--ecommerce-customer init js -->
 
     <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
-
-    <script>
-       
-        window.addEventListener('show-delete', event => {
-            $('#deleteOrder').modal('show');
-        })
-
-        window.addEventListener('hide-delete', event => {
-            $('#deleteOrder').modal('hide');
-        })
-
-        window.addEventListener('msg-alert', event => {
-            swal("Error!", "Existen entregas realizadas...", "warning");
-        }) 
-
-    </script>
     
 @endsection

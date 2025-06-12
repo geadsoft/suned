@@ -229,5 +229,14 @@ class DocentesController extends Controller
         return view('/academic/calendarioview');
     } 
     
+    public function resources()
+    {
+        return view('/teachers/recursos');
+    } 
+
+    public function resources_add()
+    {
+        return view('/teachers/recursosadd',['id' => 0]);
+    } 
 
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Livewire;
 use App\Models\TmHorarios;
 use App\Models\TmPeriodosLectivos;
+use App\Models\TmActividades;
+use App\Models\TdActividadesEntregas;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,7 +14,7 @@ class VcActividades extends Component
 {
     use WithPagination;
 
-    public $actividadId, $docenteId, $pendientes;
+    public $selectId, $actividadId, $docenteId, $pendientes;
     public $tblasignaturas=[], $paralelos=[];
     public $tab1="active", $tab2, $tab3, $tab4;
 
@@ -147,6 +149,30 @@ class VcActividades extends Component
     public function edit($Id)
     {
         return redirect()->to('/activities/activity-edit/'.$Id);
+    }
+
+    public function delete( $id ){
+         
+        $this->selectId = $id;
+
+        $entregas = TdActividadesEntregas::query()
+        ->join("tm_actividades as a","a.id","=","td_actividades_entregas.actividad_id")
+        ->where("td_actividades_entregas.actividad_id",$this->selectId)
+        ->get();
+
+        if($entregas->isEmpty()){
+            $this->dispatchBrowserEvent('show-delete');
+        }else{
+            $this->dispatchBrowserEvent('msg-alert'); 
+        }
+
+    }
+
+    public function deleteData(){
+
+        TmActividades::find($this->selectId)->delete();
+        $this->dispatchBrowserEvent('hide-delete');
+
     }
 
     public function filtrar($data){
