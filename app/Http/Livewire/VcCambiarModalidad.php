@@ -98,14 +98,14 @@ class VcCambiarModalidad extends Component
 
                 $nommodalidad = $pasecurso->nommodalidad;
                 $nomservicio  = $pasecurso->nomservicio.' - '.$curso->paralelo;
-            }
+            }*/
 
             $this->datos = [
                 'tipo' => 'E',
                 'rol' => auth()->user()->roles->pluck('name')->implode(', '),
                 'modalidad' => $nommodalidad,
                 'curso' => $nomservicio,
-            ];*/
+            ];
 
         }else{
                 $this->datos = [
