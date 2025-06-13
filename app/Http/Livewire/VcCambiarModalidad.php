@@ -73,7 +73,7 @@ class VcCambiarModalidad extends Component
             ->select('g.id','g.descripcion','tm_matriculas.id')
             ->get();
 
-            $curso = TmCursos::find($datos->cursoId);
+            $curso = TmCursos::find($datos->curso_id);
 
             $nommodalidad = "";
             $nomservicio = "";
