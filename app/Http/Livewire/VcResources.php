@@ -52,6 +52,9 @@ class VcResources extends Component
         ->select("a.descripcion","enlace","nombre")
         ->paginate(10);
 
+        
+
+
         return view('livewire.vc-resources',[
             'tblrecords' => $tblrecords
         ]);
