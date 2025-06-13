@@ -59,9 +59,9 @@ class VcCambiarModalidad extends Component
         if ($this->personas->tipopersona=='E'){
 
             $datos = TmCambiaModalidad::query()
-            ->join('tm_generalidades as d','d.id','=','tm_cambia_modalidad.modalidad_id')
-            ->join('tm_servicios as s','s.id','=','tm_cambia_modalidad.grado_id')
-            ->selectRaw('d.descripcion as nommodalidad, s.descripcion as nomservicio, tm_cambia_modalidad.curso_id')
+            /*->join('tm_generalidades as d','d.id','=','tm_cambia_modalidad.modalidad_id')
+            ->join('tm_servicios as s','s.id','=','tm_cambia_modalidad.grado_id')*/
+            ->selectRaw('modalidad as nommodalidad, curso as nomservicio, tm_cambia_modalidad.curso_id')
             ->where('persona_id',$this->personaId)
             ->first();
 
