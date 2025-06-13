@@ -122,7 +122,7 @@
 
 
                             </div>
-                            @if ($this->array_entregas->isEmpty())
+                            @if ($this->entregas->isEmpty())
                             <div class="alert alert-warning" role="alert">
                                 <strong> Esta actividad no tiene respuestas de estudiantes. </strong>
                             </div>

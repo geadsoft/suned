@@ -9,9 +9,11 @@ use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmFiles;
 use App\Models\TmMatriculas;
-use Illuminate\Support\Facades\Http;
+use App\Models\TdActividadesEntregas;
+
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
@@ -20,7 +22,7 @@ class VcActividadView extends Component
     public $asignatura, $curso,  $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $descripcion="", $estado="A";
     public $periodoId, $tbltermino, $tblbloque, $tblactividad, $actividadId;
     public $array_attach=[];
-    public $array_entregas=[];
+    public $array_entregas=[], $entregas=[];
     public $personas=[];
     public $arrtermino, $arrbloque, $arractividad;
     
@@ -95,6 +97,11 @@ class VcActividadView extends Component
         $actividad = TmActividades::find($this->actividadId);
         
         //Entregas
+        $this->entregas = TdActividadesEntregas::query()
+        ->where('actividad_id',$this->actividadId)
+        ->get();
+
+        //Archivos
         $this->array_entregas = TmFiles::query()
         ->where('actividad_id',$this->actividadId)
         ->where('entrega',1)
