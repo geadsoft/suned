@@ -9,6 +9,7 @@ use App\Models\TmActividades;
 use App\Models\TmCambiaModalidad;
 use App\Models\TmHorariosAsignaturas;
 use App\Models\TmPersonalizaAsignaturas;
+use App\Models\TmPaseCursos;
 
 use Livewire\Component;
 
