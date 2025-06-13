@@ -84,7 +84,7 @@ class VcCambiarModalidad extends Component
             }
 
             //Si tiene pase de curso en otra modalidad
-            /*$pasecurso = TmPaseCursos::query()
+            $pasecurso = TmPaseCursos::query()
             ->join('tm_servicios as s','s.id','=','tm_pase_cursos.grado_id')
             ->join('tm_generalidades as g','g.id','=','s.modalidad_id')
             ->selectRaw('g.descripcion as nommodalidad, s.descripcion as nomservicio, tm_pase_cursos.curso_id')
@@ -98,7 +98,7 @@ class VcCambiarModalidad extends Component
 
                 $nommodalidad = $pasecurso->nommodalidad;
                 $nomservicio  = $pasecurso->nomservicio.' - '.$curso->paralelo;
-            }*/
+            }
 
             $this->datos = [
                 'tipo' => 'E',
