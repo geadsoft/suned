@@ -92,12 +92,12 @@ class VcCambiarModalidad extends Component
             ->where('tm_pase_cursos.estado','A')
             ->first();
 
-            if (!empty($pasecurso)){
+            if ($pasecurso){
 
                 $curso = TmCursos::find($pasecurso->curso_id);
 
                 $nommodalidad = $pasecurso->nommodalidad;
-                $nomservicio  = $pasecurso->nomservicio.' - '.$pasecurso->paralelo;
+                $nomservicio  = $pasecurso->nomservicio.' - '.$curso->paralelo;
             }
 
             $this->datos = [
