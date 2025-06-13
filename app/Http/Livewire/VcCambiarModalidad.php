@@ -78,8 +78,8 @@ class VcCambiarModalidad extends Component
             $nommodalidad = "";
             $nomservicio = "";
             if(!empty($datos)){
-                $nommodalidad = $datos->nommodalidad.' - '.$curso->paralelo;
-                $nomservicio  = $datos->nomservicio;
+                $nommodalidad = $datos->nommodalidad;
+                $nomservicio  = $datos->nomservicio.' - '.$curso->paralelo;
             }
 
             //Si tiene pase de curso en otra modalidad
@@ -94,8 +94,8 @@ class VcCambiarModalidad extends Component
 
             if (!empty($pasecurso)){
                 
-                $nommodalidad = $pasecurso->nommodalidad.' - '.$pasecurso->paralelo;
-                $nomservicio  = $pasecurso->nomservicio;
+                $nommodalidad = $pasecurso->nommodalidad;
+                $nomservicio  = $pasecurso->nomservicio.' - '.$pasecurso->paralelo;
             }
 
             $this->datos = [
