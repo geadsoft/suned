@@ -36,7 +36,7 @@ class VcSchoolSchedule extends Component
 
         //Si tiene pase de curso en otra modalidad
         $pasecurso = TmPaseCursos::query()
-        ->where('matricula_id',$modalidad->matricula_id)
+        ->where('matricula_id',$matricula->matricula_id)
         ->where('estado','A')
         ->first();
 
