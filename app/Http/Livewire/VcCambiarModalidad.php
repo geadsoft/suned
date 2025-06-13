@@ -73,27 +73,29 @@ class VcCambiarModalidad extends Component
             ->select('g.id','g.descripcion','tm_matriculas.id')
             ->get();
 
-            $curso = TmCursos::find($datos->curso_id);
-
             $nommodalidad = "";
             $nomservicio = "";
             if(!empty($datos)){
+
+                $curso = TmCursos::find($datos->curso_id);
+
                 $nommodalidad = $datos->nommodalidad;
                 $nomservicio  = $datos->nomservicio.' - '.$curso->paralelo;
             }
 
             //Si tiene pase de curso en otra modalidad
             $pasecurso = TmPaseCursos::query()
-            ->join('tm_cursos as c','c.id','=','tm_pase_cursos.curso_id')
-            ->join('tm_generalidades as g','g.id','=','c.grupo_id')
-            ->join('tm_servicios as s','s.id','=','c.grado_id')
-            ->selectRaw('g.descripcion as nommodalidad, s.descripcion as nomservicio, c.paralelo, tm_pase_cursos.curso_id')
+            ->join('tm_servicios as s','s.id','=','tm_pase_cursos.grado_id')
+            ->join('tm_generalidades as g','g.id','=','s.modalidad_id')
+            ->selectRaw('g.descripcion as nommodalidad, s.descripcion as nomservicio, tm_pase_cursos.curso_id')
             ->where('tm_pase_cursos.matricula_id',$datos->matricula_id)
             ->where('tm_pase_cursos.estado','A')
             ->first();
 
             if (!empty($pasecurso)){
-                
+
+                $curso = TmCursos::find($pasecurso->curso_id);
+
                 $nommodalidad = $pasecurso->nommodalidad;
                 $nomservicio  = $pasecurso->nomservicio.' - '.$pasecurso->paralelo;
             }
