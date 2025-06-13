@@ -88,8 +88,8 @@ class VcCambiarModalidad extends Component
             ->join('tm_generalidades as g','g.id','=','c.grupo_id')
             ->join('tm_servicios as s','s.id','=','c.grado_id')
             ->selectRaw('g.descripcion as nommodalidad, s.descripcion as nomservicio, c.paralelo, tm_pase_cursos.curso_id')
-            ->where('matricula_id',$datos->matricula_id)
-            ->where('estado','A')
+            ->where('tm_pase_cursos.matricula_id',$datos->matricula_id)
+            ->where('tm_pase_cursos.estado','A')
             ->first();
 
             if (!empty($pasecurso)){
