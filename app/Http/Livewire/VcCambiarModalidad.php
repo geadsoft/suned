@@ -84,15 +84,13 @@ class VcCambiarModalidad extends Component
             }
 
             //Si tiene pase de curso en otra modalidad
-            $pasecurso = TmPaseCursos::query()
+            /*$pasecurso = TmPaseCursos::query()
             ->join('tm_servicios as s','s.id','=','tm_pase_cursos.grado_id')
             ->join('tm_generalidades as g','g.id','=','s.modalidad_id')
             ->selectRaw('g.descripcion as nommodalidad, s.descripcion as nomservicio, tm_pase_cursos.curso_id')
             ->where('tm_pase_cursos.matricula_id',$datos->matricula_id)
             ->where('tm_pase_cursos.estado','A')
             ->first();
-
-            
 
             if ($pasecurso){
 
@@ -107,7 +105,7 @@ class VcCambiarModalidad extends Component
                 'rol' => auth()->user()->roles->pluck('name')->implode(', '),
                 'modalidad' => $nommodalidad,
                 'curso' => $nomservicio,
-            ];
+            ];*/
 
         }else{
                 $this->datos = [
