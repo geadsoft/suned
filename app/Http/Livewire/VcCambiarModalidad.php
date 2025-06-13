@@ -61,7 +61,7 @@ class VcCambiarModalidad extends Component
             $datos = TmCambiaModalidad::query()
             /*->join('tm_generalidades as d','d.id','=','tm_cambia_modalidad.modalidad_id')
             ->join('tm_servicios as s','s.id','=','tm_cambia_modalidad.grado_id')*/
-            ->selectRaw('modalidad as nommodalidad, curso as nomservicio, tm_cambia_modalidad.curso_id')
+            ->selectRaw('modalidad as nommodalidad, curso as nomservicio, curso_id, matricula_id')
             ->where('persona_id',$this->personaId)
             ->first();
 
@@ -91,6 +91,8 @@ class VcCambiarModalidad extends Component
             ->where('tm_pase_cursos.matricula_id',$datos->matricula_id)
             ->where('tm_pase_cursos.estado','A')
             ->first();
+
+            
 
             if ($pasecurso){
 
