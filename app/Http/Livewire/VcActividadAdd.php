@@ -264,6 +264,8 @@ class VcActividadAdd extends Component
         $fileId  ="";
         $msgfile ="";
 
+        sleep(3); // Simula espera
+
         foreach ($this->array_attach as $attach){
 
             if ($attach['id']>0) { 
