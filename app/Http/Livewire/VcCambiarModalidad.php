@@ -5,7 +5,8 @@ use App\Models\TmMatricula;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmCambiaModalidad;
 use App\Models\TmPersonas;
-
+use App\Models\TmPaseCursos;
+use App\Models\TmCursos;
 
 use Livewire\Component;
 
@@ -72,11 +73,29 @@ class VcCambiarModalidad extends Component
             ->select('g.id','g.descripcion','tm_matriculas.id')
             ->get();
 
+            $curso = TmCursos::find($datos->cursoId);
+
             $nommodalidad = "";
             $nomservicio = "";
             if(!empty($datos)){
-                $nommodalidad = $datos->nommodalidad;
+                $nommodalidad = $datos->nommodalidad.' - '.$curso->paralelo;
                 $nomservicio  = $datos->nomservicio;
+            }
+
+            //Si tiene pase de curso en otra modalidad
+            $pasecurso = TmPaseCursos::query()
+            ->join('tm_cursos as c','c.id','=','tm_pase_cursos.curso_id')
+            ->join('tm_generalidades as g','g.id','=','c.grupo_id')
+            ->join('tm_servicios as s','s.id','=','c.grado_id')
+            ->selectRaw('g.descripcion as nommodalidad, s.descripcion as nomservicio, c.paralelo, c.curso_id')
+            ->where('matricula_id',$matricula->matricula_id)
+            ->where('estado','A')
+            ->first();
+
+            if (!empty($pasecurso)){
+                
+                $nommodalidad = $pasecurso->nommodalidad.' - '.$pasecurso->paralelo;
+                $nomservicio  = $pasecurso->nomservicio;
             }
 
             $this->datos = [

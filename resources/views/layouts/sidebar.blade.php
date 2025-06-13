@@ -512,9 +512,6 @@
                         </ul>
                     </div>
                 </li>
-
-
-
                 @endcan
                 @can('Eventos Comunicados')
                 <li class="nav-item">
