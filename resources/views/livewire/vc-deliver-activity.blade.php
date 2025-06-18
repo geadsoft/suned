@@ -407,6 +407,47 @@
         </div>-->
     </div>
     </form>
+ 
+    @if ($showModal)
+    <div class="modal-backdrop">
+        <div class="modal">
+            <div class="spinner"></div>
+            <h2 class="mt-4">Enviando tarea... Por favor espera.</h2>
+            <p id="progress-text">Progreso: <strong>0%</strong></p>
+        </div>
+    </div>
+    @endif
+
+    <style>
+    .modal-backdrop {
+        position: fixed; top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex; align-items: center; justify-content: center;
+        z-index: 9999;
+    }
+    .modal {
+        background: white;
+        padding: 30px 40px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
+        text-align: center;
+    }
+    .spinner {
+        margin: 0 auto 10px auto;
+        border: 6px solid #f3f3f3;
+        border-top: 6px solid #3498db;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    </style>
     
+
 
 </div>

@@ -48,6 +48,35 @@
             });
         })
 
+        window.addEventListener('mostrar-modal-espera', () => {
+            let progress = 0;
+
+            Swal.fire({
+                title: 'Enviando tarea... Por favor espera.',
+                html: '<b>Progreso:</b> <span id="swal-progress">0%</span>',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+
+                    const progressText = document.getElementById('swal-progress');
+                    const interval = setInterval(() => {
+                        progress++;
+                        if (progressText) {
+                            progressText.textContent = progress + '%';
+                        }
+
+                        if (progress >= 100) {
+                            clearInterval(interval);
+                            Swal.close(); // Cierra la modal automáticamente
+                            //Livewire.dispatch('apiDrive');
+                            Livewire.emit('apiDrive')
+                        }
+                    }, 30); // 3 segundos total
+                }
+            });
+        })
+
         window.addEventListener('entrega', event => {
             addElement(event.detail.newName)
         })

@@ -20,6 +20,7 @@ class VcDeliverActivity extends Component
     public $data, $personaId, $tiempo, $estado="No Entregado", $texteditor="", $descripcion;
     public $array_attach=[], $files=[], $entregas=[], $datos=[];
     public $showEditor = false;
+    public bool $showModal=false;
 
     public $arrdoc = [
         'doc' => 'ri-file-word-2-line',
@@ -47,7 +48,7 @@ class VcDeliverActivity extends Component
         'html' => 'text-info',
     ];
 
-    protected $listeners = ['updateEditorData','cancel'];
+    protected $listeners = ['updateEditorData','cancel','apiDrive'];
 
     private function token(){
 
@@ -157,6 +158,7 @@ class VcDeliverActivity extends Component
     public function createData(){
 
         $fecha = date('Y-m-d H:i:s');
+        $msgfile = "";
 
         if ($this->showEditor){
 
@@ -179,10 +181,16 @@ class VcDeliverActivity extends Component
 
         }
 
-        $msgfile = $this->apiDrive($this->selectId);
+        //sleep(3); // Simula espera
+        $this->showModal = true;
 
-        $message = nl2br("Registro grabado con éxito!\n".$msgfile);
-        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+        // Espera simulada
+        $this->dispatchBrowserEvent('mostrar-modal-espera');
+
+        //$msgfile = $this->apiDrive($this->selectId);
+
+        //$message = nl2br("Registro grabado con éxito!\n".$msgfile);
+        //$this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
         //return redirect(request()->header('Referer'));
        
@@ -234,14 +242,15 @@ class VcDeliverActivity extends Component
     
     }
 
-    public function apiDrive($selectId){
- 
+    #[On('apiDrive')]
+    public function apiDrive(){
+        
+        $selectId = $this->selectId;
         $accessToken = $this->token();
         $fileId  ="";
         $msgfile ="";
 
-        sleep(3); // Simula espera
-
+        
         foreach ($this->array_attach as $attach){
 
             if ($attach['id']>0) { 
@@ -320,10 +329,14 @@ class VcDeliverActivity extends Component
 
         }
 
-        return $msgfile;
+        //return $msgfile;
 
         /*$message = "Registro grabado con éxito!"."\n".$msgfile;
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);*/
+        $message = nl2br("Registro grabado con éxito!\n".$msgfile);
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+
+        $this->showModal = false; // Oculta modal después de subir
 
     }
 
