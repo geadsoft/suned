@@ -92,7 +92,7 @@
                         <div class="row">
                             <div class="col-xl-6" id="detail-col1">
                                 <div class="modal-body p-4">
-                                    <form autocomplete="off" wire:submit.prevent="{{ $showEditModal ? 'updateData' : 'createData' }}" class="needs-validation" name="event-form" id="form-event" novalidate>
+                                    <form autocomplete="off" wire:submit.prevent="{{ $showEditModal ? 'updateData' : 'createData' }}" class="needs-validation" name="event-form" id="form-event">
                                         <!--<div class="text-end">
                                             <a href="#" class="btn btn-sm btn-soft-primary" id="edit-event-btn" data-id="edit-event" onclick="editEvent(this)" wire:click='postAdded(1)' role="button">Edit</a>
                                         </div>
@@ -179,7 +179,7 @@
                                             <div class="col-12">
                                                 <div class="mb-3">
                                                     <label class="form-label">Description</label>
-                                                    <textarea type="text" class="form-control" id="event-description" placeholder="Ingrese descripción del evento" wire:model.defer="comentario"></textarea>
+                                                    <textarea type="text" class="form-control" id="event-description" placeholder="Ingrese descripción del evento" wire:model.defer="comentario" required></textarea>
                                                 </div>
                                             </div><!--end col-->
                                         </div><!--end row-->
