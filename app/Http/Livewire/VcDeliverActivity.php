@@ -181,7 +181,7 @@ class VcDeliverActivity extends Component
 
         }
 
-        //sleep(3); // Simula espera
+        
         $this->showModal = true;
 
         // Espera simulada
