@@ -520,6 +520,13 @@
                     </a>
                 </li>
                 @endcan
+                @can('Recursos')
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/subject/resources">
+                        <i class="ri-folder-open-line fs-20"></i>Recursos</span>
+                    </a>
+                </li>
+                @endcan                
                 @can('Personalizar')
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#personalizar" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="personalizar">
@@ -743,18 +750,6 @@
                     </div>
                 </li>
                 @endcan
-
-                <!--<li class="nav-item">
-                    <a class="nav-link menu-link" href="/">
-                        <i class="las la-edit fs-20"></i>Proyecto Final</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="/">
-                        <i class="las la-award fs-20"></i>Evaluacion Nivel / Subnivel</span>
-                    </a>
-                </li>--> 
-
                 @can('Sistemas')
                 <!--Sistemas-->
                 <li class="nav-item">

@@ -236,12 +236,18 @@ class DocentesController extends Controller
 
     public function resources_add()
     {
-        return view('/teachers/recursosadd',['id' => 0]);
+        return view('/teachers/recursosadd',[
+            'id' => 0,
+            'action' => 'add'
+        ]);
     } 
 
     public function resources_edit($id)
     {
-        return view('teachers/recursosadd',['id' => $id]);
+        return view('teachers/recursosadd',[
+            'id' => $id,
+            'action' => 'edit'
+        ]);
     }
 
     public function resources_view($id)

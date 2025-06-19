@@ -16,9 +16,8 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-resources-add',[
+    @livewire('vc-resources-view',[
         'id' => $id,
-        'action' => $action
     ])
 
 @endsection

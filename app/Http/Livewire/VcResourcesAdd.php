@@ -18,7 +18,7 @@ class VcResourcesAdd extends Component
 {
     use WithFileUploads;
 
-    public $recursoId, $asignaturaId, $nombre, $enlace="", $control, $texteditor;
+    public $recursoId, $asignaturaId, $nombre, $enlace="", $control, $texteditor, $estado='A';
     public $array_attach=[], $tblasignatura, $accion;
     public $selectedCursos = [];
 
@@ -143,8 +143,12 @@ class VcResourcesAdd extends Component
             $this->selectedCursos[] = $curso->curso_id;
         }
        
-        //dd($cursos );
+        
+        if (count($tblfiles)==0){
+            $this->attach_add();
+        }
 
+        $this->control = 'disabled';
 
     }
 
@@ -189,6 +193,30 @@ class VcResourcesAdd extends Component
         $message = nl2br("Registro grabado con éxito!\n".$msgfile);
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
         
+    }
+
+
+    public function updateData(){
+
+        $record = TmRecursos::find($this->recursoId);
+
+        $record->update([
+            'nombre' => $this->nombre,
+            'enlace' => $this->enlace,
+            'estado' => $this->estado,
+            'usuario' => auth()->user()->name,
+        ]);
+
+        TdRecursosCursos::where('recurso_id',$this->recursoId)->delete();
+
+        foreach($this->selectedCursos as $recurso){
+                TdRecursosCursos::Create([
+                'recurso_id' => $this->recursoId,
+                'curso_id' => $recurso,
+                'usuario' => auth()->user()->name,
+            ]);
+        } 
+
     }
 
     public function apiDrive($selectId){

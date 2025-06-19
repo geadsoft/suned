@@ -64,7 +64,7 @@
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Estado Actividad</label>
                             <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="estado">
                                 <option value="A">Activo</option>
-                                <option value="F">Finalizado</option>
+                                <option value="I">Inactivo</option>
                             </select>
                         </div>
                         @endif

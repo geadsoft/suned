@@ -16,7 +16,10 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-resources-add',['id' => $id])
+    @livewire('vc-resources-add',[
+        'id' => $id,
+        'action' => $action
+    ])
 
 @endsection
 @section('script')
