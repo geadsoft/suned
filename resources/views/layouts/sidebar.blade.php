@@ -467,6 +467,13 @@
                     </a>
                 </li>
                 @endcan
+                @can('Mis Recursos')
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/student/resources">
+                        <i class="ri-folder-open-line fs-20"></i>Mis Recursos</span>
+                    </a>
+                </li>
+                @endcan
                 @can('Clases Virtuales')
                 <li class="nav-item">
                     <!--<a class="nav-link menu-link" href="/activities/virtual-classes">

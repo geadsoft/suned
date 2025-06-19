@@ -10,7 +10,7 @@ use Livewire\Component;
 
 class VcResourcesView extends Component
 {
-    public $docenteId, $recursoId, $periodoId, $nombre, $estado; 
+    public $docenteId, $recursoId, $periodoId, $nombre, $estado, $accion; 
     public $array_attach;
 
     public $arrestado=[
@@ -20,7 +20,7 @@ class VcResourcesView extends Component
     ];
 
 
-    public function mount($id)
+    public function mount($id, $action)
     {
 
         $this->docenteId = auth()->user()->personaId;
@@ -30,6 +30,7 @@ class VcResourcesView extends Component
         $this->periodoId = $tblperiodos['id'];
 
         $this->load();
+        $this->accion = $action;
 
     }
 

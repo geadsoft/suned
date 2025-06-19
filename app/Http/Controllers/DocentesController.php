@@ -254,7 +254,7 @@ class DocentesController extends Controller
     {
         return view('teachers/recursosview',[
             'id' => $id,
-            'action' => 'view'
+            'action' => 'docente'
         ]);
     }
 

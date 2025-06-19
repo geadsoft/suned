@@ -147,11 +147,14 @@ Route::get('/subject/resource-add',[App\Http\Controllers\DocentesController::cla
 Route::get('/subject/resource-view/{id}',[App\Http\Controllers\DocentesController::class, 'resources_view'])->name('resources_view');
 Route::get('/subject/resource-edit/{id}',[App\Http\Controllers\DocentesController::class, 'resources_edit'])->name('resources_edit');
 
+
 Route::get('/student/subject',[App\Http\Controllers\EstudiantesController::class, 'subject'])->name('subject');
 Route::get('/student/subject-view/{data}',[App\Http\Controllers\EstudiantesController::class, 'subject_view'])->name('subject_view');
 Route::get('/student/school-schedule',[App\Http\Controllers\EstudiantesController::class, 'school_schedule'])->name('school_schedule');
 Route::get('/student/deliver-activity/{id},{data}',[App\Http\Controllers\EstudiantesController::class, 'deliver_activity'])->name('deliver_activity');
 Route::get('/student/activities',[App\Http\Controllers\EstudiantesController::class, 'student_activities'])->name('student_activities');
+Route::get('/student/resources',[App\Http\Controllers\EstudiantesController::class, 'student_resources'])->name('student_resources');
+Route::get('/student/resource-view/{id}',[App\Http\Controllers\EstudiantesController::class, 'resources_view'])->name('resources_view');
 
 Route::get('/descargar-archivo/{id}', [ArchivoController::class, 'descargar'])->name('archivo.descargar');
 

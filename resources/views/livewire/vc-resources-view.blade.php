@@ -87,7 +87,11 @@
                             </div>
                             
                             <div class="d-flex align-items-start gap-3 mt-4">
+                                @if($accion=='docente')
                                 <a class="btn btn-soft-info w-sm" href="/subject/resources"><i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Volver al Listado</a>
+                                @else
+                                <a class="btn btn-soft-info w-sm" href="/student/resources"><i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Volver al Listado</a>
+                                @endif
                             </div>
 
                         </div>

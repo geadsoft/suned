@@ -9,27 +9,22 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Asignaturas
+            Asignatura
         @endslot
         @slot('title')
             Recursos
         @endslot
     @endcomponent
 
-    @livewire('vc-resources-view',[
-        'id' => $id,
-        'action' => $action,
-    ])
+    @livewire('vc-student-resources')
 
 @endsection
 @section('script')
     <!--ecommerce-customer init js -->
 
-    
-    <script src="{{ URL::asset('assets/libs/@ckeditor/@ckeditor.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/js/pages/ecommerce-product-create.init.js') }}"></script>
     <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="assets/libs/dom-autoscroller/dom-autoscroller.min.js"></script>
     
 @endsection
