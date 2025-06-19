@@ -18,8 +18,8 @@ class VcResourcesAdd extends Component
 {
     use WithFileUploads;
 
-    public $recursoId, $asignaturaId, $nombre, $enlace, $control, $texteditor;
-    public $array_attach=[], $tblasignatura;
+    public $recursoId, $asignaturaId, $nombre, $enlace="", $control, $texteditor;
+    public $array_attach=[], $tblasignatura, $accion;
     public $selectedCursos = [];
 
     private function token(){
@@ -38,9 +38,10 @@ class VcResourcesAdd extends Component
         return $accessToken;
     }
 
-    public function mount($id)
+    public function mount($id, $action)
     {
-        
+        $this->accion = $action;
+
         $ldate = date('Y-m-d H:i:s');
         $this->recursoId = $id;
 
@@ -104,6 +105,47 @@ class VcResourcesAdd extends Component
 
         array_push($this->array_attach,$attach);
         
+    }
+
+    public function edit($id){
+
+        $tblrecords = TmRecursos::find($id);
+        $this->periodoId = $tblrecords->periodo_id;
+        $this->docenteId = $tblrecords->docente_id;
+        $this->asignaturaId = $tblrecords->asignatura_id;
+        $this->nombre = $tblrecords->nombre;
+        $this->enlace = $tblrecords->enlace;
+
+        $tblfiles = TmFiles::query()
+        ->where('actividad_id',$id)
+        ->where('persona_id',$this->docenteId)
+        ->get();
+
+        $this->array_attach = [];
+        foreach($tblfiles as $key => $files){
+
+            $linea = count($this->array_attach);
+            $linea = $linea+1;
+
+            $attach=[
+                'id' => $files['id'],
+                'linea' => $linea,
+                'adjunto' => $files['nombre'],
+                'drive_id' => $files['drive_id'],
+            ];
+
+            array_push($this->array_attach,$attach);
+
+        }
+
+        $cursos = TdRecursosCursos::where("recurso_id",$id)->get();
+        foreach($cursos as $key => $curso){
+            $this->selectedCursos[] = $curso->curso_id;
+        }
+       
+        //dd($cursos );
+
+
     }
 
     public function createData(){

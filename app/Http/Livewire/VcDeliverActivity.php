@@ -180,20 +180,11 @@ class VcDeliverActivity extends Component
             ]);
 
         }
-
-        
+ 
         $this->showModal = true;
 
         // Espera simulada
-        $this->dispatchBrowserEvent('mostrar-modal-espera');
-
-        //$msgfile = $this->apiDrive($this->selectId);
-
-        //$message = nl2br("Registro grabado con éxito!\n".$msgfile);
-        //$this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
-
-        //return redirect(request()->header('Referer'));
-       
+        $this->dispatchBrowserEvent('mostrar-modal-espera');       
     } 
 
     public function entrega(){

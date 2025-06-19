@@ -16,30 +16,20 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-resources')
+    @livewire('vc-resources-add',[
+        'id' => $id,
+        'action' => $action
+    ])
 
 @endsection
 @section('script')
     <!--ecommerce-customer init js -->
 
+    
+    <script src="{{ URL::asset('assets/libs/@ckeditor/@ckeditor.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/pages/ecommerce-product-create.init.js') }}"></script>
     <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
-     <script>
-       
-        window.addEventListener('show-delete', event => {
-            $('#deleteOrder').modal('show');
-        })
-
-        window.addEventListener('hide-delete', event => {
-            $('#deleteOrder').modal('hide');
-        })
-
-        window.addEventListener('msg-alert', event => {
-            swal("Error!", "Existen entregas realizadas...", "warning");
-        }) 
-
-    </script>
     
 @endsection

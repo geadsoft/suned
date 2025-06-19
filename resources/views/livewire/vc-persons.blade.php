@@ -132,9 +132,25 @@
                                         <td>{{$record->telefono}}</td>
                                         <td>{{$record->descripcion}}-{{$record->paralelo}}</td>
                                         <td>
+                                            @php
+                                                $existe = collect($users)->contains(fn($user) => $user['personaId'] == $record->id);
+                                            @endphp
                                             <ul class="list-inline hstack gap-2 mb-0">
+                                                @if($existe)
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Resetear">
+                                                    <a class="edit-item-btn" href="" wire:click.prevent="resetPassword({{$record->estudiante_id}})"><i
+                                                            class="las la-key text-info fs-18"></i></a>
+                                                </li>
+                                                @else
+                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Sin Usuario">
+                                                    <a class="edit-item-btn" href=""><i
+                                                            class="las la-user-slash  text-warning fs-18"></i></a>
+                                                </li>
+                                                @endif
+                                                <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Editar">
                                                     <a class="edit-item-btn" href="/academic/person-edit/{{$record->matriculaId}}"><i
                                                             class="ri-pencil-fill fs-16"></i></a>
                                                 </li>

@@ -7,6 +7,7 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TmGeneralidades;
 use App\Models\TmCursos;
 use App\Models\TmMatricula;
+use App\Models\User;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -16,14 +17,17 @@ use PDF;
 use App\Exports\ListaMatriculasExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Illuminate\Support\Facades\Hash;
 
 class VcPersons extends Component
 {   
     use WithPagination;
     use Exportable;
 
+     protected $listeners = ['guardarNuevaPassword'];
+
     public $datos, $estudiante, $selectId, $estado=false, $periodoOld, $matriculaId, $registros;
-    public $resumenMatricula = [], $resumenNivel = [], $nivelestudio=[];
+    public $resumenMatricula = [], $resumenNivel = [], $nivelestudio=[], $personaId;
     public $filters = [
         'srv_nombre' => '',
         'srv_periodo' => '',
@@ -105,6 +109,8 @@ class VcPersons extends Component
         ->orderBy('apellidos','asc')
         ->paginate(12);
 
+        $users = User::all();
+
         $this->datos = json_encode($this->filters);
 
         $this->registros = $tblrecords->total();
@@ -114,6 +120,7 @@ class VcPersons extends Component
             'tblperiodos' => $tblperiodos,
             'tblgenerals' => $tblgenerals,
             'tblcursos'   => $tblcursos,
+            'users' => $users,
         ]);
 
     }
@@ -158,13 +165,8 @@ class VcPersons extends Component
     }
 
     public function deleteData(){
-        
-        /*$record = TmPersonas::find($this->selectId);
-        $record->update([
-            'estado' => 'R',
-        ]);*/
-        $matricula = TmMatricula::find($this->matriculaId);
 
+        $matricula = TmMatricula::find($this->matriculaId);
         $matricula->update([
             'estado' => 'R',
         ]);
@@ -183,13 +185,28 @@ class VcPersons extends Component
         $this->dispatchBrowserEvent('show-reintegrar');
     }
 
+
+    public function resetPassword($estudianteId){
+
+        $this->personaId = $estudianteId;
+        $person = TmPersonas::find($estudianteId);
+        $this->dispatchBrowserEvent('resetPasswordSwal', ['newName' => $person->identificacion]);
+
+    }
+
+    public function guardarNuevaPassword($password)
+    {
+        $password = str_replace(' ', '', $password);
+        User::where('personaId',$this->personaId)->update(['password' => Hash::make($password)]);
+
+        $this->dispatchBrowserEvent('msg-grabar', [
+            'newName' => 'La contraseña ha sido actualizada correctamente.'
+        ]);
+
+    }
+
     public function reintegrarData(){
         
-        /*$record = TmPersonas::find($this->selectId);
-        $record->update([
-            'estado' => 'A',
-        ]);*/
-
         $matricula = TmMatricula::find($this->matriculaId);
         $matricula->update([
             'estado' => 'A',

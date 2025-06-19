@@ -39,7 +39,7 @@
                                 @else
                                 <td>
                                     <div class="input-group">
-                                    <input type="file" id="file-{{$recno['linea']}}" wire:model="array_attach.{{$key}}.adjunto" class="form-control">
+                                    <input type="file" id="file-{{$recno['linea']}}" wire:model="array_attach.{{$key}}.adjunto" accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf,.html,.jpg,.png" class="form-control">
                                     {{-- Indicador de carga --}}
                                     <a id="btnadd-{{$recno['linea']}}" class ="btn" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-16"></i></a>
                                     <a id="btndel-{{$recno['linea']}}" class ="btn" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-16"></i></a>
@@ -126,7 +126,7 @@
             @else
             <button type="submit" class="btn btn-success w-sm">Actualizar</button>
             @endif
-            <a class="btn btn-secondary w-sm" href="/activities/activity"><i class="me-1 align-bottom"></i>Cancelar</a>
+            <a class="btn btn-secondary w-sm" href="/subject/resources"><i class="me-1 align-bottom"></i>Cancelar</a>
         </div>
     </form>
 </div>
