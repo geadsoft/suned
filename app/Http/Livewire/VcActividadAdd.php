@@ -331,8 +331,13 @@ class VcActividadAdd extends Component
             if ($response->successful()){
                 $fileId = json_decode($response->body())->id;
                 $msgfile = " Archivo cargado a Google Drive";
-            }else{
-                $msgfile = " Cargar fallida en Google Drive";
+            }else {
+                $msgfile = "Error al subir a Google Drive: " . $response->body();
+                logger()->error('Google Drive Upload Error', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                    'name' => $name . '.' . $ext
+                ]);
             }
 
             $contents = Storage::disk('public')->exists('archivos/'.$filesave);
