@@ -239,6 +239,7 @@ class VcResourcesAdd extends Component
 
             $name = $file->getClientOriginalName();
             $name = pathinfo($name, PATHINFO_FILENAME);
+            $name = preg_replace('/[^A-Za-z0-9_\-]/', '_', $name); // sanitizar nombre
             $ext =  $file->getClientOriginalExtension();
             $mime = $file->getClientMimeType();
 
