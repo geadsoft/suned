@@ -308,11 +308,12 @@ class VcDeliverActivity extends Component
             ])->withBody($body, 'multipart/related')  // Usar el cuerpo con los metadatos y el archivo
             ->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
 
-            if ($response->successful()){
-                $fileId = json_decode($response->body())->id;
-                $msgfile = " Archivo cargado a Google Drive";
-            }else {
-                $msgfile = "Error al subir a Google Drive: " . $response->body();
+            $responseData = json_decode($response->body(), true);
+            if ($response->successful() && isset($responseData['id'])) {
+                $fileId = $responseData['id'];
+                $msgfile = "Archivo cargado a Google Drive";
+            } else {
+                $msgfile = "Error al subir a Google Drive: " . ($response->body() ?: 'Sin respuesta');
                 logger()->error('Google Drive Upload Error', [
                     'status' => $response->status(),
                     'body' => $response->body(),
