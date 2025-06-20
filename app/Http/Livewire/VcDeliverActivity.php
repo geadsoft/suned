@@ -130,7 +130,7 @@ class VcDeliverActivity extends Component
         if (count($this->files)>0){
 
             $this->array_attach = [];
-            foreach($tblfiles as $key => $files){
+            foreach($this->files as $key => $files){
 
             $linea = count($this->array_attach);
             $linea = $linea+1;

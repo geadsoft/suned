@@ -132,8 +132,8 @@ class VcActividadView extends Component
         $tblfiles = TmFiles::query()
         ->where('actividad_id',$id)
         ->where('persona_id',$this->docenteId)
+        ->where('actividad',1)
         ->get();
-
 
         $this->array_attach = [];
         foreach($tblfiles as $key => $files){

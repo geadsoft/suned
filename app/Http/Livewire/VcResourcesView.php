@@ -56,6 +56,7 @@ class VcResourcesView extends Component
         $tblfiles = TmFiles::query()
         ->where('actividad_id',$this->recursoId)
         ->where('persona_id',$this->docenteId)
+        ->where('recurso',1)
         ->get();
 
         $this->array_attach = [];
