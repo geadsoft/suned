@@ -297,6 +297,7 @@ class VcResourcesAdd extends Component
                 'nombre' => $name.'.'.$ext,
                 'extension' => $ext,
                 'entrega' => false,
+                'recurso' => true,
                 'drive_id' => $fileId,
                 'usuario' => auth()->user()->name,
             ]);

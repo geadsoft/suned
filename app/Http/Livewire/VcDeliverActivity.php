@@ -117,23 +117,27 @@ class VcDeliverActivity extends Component
         //Archivos Adjuntos
         $this->adjuntos = TmFiles::query()
         ->where('actividad_id',$this->selectId)
-        ->where('entrega',0)
+        ->where('actividad',1)
         ->get();
 
         //Entregas Realizadas
         $this->files = TmFiles::query()
         ->where('actividad_id',$this->selectId)
-        ->where('entrega',1)
+        ->where('persona_id',$this->personaId)
+        ->where('tarea',1)
         ->get();
 
         if (count($this->files)>0){
 
-            $this->array_attach=[];
+            $this->array_attach = [];
+            foreach($tblfiles as $key => $files){
 
-            foreach( $this->files as $key => $file){
+            $linea = count($this->array_attach);
+            $linea = $linea+1;
+
                 $attach=[
                 'id' => $file->id,
-                'linea' => $key+1,
+                'linea' => $linea,
                 'adjunto' => $file->nombre,
                 'drive_id' => $file->drive_id,
                 ];
@@ -309,6 +313,7 @@ class VcDeliverActivity extends Component
             }
 
             TmFiles::Create([
+                'tarea' => true,
                 'actividad_id' => $selectId,
                 'persona_id' => $this->personaId,
                 'nombre' => $name.'.'.$ext,

@@ -160,6 +160,7 @@ class VcActividadAdd extends Component
         $tblfiles = TmFiles::query()
         ->where('actividad_id',$id)
         ->where('persona_id',$this->docenteId)
+        ->where('actividad',1)
         ->get();
 
         $this->array_attach = [];
@@ -338,6 +339,7 @@ class VcActividadAdd extends Component
                 'nombre' => $name.'.'.$ext,
                 'extension' => $ext,
                 'entrega' => false,
+                'actividad' => true,
                 'drive_id' => $fileId,
                 'usuario' => auth()->user()->name,
             ]);
@@ -393,6 +395,7 @@ class VcActividadAdd extends Component
         {
             if ($recno['linea'] == $linea){
                 unset ($recnoToDelete[$index]);
+                TmFiles::find($recno['id'])->delete();
             } 
         }
 

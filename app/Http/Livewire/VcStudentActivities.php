@@ -43,7 +43,7 @@ class VcStudentActivities extends Component
     
     public function render()
     {
-         $this->materias = TmHorarios::query()
+        $this->materias = TmHorarios::query()
         ->join("tm_horarios_docentes as a","a.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","a.asignatura_id")
         ->where("tm_horarios.curso_id",$this->cursoId)
