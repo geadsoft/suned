@@ -140,6 +140,7 @@ class VcDeliverActivity extends Component
                 'linea' => $linea,
                 'adjunto' => $files->nombre,
                 'drive_id' => $files->drive_id,
+                'user_id' => auth()->id(),
                 ];
 
                 array_push($this->array_attach,$attach);
@@ -213,6 +214,7 @@ class VcDeliverActivity extends Component
             'linea' => $linea,
             'adjunto' => "",
             'drive_id' => "",
+            'user_id' => auth()->id(),
         ];
 
         array_push($this->array_attach,$attach);
@@ -224,16 +226,23 @@ class VcDeliverActivity extends Component
     public function attach_del($linea){
 
         $recnoToDelete = $this->array_attach;
-        foreach ($recnoToDelete as $index => $recno)
-        {
-            if ($recno['linea'] == $linea){
-                unset ($recnoToDelete[$index]);
-                TmFiles::find($recno['id'])->delete();
-            } 
+        foreach ($recnoToDelete as $index => $recno) {
+            if ($recno['linea'] == $linea && $recno['user_id'] == auth()->id())  {
+
+                // Seguridad: verificar que el archivo pertenece al usuario antes de eliminar
+                $archivo = TmFiles::where('id', $recno['id'])
+                            ->where('persona_id', $this->personaId)
+                            ->first();
+
+                if ($archivo) {
+                    $archivo->delete();
+                    unset($recnoToDelete[$index]);
+                }
+            }
         }
 
         $this->reset(['array_attach']);
-        $this->array_attach = $recnoToDelete;
+        $this->array_attach = array_values($recnoToDelete); 
     
     }
 
@@ -247,6 +256,10 @@ class VcDeliverActivity extends Component
 
         
         foreach ($this->array_attach as $attach){
+
+            if (isset($attach['user_id']) && $attach['user_id'] != auth()->id()) {
+                continue; // Ignora si no es del usuario actual
+            }
 
             if ($attach['id']>0) { 
                 continue;
@@ -347,6 +360,7 @@ class VcDeliverActivity extends Component
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
         $this->showModal = false; // Oculta modal después de subir
+        $this->array_attach = [];
 
     }
 
