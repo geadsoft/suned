@@ -136,10 +136,10 @@ class VcDeliverActivity extends Component
             $linea = $linea+1;
 
                 $attach=[
-                'id' => $file->id,
+                'id' => $files->id,
                 'linea' => $linea,
-                'adjunto' => $file->nombre,
-                'drive_id' => $file->drive_id,
+                'adjunto' => $files->nombre,
+                'drive_id' => $files->drive_id,
                 ];
 
                 array_push($this->array_attach,$attach);
