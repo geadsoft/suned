@@ -237,6 +237,7 @@ class VcDeliverActivity extends Component
                 if ($archivo) {
                     $archivo->delete();
                     unset($recnoToDelete[$index]);
+                    $this->deleteFromDrive($recno['drive_id']);
                 }
             }
         }
@@ -244,6 +245,20 @@ class VcDeliverActivity extends Component
         $this->reset(['array_attach']);
         $this->array_attach = array_values($recnoToDelete); 
     
+    }
+
+    private function deleteFromDrive($fileId)
+    {
+        $accessToken = $this->token(); // Tu función que obtiene el access_token
+
+        $response = Http::withToken($accessToken)
+        ->delete("https://www.googleapis.com/drive/v3/files/{$fileId}");
+
+        /*if ($response->successful()) {
+            return "Archivo eliminado correctamente.";
+        } else {
+            return "Error al eliminar el archivo: " . $response->body();
+        }*/
     }
 
     #[On('apiDrive')]
