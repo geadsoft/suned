@@ -118,7 +118,8 @@ class VcResources extends Component
 
     public function deleteData(){
         
-        TdRecursosCursos::where('recurso_id',$this->selectId);
+        TdRecursosCursos::where('recurso_id',$this->selectId)->delete();
+
         TmRecursos::find($this->selectId)->delete();
 
         $this->dispatchBrowserEvent('hide-delete');
