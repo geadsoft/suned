@@ -22,6 +22,8 @@ class VcResourcesAdd extends Component
     public $array_attach=[], $tblasignatura, $accion;
     public $selectedCursos = [];
 
+    protected $listeners = ['retornar'];
+
     private function token(){
 
         $client_id = \Config('services.google.client_id');
@@ -215,7 +217,9 @@ class VcResourcesAdd extends Component
                 'curso_id' => $recurso,
                 'usuario' => auth()->user()->name,
             ]);
-        } 
+        }
+        
+        
 
     }
 
@@ -317,6 +321,10 @@ class VcResourcesAdd extends Component
         }
 
        return  $msgfile;
+    }
+
+    public function retornar(){
+        return redirect()->to('/subject/resources');
     }
 
 }
