@@ -117,6 +117,8 @@ class VcConfigProfile extends Component
             'personas.foto' => ['image', 'mimes:jpg,jpeg,png', 'max:1024'],
         ]);*/
 
+
+
         if (auth()->user()->personaId == 0){
 
             $this->createData();
@@ -126,9 +128,9 @@ class VcConfigProfile extends Component
         $nameFile='';
 
         if($this->fileimg ?? null){
-            $this ->validate([
+            /*$this ->validate([
                 'fileimg' => ['image', 'mimes:jpg,jpeg,png', 'max:1024'],
-                ]);
+                ]);*/
 
             $nameFile = $this->personas['identificacion'].'.'.$this->fileimg->getClientOriginalExtension();
             $pathfile = 'storage/'.$this->fileimg->storeAs('public/fotos', $nameFile);
@@ -148,7 +150,7 @@ class VcConfigProfile extends Component
 
         }
 
-        $this->dispatchBrowserEvent('msg-actualizar');
+        $this->dispatchBrowserEvent('msg-update');
         //return redirect()->to('/academic/students');
 
     }
