@@ -5,6 +5,7 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TmCambiaModalidad;
 use App\Models\TmHorarios;
 use App\Models\TmRecursos;
+use App\Models\TmAsignaturas;
 
 
 use Livewire\Component;
@@ -15,6 +16,9 @@ class VcStudentResources extends Component
     use WithPagination;
 
     public $asignatura="TODOS";
+    public $filters=[
+        'asignaturaId' => "",
+    ];
     
     public function mount()
     {
@@ -50,6 +54,9 @@ class VcStudentResources extends Component
         ->join("td_recursos_cursos as r","r.recurso_id","=","tm_recursos.id")
         ->join("tm_personas as p","p.id","=","tm_recursos.docente_id")
         ->join("tm_asignaturas as a","a.id","=","tm_recursos.asignatura_id")
+        ->when($this->filters['asignaturaId'],function($query){
+            return $query->where('a.id',"{$this->filters['asignaturaId']}");
+        })
         ->where("r.curso_id",$this->cursoId)
         ->select("tm_recursos.*","a.descripcion as asignatura","p.apellidos","p.nombres")        
         ->orderBy("id","desc")
@@ -62,6 +69,17 @@ class VcStudentResources extends Component
 
     public function paginationView(){
         return 'vendor.livewire.bootstrap'; 
+    }
+
+    public function asignatura($id){
+
+        $this->asignatura = "TODAS";
+        if ($id<>''){
+            $asignatura = TmAsignaturas::find($id);
+            $this->asignatura = $asignatura->descripcion;
+        }
+        
+        $this->filters['asignaturaId']  = $id;
     }
 
     public function mostrar($id){

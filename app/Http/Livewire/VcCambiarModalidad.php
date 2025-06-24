@@ -9,11 +9,12 @@ use App\Models\TmPaseCursos;
 use App\Models\TmCursos;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Storage;
 
 class VcCambiarModalidad extends Component
 {
     public $personaId, $periodoId, $cursoId, $datos=null, $matricula;
-    public $personas;
+    public $personas,  $foto='';
 
     public function mount()
     {
@@ -25,6 +26,15 @@ class VcCambiarModalidad extends Component
         if ($this->personaId>0){
 
             $this->personas  = TmPersonas::find($this->personaId);
+            $this->foto = $this->personas->foto;
+
+         
+
+            $contents   = Storage::disk('public')->exists('fotos/'.$this->foto);
+            
+            if($contents==false){
+                $this->foto='';
+            }
         
             $record = TmCambiaModalidad::where('persona_id',$this->personaId)->first();
 

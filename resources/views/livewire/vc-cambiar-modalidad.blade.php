@@ -3,8 +3,13 @@
     <button type="button" class="btn" id="page-header-user-dropdown"
         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span class="d-flex align-items-center">
-            <img class="rounded-circle header-profile-user"
+
+            <!--<img class="rounded-circle header-profile-user"
                 src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('assets/images/users/avatar-1.jpg') }} @endif"
+                alt="Header Avatar">-->
+            
+            <img class="rounded-circle header-profile-user"
+                src="@if ($foto != '') {{ URL::asset('storage/fotos/'.$foto) }}@else{{ URL::asset('assets/images/users/sin-foto.jpg') }}@endif"
                 alt="Header Avatar">
             <span class="text-start ms-xl-2">
                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->name }}</span>
