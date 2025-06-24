@@ -85,6 +85,7 @@
                             @endforeach
                         </div>
                     </div>
+                    @if($record->subir_archivo=='SI')
                     <div class="mt-4" style="{{$display_estado}}">
                         <h6 class="fw-semibold text-uppercase mb-3">Estado de la Entrega</h6>
                         <div class="alert border-dashed alert-dark" role="alert">
@@ -187,6 +188,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                     <div class="row mb-3">
                         <div class="col-xl-3"> 
                             @if($display_estado<>"") 
@@ -260,7 +262,8 @@
                             
                         </div>
                     </div>
-                    @endif      
+                    @endif 
+                    @if($record->subir_archivo=='SI')     
                     <div class="text-center" style="{{$display_estado}}">
                         @if (empty($entrega))
                         <button type="button" class="btn btn-primary" id="btnentrega" wire:click='entrega' ><i class="ri-upload-2-line align-bottom me-1"></i>Agregar Entrega</button>
@@ -269,6 +272,13 @@
                         @endif
                         <button type="button" class="btn btn-soft-primary" wire:click="retornar()"><i class="align-bottom me-1"></i>Cancelar</button>
                     </div>
+                    @else
+                        <div class="text-center" style="{{$display_estado}}">
+                            <a type="button" href="/student/activities" class="btn btn-soft-info btn-label previestab"
+                    data-previous="pills-bill-registration-tab"><i
+                        class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Mis Actividades</a>
+                        </div>
+                    @endif
                     
                 </div><!--end card-body-->
                 

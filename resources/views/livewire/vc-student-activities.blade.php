@@ -78,6 +78,7 @@
                                                 <thead class="text-muted table-light">
                                                     <tr class="text-uppercase">
                                                         <th class="sort" data-sort="id">Descripción</th>
+                                                        <th class="sort" data-sort="id">Subir Archivo</th>
                                                         <th class="sort" data-sort="customer_name">Fecha Entrega</th>
                                                         <th class="sort" data-sort="date">Calificación</th>
                                                         <th class="sort" data-sort="amount">Estado</th>
@@ -97,22 +98,31 @@
                                                             <i class="las la-user-check fs-18"></i><a class="text-muted"> {{$record->apellidos}} {{$record->nombres}} </a>
                                                             </div>                                        
                                                         </td>
+                                                        <td>
+                                                            @if($record->subir_archivo=='SI')
+                                                            <span class="badge badge-soft-success text-uppercase"> {{$record->subir_archivo}}</span>
+                                                            @else
+                                                            <span class="badge badge-soft-danger text-uppercase"> {{$record->subir_archivo}}</span>
+                                                            @endif
+                                                        </td>
                                                         <td class="date">@lang('translation.'.(date('l',strtotime($record->fecha)))),
                                                                 {{date('d',strtotime($record->fecha))}} de @lang('months.'.(date('m',strtotime($record->fecha)))) del {{date('Y',strtotime($record->fecha))}}
                                                                 , <small class="text-muted"> {{date('H:i',strtotime($record->fecha))}}</small></td>
                                                         <td class="amount">{{$record->nota}}</td>
                                                         <td class="status">
-                                                            
-                                                                @if (empty($record->nota) && empty($record->fechaentrega))
-                                                                    <span class="badge badge-soft-warning text-uppercase">Sin Entrega</span>
+                                                                @if ($record->subir_archivo=='NO')
+                                                                    <span class="badge badge-soft-success text-uppercase">Activo</span>
+                                                                @else
+                                                                    @if (empty($record->nota) && empty($record->fechaentrega))
+                                                                        <span class="badge badge-soft-warning text-uppercase">Sin Entrega</span>
+                                                                    @endif
+                                                                    @if ($record->nota==0 && !empty($record->fechaentrega))
+                                                                        <span class="badge badge-soft-info text-uppercase">Por Calificar</span>
+                                                                    @endif
+                                                                    @if ($record->nota>0)
+                                                                        <span class="badge badge-soft-success text-uppercase">Calificado</span>
+                                                                    @endif
                                                                 @endif
-                                                                @if ($record->nota==0 && !empty($record->fechaentrega))
-                                                                    <span class="badge badge-soft-info text-uppercase">Por Calificar</span>
-                                                                @endif
-                                                                @if ($record->nota>0)
-                                                                    <span class="badge badge-soft-success text-uppercase">Calificado</span>
-                                                                @endif
-                                                            
                                                         </td>
                                                     </tr>
                                                     @endforeach

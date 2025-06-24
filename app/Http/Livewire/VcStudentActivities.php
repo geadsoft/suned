@@ -91,7 +91,8 @@ class VcStudentActivities extends Component
         })
         ->whereRaw("e.fecha is null")
         ->where("tipo",'AC')
-        ->where("h.curso_id",$this->cursoId)     
+        ->where("h.curso_id",$this->cursoId)  
+        ->where("subir_archivo",'SI')   
         ->orderBy("fecha","desc")
         ->count();
                 
