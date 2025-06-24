@@ -68,7 +68,7 @@ class VcStudentActivities extends Component
             return $query->where('a.id',"{$this->filters['asignaturaId']}");
         })
         ->when($this->filters['pendientes'],function($query){
-            return $query->whereRaw("e.fecha is null");
+            return $query->whereRaw("e.fecha is null and tm_actividades.subir_archivo = 'SI'");
         })
         ->where("tipo",'AC')
         ->where("h.curso_id",$this->cursoId)
