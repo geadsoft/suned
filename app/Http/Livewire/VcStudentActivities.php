@@ -125,7 +125,7 @@ class VcStudentActivities extends Component
             $this->tab1 = "active";
             $this->filters=[
                 'actividad' => "",
-                'asignaturaId' => "",
+                'asignaturaId' => $this->filters['asignaturaId'],
                 'pendientes' => "",
             ];
         }
