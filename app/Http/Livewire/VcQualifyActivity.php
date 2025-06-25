@@ -170,7 +170,7 @@ class VcQualifyActivity extends Component
 
             foreach ($this->tblactividad as $col => $actividad)
             {
-                $this->tblrecords[$data->id][$actividad->id] = 0.00;    
+                $this->tblrecords[$data->id][$actividad['id']] = 0.00;    
             }
             $this->tblrecords[$data->id]['promedio'] = 0.00;
         }
@@ -180,7 +180,7 @@ class VcQualifyActivity extends Component
         $this->tblrecords['ZZ']['nombres'] = 'Promedio';
         foreach ($this->tblactividad as $col => $actividad)
         {
-            $this->tblrecords['ZZ'][$actividad->id] = 0.00;    
+            $this->tblrecords['ZZ'][$actividad['id']] = 0.00;    
         }
         $this->tblrecords['ZZ']['promedio'] = 0.00;
         
