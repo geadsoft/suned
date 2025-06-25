@@ -177,16 +177,10 @@ class VcQualifyActivity extends Component
 
         //array_multisort(array_column($this->tblrecords, 'nombres'), SORT_ASC, $this->tblrecords);
 
-        // Paso 1: ordenar por nombre
-        usort($this->tblrecords, function($a, $b) {
-            return strcmp($a['nombres'], $b['nombres']);
-        });
-
-        // Paso 2: reconstruir $arr manteniendo el orden de $nombres
         $arrOrdenado = [];
-        foreach (array_keys($this->tblrecords) as $id) {
-            if (isset($arr[$id])) {
-                $arrOrdenado[$id] = $arr[$id];
+        foreach ($this->personas as $id) {
+            if (isset($this->tblrecords[$id])) {
+                $arrOrdenado[$id] = $this->tblrecords[$id];
             }
         }
        
@@ -200,7 +194,6 @@ class VcQualifyActivity extends Component
         }
         $this->tblrecords['ZZ']['promedio'] = 0.00;
 
-        dd($this->tblrecords);
 
     }
 
