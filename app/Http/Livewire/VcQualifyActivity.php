@@ -179,7 +179,7 @@ class VcQualifyActivity extends Component
 
         $arrOrdenado = [];
         foreach ($this->tblrecords as $record) {
-            $arrOrdenado[$record['personaId']] = $recno;
+            $arrOrdenado[$record['personaId']] = $record;
         }
        
         $this->tblrecords = $arrOrdenado;
