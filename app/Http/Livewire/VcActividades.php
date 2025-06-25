@@ -5,6 +5,7 @@ use App\Models\TmHorarios;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmActividades;
 use App\Models\TdActividadesEntregas;
+use App\Models\TmFiles;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -170,6 +171,8 @@ class VcActividades extends Component
 
     public function deleteData(){
 
+        TmFiles::where('actividad_id',$this->selectId)->delete();
+        
         TmActividades::find($this->selectId)->delete();
         $this->dispatchBrowserEvent('hide-delete');
 
