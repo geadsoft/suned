@@ -39,6 +39,17 @@ class VcStudentActivities extends Component
         $this->cursoId = $matricula->curso_id;
         $this->modalidadId = $matricula->modalidad_id;
 
+        //Si tiene pase de curso en otra modalidad
+        $pasecurso = TmPaseCursos::query()
+        ->where('matricula_id',$matricula->matricula_id)
+        ->where('estado','A')
+        ->first();
+
+        if (!empty($pasecurso)){
+            
+            $this->cursoId = $pasecurso->curso_id;
+        }
+
     }
     
     public function render()
