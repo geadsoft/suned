@@ -113,6 +113,7 @@ class VcActividadView extends Component
         ->join("tm_personas as p","p.id","=","m.estudiante_id")
         ->select("p.id","nombres","apellidos")
         ->where('d.id',$actividad->paralelo)
+        ->where('p.estado','A')
         ->orderByRaw("apellidos, nombres")
         ->get();
 
