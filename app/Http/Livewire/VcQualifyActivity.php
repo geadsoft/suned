@@ -219,7 +219,7 @@ class VcQualifyActivity extends Component
             return $query->where('actividad',"{$this->filters['actividad']}");
         })
         ->where("tipo","AC")
-        ->where("docente_i",$this->docenteId)
+        ->where("docente_id",$this->docenteId)
         ->select("n.*")
         ->get();  
 
@@ -230,6 +230,8 @@ class VcQualifyActivity extends Component
             $this->tblrecords[$fil][$col] = $record->nota; 
         }
         
+        dd($this->tblrecords);
+
         /*foreach ($this->personas as $key => $data)
         {
             $personaId =  $data->id; 
