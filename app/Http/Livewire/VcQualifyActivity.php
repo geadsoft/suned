@@ -205,7 +205,6 @@ class VcQualifyActivity extends Component
         })
         ->where("tipo","AC")
         ->where("docente_id",$this->docenteId)
-        ->where("actividad_id",$actividadId)
         ->select("n.*")
         ->get();  
 
