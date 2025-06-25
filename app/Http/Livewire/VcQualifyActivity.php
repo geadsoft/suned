@@ -175,13 +175,11 @@ class VcQualifyActivity extends Component
             $this->tblrecords[$data->id]['promedio'] = 0.00;
         }
 
-        //array_multisort(array_column($this->tblrecords, 'nombres'), SORT_ASC, $this->tblrecords);
+        array_multisort(array_column($this->tblrecords, 'nombres'), SORT_ASC, $this->tblrecords);
 
         $arrOrdenado = [];
-        foreach ($this->personas as $persona) {
-            if (isset($this->tblrecords[$persona->id])) {
-                $arrOrdenado[$persona->id] = $this->tblrecords[$persona->id];
-            }
+        foreach ($this->tblrecords as $record) {
+            $arrOrdenado[$record->personaId] = $recno;
         }
        
         $this->tblrecords = $arrOrdenado;
