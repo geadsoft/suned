@@ -179,7 +179,7 @@ class VcQualifyActivity extends Component
 
         // Paso 1: ordenar por nombre
         usort($this->tblrecords, function($a, $b) {
-            return strcmp($a['nombre'], $b['nombre']);
+            return strcmp($a['nombres'], $b['nombres']);
         });
 
         // Paso 2: reconstruir $arr manteniendo el orden de $nombres
