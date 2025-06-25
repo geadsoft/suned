@@ -35,7 +35,7 @@
                 text: "",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, Grabar',
+                confirmButtonText: 'Si, Grabar',
                 cancelButtonText: 'No, cancel!',
                 confirmButtonClass: 'btn btn-primary w-xs me-2 mt-2',
                 cancelButtonClass: 'btn btn-danger w-xs mt-2',
@@ -75,15 +75,20 @@
         })    
 
 
-        window.addEventListener('msg-grabar', event => {
+         window.addEventListener('msg-grabar', event => {
+            /*swal("Buen Trabajo!", event.detail.newName, "success");*/
             Swal.fire({
-                    title: 'Buen Trabajo!',
-                    text:  event.detail.newName,
-                    icon: 'success',
-                    confirmButtonClass: 'btn btn-primary w-xs mt-2',
-                    buttonsStyling: false
-                })
-        }) 
+            title: 'Buen Trabajo!',
+            html:  event.detail.newName,
+            icon: 'success',
+            confirmButtonClass: 'btn btn-primary w-xs mt-2',
+            confirmButtonText: 'OK'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                location.reload(); // Actualiza la misma página
+            }
+            });
+        })
 
         window.addEventListener('row-delete', event => {
 
