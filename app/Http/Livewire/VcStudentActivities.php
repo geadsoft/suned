@@ -6,6 +6,7 @@ use App\Models\TmCambiaModalidad;
 use App\Models\TmHorarios;
 use App\Models\TmActividades;
 use App\Models\TmAsignaturas;
+use App\Models\TmPaseCursos;
 
 use Livewire\Component;
 use Livewire\WithPagination;
