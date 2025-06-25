@@ -178,9 +178,9 @@ class VcQualifyActivity extends Component
         //array_multisort(array_column($this->tblrecords, 'nombres'), SORT_ASC, $this->tblrecords);
 
         $arrOrdenado = [];
-        foreach ($this->personas as $id) {
-            if (isset($this->tblrecords[$id])) {
-                $arrOrdenado[$id] = $this->tblrecords[$id];
+        foreach ($this->personas as $persona) {
+            if (isset($this->tblrecords[$persona->id])) {
+                $arrOrdenado[$id] = $this->tblrecords[$persona->id];
             }
         }
        
