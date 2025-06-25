@@ -88,15 +88,15 @@
                                 <tbody id="tbl-notas">
                                 @foreach ($personas as $fil => $persona)
                                 <tr id="{{$fil}}" class="detalle">
-                                    <td> {{$tblrecords[$fil]['nombre']}} </td>                                    
+                                    <td> {{$tblrecords[$persona->id]['nombres']}} </td>                                    
                                     @foreach ($tbltarea as $col => $tarea)
                                     <td>
                                         <input type="number" step="1" min="0" max="10" value="0" class="form-control product-price bg-white border-0"
-                                        id="{{$fil}}-{{$col}}" wire:model="tblrecords.{{$fil}}.{{$tarea['id']}}" />
+                                        id="{{$fil}}-{{$col}}" wire:model="tblrecords.{{$persona->id}}.{{$tarea['id']}}" />
                                     </td>
                                     @endforeach
                                     <td>
-                                        <input type="text" class="form-control bg-white border-0" id="promedio-{{$fil}}" value="{{$nota["promedio"]}}" disabled/>
+                                        <input type="text" class="form-control bg-white border-0" id="promedio-{{$fil}}" value="{{$tblrecords[$persona->id]["promedio"]}}" disabled/>
                                     </td>
                                 </tr>
                                  @endforeach
