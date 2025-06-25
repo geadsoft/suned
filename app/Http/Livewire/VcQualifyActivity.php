@@ -55,6 +55,19 @@ class VcQualifyActivity extends Component
 
     public function render()
     {   
+        $this->personas = TmHorariosDocentes::query()
+        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
+        ->join("tm_matriculas as m",function($join){
+            $join->on("m.modalidad_id","=","h.grupo_id")
+                ->on("m.periodo_id","=","h.periodo_id")
+                ->on("m.curso_id","=","h.curso_id");
+        })
+        ->join("tm_personas as p","p.id","=","m.estudiante_id")
+        ->select("p.*")
+        ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
+        ->orderBy("p.apellidos")
+        ->get();
+        
         $this->tblmodalidad = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
@@ -288,14 +301,14 @@ class VcQualifyActivity extends Component
 
         foreach ($this->tblrecords as $index => $data)
         {   
-            $personaId = $data['personaId'];
+            $personaId = $index;
             foreach ($this->tblactividad as $col => $actividad)
             {
-                
+                $actividadId   = $actividad['id'];
                 $dataRow['id'] = 0;               
 
                 $tmpnota = TdCalificacionActividades::query()
-                ->where('actividad_id',$actividad['id']) 
+                ->where('actividad_id',$actividadId) 
                 ->where('persona_id',$personaId)
                 ->first();
                 
@@ -304,8 +317,8 @@ class VcQualifyActivity extends Component
                 }
                 
                 $dataRow['actividad_id'] = $actividad['id'];
-                $dataRow['persona_id']=$this->tblrecords[$index]['personaId'];
-                $dataRow['nota'] = $this->tblrecords[$index][$col];
+                $dataRow['persona_id']=$personaId;
+                $dataRow['nota'] = $this->tblrecords[$personaId][$actividadId];
                 $dataRow['estado'] = 'A';
                 $dataRow['usuario'] = auth()->user()->name;   
                 
