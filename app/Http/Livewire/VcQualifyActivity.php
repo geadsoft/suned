@@ -174,11 +174,9 @@ class VcQualifyActivity extends Component
             }
             $this->tblrecords[$data->id]['promedio'] = 0.00;
         }
-       
-        $this->tblrecords = usort($this->tblrecords, function($a, $b) {
-            return strcmp($a['nombres'], $b['nombres']);
-        });
 
+        array_multisort(array_column($this->tblrecords, 'nombres'), SORT_ASC, $this->tblrecords);
+       
         $this->tblrecords['ZZ']['personaId'] = 0;
         $this->tblrecords['ZZ']['nui'] = '';
         $this->tblrecords['ZZ']['nombres'] = 'Promedio';
@@ -187,7 +185,6 @@ class VcQualifyActivity extends Component
             $this->tblrecords['ZZ'][$actividad['id']] = 0.00;    
         }
         $this->tblrecords['ZZ']['promedio'] = 0.00;
-        
 
     }
 
