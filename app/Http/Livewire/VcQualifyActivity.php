@@ -178,8 +178,8 @@ class VcQualifyActivity extends Component
         //array_multisort(array_column($this->tblrecords, 'nombres'), SORT_ASC, $this->tblrecords);
 
         // Paso 1: ordenar por nombre
-        uasort($this->tblrecords, function($a, $b) {
-            return strcmp($a, $b); // orden ascendente
+        usort($this->tblrecords, function($a, $b) {
+            return strcmp($a['nombre'], $b['nombre']);
         });
 
         // Paso 2: reconstruir $arr manteniendo el orden de $nombres
