@@ -118,8 +118,6 @@ class VcQualifyActivity extends Component
 
     public function consulta(){
 
-
-
         $this->tblactividad = TmActividades::query()
         ->when($this->filters['paralelo'],function($query){
             return $query->where('paralelo',"{$this->filters['paralelo']}");
@@ -166,15 +164,15 @@ class VcQualifyActivity extends Component
         foreach ($this->personas as $key => $data)
         {   
             $index = $data->id;
-            $this->tblrecords[$key]['personaId'] = $data->id;
-            $this->tblrecords[$key]['nui'] = $data->identificacion;
-            $this->tblrecords[$key]['nombres'] = $data->apellidos.' '.$data->nombres;
+            $this->tblrecords[$data->id]['personaId'] = $data->id;
+            $this->tblrecords[$data->id]['nui'] = $data->identificacion;
+            $this->tblrecords[$data->id]['nombres'] = $data->apellidos.' '.$data->nombres;
 
             foreach ($this->tblactividad as $col => $actividad)
             {
-                $this->tblrecords[$key][$col] = 0.00;    
+                $this->tblrecords[$data->id][$actividad->id] = 0.00;    
             }
-            $this->tblrecords[$key]['promedio'] = 0.00;
+            $this->tblrecords[$data->id]['promedio'] = 0.00;
         }
        
         $this->tblrecords['ZZ']['personaId'] = 0;
@@ -182,7 +180,7 @@ class VcQualifyActivity extends Component
         $this->tblrecords['ZZ']['nombres'] = 'Promedio';
         foreach ($this->tblactividad as $col => $actividad)
         {
-            $this->tblrecords['ZZ'][$col] = 0.00;    
+            $this->tblrecords['ZZ'][$actividad->id] = 0.00;    
         }
         $this->tblrecords['ZZ']['promedio'] = 0.00;
         
@@ -191,7 +189,34 @@ class VcQualifyActivity extends Component
 
     public function asignarNotas(){
 
-        foreach ($this->personas as $key => $data)
+        $notas = TmActividades::query()
+        ->join('td_calificacion_actividades as n','n.actividad_id','=','tm_actividades.id')
+        ->when($this->filters['paralelo'],function($query){
+            return $query->where('paralelo',"{$this->filters['paralelo']}");
+        })
+        ->when($this->filters['termino'],function($query){
+            return $query->where('termino',"{$this->filters['termino']}");
+        })
+        ->when($this->filters['bloque'],function($query){
+            return $query->where('bloque',"{$this->filters['bloque']}");
+        })
+        ->when($this->filters['actividad'],function($query){
+            return $query->where('actividad',"{$this->filters['actividad']}");
+        })
+        ->where("tipo","AC")
+        ->where("docente_id",$this->docenteId)
+        ->where("actividad_id",$actividadId)
+        ->select("n.*")
+        ->get();  
+
+        foreach ($notas as $key => $record){
+
+            $fil = $record->persona_id;
+            $col = $record->actividad_id;
+            $this->tblrecords[$fil][$col] = $record->nota; 
+        }
+        
+        /*foreach ($this->personas as $key => $data)
         {
             $personaId =  $data->id; 
 
@@ -199,7 +224,7 @@ class VcQualifyActivity extends Component
             {
                 $actividadId =  $actividad['id'];
                 
-                /*Notas*/
+                
                 $notas = TmActividades::query()
                 ->join('td_calificacion_actividades as n','n.actividad_id','=','tm_actividades.id')
                 ->when($this->filters['paralelo'],function($query){
@@ -228,7 +253,7 @@ class VcQualifyActivity extends Component
                 }
 
             }
-        }
+        }*/
 
     }
 
