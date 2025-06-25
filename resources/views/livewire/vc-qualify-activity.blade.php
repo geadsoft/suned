@@ -92,11 +92,11 @@
                                     @foreach ($tbltarea as $col => $tarea)
                                     <td>
                                         <input type="number" step="1" min="0" max="10" value="0" class="form-control product-price bg-white border-0"
-                                        id="{{$fil}}-{{$col}}" wire:model="tblrecords.{{$record['personaId']}}.{{$tarea['id']}}" />
+                                        id="{{$fil}}-{{$col}}" wire:model="tblrecords.{{$fil}}.{{$tarea['id']}}" />
                                     </td>
                                     @endforeach
                                     <td>
-                                        <input type="text" class="form-control bg-white border-0" id="promedio-{{$record['personaId']}}" value="{{$record["promedio"]}}" disabled/>
+                                        <input type="text" class="form-control bg-white border-0" id="promedio-{{$fil}}" value="{{$record["promedio"]}}" disabled/>
                                     </td>
                                 </tr>
                                  @endforeach
