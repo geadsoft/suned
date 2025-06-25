@@ -175,7 +175,7 @@ class VcQualifyActivity extends Component
             $this->tblrecords[$data->id]['promedio'] = 0.00;
         }
 
-        array_multisort(array_column($this->tblrecords, 'nombres'), SORT_ASC, $this->tblrecords);
+        //array_multisort(array_column($this->tblrecords, 'nombres'), SORT_ASC, $this->tblrecords);
        
         $this->tblrecords['ZZ']['personaId'] = 0;
         $this->tblrecords['ZZ']['nui'] = '';
