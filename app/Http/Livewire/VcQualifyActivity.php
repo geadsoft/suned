@@ -186,6 +186,8 @@ class VcQualifyActivity extends Component
         }
         $this->tblrecords['ZZ']['promedio'] = 0.00;
 
+        dd($this->tblrecords);
+
     }
 
     public function asignarNotas(){
