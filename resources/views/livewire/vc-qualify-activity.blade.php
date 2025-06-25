@@ -86,9 +86,9 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tbl-notas">
-                                @foreach ($tblrecords as $fil => $record)
+                                @foreach ($tblrecords as $fil => $nota)
                                 <tr id="{{$fil}}" class="detalle">
-                                    <td> {{$record["nombres"]}} </td>                                    
+                                    <td> {{$nota["nombres"]}} </td>                                    
                                     @foreach ($tbltarea as $col => $tarea)
                                     <td>
                                         <input type="number" step="1" min="0" max="10" value="0" class="form-control product-price bg-white border-0"
@@ -96,7 +96,7 @@
                                     </td>
                                     @endforeach
                                     <td>
-                                        <input type="text" class="form-control bg-white border-0" id="promedio-{{$fil}}" value="{{$record["promedio"]}}" disabled/>
+                                        <input type="text" class="form-control bg-white border-0" id="promedio-{{$fil}}" value="{{$nota["promedio"]}}" disabled/>
                                     </td>
                                 </tr>
                                  @endforeach
