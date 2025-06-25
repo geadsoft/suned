@@ -65,6 +65,7 @@ class VcQualifyActivity extends Component
         ->join("tm_personas as p","p.id","=","m.estudiante_id")
         ->select("p.*")
         ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
+        ->where("p.estado",'A')
         ->orderBy("p.apellidos")
         ->get();
         
@@ -170,6 +171,7 @@ class VcQualifyActivity extends Component
         ->join("tm_personas as p","p.id","=","m.estudiante_id")
         ->select("p.*")
         ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
+        ->where("p.estado",'A')
         ->orderBy("p.apellidos")
         ->get();
 
@@ -354,6 +356,7 @@ class VcQualifyActivity extends Component
         $message = "Calificaciones grabada con Éxito......";
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
     
+
     }
 
 
