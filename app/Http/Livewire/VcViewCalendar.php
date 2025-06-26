@@ -48,7 +48,7 @@ class VcViewCalendar extends Component
 
         if ($persona->tipopersona=='E'){
 
-            $matricula = TmCambiaModalidad::query()
+            /*$matricula = TmCambiaModalidad::query()
             ->where('persona_id',$this->personaId)
             ->first();
 
@@ -58,14 +58,29 @@ class VcViewCalendar extends Component
             }else{
                 $this->modalidadId = $matricula['modalidadId'];
                 $this->gradoId = $matricula['gradoId'];
-            }            
+            }*/
+            $matricula = TmCambiaModalidad::query()
+            ->where('persona_id',$this->personaId)
+            ->first();
+
+            if (!$matricula) {
+                $matricula = TmMatricula::query()
+                ->where('periodo_id',$this->periodoId)
+                ->where('estudiante_id',$this->personaId)
+                ->first();
+
+                $matriculaId = $matricula->id;
+            }else{
+                $matriculaId = $matricula->modalidad_id;
+            }
+
 
             $this->gradoId = $matricula->grado_id;
             $this->modalidadId = $matricula->modalidad_id;
 
             //Si tiene pase de curso en otra modalidad
             $pasecurso = TmPaseCursos::query()
-            ->where('matricula_id',$matricula->matricula_id)
+            ->where('matricula_id',$matriculaId)
             ->where('estado','A')
             ->first();
 
