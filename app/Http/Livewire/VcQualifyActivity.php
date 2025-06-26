@@ -16,7 +16,7 @@ class VcQualifyActivity extends Component
 
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $tblparalelo=[], $tblasignatura=[];
-    public $periodoId, $modalidadId, $tbltermino, $tblbloque, $tblactividades;
+    public $periodoId, $modalidadId=0, $tbltermino, $tblbloque, $tblactividades;
     public $tblactividad=[];
     public $tblrecords=[];
     public $personas=[];
@@ -178,7 +178,21 @@ class VcQualifyActivity extends Component
 
         $this->personas = TmHorariosDocentes::query()
         ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join("tm_matriculas as m",function($join){
+        /*->join("tm_matriculas as m",function($join){
+            $join->on("m.modalidad_id","=","h.grupo_id")
+                ->on("m.periodo_id","=","h.periodo_id")
+                ->on("m.curso_id","=","h.curso_id");
+        })*/
+        ->join(DB::raw("(select estudiante_id, modalidad_id, periodo_id, curso_id, estado 
+        from tm_matriculas m 
+        where m.modalidad_id = ".$this->modalidadId."  and m.curso_id = ".$this->periodoId."
+        union all
+        select m.estudiante_id, m.modalidad_id, m.periodo_id, p.curso_id, m.estado
+        from tm_pase_cursos p
+        inner join tm_matriculas m on m.id = p.matricula_id
+        where m.modalidad_id = ".$this->modalidadId."  and m.curso_id = ".$this->periodoId."
+        and p.estado = 'A'        
+        ) as m"),function($join){
             $join->on("m.modalidad_id","=","h.grupo_id")
                 ->on("m.periodo_id","=","h.periodo_id")
                 ->on("m.curso_id","=","h.curso_id");
