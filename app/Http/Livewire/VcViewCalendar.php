@@ -30,7 +30,6 @@ class VcViewCalendar extends Component
         $this->periodo = $tblperiodos['periodo'];
         $this->mes = date('m');
 
-
         $this->loadEvent();
     }
 
@@ -41,94 +40,6 @@ class VcViewCalendar extends Component
 
     }
 
-    /*public function createData(){
-
-        $this ->validate([
-            'actividad' => 'required',
-            'evento' => 'required',
-            'startdate' => 'required',
-            'enddate' => 'required',
-            'comentario' => 'required',
-        ]);
-
-        $eventos = TmCalendarioEventos::Create([
-            'periodo' => $this->periodo,
-            'mes' => $this->mes,
-            'actividad' => $this->actividad,
-            'nombre' => $this->evento,
-            'start_date' => $this->startdate,
-            'end_date' => $this->enddate,
-            'descripcion' => $this->comentario,
-            'usuario' => auth()->user()->name,
-        ]);
-
-        $this->selectId = $eventos->id;
-        $this->emitTo('vc-nivel-calendar','setGrabaDetalle',$this->selectId);
-
-        $this->dispatchBrowserEvent('hide-form');
-        $this->loadEvent();  
-        
-    }*/
-
-
-    /*public function updateData(){
-
-        $this ->validate([
-            'actividad' => 'required',
-            'evento' => 'required',
-            'startdate' => 'required',
-            'enddate' => 'required',
-            'comentario' => 'required',
-        ]);
-        
-        $record = TmCalendarioEventos::find($this->selectId);
-        $record->update([
-            'descripcion' => $this->comentario,
-            'nombre' => $this->evento,
-            'start_date' => $this->startdate,
-            'end_date' => $this->enddate,                
-        ]);
-        
-        $this->emitTo('vc-nivel-calendar','setGrabaDetalle',$this->selectId);
-        $this->dispatchBrowserEvent('hide-form');
-        $this->loadEvent();
-        
-    }*/
-
-    /*public function cerrarModal(){
-        $this->dispatchBrowserEvent('hide-form');
-    }*/
-
-    /*public function deleteData(){
-
-        TmCalendarioGrados::where('calendario_id',$this->eventoId)->delete();
-        TmCalendarioEventos::find($this->eventoId)->delete();
-        
-        $this->dispatchBrowserEvent('hide-form');
-        $this->loadEvent();
-    }*/
-
-    /*public function newEvent(){
-
-        $this->showEditModal = false;
-        $this->eControl = '';
-        
-        $ldate = date('Y-m-d H:i:s');
-        $startDate = date('Y-m-d',strtotime($ldate));
-        $endDate = date('Y-m-d',strtotime($ldate));
-
-        $this->eventoId = 0;
-        $this->actividad = 'GE';
-        $this->evento = '';
-        $this->startdate = $startDate;
-        $this->enddate = $endDate;
-        $this->comentario = '';
-
-        $this->emitTo('vc-nivel-calendar','setGrado',$this->eventoId);
-        $this->dispatchBrowserEvent('show-form');
-
-    }*/
-
     public function loadEvent(){
 
         $this->array=[];
@@ -136,15 +47,7 @@ class VcViewCalendar extends Component
 
         if ($persona->tipopersona=='E'){
 
-            /*$matricula = TmMatricula::query()
-            ->where('periodo_id',$this->periodoId)
-            ->where('estudiante_id',$this->personaId)
-            ->first();
-
-            $this->modalidadId = $matricula->modalidad_id;
-            $this->gradoId = $matricula->grado_id;*/
-
-            $matricula = TmCambiaModalidad::query()
+            /*$matricula = TmCambiaModalidad::query()
             ->where('persona_id',$this->personaId)
             ->first();
 
@@ -154,7 +57,26 @@ class VcViewCalendar extends Component
             }else{
                 $this->modalidadId = $matricula['modalidadId'];
                 $this->gradoId = $matricula['gradoId'];
+            }*/
+            $matricula = TmCambiaModalidad::query()
+            ->where('persona_id',$this->personaId)
+            ->first();
+
+            $this->gradoId = $matricula->grado_id;
+            $this->modalidadId = $matricula->modalidad_id;
+
+            //Si tiene pase de curso en otra modalidad
+            $pasecurso = TmPaseCursos::query()
+            ->where('matricula_id',$matricula->matricula_id)
+            ->where('estado','A')
+            ->first();
+
+            if (!empty($pasecurso)){
+                
+                $this->modalidadId = $pasecurso->modalidad_id;
+                $this->gradoId = $matricula->grado_id;
             }
+
 
             // Eventos Todos
             $evenTodos = TmCalendarioEventos::query()

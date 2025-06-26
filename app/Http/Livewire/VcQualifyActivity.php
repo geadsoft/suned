@@ -58,11 +58,6 @@ class VcQualifyActivity extends Component
     {   
         $this->personas = TmHorariosDocentes::query()
         ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        /*->join("tm_matriculas as m",function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
-        })*/
         ->join(DB::raw("(select estudiante_id, modalidad_id, periodo_id, curso_id, estado 
         from tm_matriculas m 
         where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
@@ -178,11 +173,6 @@ class VcQualifyActivity extends Component
 
         $this->personas = TmHorariosDocentes::query()
         ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        /*->join("tm_matriculas as m",function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
-        })*/
         ->join(DB::raw("(select estudiante_id, modalidad_id, periodo_id, curso_id, estado 
         from tm_matriculas m 
         where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."

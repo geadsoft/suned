@@ -19,6 +19,7 @@ class TmCalendarioEventos extends Model
         'start_date',
         'end_date',
         'descripcion',
+        'todos',
         'usuario',
     ];
 
