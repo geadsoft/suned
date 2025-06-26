@@ -8,6 +8,7 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TmMatricula;
 use App\Models\TmPersonas;
 use App\Models\TmCambiaModalidad;
+use App\Models\TmPaseCursos;
 
 use Livewire\Component;
 
