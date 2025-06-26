@@ -9,6 +9,7 @@ use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmPeriodosLectivos;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 
 class VcQualifyActivity extends Component
 {   
