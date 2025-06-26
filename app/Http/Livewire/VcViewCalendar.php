@@ -75,7 +75,7 @@ class VcViewCalendar extends Component
             if (!empty($pasecurso)){
                 
                 $this->modalidadId = $pasecurso->modalidad_id;
-                $this->gradoId = $matricula->grado_id;
+                $this->gradoId = $pasecurso->grado_id;
             }
 
 
