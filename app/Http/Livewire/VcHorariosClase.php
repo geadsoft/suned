@@ -217,7 +217,6 @@ class VcHorariosClase extends Component
 
             $actividades = TmActividades::query()
             ->where("paralelo",$recno->id)
-            ->where("docente_id",$recno->docente_id)
             ->get();
 
             if ($actividades->isEmpty()){
