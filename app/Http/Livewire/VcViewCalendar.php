@@ -48,7 +48,7 @@ class VcViewCalendar extends Component
 
         if ($persona->tipopersona=='E'){
 
-            /*$matricula = TmCambiaModalidad::query()
+            $matricula = TmCambiaModalidad::query()
             ->where('persona_id',$this->personaId)
             ->first();
 
@@ -58,10 +58,7 @@ class VcViewCalendar extends Component
             }else{
                 $this->modalidadId = $matricula['modalidadId'];
                 $this->gradoId = $matricula['gradoId'];
-            }*/
-            $matricula = TmCambiaModalidad::query()
-            ->where('persona_id',$this->personaId)
-            ->first();
+            }            
 
             $this->gradoId = $matricula->grado_id;
             $this->modalidadId = $matricula->modalidad_id;
