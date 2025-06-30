@@ -40,11 +40,11 @@
                                 <img src="{{ URL::asset('assets/images/American-School.png')}}" alt="" height="80">
                             </a>
                         </div>
-                        @if(session('message'))
+                        <!--@if(session('message'))
                             <div class="alert alert-warning">
                                 {{ session('message') }}
                             </div>
-                        @endif
+                        @endif-->
                         <div class="card-body p-4">
                             <div class="text-center mt-2">
 
