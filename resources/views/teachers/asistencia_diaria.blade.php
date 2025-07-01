@@ -31,7 +31,7 @@
         window.addEventListener('msg-confirm', event => {
             
             Swal.fire({
-                title: '¿Está seguro que quiere guardar la asistencia de este curso para el día de hoy?\n No podrá hacer modificaciones una vez guardada',
+                title: '¿Está seguro que quiere guardar la asistencia de este curso para el día de hoy?',
                 text: "",
                 icon: 'warning',
                 showCancelButton: true,
@@ -76,14 +76,19 @@
 
 
         window.addEventListener('msg-grabar', event => {
+            /*swal("Buen Trabajo!", event.detail.newName, "success");*/
             Swal.fire({
-                    title: 'Buen Trabajo!',
-                    text:  event.detail.newName,
-                    icon: 'success',
-                    confirmButtonClass: 'btn btn-primary w-xs mt-2',
-                    buttonsStyling: false
-                })
-        }) 
+            title: 'Buen Trabajo!',
+            html:  event.detail.newName,
+            icon: 'success',
+            confirmButtonClass: 'btn btn-primary w-xs mt-2',
+            confirmButtonText: 'OK'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                location.reload(); // Actualiza la misma página
+            }
+            });
+        })
 
 
     </script>

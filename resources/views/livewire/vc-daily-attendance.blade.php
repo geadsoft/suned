@@ -5,20 +5,20 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="mb-3">
-                                <label for="choices-publish-status-input" class="form-label fw-semibold">Asignatura</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="asignaturaId">
-                                   <option value="">Seleccione Asignatura</option>
-                                   @foreach ($tblasignatura as $asignatura) 
-                                    <option value="{{$asignatura->id}}">{{$asignatura->descripcion}}</option>
+                                <label for="choices-publish-status-input" class="form-label fw-semibold">Modalidad</label>
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
+                                   <option value="">Seleccione Modalidad</option>
+                                   @foreach ($tblmodalidad as $modalidad) 
+                                    <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
                                     @endforeach 
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.cursoId"  wire:change="consulta()">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="filters.cursoId"  wire:change="consulta()">
                                    <option value="">Seleccione Paralelo</option>
                                    @foreach ($tblparalelo as $paralelo) 
-                                    <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
+                                    <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}-{{$paralelo->paralelo}}</option>
                                     @endforeach 
                                 </select>
                             </div>
@@ -28,7 +28,7 @@
             </div>
             <div class="col-lg-12">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                     Activar el check solamente si el estudiante ha <b>faltado a clases.</b>
+                     Digitar <b>F</b> solamente si el estudiante ha <b>faltado a clases</b>, <b>FJ</b> -> Falta Justificada, <b>FE</b> -> Feriado, <b>A</b> -> Atraso, <b>AH</b> -> Atraso Justificado
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>
@@ -43,35 +43,53 @@
                             <div class="col-lg-8">
                                 <div class="search-box">
                                     <input type="text" class="form-control search"
-                                        placeholder="Buscar por nombre o apellidos" wire:model="filters.buscar" wire:keydown="consulta()">
+                                        placeholder="Buscar por nombre o apellidos" wire:model="filters.buscar" wire:keydown="consulta()" disabled>
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
                             </div>
                             <div class="col-lg-4">
-                                <input type="date" class="form-control" id="fechaIni" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.fecha">
-                            </div>
+                                <!--<input type="date" class="form-control" id="fechaIni" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.fecha">-->
+                                <select class="form-select" id="select_mes" data-choices data-choices-search-false wire:model="filters.mes" wire:change="consulta()">
+                                    @foreach($objmes as $key => $mes)
+                                    <option value="{{$key}}">{{$mes}}</option>
+                                    @endforeach 
+                                </select>
+                            </div> 
                         </div>
                         <div class="mb-3">
                             <table class="table table-bordered table-sm" id="orderTable">
                                 <thead class="text-muted table-light">
-                                    <tr class="text-uppercase">
-                                        <th style="width: 500px;">Estudiante</th>
-                                        <th style="width: 90px;" class="text-center">Falta</th>
+                                    <tr class="text-uppercase ">
+                                        <th style="width: 500px;" rowspan="2">Estudiante</th>
+                                        <!--<th style="width: 90px;" class="text-center">Falta</th>-->
+                                        @foreach ($diasHabiles as $dia)
+                                            <th style="width: 90px;" class="text-center">{{$this->objdia[$dia['dia']]}}</th>
+                                        @endforeach
+                                    </tr>
+                                    <tr>
+                                        @foreach ($diasHabiles as $dia)
+                                            <th style="width: 90px;" class="text-center">{{$dia['fecha']}}</th>
+                                        @endforeach
                                     </tr>
                                 </thead>
                                 <tbody id="tbl-notas">
-                                @foreach ($tblrecords as $fil => $record)
-                                <tr id="{{$fil}}" class="detalle">
-                                    <td>{{$record["nombres"]}}</td> 
-                                    <td> 
-                                        <div class="custom-control custom-checkbox">
-                                            <div class="form-check text-center" >
-                                            <input class="form-check-input" type="checkbox" role="switch" wire:model="tblrecords.{{$fil}}.falta">
-                                             </div>
-                                        </div>
+                                @foreach($personas as $personaId => $record)
+                                <tr wire:key="persona-{{ $record->id }}">
+                                    <td style="vertical-align: middle;">{{ $record['apellidos'] }} {{ $record['nombres'] }}</td> 
+                                    @foreach ($diasHabiles as $dia)
+                                    <td>
+                                        <input list="asistencias" name="asistencia" class="form-control form-control-sm" type="text" wire:model="tblrecords.{{$record->id}}.{{$dia['fecha']}}">
+                                        <datalist id="asistencias">
+                                        <option value="F">
+                                        <option value="FJ">
+                                        <option value="A">
+                                        <option value="AH">
+                                        <option value="FE">
+                                        </datalist>
                                     </td>
+                                    @endforeach
                                 </tr>
-                                 @endforeach
+                                @endforeach
                             </table>                            
                         </div>
                         

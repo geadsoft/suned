@@ -193,6 +193,12 @@ class VcCalendario extends Component
                 case 'EX':
                     $color = "bg-soft-danger";
                     break;
+                case 'ND':
+                    $color = "bg-soft-secondary";
+                    break;
+                case 'FE':
+                    $color = "bg-soft-dark";
+                    break;
                 default:
                     $color = "bg-soft-primary";
                     break;

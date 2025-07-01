@@ -6,92 +6,116 @@ use App\Models\TmHorarios;
 use App\Models\TmHorariosDocentes;
 use App\Models\TmActividades;
 use App\Models\TdAsistenciaDiarias;
+use App\Models\TmPeriodosLectivos;
+use App\Models\TmCursos;
 
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use DateTime;
 
 class VcDailyAttendance extends Component
 {
-    public $modalidadId, $tblmodalidad;
+
+    public $modalidadId, $tblmodalidad, $personas=[];
     public $asignaturaId;
-    public $tblrecords=[];
+    public $tblrecords=[], $diasHabiles=[];
     
     public $filters=[
         'docenteId' => 0,
         'cursoId' => 0, 
         'buscar' => '',
         'fecha' => '',
+        'mes' => 1,
     ];
 
     protected $listeners = ['setData'];
+
+    public $objdia=[
+        1 => 'L',
+        2 => 'M',
+        3 => 'X',
+        4 => 'J',
+        5 => 'V',
+    ];
+
+    public $objmes = [
+        1 => 'Enero',
+        2 => 'Febrero',
+        3 => 'Marzo',
+        4 => 'Abril',
+        5 => 'Mayo',
+        6 => 'Junio',
+        7 => 'Julio',
+        8 => 'Agosto',
+        9 => 'Septiembre',
+        10=> 'Octubre',
+        11=> 'Noviembre',
+        12=> 'Diciembre',
+    ];
 
     public function mount()
     {   
         $ldate = date('Y-m-d H:i:s');
         $this->filters['fecha'] = date('Y-m-d',strtotime($ldate));
         $this->filters['docenteId'] = auth()->user()->personaId;
+        $this->filters['mes'] = intval(date('m',strtotime($ldate)));
 
+        $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
+        $this->periodoId = $tblperiodos['id'];
+        
     }
 
     public function render()
     {
         $this->tblmodalidad = TmGeneralidades::where('superior',1)->get();
 
-        $this->tblasignatura = TmHorarios::query()
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->filters['docenteId'])
-        ->selectRaw('m.id, m.descripcion')
-        ->groupBy('m.id','m.descripcion')
+        $this->tblparalelo = TmCursos::query()
+        ->join('tm_servicios as s', 's.id', '=', 'tm_cursos.servicio_id')
+        ->where('tm_cursos.periodo_id',$this->periodoId)
+        ->where('s.modalidad_id', $this->modalidadId)
+        ->select("tm_cursos.id","s.descripcion","tm_cursos.paralelo")
+        ->orderBy('tm_cursos.nivel_id')
+        ->orderBy('tm_cursos.grado_id')
         ->get();
 
-        $this->tblparalelo = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->filters['docenteId'])
-        ->where("m.id",$this->asignaturaId)
-        ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion')
-        ->get();
-
-        return view('livewire.vc-daily-attendance');
-    }
-
-    public function updatedasignaturaId($id){
-
-        $this->tblparalelo = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->filters['docenteId'])
-        ->where("m.id",$id)
-        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
-        ->get();
-
-    }
-
-    public function consulta(){
-
-        $this->personas = TmHorariosDocentes::query()
-        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
+        $this->personas = TmHorarios::query()
         ->join("tm_matriculas as m",function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
+            $join->on("m.modalidad_id","=","tm_horarios.grupo_id")
+                ->on("m.periodo_id","=","tm_horarios.periodo_id")
+                ->on("m.curso_id","=","tm_horarios.curso_id");
         })
         ->join("tm_personas as p","p.id","=","m.estudiante_id")
         ->when($this->filters['buscar'],function($query){
             return $query->where(DB::raw('concat(ltrim(rtrim(p.apellidos))," ",ltrim(rtrim(p.nombres)))'), 'LIKE' , "%{$this->filters['buscar']}%");
         })
         ->select("p.*")
-        ->where("tm_horarios_docentes.asignatura_id",$this->asignaturaId)
-        ->where("h.curso_id",$this->filters['cursoId'])
+        ->where("tm_horarios.curso_id",$this->filters['cursoId'])
+        ->where("tm_horarios.periodo_id",$this->periodoId)
         ->orderBy("p.apellidos")
         ->get();
-            
+
+        return view('livewire.vc-daily-attendance');
+    }
+
+    public function consulta(){
+
+        $this->personas = TmHorarios::query()
+        ->join("tm_matriculas as m",function($join){
+            $join->on("m.modalidad_id","=","tm_horarios.grupo_id")
+                ->on("m.periodo_id","=","tm_horarios.periodo_id")
+                ->on("m.curso_id","=","tm_horarios.curso_id");
+        })
+        ->join("tm_personas as p","p.id","=","m.estudiante_id")
+        ->when($this->filters['buscar'],function($query){
+            return $query->where(DB::raw('concat(ltrim(rtrim(p.apellidos))," ",ltrim(rtrim(p.nombres)))'), 'LIKE' , "%{$this->filters['buscar']}%");
+        })
+        ->select("p.*")
+        ->where("tm_horarios.curso_id",$this->filters['cursoId'])
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->orderBy("p.apellidos")
+        ->get();
+        
         $this->add();
         $this->loadfalta();
 
@@ -99,7 +123,8 @@ class VcDailyAttendance extends Component
 
     public function add(){
 
-        $this->tblrecords=[];
+       $this->tblrecords=[];
+       $this->diasHabiles = $this->obtenerDiasHabiles($this->periodoId,$this->filters['mes']);
 
         // Datos
         foreach ($this->personas as $key => $data)
@@ -108,35 +133,36 @@ class VcDailyAttendance extends Component
             $this->tblrecords[$index]['id'] = 0;
             $this->tblrecords[$index]['personaId'] = $data->id;
             $this->tblrecords[$index]['nombres'] = $data->apellidos.' '.$data->nombres;
-            $this->tblrecords[$index]['falta'] = false;
+            foreach ($this->diasHabiles as $dias){
+                $lndia = $dias['fecha'];
+                $this->tblrecords[$index][$lndia] = "";
+            } 
         }
 
-        
     }
 
     public function loadfalta(){
 
 
         $faltas = TdAsistenciaDiarias::query()
-        ->where("asignatura_id",$this->asignaturaId)
         ->where("curso_id",$this->filters['cursoId'])
         ->where("docente_id",$this->filters['docenteId'])
-        ->where("fecha",$this->filters['fecha'])
+        ->where("periodo_id", $this->periodoId)
+        ->where("mes", $this->filters['mes'])
+        ->whereRaw("valor<>''")
         ->get();
 
         foreach ($faltas as $key => $data)
         {
             $index = $data->persona_id;
-            $this->tblrecords[$index]['id'] = $data['id'];
-            $this->tblrecords[$index]['falta'] = true;
-        }
+            $dia = intval(date("d", strtotime($data->fecha)));
 
-        array_multisort(array_column($this->tblrecords, 'nombres'), SORT_ASC, $this->tblrecords);
+            $this->tblrecords[$index][$dia] = $data->valor;
+        }
 
     }
 
     public function createData(){
-
 
         if (count($this->tblrecords)>0){
 
@@ -148,35 +174,89 @@ class VcDailyAttendance extends Component
             $message = "";
             $this->dispatchBrowserEvent('msg-alert', ['newName' => $message]);
 
-        }  
+        }        
 
     }
 
     public function setData()
     {
+        $periodo = TmPeriodosLectivos::find($this->periodoId);
+        $anio = str_pad($periodo->periodo, 4, '0', STR_PAD_LEFT); 
+        $mes  = str_pad($this->filters['mes'], 2, '0', STR_PAD_LEFT);
 
-        foreach ($this->tblrecords as $key => $record)
+
+        foreach ($this->tblrecords as $index => $data)
         {
-            if ($record['falta']==true && $record['id']==0){
+            $personaId = $index;
 
-                TdAsistenciaDiarias::Create([
-                    'docente_id' => $this->filters['docenteId'],
-                    'asignatura_id' => $this->asignaturaId,
-                    'curso_id' => $this->filters['cursoId'],
-                    'persona_id' => $record['personaId'],
-                    'fecha' => $this->filters['fecha'],
-                    'falta' =>  $record['falta'],
-                    'usuario' => auth()->user()->name,
-                    'estado' => 'A',
-                ]);
+            foreach ($this->diasHabiles as $dias){
+
+                $dia   = str_pad($dias['fecha'], 2, '0', STR_PAD_LEFT);
+                $fecha = date("Y-m-d", strtotime("$anio-$mes-$dia"));
+                
+                $asistencia = TdAsistenciaDiarias::query()
+                    ->where("periodo_id", $this->periodoId)
+                    ->where("mes", $this->filters['mes'])
+                    ->whereRaw("DAY(fecha) = ?", [$dias['fecha']])
+                    ->where("persona_id", $personaId)
+                    ->where("curso_id",$this->filters['cursoId'])
+                    ->first();
+
+                if ($asistencia) {
+                    $asistencia->update([
+                        'valor' => $this->tblrecords[$personaId][$dias['fecha']],
+                    ]);
+                }else{
+                    
+                    TdAsistenciaDiarias::Create([
+                        'periodo_id' => $this->periodoId,
+                        'mes' => $this->filters['mes'],
+                        'docente_id' => $this->filters['docenteId'],
+                        'asignatura_id' => null,
+                        'curso_id' => $this->filters['cursoId'],
+                        'persona_id' => $personaId,
+                        'fecha' => $fecha,
+                        'valor' =>  $this->tblrecords[$personaId][$dias['fecha']],
+                        'usuario' => auth()->user()->name,
+                        'estado' => 'A',
+                    ]);
+
+                }
 
             }
         
         }
 
-
+        $message = "Calificaciones grabada con Éxito......";
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+        
     }
 
+    function obtenerDiasHabiles($anio, $mes) {
+    $diasHabiles = [];
+
+    // Primer día del mes
+    $fecha = new DateTime("$anio-$mes-01");
+
+    // Último día del mes
+    $ultimoDia = (clone $fecha)->modify('last day of this month');
+
+    while ($fecha <= $ultimoDia) {
+        $diaSemana = $fecha->format('N'); // 1 (lunes) a 7 (domingo)
+
+        if ($diaSemana <= 5) { // de lunes (1) a viernes (5)
+            $diasHabiles[] = [
+                'fecha' => intval($fecha->format('d')),
+                'dia' => $diaSemana, 
+            ];
+        }
+
+        // Avanzar un día
+        $fecha->modify('+1 day');
+    }
+
+    return $diasHabiles;
+}
     
 }
 

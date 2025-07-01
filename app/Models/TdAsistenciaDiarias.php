@@ -11,12 +11,14 @@ class TdAsistenciaDiarias extends Model
     protected $table = 'td_asistencia_diarias';
     protected $primaryKey = "id";
     protected $fillable = [
+        'periodo_id',
+        'mes',
         'docente_id',
         'asignatura_id',
         'curso_id',
         'persona_id',
         'fecha',
-        'falta',
+        'valor',
         'usuario'
     ];
 

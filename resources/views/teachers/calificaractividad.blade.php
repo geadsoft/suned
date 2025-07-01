@@ -75,7 +75,7 @@
         })    
 
 
-         window.addEventListener('msg-grabar', event => {
+        window.addEventListener('msg-grabar', event => {
             /*swal("Buen Trabajo!", event.detail.newName, "success");*/
             Swal.fire({
             title: 'Buen Trabajo!',
