@@ -234,9 +234,10 @@ class VcDailyAttendance extends Component
 
     function obtenerDiasHabiles($anio, $mes) {
     $diasHabiles = [];
+    $timezone = new \DateTimeZone('America/Guayaquil'); // ← Agrega la barra invertida
 
     // Primer día del mes
-    $fecha = new DateTime("$anio-$mes-01");
+    $fecha = new \DateTime("$anio-$mes-01", $timezone); // ← También aquí
 
     // Último día del mes
     $ultimoDia = (clone $fecha)->modify('last day of this month');
@@ -244,14 +245,13 @@ class VcDailyAttendance extends Component
     while ($fecha <= $ultimoDia) {
         $diaSemana = $fecha->format('N'); // 1 (lunes) a 7 (domingo)
 
-        if ($diaSemana <= 5) { // de lunes (1) a viernes (5)
+        if ($diaSemana <= 5) { // lunes a viernes
             $diasHabiles[] = [
                 'fecha' => intval($fecha->format('d')),
-                'dia' => $diaSemana, 
+                'dia' => $diaSemana,
             ];
         }
 
-        // Avanzar un día
         $fecha->modify('+1 day');
     }
 
