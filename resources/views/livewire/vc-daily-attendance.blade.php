@@ -63,7 +63,7 @@
                                         <th style="width: 500px;" rowspan="2">Estudiante</th>
                                         <!--<th style="width: 90px;" class="text-center">Falta</th>-->
                                         @foreach ($diasHabiles as $dia)
-                                            <th style="width: 90px;" class="text-center">{{$this->objdia[$dia['dia']]}}</th>
+                                            <th style="width: 90px;" class="text-center">{{$dia['letra'] }}</th>
                                         @endforeach
                                     </tr>
                                     <tr>

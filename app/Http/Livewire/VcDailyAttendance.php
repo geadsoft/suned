@@ -243,32 +243,40 @@ class VcDailyAttendance extends Component
     }
 
     function obtenerDiasHabiles($anio, $mes) {
-    $diasHabiles = [];
-    $timezone = new \DateTimeZone('America/Guayaquil'); // ← Agrega la barra invertida
+        $diasHabiles = [];
+        $timezone = new \DateTimeZone('America/Guayaquil');
 
-    // Primer día del mes
-    $fecha = new \DateTime("$anio-$mes-01", $timezone); // ← También aquí
+        $letras = [
+            1 => 'L', // lunes
+            2 => 'M',
+            3 => 'X',
+            4 => 'J',
+            5 => 'V',
+        ];
 
-    // Último día del mes
-    $ultimoDia = (clone $fecha)->modify('last day of this month');
+        $fecha = new \DateTime("$anio-$mes-01", $timezone);
+        $ultimoDia = (clone $fecha)->modify('last day of this month');
 
-    while ($fecha <= $ultimoDia) {
-        $diaSemana = intval($fecha->format('w'));; // 1 (lunes) a 7 (domingo)
-        //$diaSemana = $fecha->format('l');
-        $diaISO = $diaSemana === 0 ? 7 : $diaSemana;
+        while ($fecha <= $ultimoDia) {
+            // Usamos 'w' (0 = domingo, 6 = sábado)
+            $diaSemanaW = intval($fecha->format('w'));
 
-        if ($diaISO <= 5) { // lunes a viernes
-            $diasHabiles[] = [
-                'fecha' => intval($fecha->format('d')),
-                'dia' => $diaISO,
-            ];
+            // Convertimos a ISO-8601 manualmente: lunes = 1, ..., domingo = 7
+            $diaISO = $diaSemanaW === 0 ? 7 : $diaSemanaW;
+
+            if ($diaISO <= 5) { // lunes a viernes
+                $diasHabiles[] = [
+                    'fecha' => intval($fecha->format('d')),
+                    'dia' => $diaISO,
+                    'letra' => $letras[$diaISO],
+                ];
+            }
+
+            $fecha->modify('+1 day');
         }
 
-        $fecha->modify('+1 day');
+        return $diasHabiles;
     }
-
-    return $diasHabiles;
-}
     
 }
 
