@@ -521,7 +521,7 @@
                 </li>-->
                 @can('Control de Asistencia')
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="student/show-assistance">
+                    <a class="nav-link menu-link" href="/student/show-assistance">
                         <i class="las la-list-alt fs-20"></i>Control de Asistencia</span>
                     </a>
                 </li>
