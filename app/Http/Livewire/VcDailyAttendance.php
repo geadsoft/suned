@@ -13,6 +13,7 @@ use App\Models\TmCursos;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use DateTime;
+use Carbon\Carbon;
 
 class VcDailyAttendance extends Component
 {
@@ -243,41 +244,35 @@ class VcDailyAttendance extends Component
     }
 
     function obtenerDiasHabiles($anio, $mes) {
-        $diasHabiles = [];
-        $timezone = new \DateTimeZone('America/Guayaquil');
+    $diasHabiles = [];
 
-        $letras = [
-            1 => 'L', // lunes
-            2 => 'M',
-            3 => 'X',
-            4 => 'J',
-            5 => 'V',
-        ];
+    $letras = [
+        1 => 'L',
+        2 => 'M',
+        3 => 'X',
+        4 => 'J',
+        5 => 'V',
+    ];
 
-        $fecha = new \DateTime("$anio-$mes-01", $timezone);
-        $ultimoDia = (clone $fecha)->modify('last day of this month');
+    $fecha = Carbon::createFromDate($anio, $mes, 1, 'America/Guayaquil');
+    $ultimoDia = $fecha->copy()->endOfMonth();
 
-        while ($fecha <= $ultimoDia) {
-            // Usamos 'w' (0 = domingo, 6 = sábado)
-            $diaSemanaW = intval($fecha->format('w'));
+    while ($fecha->lte($ultimoDia)) {
+        $diaISO = (int) $fecha->isoWeekday(); // 1 = lunes, 7 = domingo
 
-            // Convertimos a ISO-8601 manualmente: lunes = 1, ..., domingo = 7
-            $diaISO = $diaSemanaW === 0 ? 7 : $diaSemanaW;
-
-            if ($diaISO <= 5) { // lunes a viernes
-                $diasHabiles[] = [
-                    'fecha' => intval($fecha->format('d')),
-                    'dia' => $diaISO,
-                    'letra' => $letras[$diaISO],
-                ];
-            }
-
-            $fecha->modify('+1 day');
+        if ($diaISO <= 5) {
+            $diasHabiles[] = [
+                'fecha' => $fecha->day,
+                'dia' => $diaISO,
+                'letra' => $letras[$diaISO],
+            ];
         }
 
-        dd($diasHabiles);
-        return $diasHabiles;
+        $fecha->addDay();
     }
+
+    return $diasHabiles;
+}
     
 }
 
