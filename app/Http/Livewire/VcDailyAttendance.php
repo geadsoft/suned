@@ -246,26 +246,28 @@ class VcDailyAttendance extends Component
     function obtenerDiasHabiles($anio, $mes) {
         $diasHabiles = [];
 
-        $letras = [
-            'Monday'    => 'L',
-            'Tuesday'   => 'M',
-            'Wednesday' => 'X',
-            'Thursday'  => 'J',
-            'Friday'    => 'V',
+        // Mapeo manual para forzar letras según índice 0=domingo...6=sábado
+        $mapaDias = [
+            0 => null,    // domingo (lo excluimos)
+            1 => 'L',
+            2 => 'M',
+            3 => 'X',
+            4 => 'J',
+            5 => 'V',
+            6 => null,    // sábado (lo excluimos)
         ];
 
-        $fecha = "$anio-$mes-01";
-        $ultimoDia = date('t', strtotime($fecha)); // Total de días del mes
+        $totalDias = cal_days_in_month(CAL_GREGORIAN, $mes, $anio);
 
-        for ($dia = 1; $dia <= $ultimoDia; $dia++) {
-            $fechaCompleta = "$anio-$mes-" . str_pad($dia, 2, '0', STR_PAD_LEFT);
-            $nombreDia = date('l', strtotime($fechaCompleta));
+        for ($dia = 1; $dia <= $totalDias; $dia++) {
+            $fechaCompleta = "$anio-" . str_pad($mes, 2, '0', STR_PAD_LEFT) . "-" . str_pad($dia, 2, '0', STR_PAD_LEFT);
+            $diaSemana = (int) date('w', strtotime($fechaCompleta)); // 0=domingo, ..., 6=sábado
 
-            if (isset($letras[$nombreDia])) {
+            if (isset($mapaDias[$diaSemana]) && $mapaDias[$diaSemana] !== null) {
                 $diasHabiles[] = [
                     'fecha' => $dia,
-                    'dia' => $nombreDia,
-                    'letra' => $letras[$nombreDia],
+                    'dia' => $diaSemana,
+                    'letra' => $mapaDias[$diaSemana],
                 ];
             }
         }
