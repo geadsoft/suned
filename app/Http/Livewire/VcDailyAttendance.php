@@ -31,15 +31,15 @@ class VcDailyAttendance extends Component
 
     protected $listeners = ['setData'];
 
-    /*public $objdia=[
+    public $objdia=[
         1 => 'L',
         2 => 'M',
         3 => 'X',
         4 => 'J',
         5 => 'V',
-    ];*/
+    ];
 
-    public $objdia=[
+    /*public $objdia=[
         "Monday" => "L",
         "Tuesday" => "M",
         "Wednesday" => "X",
@@ -47,7 +47,7 @@ class VcDailyAttendance extends Component
         "Friday" => "V",
         "Saturday" => "S",
         "Sunday" => "D"
-    ];
+    ];*/
 
     public $objmes = [
         1 => 'Enero',
@@ -253,13 +253,14 @@ class VcDailyAttendance extends Component
     $ultimoDia = (clone $fecha)->modify('last day of this month');
 
     while ($fecha <= $ultimoDia) {
-        //$diaSemana = $fecha->format('N'); // 1 (lunes) a 7 (domingo)
-        $diaSemana = $fecha->format('l');
-        
-        if ($diaSemana != "Saturday" && $diaSemana != "Sunday") { // lunes a viernes
+        $diaSemana = intval($fecha->format('w'));; // 1 (lunes) a 7 (domingo)
+        //$diaSemana = $fecha->format('l');
+        $diaISO = $diaSemana === 0 ? 7 : $diaSemana;
+
+        if ($diaISO <= 5) { // lunes a viernes
             $diasHabiles[] = [
                 'fecha' => intval($fecha->format('d')),
-                'dia' => $diaSemana,
+                'dia' => $diaISO,
             ];
         }
 
