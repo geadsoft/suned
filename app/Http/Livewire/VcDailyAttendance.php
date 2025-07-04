@@ -244,35 +244,34 @@ class VcDailyAttendance extends Component
     }
 
     function obtenerDiasHabiles($anio, $mes) {
-    $diasHabiles = [];
+        $diasHabiles = [];
 
-    $letras = [
-        1 => 'L',
-        2 => 'M',
-        3 => 'X',
-        4 => 'J',
-        5 => 'V',
-    ];
+        $letras = [
+            'Monday'    => 'L',
+            'Tuesday'   => 'M',
+            'Wednesday' => 'X',
+            'Thursday'  => 'J',
+            'Friday'    => 'V',
+        ];
 
-    $fecha = Carbon::createFromDate($anio, $mes, 1, 'America/Guayaquil');
-    $ultimoDia = $fecha->copy()->endOfMonth();
+        $fecha = "$anio-$mes-01";
+        $ultimoDia = date('t', strtotime($fecha)); // Total de días del mes
 
-    while ($fecha->lte($ultimoDia)) {
-        $diaISO = (int) $fecha->isoWeekday(); // 1 = lunes, 7 = domingo
+        for ($dia = 1; $dia <= $ultimoDia; $dia++) {
+            $fechaCompleta = "$anio-$mes-" . str_pad($dia, 2, '0', STR_PAD_LEFT);
+            $nombreDia = date('l', strtotime($fechaCompleta));
 
-        if ($diaISO <= 5) {
-            $diasHabiles[] = [
-                'fecha' => $fecha->day,
-                'dia' => $diaISO,
-                'letra' => $letras[$diaISO],
-            ];
+            if (isset($letras[$nombreDia])) {
+                $diasHabiles[] = [
+                    'fecha' => $dia,
+                    'dia' => $nombreDia,
+                    'letra' => $letras[$nombreDia],
+                ];
+            }
         }
 
-        $fecha->addDay();
+        return $diasHabiles;
     }
-
-    return $diasHabiles;
-}
     
 }
 
