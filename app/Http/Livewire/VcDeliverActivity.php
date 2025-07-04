@@ -95,7 +95,14 @@ class VcDeliverActivity extends Component
 
     public function load(){
 
-        $this->record = TmActividades::find($this->selectId);
+        $this->record = TmActividades::query()
+        ->join("tm_horarios_docentes as h","h.id","=","tm_actividades.paralelo")
+        ->join("tm_asignaturas as a","a.id","=","h.asignatura_id")
+        ->where("tm_actividades.id",$this->selectId) 
+        ->select("tm_actividades.*","a.descripcion as asignatura")   
+        ->where("tm_actividades.id",$this->selectId)
+        ->first();
+        
         $this->descripcion = json_encode($this->record['descripcion']);
         
         $fechaInicial  = date('Y-m-d H:i:s');
