@@ -275,6 +275,7 @@ class VcDailyAttendance extends Component
             $fecha->modify('+1 day');
         }
 
+        dd($diasHabiles);
         return $diasHabiles;
     }
     
