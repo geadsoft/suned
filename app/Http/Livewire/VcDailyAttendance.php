@@ -28,6 +28,7 @@ class VcDailyAttendance extends Component
         'buscar' => '',
         'fecha' => '',
         'mes' => 1,
+        'periodo' => 0,
     ];
 
     protected $listeners = ['setData'];
@@ -74,6 +75,7 @@ class VcDailyAttendance extends Component
 
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
+        $this->filters['periodo'] = $tblperiodos['periodo'];
         
     }
 
@@ -135,7 +137,7 @@ class VcDailyAttendance extends Component
     public function add(){
 
        $this->tblrecords=[];
-       $this->diasHabiles = $this->obtenerDiasHabiles($this->periodoId,$this->filters['mes']);
+       $this->diasHabiles = $this->obtenerDiasHabiles($this->filters['periodo'],$this->filters['mes']);
 
         // Datos
         foreach ($this->personas as $key => $data)
@@ -245,7 +247,6 @@ class VcDailyAttendance extends Component
 
     function obtenerDiasHabiles($anio, $mes) {
 
-        logger("Generando días hábiles para $anio-$mes"); // ← agrega esto
         $diasHabiles = [];
 
         // Mapeo manual para forzar letras según índice 0=domingo...6=sábado
