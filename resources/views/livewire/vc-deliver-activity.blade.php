@@ -100,9 +100,9 @@
                                             <td>.</td>
                                         </tr>
                                         @else
-                                        <tr class="alert-success">
+                                        <tr class="{{$estado_alert}}">
                                             <th style="width: 350px;"><span class="">Estado de la Entrega</span></th>
-                                            <td>{{$estado}}</td>
+                                            <td><strong>{{$estado}}</strong></td>
                                             <td>.</td>
                                         </tr>
                                         @endif

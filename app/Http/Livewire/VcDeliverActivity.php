@@ -118,6 +118,7 @@ class VcDeliverActivity extends Component
 
         if (!empty($this->entrega)){
             $this->estado = "Enviado para Calificar";
+            $this->estado_alert = "alert-success";
             $this->texteditor = $this->entrega->comentario;
         }
 
@@ -126,6 +127,7 @@ class VcDeliverActivity extends Component
         ->where('actividad_id',$this->selectId)
         ->where('actividad',1)
         ->get();
+        
 
         //Entregas Realizadas
         $this->files = TmFiles::query()
@@ -133,6 +135,12 @@ class VcDeliverActivity extends Component
         ->where('persona_id',$this->personaId)
         ->where('tarea',1)
         ->get();
+
+
+         if ($this->files->isEmpty()){
+            $this->estado = "Archivo no pudo ser cargado..";
+            $this->estado_alert = "alert-danger";
+        }
 
         if (count($this->files)>0){
 
