@@ -244,6 +244,8 @@ class VcDailyAttendance extends Component
     }
 
     function obtenerDiasHabiles($anio, $mes) {
+
+        logger("Generando días hábiles para $anio-$mes"); // ← agrega esto
         $diasHabiles = [];
 
         // Mapeo manual para forzar letras según índice 0=domingo...6=sábado
