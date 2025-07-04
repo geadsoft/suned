@@ -505,7 +505,7 @@
                     </div>
                     @endcan
                 </li>
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link menu-link" href="#faltas" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="faltas">
                         <i class="las la-tasks fs-20"></i><span>Justificativo de Faltas</span>
                     </a>
@@ -518,7 +518,14 @@
                             </li>
                         </ul>
                     </div>
+                </li>-->
+                @can('Control de Asistencia')
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="student/show-assistance">
+                        <i class="ri-folder-open-line fs-20"></i>Control de Asistencia</span>
+                    </a>
                 </li>
+                @endcan
                 @endcan
                 @can('Eventos Comunicados')
                 <li class="nav-item">

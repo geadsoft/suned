@@ -47,4 +47,9 @@ class EstudiantesController extends Controller
             'action' => 'estudiante'
         ]);
     }
+
+    public function assistance()
+    {      
+        return view('student/asistencias');
+    }
 }
