@@ -31,12 +31,22 @@ class VcDailyAttendance extends Component
 
     protected $listeners = ['setData'];
 
-    public $objdia=[
+    /*public $objdia=[
         1 => 'L',
         2 => 'M',
         3 => 'X',
         4 => 'J',
         5 => 'V',
+    ];*/
+
+    public $objdia=[
+        "Monday" => "L",
+        "Tuesday" => "M",
+        "Wednesday" => "X",
+        "Thursday" => "J",
+        "Friday" => "V",
+        "Saturday" => "S",
+        "Sunday" => "D"
     ];
 
     public $objmes = [
@@ -243,9 +253,10 @@ class VcDailyAttendance extends Component
     $ultimoDia = (clone $fecha)->modify('last day of this month');
 
     while ($fecha <= $ultimoDia) {
-        $diaSemana = $fecha->format('N'); // 1 (lunes) a 7 (domingo)
-
-        if ($diaSemana <= 5) { // lunes a viernes
+        //$diaSemana = $fecha->format('N'); // 1 (lunes) a 7 (domingo)
+        $diaSemana = $fecha->format('l');
+        
+        if ($diaSemana != "Saturday" && $diaSemana != "Sunday") { // lunes a viernes
             $diasHabiles[] = [
                 'fecha' => intval($fecha->format('d')),
                 'dia' => $diaSemana,
