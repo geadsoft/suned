@@ -137,7 +137,7 @@ class VcDeliverActivity extends Component
         ->get();
 
 
-         if ($this->files->isEmpty()){
+         if ($this->files->isEmpty() && $this->entrega !== null){
             $this->estado = "Archivo no pudo ser cargado..";
             $this->estado_alert = "alert-danger";
         }
