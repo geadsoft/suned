@@ -56,7 +56,7 @@
                                 </select>
                             </div> 
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 max-height: 300px; overflow-y: auto;">
                             <table class="table table-bordered table-sm" id="orderTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase ">
@@ -64,11 +64,17 @@
                                         <!--<th style="width: 90px;" class="text-center">Falta</th>-->
                                         @foreach ($diasHabiles as $dia)
                                             <th style="width: 90px;" class="text-center">{{$dia['letra'] }}</th>
+                                            @if ($dia['letra']=='V')
+                                                <th class="text-center"></th>
+                                            @endif
                                         @endforeach
                                     </tr>
                                     <tr>
                                         @foreach ($diasHabiles as $dia)
                                             <th style="width: 90px;" class="text-center">{{$dia['fecha']}}</th>
+                                            @if ($dia['letra']=='V')
+                                                <th class="text-center"></th>
+                                            @endif
                                         @endforeach
                                     </tr>
                                 </thead>
@@ -87,6 +93,10 @@
                                         <option value="FE">
                                         </datalist>
                                     </td>
+                                    @if ($dia['letra']=='V')
+                                        <td class="alert border-dashed alert-dark bg-primary">
+                                        </td>
+                                    @endif
                                     @endforeach
                                 </tr>
                                 @endforeach
