@@ -130,7 +130,7 @@
                                 @foreach ($tblrecords as $record)
                                     <tr>
                                         <td>@lang('months.'.(date('m',strtotime($record['fecha'])))) </td>
-                                        <td>@lang('translation.'.(date('l',strtotime($fecha)))) {{date('d/m/Y',strtotime($record['fecha']))}}</td>
+                                        <td>@lang('translation.'.(date('l',strtotime($record['fecha'])))) {{date('d/m/Y',strtotime($record['fecha']))}}</td>
                                         <td class="text-center">
                                             @if ($record['valor'] == "F")
                                                 <i class="ri-close-circle-fill fs-18 text-danger"></i> 
