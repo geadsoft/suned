@@ -154,8 +154,6 @@
                                                             </div>
                                                         </div>
                                                         @foreach($files as $file)
-                                                    
-                                               
                                                         <div class="accordion-item border-0">
                                                             <div class="accordion-header" id="headingFive">
                                                                 <a class="accordion-button p-2 shadow-none" data-bs-toggle="collapse" href="#collapseFile" aria-expanded="false">
@@ -165,9 +163,11 @@
                                                                                 <i class="{{$arrdoc[$file->extension]}}"></i>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="flex-grow-1 ms-3">
-                                                                            <h6 class="fs-14 mb-0 fw-semibold">{{$file->nombre}}</h6>
-                                                                        </div>
+                                                                        <div class="flex-grow-1">
+                                                                            <h6 class="fs-14 mb-0 fw-semibold text-primary" role="button" style="cursor: pointer;" wire:click="download_drive({{ $file['id'] }})">
+                                                                                {{ $file->nombre }}
+                                                                            </h6>
+                                                                        </div>                                                                                                                                               
                                                                     </div>
                                                                 </a>
                                                             </div>

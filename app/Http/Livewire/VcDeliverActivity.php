@@ -80,6 +80,14 @@ class VcDeliverActivity extends Component
     public function render()
     {
 
+        $this->record = TmActividades::query()
+        ->join("tm_horarios_docentes as h","h.id","=","tm_actividades.paralelo")
+        ->join("tm_asignaturas as a","a.id","=","h.asignatura_id")
+        ->where("tm_actividades.id",$this->selectId) 
+        ->select("tm_actividades.*","a.descripcion as asignatura")   
+        ->where("tm_actividades.id",$this->selectId)
+        ->first();
+        
         return view('livewire.vc-deliver-activity');
         
     }
@@ -421,6 +429,7 @@ class VcDeliverActivity extends Component
             }
 
         }
+
 
     }
 
