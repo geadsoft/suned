@@ -56,9 +56,9 @@
                                 </select>
                             </div> 
                         </div>
-                        <div class="mb-3 max-height: 300px; overflow-y: auto;">
+                        <div style="max-height: 600px; overflow-y: auto;">
                             <table class="table table-bordered table-sm" id="orderTable">
-                                <thead class="text-muted table-light">
+                                <thead class="text-muted table-light" style="position: sticky; top: 0; z-index: 10;">
                                     <tr class="text-uppercase ">
                                         <th style="width: 500px;" rowspan="2">Estudiante</th>
                                         <!--<th style="width: 90px;" class="text-center">Falta</th>-->
