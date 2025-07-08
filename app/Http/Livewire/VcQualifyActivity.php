@@ -62,10 +62,10 @@ class VcQualifyActivity extends Component
         from tm_matriculas m 
         where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
         union all
-        select m.estudiante_id, m.modalidad_id, m.periodo_id, p.curso_id, m.estado
+        select m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado
         from tm_pase_cursos p
         inner join tm_matriculas m on m.id = p.matricula_id
-        where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
+        where p.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
         and p.estado = 'A'        
         ) as m"),function($join){
             $join->on("m.modalidad_id","=","h.grupo_id")
