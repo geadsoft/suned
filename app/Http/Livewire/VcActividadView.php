@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\DB;
 class VcActividadView extends Component
 {
     public $asignatura, $curso,  $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $descripcion="", $estado="A";
-    public $periodoId, $tbltermino, $tblbloque, $tblactividad, $actividadId;
+    public $periodoId, $tbltermino, $tblbloque, $tblactividad, $actividadId, $modalidadId;
     public $array_attach=[];
     public $array_entregas=[], $entregas=[];
     public $personas=[];
@@ -53,6 +53,7 @@ class VcActividadView extends Component
 
         $this->docenteId = auth()->user()->personaId;
         $this->actividadId = $id;
+        $this->modalidadId = 0;
 
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
@@ -107,7 +108,7 @@ class VcActividadView extends Component
         ->where('entrega',1)
         ->get();
 
-        $this->personas = TmHorarios::query()
+        /*$this->personas = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_matriculas as m","m.curso_id","=","tm_horarios.curso_id")
         ->join("tm_personas as p","p.id","=","m.estudiante_id")
@@ -115,6 +116,29 @@ class VcActividadView extends Component
         ->where('d.id',$actividad->paralelo)
         ->where('m.estado','A')
         ->orderByRaw("apellidos, nombres")
+        ->get();*/
+        
+        $this->personas = TmHorariosDocentes::query()
+        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
+        ->join(DB::raw("(select estudiante_id, modalidad_id, periodo_id, curso_id, estado 
+        from tm_matriculas m 
+        where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
+        union all
+        select m.estudiante_id, m.modalidad_id, m.periodo_id, p.curso_id, m.estado
+        from tm_pase_cursos p
+        inner join tm_matriculas m on m.id = p.matricula_id
+        where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
+        and p.estado = 'A'        
+        ) as m"),function($join){
+            $join->on("m.modalidad_id","=","h.grupo_id")
+                ->on("m.periodo_id","=","h.periodo_id")
+                ->on("m.curso_id","=","h.curso_id");
+        })
+        ->join("tm_personas as p","p.id","=","m.estudiante_id")
+        ->select("p.*")
+        ->where("tm_horarios_docentes.id",$actividad->paralelo)
+        ->where("m.estado",'A')
+        ->orderBy("p.apellidos")
         ->get();
 
         return view('livewire.vc-actividad-view');
@@ -172,11 +196,13 @@ class VcActividadView extends Component
         $tblcurso = TmHorarios::query()
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_servicios as s","s.id","=","c.servicio_id")
-        ->selectRaw("concat(s.descripcion,' ',c.paralelo) as curso")
+        ->selectRaw("concat(s.descripcion,' ',c.paralelo) as curso, tm_horarios.grupo_id")
         ->where("tm_horarios.id",$record['horario_id'])
         ->first();
 
         $this->curso =  $tblcurso['curso'];
+        $this->modalidadId =  $tblcurso['grupo_id'];
+      
 
     }
 
