@@ -250,8 +250,6 @@ class VcQualifyActivity extends Component
             $this->tblrecords[$fil][$col] = $record->nota; 
         }
 
-        dd($this->tblrecords);
-
         /*foreach ($this->personas as $key => $data)
         {
             $personaId =  $data->id; 
