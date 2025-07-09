@@ -96,7 +96,7 @@
                                     </td>
                                     @endforeach
                                     <td>
-                                        <input type="text" class="form-control bg-light border-0" id="promedio-{{$fil}}" value="{{$tblrecords[$persona->id]["promedio"]}}" disabled/>
+                                        <input type="text" class="form-control form-control-sm bg-light border-0" id="promedio-{{$fil}}" value="{{$tblrecords[$persona->id]["promedio"]}}" disabled/>
                                     </td>
                                 </tr>
                                  @endforeach
