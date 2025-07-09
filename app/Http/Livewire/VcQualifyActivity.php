@@ -220,7 +220,7 @@ class VcQualifyActivity extends Component
         }
         $this->tblrecords['ZZ']['promedio'] = 0.00;
 
-
+        dd($this->tblrecords);
     }
 
     public function asignarNotas(){
@@ -337,7 +337,8 @@ class VcQualifyActivity extends Component
                 ->where('persona_id',$personaId)
                 ->first();
                 
-                $dataRow['id'] = $tmpnota?->id ?? 0;                
+                $dataRow['id'] = $tmpnota?->id ?? 0;  
+
                 $dataRow['actividad_id'] = $actividad['id'];
                 $dataRow['persona_id']=$personaId;
                 $dataRow['nota'] = $this->tblrecords[$personaId][$actividadId];
