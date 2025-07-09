@@ -1,7 +1,7 @@
 <div>
     <form id="createactivity-form" autocomplete="off" wire:submit.prevent="{{ 'createData' }}" class="needs-validation" >
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body">
                             <div class="mb-3">
@@ -31,6 +31,13 @@
                                     @endforeach 
                                 </select>
                             </div>
+                        </div>
+                    </div>
+            </div>
+            <!-- end col -->
+            <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
                             <div class="mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino"  wire:change="consulta()">
@@ -39,23 +46,24 @@
                                     @endforeach 
                                 </select>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-sm-6">
+                            <div class="mb-3">
+                                
                                     <label for="choices-publish-status-input" class="form-label fw-semibold">Bloque</label>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque"  wire:change="consulta()">
                                         @foreach ($tblbloque as $bloques) 
                                         <option value="{{$bloques->codigo}}">{{$bloques->descripcion}}</option>
                                         @endforeach 
                                     </select>
-                                </div>
-                                <div class="col-sm-6">
+                            </div>
+                            <div class="mb-3"> 
+                                
                                     <label for="choices-publish-status-input" class="form-label fw-semibold">Tipo Actividad</label>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.actividad"  wire:change="consulta()">
                                         @foreach ($tblactividades as $actividades) 
                                         <option value="{{$actividades->codigo}}">{{$actividades->descripcion}}</option>
                                         @endforeach 
                                     </select>
-                                </div>
+                               
                             </div>
                         </div>
                     </div>
@@ -65,7 +73,7 @@
                         <button type="submit" class="btn btn-success w-sm">Submit</button>
                     </div>-->
             </div>
-            <!-- end col -->
+
         </div>
         <!-- end row -->
 
@@ -121,13 +129,15 @@
                 </div>
             </div>
         </div>
-        <div class="text-end mb-3">
-            @if ($this->actividadId==0)
-            <button type="submit" class="btn btn-success w-sm">Grabar</button>
-            @else
-            <button type="submit" class="btn btn-success w-sm">Actualizar</button>
-            @endif
-            <a class="btn btn-secondary w-sm" href="/activities/activity"><i class="me-1 align-bottom"></i>Cancelar</a>
-        </div>
+        @if(!empty($tblrecords))
+            <div class="text-end mb-3">
+                <button type="submit" class="btn btn-success w-sm me-2">Grabar</button>
+                <a class="btn btn-secondary w-sm" href="/activities/activity">Cancelar</a>
+            </div>
+        @else
+            <div class="text-end mb-3">
+                <a class="btn btn-secondary w-sm" href="/activities/activity">Cancelar</a>
+            </div>
+        @endif
     </form>
 </div>
