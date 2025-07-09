@@ -91,12 +91,12 @@
                                     <td> {{$tblrecords[$persona->id]['nombres']}} </td>                                    
                                     @foreach ($tbltarea as $col => $tarea)
                                     <td>
-                                        <input type="number" step="0.01" min="0" max="10" value="0" class="form-control form-control-sm product-price bg-white border-0"
+                                        <input type="number" step="0.01" min="0" max="10" value="0" class="form-control product-price bg-white border-0"
                                         id="{{$fil}}-{{$col}}" wire:model="tblrecords.{{$persona->id}}.{{$tarea['id']}}" />
                                     </td>
                                     @endforeach
                                     <td>
-                                        <input type="text" class="form-control form-control-sm bg-light border-0" id="promedio-{{$fil}}" value="{{$tblrecords[$persona->id]["promedio"]}}" disabled/>
+                                        <input type="text" class="form-control bg-light border-0" id="promedio-{{$fil}}" value="{{$tblrecords[$persona->id]["promedio"]}}" disabled/>
                                     </td>
                                 </tr>
                                  @endforeach
@@ -105,12 +105,12 @@
                                     <td> {{$tblrecords['ZZ']['nombres']}} </td>                                    
                                     @foreach ($tbltarea as $col => $tarea)
                                     <td>
-                                        <input type="number" step="0.01" min="0" max="10" value="0" class="form-control form-control-sm product-price bg-light border-0"
+                                        <input type="number" step="0.01" min="0" max="10" value="0" class="form-control product-price bg-light border-0"
                                         id="ZZ-Prom" value="{{$tblrecords['ZZ'][$tarea['id']]}}" disabled/>
                                     </td>
                                     @endforeach
                                     <td>
-                                        <input type="text" class="form-control form-control-sm bg-light border-0" id="promedio-ZZ" value="{{$tblrecords['ZZ']["promedio"]}}" disabled/>
+                                        <input type="text" class="form-control bg-light border-0" id="promedio-ZZ" value="{{$tblrecords['ZZ']["promedio"]}}" disabled/>
                                     </td>
                                 </tr>
                                 @endif
