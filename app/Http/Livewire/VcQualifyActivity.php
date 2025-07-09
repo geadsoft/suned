@@ -312,6 +312,8 @@ class VcQualifyActivity extends Component
     public function setData()
     {
         
+        dd($this->tblrecords);
+
         $dataRow=[
             'id' => 0,
             'actividad_id' => 0,
