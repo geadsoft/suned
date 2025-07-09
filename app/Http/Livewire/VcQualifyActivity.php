@@ -220,7 +220,7 @@ class VcQualifyActivity extends Component
         }
         $this->tblrecords['ZZ']['promedio'] = 0.00;
 
-        dd($this->tblrecords);
+        
 
     }
 
@@ -252,6 +252,8 @@ class VcQualifyActivity extends Component
             $this->tblrecords[$fil][$col] = $record->nota; 
         }
 
+        dd($this->tblrecords);
+        
         /*foreach ($this->personas as $key => $data)
         {
             $personaId =  $data->id; 
