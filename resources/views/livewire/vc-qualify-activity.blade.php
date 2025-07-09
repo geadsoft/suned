@@ -73,10 +73,9 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        
-                        <div class="mb-3">
+                        <div style="max-height: 600px; overflow-y: auto;">
                             <table class="table table-bordered table-sm align-middle mb-0" id="orderTable">
-                                <thead class="text-muted table-light">
+                                <thead class="text-muted table-light" style="position: sticky; top: 0; z-index: 10;">
                                     <tr class="text-uppercase">
                                         <th style="width: 150px;">Estudiante</th>
                                         @foreach ($tbltarea as $data)
