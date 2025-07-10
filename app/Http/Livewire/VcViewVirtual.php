@@ -45,17 +45,20 @@ class VcViewVirtual extends Component
     public function render()
     {
         $tblrecords = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->join("tm_actividades as a","a.paralelo","=","d.id")
-        ->where("tm_horarios.curso_id",$this->cursoId)
-        ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->where("a.tipo","CV")
-        ->where("a.estado","A")
+        ->join('tm_servicios as s', 's.id', '=', 'tm_horarios.servicio_id')
+        ->join('tm_cursos as c', 'c.id', '=', 'tm_horarios.curso_id')
+        ->join('tm_horarios_docentes as d', 'd.horario_id', '=', 'tm_horarios.id')
+        ->join('tm_asignaturas as m', 'm.id', '=', 'd.asignatura_id')
+        ->join('tm_actividades as a', function ($join) {
+            $join->on('a.paralelo', '=', 'd.id')
+                ->on('a.docente_id', '=', 'd.docente_id');
+        })
+        ->where('tm_horarios.curso_id', $this->cursoId)
+        ->where('tm_horarios.periodo_id', $this->periodoId)
+        ->where('a.tipo', 'CV')
+        ->where('a.estado', 'A')
         ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
-        ->orderby("m.descripcion")
+        ->orderBy('m.descripcion')
         ->paginate(12);
 
         return view('livewire.vc-view-virtual',[
