@@ -94,7 +94,7 @@ class VcActividades extends Component
         ->where("d.docente_id",$this->docenteId)
         ->where("tm_horarios.periodo_id",$this->periodoId)
         ->selectRaw('s.id, concat(s.descripcion," ",c.paralelo) as descripcion')
-        ->groupBy("s.id","s.descripcion","c.paralelo")
+        ->groupBy("c.id","s.descripcion","c.paralelo")
         ->orderByRaw("s.modalidad_id, s.nivel_id, s.grado_id")
         ->get(); 
 
@@ -115,7 +115,7 @@ class VcActividades extends Component
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
         ->join("tm_actividades as a","a.paralelo","=","d.id")
         ->when($this->filters['paralelo'],function($query){
-            return $query->where('s.id',"{$this->filters['paralelo']}");
+            return $query->where('c.id',"{$this->filters['paralelo']}");
         })
         ->when($this->filters['tipo'],function($query){
             return $query->where('actividad',"{$this->filters['tipo']}");
