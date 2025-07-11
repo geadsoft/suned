@@ -93,8 +93,8 @@ class VcActividades extends Component
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->where("d.docente_id",$this->docenteId)
         ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion')
-        ->groupBy("c.id","s.descripcion","c.paralelo")
+        ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion, s.modalidad_id, s.nivel_id, s.grado_id')
+        ->groupBy("c.id","s.descripcion","c.paralelo","s.modalidad_id","s.nivel_id","s.grado_id")
         ->orderByRaw("s.modalidad_id, s.nivel_id, s.grado_id")
         ->get(); 
 
