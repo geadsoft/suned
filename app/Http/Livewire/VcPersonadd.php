@@ -21,7 +21,7 @@ class VcPersonadd extends Component
     use WithFileUploads;
 
     public $record, $addfamily=false, $estudiante_id, $datosFamiliar=1, $nuirepresentante;
-    public $search_nui, $foto, $fileimg='';
+    public $search_nui, $foto, $fileimg='', $estado;
     public $eControl="";
     public $eControl2="disabled";
     public $showEditModal=false;
@@ -90,12 +90,14 @@ class VcPersonadd extends Component
             $this->search_nui = $personas['identificacion'];
             $this->representante    = TmPersonas::find($matricula['representante_id'])->toArray();
             $this->nuirepresentante = $this->representante['identificacion'];
+            $this->estado = $matricula->estado;
             $this->searchPerson();  
 
         }else{
 
             $this->plectivo = TmPeriodosLectivos::orderBy('periodo','desc')->first();
             $this->chkoptnui="no";
+            
 
         }
 

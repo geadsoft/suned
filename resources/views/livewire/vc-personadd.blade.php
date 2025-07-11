@@ -2,11 +2,21 @@
     <div class="row">
         <div class="col-xl-12">
             <div class="card">
+                <!-- Danger Alert -->
+                @if ($estado=='R')
+                <div class="alert alert-danger alert-dismissible alert-label-icon rounded-label fade show" role="alert">
+                    <i class="ri-emotion-unhappy-line label-icon"></i><strong>Retirado</strong>
+                    
+                </div>
+                @else
+                <div class="mb-3"></div>
+                @endif
                 <div class="card-body checkout-tab">
+                    
                     <form autocomplete="off" wire:submit.prevent="{{ 'createData' }}">
                         @csrf
 
-                        <div class="step-arrow-nav mt-n3 mx-n3 mb-3">
+                        <div class="step-arrow-nav mt-n3 mb-3">
 
                             <ul class="nav nav-pills nav-justified custom-nav nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                                 <li class="nav-item" role="presentation">
