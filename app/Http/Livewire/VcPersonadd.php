@@ -350,22 +350,21 @@ class VcPersonadd extends Component
             
         }
 
+        /*foreach ($this->familiares as $familiar){
 
-        foreach ($this->familiares as $data){
+            if ($familiar['id']>0){
 
-            if ($data['id']>0){
-
-                $family = TmPersonas::find($data['persona_id']);
+                $family = TmPersonas::find($familiar['persona_id']);
                 $family->update([
-                    'nombres' => $data['nombres'],
-                    'apellidos' => $data['apellidos'],
-                    'identificacion' => $data['identificacion'],
-                    'nacionalidad_id' => $data['nacionalidad_id'],
-                    'genero' => $data['genero'],
-                    'telefono' => $data['telefono'],
-                    'direccion' => $data['direccion'],
-                    'email' => $data['email'],
-                    'parentesco' => $data['parentesco'],
+                    'nombres' => $familiar['nombres'],
+                    'apellidos' => $familiar['apellidos'],
+                    'identificacion' => $familiar['identificacion'],
+                    'nacionalidad_id' => $familiar['nacionalidad_id'],
+                    'genero' => $familiar['genero'],
+                    'telefono' => $familiar['telefono'],
+                    'direccion' => $familiar['direccion'],
+                    'email' => $familiar['email'],
+                    'parentesco' => $familiar['parentesco'],
                 ]);
 
             }else{
@@ -415,7 +414,7 @@ class VcPersonadd extends Component
 
             }
 
-        }
+        }*/
 
         //Representante
         $recordR = TmPersonas::find($this->representante['id']);

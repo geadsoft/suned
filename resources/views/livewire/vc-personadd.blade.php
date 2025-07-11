@@ -333,9 +333,9 @@
                                 <div class="col-lg-12">
                                     <div class="hstack gap-2 justify-content-end">
                                         @if ($personaId==0)
-                                            <button type="submit" class="btn btn-primary" wire:click="createData()">Save Record</button>
+                                            <button type="submit" class="btn btn-primary" wire:click="createData()">Grabar</button>
                                         @else 
-                                            <button class="btn btn-primary" wire:click="updateData()">Update Record</button>
+                                            <button class="btn btn-primary" wire:click="updateData()">Actualizar</button>
                                         @endif
                                         <a class="btn btn-secondary w-sm" href="/academic/students"><i class="me-1 align-bottom"></i>Cancel</a>
                                     </div>
@@ -453,9 +453,9 @@
                                 <div class="col-lg-12">
                                     <div class="hstack gap-2 justify-content-end">
                                         @if ($personaId==0)
-                                            <button type="submit" class="btn btn-primary" wire:click="createData()">Grabar Registro</button>
+                                            <button type="submit" class="btn btn-primary" wire:click="createData()">Grabar</button>
                                         @else 
-                                            <button class="btn btn-primary" wire:click="updateData()">Actualizar Registro</button>
+                                            <button class="btn btn-primary" wire:click="updateData()">Actualizar</button>
                                         @endif
                                         <a class="btn btn-secondary w-sm" href="/academic/students"><i class="me-1 align-bottom"></i>Cancelar</a>
                                     </div>
