@@ -148,8 +148,12 @@ class VcAccountStatus extends Component
 
         $periodo = TmPeriodosLectivos::find($matricula['periodo_id']);
         $this->consulta['periodo'] = $periodo['descripcion'];
+
+        $this->consulta['estado'] = $matricula['estado'];
         
         $dias = [0=>'Domingo',1=>'Lunes',2=>'Martes',3=>'Miercoles',4=>'Jueves',5=>'Viernes',6=>'Sabado'];
+
+    
 
         //Vista
         $pdf = PDF::loadView('reports/estado_cuenta2',[
@@ -195,6 +199,8 @@ class VcAccountStatus extends Component
 
         $periodo = TmPeriodosLectivos::find($matricula['periodo_id']);
         $this->consulta['periodo'] = $periodo['descripcion'];
+
+        $this->consulta['estado'] = $matricula['estado'];
         
         $dias = [0=>'Domingo',1=>'Lunes',2=>'Martes',3=>'Miercoles',4=>'Jueves',5=>'Viernes',6=>'Sabado'];
         
