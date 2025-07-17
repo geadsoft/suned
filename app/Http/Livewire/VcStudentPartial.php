@@ -282,7 +282,7 @@ class VcStudentPartial extends Component
 
         foreach ($materias as $key => $data) {
 
-            dump("Iterando ID: $data (tipo: " . gettype($data) . ")");
+            //dump("Iterando ID: $data (tipo: " . gettype($data) . ")");
             
             $record = $this->tblrecords[$data];
             $promedio = 0;
