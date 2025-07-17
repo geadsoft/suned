@@ -242,7 +242,7 @@ class VcStudentPartial extends Component
         ])
         ->get(); 
 
-        dd($notas, $this->filters['paralelo'], $this->modalidadId, $this->filters['estudianteId']);
+        dd($notas, $this->filters['paralelo'], $this->modalidadId, $this->filters['estudianteId'], $this->tblrecords);
         
         //Asignar Notas
 
