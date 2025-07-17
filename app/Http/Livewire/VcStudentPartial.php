@@ -242,21 +242,22 @@ class VcStudentPartial extends Component
         ])
         ->get(); 
 
-        dd($notas, $this->filters['paralelo'], $this->modalidadId, $this->filters['estudianteId'], $this->tblrecords);
-        
         //Asignar Notas
 
-        foreach ($notas as $key => $record){
+        foreach ($notas as $key => $objnota){
 
-            $fil  = $record->asignatura_id;
-            $tipo = $record->actividad;
-            $actividadId = $record->actividadId;
+            $fil  = $objnota->asignatura_id;
+            $tipo = $objnota->actividad;
+            $actividadId = $objnota->actividadId;
             $col = $tipo.$actividadId;
 
             if (isset($this->tblrecords[$fil][$col])) {
-                $this->tblrecords[$fil][$col] = $record->nota;
+                $this->tblrecords[$fil][$col] = $objnota->nota;
             }
         }
+
+        dd($notas, $this->filters['paralelo'], $this->modalidadId, $this->filters['estudianteId'], $this->tblrecords);
+        
 
         //Calcula Totales
 
