@@ -258,4 +258,9 @@ class DocentesController extends Controller
         ]);
     }
 
+    public function estudiante_notas_parcial()
+    {
+        return view('teachers/estudiante_parcial');
+    }
+
 }

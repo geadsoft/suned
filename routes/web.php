@@ -71,7 +71,7 @@ Route::get('/report/exams-qualify',[App\Http\Controllers\DocentesController::cla
 Route::get('/report/detailed-rating',[App\Http\Controllers\DocentesController::class, 'calificacion_detallada'])->name('calificacion_detallada');
 Route::get('/report/partial-teacher',[App\Http\Controllers\DocentesController::class, 'informe_parcial'])->name('informe_parcial');
 Route::get('/report/quarterly-teacher',[App\Http\Controllers\DocentesController::class, 'informe_trimestral'])->name('informe_trimestral');
-
+Route::get('/report/partial-student',[App\Http\Controllers\DocentesController::class, 'estudiante_notas_parcial'])->name('estudiante_notas_parcial');
 
 Route::get('/headquarters/headquarters-add',[App\Http\Controllers\TmSedesController::class, 'index'])->name('index');
 Route::get('/headquarters/pension',[App\Http\Controllers\TmPensionesCabController::class, 'index'])->name('index');

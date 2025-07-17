@@ -703,7 +703,7 @@
                                             <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Asignaturas Trimestral</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="pages-profile.html" class="nav-link" data-key="t-simple-page">Estudiante Parcial</a>
+                                            <a href="/report/partial-student" class="nav-link" data-key="t-simple-page">Estudiante Parcial</a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Estudiante Trimestral</a>
