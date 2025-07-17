@@ -256,18 +256,14 @@ class VcStudentPartial extends Component
             }
         }
 
-        dd($notas, $this->filters['paralelo'], $this->modalidadId, $this->filters['estudianteId'], $this->tblrecords);
-        
-
         //Calcula Totales
-
         foreach ($this->asignaturas as $key => $data){
             $materias[] = $data->id;
         }    
 
         foreach ($materias as $key => $data) {
 
-            //dump("Iterando ID: $data (tipo: " . gettype($data) . ")");
+            dump("Iterando ID: $data (tipo: " . gettype($data) . ")");
             
             $record = $this->tblrecords[$data];
             $promedio = 0;
