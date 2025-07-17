@@ -15,7 +15,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.paralelo">
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.paralelo" wire:change="add()">
                                 <option value="">Seleccione Paralelo</option>
                                 @foreach ($tblparalelo as $paralelo) 
                                 <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>

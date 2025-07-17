@@ -150,7 +150,7 @@ class VcStudentPartial extends Component
         $this->materia = ''; // $titulo['asignatura'];
         $this->curso = $titulo['servicio'].' '.$titulo['paralelo'];
             
-        $this->add();
+        //$this->add();
         $this->asignarNotas();
 
     }
@@ -159,20 +159,12 @@ class VcStudentPartial extends Component
     public function add(){
 
         $this->tblrecords=[];
-
-        $matricula = TmMatricula::query()
-        ->join("tm_cursos as c","c.id","=","tm_matriculas.curso_id")
-        ->where("tm_matriculas.modalidad_id",$this->modalidadId)
-        ->where("tm_matriculas.estudiante_id", $this->filters['estudianteId'])
-        ->first();
         
-        //dd($matricula->curso_id);
-
         $this->asignaturas = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
         ->select("a.*")
-        ->where("tm_horarios.curso_id",$matricula->curso_id)
+        ->where("tm_horarios.curso_id",$this->filters['paralelo'])
         ->orderBy("a.descripcion")
         ->get();
 
@@ -231,7 +223,7 @@ class VcStudentPartial extends Component
         ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
         ->join('tm_horarios_docentes as d', function($join) {
             $join->on('d.id', '=', 'tm_actividades.paralelo')
-                ->whereColumn('d.docente_id', 'tm_actividades.docente_id');
+                ->on('d.docente_id', 'tm_actividades.docente_id');
         })
         ->when(!empty($this->filters['termino']), function($query) {
             return $query->where('tm_actividades.termino', $this->filters['termino']);
