@@ -288,10 +288,11 @@ class VcStudentPartial extends Component
             $promedio = 0;
             $countprm = 0;
             
-            foreach ($this->tblgrupo as $key2 => $grupo){
+            foreach ($this->tblgrupo as $grupo){
 
                 $suma  = 0;
                 $count = 0;
+                $key2 = $grupo->actividad;
 
                 foreach ($record as $campo => $recno){
                    
