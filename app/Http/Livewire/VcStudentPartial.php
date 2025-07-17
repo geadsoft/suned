@@ -298,6 +298,8 @@ class VcStudentPartial extends Component
                     
         }
 
+        dd($this->tblrecords);
+
         foreach ($this->tblescala as $escala) {
 
             $nota1 = ($escala->nota-1)+0.01; 
