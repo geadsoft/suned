@@ -218,6 +218,7 @@ class VcStudentPartial extends Component
     }
 
     public function asignarNotas(){
+
                 
         $notas = TmActividades::query()
         ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
@@ -240,6 +241,8 @@ class VcStudentPartial extends Component
             'd.asignatura_id'
         ])
         ->get(); 
+
+        dd($notas, $this->filters['paralelo'], $this->modalidadId, $this->filters['estudianteId']);
         
         //Asignar Notas
 
