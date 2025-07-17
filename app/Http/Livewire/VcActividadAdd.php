@@ -407,12 +407,20 @@ class VcActividadAdd extends Component
         {
             if ($recno['linea'] == $linea){
                 unset ($recnoToDelete[$index]);
-                TmFiles::find($recno['id'])->delete();
+                if ($recno['id']>0){
+                    TmFiles::find($recno['id'])->delete();
+                }
             } 
         }
 
         $this->reset(['array_attach']);
         $this->array_attach = $recnoToDelete;
+
+        $linea = count($this->array_attach);
+        
+        if ($linea==0){
+            $this->attach_add();
+        }
     
     }
 

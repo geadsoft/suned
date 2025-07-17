@@ -71,8 +71,7 @@
             const editor = ClassicEditor.instances['editor']; // Si tienes múltiples instancias, usa el selector correspondiente
             editor.setData(datosDelEditor);
         });
-
-       
+        
 
     </script>
     
