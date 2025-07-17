@@ -318,7 +318,6 @@ class VcStudentPartial extends Component
                     
         }
 
-        dd($this->tblgrupo,$this->tblrecords);
 
         foreach ($this->tblescala as $escala) {
 
