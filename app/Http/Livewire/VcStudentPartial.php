@@ -20,6 +20,7 @@ class VcStudentPartial extends Component
     public $asignaturas=[];
     public $tblrecords=[];
     public $tblescala=[];
+    public $tbltermino=[];
 
     public $filters=[
         'docenteId' => 0,
@@ -45,12 +46,25 @@ class VcStudentPartial extends Component
         ->where("tipo","EC")
         ->get();
 
+         $this->tbltermino = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','EA')
+        ->get();
+
+        $this->termino = $this->tbltermino[0]['codigo'];
+
     }
     
     public function render()
     {
         $this->tblmodalidad = TmGeneralidades::query()
         ->where("superior",1)
+        ->get();
+
+        $this->tblbloque = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','PA')
+        ->where('evaluacion',$this->termino)
         ->get();
         
        $this->tblparalelo = TmHorarios::query()
