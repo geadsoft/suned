@@ -219,7 +219,26 @@ class VcStudentPartial extends Component
 
     public function asignarNotas(){
 
-                
+        $this->tblgrupo  = TmActividades::query()
+        ->join("tm_horarios_docentes as d",function($join){
+            $join->on("d.id","=","tm_actividades.paralelo")
+                ->on("d.docente_id","=","tm_actividades.docente_id");
+        })
+        ->join("tm_horarios as h","h.id","=","d.horario_id")
+        ->when($this->filters['paralelo'],function($query){
+            return $query->where('h.curso_id',"{$this->filters['paralelo']}");
+        })
+        ->when($this->filters['termino'],function($query){
+            return $query->where('termino',"{$this->filters['termino']}");
+        })
+        ->when($this->filters['bloque'],function($query){
+            return $query->where('bloque',"{$this->filters['bloque']}");
+        })
+        ->selectRaw("tm_actividades.actividad")
+        ->where("tipo","AC")
+        ->groupBy("tm_actividades.actividad")
+        ->get();
+
         $notas = TmActividades::query()
         ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
         ->join('tm_horarios_docentes as d', function($join) {
