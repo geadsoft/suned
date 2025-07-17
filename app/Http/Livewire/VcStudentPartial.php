@@ -129,18 +129,6 @@ class VcStudentPartial extends Component
         ->where("tm_cursos.id",$this->filters['paralelo'])
         ->selectRaw('s.descripcion as servicio,tm_cursos.paralelo, n.descripcion as nivel')
         ->first();
-        
-        
-        /*TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_generalidades as n","n.id","=","s.nivel_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->filters['docenteId'])
-        ->where("c.id",$this->filters['paralelo'])
-        ->selectRaw('d.id, m.descripcion as asignatura,s.descripcion as servicio,c.paralelo, n.descripcion as nivel, tm_horarios.periodo_id')
-        ->first();*/
 
         $periodo = TmPeriodosLectivos::find($this->periodoId);
 
@@ -174,8 +162,8 @@ class VcStudentPartial extends Component
             $index = $data->id;
             $this->tblrecords[$index]['id'] = 0;
             $this->tblrecords[$index]['asignaturaId'] = $data->id;
-            $this->tblrecords[$index]['nombres'] = $data->descripcion;
-           
+            $this->tblrecords[$index]['nombres'] = strtoupper($data->descripcion);
+                       
             $record = $this->actividad($data->id);
             $this->tblgrupo = $record->groupBy('actividad')->toBase();
             
