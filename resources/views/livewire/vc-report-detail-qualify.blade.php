@@ -1,68 +1,61 @@
 <div>
     <form id="createactivity-form" autocomplete="off" wire:submit.prevent="{{ 'createData' }}" class="needs-validation" >
         <div class="row">
-            <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label for="choices-publish-status-input" class="form-label fw-semibold">Modalidad</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
-                                   <option value="">Seleccione Modalidad</option>
-                                   @foreach ($tblmodalidad as $modalidad) 
-                                    <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
-                                    @endforeach 
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="choices-publish-status-input" class="form-label fw-semibold">Asignatura</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="asignaturaId">
-                                   <option value="">Seleccione Asignatura</option>
-                                   @foreach ($tblasignatura as $asignatura) 
-                                    <option value="{{$asignatura->id}}">{{$asignatura->descripcion}}</option>
-                                    @endforeach 
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.paralelo"  wire:change="consulta()">
-                                    <option value="">Seleccione Paralelo</option>
-                                   @foreach ($tblparalelo as $paralelo) 
-                                    <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
-                                    @endforeach 
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino"  wire:change="consulta()">
-                                    <option value="1T" selected>Primer Trimestre</option>
-                                    <option value="2T">Segundo Trimestre</option>
-                                    <option value="3T">Tercer Trimestre</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                
-                                    <label for="choices-publish-status-input" class="form-label fw-semibold">Bloque</label>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque"  wire:change="consulta()">
-                                        <option value="1P" selected>Primer Parcial</option>
-                                    </select>
-                                
-                                <!--<div class="col-sm-6">
-                                    <label for="choices-publish-status-input" class="form-label fw-semibold">Tipo Actividad</label>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.actividad"  wire:change="consulta()">
-                                        <option value="AI">Actividad Individual</option>
-                                        <option value="AG">Actividad Grupal</option>
-                                    </select>
-                                </div>-->
-                            </div>
+            <div class="col-lg-8 d-flex gap-3 align-items-stretch">
+                <div class="card flex-fill">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="choices-publish-status-input" class="form-label fw-semibold">Modalidad</label>
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
+                                <option value="">Seleccione Modalidad</option>
+                                @foreach ($tblmodalidad as $modalidad) 
+                                <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
+                                @endforeach 
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="choices-publish-status-input" class="form-label fw-semibold">Asignatura</label>
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="asignaturaId">
+                                <option value="">Seleccione Asignatura</option>
+                                @foreach ($tblasignatura as $asignatura) 
+                                <option value="{{$asignatura->id}}">{{$asignatura->descripcion}}</option>
+                                @endforeach 
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.paralelo"  wire:change="consulta()">
+                                <option value="">Seleccione Paralelo</option>
+                                @foreach ($tblparalelo as $paralelo) 
+                                <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
+                                @endforeach 
+                            </select>
                         </div>
                     </div>
-                    <!-- end card -->
-
-                    <!--<div class="text-end mb-3">
-                        <button type="submit" class="btn btn-success w-sm">Submit</button>
-                    </div>-->
+                </div>
             </div>
             <!-- end col -->
+            <div class="col-lg-4 d-flex gap-3 align-items-stretch">
+                <div class="card flex-fill">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino"  wire:change="consulta()">
+                                <option value="1T" selected>Primer Trimestre</option>
+                                <option value="2T">Segundo Trimestre</option>
+                                <option value="3T">Tercer Trimestre</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            
+                                <label for="choices-publish-status-input" class="form-label fw-semibold">Bloque</label>
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque"  wire:change="consulta()">
+                                    <option value="1P" selected>Primer Parcial</option>
+                                </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- end row -->
 
