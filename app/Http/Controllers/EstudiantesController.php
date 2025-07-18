@@ -52,4 +52,9 @@ class EstudiantesController extends Controller
     {      
         return view('student/asistencias');
     }
+
+    public function student_grades()
+    {      
+        return view('student/calificaciones');
+    }
 }

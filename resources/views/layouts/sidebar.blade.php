@@ -760,6 +760,23 @@
                                 </div>
                             </li>
                             @endcan
+                            @can('Reportes Estudiantes')
+                            <li class="nav-item">
+                                <a href="#calificacion-estudiante" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="cursos" data-key="t-profile">Calificaciones</a>
+                                <div class="menu-dropdown collapse" id="calificacion-estudiante" style="">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link" data-key="t-settings">Calificacion Actividades</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/report/student-grades" class="nav-link" data-key="t-simple-page">Calificacion Parcial</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link" data-key="t-settings">Calificacion Trimestral</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </li>
