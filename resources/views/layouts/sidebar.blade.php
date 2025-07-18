@@ -766,10 +766,10 @@
                                 <div class="menu-dropdown collapse" id="calificacion-estudiante" style="">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="" class="nav-link" data-key="t-settings">Calificacion Actividades</a>
+                                            <a href="/report/note-activity" class="nav-link" data-key="t-settings">Calificación Actividades</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="/report/student-grades" class="nav-link" data-key="t-simple-page">Calificacion Parcial</a>
+                                            <a href="/report/student-grades" class="nav-link" data-key="t-simple-page">Calificación Parcial</a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="" class="nav-link" data-key="t-settings">Calificacion Trimestral</a>
