@@ -214,6 +214,11 @@ class DocentesController extends Controller
         return view('teachers/asistencia_diaria');
     }
 
+    public function asistencia_materia()
+    {
+        return view('teachers/asistencia_materia');
+    }
+
     public function justificar_faltas()
     {
         return view('teachers/justificar_faltas');

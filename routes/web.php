@@ -158,7 +158,7 @@ Route::get('/student/activities',[App\Http\Controllers\EstudiantesController::cl
 Route::get('/student/resources',[App\Http\Controllers\EstudiantesController::class, 'student_resources'])->name('student_resources');
 Route::get('/student/resource-view/{id}',[App\Http\Controllers\EstudiantesController::class, 'resources_view'])->name('resources_view');
 Route::get('/student/show-assistance',[App\Http\Controllers\EstudiantesController::class, 'assistance'])->name('assistance');
-
+Route::get('/student/teacher-assistance',[App\Http\Controllers\DocentesController::class, 'asistencia_materia'])->name('asistencia_materia');
 
 Route::get('/descargar-archivo/{id}', [ArchivoController::class, 'descargar'])->name('archivo.descargar');
 
