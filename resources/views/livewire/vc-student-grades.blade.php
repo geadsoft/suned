@@ -69,8 +69,8 @@
                             <div class="row g-3 mb-3">
                             <div class="col-md-auto ms-auto text-end">
                                 <div class="hstack text-nowrap gap-2">
-                                    <a href="/preview-pdf/partial-teacher/{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" target="_blank"><i class="ri-printer-fill fs-22"></i></a>
-                                    <!--<a href="" wire:click.prevent="exportExcel()" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-file-excel-2-line align-bottom fs-22"></i></a>-->
+                                    <!--<a href="/preview-pdf/partial-teacher/{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" target="_blank"><i class="ri-printer-fill fs-22"></i></a>
+                                    <a href="" wire:click.prevent="exportExcel()" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-file-excel-2-line align-bottom fs-22"></i></a>-->
                                 </div>
                             </div>
                             </div>
