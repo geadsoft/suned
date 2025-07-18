@@ -337,20 +337,21 @@ class VcNoteActivity extends Component
                 $suma  = 0;
                 $count = 0;
                 $key2 = $grupo->actividad;
+                $col = $key2."-prom";
 
                 foreach ($record as $campo => $recno){
                    
                     $ncampo = substr($campo, 0, 2); 
-                    if ($ncampo==$key2){
+                    if ($ncampo==$key2 && $col != $campo){
                         $suma += $recno;
                         $count += 1;
                     }
+
                 }                
 
-                $col = $key2."-prom";
                 if ($count > 0){
-                    $this->tblrecords[$data][$col] = $suma/($count-1);
-                    $promedio += $suma/($count-1);
+                    $this->tblrecords[$data][$col] = $suma/($count);
+                    $promedio += $suma/($count);
                     $countprm += 1;
                 }
                 
