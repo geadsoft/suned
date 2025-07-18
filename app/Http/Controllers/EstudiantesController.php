@@ -57,4 +57,9 @@ class EstudiantesController extends Controller
     {      
         return view('student/calificaciones');
     }
+
+    public function note_activity()
+    {      
+        return view('student/calificaciones_actividades');
+    }
 }
