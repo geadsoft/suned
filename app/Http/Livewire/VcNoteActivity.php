@@ -90,8 +90,7 @@ class VcNoteActivity extends Component
 
         $this->add();
         $this->asignarNotas();
-        dd($this->tblrecords);
-       
+               
     }
     
     public function render()
@@ -397,7 +396,7 @@ class VcNoteActivity extends Component
                     ->on("d.docente_id","=","tm_actividades.docente_id");
             })
             ->join("tm_horarios as h","h.id","=","d.horario_id")
-            ->join("td_calificacion_actividades as n","n.actividad_id","=","tm_actividades.id")
+            ->leftjoin("td_calificacion_actividades as n","n.actividad_id","=","tm_actividades.id")
             ->when($this->filters['paralelo'],function($query){
                 return $query->where('h.curso_id',"{$this->filters['paralelo']}");
             })
