@@ -391,26 +391,34 @@ class VcNoteActivity extends Component
         } else {
             $this->selectedId = $id;
             $this->detalles = TmActividades::query()
-            ->join("tm_horarios_docentes as d",function($join){
-                $join->on("d.id","=","tm_actividades.paralelo")
-                    ->on("d.docente_id","=","tm_actividades.docente_id");
+            ->join("tm_horarios_docentes as d", function($join) {
+                $join->on("d.id", "=", "tm_actividades.paralelo")
+                    ->on("d.docente_id", "=", "tm_actividades.docente_id");
             })
-            ->join("tm_horarios as h","h.id","=","d.horario_id")
-            ->leftjoin("td_calificacion_actividades as n","n.actividad_id","=","tm_actividades.id")
-            ->when($this->filters['paralelo'],function($query){
-                return $query->where('h.curso_id',"{$this->filters['paralelo']}");
+            ->join("tm_horarios as h", "h.id", "=", "d.horario_id")
+            ->leftJoin("td_calificacion_actividades as n", function($join) {
+                $join->on("n.actividad_id", "=", "tm_actividades.id")
+                    ->where("n.persona_id", $this->filters['estudianteId']);
             })
-            ->when($this->filters['termino'],function($query){
-                return $query->where('termino',"{$this->filters['termino']}");
+            ->when($this->filters['paralelo'], function($query) {
+                return $query->where('h.curso_id', $this->filters['paralelo']);
             })
-            ->when($this->filters['bloque'],function($query){
-                return $query->where('bloque',"{$this->filters['bloque']}");
+            ->when($this->filters['termino'], function($query) {
+                return $query->where('termino', $this->filters['termino']);
             })
-            ->selectRaw("tm_actividades.id,tm_actividades.nombre,tm_actividades.actividad,tm_actividades.puntaje, n.nota, tm_actividades.actividad")
-            ->where("tipo","AC")
-            ->where("d.asignatura_id",$id)
-            ->where("n.persona_id",$this->filters['estudianteId'])
-            ->orderByRaw("actividad desc")
+            ->when($this->filters['bloque'], function($query) {
+                return $query->where('bloque', $this->filters['bloque']);
+            })
+            ->where("tipo", "AC")
+            ->where("d.asignatura_id", $id)
+            ->selectRaw("
+                tm_actividades.id,
+                tm_actividades.nombre,
+                tm_actividades.actividad,
+                tm_actividades.puntaje,
+                n.nota
+            ")
+            ->orderByRaw("actividad DESC")
             ->get();
         }
 
