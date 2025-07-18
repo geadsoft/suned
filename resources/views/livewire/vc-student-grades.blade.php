@@ -82,7 +82,7 @@
                                         @if (count($tblrecords)==0)
                                             <div class="col-4"><img class="img-fluid" style="position: absolute;top: 30%; left: 2%; width: 15%;height:60pt;" src="{{ URL::asset('assets/images/LogoReport.png')}}" alt=""></div>
                                         @else
-                                            <div class="col-4"><img class="img-fluid" style="position: absolute;top: 13%; left: 2%; width: 15%;height:60pt;" src="{{ URL::asset('assets/images/LogoReport.png')}}" alt=""></div>
+                                            <div class="col-4"><img class="img-fluid" style="position: absolute;top: 6%; left: 2%; width: 15%;height:60pt;" src="{{ URL::asset('assets/images/LogoReport.png')}}" alt=""></div>
                                         @endif
                                         <p class="text-center text-uppercase" style="margin: 0px;">UNIDAD EDUCATIVA AMERICAN SCHOOL - {{$nivel}}</p>
                                         <p class="text-center" style="margin: 0px;">INFORME DE APRENDIZAJE POR ESTUDIANTES</p>
