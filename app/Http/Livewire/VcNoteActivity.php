@@ -90,6 +90,7 @@ class VcNoteActivity extends Component
 
         $this->add();
         $this->asignarNotas();
+        dd($this->tblrecords);
        
     }
     
