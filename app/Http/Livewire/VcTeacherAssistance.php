@@ -116,6 +116,11 @@ class VcTeacherAssistance extends Component
 
     }
 
+    public function updatedFiltersModalidadId()
+    {   
+        $this->tblrecords=[];
+    }
+
     public function updatedFiltersFecha($value)
     {   
 
