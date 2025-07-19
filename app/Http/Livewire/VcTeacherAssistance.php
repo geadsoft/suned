@@ -44,7 +44,8 @@ class VcTeacherAssistance extends Component
         ->select("id")
         ->whereIn('id', $ids)
         ->first();
-        $this->filters['modalidadId'] = ""
+
+        $this->filters['modalidadId'] = "";
        
     }
 
