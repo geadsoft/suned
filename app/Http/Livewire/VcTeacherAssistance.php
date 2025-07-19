@@ -47,7 +47,8 @@ class VcTeacherAssistance extends Component
     public function render()
     {
         $ids = [3, 4];
-        $this->tblmodalidad = TmGeneralidades::->whereIn('id', $ids)->get();
+        $this->tblmodalidad = TmGeneralidades::query()
+        ->whereIn('id', $ids)->get();
         
         $this->tblparalelo = TmHorarios::query()
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
