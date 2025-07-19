@@ -39,11 +39,12 @@ class VcTeacherAssistance extends Component
         $this->filters['periodoId']  = $tblperiodos['id'];
         $this->filters['periodo'] = $tblperiodos['periodo'];
         
+        $ids = [3, 4];
         $modalidad = TmGeneralidades::query()
         ->select("id")
-        ->where('id',4)
+        ->whereIn('id', $ids)
         ->first();
-        $this->filters['modalidadId'] = $modalidad['id'];;
+        $this->filters['modalidadId'] = ""
        
     }
 
@@ -68,8 +69,9 @@ class VcTeacherAssistance extends Component
         $this->asignaturas = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
-        ->where('tm_horarios.grupo_id',$this->filters['modalidadId'])
+        /*->where("tm_horarios.periodo_id",$this->filters['periodoId'])
+        ->where("tm_horarios.grupo_id",$this->filters['modalidadId'])*/
+        ->where("tm_horarios.curso_id",$this->filters['cursoId'])
         ->where("d.docente_id",$this->filters['docenteId'])
         ->selectRaw('m.id, m.descripcion')
         ->get();
