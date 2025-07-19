@@ -38,12 +38,6 @@ class VcTeacherAssistance extends Component
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->filters['periodoId']  = $tblperiodos['id'];
         $this->filters['periodo'] = $tblperiodos['periodo'];
-        
-        $ids = [3, 4];
-        $modalidad = TmGeneralidades::query()
-        ->select("id")
-        ->whereIn('id', $ids)
-        ->first();
 
         $this->filters['modalidadId'] = "";
        
@@ -52,8 +46,8 @@ class VcTeacherAssistance extends Component
 
     public function render()
     {
-        
-        $this->tblmodalidad = TmGeneralidades::where('superior',1)->get();
+        $ids = [3, 4];
+        $this->tblmodalidad = TmGeneralidades::->whereIn('id', $ids)->get();
         
         $this->tblparalelo = TmHorarios::query()
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
