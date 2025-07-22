@@ -330,14 +330,19 @@ class VcQualifyActivity extends Component
 
         foreach ($this->detalle as $detalle){
             
-            if ($detalle['id']>0){
+            /*if ($detalle['id']>0){
 
                 $record = TdCalificacionActividades::find($detalle['id']);
                 $record->update([
                     'nota' => $detalle['nota'],
                 ]);
 
-            }else{
+            }else{*/
+
+                TdCalificacionActividades::query()
+                ->where("actividad_id","=",$detalle['actividad_id'])
+                ->where("persona_id","=",$detalle['persona_id'])
+                ->delete();
                 
                 TdCalificacionActividades::Create([
                     'actividad_id' => $detalle['actividad_id'],
@@ -347,7 +352,7 @@ class VcQualifyActivity extends Component
                     'estado' => 'A',
                 ]);
 
-            }
+            /*}*/
         }
 
         $message = "Calificaciones grabada con Éxito......";
