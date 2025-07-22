@@ -14,22 +14,29 @@
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
                         <div class="row g-3 mb-3">
-                            <div class="col-xxl-5 col-sm-6">
+                            <div class="col-xxl-2 col-sm-6">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.modalidadId">
+                                    @foreach ($tblmodalidad as $modalidad) 
+                                    <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="col-xxl-3 col-sm-6">
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.paralelo">
-                                    <option value="">Seleccione Paralelo</option>
+                                    <option value="">Seleccione Curso</option>
                                    @foreach ($tblparalelo as $paralelo) 
                                     <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
                                     @endforeach 
                                 </select>
                             </div>
-                            <div class="col-xxl-2 col-sm-4">
-                                <div>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.tipo">
-                                        <option value="">Seleccione Actividad</option>
-                                        <option value="AI">Actividad Individual</option>
-                                        <option value="AG">Actividad Grupal</option>
-                                    </select>
-                                </div>
+                            
+                            <div class="col-xxl-2 col-sm-6">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.asignaturaId">
+                                    <option value="">Seleccione Asignatura</option>
+                                   @foreach ($tblasignaturas as $asignatura) 
+                                    <option value="{{$asignatura->id}}">{{$asignatura->descripcion}}</option>
+                                    @endforeach 
+                                </select>
                             </div>
                             <!--end col-->
                             <div class="col-xxl-2 col-sm-4">
