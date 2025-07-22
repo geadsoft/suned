@@ -34,6 +34,7 @@ class VcActividades extends Component
     public $arractividad=[
         'AI' => 'Actividad Individual',
         'AG' => 'Actividad Grupal',
+        'EX' => 'Examen'
     ];
     
     public $filters=[
