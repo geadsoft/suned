@@ -23,6 +23,7 @@ use App\Http\Livewire\VcReportPartialTeacher;
 use App\Http\Livewire\VcStudents;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ArchivoController;
+use App\Http\Livewire\VcReportCard;
 
 /*
 |--------------------------------------------------------------------------
@@ -159,6 +160,9 @@ Route::get('/student/resources',[App\Http\Controllers\EstudiantesController::cla
 Route::get('/student/resource-view/{id}',[App\Http\Controllers\EstudiantesController::class, 'resources_view'])->name('resources_view');
 Route::get('/student/show-assistance',[App\Http\Controllers\EstudiantesController::class, 'assistance'])->name('assistance');
 Route::get('/student/teacher-assistance',[App\Http\Controllers\DocentesController::class, 'asistencia_materia'])->name('asistencia_materia');
+Route::get('/student/report-card',[App\Http\Controllers\EstudiantesController::class, 'report_card'])->name('report_card');
+
+
 
 Route::get('/descargar-archivo/{id}', [ArchivoController::class, 'descargar'])->name('archivo.descargar');
 
@@ -201,6 +205,8 @@ Route::get('/preview-pdf/total-rating/{data}',[VcReportTQualify::class, 'printPD
 Route::get('/preview-pdf/partial-teacher/{data}',[VcReportPartialTeacher::class, 'printPDF']);
 Route::get('/preview-pdf/quarterly-teacher/{data}',[VcReportQuarterlyTeacher::class, 'printPDF']);
 Route::get('/preview-pdf/informacion-student/{id}',[VcStudents::class, 'printFichaPDF']);
+Route::get('/preview-pdf/report-card/{data}',[VcReportCard::class, 'printPDF']);
+
 
 Route::get('/invoice/genera/{id}',[VcGeneraXML::class, 'setGeneraXML']);
 Route::get('/invoice/ride-pdf/{id}',[VcGeneraXML::class, 'imprimeRide']);

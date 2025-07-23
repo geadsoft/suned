@@ -62,4 +62,10 @@ class EstudiantesController extends Controller
     {      
         return view('student/calificaciones_actividades');
     }
+
+    public function report_card()
+    {      
+        return view('student/boletin_calificaciones');
+    }
+
 }

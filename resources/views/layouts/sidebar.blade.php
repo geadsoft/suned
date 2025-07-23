@@ -744,7 +744,7 @@
                                             <a href="/report/exams-qualify" class="nav-link" data-key="t-settings">Examenes</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="/report/exams-qualify" class="nav-link" data-key="t-settings">Finales</a>
+                                            <a href="/student/report-card" class="nav-link" data-key="t-settings">Trimestral</a>
                                         </li>
                                     </ul>
                                 </div>
