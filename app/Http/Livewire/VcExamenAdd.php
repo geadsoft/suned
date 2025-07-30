@@ -19,10 +19,11 @@ class VcExamenAdd extends Component
 {
     use WithFileUploads;
 
-    public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="3E", $tipo="EX", $nombre, $fecha, $hora;
+    public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1E", $tipo="EX", $nombre, $fecha, $hora;
     public $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
-    public $periodoId, $modalidadId, $tbltermino, $tblbloque, $tblactividad, $texteditor="";
+    public $periodoId, $modalidadId, $tbltermino, $tblactividad, $texteditor="";
     public $tblparalelo=[], $tblasignatura=[];
+    public $tblbloque=[];
     public $array_attach=[];
     public $docenteId;
 
@@ -61,6 +62,7 @@ class VcExamenAdd extends Component
         ->get();
 
         $this->attach_add();
+        $this->updatedTermino();
 
         if ($id>0){
             $this->edit($id);
@@ -71,16 +73,7 @@ class VcExamenAdd extends Component
     
     public function render()
     {
-        $this->tblbloque=[];
-        foreach($this->tbltermino as $data){
-            if ($this->termino == $data['codigo']){
-                $arrbloque['codigo'] = str_replace('T','E',$data['codigo']);
-                $arrbloque['descripcion'] = 'Examen '.$data['descripcion'];
-
-                array_push($this->tblbloque,$arrbloque);
-            }
-        }
-
+        
         $this->tblmodalidad = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
@@ -111,6 +104,23 @@ class VcExamenAdd extends Component
     public function updateEditorData($data)
     {
         $this->texteditor = $data;
+       
+    }
+
+    public function updatedTermino()
+    {
+        
+        $this->tblbloque=[];
+
+        foreach($this->tbltermino as $data){
+            if ($this->termino == $data['codigo']){
+                $arrbloque['codigo'] = str_replace('T','E',$data['codigo']);
+                $arrbloque['descripcion'] = 'Examen '.$data['descripcion'];
+
+                array_push($this->tblbloque,$arrbloque);
+            }
+        }
+
        
     }
 

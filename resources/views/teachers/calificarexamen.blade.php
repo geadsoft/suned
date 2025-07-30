@@ -77,13 +77,17 @@
 
         window.addEventListener('msg-grabar', event => {
             Swal.fire({
-                    title: 'Buen Trabajo!',
-                    text:  event.detail.newName,
-                    icon: 'success',
-                    confirmButtonClass: 'btn btn-primary w-xs mt-2',
-                    buttonsStyling: false
-                })
-        }) 
+            title: 'Buen Trabajo!',
+            html:  event.detail.newName,
+            icon: 'success',
+            confirmButtonClass: 'btn btn-primary w-xs mt-2',
+            confirmButtonText: 'OK'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                location.reload(); // Actualiza la misma página
+            }
+            });
+        })
 
 
     </script>

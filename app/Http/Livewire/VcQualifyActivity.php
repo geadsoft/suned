@@ -138,6 +138,8 @@ class VcQualifyActivity extends Component
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
+        $this->add();
+
     }
 
     public function consulta(){
@@ -209,8 +211,6 @@ class VcQualifyActivity extends Component
             $this->tblrecords[$data->id]['promedio'] = 0.00;
         }
 
-        //array_multisort(array_column($this->tblrecords, 'nombres'), SORT_ASC, $this->tblrecords);
-
         $this->tblrecords['ZZ']['personaId'] = 0;
         $this->tblrecords['ZZ']['nui'] = '';
         $this->tblrecords['ZZ']['nombres'] = 'Promedio';
@@ -219,8 +219,6 @@ class VcQualifyActivity extends Component
             $this->tblrecords['ZZ'][$actividad['id']] = 0.00;    
         }
         $this->tblrecords['ZZ']['promedio'] = 0.00;
-
-        
 
     }
 
@@ -250,7 +248,6 @@ class VcQualifyActivity extends Component
             $fil = $record->persona_id;
             $col = $record->actividad_id;
 
-            //$this->tblrecords[$fil][$col] = $record->nota; 
             if (isset($this->tblrecords[$fil][$col])) {
                 $this->tblrecords[$fil][$col] = $record->nota;
             }
@@ -266,6 +263,19 @@ class VcQualifyActivity extends Component
             }
 
             $this->tblrecords[$key]['promedio'] =  $suma/$count; 
+        }
+
+        //Promedio Total
+        foreach ($this->tblactividad as $col => $actividad)
+        {   
+            $suma  = 0;
+            $count = 0;
+
+            foreach ($this->tblrecords as $key => $record){
+                $suma += $this->tblrecords[$key][$actividad['id']];
+                $count += 1;  
+            }
+            $this->tblrecords['ZZ'][$actividad['id']] =  $suma/$count; 
         }
 
     }
@@ -329,15 +339,6 @@ class VcQualifyActivity extends Component
         }
 
         foreach ($this->detalle as $detalle){
-            
-            /*if ($detalle['id']>0){
-
-                $record = TdCalificacionActividades::find($detalle['id']);
-                $record->update([
-                    'nota' => $detalle['nota'],
-                ]);
-
-            }else{*/
 
                 TdCalificacionActividades::query()
                 ->where("actividad_id","=",$detalle['actividad_id'])
@@ -352,7 +353,6 @@ class VcQualifyActivity extends Component
                     'estado' => 'A',
                 ]);
 
-            /*}*/
         }
 
         $message = "Calificaciones grabada con Éxito......";
