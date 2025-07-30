@@ -17,7 +17,8 @@ use Str;
 
 class VcExamenAdd extends Component
 {
-    
+    use WithFileUploads;
+
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="3E", $tipo="EX", $nombre, $fecha, $hora;
     public $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $periodoId, $modalidadId, $tbltermino, $tblbloque, $tblactividad, $texteditor="";
@@ -126,6 +127,7 @@ class VcExamenAdd extends Component
         $this->modalidadId  = $record['grupo_id'];
         $this->asignaturaId = $record['asignatura_id'];
 
+
         $this->updatedasignaturaId($this->asignaturaId);
 
         $this->actividadId = $id;
@@ -136,9 +138,9 @@ class VcExamenAdd extends Component
         $this->nombre = $record['nombre'];
         $this->puntaje = $record['puntaje'];
         $this->enlace = $record['enlace'];
-        $this->descripcion = $record['descripcion'];
         $this->texteditor = $record['descripcion'];
         $this->estado = $record['estado'];
+
 
         $this->control="disabled";
 
@@ -147,6 +149,40 @@ class VcExamenAdd extends Component
 
         $this->descripcion=".";
 
+        $tblfiles = TmFiles::query()
+        ->where('actividad_id',$id)
+        ->where('persona_id',$this->docenteId)
+        ->where('actividad',1)
+        ->get();
+
+        $this->array_attach = [];
+        foreach($tblfiles as $key => $files){
+
+            $linea = count($this->array_attach);
+            $linea = $linea+1;
+
+            $attach=[
+                'id' => $files['id'],
+                'linea' => $linea,
+                'adjunto' => $files['nombre'],
+                'drive_id' => $files['drive_id'],
+            ];
+
+            array_push($this->array_attach,$attach);
+
+        }
+
+        if (count($tblfiles)==0){
+            $this->attach_add();
+        }
+
+        $this->setEditorData($this->texteditor);
+
+    }
+
+    public function setEditorData($data){
+        $this->texteditor = $data;
+        
     }
 
     public function updatedasignaturaId($id){
@@ -188,7 +224,7 @@ class VcExamenAdd extends Component
 
         }else {
             
-            TmActividades::Create([
+            $tblData = TmActividades::Create([
                 'docente_id' => 2913,
                 'paralelo' => $this->paralelo,
                 'termino' => $this->termino,
@@ -209,7 +245,7 @@ class VcExamenAdd extends Component
             //return redirect()->to('/activities/exams');
         }
 
-        $message = "Registro grabado con éxito!";
+        $message = nl2br("Registro grabado con éxito!\n".$msgfile);
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
     }
@@ -235,11 +271,11 @@ class VcExamenAdd extends Component
             
             $file = $attach['adjunto'];
 
-            $name = $file->getClientOriginalName();
-            $name = pathinfo($name, PATHINFO_FILENAME);
-            $name = preg_replace('/[^A-Za-z0-9_\-]/', '_', $name); // sanitizar nombre
-
+            $name    = $file->getClientOriginalName();
+            $name    = pathinfo($name, PATHINFO_FILENAME);
             $archivo = $name;
+            $name = preg_replace('/[^A-Za-z0-9_\-]/', '_', $name); // sanitizar nombre
+           
             // Agregar timestamp para hacerlo único
             $uniqueSuffix = now()->format('Ymd_His'); // o usar uniqid() si prefieres algo más corto
             $name = $name . '_' . $uniqueSuffix;

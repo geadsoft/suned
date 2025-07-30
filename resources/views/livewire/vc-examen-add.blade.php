@@ -107,21 +107,37 @@
                                 
                             </textarea>
                         </div>
-                        <div class="mb-3"> 
+                        <div class="mb-3">
                             <label class="form-label fw-semibold">Adjuntos</label>
                             <table class="table table-nowrap align-middle" id="orderTable">
                                 <tbody>
                                 @foreach ($array_attach as $key => $recno) 
                                 <tr class="det-{{$recno['linea']}}">
+                                @if ($recno['drive_id']!="")
                                 <td>
                                     <div class="input-group">
-                                    <input type="file" id="file-{{$recno['linea']}}" wire:model.prevent="" class="form-control">
-                                    <a id="btnadd-{{$recno['linea']}}" class ="btn" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-16"></i></a>
-                                    <a id="btndel-{{$recno['linea']}}" class ="btn" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-16"></i></a>
+                                        <span class="input-group-text" id="basic-addon3">Archivo</span>
+                                        <input type="text" id="file-{{$recno['linea']}}" wire:model.prevent="array_attach.{{$key}}.adjunto" class="form-control">
+                                        <a href="#" id="drive-{{$recno['linea']}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" wire:click.prevent='download_drive({{$recno['id']}})'><i class="ri-download-2-line fs-18"></i></a>
+                                        <a id="btnadd-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-success rounded-circle" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-18"></i></a>
+                                        <a id="btndel-{{$recno['linea']}}" class ="btn btn-icon btn-topbar btn-ghost-danger rounded-circle" wire:click="attach_del({{$recno['linea']}})"><i class="text-danger ri-subtract-line fs-18"></i></a>
                                     </div>
                                 </td>
+                                @else
+                                <td>
+                                    <div class="input-group">
+                                    <input type="file" id="file-{{$recno['linea']}}" wire:model="array_attach.{{$key}}.adjunto" class="form-control">
+                                    {{-- Indicador de carga --}}
+                                    <a id="btnadd-{{$recno['linea']}}" class ="btn" wire:click="attach_add()"><i class="text-secondaryimary ri-add-fill fs-16"></i></a>
+                                    <a id="btndel-{{$recno['linea']}}" class ="btn" wire:click="attach_del({{$recno['linea']}})" onclick="document.getElementById('file-{{$recno['linea']}}').value='';"><i class="text-danger ri-subtract-line fs-16"></i></a>
+                                    </div>
+                                    <div wire:loading wire:target="array_attach.{{$key}}.adjunto" class="text-danger">
+                                        Cargando archivo...
+                                    </div>
+                                </td>
+                                @endif
                                 </tr>
-                                @endforeach
+                                 @endforeach
                                 </tbody>
                             </table>                            
                         </div>
