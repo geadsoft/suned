@@ -138,7 +138,7 @@ class VcQualifyActivity extends Component
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
-        $this->add();
+        $this->tblrecords=[];
 
     }
 

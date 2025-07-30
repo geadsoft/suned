@@ -71,12 +71,12 @@
                     @foreach ($asignaturas as $col)                   
                     <tr id="{{$record->id}}-{{$col->id}}">
                         <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$tblrecords[$record->id][$col->id]['nombres']}}</td>
-                        @if (isset($tblrecords[$record->id][$col->id]['AI-prom"']))
+                        @if (isset($tblrecords[$record->id][$col->id]['AI-prom']))
                             <td class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['AI-prom'],2)}}</td>
                         @else
                             <td class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">0.00</td>
                         @endif
-                        @if (isset($tblrecords[$record->id][$col->id]['AG-prom"']))
+                        @if (isset($tblrecords[$record->id][$col->id]['AG-prom']))
                             <td class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['AG-prom'],2)}}</td>
                         @else
                             <td class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">0.00</td>

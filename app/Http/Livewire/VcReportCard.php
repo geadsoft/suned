@@ -14,11 +14,12 @@ use PDF;
 
 class VcReportCard extends Component
 {
-    public $periodoId, $modalidadId=0, $tblpersonas, $datos;
+    public $periodoId, $modalidadId=0, $tblpersonas, $datos, $bloqueEx;
     public $arrtipo=[];
     public $tblbloque=[];
     public $tblparalelo=[];
     public $tblescala=[];
+    public $tbltermino=[];
     
     public $filters=[
         'periodoId' => 0,
@@ -173,29 +174,7 @@ class VcReportCard extends Component
                 $this->tblrecords[$idPerson][$index]['cuantitativo'] = "";
                 $this->tblrecords[$idPerson][$index]['cualitativo'] = "";
             }
-            /*$this->tblrecords[$idPerson]['ZZ']['id'] = 0;
-            $this->tblrecords[$idPerson]['ZZ']['personaId'] = 0;
-            $this->tblrecords[$idPerson]['ZZ']['nui'] = '';
-            $this->tblrecords[$idPerson]['ZZ']['nombres'] = 'PROMEDIO DEL CURSO';*/
 
-            /*foreach ($this->tblgrupo as $key2 => $grupo){
-
-                foreach ($grupo as $key3 => $actividad){
-                    $col = $key2.$actividad->id;
-                    $this->tblrecords[$idPerson]['ZZ'][$col] = 0.00;                   
-                }
-                $col = $key2."-prom";
-                $this->tblrecords['ZZ'][$col] = 0;
-            }*/
-
-           /* $this->tblrecords[$idPerson]['ZZ']['promedio'] = 0.00;
-            $this->tblrecords[$idPerson]['ZZ']['nota70'] = 0.00;
-            $this->tblrecords[$idPerson]['ZZ']['examen'] = 0.00;
-            $this->tblrecords[$idPerson]['ZZ']['nota30'] = 0.00;
-            $this->tblrecords[$idPerson]['ZZ']['cuantitativo'] = "";
-            $this->tblrecords[$idPerson]['ZZ']['cualitativo'] = "";*/
-            
-            //dd($this->tblrecords);
         } 
         
         $this->datos = json_encode($this->filters);
@@ -230,7 +209,6 @@ class VcReportCard extends Component
             $idPerson = $person->id;
             $this->filters['estudianteId'] = $idPerson;
 
-            //Asignar Notas Actividad
             $notas = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
             ->join('tm_horarios_docentes as d', function($join) {
@@ -266,6 +244,17 @@ class VcReportCard extends Component
             }
 
             //Asginar Nota Examen
+            $this->tbltermino = TdPeriodoSistemaEducativos::query()
+            ->where('periodo_id',$this->filters['periodoId'])
+            ->where('tipo','EA')
+            ->get();
+
+            foreach($this->tbltermino as $data){
+                if ($this->filters['termino'] == $data['codigo']){
+                    $this->bloqueEx = str_replace('T','E',$data['codigo']);
+                }
+            }
+
             $examen = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
             ->join('tm_horarios_docentes as d', function($join) {
@@ -276,7 +265,7 @@ class VcReportCard extends Component
                 return $query->where('tm_actividades.termino', $this->filters['termino']);
             })
             ->when(!empty($this->filters['bloque']), function($query) {
-                return $query->where('tm_actividades.bloque', $this->filters['bloque']);
+                return $query->where('tm_actividades.bloque',$this->bloqueEx);
             })
             ->where('tm_actividades.tipo', 'ET')
             ->where('n.persona_id', $this->filters['estudianteId'])
@@ -301,7 +290,7 @@ class VcReportCard extends Component
             }
 
 
-            //Calcula Totales
+            /*//Calcula Totales
             foreach ($this->asignaturas as $key => $data){
                 $materias[] = $data->id;
             }    
@@ -313,6 +302,8 @@ class VcReportCard extends Component
                 $record = $this->tblrecords[$idPerson][$data];
                 $promedio = 0;
                 $countprm = 0;
+                $suma  = 0;
+                $count = 0;
                 
                 foreach ($this->tblgrupo as $grupo){
 
@@ -349,22 +340,73 @@ class VcReportCard extends Component
                 $this->tblrecords[$idPerson][$data]['nota30'] = $nota30;
                 $this->tblrecords[$idPerson][$data]['cuantitativo'] = $nota70+$nota30; 
 
-                $promedio = $nota70+$nota30; 
+            }*/
+        
+        }
+
+        // Calcula Promedio
+        foreach ($this->tblrecords as $key1 => $records){
+            foreach ($records as $key2 => $recno){
+                $promedio = 0;
+                $countprm = 0;
+                foreach ($this->tblgrupo as $grupo){
+
+                    $tipo  = $grupo->actividad;
+                    $suma  = 0;
+                    $count = 0;
+
+                    foreach ($recno as $campo => $valor){
+                    
+                        $ncampo = substr($campo, 0, 2); 
+                        
+                        if ($ncampo==$tipo){
+                            $suma += $valor;
+                            $count += 1;
+                        }
+
+                    }
+
+                    $col = $tipo."-prom";
+                    if ($count > 0){
+                        $this->tblrecords[$key1][$key2][$col] = $suma/($count-1);
+                        $promedio += $suma/($count-1);
+                        $countprm += 1;
+                    }
+
+                }
+                if ($countprm > 0){
+                    $this->tblrecords[$key1][$key2]['promedio'] = $promedio/($countprm);  
+                }
+
+                $nota70 = $this->tblrecords[$key1][$key2]['promedio']*0.70;
+                $nota30 = $this->tblrecords[$key1][$key2]['examen']*0.30;
                 
+                $this->tblrecords[$key1][$key2]['nota70'] = $nota70;
+                $this->tblrecords[$key1][$key2]['nota30'] = $nota30;
+                $this->tblrecords[$key1][$key2]['cuantitativo'] = $nota70+$nota30; 
+            }
+        }
+                
+        // Escala Cualitativa
+        foreach ($this->tblrecords as $key1 => $records){
+
+            foreach ($records as $key2 => $recno){
+
+                $promedio = $recno['cuantitativo']; 
+                    
                 foreach ($this->tblescala as $escala) {
+                    
+                    $nota = $escala['nota'];                  
+                    $letra = $escala['evaluacion'];
 
-                    $nota1 = ($escala->nota-1)+0.01; 
-                    $nota2 = $escala->nota;
-                    $letra = $escala->evaluacion;
-
-                    if ($promedio >= $nota1 && $promedio <= $nota2) {
-                        $this->tblrecords[$idPerson][$data]['cualitativo'] = $letra;
+                    if ($promedio >= ($nota-1)+0.01 && $promedio <= $nota) {
+                        $this->tblrecords[$key1][$key2]['cualitativo'] = $letra;
                     }
                     
                 }
             
             }
-        
+
         }
 
     }
@@ -403,6 +445,8 @@ class VcReportCard extends Component
         ->where("periodo_id",$this->filters['periodoId'])
         ->where("tipo","EC")
         ->get()->toArray();
+
+        $this->tblescala = $escalas;
 
         // Definimos los rangos
         $rangos = [
@@ -451,6 +495,7 @@ class VcReportCard extends Component
         $notaParcial = $periodo->evaluacion_formativa;
         $notaExamen = $periodo->evaluacion_sumativa;
 
+       
 
         $pdf = PDF::loadView('pdf/reporte_boletin_notas',[
             'tblrecords' => $this->tblrecords,
