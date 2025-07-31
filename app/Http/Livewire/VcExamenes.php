@@ -3,9 +3,13 @@
 namespace App\Http\Livewire;
 use App\Models\TmHorarios;
 use App\Models\TmPeriodosLectivos;
+use App\Models\TmActividades;
+use App\Models\TdActividadesEntregas;
+use App\Models\TmFiles;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
 
 class VcExamenes extends Component
 {
