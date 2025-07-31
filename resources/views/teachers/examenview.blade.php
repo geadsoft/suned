@@ -26,6 +26,7 @@
     <script src="{{ URL::asset('assets/libs/@ckeditor/@ckeditor.min.js') }}"></script>
     <script src="{{ URL::asset('assets/js/pages/ecommerce-product-create.init.js') }}"></script>
     <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
     <script>
@@ -33,6 +34,21 @@
         window.addEventListener('msg-grabar', event => {
             swal("Buen Trabajo!", event.detail.newName, "success");
         })
+
+        window.addEventListener('textArea', event => {
+            addElement(event.detail.newName)
+        })
+
+        function addElement($text)
+        {
+            var $string = $text
+             document.getElementById("elemnt").innerHTML += $string;
+        }
+        
+        window.addEventListener('iniciar-descarga', event => {
+            const url = event.detail.url;
+            window.open(url, '_blank');
+        });
 
     </script>
     

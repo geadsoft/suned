@@ -123,7 +123,7 @@
 
                             </div>
                             
-                                <div class="mb-3">
+                            <div class="mb-3">
                                 <table class="table table-nowrap table-sm align-middle" id="orderTable">
                                     <thead class="text-muted table-light">
                                         <tr class="text-uppercase">
@@ -167,7 +167,7 @@
                                     @endforeach
                                     </tbody>
                                 </table> 
-                                </div>
+                            </div>
                             
                             <div class="d-flex justify-content-between align-items-start mt-4">
                                 <a class="btn btn-soft-info w-sm" href="/activities/activity">
