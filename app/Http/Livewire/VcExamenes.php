@@ -110,7 +110,7 @@ class VcExamenes extends Component
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
         ->join("tm_actividades as a","a.paralelo","=","d.id")
         ->when($this->filters['paralelo'],function($query){
-            return $query->where('a.paralelo',"{$this->filters['paralelo']}");
+            return $query->where('c.id',"{$this->filters['paralelo']}");
         })
         ->when($this->filters['tipo'],function($query){
             return $query->where('actividad',"{$this->filters['tipo']}");
@@ -127,6 +127,7 @@ class VcExamenes extends Component
         ->where("a.docente_id",$this->docenteId)
         ->where("a.tipo","ET")
         ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
+        ->orderby("a.fecha","desc")
         ->paginate(12);
 
         return view('livewire.vc-examenes',[
@@ -146,5 +147,30 @@ class VcExamenes extends Component
         return redirect()->to('/activities/exam-edit/'.$Id);
     }
 
+    public function delete( $id ){
+         
+        $this->selectId = $id;
+
+        $entregas = TdActividadesEntregas::query()
+        ->join("tm_actividades as a","a.id","=","td_actividades_entregas.actividad_id")
+        ->where("td_actividades_entregas.actividad_id",$this->selectId)
+        ->get();
+
+        if($entregas->isEmpty()){
+            $this->dispatchBrowserEvent('show-delete');
+        }else{
+            $this->dispatchBrowserEvent('msg-alert'); 
+        }
+
+    }
+
+    public function deleteData(){
+
+        TmFiles::where('actividad_id',$this->selectId)->delete();
+        
+        TmActividades::find($this->selectId)->delete();
+        $this->dispatchBrowserEvent('hide-delete');
+
+    }
 
 }
