@@ -50,14 +50,14 @@
                                 </div>
                             </div>
                             <!--end col-->
-                            <div class="col-xxl-2 col-sm-4">
+                            <!--<div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque">
                                         <option value="">Seleccione Bloque</option>
                                         <option value="1P" selected>Primer Parcial</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div>-->
                             <!--end col-->
                             <div class="col-xxl-1 col-sm-4">
                                 <div>
