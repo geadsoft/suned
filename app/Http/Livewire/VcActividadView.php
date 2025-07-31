@@ -10,6 +10,7 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TmFiles;
 use App\Models\TmMatriculas;
 use App\Models\TdActividadesEntregas;
+use App\Models\TdCalificacionActividades;
 
 
 use Livewire\Component;
@@ -25,6 +26,7 @@ class VcActividadView extends Component
     public $array_entregas=[], $entregas=[];
     public $personas=[];
     public $arrtermino, $arrbloque, $arractividad;
+    public $tblrecords=[];
     
     public $arrestado=[
         'A' => 'Activo',
@@ -96,28 +98,39 @@ class VcActividadView extends Component
     public function render()
     {
         $actividad = TmActividades::find($this->actividadId);
-        
-        //Entregas
-        $this->entregas = TdActividadesEntregas::query()
-        ->where('actividad_id',$this->actividadId)
-        ->get();
 
-        //Archivos
-        $this->array_entregas = TmFiles::query()
-        ->where('actividad_id',$this->actividadId)
-        ->where('entrega',1)
-        ->get();
-
-        /*$this->personas = TmHorarios::query()
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_matriculas as m","m.curso_id","=","tm_horarios.curso_id")
+        $this->personas = TmHorariosDocentes::query()
+        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
+        ->join(DB::raw("(select estudiante_id, modalidad_id, periodo_id, curso_id, estado 
+        from tm_matriculas m 
+        where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
+        union all
+        select m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado
+        from tm_pase_cursos p
+        inner join tm_matriculas m on m.id = p.matricula_id
+        where p.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
+        and p.estado = 'A'        
+        ) as m"),function($join){
+            $join->on("m.modalidad_id","=","h.grupo_id")
+                ->on("m.periodo_id","=","h.periodo_id")
+                ->on("m.curso_id","=","h.curso_id");
+        })
         ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->select("p.id","nombres","apellidos")
-        ->where('d.id',$actividad->paralelo)
-        ->where('m.estado','A')
-        ->orderByRaw("apellidos, nombres")
-        ->get();*/
-        
+        ->select("p.*")
+        ->where("tm_horarios_docentes.id",$actividad->paralelo)
+        ->where("m.estado",'A')
+        ->orderBy("p.apellidos")
+        ->get();
+                
+        return view('livewire.vc-actividad-view');
+    }
+
+    public function add(){
+
+        $this->tblrecords=[];
+
+        $actividad = TmActividades::find($this->actividadId);
+
         $this->personas = TmHorariosDocentes::query()
         ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
         ->join(DB::raw("(select estudiante_id, modalidad_id, periodo_id, curso_id, estado 
@@ -141,7 +154,34 @@ class VcActividadView extends Component
         ->orderBy("p.apellidos")
         ->get();
 
-        return view('livewire.vc-actividad-view');
+        // Actualiza Datos Estudiantes
+        foreach ($this->personas as $key => $data)
+        {   
+
+            $this->tblrecords[$data->id]['personaId'] = $data->id;
+            $this->tblrecords[$data->id]['nui'] = $data->identificacion;
+            $this->tblrecords[$data->id]['nombres'] = $data->apellidos.' '.$data->nombres;
+            $this->tblrecords[$data->id]['archivo'] = "";
+            $this->tblrecords[$data->id]['fecha'] = "";
+            $this->tblrecords[$data->id]['entregaId'] = 0;
+            $this->tblrecords[$data->id]['nota'] = 0;
+
+        }
+
+        $this->array_entregas = TmFiles::query()
+        ->where('actividad_id',$this->actividadId)
+        ->where('entrega',1)
+        ->get();
+
+        foreach ($this->array_entregas as $key =>$entrega)
+        { 
+            $personaId = $entrega->persona_id;
+            $this->tblrecords[$personaId]['archivo'] =  $entrega->nombre;
+            $this->tblrecords[$personaId]['fecha'] =  $entrega->create_at;
+            $this->tblrecords[$personaId]['entregaId'] =  $entrega->id;
+
+        }
+
     }
 
     public function edit($id){
@@ -202,14 +242,63 @@ class VcActividadView extends Component
 
         $this->curso =  $tblcurso['curso'];
         $this->modalidadId =  $tblcurso['grupo_id'];
-      
+        
+        $this->add();
+        $this->asignarNotas();
 
     }
+
+
+    public function asignarNotas(){
+
+        $notas = TmActividades::query()
+        ->join('td_calificacion_actividades as n','n.actividad_id','=','tm_actividades.id')
+        ->where("tipo","AC")
+        ->where("actividad_id",$this->actividadId)
+        ->where("docente_id",$this->docenteId)
+        ->select("n.*")
+        ->get();
+
+        foreach ($notas as $recno){
+            $personaId = $recno->persona_id;
+            $this->tblrecords[$personaId]['nota'] =  $recno->nota;
+        }
+
+
+    }
+
 
     public function download_drive($id){
 
         $url = route('archivo.descargar', ['id' => $id]);
         $this->dispatchBrowserEvent('iniciar-descarga', ['url' => $url]);
+
+    }
+
+    public function grabarNota(){
+
+        foreach ($this->tblrecords as $records){
+
+                TdCalificacionActividades::query()
+                ->where("actividad_id","=",$this->actividadId)
+                ->where("persona_id","=",$records['personaId'])
+                ->delete();
+
+                if ($records['nota']>0){
+                    
+                    TdCalificacionActividades::Create([
+                        'actividad_id' => $this->actividadId,
+                        'persona_id' => $records['personaId'],
+                        'nota' =>  $records['nota'],
+                        'usuario' => auth()->user()->name,
+                        'estado' => 'A',
+                    ]);
+
+                }
+        }
+
+        $message = "Calificaciones grabada con Éxito......";
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
     }
 

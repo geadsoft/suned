@@ -25,7 +25,10 @@
     
     <script src="{{ URL::asset('assets/libs/@ckeditor/@ckeditor.min.js') }}"></script>
     <script src="{{ URL::asset('assets/js/pages/ecommerce-product-create.init.js') }}"></script>
+    
     <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
     <script>
