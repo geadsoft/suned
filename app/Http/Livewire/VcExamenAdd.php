@@ -235,7 +235,7 @@ class VcExamenAdd extends Component
         }else {
             
             $tblData = TmActividades::Create([
-                'docente_id' => 2913,
+                'docente_id' => $this->docenteId,
                 'paralelo' => $this->paralelo,
                 'termino' => $this->termino,
                 'bloque' => $this->bloque,
