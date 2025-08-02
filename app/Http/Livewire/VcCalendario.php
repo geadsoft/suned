@@ -22,7 +22,7 @@ class VcCalendario extends Component
         
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
-        $this->periodo = $tblperiodos['periodo'];
+        $this->periodo = date('Y');
         $this->mes = date('m');
         $this->loadEvent();
     }
@@ -45,9 +45,10 @@ class VcCalendario extends Component
         ]);
 
         $mes = date('m', strtotime($this->startdate));
+        $periodo = date('Y', strtotime($this->startdate));
 
         $eventos = TmCalendarioEventos::Create([
-            'periodo' => $this->periodo,
+            'periodo' => $periodo,
             'mes' => $mes,
             'actividad' => $this->actividad,
             'nombre' => $this->evento,
@@ -77,11 +78,13 @@ class VcCalendario extends Component
         ]);
         
         $mes = date('m', strtotime($this->startdate));
+        $periodo = date('Y', strtotime($this->startdate));
 
         $record = TmCalendarioEventos::find($this->selectId);
         $record->update([
             'descripcion' => $this->comentario,
             'nombre' => $this->evento,
+            'periodo' => $periodo,
             'mes' => $mes,
             'start_date' => $this->startdate,
             'end_date' => $this->enddate,                
