@@ -262,7 +262,10 @@ class VcQualifyActivity extends Component
                 $count += 1;    
             }
 
-            $this->tblrecords[$key]['promedio'] =  $suma/$count; 
+            if ($suma>0){
+                $this->tblrecords[$key]['promedio'] =  $suma/$count; 
+            }
+            
         }
 
         //Promedio Total
@@ -275,7 +278,11 @@ class VcQualifyActivity extends Component
                 $suma += $this->tblrecords[$key][$actividad['id']];
                 $count += 1;  
             }
-            $this->tblrecords['ZZ'][$actividad['id']] =  $suma/$count; 
+
+            if($suma>0){
+                $this->tblrecords['ZZ'][$actividad['id']] =  $suma/$count; 
+            }
+
         }
 
     }

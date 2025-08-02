@@ -283,7 +283,11 @@ class VcQualifyExams extends Component
                 $suma += $this->tblrecords[$key][$actividad['id']];
                 $count += 1;  
             }
-            $this->tblrecords['ZZ'][$actividad['id']] =  $suma/$count; 
+
+            if ($suma>0){
+                $this->tblrecords['ZZ'][$actividad['id']] =  $suma/$count; 
+            }
+            
         }
 
        
