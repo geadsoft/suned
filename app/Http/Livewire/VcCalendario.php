@@ -14,7 +14,7 @@ class VcCalendario extends Component
     public $actividad='GE', $evento, $startdate, $enddate, $comentario, $selectId, $eventoId;
     public $arrevent=[], $lstevent;
 
-    protected $listeners = ['postAdded','newEvent'];
+    protected $listeners = ['postAdded','newEvent','viewEvent'];
 
     public function mount()
     {
@@ -44,9 +44,11 @@ class VcCalendario extends Component
             'comentario' => 'required',
         ]);
 
+        $mes = date('m', strtotime($this->startdate));
+
         $eventos = TmCalendarioEventos::Create([
             'periodo' => $this->periodo,
-            'mes' => $this->mes,
+            'mes' => $mes,
             'actividad' => $this->actividad,
             'nombre' => $this->evento,
             'start_date' => $this->startdate,
@@ -74,10 +76,13 @@ class VcCalendario extends Component
             'comentario' => 'required',
         ]);
         
+        $mes = date('m', strtotime($this->startdate));
+
         $record = TmCalendarioEventos::find($this->selectId);
         $record->update([
             'descripcion' => $this->comentario,
             'nombre' => $this->evento,
+            'mes' => $mes,
             'start_date' => $this->startdate,
             'end_date' => $this->enddate,                
         ]);
@@ -126,7 +131,7 @@ class VcCalendario extends Component
 
         $this->eventos = TmCalendarioEventos::query()
         ->where('periodo',$this->periodo)
-        ->where('mes',$this->mes)
+        //->where('mes',$this->mes)
         ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
         ->get();
 
@@ -234,11 +239,24 @@ class VcCalendario extends Component
             }
         }
 
-        $this->arrevent = json_encode($array);
         
-        
+        $this->arrevent = json_encode($array);      
         $this->dispatchBrowserEvent('load-calendar', ['newObj' => $this->arrevent]);
+        
+        
+    }
 
+    public function viewEvent($mes,$periodo){
+
+        $timestamp = mktime(0, 0, 0, $mes+1, 1, $periodo);
+        $fechafin = date('Y-m-d', $timestamp);
+        $messig = $mes+1;
+
+        $this->lstevent = TmCalendarioEventos::query()
+        ->where('periodo',$this->periodo)
+        ->where('mes',$messig)
+        ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
+        ->get();
 
     }
 
