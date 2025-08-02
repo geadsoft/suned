@@ -94,7 +94,7 @@ class VcViewCalendar extends Component
             // Eventos Todos
             $evenTodos = TmCalendarioEventos::query()
             ->where('periodo',$this->periodo)
-            ->where('mes',$this->mes)
+            //->where('mes',$this->mes)
             ->where('todos',1)
             ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
             ->get();
@@ -105,7 +105,7 @@ class VcViewCalendar extends Component
             $eventModalidad = TmCalendarioEventos::query()
             ->join('tm_calendario_grados as g','g.calendario_id','=','tm_calendario_eventos.id')
             ->where('periodo',$this->periodo)
-            ->where('mes',$this->mes)
+            //->where('mes',$this->mes)
             ->where('g.modalidad_id',$this->modalidadId)
             ->where('g.grado_id',$this->gradoId)
             ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
@@ -117,7 +117,7 @@ class VcViewCalendar extends Component
 
             $this->eventos = TmCalendarioEventos::query()
             ->where('periodo',$this->periodo)
-            ->where('mes',$this->mes)
+            //->where('mes',$this->mes)
             ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
             ->get();
 
