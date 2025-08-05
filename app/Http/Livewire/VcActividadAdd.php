@@ -66,6 +66,7 @@ class VcActividadAdd extends Component
         $this->tblactividad = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
         ->where('tipo','AC')
+        ->where('codigo','<>','EX')
         ->get();
 
         $this->attach_add();
