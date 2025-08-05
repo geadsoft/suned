@@ -67,7 +67,7 @@
                                             <li class="nav-item">
                                                 <a class="nav-link {{$tab5}} py-3 Returns" data-bs-toggle="tab" id="Returns" href="#returns"
                                                     role="tab" aria-selected="false" wire:click="filtrar('EX')">
-                                                    <i class="ri-parent-line me-1 align-bottom"></i> Exámenes
+                                                    <i class="ri-file-edit-line me-1 align-bottom"></i> Exámenes
                                                 </a>
                                             </li>
                                             <li class="nav-item">
