@@ -65,6 +65,12 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item">
+                                                <a class="nav-link {{$tab5}} py-3 Returns" data-bs-toggle="tab" id="Returns" href="#returns"
+                                                    role="tab" aria-selected="false" wire:click="filtrar('EX')">
+                                                    <i class="ri-parent-line me-1 align-bottom"></i> Exámenes
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
                                                 <a class="nav-link {{$tab4}} py-3 Pickups" data-bs-toggle="tab" id="Pickups" href="#pickups"
                                                     role="tab" aria-selected="false" wire:click="pendientes">
                                                     <i class=" ri-notification-badge-line align-bottom"></i> Pendientes <span

@@ -16,7 +16,7 @@ class VcStudentActivities extends Component
     use WithPagination;
 
     public $fecha, $personaId, $periodoId, $cursoId, $modalidadId, $pendientes, $asignatura="TODOS";
-    public $tab1 = "active", $tab2="", $tab3="", $tab4;
+    public $tab1 = "active", $tab2="", $tab3="", $tab4,  $tab5;
     public $materias=[];
     public $filters=[
         'actividad' => "",
@@ -82,7 +82,7 @@ class VcStudentActivities extends Component
         ->when($this->filters['pendientes'],function($query){
             return $query->whereRaw("e.fecha is null and tm_actividades.subir_archivo = 'SI'");
         })
-        ->where("tipo",'AC')
+        //->where("tipo",'AC')
         ->where("h.curso_id",$this->cursoId)
         ->select("tm_actividades.*","a.descripcion as asignatura","p.apellidos","p.nombres","e.nota","e.fecha as fechaentrega")        
         ->orderBy("fecha","desc")
@@ -102,7 +102,7 @@ class VcStudentActivities extends Component
             return $query->where('d.asignatura_id',"{$this->filters['asignaturaId']}");
         })
         ->whereRaw("e.fecha is null")
-        ->where("tipo",'AC')
+        //->where("tipo",'AC')
         ->where("h.curso_id",$this->cursoId)  
         ->where("subir_archivo",'SI')   
         ->orderBy("fecha","desc")
@@ -123,6 +123,7 @@ class VcStudentActivities extends Component
         $this->tab2="";
         $this->tab3="";
         $this->tab4="";
+        $this->tab5="";
 
         switch ($data) {
         case "AI":
@@ -131,6 +132,10 @@ class VcStudentActivities extends Component
             break;
         case "AG":
             $this->tab3 = "active";
+            $this->filters['actividad'] = $data;
+            break;
+        case "EX":
+            $this->tab5 = "active";
             $this->filters['actividad'] = $data;
             break;
         default:
