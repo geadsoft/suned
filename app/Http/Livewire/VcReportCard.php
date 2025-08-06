@@ -543,7 +543,7 @@ class VcReportCard extends Component
             'notaParcial' => $notaParcial,
             'notaExamen' => $notaExamen,
             'arrescala' => $arrescala,
-            'conteos' => $conteos,
+            'faltas' => $faltas,
         ]);
 
         return $pdf->setPaper('a4','landscape')->stream('Informe Aprendizaje.pdf');
