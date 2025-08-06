@@ -115,8 +115,8 @@ class VcReportCard extends Component
         ->join("tm_personas as p", "p.id", "=", "m.estudiante_id")
         ->select("p.*","m.documento")
         ->where("m.curso_id", $this->filters['paralelo'])
-        ->where("m.estado", "A")
-        ->orderBy("p.apellido")
+        //->where("m.estado", "A")
+        ->orderBy("p.apellidos")
         ->get();
 
         //dd($this->tblpersonas);
