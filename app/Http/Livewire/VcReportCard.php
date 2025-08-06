@@ -91,21 +91,12 @@ class VcReportCard extends Component
         ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
-        /*$this->tblpersonas = TmPersonas::query()
-        ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
-        ->select("tm_personas.*","m.documento")
-        ->where("m.curso_id",$this->filters['paralelo'])
-        ->where("m.modalidad_id",$this->modalidadId)
-        ->where("m.periodo_id",$this->periodoId)
-        ->orderBy("tm_personas.apellidos")
-        ->get();*/
-
         $this->tblpersonas = DB::table(DB::raw("(
             select m.estudiante_id, m.modalidad_id, m.periodo_id, m.curso_id, m.estado, m.documento 
-            from tm_matriculas m 
+            from tm_matriculas m
             left join tm_pase_cursos p on p.matricula_id <> m.id
             where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
-            union all
+            union all 
             select m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado, m.documento
             from tm_pase_cursos p
             inner join tm_matriculas m on m.id = p.matricula_id
