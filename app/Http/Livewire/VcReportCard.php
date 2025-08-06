@@ -101,21 +101,26 @@ class VcReportCard extends Component
         ->get();*/
 
         $this->tblpersonas = DB::table(DB::raw("(
-            select m.estudiante_id, m.modalidad_id, m.periodo_id, m.curso_id, m.estado, m.documento 
-            from tm_matriculas m
-            left join tm_pase_cursos p on p.matricula_id <> m.id
-            where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
-            union all 
-            select m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado, m.documento
-            from tm_pase_cursos p
-            inner join tm_matriculas m on m.id = p.matricula_id
-            where p.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
-            and p.estado = 'A'
-        ) as m"))
+            SELECT m.estudiante_id, m.modalidad_id, m.periodo_id, m.curso_id, m.estado 
+            FROM tm_matriculas m
+            LEFT JOIN tm_pase_cursos p ON p.matricula_id = m.id
+            WHERE m.modalidad_id = {$this->modalidadId}
+            AND m.periodo_id = {$this->periodoId}
+            AND p.id IS NULL
+
+            UNION ALL
+
+            SELECT m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado
+            FROM tm_pase_cursos p
+            INNER JOIN tm_matriculas m ON m.id = p.matricula_id
+            WHERE p.modalidad_id = {$this->modalidadId}
+            AND m.periodo_id = {$this->periodoId}
+            AND p.estado = 'A'
+        ) AS m"))
         ->join("tm_personas as p", "p.id", "=", "m.estudiante_id")
-        ->select("p.*","m.documento")
+        ->select("p.*")
         ->where("m.curso_id", $this->filters['paralelo'])
-        //->where("m.estado", "A")
+        ->where("m.estado", "A")
         ->orderBy("p.apellidos")
         ->get();
 
@@ -191,8 +196,6 @@ class VcReportCard extends Component
         ->where("tm_horarios.curso_id",$this->filters['paralelo'])
         ->orderBy("a.descripcion")
         ->get();
-
-        dd($this->tblpersonas);
 
         foreach ($this->tblpersonas as $key => $person)
         { 
