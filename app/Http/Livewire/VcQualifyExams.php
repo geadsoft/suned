@@ -268,7 +268,7 @@ class VcQualifyExams extends Component
             }
 
             if ($suma>0){
-                $this->tblrecords[$key]['promedio'] =  $suma/$count; 
+                $this->tblrecords[$key]['promedio'] =  round($suma/$count, 2);  
             }
             
         }
@@ -280,17 +280,29 @@ class VcQualifyExams extends Component
             $count = 0;
             
             foreach ($this->tblrecords as $key => $record){
-                $suma += $this->tblrecords[$key][$actividad['id']];
-                $count += 1;  
+                if ($key != 'ZZ'){
+                    $suma += $this->tblrecords[$key][$actividad['id']];
+                    $count += 1;  
+                }
             }
 
             if ($suma>0){
-                $this->tblrecords['ZZ'][$actividad['id']] =  $suma/$count; 
+                $this->tblrecords['ZZ'][$actividad['id']] =  round($suma / $count, 2);
             }
             
         }
 
-       
+        $suma  = 0;
+        $count = 0;
+        foreach ($this->tblrecords as $key => $record){
+            if ($key != 'ZZ'){
+                $suma  += $this->tblrecords[$key]['promedio'];
+                $count += 1;
+            }
+        }
+        if($suma>0){
+            $this->tblrecords['ZZ']['promedio'] = round($suma /($count), 2);
+        }       
 
     }
 

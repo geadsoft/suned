@@ -72,6 +72,7 @@
                                         <td class="align-middle text-center" style="font-weight: normal; padding: 0px 10px;">Matricula</td>
                                         <td class="align-middle text-center" style="font-weight: normal; padding: 0px 10px;">Identificación</td>
                                         <td class="align-middle text-center" style="font-weight: normal; padding: 0px 10px;">Nombres</td>
+                                        <td class="align-middle text-center" style="font-weight: normal; padding: 0px 10px;">Observación</td>
                                         <td class="align-middle text-center" style="font-weight: normal; padding: 0px 10px;">Acción</td>
                                     </tr>
                                 </thead>
@@ -81,6 +82,9 @@
                                     <td>{{$record["documento"]}}</td>
                                     <td>{{$record["identificacion"]}}</td>
                                     <td>{{$record["apellidos"]}} {{$record["nombres"]}}</td>
+                                    <td>
+                                    
+                                    </td>
                                     <td class="text-center">
                                         <li class="list-inline-item" data-bs-toggle="tooltip"
                                             data-bs-trigger="hover" data-bs-placement="top" title="Ver Calificaciones">
