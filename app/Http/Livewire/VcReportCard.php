@@ -100,7 +100,7 @@ class VcReportCard extends Component
         $matriculasQuery = DB::table('tm_matriculas as m')
         ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
         ->where('m.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId);
+        ->where('m.periodo_id', $this->periodoId)
         ->whereNotIn('m.id', $matriculasConPase);
 
         // Consulta de pases activos
