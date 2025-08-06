@@ -449,8 +449,8 @@ class VcReportCard extends Component
         ->where("persona_id",$this->estudianteId)
         ->first();
         
-        $this->mensaje = $observaciones->comentario;
-        $this->comentarioId = $observaciones->id;
+        $this->mensaje = $observaciones?->comentario ?? '';
+        $this->comentarioId = $observaciones?->id ?? 0;
         
         $this->dispatchBrowserEvent('add-mensaje');
 
