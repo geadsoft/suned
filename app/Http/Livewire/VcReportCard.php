@@ -192,6 +192,8 @@ class VcReportCard extends Component
         ->orderBy("a.descripcion")
         ->get();
 
+        dd($this->tblpersonas);
+
         foreach ($this->tblpersonas as $key => $person)
         { 
             $idPerson = $person->id;
