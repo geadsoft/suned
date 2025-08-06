@@ -175,7 +175,7 @@ class VcQualifyActivity extends Component
 
         $this->personas = TmHorariosDocentes::query()
         ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join(DB::raw("(select estudiante_id, modalidad_id, periodo_id, curso_id, m.id 
+        ->join(DB::raw("(select m.estudiante_id, m.modalidad_id, m.periodo_id, m.curso_id
         from tm_matriculas m 
         left join tm_pase_cursos p on p.matricula_id <> m.id
         where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
