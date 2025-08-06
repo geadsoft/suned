@@ -17,7 +17,7 @@ use PDF;
 
 class VcReportCard extends Component
 {
-    public $periodoId, $modalidadId=0, $tblpersonas=[], $datos, $bloqueEx;
+    public $periodoId, $modalidadId=0, $tblpersonas, $datos, $bloqueEx;
     public $arrtipo=[];
     public $tblbloque=[];
     public $tblparalelo=[];
@@ -91,6 +91,15 @@ class VcReportCard extends Component
         ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
+        /*$this->tblpersonas = TmPersonas::query()
+        ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
+        ->select("tm_personas.*","m.documento")
+        ->where("m.curso_id",$this->filters['paralelo'])
+        ->where("m.modalidad_id",$this->modalidadId)
+        ->where("m.periodo_id",$this->periodoId)
+        ->orderBy("tm_personas.apellidos")
+        ->get();*/
+
         $this->tblpersonas = DB::table(DB::raw("(
             select m.estudiante_id, m.modalidad_id, m.periodo_id, m.curso_id, m.estado, m.documento 
             from tm_matriculas m
@@ -110,6 +119,7 @@ class VcReportCard extends Component
         ->orderBy("p.apellidos")
         ->get();
 
+        dd($this->tblpersonas);
 
         /*$this->tblpersonas = TmHorariosDocentes::query()
         ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
