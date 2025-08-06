@@ -175,8 +175,9 @@ class VcQualifyActivity extends Component
 
         $this->personas = TmHorariosDocentes::query()
         ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join(DB::raw("(select estudiante_id, modalidad_id, periodo_id, curso_id, estado 
+        ->join(DB::raw("(select estudiante_id, modalidad_id, periodo_id, curso_id, m.id 
         from tm_matriculas m 
+        left join tm_pase_cursos p on p.matricula_id <> m.id
         where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
         union all
         select m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado
@@ -195,6 +196,8 @@ class VcQualifyActivity extends Component
         ->where("m.estado",'A')
         ->orderBy("p.apellidos")
         ->get();
+
+
 
         // Actualiza Datos Estudiantes
         foreach ($this->personas as $key => $data)
@@ -263,7 +266,7 @@ class VcQualifyActivity extends Component
             }
 
             if ($suma>0){
-                $this->tblrecords[$key]['promedio'] =  $suma/$count; 
+                $this->tblrecords[$key]['promedio'] =  round($suma/$count, 2); 
             }
             
         }
@@ -280,10 +283,12 @@ class VcQualifyActivity extends Component
             }
 
             if($suma>0){
-                $this->tblrecords['ZZ'][$actividad['id']] =  $suma/$count; 
+                $this->tblrecords['ZZ'][$actividad['id']] =  round($suma / $count, 2);
             }
 
         }
+
+
 
     }
 
