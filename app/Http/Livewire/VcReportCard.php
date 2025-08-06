@@ -528,12 +528,10 @@ class VcReportCard extends Component
             ->where('persona_id', $person->id)
             ->first();
 
-            $faltas[$person->id]['faltas'] = $conteos->total_f;
-            $faltas[$person->id]['fjustificada'] = $conteos->total_fj;
+            $faltas[$person->id]['faltas'] = $conteos->total_f ?? 0;
+            $faltas[$person->id]['fjustificada'] = $conteos->total_fj ?? 0;
 
         }
-
-        dd($faltas);
 
         $pdf = PDF::loadView('pdf/reporte_boletin_notas',[
             'tblrecords' => $this->tblrecords,
