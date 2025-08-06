@@ -124,34 +124,6 @@ class VcReportCard extends Component
         ->orderBy('tm_personas.apellidos')
         ->get();
 
-        //dd($this->tblpersonas);
-
-        /*$this->tblpersonas = TmHorariosDocentes::query()
-        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join(DB::raw("(select m.estudiante_id, m.modalidad_id, m.periodo_id, m.curso_id, m.estado 
-        from tm_matriculas m 
-        left join tm_pase_cursos p on p.matricula_id <> m.id
-        where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
-        union all
-        select m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado
-        from tm_pase_cursos p
-        inner join tm_matriculas m on m.id = p.matricula_id
-        where p.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
-        and p.estado = 'A'        
-        ) as m"),function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
-        })
-        ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->select("p.*")
-        ->where("m.curso_id",$this->filters['paralelo'])
-        ->where("m.estado",'A')
-        ->orderBy("p.apellidos")
-        ->get();*/
-
-
-
         $this->filters['modalidadId'] = $this->modalidadId;
         
         return view('livewire.vc-report-card');
@@ -180,7 +152,6 @@ class VcReportCard extends Component
         ->orderByRaw("actividad desc")
         ->get();
 
-        //$this->colspan = $this->colspan+count($record)+2;
         return  $record;
 
     }
@@ -343,59 +314,6 @@ class VcReportCard extends Component
                     $this->tblrecords[$idPerson][$fil]['examen'] = $objnota->nota;
                 }
             }
-
-
-            /*//Calcula Totales
-            foreach ($this->asignaturas as $key => $data){
-                $materias[] = $data->id;
-            }    
-
-            foreach ($materias as $key => $data) {
-
-                //dump("Iterando ID: $data (tipo: " . gettype($data) . ")");
-                
-                $record = $this->tblrecords[$idPerson][$data];
-                $promedio = 0;
-                $countprm = 0;
-                $suma  = 0;
-                $count = 0;
-                
-                foreach ($this->tblgrupo as $grupo){
-
-                    $suma  = 0;
-                    $count = 0;
-                    $key2 = $grupo->actividad;
-
-                    foreach ($record as $campo => $recno){
-                    
-                        $ncampo = substr($campo, 0, 2); 
-                        if ($ncampo==$key2){
-                            $suma += $recno;
-                            $count += 1;
-                        }
-                    }                
-
-                    $col = $key2."-prom";
-                    if ($count > 0){
-                        $this->tblrecords[$idPerson][$data][$col] = $suma/($count-1);
-                        $promedio += $suma/($count-1);
-                        $countprm += 1;
-                    }
-                    
-                }
-
-                if ($countprm > 0){
-                    $this->tblrecords[$idPerson][$data]['promedio'] = $promedio/($countprm);  
-                }
-
-                $nota70 = $this->tblrecords[$idPerson][$data]['promedio']*0.70;
-                $nota30 = $this->tblrecords[$idPerson][$data]['examen']*0.30;
-                
-                $this->tblrecords[$idPerson][$data]['nota70'] = $nota70;
-                $this->tblrecords[$idPerson][$data]['nota30'] = $nota30;
-                $this->tblrecords[$idPerson][$data]['cuantitativo'] = $nota70+$nota30; 
-
-            }*/
         
         }
 
@@ -423,21 +341,21 @@ class VcReportCard extends Component
 
                     $col = $tipo."-prom";
                     if ($count > 0){
-                        $this->tblrecords[$key1][$key2][$col] = $suma/($count-1);
+                        $this->tblrecords[$key1][$key2][$col] = round($suma/($count-1), 2);
                         $promedio += $suma/($count-1);
                         $countprm += 1;
                     }
 
                 }
                 if ($countprm > 0){
-                    $this->tblrecords[$key1][$key2]['promedio'] = $promedio/($countprm);  
+                    $this->tblrecords[$key1][$key2]['promedio'] = round($promedio/($countprm), 2);  
                 }
 
                 $nota70 = $this->tblrecords[$key1][$key2]['promedio']*0.70;
                 $nota30 = $this->tblrecords[$key1][$key2]['examen']*0.30;
                 
-                $this->tblrecords[$key1][$key2]['nota70'] = $nota70;
-                $this->tblrecords[$key1][$key2]['nota30'] = $nota30;
+                $this->tblrecords[$key1][$key2]['nota70'] = round($nota70, 2);
+                $this->tblrecords[$key1][$key2]['nota30'] = round($nota30, 2);
                 $this->tblrecords[$key1][$key2]['cuantitativo'] = $nota70+$nota30; 
             }
         }
