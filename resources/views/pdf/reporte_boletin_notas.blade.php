@@ -99,7 +99,7 @@
                                     <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"><strong>Faltas Injustificadas</strong></td>
                                     <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$faltas[$record->id]['fjustificada']}}</td>
                                     <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"><strong>Total Faltas</strong></td>
-                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">0</td>
+                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$faltas[$record->id]['total']}}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="6" class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"><strong>Observaciones</strong></td>

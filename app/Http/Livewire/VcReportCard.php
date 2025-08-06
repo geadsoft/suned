@@ -530,7 +530,7 @@ class VcReportCard extends Component
 
             $faltas[$person->id]['faltas'] = $conteos->total_f ?? 0;
             $faltas[$person->id]['fjustificada'] = $conteos->total_fj ?? 0;
-
+            $faltas[$person->id]['total'] = $faltas[$person->id]['faltas']+$faltas[$person->id]['fjustificada'];
         }
 
         $pdf = PDF::loadView('pdf/reporte_boletin_notas',[
