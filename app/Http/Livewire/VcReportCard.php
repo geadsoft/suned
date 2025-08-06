@@ -522,8 +522,8 @@ class VcReportCard extends Component
 
             $conteos = DB::table('td_asistencia_diarias')
             ->selectRaw("
-                SUM(CASE WHEN tipo = 'F' THEN 1 ELSE 0 END) as total_f,
-                SUM(CASE WHEN tipo = 'FJ' THEN 1 ELSE 0 END) as total_fj
+                SUM(CASE WHEN valor = 'F' THEN 1 ELSE 0 END) as total_f,
+                SUM(CASE WHEN valor = 'FJ' THEN 1 ELSE 0 END) as total_fj
             ")
             ->where('persona_id', $person->id)
             ->first();
