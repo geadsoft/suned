@@ -91,7 +91,7 @@ class VcReportCard extends Component
         ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
-        $this->personas = TmHorariosDocentes::query()
+        $this->tblpersonas = TmHorariosDocentes::query()
         ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
         ->join(DB::raw("(select m.estudiante_id, m.modalidad_id, m.periodo_id, m.curso_id, m.estado, m.documento 
         from tm_matriculas m 
