@@ -105,7 +105,11 @@
                                     <td colspan="6" class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"><strong>Observaciones</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><br></td>
+                                    @if(isset($arrComentario[$record->id]['comentario']))
+                                    <td colspan="6" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$arrComentario[$record->id]['comentario']}}</td>
+                                    @else
+                                    <td colspan="6" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                                    @endif 
                                 </tr>
                                 <tr>
                                     <td colspan="3" class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"><strong>Firma de Profesor Tutor</strong></td>

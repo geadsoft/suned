@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('td_asistencia_diarias', function (Blueprint $table) {
-            $table->dropColumn('falta'); // eliminar el campo anterior
+            //$table->dropColumn('falta'); // eliminar el campo anterior
             $table->string('valor', 2)->after('fecha'); // nuevo campo
 
             $table->bigInteger('periodo_id')->unsigned()->after('docente_id');
@@ -33,7 +33,7 @@ return new class extends Migration
     public function down()
     {   
         Schema::table('td_asistencia_diarias', function (Blueprint $table) {
-        $table->boolean('falta')->after('fecha');
+        //$table->boolean('falta')->after('fecha');
         $table->dropColumn('valor');
         $table->dropColumn('periodo_id');
         $table->dropColumn('mes');

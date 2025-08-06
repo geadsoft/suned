@@ -9,6 +9,7 @@ use App\Models\TmActividades;
 use App\Models\TmGeneralidades;
 use App\Models\TmCursos;
 use App\Models\TmHorariosDocentes;
+use App\Models\TdObservacionActa;
 
 
 use Livewire\Component;
@@ -17,7 +18,8 @@ use PDF;
 
 class VcReportCard extends Component
 {
-    public $periodoId, $modalidadId=0, $tblpersonas, $datos, $bloqueEx;
+    public $periodoId, $modalidadId=0, $tblpersonas, $datos, $bloqueEx, $estudianteId, $mensaje="";
+    public $arrComentario=[];
     public $arrtipo=[];
     public $tblbloque=[];
     public $tblparalelo=[];
@@ -125,7 +127,7 @@ class VcReportCard extends Component
         ->get();
 
         $this->filters['modalidadId'] = $this->modalidadId;
-        
+                
         return view('livewire.vc-report-card');
     }
 
@@ -242,6 +244,17 @@ class VcReportCard extends Component
             }
 
         } 
+
+        //Observaciones
+        $observaciones = TdObservacionActa::query()
+        ->where("termino",$this->filters['termino'])
+        ->where("bloque",$this->filters['bloque'])
+        ->where("curso_id",$this->filters['paralelo'])
+        ->get();
+
+        foreach ($observaciones as $obsr) {
+            $this->arrComentario[$obsr->persona_id]['comentario'] = $obsr->comentario;
+        }
         
         $this->datos = json_encode($this->filters);
     }
@@ -422,6 +435,52 @@ class VcReportCard extends Component
 
         }
 
+
+    }
+
+    public function addNota($id){
+
+        $this->estudianteId =  $id;
+        
+        $observaciones = TdObservacionActa::query()
+        ->where("termino",$this->filters['termino'])
+        ->where("bloque",$this->filters['bloque'])
+        ->where("curso_id",$this->filters['paralelo'])
+        ->where("persona_id",$this->estudianteId)
+        ->first();
+        
+        $this->mensaje = $observaciones->comentario;
+        $this->comentarioId = $observaciones->id;
+        
+        $this->dispatchBrowserEvent('add-mensaje');
+
+    }
+
+    public function grabar(){
+
+        if ($this->comentarioId==0){
+                TdObservacionActa::Create([
+                'curso_id' => $this->filters['paralelo'],
+                'termino' => $this->filters['termino'],
+                'bloque' => $this->filters['bloque'],
+                'persona_id' => $this->estudianteId,
+                'comentario' => $this->mensaje,
+                'estado' => 'A',
+                'usuario' => auth()->user()->name,
+            ]);
+        }else{
+
+            $record = TdObservacionActa::find($this->comentarioId);
+            $record->update([
+                'comentario' => $this->mensaje,
+            ]);
+
+        }     
+        
+        $this->arrComentario[$this->estudianteId]['comentario'] =  $this->mensaje;
+
+        $this->dispatchBrowserEvent('close-mensaje');
+
     }
 
     public function printPDF($objdata)
@@ -549,6 +608,8 @@ class VcReportCard extends Component
             $faltas[$person->id]['total'] = $faltas[$person->id]['faltas']+$faltas[$person->id]['fjustificada'];
         }
 
+        
+
         $pdf = PDF::loadView('pdf/reporte_boletin_notas',[
             'tblrecords' => $this->tblrecords,
             'asignaturas' => $asignaturas,
@@ -560,6 +621,7 @@ class VcReportCard extends Component
             'notaExamen' => $notaExamen,
             'arrescala' => $arrescala,
             'faltas' => $faltas,
+            'arrComentario' => $this->arrComentario,
         ]);
 
         return $pdf->setPaper('a4','landscape')->stream('Informe Aprendizaje.pdf');

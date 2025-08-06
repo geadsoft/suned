@@ -32,7 +32,7 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino"  wire:change="consulta()">
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino">
                                 @foreach ($tbltermino as $terminos) 
                                 <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
                                 @endforeach 
@@ -40,7 +40,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Bloque</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque"  wire:change="consulta()">
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque">
                                 @foreach ($tblbloque as $bloques) 
                                 <option value="{{$bloques->codigo}}">{{$bloques->descripcion}}</option>
                                 @endforeach 
@@ -79,20 +79,30 @@
                                 <tbody>
                                 @foreach ($tblpersonas as $fil => $record)
                                 <tr id="{{$fil}}" class="detalle">
-                                    <td>{{$record["documento"]}}</td>
-                                    <td>{{$record["identificacion"]}}</td>
-                                    <td>{{$record["apellidos"]}} {{$record["nombres"]}}</td>
+                                    <td class="align-middle">{{$record["documento"]}}</td>
+                                    <td class="align-middle">{{$record["identificacion"]}}</td>
+                                    <td class="align-middle">{{$record["apellidos"]}} {{$record["nombres"]}}</td>
                                     <td>
-                                    
+                                        <div class="input-group">
+                                            @if(isset($arrComentario[$record->id]['comentario']))
+                                            <input type="text" class="form-control bg-white border-0" name="identidad" id="billinginfo-firstName" value="{{$arrComentario[$record->id]['comentario']}}" disabled>
+                                            @else
+                                            <input type="text" class="form-control bg-white border-0" name="identidad" id="billinginfo-firstName" value="" disabled>
+                                            @endif
+                                            <a id="btnstudents" class ="input-group-text btn btn-soft-secondary" wire:click.prevent="addNota({{$record->id}})"><i class="ri-message-2-line me-1 fs-15"></i></a>
+                                        </div>
                                     </td>
-                                    <td class="text-center">
-                                        <li class="list-inline-item" data-bs-toggle="tooltip"
-                                            data-bs-trigger="hover" data-bs-placement="top" title="Ver Calificaciones">
-                                            <a class="text-primary d-inline-block"
-                                                data-bs-toggle="modal" href="" wire:click.prevent="imprimir({{ $record->id }})">
-                                                <i class="ri-eye-line fs-16"></i>
-                                            </a>
-                                        </li>
+                                    <td class="text-center align-middle">
+                                        <a class="text-primary d-flex justify-content-center align-items-center"
+                                        style="height: 100%; width: 100%;"
+                                        data-bs-toggle="modal"
+                                        href="#"
+                                        wire:click.prevent="imprimir({{ $record->id }})"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="Ver Calificaciones">
+                                            <i class="ri-eye-line fs-16"></i>
+                                        </a>
                                     </td>                       
                                 </tr>
                                 @endforeach
@@ -106,5 +116,34 @@
             </div>
         </div>
     </form>
+
+    <!-- Varying modal content -->
+    <div wire.ignore.self class="modal fade" id="varyingcontentModal" tabindex="-1" aria-labelledby="varyingcontentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="varyingcontentModalLabel">Observación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <!--<div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Recipient:</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                        </div>-->
+                        <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Message:</label>
+                            <textarea class="form-control" id="message-text" wire:model.defer="mensaje"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" wire:click="grabar()" >Grabar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 

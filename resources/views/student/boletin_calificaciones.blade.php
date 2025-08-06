@@ -24,10 +24,20 @@
     <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>
 
     <!--ecommerce-customer init js -->
+    <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
     <script>
+        
+        window.addEventListener('add-mensaje', event => {
+            $('#varyingcontentModal').modal('show');
+        })
+        
+        window.addEventListener('close-mensaje', event => {
+            $('#varyingcontentModal').modal('hide');
+        })
+
         document.addEventListener('scroll-bottom', function () {
             window.scrollTo({
                 top: document.body.scrollHeight,
