@@ -489,6 +489,7 @@ class VcReportCard extends Component
         $notaExamen = $periodo->evaluacion_sumativa;
 
         //Faltas
+        $faltas = [];
         foreach ($this->tblpersonas as $person) {
 
             $conteos = DB::table('td_asistencia_diarias')
