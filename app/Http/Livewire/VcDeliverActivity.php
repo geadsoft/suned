@@ -33,6 +33,7 @@ class VcDeliverActivity extends Component
         'html' => 'ri-file-code-line',
         'jpg' => 'ri-picture-in-picture-fill',
         'png' => 'ri-picture-in-picture-fill',
+        'bin' => 'ri-database-2-line',
     ];
 
     public $arrcolor = [  
@@ -46,6 +47,7 @@ class VcDeliverActivity extends Component
         'pptx' => 'text-danger',
         'pdf' => 'text-danger',
         'html' => 'text-info',
+        'bin' => 'text-primary',
     ];
 
     protected $listeners = ['updateEditorData','cancel','apiDrive'];
