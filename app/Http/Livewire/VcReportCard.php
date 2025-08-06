@@ -8,6 +8,7 @@ use App\Models\TmPersonas;
 use App\Models\TmActividades;
 use App\Models\TmGeneralidades;
 use App\Models\TmCursos;
+use App\Models\TmHorariosDocentes;
 
 
 use Livewire\Component;
