@@ -97,8 +97,8 @@
                                         <td>{{$record['asignatura']}}</td>
                                         <td> {{$arrtermino[$record['termino']]}}</td>
                                         <td>{{$record['nombre']}}</td>
-                                        <td>{{$record['fecha']}}</td>
-                                        <td>{{$record['created_at']}}</td>
+                                        <td>{{date('d/m/Y',strtotime($record['created_at']))}} </td>
+                                        <td> {{date('d/m/Y',strtotime($record['fecha']))}} {{date('H:i',strtotime($record['fecha']))}}</td>
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
