@@ -453,8 +453,9 @@ class VcReportCard extends Component
             ["min" => 9, "max" => 10, "codigo" => "DA", "desc" => "Domina los aprendizajes"],
             ["min" => 7, "max" => 8.99, "codigo" => "AA", "desc" => "Alcanza los aprendizajes"],
             ["min" => 5, "max" => 6.99, "codigo" => "PA", "desc" => "Está próximo a alcanzar"],
-            ["min" => 1, "max" => 4.99, "codigo" => "NA", "desc" => "No alcanza los aprendizajes"]
+            ["min" => 1, "max" => 4.99, "codigo" => "NA", "desc" => "No alcanza los aprendizajes"],
         ];
+
 
         // Agrupamos las notas según el rango
         $arrescala = [];
@@ -468,9 +469,28 @@ class VcReportCard extends Component
                         return $n["nota"] >= $r["min"] && $n["nota"] <= $r["max"];
                     }),
                     "nota"
-                )
+                ),
+                "rango2" => "",
+                "codigo2" => "",
+                "desc2" => "",
             ];
         }
+
+        $arrescala[0]["rango2"] = "9.5 a 10";
+        $arrescala[0]["codigo2"] = "EX";
+        $arrescala[0]["desc2"] = "Excelente";
+
+        $arrescala[1]["rango2"] = "8 a 9.49";
+        $arrescala[1]["codigo2"] = "MB";
+        $arrescala[1]["desc2"] = "Muy Bueno";
+
+        $arrescala[2]["rango2"] = "6.5 a 7.99";
+        $arrescala[2]["codigo2"] = "B";
+        $arrescala[2]["desc2"] = "Bueno";
+
+        $arrescala[3]["rango2"] = "0 a 6.49";
+        $arrescala[3]["codigo2"] = "R";
+        $arrescala[3]["desc2"] = "Regular";
 
         $this->add();
         $this->asignarNotas();

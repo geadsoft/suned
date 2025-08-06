@@ -131,9 +131,9 @@
                                     <td class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$escala['rango']}}</td>
                                     <td class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$escala['codigo']}}</strong></td>
                                     <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$escala['desc']}}</td>
-                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
-                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
-                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$escala['rango2']}}</td>
+                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$escala['codigo2']}}</td>
+                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$escala['desc2']}}</td>
                                 </tr>
                                 @endforeach
                             </table>
