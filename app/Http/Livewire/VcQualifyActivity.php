@@ -294,7 +294,7 @@ class VcQualifyActivity extends Component
             $count += 1;
         }
         if($suma>0){
-            $this->tblrecords['ZZ']['promedio'] = round($suma / $count, 2);
+            $this->tblrecords['ZZ']['promedio'] = round($suma /($count-1), 2);
         }
     }
 
