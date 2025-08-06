@@ -104,12 +104,12 @@ class VcReportCard extends Component
             select m.estudiante_id, m.modalidad_id, m.periodo_id, m.curso_id, m.estado 
             from tm_matriculas m 
             left join tm_pase_cursos p on p.matricula_id <> m.id
-            where m.modalidad_id = ".$this->modalidadId. "and m.periodo_id = ".$this->periodoId."
+            where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
             union all
             select m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado
             from tm_pase_cursos p
             inner join tm_matriculas m on m.id = p.matricula_id
-            where p.modalidad_id = ".$this->modalidadId." and m.periodo_id = ".$this->periodoId."
+            where p.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
             and p.estado = 'A'
         ) as m"))
         ->join("tm_personas as p", "p.id", "=", "m.estudiante_id")
