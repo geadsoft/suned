@@ -129,6 +129,43 @@ class VcReportCard extends Component
         return view('livewire.vc-report-card');
     }
 
+    public function loadPersonas(){
+
+        // Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
+        $matriculasConPase = DB::table('tm_pase_cursos')
+        ->where('estado', 'A')
+        ->pluck('matricula_id');
+
+        // Consulta de matrículas SIN pase
+        $matriculasQuery = DB::table('tm_matriculas as m')
+        ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
+        ->where('m.modalidad_id', $this->modalidadId)
+        ->where('m.periodo_id', $this->periodoId)
+        ->whereNotIn('m.id', $matriculasConPase);
+
+        // Consulta de pases activos
+        $pasesQuery = DB::table('tm_pase_cursos as p')
+        ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
+        ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
+        ->where('p.modalidad_id', $this->modalidadId)
+        ->where('m.periodo_id', $this->periodoId)
+        ->where('p.estado', 'A');
+
+        // UNION de ambas consultas
+        $unionQuery = $matriculasQuery->unionAll($pasesQuery);
+
+        // Consulta principal con joinSub en Eloquent
+        $this->tblpersonas = TmPersonas::query()
+            ->joinSub($unionQuery, 'm', function ($join) {
+            $join->on('tm_personas.id', '=', 'm.estudiante_id');
+        })
+        ->where('m.curso_id', $this->filters['paralelo'])
+        ->select('tm_personas.*', 'm.documento')
+        ->orderBy('tm_personas.apellidos')
+        ->get();
+
+    }
+
     public function actividad($id){
 
         $record = TmActividades::query()
@@ -394,6 +431,9 @@ class VcReportCard extends Component
         $this->filters['bloque']  = $data->bloque;
         $this->filters['estudianteId'] = $data->estudianteId;
 
+        $this->modalidadId =  $data->modalidadId;
+        $this->periodoId = $data->periodoId;
+
         $asignaturas = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
@@ -402,17 +442,18 @@ class VcReportCard extends Component
         ->orderBy("a.descripcion")
         ->get();
 
-        $this->tblpersonas = TmPersonas::query()
+        $this->loadPersonas();
+        /*$this->tblpersonas = TmPersonas::query()
         ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
         ->select("tm_personas.*","m.documento")
-        /*->where("m.curso_id",$this->filters['paralelo'])
-        ->where("m.modalidad_id",$this->filters['modalidadId'])*/
+        ->where("m.curso_id",$this->filters['paralelo'])
+        ->where("m.modalidad_id",$this->filters['modalidadId'])
         ->where("m.periodo_id",$this->filters['periodoId'])
         ->when(!empty($this->filters['estudianteId']), function($query) {
                 return $query->where('tm_personas.id', $this->filters['estudianteId']);
             })
         ->orderBy("tm_personas.apellidos")
-        ->get();
+        ->get();*/
 
         $escalas = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->filters['periodoId'])
