@@ -277,8 +277,10 @@ class VcQualifyActivity extends Component
             $count = 0;
 
             foreach ($this->tblrecords as $key => $record){
-                $suma += $this->tblrecords[$key][$actividad['id']];
-                $count += 1;  
+                if ($key != 'ZZ'){
+                    $suma += $this->tblrecords[$key][$actividad['id']];
+                    $count += 1;
+                }  
             }
 
             if($suma>0){
