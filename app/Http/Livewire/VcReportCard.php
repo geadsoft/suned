@@ -533,6 +533,8 @@ class VcReportCard extends Component
 
         }
 
+        dd($faltas);
+
         $pdf = PDF::loadView('pdf/reporte_boletin_notas',[
             'tblrecords' => $this->tblrecords,
             'asignaturas' => $asignaturas,
