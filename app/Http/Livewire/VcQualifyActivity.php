@@ -293,8 +293,9 @@ class VcQualifyActivity extends Component
             $suma  += $this->tblrecords[$key]['promedio']
             $count += 1;
         }
-        $this->tblrecords['ZZ']['promedio'] = round($suma / $count, 2);
-
+        if($suma>0){
+            $this->tblrecords['ZZ']['promedio'] = round($suma / $count, 2);
+        }
     }
 
     public function createData(){
