@@ -91,38 +91,16 @@ class VcReportCard extends Component
         ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
-        /*$this->tblpersonas = TmPersonas::query()
+        $this->tblpersonas = TmPersonas::query()
         ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
         ->select("tm_personas.*","m.documento")
         ->where("m.curso_id",$this->filters['paralelo'])
         ->where("m.modalidad_id",$this->modalidadId)
         ->where("m.periodo_id",$this->periodoId)
         ->orderBy("tm_personas.apellidos")
-        ->get();*/
-
-        $this->tblpersonas = DB::table(DB::raw("(
-            SELECT m.estudiante_id, m.modalidad_id, m.periodo_id, m.curso_id, m.estado 
-            FROM tm_matriculas m
-            LEFT JOIN tm_pase_cursos p ON p.matricula_id = m.id
-            WHERE m.modalidad_id = {$this->modalidadId}
-            AND m.periodo_id = {$this->periodoId}
-            AND p.id IS NULL
-
-            UNION ALL
-
-            SELECT m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado
-            FROM tm_pase_cursos p
-            INNER JOIN tm_matriculas m ON m.id = p.matricula_id
-            WHERE p.modalidad_id = {$this->modalidadId}
-            AND m.periodo_id = {$this->periodoId}
-            AND p.estado = 'A'
-        ) AS m"))
-        ->join("tm_personas as p", "p.id", "=", "m.estudiante_id")
-        ->select("p.*")
-        ->where("m.curso_id", $this->filters['paralelo'])
-        ->where("m.estado", "A")
-        ->orderBy("p.apellidos")
         ->get();
+
+        
 
         //dd($this->tblpersonas);
 
