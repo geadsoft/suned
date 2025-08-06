@@ -93,12 +93,12 @@ class VcReportCard extends Component
 
         $this->personas = TmHorariosDocentes::query()
         ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join(DB::raw("(select m.estudiante_id, m.modalidad_id, m.periodo_id, m.curso_id, m.estado 
+        ->join(DB::raw("(select m.estudiante_id, m.modalidad_id, m.periodo_id, m.curso_id, m.estado, m.documento 
         from tm_matriculas m 
         left join tm_pase_cursos p on p.matricula_id <> m.id
         where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
         union all
-        select m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado
+        select m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado, m.documento
         from tm_pase_cursos p
         inner join tm_matriculas m on m.id = p.matricula_id
         where p.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
