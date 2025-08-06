@@ -406,8 +406,8 @@ class VcReportCard extends Component
         ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
         ->select("tm_personas.*","m.documento")
         /*->where("m.curso_id",$this->filters['paralelo'])
-        ->where("m.modalidad_id",$this->filters['modalidadId'])
-        ->where("m.periodo_id",$this->filters['periodoId'])*/
+        ->where("m.modalidad_id",$this->filters['modalidadId'])*/
+        ->where("m.periodo_id",$this->filters['periodoId'])
         ->when(!empty($this->filters['estudianteId']), function($query) {
                 return $query->where('tm_personas.id', $this->filters['estudianteId']);
             })
