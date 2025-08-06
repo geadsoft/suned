@@ -119,7 +119,7 @@ class VcReportCard extends Component
         ->orderBy("p.apellidos")
         ->get();
 
-        dd($this->tblpersonas);
+        //dd($this->tblpersonas);
 
         /*$this->tblpersonas = TmHorariosDocentes::query()
         ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
