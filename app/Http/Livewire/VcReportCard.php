@@ -159,6 +159,9 @@ class VcReportCard extends Component
             ->joinSub($unionQuery, 'm', function ($join) {
             $join->on('tm_personas.id', '=', 'm.estudiante_id');
         })
+        ->when(!empty($this->filters['estudianteId']), function($query) {
+            return $query->where('tm_personas.id', $this->filters['estudianteId']);
+        })
         ->where('m.curso_id', $this->filters['paralelo'])
         ->select('tm_personas.*', 'm.documento')
         ->orderBy('tm_personas.apellidos')
