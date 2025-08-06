@@ -485,6 +485,8 @@ class VcReportCard extends Component
 
     public function printPDF($objdata)
     {   
+        set_time_limit(300);
+        
         $data = json_decode($objdata);
         $this->filters['periodoId']   = $data->periodoId;
         $this->filters['modalidadId']   = $data->modalidadId;
@@ -505,17 +507,6 @@ class VcReportCard extends Component
         ->get();
 
         $this->loadPersonas();
-        /*$this->tblpersonas = TmPersonas::query()
-        ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
-        ->select("tm_personas.*","m.documento")
-        ->where("m.curso_id",$this->filters['paralelo'])
-        ->where("m.modalidad_id",$this->filters['modalidadId'])
-        ->where("m.periodo_id",$this->filters['periodoId'])
-        ->when(!empty($this->filters['estudianteId']), function($query) {
-                return $query->where('tm_personas.id', $this->filters['estudianteId']);
-            })
-        ->orderBy("tm_personas.apellidos")
-        ->get();*/
 
         $escalas = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->filters['periodoId'])
