@@ -120,7 +120,7 @@
                         <td colspan="5" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">
                             <table cellpadding="0" cellspancing="0" class="table table-sm table-bordered">
                                 <tr>
-                                    <td colspan="5" class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"> <strong>ESCALA DE CALIFICACIONES</strong></td>
+                                    <td colspan="6" class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"> <strong>ESCALA DE CALIFICACIONES</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="3" class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"> <strong>BÁSICAS</strong></td>
