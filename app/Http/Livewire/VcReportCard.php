@@ -9,7 +9,9 @@ use App\Models\TmActividades;
 use App\Models\TmGeneralidades;
 use App\Models\TmCursos;
 
+
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 use PDF;
 
 class VcReportCard extends Component
@@ -515,7 +517,21 @@ class VcReportCard extends Component
         $notaParcial = $periodo->evaluacion_formativa;
         $notaExamen = $periodo->evaluacion_sumativa;
 
-       
+        //Faltas
+        foreach ($this->tblpersonas as $person) {
+
+            $conteos = DB::table('td_asistencia_diarias')
+            ->selectRaw("
+                SUM(CASE WHEN tipo = 'F' THEN 1 ELSE 0 END) as total_f,
+                SUM(CASE WHEN tipo = 'FJ' THEN 1 ELSE 0 END) as total_fj
+            ")
+            ->where('persona_id', $person->id)
+            ->first();
+
+            $faltas[$person->id]['faltas'] = $conteos->total_f;
+            $faltas[$person->id]['fjustificada'] = $conteos->total_fj;
+
+        }
 
         $pdf = PDF::loadView('pdf/reporte_boletin_notas',[
             'tblrecords' => $this->tblrecords,
@@ -527,6 +543,7 @@ class VcReportCard extends Component
             'notaParcial' => $notaParcial,
             'notaExamen' => $notaExamen,
             'arrescala' => $arrescala,
+            'conteos' => $conteos,
         ]);
 
         return $pdf->setPaper('a4','landscape')->stream('Informe Aprendizaje.pdf');
