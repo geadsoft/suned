@@ -171,7 +171,7 @@ class VcQualifyActivity extends Component
         $unionQuery = $matriculasQuery->unionAll($pasesQuery);
 
         // Consulta principal con joinSub en Eloquent
-        $this->tblpersonas = TmPersonas::query()
+        $this->personas = TmPersonas::query()
             ->joinSub($unionQuery, 'm', function ($join) {
             $join->on('tm_personas.id', '=', 'm.estudiante_id');
         })
