@@ -17,7 +17,7 @@ class VcQualifyActivity extends Component
 
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $tblparalelo=[], $tblasignatura=[];
-    public $periodoId, $modalidadId=0, $tbltermino, $tblbloque, $tblactividades;
+    public $periodoId, $modalidadId=0, $tbltermino, $tblbloque, $tblactividades, $cursoId;
     public $tblactividad=[];
     public $tblrecords=[];
     public $personas=[];
@@ -114,7 +114,7 @@ class VcQualifyActivity extends Component
         ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->docenteId)
         ->where("m.id",$this->asignaturaId)
-        ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion')
+        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
         $this->loadPersonas();
@@ -138,7 +138,7 @@ class VcQualifyActivity extends Component
         ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->docenteId)
         ->where("m.id",$id)
-        ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion')
+        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
         $this->tblrecords=[];
@@ -146,6 +146,14 @@ class VcQualifyActivity extends Component
     }
 
     public function loadPersonas(){
+
+        $curso = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->where("d.id",$this->filters['paralelo'])
+        ->select("tm_horarios.*")
+        ->first();
+
+        $this->cursoId = $curso->curso_id;
 
         // Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
         $matriculasConPase = DB::table('tm_pase_cursos')
@@ -178,7 +186,7 @@ class VcQualifyActivity extends Component
         ->when(!empty($this->filters['estudianteId']), function($query) {
             return $query->where('tm_personas.id', $this->filters['estudianteId']);
         })
-        ->where('m.curso_id', $this->filters['paralelo'])
+        ->where('m.curso_id', $this->cursoId)
         ->select('tm_personas.*', 'm.documento')
         ->orderBy('tm_personas.apellidos')
         ->get();
