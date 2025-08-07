@@ -114,7 +114,7 @@ class VcQualifyActivity extends Component
         ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->docenteId)
         ->where("m.id",$this->asignaturaId)
-        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
+        ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
         $this->loadPersonas();
