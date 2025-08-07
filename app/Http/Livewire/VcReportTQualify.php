@@ -454,7 +454,7 @@ class VcReportTQualify extends Component
 
 
         // Escala Cualitativa
-        foreach ($this->tblrecords as $key1 => $records){
+        foreach ($tblrecords as $key1 => $records){
 
             $promedio = $records['promedio']; 
                 
@@ -464,7 +464,7 @@ class VcReportTQualify extends Component
                 $letra = $escala['evaluacion'];
 
                 if ($promedio >= ($nota-1)+0.01 && $promedio <= $nota) {
-                    $this->tblrecords[$key1]['cualitativa'] = $letra;
+                    $tblrecords[$key1]['cualitativa'] = $letra;
                 }
                 
             }
