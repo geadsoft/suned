@@ -24,7 +24,7 @@ use App\Http\Livewire\VcStudents;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ArchivoController;
 use App\Http\Livewire\VcReportCard;
-use App\Http\Livewire\VcReportTQualify
+use App\Http\Livewire\VcReportTQualify;
 
 /*
 |--------------------------------------------------------------------------
