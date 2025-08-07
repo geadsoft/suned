@@ -8,6 +8,7 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TmHorarios;
 use App\Models\TmHorariosDocentes;
 use App\Models\TmActividades;
+use App\Models\TdPeriodoSistemaEducativos;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -220,6 +221,29 @@ class CalificacionesTotalesExport implements FromView, WithColumnWidths, WithSty
         $valor = (array_sum(array_column($tblrecords,'promedio')));
         $tblrecords['ZZ']['promedio'] = $valor/count($personas);
 
+        // Escala Cualitativa
+        $escalas = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->filters['periodoId'])
+        ->where("tipo","EC")
+        ->get()->toArray();
+
+        foreach ($tblrecords as $key1 => $records){
+
+            $promedio = $records['promedio']; 
+                
+            foreach ($escalas as $escala) {
+                
+                $nota  = $escala['nota'];                  
+                $letra = $escala['evaluacion'];
+
+                if ($promedio >= ($nota-1)+0.01 && $promedio <= $nota) {
+                    $tblrecords[$key1]['cualitativa'] = $letra;
+                }
+                
+            }
+
+        }        
+           
         return $tblrecords;
 
     }
