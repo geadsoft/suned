@@ -10,7 +10,7 @@
                                 <p class="text-muted fs-15 mt-3">Si tienes sugerencias, comentarios o necesitas asistencia, no dudes en escribirnos. Puedes contactarnos o enviarnos un correo electrónico.</p>
                                 <div class="hstack flex-wrap gap-2">
                                     <button type="button" class="btn btn-primary btn-label rounded-pill"><i
-                                        class="ri-send-plane-fill label-icon align-middle rounded-pill fs-16 me-2"></i> Enviar Email
+                                        class="ri-send-plane-fill label-icon align-middle rounded-pill fs-16 me-2"></i> Enviar
                                     </button>
                                     <!--<button type="button" class="btn btn-info btn-label rounded-pill"><i
                                             class="ri-twitter-line label-icon align-middle rounded-pill fs-16 me-2"></i>
