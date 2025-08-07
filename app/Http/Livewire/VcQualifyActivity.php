@@ -153,8 +153,8 @@ class VcQualifyActivity extends Component
         ->select("tm_horarios.*")
         ->first();
 
-        $this->cursoId = $curso->curso_id;
-
+        $this->cursoId = $curso->curso_id ?? 0;
+        
         // Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
         $matriculasConPase = DB::table('tm_pase_cursos')
         ->where('estado', 'A')
