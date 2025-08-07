@@ -352,36 +352,10 @@ class VcReportCard extends Component
             ->selectRaw('d.asignatura_id, ROUND(AVG(n.nota), 2) as promedio')
             ->pluck('promedio', 'asignatura_id');
 
-            /*TmActividades::query()
-            ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
-            ->join('tm_horarios_docentes as d', function($join) {
-                $join->on('d.id', '=', 'tm_actividades.paralelo')
-                    ->on('d.docente_id', 'tm_actividades.docente_id');
-            })
-            ->when(!empty($this->filters['termino']), function($query) {
-                return $query->where('tm_actividades.termino', $this->filters['termino']);
-            })
-            ->when(!empty($this->filters['bloque']), function($query) {
-                return $query->where('tm_actividades.bloque',$this->bloqueEx);
-            })
-            ->where('tm_actividades.tipo', 'ET')
-            ->where('n.persona_id', $this->filters['estudianteId'])
-            ->select([
-                'tm_actividades.id as actividadId',
-                'tm_actividades.actividad',
-                'n.nota',
-                'd.asignatura_id'
-            ])
-            ->get();*/
-
             foreach ($examen as $key => $objnota){
                 
                 $fil = $key;
-                //$fil  = $objnota->asignatura_id;
-                //$tipo = $objnota->actividad;
-                //$actividadId = $objnota->actividadId;
-                //$col = $tipo.$actividadId;
-
+                
                 if (isset($this->tblrecords[$idPerson][$fil]['examen'])) {
                     $this->tblrecords[$idPerson][$fil]['examen'] = $objnota;
                 }
