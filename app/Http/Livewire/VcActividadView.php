@@ -11,6 +11,7 @@ use App\Models\TmFiles;
 use App\Models\TmMatriculas;
 use App\Models\TdActividadesEntregas;
 use App\Models\TdCalificacionActividades;
+use App\Models\TmPersonas;
 
 
 use Livewire\Component;
