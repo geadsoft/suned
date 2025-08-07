@@ -154,32 +154,6 @@ class VcActividadView extends Component
     public function add(){
 
         $this->tblrecords=[];
-
-        /*$actividad = TmActividades::find($this->actividadId);
-
-        $this->personas = TmHorariosDocentes::query()
-        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join(DB::raw("(select estudiante_id, modalidad_id, periodo_id, curso_id, estado 
-        from tm_matriculas m 
-        where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
-        union all
-        select m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado
-        from tm_pase_cursos p
-        inner join tm_matriculas m on m.id = p.matricula_id
-        where p.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
-        and p.estado = 'A'        
-        ) as m"),function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
-        })
-        ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->select("p.*")
-        ->where("tm_horarios_docentes.id",$actividad->paralelo)
-        ->where("m.estado",'A')
-        ->orderBy("p.apellidos")
-        ->get();*/
-
         $this->loadPersonas();
 
         // Actualiza Datos Estudiantes
