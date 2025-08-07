@@ -7,6 +7,7 @@ use App\Models\TmActividades;
 use App\Models\TdCalificacionActividades;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TdPeriodoSistemaEducativos;
+use App\Models\TmPersonas;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
