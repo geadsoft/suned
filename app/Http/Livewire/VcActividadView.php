@@ -107,7 +107,14 @@ class VcActividadView extends Component
     public function loadPersonas(){
 
         $actividad = TmActividades::find($this->actividadId);
-        $this->cursoId = $actividad->paralelo ?? 0;        
+        
+        $curso = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->where("d.id",$actividad->paralelo)
+        ->select("tm_horarios.*")
+        ->first();
+
+        $this->cursoId = $curso->curso_id ?? 0;
         
         // Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
         $matriculasConPase = DB::table('tm_pase_cursos')
@@ -136,9 +143,6 @@ class VcActividadView extends Component
         $this->personas = TmPersonas::query()
             ->joinSub($unionQuery, 'm', function ($join) {
             $join->on('tm_personas.id', '=', 'm.estudiante_id');
-        })
-        ->when(!empty($this->filters['estudianteId']), function($query) {
-            return $query->where('tm_personas.id', $this->filters['estudianteId']);
         })
         ->where('m.curso_id', $this->cursoId)
         ->select('tm_personas.*', 'm.documento')
