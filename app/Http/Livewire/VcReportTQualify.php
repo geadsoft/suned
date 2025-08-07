@@ -306,7 +306,7 @@ class VcReportTQualify extends Component
 
             $promedio = $records['promedio']; 
                 
-            foreach ($this->tblescala as $escala) {
+            foreach ($escalas as $escala) {
                 
                 $nota  = $escala['nota'];                  
                 $letra = $escala['evaluacion'];
@@ -458,7 +458,7 @@ class VcReportTQualify extends Component
 
             $promedio = $records['promedio']; 
                 
-            foreach ($this->tblescala as $escala) {
+            foreach ($escalas as $escala) {
                 
                 $nota  = $escala['nota'];                  
                 $letra = $escala['evaluacion'];
