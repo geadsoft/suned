@@ -421,6 +421,31 @@ class VcReportTQualify extends Component
         $valor = (array_sum(array_column($tblrecords,'promedio')));
         $tblrecords['ZZ']['promedio'] = $valor/count($personas);
 
+        
+        $escalas = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->filters['periodoId'])
+        ->where("tipo","EC")
+        ->get()->toArray();
+
+
+        // Escala Cualitativa
+        foreach ($this->tblrecords as $key1 => $records){
+
+            $promedio = $records['promedio']; 
+                
+            foreach ($this->tblescala as $escala) {
+                
+                $nota  = $escala['nota'];                  
+                $letra = $escala['evaluacion'];
+
+                if ($promedio >= ($nota-1)+0.01 && $promedio <= $nota) {
+                    $this->tblrecords[$key1]['cualitativa'] = $letra;
+                }
+                
+            }
+
+        }           
+        
         return $tblrecords;
 
     }
