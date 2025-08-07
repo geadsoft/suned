@@ -38,6 +38,7 @@ class VcReportTQualify extends Component
         'termino' => '1T',
         'bloque' => '1P',
         'actividad' => 'AI',
+        'periodoId' => 0,
     ];
 
     protected $listeners = ['setData'];
@@ -51,7 +52,7 @@ class VcReportTQualify extends Component
         $this->horaActual  = date("H:i:s");
 
         $periodo = TmPeriodosLectivos::where("aperturado",1)->first();
-        $this->periodoId = $periodo->id;
+        $this->filters['periodoId'] = $periodo->id;
 
         $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion'].'/ - ';
 
@@ -68,7 +69,7 @@ class VcReportTQualify extends Component
         $this->tblmodalidad = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
-        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->where("d.docente_id",$this->docenteId)
         ->selectRaw('g.id, g.descripcion')
         ->groupBy('g.id','g.descripcion')
@@ -78,7 +79,7 @@ class VcReportTQualify extends Component
         $this->tblasignatura = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->docenteId)
         ->selectRaw('m.id, m.descripcion')
@@ -90,7 +91,7 @@ class VcReportTQualify extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->docenteId)
         ->where("m.id",$this->asignaturaId)       
@@ -107,7 +108,7 @@ class VcReportTQualify extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->docenteId)
         ->where("m.id",$id)
@@ -483,6 +484,7 @@ class VcReportTQualify extends Component
         $this->filters['termino'] = $data->termino;
         $this->filters['bloque'] = $data->bloque;
         $this->filters['actividad'] = $data->actividad;
+        $this->filters['periodoId'] = $data->periodoId;
         
 
         $docente = TmPersonas::find($this->filters['docenteId']);
