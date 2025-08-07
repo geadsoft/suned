@@ -50,28 +50,6 @@ class VcQualifyExams extends Component
 
     public function render()
     {
-        $this->personas = TmHorariosDocentes::query()
-        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join(DB::raw("(select estudiante_id, modalidad_id, periodo_id, curso_id, estado 
-        from tm_matriculas m 
-        where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
-        union all
-        select m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado
-        from tm_pase_cursos p
-        inner join tm_matriculas m on m.id = p.matricula_id
-        where p.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
-        and p.estado = 'A'        
-        ) as m"),function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
-        })
-        ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->select("p.*")
-        ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
-        ->where("m.estado",'A')
-        ->orderBy("p.apellidos")
-        ->get();
 
         $this->tblmodalidad = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
@@ -103,6 +81,8 @@ class VcQualifyExams extends Component
         ->where("m.id",$this->asignaturaId)
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
+
+        $this->loadPersonas();
 
         return view('livewire.vc-qualify-exams',[
             'tblrecords'  => $this->tblrecords,
@@ -147,6 +127,54 @@ class VcQualifyExams extends Component
        
     }
 
+    public function loadPersonas(){
+
+        $curso = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->where("d.id",$this->filters['paralelo'])
+        ->select("tm_horarios.*")
+        ->first();
+
+        $this->cursoId = $curso->curso_id ?? 0;
+        
+        // Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
+        $matriculasConPase = DB::table('tm_pase_cursos')
+        ->where('estado', 'A')
+        ->pluck('matricula_id');
+
+        // Consulta de matrículas SIN pase
+        $matriculasQuery = DB::table('tm_matriculas as m')
+        ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
+        ->where('m.modalidad_id', $this->modalidadId)
+        ->where('m.periodo_id', $this->periodoId)
+        ->whereNotIn('m.id', $matriculasConPase);
+
+        // Consulta de pases activos
+        $pasesQuery = DB::table('tm_pase_cursos as p')
+        ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
+        ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
+        ->where('p.modalidad_id', $this->modalidadId)
+        ->where('m.periodo_id', $this->periodoId)
+        ->where('p.estado', 'A');
+
+        // UNION de ambas consultas
+        $unionQuery = $matriculasQuery->unionAll($pasesQuery);
+
+        // Consulta principal con joinSub en Eloquent
+        $this->personas = TmPersonas::query()
+            ->joinSub($unionQuery, 'm', function ($join) {
+            $join->on('tm_personas.id', '=', 'm.estudiante_id');
+        })
+        ->when(!empty($this->filters['estudianteId']), function($query) {
+            return $query->where('tm_personas.id', $this->filters['estudianteId']);
+        })
+        ->where('m.curso_id', $this->cursoId)
+        ->select('tm_personas.*', 'm.documento')
+        ->orderBy('tm_personas.apellidos')
+        ->get();
+
+    }
+
     public function consulta(){
 
         $this->tblexamen = TmActividades::query()
@@ -177,28 +205,7 @@ class VcQualifyExams extends Component
 
         $this->tblrecords=[];
 
-        $this->personas = TmHorariosDocentes::query()
-        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join(DB::raw("(select estudiante_id, modalidad_id, periodo_id, curso_id, estado 
-        from tm_matriculas m 
-        where m.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
-        union all
-        select m.estudiante_id, p.modalidad_id, m.periodo_id, p.curso_id, m.estado
-        from tm_pase_cursos p
-        inner join tm_matriculas m on m.id = p.matricula_id
-        where p.modalidad_id = ".$this->modalidadId."  and m.periodo_id = ".$this->periodoId."
-        and p.estado = 'A'        
-        ) as m"),function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
-        })
-        ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->select("p.*")
-        ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
-        ->where("m.estado",'A')
-        ->orderBy("p.apellidos")
-        ->get();
+        $this->loadPersonas();
 
         // Actualiza Datos Estudiantes
         foreach ($this->personas as $key => $data)
