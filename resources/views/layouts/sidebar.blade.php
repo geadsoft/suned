@@ -793,6 +793,14 @@
                     </div>
                 </li>
                 @endcan
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/academic/suggestion-box">
+                        <i class="ri-mail-send-line fs-20"></i>Buzón Sugerencias</span>
+                    </a>
+                </li>
+
+
                 @can('Sistemas')
                 <!--Sistemas-->
                 <li class="nav-item">

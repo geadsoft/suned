@@ -42,6 +42,11 @@ class TmSedesController extends Controller
         return view('academic/pasecurso');
     }
 
+    public function buzon()
+    {
+        return view('academic/mailbox');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
