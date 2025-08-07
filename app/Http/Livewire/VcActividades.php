@@ -5,6 +5,7 @@ use App\Models\TmHorarios;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmActividades;
 use App\Models\TdActividadesEntregas;
+use App\Models\TdCalificacionActividades;
 use App\Models\TmFiles;
 
 use Livewire\Component;
@@ -156,22 +157,14 @@ class VcActividades extends Component
     public function delete( $id ){
          
         $this->selectId = $id;
-
-        $entregas = TdActividadesEntregas::query()
-        ->join("tm_actividades as a","a.id","=","td_actividades_entregas.actividad_id")
-        ->where("td_actividades_entregas.actividad_id",$this->selectId)
-        ->get();
-
-        if($entregas->isEmpty()){
-            $this->dispatchBrowserEvent('show-delete');
-        }else{
-            $this->dispatchBrowserEvent('msg-alert'); 
-        }
+        $this->dispatchBrowserEvent('show-delete');
 
     }
 
     public function deleteData(){
 
+        TdActividadesEntregas::where('actividad_id',$this->selectId)->delete();
+        TdCalificacionActividades::where('actividad_id',$this->selectId)->delete();
         TmFiles::where('actividad_id',$this->selectId)->delete();
         
         TmActividades::find($this->selectId)->delete();
