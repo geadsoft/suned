@@ -116,7 +116,7 @@ class VcQualifyActivity extends Component
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
-        $this->loadPersonas()
+        $this->loadPersonas();
         
         return view('livewire.vc-qualify-activity',[
             'tblrecords'  => $this->tblrecords,
