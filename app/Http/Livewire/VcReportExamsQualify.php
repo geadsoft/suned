@@ -16,7 +16,7 @@ class VcReportExamsQualify extends Component
 {
     
     public $nivel,$subtitulo="",$docente="",$materia="",$curso="", $cursoId;
-    public $asignaturaId=0, $fechaActual, $horaactual, $datos;
+    public $asignaturaId=0, $fechaActual, $horaactual, $datos, $periodoId;
 
     public $tblasignatura=[];
     public $tblparalelo=[];
@@ -42,8 +42,9 @@ class VcReportExamsQualify extends Component
         $this->fechaActual = date("d/m/Y");
         $this->horaActual  = date("H:i:s");
 
-        $periodo = TmPeriodosLectivos::where("estado","A")
-        ->first();
+        $periodo = TmPeriodosLectivos::where("aperturado",1)->first();
+        $this->periodoId = $periodo->id;
+
         $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion'].'/ - ';
 
 
