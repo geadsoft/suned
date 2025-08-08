@@ -27,7 +27,7 @@ class VcReportExamsQualify extends Component
     public $filters=[
         'docenteId' => 0,
         'paralelo' => 0, 
-        'termino' => '3T',
+        'termino' => '1T',
         'bloque' => '1P',
         'actividad' => 'AI',
     ];
@@ -57,9 +57,20 @@ class VcReportExamsQualify extends Component
 
     public function render()
     {
+        $this->tblmodalidad = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("d.docente_id",$this->docenteId)
+        ->selectRaw('g.id, g.descripcion')
+        ->groupBy('g.id','g.descripcion')
+        ->get();
+        
         $this->tblasignatura = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->docenteId)
         ->selectRaw('m.id, m.descripcion')
         ->groupBy('m.id','m.descripcion')
@@ -70,8 +81,10 @@ class VcReportExamsQualify extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->docenteId)
-        ->where("m.id",$this->asignaturaId)
+        ->where("m.id",$this->asignaturaId) 
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
         
@@ -80,15 +93,7 @@ class VcReportExamsQualify extends Component
 
     public function updatedasignaturaId($id){
 
-        $this->tblparalelo = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->docenteId)
-        ->where("m.id",$id)
-        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
-        ->get();
+        $this->asignaturaId = $id;
 
     }
 
