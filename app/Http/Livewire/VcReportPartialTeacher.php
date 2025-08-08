@@ -65,7 +65,7 @@ class VcReportPartialTeacher extends Component
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
         ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->where("d.docente_id",$this->docenteId)
+        ->where("d.docente_id",$this->filters['docenteId'])
         ->selectRaw('g.id, g.descripcion')
         ->groupBy('g.id','g.descripcion')
         ->get();
@@ -76,7 +76,7 @@ class VcReportPartialTeacher extends Component
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
         ->where("tm_horarios.periodo_id",$this->periodoId)
         ->where('tm_horarios.grupo_id',$this->modalidadId)
-        ->where("d.docente_id",$this->docenteId)
+        ->where("d.docente_id",$this->filters['docenteId'])
         ->selectRaw('m.id, m.descripcion')
         ->groupBy('m.id','m.descripcion')
         ->get();
@@ -88,7 +88,7 @@ class VcReportPartialTeacher extends Component
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
         ->where("tm_horarios.periodo_id",$this->periodoId)
         ->where('tm_horarios.grupo_id',$this->modalidadId)
-        ->where("d.docente_id",$this->docenteId)
+        ->where("d.docente_id",$this->filters['docenteId'])
         ->where("m.id",$this->asignaturaId) 
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
