@@ -7,6 +7,7 @@ use App\Models\TmHorarios;
 use App\Models\TmHorariosDocentes;
 use App\Models\TmActividades;
 use App\Models\TdCalificacionActividades;
+use App\Models\TdPeriodoSistemaEducativos;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -34,9 +35,10 @@ class VcReportPartialTeacher extends Component
     public $filters=[
         'docenteId' => 0,
         'paralelo' => 0, 
-        'termino' => '3T',
+        'termino' => '1T',
         'bloque' => '1P',
         'actividad' => 'AI',
+        'periodoId' => 0,
     ];
 
     public function mount()
@@ -47,7 +49,7 @@ class VcReportPartialTeacher extends Component
         $this->horaActual  = date("H:i:s");
 
         $periodo = TmPeriodosLectivos::where("aperturado",1)->first();
-        $this->periodoId = $periodo->id;
+        $this->filters['periodoId'] = $periodo->id;
         
         $this->periodolectivo = "Periodo Lectivo ".$periodo['descripcion'];
 
@@ -64,7 +66,7 @@ class VcReportPartialTeacher extends Component
         $this->tblmodalidad = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
-        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->where("d.docente_id",$this->filters['docenteId'])
         ->selectRaw('g.id, g.descripcion')
         ->groupBy('g.id','g.descripcion')
@@ -74,7 +76,7 @@ class VcReportPartialTeacher extends Component
         $this->tblasignatura = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->filters['docenteId'])
         ->selectRaw('m.id, m.descripcion')
@@ -86,7 +88,7 @@ class VcReportPartialTeacher extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->filters['docenteId'])
         ->where("m.id",$this->asignaturaId) 
@@ -178,7 +180,7 @@ class VcReportPartialTeacher extends Component
         $matriculasQuery = DB::table('tm_matriculas as m')
         ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
         ->where('m.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.periodo_id', $this->filters['periodoId'])
         ->where('m.estado','A')
         ->whereNotIn('m.id', $matriculasConPase);
 
@@ -187,7 +189,7 @@ class VcReportPartialTeacher extends Component
         ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
         ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
         ->where('p.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.periodo_id', $this->filters['periodoId'])
         ->where('m.estado','A')
         ->where('p.estado', 'A');
 
@@ -212,19 +214,6 @@ class VcReportPartialTeacher extends Component
         $this->tblrecords=[];
 
         $this->loadPersonas();
-
-        /*$this->personas = TmHorariosDocentes::query()
-        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join("tm_matriculas as m",function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
-        })
-        ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->select("p.*")
-        ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
-        ->orderBy("p.apellidos")
-        ->get();*/
 
         // Actualiza Datos Estudiantes
         foreach ($this->personas as $key => $data)
@@ -329,6 +318,31 @@ class VcReportPartialTeacher extends Component
 
         $valor = (array_sum(array_column($this->tblrecords,'promedio')));
         $this->tblrecords['ZZ']['promedio'] = $valor/count($this->personas);
+        
+        
+        // Escala Cualitativa
+        $escalas = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->filters['periodoId'])
+        ->where("tipo","EC")
+        ->get()->toArray();
+       
+        foreach ($this->tblrecords as $key1 => $records){
+
+            $promedio = $records['promedio']; 
+                
+            foreach ($escalas as $escala) {
+                
+                $nota  = $escala['nota'];                  
+                $letra = $escala['evaluacion'];
+
+                if ($promedio >= ($nota-1)+0.01 && $promedio <= $nota) {
+                    $this->tblrecords[$key1]['cualitativa'] = $letra;
+                }
+                
+            }
+
+        }        
+        
         
         $this->datos = json_encode($this->filters);
 
