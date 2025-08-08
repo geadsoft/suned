@@ -61,7 +61,7 @@ class VcReportDetailQualify extends Component
 
     public function render()
     {
-         $this->tblmodalidad = TmHorarios::query()
+        $this->tblmodalidad = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
         ->where("tm_horarios.periodo_id",$this->periodoId)

@@ -329,27 +329,13 @@ class VcReportPartialTeacher extends Component
 
     public function reporte(){
 
+        /* Estudiantes */
+        $tblrecords=[];
 
         $tblactividad = $this->actividad();
         $tblgrupo = $tblactividad->groupBy('actividad')->toBase();
 
-        /* Estudiantes */
-        $tblrecords=[];
-
-        /*$personas = TmHorariosDocentes::query()
-        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join("tm_matriculas as m",function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
-        })
-        ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->select("p.*")
-        ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
-        ->orderBy("p.apellidos")
-        ->get();*/
-
-        $this->loadPersonas()
+        $this->loadPersonas();
 
         foreach ($this->personas as $key => $data)
         {   
