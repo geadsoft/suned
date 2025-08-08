@@ -221,23 +221,6 @@ class VcReportDetailQualify extends Component
 
         $this->loadPersonas();
 
-        /*$this->personas = TmHorariosDocentes::query()
-        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join("tm_matriculas as m",function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
-        })
-        ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->select("p.*")
-        ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
-        ->orderBy("p.apellidos")
-        ->get();*/
-
-        /*if (count($this->tblgrupo)>0){
-            dd($this->tblgrupo);
-        }*/
-
         // Actualiza Datos Estudiantes
         foreach ($this->personas as $key => $data)
         {   

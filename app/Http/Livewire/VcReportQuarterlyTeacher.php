@@ -7,6 +7,7 @@ use App\Models\TmHorarios;
 use App\Models\TmHorariosDocentes;
 use App\Models\TmActividades;
 use App\Models\TdCalificacionActividades;
+use App\Models\TdPeriodoSistemaEducativos;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -21,8 +22,8 @@ class VcReportQuarterlyTeacher extends Component
 {
     use Exportable;
 
-    public $nivel,$subtitulo="",$docente="",$materia="",$curso="", $periodolectivo="";
-    public $asignaturaId=0, $fechaActual, $horaactual, $datos, $colspan=3, $cursoId;
+    public $nivel,$subtitulo="",$docente="",$materia="",$curso="", $periodolectivo="", $bloqueEx="";
+    public $asignaturaId=0, $fechaActual, $horaactual, $datos, $colspan=3, $cursoId, $modalidadId;
 
     public $tblasignatura=[];
     public $tblparalelo=[];
@@ -30,13 +31,15 @@ class VcReportQuarterlyTeacher extends Component
     public $tblrecords=[];
     public $personas=[];
     public $tblgrupo=[];
+    public $tbltermino=[];
 
     public $filters=[
         'docenteId' => 0,
         'paralelo' => 0, 
-        'termino' => '3T',
+        'termino' => '1T',
         'bloque' => '1P',
         'actividad' => 'AI',
+        'periodoId' => 0,
     ];
 
     public function mount()
@@ -46,22 +49,38 @@ class VcReportQuarterlyTeacher extends Component
         $this->fechaActual = date("d/m/Y");
         $this->horaActual  = date("H:i:s");
 
-        $periodo = TmPeriodosLectivos::where("estado","A")
-        ->first();
+        $periodo = TmPeriodosLectivos::where("aperturado",1)->first();
+        $this->filters['periodoId'] = $periodo->id;
+
         $this->periodolectivo = "Periodo Lectivo ".$periodo['descripcion'];
 
-        if (!empty($this->tblparalelo)){
-            $this->filters['paralelo'] = $this->tblparalelo[0]["id"];
-            $this->consulta();
-        }
+        $this->tbltermino = TdPeriodoSistemaEducativos::query()
+            ->where('periodo_id',$this->filters['periodoId'])
+            ->where('tipo','EA')
+            ->get();
+
+
+        $this->updatedTermino();
 
     }
 
     public function render()
     {
+        $this->tblmodalidad = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
+        ->where("d.docente_id",$this->filters['docenteId'])
+        ->selectRaw('g.id, g.descripcion')
+        ->groupBy('g.id','g.descripcion')
+        ->get();
+
+        
         $this->tblasignatura = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
+        ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->filters['docenteId'])
         ->selectRaw('m.id, m.descripcion')
         ->groupBy('m.id','m.descripcion')
@@ -72,8 +91,10 @@ class VcReportQuarterlyTeacher extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
+        ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->filters['docenteId'])
-        ->where("m.id",$this->asignaturaId)
+        ->where("m.id",$this->asignaturaId) 
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
@@ -82,16 +103,24 @@ class VcReportQuarterlyTeacher extends Component
 
     public function updatedasignaturaId($id){
 
-        $this->tblparalelo = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("d.docente_id",$this->filters['docenteId'])
-        ->where("m.id",$id)
-        ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
-        ->get();
+        $this->asignaturaId = $id;
 
+    }
+
+    public function updatedTermino()
+    {
+        
+        $this->tblbloque=[];
+
+        foreach($this->tbltermino as $data){
+            if ($this->filters['termino'] == $data['codigo']){
+                $arrbloque['codigo'] = str_replace('T','E',$data['codigo']);
+                $arrbloque['descripcion'] = 'Examen '.$data['descripcion'];
+
+                array_push($this->tblbloque,$arrbloque);
+            }
+        }
+       
     }
 
     public function actividad(){
@@ -117,18 +146,30 @@ class VcReportQuarterlyTeacher extends Component
 
     public function examenes(){
 
+        //Asginar Nota Examen
+        foreach($this->tbltermino as $data){
+            if ($this->filters['termino'] == $data['codigo']){
+                $this->bloqueEx = str_replace('T','E',$data['codigo']);
+            }
+        }
+
         $record = TmActividades::query()
-        ->when($this->filters['paralelo'],function($query){
-            return $query->where('paralelo',"{$this->filters['paralelo']}");
+        ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
+        ->join('tm_horarios_docentes as d', function($join) {
+            $join->on('d.id', '=', 'tm_actividades.paralelo')
+                ->on('d.docente_id', '=', 'tm_actividades.docente_id');
         })
-        ->when($this->filters['termino'],function($query){
-            return $query->where('termino',"{$this->filters['termino']}");
+        ->when(!empty($this->filters['termino']), function($query) {
+            return $query->where('tm_actividades.termino', $this->filters['termino']);
         })
-        ->selectRaw("id,nombre,actividad,puntaje")
-        ->where("tipo","ET")
-        ->where("docente_id",$this->filters['docenteId'])
-        ->orderByRaw("actividad desc")
-        ->get();
+        ->when(!empty($this->filters['bloque']), function($query) {
+            return $query->where('tm_actividades.bloque', $this->bloqueEx);
+        })
+        ->where('tm_actividades.tipo', 'ET')
+        ->where('d.asignatura_id',$this->asignaturaId)
+        ->groupBy('n.persona_id')
+        ->selectRaw('n.persona_id, ROUND(AVG(n.nota), 2) as promedio')
+        ->pluck('promedio', 'persona_id');
 
         return  $record;
 
@@ -183,7 +224,7 @@ class VcReportQuarterlyTeacher extends Component
         $matriculasQuery = DB::table('tm_matriculas as m')
         ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
         ->where('m.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.periodo_id', $this->filters['periodoId'])
         ->where('m.estado','A')
         ->whereNotIn('m.id', $matriculasConPase);
 
@@ -192,7 +233,7 @@ class VcReportQuarterlyTeacher extends Component
         ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
         ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
         ->where('p.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.periodo_id', $this->filters['periodoId'])
         ->where('m.estado','A')
         ->where('p.estado', 'A');
 
@@ -216,19 +257,6 @@ class VcReportQuarterlyTeacher extends Component
         $this->tblrecords=[];
 
         $this->loadPersonas();
-
-        /*$this->personas = TmHorariosDocentes::query()
-        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join("tm_matriculas as m",function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
-        })
-        ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->select("p.*")
-        ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
-        ->orderBy("p.apellidos")
-        ->get();*/
 
         /*Actividades*/
         $record = $this->actividad();
@@ -259,12 +287,12 @@ class VcReportQuarterlyTeacher extends Component
             $this->tblrecords[$personaId]['promedio'] = 0.00;
             $this->tblrecords[$personaId]['prom70'] = 0.00;
 
-            foreach ($this->tblexamen as $col => $actividad)
+            /*foreach ($this->tblexamen as $col => $actividad)
             {
-                $column = 'EX'.$actividad['id'];
+                $column = 'EX'.$actividad->persona_id;
                 $this->tblrecords[$personaId][$column] = 0.00;    
-            }
-
+            }*/
+            $this->tblrecords[$personaId]['promExamen'] = 0.00;
             $this->tblrecords[$personaId]['prom30'] = 0.00;
             $this->tblrecords[$personaId]['cuanti'] = 0.00;
             $this->tblrecords[$personaId]['cuali'] = "";
@@ -275,16 +303,18 @@ class VcReportQuarterlyTeacher extends Component
 
     public function asignarNotas(){
 
+        //Actividades
         $notas = TmActividades::query()
         ->join('td_calificacion_actividades as n','n.actividad_id','=','tm_actividades.id')
-        ->when($this->filters['paralelo'],function($query){
-            return $query->where('paralelo',"{$this->filters['paralelo']}");
-        })
-        ->when($this->filters['termino'],function($query){
-            return $query->where('termino',"{$this->filters['termino']}");
-        })
-        ->where("docente_id",$this->filters['docenteId'])
-        ->selectRaw("n.*,tm_actividades.actividad")
+        ->join('tm_horarios_docentes as d', function($join) {
+                $join->on('d.id', '=', 'tm_actividades.paralelo')
+                    ->on('d.docente_id', '=', 'tm_actividades.docente_id');
+            })
+        ->where('paralelo',$this->filters['paralelo'])
+        ->where('termino',$this->filters['termino'])
+        ->where("tipo","AC")
+        ->where("d.docente_id",$this->filters['docenteId'])
+        ->select("n.*","tm_actividades.actividad")
         ->get();
 
         if ($notas!=null){
@@ -298,6 +328,17 @@ class VcReportQuarterlyTeacher extends Component
                     $this->tblrecords[$personaId][$col] = $recno['nota'];                   
                 }
     
+            }
+
+        }
+
+        //Examenes
+        $examen = $this->examenes(); 
+  
+        foreach ($examen as $personaId => $objnota){
+
+            if (isset($this->tblrecords[$personaId]['promExamen'])) {
+                $this->tblrecords[$personaId]['promExamen'] = $objnota;
             }
 
         }
@@ -325,21 +366,17 @@ class VcReportQuarterlyTeacher extends Component
             if ($promedio>0){
                 $this->tblrecords[$personaId]['promedio'] = $promedio/count($this->tblgrupo);
                 $this->tblrecords[$personaId]['prom70'] = round(($promedio/count($this->tblgrupo))*0.70,2);
-                $notafinal = $notafinal+round(($promedio/count($this->tblgrupo))*0.70,2);
+                $notafinal = $notafinal+$this->tblrecords[$personaId]['prom70'];
             }
 
-            foreach ($this->tblexamen as $actividad)
-            {
-                $col = 'EX'.$actividad['id'];
-                $nota = $this->tblrecords[$personaId][$col];
-                $this->tblrecords[$personaId]['prom30'] = round(floatval($nota)*0.30,2);
-                $notafinal = $notafinal+round(floatval($nota)*0.30,2);
-            }
+            $this->tblrecords[$personaId]['prom30'] = round(floatval($this->tblrecords[$personaId]['promExamen'])*0.30,2);
+            $notafinal = $notafinal+$this->tblrecords[$personaId]['prom30'];
 
             $this->tblrecords[$personaId]['cuanti'] = $notafinal;
             $this->tblrecords[$personaId]['cuali'] = "";
         }
         
+
         array_multisort(array_column($this->tblrecords, 'nombres'), SORT_ASC, $this->tblrecords);
 
         
@@ -356,16 +393,12 @@ class VcReportQuarterlyTeacher extends Component
 
         $valor = (array_sum(array_column($this->tblrecords,'promedio')));
         $this->tblrecords['ZZ']['promedio'] = $valor/count($this->personas);
-        
-        foreach ($this->tblexamen as $col => $actividad)
-        {
-            $col = 'EX'.$actividad['id'];
-            $valor = (array_sum(array_column($this->tblrecords,$col)));
-            $this->tblrecords['ZZ'][$col] = $valor/count($this->personas);
-        }
 
         $valor = (array_sum(array_column($this->tblrecords,'prom70')));
         $this->tblrecords['ZZ']['prom70'] = round($valor/count($this->personas),2);
+
+        $valor = (array_sum(array_column($this->tblrecords,'promExamen')));
+        $this->tblrecords['ZZ']['promExamen'] = round($valor/count($this->personas),2);
 
         $valor = (array_sum(array_column($this->tblrecords,'prom30')));
         $this->tblrecords['ZZ']['prom30'] = round($valor/count($this->personas),2);
@@ -373,6 +406,29 @@ class VcReportQuarterlyTeacher extends Component
         $valor = (array_sum(array_column($this->tblrecords,'cuanti')));
         $this->tblrecords['ZZ']['cuanti'] = round($valor/count($this->personas),2);
         $this->tblrecords['ZZ']['cuali'] = "";
+
+        // Escala Cualitativa
+        $escalas = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->filters['periodoId'])
+        ->where("tipo","EC")
+        ->get()->toArray();
+       
+        foreach ($this->tblrecords as $key1 => $records){
+
+            $promedio = $records['cuanti']; 
+                
+            foreach ($escalas as $escala) {
+                
+                $nota  = $escala['nota'];                  
+                $letra = $escala['evaluacion'];
+
+                if ($promedio >= ($nota-1)+0.01 && $promedio <= $nota) {
+                    $this->tblrecords[$key1]['cuali'] = $letra;
+                }
+                
+            }
+
+        }
 
         $this->datos = json_encode($this->filters);
 
@@ -383,19 +439,6 @@ class VcReportQuarterlyTeacher extends Component
         $tblrecords=[];
 
         $this->loadPersonas();
-
-        /*$personas = TmHorariosDocentes::query()
-        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join("tm_matriculas as m",function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
-        })
-        ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->select("p.*")
-        ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
-        ->orderBy("p.apellidos")
-        ->get();*/
 
         /*Actividades*/
         $record = $this->actividad();
@@ -424,13 +467,7 @@ class VcReportQuarterlyTeacher extends Component
 
             $tblrecords[$personaId]['promedio'] = 0.00;
             $tblrecords[$personaId]['prom70'] = 0.00;
-
-            foreach ($tblexamen as $col => $actividad)
-            {
-                $column = 'EX'.$actividad['id'];
-                $tblrecords[$personaId][$column] = 0.00;    
-            }
-
+            $tblrecords[$personaId]['promExamen'] = 0.00;
             $tblrecords[$personaId]['prom30'] = 0.00;
             $tblrecords[$personaId]['cuanti'] = 0.00;
             $tblrecords[$personaId]['cuali'] = "";
@@ -464,6 +501,18 @@ class VcReportQuarterlyTeacher extends Component
             }
 
         }
+
+        //Examenes
+        $examen = $this->examenes(); 
+  
+        foreach ($examen as $personaId => $objnota){
+
+            if (isset($this->tblrecords[$personaId]['promExamen'])) {
+                $this->tblrecords[$personaId]['promExamen'] = $objnota;
+            }
+
+        }
+
 
     }
 

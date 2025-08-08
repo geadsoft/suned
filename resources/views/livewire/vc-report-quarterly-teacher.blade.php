@@ -5,6 +5,15 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="mb-3">
+                                <label for="choices-publish-status-input" class="form-label fw-semibold">Modalidad</label>
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
+                                    <option value="">Seleccione Modalidad</option>
+                                    @foreach ($tblmodalidad as $modalidad) 
+                                    <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Asignatura</label>
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="asignaturaId">
                                    <option value="">Seleccione Asignatura</option>
@@ -25,9 +34,9 @@
                             <div class="mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino"  wire:change="consulta()">
-                                    <option value="1T" selected>Primer Trimestre</option>
-                                    <option value="2T">Segundo Trimestre</option>
-                                    <option value="3T">Tercer Trimestre</option>
+                                    @foreach ($tbltermino as $terminos) 
+                                        <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
+                                    @endforeach 
                                 </select>
                             </div>
                         </div>
@@ -110,12 +119,7 @@
                                     @endif
                                     <td class="text-center">{{number_format($record["promedio"],2)}}</td> 
                                     <td class="text-center">{{$record["prom70"]}}</td>
-                                    @foreach ($tblexamen as $col => $tarea)
-                                        <?php
-                                        $column = 'EX'.$tarea['id'];
-                                        ?>
-                                        <td class="text-end">{{number_format($tblrecords[$fil][$column],2)}}</td>
-                                    @endforeach
+                                    <td class="text-center">{{$record["promExamen"]}}</td>
                                     <td class="text-center">{{$record["prom30"]}}</td>
 
                                     <td class="text-center">{{$record["cuanti"]}}</td> 
