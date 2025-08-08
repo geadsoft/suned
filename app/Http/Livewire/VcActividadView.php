@@ -126,6 +126,7 @@ class VcActividadView extends Component
         ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
         ->where('m.modalidad_id', $this->modalidadId)
         ->where('m.periodo_id', $this->periodoId)
+        ->where('m.estado', 'A');
         ->whereNotIn('m.id', $matriculasConPase);
 
         // Consulta de pases activos
@@ -134,6 +135,7 @@ class VcActividadView extends Component
         ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
         ->where('p.modalidad_id', $this->modalidadId)
         ->where('m.periodo_id', $this->periodoId)
+        ->where('m.estado', 'A');
         ->where('p.estado', 'A');
 
         // UNION de ambas consultas

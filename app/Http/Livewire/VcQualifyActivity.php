@@ -144,6 +144,7 @@ class VcQualifyActivity extends Component
         ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
         ->where('m.modalidad_id', $this->modalidadId)
         ->where('m.periodo_id', $this->periodoId)
+        ->where('m.estado','A')
         ->whereNotIn('m.id', $matriculasConPase);
 
         // Consulta de pases activos
@@ -152,6 +153,7 @@ class VcQualifyActivity extends Component
         ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
         ->where('p.modalidad_id', $this->modalidadId)
         ->where('m.periodo_id', $this->periodoId)
+        ->where('m.estado', 'A')
         ->where('p.estado', 'A');
 
         // UNION de ambas consultas
@@ -161,9 +163,6 @@ class VcQualifyActivity extends Component
         $this->personas = TmPersonas::query()
             ->joinSub($unionQuery, 'm', function ($join) {
             $join->on('tm_personas.id', '=', 'm.estudiante_id');
-        })
-        ->when(!empty($this->filters['estudianteId']), function($query) {
-            return $query->where('tm_personas.id', $this->filters['estudianteId']);
         })
         ->where('m.curso_id', $this->cursoId)
         ->select('tm_personas.*', 'm.documento')

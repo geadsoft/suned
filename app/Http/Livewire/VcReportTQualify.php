@@ -21,7 +21,7 @@ class VcReportTQualify extends Component
     
     use Exportable;
 
-    public $nivel,$subtitulo="",$docente="",$materia="",$curso="";
+    public $nivel,$subtitulo="",$docente="",$materia="",$curso="", $cursoId; 
     public $periodoId, $modalidadId=0, $asignaturaId=0, $fechaActual, $horaactual, $datos, $colspan=3;
 
     public $tblmodalidad=[];
@@ -174,12 +174,60 @@ class VcReportTQualify extends Component
 
     }
 
+    public function loadPersonas(){
+
+        $curso = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->where("d.id",$this->filters['paralelo'])
+        ->select("tm_horarios.*")
+        ->first();
+
+        $this->cursoId = $curso->curso_id ?? 0;
+        
+        // Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
+        $matriculasConPase = DB::table('tm_pase_cursos')
+        ->where('estado', 'A')
+        ->pluck('matricula_id');
+
+        // Consulta de matrículas SIN pase
+        $matriculasQuery = DB::table('tm_matriculas as m')
+        ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
+        ->where('m.modalidad_id', $this->modalidadId)
+        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.estado','A')
+        ->whereNotIn('m.id', $matriculasConPase);
+
+        // Consulta de pases activos
+        $pasesQuery = DB::table('tm_pase_cursos as p')
+        ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
+        ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
+        ->where('p.modalidad_id', $this->modalidadId)
+        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.estado','A')
+        ->where('p.estado', 'A');
+
+        // UNION de ambas consultas
+        $unionQuery = $matriculasQuery->unionAll($pasesQuery);
+
+        // Consulta principal con joinSub en Eloquent
+        $this->personas = TmPersonas::query()
+            ->joinSub($unionQuery, 'm', function ($join) {
+            $join->on('tm_personas.id', '=', 'm.estudiante_id');
+        })
+        ->where('m.curso_id', $this->cursoId)
+        ->select('tm_personas.*', 'm.documento')
+        ->orderBy('tm_personas.apellidos')
+        ->get();
+
+    }  
 
     public function add(){
 
         $this->tblrecords=[];
 
-        $this->personas = TmHorariosDocentes::query()
+        $this->loadPersonas();
+
+        /*$this->personas = TmHorariosDocentes::query()
         ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
         ->join("tm_matriculas as m",function($join){
             $join->on("m.modalidad_id","=","h.grupo_id")
@@ -190,7 +238,8 @@ class VcReportTQualify extends Component
         ->select("p.*")
         ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
         ->orderBy("p.apellidos")
-        ->get();
+        ->get();*/
+
 
         // Actualiza Datos Estudiantes
         foreach ($this->personas as $key => $data)
@@ -332,7 +381,9 @@ class VcReportTQualify extends Component
         /* Estudiantes */
         $tblrecords=[];
 
-        $personas = TmHorariosDocentes::query()
+        $this->loadPersonas();
+
+        /*$personas = TmHorariosDocentes::query()
         ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
         ->join("tm_matriculas as m",function($join){
             $join->on("m.modalidad_id","=","h.grupo_id")
@@ -343,9 +394,9 @@ class VcReportTQualify extends Component
         ->select("p.*")
         ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
         ->orderBy("p.apellidos")
-        ->get();
+        ->get();*/
 
-        foreach ($personas as $key => $data)
+        foreach ($this->personas as $key => $data)
         {   
             $index = $data->id;
             $tblrecords[$key]['id'] = 0;
@@ -387,7 +438,7 @@ class VcReportTQualify extends Component
 
 
         // Asigna Notas //
-        foreach ($personas as $key => $data)
+        foreach ($this->personas as $key => $data)
         {
             $personaId =  $data->id;
             $promedio  = 0; 
