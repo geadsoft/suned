@@ -34,9 +34,9 @@
                             <div class="mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino"  wire:change="consulta()">
-                                    <option value="1T" selected>Primer Trimestre</option>
-                                    <option value="2T">Segundo Trimestre</option>
-                                    <option value="3T">Tercer Trimestre</option>
+                                    @foreach ($tbltermino as $terminos) 
+                                        <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
+                                    @endforeach 
                                 </select>
                             </div>
                         </div>
@@ -84,25 +84,47 @@
                                     <tr class="text-uppercase text-muted">
                                         <th class="align-middle text-center" style="width: 900px;">NOMBRES</th>
                                         @foreach ($tblexamen as $data)
-                                            <th class="align-middle text-center" style="font-weight: normal; white-space: pre-line; width: 80px;">
+                                            <th class="align-middle text-center" style="font-weight: normal; white-space: pre-line;">
+                                            
                                             <span>{{$data->nombre}} ( {{$data->puntaje}} )</span>
                                             </th>
                                         @endforeach
+                                        <th class="text-center" style="width: 90px; margin: 0px;">
+                                        <span style="writing-mode: vertical-rl; transform: rotate(180deg);">Promedio</span>
+                                        </th>
+                                        <th class="text-center" style="width: 90px; margin: 0px;">
+                                        <span style="writing-mode: vertical-rl; transform: rotate(180deg);">Cualitativa</span>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($tblrecords as $fil => $data)
+                                @foreach ($personas as $fil => $persona)
                                 <tr id="{{$fil}}" class="detalle">
-                                    @if ($fil=='ZZ')
-                                        <td>{{$data["nombres"]}}</td>
-                                    @else
-                                        <td>{{$data["nombres"]}}</td>
-                                    @endif
+                                    <td>{{$tblrecords[$persona->id]['nombres']}}</td>
                                     @foreach ($tblexamen as $col => $tarea)
-                                    <td class="text-end">{{number_format($tblrecords[$fil][$col],2)}}</td>
+                                    <td class="text-center" id="{{$fil}}-{{$tarea->id}}">{{number_format($tblrecords[$persona->id][$tarea->id],2)}}</td>
                                     @endforeach
+                                    <td class="text-center fw-semibold" id="{{$fil}}-promedio">{{number_format($tblrecords[$persona->id]["promedio"],2)}}</td>   
+                                    <td class="text-center" id="{{$fil}}-cualitativa">{{$tblrecords[$persona->id]["cualitativa"]}}</td>
                                 </tr>
-                                 @endforeach
+                                @endforeach
+                                @if(!empty($tblrecords))
+                                    <tr id="ZZ" class="detalle">
+                                        <td class="text-end align-middle"> {{$tblrecords['ZZ']['nombres']}} </td>                                    
+                                        @foreach ($tblexamen as $col => $tarea)
+                                        <td class="text-center">
+                                            <input type="number" step="0.01" min="0" max="10" class="form-control product-price bg-light border-0 text-center"
+                                            id="ZZ-Prom-{{$tarea->id}}" value="{{number_format($tblrecords['ZZ'][$tarea['id']],2)}}" disabled/>
+                                        </td>
+                                        @endforeach
+                                        <td class="text-center">
+                                            <input type="text" class="form-control bg-light border-0 text-center fw-semibold" id="promedio-ZZ" value="{{$tblrecords['ZZ']["promedio"]}}" disabled/>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="text" class="form-control bg-light border-0 text-center" id="cualitativa-ZZ" value="{{$tblrecords['ZZ']["cualitativa"]}}" disabled/>
+                                        </td>
+                                    </tr>
+                                @endif
                                 </tbody>
                             </table>                            
                         </div>

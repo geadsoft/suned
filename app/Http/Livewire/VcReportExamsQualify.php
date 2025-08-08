@@ -7,6 +7,7 @@ use App\Models\TmHorarios;
 use App\Models\TmHorariosDocentes;
 use App\Models\TmActividades;
 use App\Models\TdCalificacionActividades;
+use App\Models\TdPeriodoSistemaEducativos;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -47,11 +48,10 @@ class VcReportExamsQualify extends Component
 
         $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion'].'/ - ';
 
-
-        if (!empty($this->tblparalelo)){
-            $this->filters['paralelo'] = $this->tblparalelo[0]["id"];
-            $this->consulta();
-        }
+        $this->tbltermino = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','EA')
+        ->get();
 
     }
 
@@ -129,9 +129,6 @@ class VcReportExamsQualify extends Component
         ->when($this->filters['termino'],function($query){
             return $query->where('termino',"{$this->filters['termino']}");
         })
-        ->when($this->filters['actividad'],function($query){
-            return $query->where('actividad',"{$this->filters['actividad']}");
-        })
         ->where("tipo","ET")
         ->where("docente_id",$this->docenteId)
         ->get();
@@ -194,73 +191,130 @@ class VcReportExamsQualify extends Component
 
         $this->loadPersonas();
 
-        /*$this->personas = TmHorariosDocentes::query()
-        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join("tm_matriculas as m",function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
-        })
-        ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->select("p.*")
-        ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
-        ->orderBy("p.apellidos")
-        ->get();*/
-
         // Actualiza Datos Estudiantes
         foreach ($this->personas as $key => $data)
         {   
             $index = $data->id;
-            $this->tblrecords[$key]['id'] = 0;
-            $this->tblrecords[$key]['personaId'] = $data->id;
-            $this->tblrecords[$key]['nui'] = $data->identificacion;
-            $this->tblrecords[$key]['nombres'] = $data->apellidos.' '.$data->nombres;
+            $this->tblrecords[$index]['personaId'] = $data->id;
+            $this->tblrecords[$index]['nui'] = $data->identificacion;
+            $this->tblrecords[$index]['nombres'] = $data->apellidos.' '.$data->nombres;
            
             foreach ($this->tblexamen as $col => $actividad)
             {
-                $this->tblrecords[$key][$col] = 0.00;    
+                $this->tblrecords[$index][$actividad->id] = 0.00;    
             }
+
+            $this->tblrecords[$index]['promedio'] = 0.00;
+            $this->tblrecords[$index]['cualitativa'] = "";
         }
+
+        $this->tblrecords['ZZ']['personaId'] = 0;
+        $this->tblrecords['ZZ']['nui'] = '';
+        $this->tblrecords['ZZ']['nombres'] = 'PROMEDIO DEL CURSO';
+        foreach ($this->tblexamen as $col => $actividad)
+        {
+            $this->tblrecords['ZZ'][$actividad->id] = 0.00;    
+        }
+        $this->tblrecords['ZZ']['promedio'] = 0.00;
+        $this->tblrecords['ZZ']['cualitativa'] = "";
         
     }
 
     public function asignarNotas(){
 
-        foreach ($this->personas as $key => $data)
-        {
-            $personaId =  $data->id; 
+        $notas = TmActividades::query()
+        ->join('td_calificacion_actividades as n','n.actividad_id','=','tm_actividades.id')
+        ->join('tm_horarios_docentes as d', function($join) {
+                $join->on('d.id', '=', 'tm_actividades.paralelo')
+                    ->on('d.docente_id', '=', 'tm_actividades.docente_id');
+            })
+        ->where('paralelo',$this->filters['paralelo'])
+        ->where('termino',$this->filters['termino'])
+        ->where("tipo","ET")
+        ->where("d.docente_id",$this->docenteId)
+        ->where("d.asignatura_id",$this->asignaturaId)
+        ->select("n.*")
+        ->get();
 
-            foreach ($this->tblexamen as $col => $actividad)
-            {
-                $actividadId =  $actividad['id'];
-                
-                /*Notas*/
-                $notas = TmActividades::query()
-                ->join('td_calificacion_actividades as n','n.actividad_id','=','tm_actividades.id')
-                ->when($this->filters['paralelo'],function($query){
-                    return $query->where('paralelo',"{$this->filters['paralelo']}");
-                })
-                ->when($this->filters['termino'],function($query){
-                    return $query->where('termino',"{$this->filters['termino']}");
-                })
-                ->when($this->filters['actividad'],function($query){
-                    return $query->where('actividad',"{$this->filters['actividad']}");
-                })
-                ->where("tipo","ET")
-                ->where("docente_id",$this->docenteId)
-                ->where("actividad_id",$actividadId)
-                ->where("persona_id",$personaId)
-                ->select("n.*")
-                ->get();  
+        foreach ($notas as $key => $data){
 
-                foreach ($notas as $record)
-                {
-                    $nota =  $record['nota'];
-                    $this->tblrecords[$key][$col] = floatval($nota); 
+            $personaId = $data->persona_id;
+            $examenId = $data->actividad_id;
+            
+            if (isset($this->tblrecords[$personaId][$examenId])){
+                $this->tblrecords[$personaId][$examenId] = floatval($data->nota);
+            }            
+        }
+
+        //Promedio 
+        foreach ($this->tblrecords as $key => $record){
+            $suma  = 0;
+            $count = 0;
+            foreach ($this->tblexamen as $data){
+                $suma  += $this->tblrecords[$key][$data->id];
+                $count += 1;
+            }
+             
+            if ($suma>0){
+                $this->tblrecords[$key]['promedio'] = round($suma/$count, 2);  
+            }
+
+        }
+
+        //Promedio Total
+        foreach ($this->tblexamen as $data)
+        {   
+            $suma  = 0;
+            $count = 0;
+            
+            foreach ($this->tblrecords as $key => $record){
+                if ($key != 'ZZ'){
+                    $suma += $this->tblrecords[$key][$data->id];
+                    $count += 1;  
                 }
+            }
 
+            if ($suma>0){
+                $this->tblrecords['ZZ'][$data->id] =  round($suma / $count, 2);
+            }
+            
+        }
+
+        $suma  = 0;
+        $count = 0;
+        foreach ($this->tblrecords as $key => $record){
+            if ($key != 'ZZ'){
+                $suma  += $this->tblrecords[$key]['promedio'];
+                $count += 1;
             }
         }
+        if($suma>0){
+            $this->tblrecords['ZZ']['promedio'] = round($suma /($count), 2);
+        } 
+
+        // Escala Cualitativa
+        $escalas = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->periodoId)
+        ->where("tipo","EC")
+        ->get()->toArray();
+       
+        foreach ($this->tblrecords as $key1 => $records){
+
+            $promedio = $records['promedio']; 
+                
+            foreach ($escalas as $escala) {
+                
+                $nota  = $escala['nota'];                  
+                $letra = $escala['evaluacion'];
+
+                if ($promedio >= ($nota-1)+0.01 && $promedio <= $nota) {
+                    $this->tblrecords[$key1]['cualitativa'] = $letra;
+                }
+                
+            }
+
+        }
+
 
         $this->datos = json_encode($this->filters);
         
