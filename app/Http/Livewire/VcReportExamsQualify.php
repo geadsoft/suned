@@ -16,7 +16,7 @@ class VcReportExamsQualify extends Component
 {
     
     public $nivel,$subtitulo="",$docente="",$materia="",$curso="", $cursoId;
-    public $asignaturaId=0, $fechaActual, $horaactual, $datos, $periodoId;
+    public $asignaturaId=0, $fechaActual, $horaactual, $datos, $periodoId, $modalidadId;
 
     public $tblasignatura=[];
     public $tblparalelo=[];
