@@ -12,6 +12,15 @@ class PdfController extends Controller
     
     public $filters=[];
 
+    public function informe_docente_trimestral($data) 
+    {   
+
+        $data = json_decode($data);
+        dd($data);
+
+    }
+
+
     public function index($report,$objdata) 
     {
         

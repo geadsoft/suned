@@ -25,6 +25,7 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ArchivoController;
 use App\Http\Livewire\VcReportCard;
 use App\Http\Livewire\VcReportTQualify;
+use App\Http\Livewire\VcReportQuarterlyTeacher;
 
 /*
 |--------------------------------------------------------------------------
@@ -205,7 +206,7 @@ Route::get('/preview-pdf/calificacion_examen/{data}',[VcReportExamsQualify::clas
 Route::get('/preview-pdf/detailed-rating/{data}',[VcReportDetailQualify::class, 'printPDF']);
 Route::get('/preview-pdf/total-rating/{data}',[VcReportTQualify::class, 'printPDF']);
 Route::get('/preview-pdf/partial-teacher/{data}',[VcReportPartialTeacher::class, 'printPDF']);
-Route::get('/preview-pdf/quarterly-teacher/{data}',[VcReportQuarterlyTeacher::class, 'printPDF']);
+//Route::get('/preview-pdf/quarterly-teacher/{data}',[VcReportQuarterlyTeacher::class, 'printPDF']);
 Route::get('/preview-pdf/informacion-student/{id}',[VcStudents::class, 'printFichaPDF']);
 Route::get('/preview-pdf/report-card/{data}',[VcReportCard::class, 'printPDF']);
 
@@ -217,6 +218,7 @@ Route::get('/preview-pdf/detail-movements/{report},{data}',[VcInventaryReports::
 Route::get('/download-pdf/detail-movements/{report},{data}',[VcInventaryReports::class, 'downloadPDF']);
 
 Route::get('pdf/{report},{data}', [PdfController::class, 'index']);
+Route::get('/preview-pdf/quarterly-teacher/{data}', [PdfController::class, 'informe_docente_trimestral'])->name('pdf.informe_docente_trimestral');
 
 /*Route::middleware(['auth'],['roles:D'])->group(function(){
     Route::get('/teachers/login', [App\Http\Controllers\DocentesController::class, 'index'])->name('login');
