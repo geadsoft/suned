@@ -57,7 +57,6 @@ class VcReportTQualify extends Component
 
         $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion'].'/ - ';
 
-
         if (!empty($this->tblparalelo)){
             $this->filters['paralelo'] = $this->tblparalelo[0]["id"];
             $this->consulta();
@@ -109,7 +108,7 @@ class VcReportTQualify extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
+        ->where("tm_horarios.periodo_id",$this->periodoId)
         ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->where("d.docente_id",$this->docenteId)
         ->where("m.id",$id)
@@ -194,7 +193,7 @@ class VcReportTQualify extends Component
         $matriculasQuery = DB::table('tm_matriculas as m')
         ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
         ->where('m.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.periodo_id',$this->filters['periodoId'])
         ->where('m.estado','A')
         ->whereNotIn('m.id', $matriculasConPase);
 
@@ -203,7 +202,7 @@ class VcReportTQualify extends Component
         ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
         ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
         ->where('p.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.periodo_id',$this->filters['periodoId'])
         ->where('m.estado','A')
         ->where('p.estado', 'A');
 
