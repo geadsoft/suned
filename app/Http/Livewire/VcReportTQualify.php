@@ -10,6 +10,7 @@ use App\Models\TdCalificacionActividades;
 use App\Models\TdPeriodoSistemaEducativos;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 use PDF;
 
 use App\Exports\CalificacionesTotalesExport;

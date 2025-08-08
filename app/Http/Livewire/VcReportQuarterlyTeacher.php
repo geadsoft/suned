@@ -9,6 +9,7 @@ use App\Models\TmActividades;
 use App\Models\TdCalificacionActividades;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 use PDF;
 
 use App\Exports\CalificacionesDetalladas;
