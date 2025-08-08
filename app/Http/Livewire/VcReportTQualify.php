@@ -340,12 +340,16 @@ class VcReportTQualify extends Component
         foreach ($this->tblgrupo as $key2 => $grupo){
             $col = $key2."-prom";
             $valor = (array_sum(array_column($this->tblrecords,$col)));
-            $this->tblrecords['ZZ'][$col] = $valor/count($this->personas);
+            if ($valor>0){
+                $this->tblrecords['ZZ'][$col] = $valor/count($this->personas);
+            }
         }
 
         $valor = (array_sum(array_column($this->tblrecords,'promedio')));
-        $this->tblrecords['ZZ']['promedio'] = $valor/count($this->personas);
-        
+        if ($valor>0){
+            $this->tblrecords['ZZ']['promedio'] = $valor/count($this->personas);
+        }
+                
         // Escala Cualitativa
         $escalas = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->filters['periodoId'])
