@@ -209,6 +209,25 @@
                                             @endforeach
                                             </select>
                                         </div>
+                                        <div class="mb-3">
+                                            <label for="txtnombre" class="form-label">Calificación</label>
+                                            <!-- Base Radios en horizontal -->
+                                            <div>
+                                                <div class="form-check form-check-inline mb-2">
+                                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="N" wire:model.defer="record.calificacion" checked>
+                                                    <label class="form-check-label" for="flexRadioDefault1">
+                                                        Cuantitativo
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="L" wire:model.defer="record.calificacion">
+                                                    <label class="form-check-label" for="flexRadioDefault2">
+                                                        Cualitativo
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <div class="hstack gap-2 justify-content-end">

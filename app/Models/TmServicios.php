@@ -15,6 +15,7 @@ class TmServicios extends Model
         'nivel_id',
         'grado_id',
         'especializacion_id',
+        'calificacion',
         'estado',
         'usuario',
     ];

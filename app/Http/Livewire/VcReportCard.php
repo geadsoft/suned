@@ -18,7 +18,7 @@ use PDF;
 
 class VcReportCard extends Component
 {
-    public $periodoId, $modalidadId=0, $tblpersonas, $datos, $bloqueEx, $estudianteId, $mensaje="";
+    public $periodoId, $modalidadId=0, $tblpersonas, $datos, $bloqueEx, $estudianteId, $mensaje="", $calificacion="N";
     public $arrComentario=[];
     public $arrtipo=[];
     public $tblbloque=[];
@@ -50,6 +50,7 @@ class VcReportCard extends Component
         $this->tblescala = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->periodoId)
         ->where("tipo","EC")
+        ->selectRaw("*,nota + case when nota=10 then 0 else 0.99 end as nota2")
         ->get();
 
         $tipoactividad = TdPeriodoSistemaEducativos::query()
@@ -90,7 +91,7 @@ class VcReportCard extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->where("tm_horarios.periodo_id",$this->periodoId)
         ->where('tm_horarios.grupo_id',$this->modalidadId)
-        ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion')
+        ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion,s.calificacion')
         ->get();
 
         // Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
@@ -127,6 +128,9 @@ class VcReportCard extends Component
         ->get();
 
         $this->filters['modalidadId'] = $this->modalidadId;
+
+        
+        
                 
         return view('livewire.vc-report-card');
     }
@@ -264,6 +268,13 @@ class VcReportCard extends Component
 
 
     public function asignarNotas(){
+
+        $servicio = TmCursos::query()
+        ->join("tm_servicios as s","s.id","=","tm_cursos.servicio_id")
+        ->where("tm_cursos.id",$this->filters['paralelo'])
+        ->first();
+
+        $this->calificacion = $servicio->calificacion;
 
         $this->tblgrupo  = TmActividades::query()
         ->join("tm_horarios_docentes as d",function($join){
@@ -431,6 +442,72 @@ class VcReportCard extends Component
 
         }
 
+        $notas = $this->tblescala;        
+
+        if($this->calificacion=="L"){
+
+             foreach($this->tblrecords as $person => $record){
+
+                foreach ($this->asignaturas as $key => $data)
+                {   
+                    $index = $data->id;
+                    
+                    if (isset($this->tblrecords[$person][$index]["AI-prom"])){
+
+                        $aiprom = $this->tblrecords[$person][$index]["AI-prom"];
+                        if ($aiprom>0){
+                            $resultado = array_filter($notas, function($notas) use ($aiprom) {
+                                return $aiprom >= $notas['nota'] && $aiprom <= $notas['nota2'];
+                            });
+                            $this->tblrecords[$person][$index]["AI-prom"] = reset($resultado)['codigo'];
+                        }
+
+                    };
+
+                    if (isset($this->tblrecords[$person][$index]["AG-prom"])){
+
+                        $agprom = $this->tblrecords[$person][$index]["AG-prom"];
+                        if ($agprom>0){
+                            $resultado = array_filter($notas, function($notas) use ($agprom) {
+                                return $aiprom >= $notas['nota'] && $aiprom <= $notas['nota2'];
+                            });
+                            $this->tblrecords[$person][$index]["AG-prom"] = reset($resultado)['codigo'];
+                        }
+
+                    };
+
+                    $promedio = $this->tblrecords[$person][$index]["promedio"];
+                    $examen   = $this->tblrecords[$person][$index]["examen"];
+                    $cuantitativo = $this->tblrecords[$person][$index]["cuantitativo"];
+                   
+                    if ($promedio>0){
+                         $resultado1 = array_filter($notas, function($notas) use ($promedio) {
+                            return $promedio >= $notas['nota'] && $promedio <= $notas['nota2'];
+                        });
+                        $this->tblrecords[$person][$index]["promedio"] = reset($resultado1)['codigo'];
+                    }
+
+                    if ($examen>0){
+                         $resultado = array_filter($notas, function($notas) use ($examen) {
+                            return $examen >= $notas['nota'] && $examen <= $notas['nota2'];
+                        });
+                        $this->tblrecords[$person][$index]["examen"] = reset($resultado)['codigo'];
+                    }
+
+                    if ($cuantitativo>0){
+                         $resultado = array_filter($notas, function($notas) use ($cuantitativo) {
+                            return $cuantitativo >= $notas['nota'] && $cuantitativo <= $notas['nota2'];
+                        });
+                        $this->tblrecords[$person][$index]["cuantitativo"] = reset($resultado)['codigo'];
+                    }
+
+                }
+
+
+            }
+
+        }
+
 
     }
 
@@ -507,26 +584,32 @@ class VcReportCard extends Component
         $escalas = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->filters['periodoId'])
         ->where("tipo","EC")
+        ->selectRaw("*,nota + case when nota=10 then 0 else 0.99 end as nota2")
         ->get()->toArray();
 
         $this->tblescala = $escalas;
 
         // Definimos los rangos
-        $rangos = [
-            ["min" => 9, "max" => 10, "codigo" => "DA", "desc" => "Domina los aprendizajes"],
-            ["min" => 7, "max" => 8.99, "codigo" => "AA", "desc" => "Alcanza los aprendizajes"],
-            ["min" => 5, "max" => 6.99, "codigo" => "PA", "desc" => "Está próximo a alcanzar"],
-            ["min" => 1, "max" => 4.99, "codigo" => "NA", "desc" => "No alcanza los aprendizajes"],
-        ];
+        TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->filters['periodoId'])
+        ->where("tipo","EC")
+        ->get()->toArray();
 
+        $rangos = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->filters['periodoId'])
+        ->where("tipo","EC")
+        ->selectRaw("min(nota) as min, max(nota)+case when max(nota)=10 then 0 else 0.99 end as max, evaluacion as codigo, glosa as descr")
+        ->groupBy("evaluacion","glosa")
+        ->get()->toArray();
 
+        
         // Agrupamos las notas según el rango
         $arrescala = [];
         foreach ($rangos as $r) {
             $arrescala[] = [
                 "rango" => "{$r['min']} - {$r['max']}",
                 "codigo" => $r["codigo"],
-                "desc" => $r["desc"],
+                "desc" => $r["descr"],
                 "notas" => array_column(
                     array_filter($escalas, function($n) use ($r) {
                         return $n["nota"] >= $r["min"] && $n["nota"] <= $r["max"];
@@ -595,21 +678,40 @@ class VcReportCard extends Component
             $faltas[$person->id]['total'] = $faltas[$person->id]['faltas']+$faltas[$person->id]['fjustificada'];
         }
 
-        
 
-        $pdf = PDF::loadView('pdf/reporte_boletin_notas',[
-            'tblrecords' => $this->tblrecords,
-            'asignaturas' => $asignaturas,
-            'tblpersons' => $this->tblpersonas,
-            'datos' => $datos,
-            'fechaActual' => $this->fechaActual,
-            'horaActual' => $this->horaActual,
-            'notaParcial' => $notaParcial,
-            'notaExamen' => $notaExamen,
-            'arrescala' => $arrescala,
-            'faltas' => $faltas,
-            'arrComentario' => $this->arrComentario,
-        ]);
+        if ($this->calificacion=="L"){
+
+            $pdf = PDF::loadView('pdf/reporte_boletin_notasletra',[
+                'tblrecords' => $this->tblrecords,
+                'asignaturas' => $asignaturas,
+                'tblpersons' => $this->tblpersonas,
+                'datos' => $datos,
+                'fechaActual' => $this->fechaActual,
+                'horaActual' => $this->horaActual,
+                'notaParcial' => $notaParcial,
+                'notaExamen' => $notaExamen,
+                'arrescala' => $arrescala,
+                'faltas' => $faltas,
+                'arrComentario' => $this->arrComentario,
+            ]);
+
+        }else{
+
+            $pdf = PDF::loadView('pdf/reporte_boletin_notas',[
+                'tblrecords' => $this->tblrecords,
+                'asignaturas' => $asignaturas,
+                'tblpersons' => $this->tblpersonas,
+                'datos' => $datos,
+                'fechaActual' => $this->fechaActual,
+                'horaActual' => $this->horaActual,
+                'notaParcial' => $notaParcial,
+                'notaExamen' => $notaExamen,
+                'arrescala' => $arrescala,
+                'faltas' => $faltas,
+                'arrComentario' => $this->arrComentario,
+            ]);
+
+        }
 
         return $pdf->setPaper('a4','landscape')->stream('Informe Aprendizaje.pdf');
 

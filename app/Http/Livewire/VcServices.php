@@ -63,6 +63,7 @@ class VcServices extends Component
         $this->record['nivel_id']= 0;
         $this->record['grado_id']= 0;       
         $this->record['especializacion_id']= 0;
+        $this->record['calificacion']= "N";
         $this->record['estado']= "A";      
         $this->dispatchBrowserEvent('show-form');
 
@@ -104,6 +105,7 @@ class VcServices extends Component
             'nivel_id' => $this -> record['nivel_id'],
             'grado_id' => $this -> record['grado_id'],
             'especializacion_id' => $this -> record['especializacion_id'],
+            'calificacion' => $this -> record['calificacion'],
             'estado' => $this -> record['estado'],
             'usuario' => auth()->user()->name,
         ]);
@@ -130,6 +132,7 @@ class VcServices extends Component
                 'nivel_id' => $this -> record['nivel_id'],
                 'grado_id' => $this -> record['grado_id'],           
                 'especializacion_id' => $this -> record['especializacion_id'],
+                'calificacion' => $this -> record['calificacion'],
             ]);
             
         }
