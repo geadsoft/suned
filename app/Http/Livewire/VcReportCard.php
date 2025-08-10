@@ -481,10 +481,10 @@ class VcReportCard extends Component
                     $cuantitativo = $this->tblrecords[$person][$index]["cuantitativo"];
                    
                     if ($promedio>0){
-                         $resultado1 = array_filter($notas, function($notas) use ($promedio) {
+                         $resultado = array_filter($notas, function($notas) use ($promedio) {
                             return $promedio >= $notas['nota'] && $promedio <= $notas['nota2'];
                         });
-                        $this->tblrecords[$person][$index]["promedio"] = reset($resultado1)['codigo'];
+                        $this->tblrecords[$person][$index]["promedio"] = reset($resultado)['codigo'];
                     }
 
                     if ($examen>0){
@@ -494,12 +494,12 @@ class VcReportCard extends Component
                         $this->tblrecords[$person][$index]["examen"] = reset($resultado)['codigo'];
                     }
 
-                    /*if ($cuantitativo>0){
+                    if ($cuantitativo>0){
                          $resultado = array_filter($notas, function($notas) use ($cuantitativo) {
                             return $cuantitativo >= $notas['nota'] && $cuantitativo <= $notas['nota2'];
                         });
                         $this->tblrecords[$person][$index]["cuantitativo"] = reset($resultado)['codigo'];
-                    }*/
+                    }
 
                 }
 
