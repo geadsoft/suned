@@ -494,7 +494,7 @@ class VcReportCard extends Component
                         $this->tblrecords[$person][$index]["examen"] = reset($resultado)['codigo'];
                     }
 
-                    if ($cuantitativo>0){
+                    if ($cuantitativo>0 && isset($this->tblrecords[$person][$index]["cuantitativo"])){
                          $resultado = array_filter($notas, function($notas) use ($cuantitativo) {
                             return $cuantitativo >= $notas['nota'] && $cuantitativo <= $notas['nota2'];
                         });
