@@ -469,7 +469,7 @@ class VcReportCard extends Component
                         $agprom = $this->tblrecords[$person][$index]["AG-prom"];
                         if ($agprom>0){
                             $resultado = array_filter($notas, function($notas) use ($agprom) {
-                                return $aiprom >= $notas['nota'] && $aiprom <= $notas['nota2'];
+                                return $agprom >= $notas['nota'] && $agprom <= $notas['nota2'];
                             });
                             $this->tblrecords[$person][$index]["AG-prom"] = reset($resultado)['codigo'];
                         }
