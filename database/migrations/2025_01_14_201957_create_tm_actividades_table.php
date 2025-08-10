@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('bloque',3);
             $table->string('tipo',2);
             $table->string('actividad',3);
-            $table->string('nombre',80);
-            $table->string('descripcion');
+            $table->text('nombre');
+            $table->longtext('descripcion');
             $table->datetime('fecha');
             $table->string('subir_archivo',2);
             $table->double('puntaje',14,2);

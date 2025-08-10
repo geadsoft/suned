@@ -18,8 +18,8 @@ return new class extends Migration
             $table->bigInteger('periodo_id')->unsigned();
             $table->string('tipo',2);
             $table->string('codigo',2);
-            $table->string('evaluacion',2);
-            $table->string('descripcion',80);
+            $table->string('evaluacion',15);
+            $table->string('descripcion',200);
             $table->double('nota',14,2);
             $table->string('usuario');
             $table->timestamps();
