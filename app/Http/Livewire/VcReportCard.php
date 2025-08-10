@@ -411,8 +411,8 @@ class VcReportCard extends Component
                     $this->tblrecords[$key1][$key2]['promedio'] = round($promedio/($countprm), 2);  
                 }
 
-                $nota70 = $this->tblrecords[$key1][$key2]['promedio']*0.70;
-                $nota30 = $this->tblrecords[$key1][$key2]['examen']*0.30;
+                $nota70 = round($this->tblrecords[$key1][$key2]['promedio']*0.70,2);
+                $nota30 = round($this->tblrecords[$key1][$key2]['examen']*0.30,2);
                 
                 $this->tblrecords[$key1][$key2]['nota70'] = round($nota70, 2);
                 $this->tblrecords[$key1][$key2]['nota30'] = round($nota30, 2);
