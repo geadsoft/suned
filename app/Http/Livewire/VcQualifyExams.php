@@ -177,6 +177,19 @@ class VcQualifyExams extends Component
 
     public function consulta(){
 
+        $this->control = "enabled";
+
+        $sistema = TdPeriodoSistemaEducativos::query()
+        ->where("codigo",$this->filters['termino'])
+        ->first();
+
+        if ($sistema->cerrar==1){
+            $this->control = "disabled";
+
+            $this->dispatchBrowserEvent('trimestre-cerrado');
+            return;
+        }
+
         $this->tblexamen = TmActividades::query()
         ->when($this->filters['paralelo'],function($query){
             return $query->where('paralelo',"{$this->filters['paralelo']}");

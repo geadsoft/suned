@@ -59,6 +59,9 @@ class VcExamenAdd extends Component
         $this->tbltermino = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
         ->where('tipo','EA')
+        ->when($id==0,function($query){
+            return $query->where('cerrar',0);
+        })
         ->get();
 
         $this->attach_add();

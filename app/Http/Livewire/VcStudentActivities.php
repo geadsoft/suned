@@ -7,6 +7,7 @@ use App\Models\TmHorarios;
 use App\Models\TmActividades;
 use App\Models\TmAsignaturas;
 use App\Models\TmPaseCursos;
+use App\Models\TdPeriodoSistemaEducativos;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -175,6 +176,18 @@ class VcStudentActivities extends Component
     }
 
     public function mostrar($id){
+
+        $record = TmActividades::find($id);
+
+        $sistema = TdPeriodoSistemaEducativos::query()
+        ->where("codigo",$record->termino)
+        ->first();
+
+        if ($sistema->cerrar==1){
+           $this->dispatchBrowserEvent('trimestre-cerrado');
+           return;
+        }
+
 
         $datos = TmActividades::query()
         ->join("tm_horarios_docentes as d","d.id","=","tm_actividades.paralelo")

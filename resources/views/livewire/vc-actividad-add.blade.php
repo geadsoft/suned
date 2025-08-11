@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="tipo-select" class="form-label fw-semibold">Tipo Actividad</label>
-                                    <select class="form-select" id="tipo-select" data-choices data-choices-search-false wire:model.defer="tipo">
+                                    <select class="form-select" id="tipo-select" data-choices data-choices-search-false wire:model.defer="tipo" {{$control}}>
                                         @foreach ($tblactividad as $actividades) 
                                         <option value="{{$actividades->codigo}}">{{$actividades->descripcion}}</option>
                                         @endforeach 
@@ -61,7 +61,7 @@
                             <div class="mb-3">
                                 <div class="mb-3">
                                     <label class="actividad" for="product-title-input">Nombre Actividad</label>
-                                    <input type="text" class="form-control" id="actividad-input" value="" placeholder="Ingrese nombre de actividad" wire:model.defer="nombre" required>
+                                    <input type="text" class="form-control" id="actividad-input" value="" placeholder="Ingrese nombre de actividad" wire:model.defer="nombre" {{$control}} required>
                                     <div class="invalid-feedback">Por favor ingrese un nombre de actividad.</div>
                                 </div>
                             </div>
@@ -80,16 +80,16 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="fechaMaxima" class="form-label fw-semibold">Fecha Máxima de Entrega</label>
-                            <input type="date" class="form-control" id="fechaMaxima" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha" required> 
+                            <input type="date" class="form-control" id="fechaMaxima" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha" {{$control}} required> 
                         </div>
                         <!-- Input Time -->
                         <div class="mb-3">
                             <label for="horamaxima" class="form-label">Hora Máxima de Entrega</label>
-                            <input type="time" class="form-control" id="horamaxima" wire:model.defer="hora" required>
+                            <input type="time" class="form-control" id="horamaxima" wire:model.defer="hora" {{$control}} required>
                         </div>
                         <div class="mb-3">
                             <label for="archivo-select" class="form-label fw-semibold">Permitir la subida de archivos</label>
-                            <select class="form-select" id="archivo-select" data-choices data-choices-search-false wire:model.defer="archivo">
+                            <select class="form-select" id="archivo-select" data-choices data-choices-search-false wire:model.defer="archivo" {{$control}}>
                                 <option value="SI" selected>SI</option>
                                 <option value="NO">NO</option>
                             </select>
@@ -97,7 +97,7 @@
 
                         <div class="mb-3">
                             <label for="puntaje-input" class="form-label fw-semibold">Puntaje</label>
-                            <input id="puntaje-input" type="number" min="1" max="10" step="1" class="form-control" value="10" wire:model.defer="puntaje" required>    
+                            <input id="puntaje-input" type="number" min="1" max="10" step="1" class="form-control" value="10" wire:model.defer="puntaje" {{$control}} required>    
                         </div>
                         <br>
                     </div>
@@ -115,7 +115,7 @@
                         <div style="display: none">{{$texteditor}}</div>
                         <div class="mb-3" wire:ignore>
                             <label class="form-label fw-semibold">Descripción de Actividad</label>
-                            <textarea id="editor" wire:model="texteditor" disabled>
+                            <textarea id="editor" wire:model="texteditor" {{$control}} disabled>
                                 
                             </textarea>
                         </div>
@@ -175,7 +175,9 @@
             @if ($this->actividadId==0)
             <button type="submit" class="btn btn-success w-sm">Grabar</button>
             @else
-            <button type="submit" class="btn btn-success w-sm">Actualizar</button>
+                @if ($control=="enabled")
+                <button type="submit" class="btn btn-success w-sm">Actualizar</button>
+                @endif
             @endif
             <a class="btn btn-secondary w-sm" href="/activities/activity"><i class="me-1 align-bottom"></i>Cancelar</a>
         </div>

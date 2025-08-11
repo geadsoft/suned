@@ -89,6 +89,15 @@
             });
         })
 
+        window.addEventListener('trimestre-cerrado', event => {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Trimestre cerrado',
+                text: 'Este trimestre ya ha sido cerrado, por lo que no es posible modificar las calificaciones. Para más información, comuníquese con la coordinación académica.',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#3085d6'
+            });
+        });
 
     </script>
     

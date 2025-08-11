@@ -98,6 +98,8 @@ class VcSistemaEducativo extends Component
                     'linea' => $key+1,
                     'codigo' => $value['codigo'],
                     'descripcion' => $value['descripcion'],
+                    'cerrar' => $value['cerrar'],
+                    'visualiza_nota' => $value['visualizar_nota'],
                 ];
                 array_push($this->arrmetodo,$datos);
             }

@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 class VcActividadView extends Component
 {
     public $asignatura, $curso,  $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $descripcion="", $estado="A";
-    public $periodoId, $tbltermino, $tblbloque, $tblactividad, $actividadId, $modalidadId, $cursoId;
+    public $periodoId, $tbltermino, $tblbloque, $tblactividad, $actividadId, $modalidadId, $cursoId, $control="enabled";
     public $array_attach=[];
     public $array_entregas=[], $entregas=[];
     public $personas=[];
@@ -249,6 +249,15 @@ class VcActividadView extends Component
         
         $this->add();
         $this->asignarNotas();
+
+        $this->control = "enabled";
+        $sistema = TdPeriodoSistemaEducativos::query()
+        ->where("codigo",$this->termino)
+        ->first();
+
+        if ($sistema->cerrar==1){
+            $this->control = "disabled";
+        }
 
     }
 

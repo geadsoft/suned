@@ -46,13 +46,6 @@
 
                     Livewire.emit('setData');
 
-                    /*Swal.fire({
-                        title: 'Deleted!',
-                        text: 'Your file has been deleted.',
-                        icon: 'success',
-                        confirmButtonClass: 'btn btn-primary w-xs mt-2',
-                        buttonsStyling: false
-                    })*/
                 } else if (
                     // Read more about handling dismissals
                     result.dismiss === Swal.DismissReason.cancel
@@ -95,6 +88,16 @@
             $("#orderTable > tbody tr").remove();
 
         })
+
+        window.addEventListener('trimestre-cerrado', event => {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Trimestre cerrado',
+                text: 'Este trimestre ya ha sido cerrado, por lo que no es posible modificar las calificaciones. Para más información, comuníquese con la coordinación académica.',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#3085d6'
+            });
+        });
 
     </script>
     

@@ -161,7 +161,7 @@
                                     </td>
                                     <td>
                                         <input type="number" step="0.01" min="0" max="10" value="0" class="form-control product-price bg-white border-0 text-center"
-                                            id="nota-{{$key}}" wire:model="tblrecords.{{$recno->id}}.nota" />
+                                            id="nota-{{$key}}" wire:model="tblrecords.{{$recno->id}}.nota" {{$control}}/>
                                     </td>
                                     </tr>
                                     @endforeach

@@ -51,6 +51,8 @@
                                     <tr class="text-uppercase">
                                         <th>Linea</th>
                                         <th>Descripción</th>
+                                        <th>Cerrar</th>
+                                        <th>Mostrar Nota</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -58,6 +60,12 @@
                                 <tr class="det-{{$metodo['linea']}}">
                                 <td>{{$metodo['linea']}}</td>
                                 <td>{{$metodo['descripcion']}}</td>
+                                <td class="text-center">
+                                    <input class="form-check-input" type="checkbox" id="{{$metodo['linea']}}-{{$key}}" wire:model.prevent="arrmetodo.{{$key}}.cerrar">
+                                </td>
+                                <td class="text-center">
+                                    <input class="form-check-input" type="checkbox" id="{{$metodo['linea']}}-{{$key}}" wire:model.prevent="arrmetodo.{{$key}}.visualizar_nota">
+                                </td>
                                 </tr>
                                 @endforeach
                                 </tbody>

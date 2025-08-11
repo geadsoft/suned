@@ -7,6 +7,7 @@ use App\Models\TmActividades;
 use App\Models\TdActividadesEntregas;
 use App\Models\TdCalificacionActividades;
 use App\Models\TmFiles;
+use App\Models\TdPeriodoSistemaEducativos;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -151,6 +152,18 @@ class VcActividades extends Component
 
     public function edit($Id)
     {
+        $record = TmActividades::find($Id);
+
+        $sistema = TdPeriodoSistemaEducativos::query()
+        ->where("codigo",$record->termino)
+        ->first();
+
+        if ($sistema->cerrar==1){
+           $this->dispatchBrowserEvent('trimestre-cerrado');
+           return;
+        }
+        
+        
         return redirect()->to('/activities/activity-edit/'.$Id);
     }
 

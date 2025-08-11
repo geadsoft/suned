@@ -9,6 +9,7 @@ use App\Models\TmAsignaturas;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmFiles;
 use App\Models\TdCalificacionActividades;
+use App\Models\TdPeriodoSistemaEducativos;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 class VcExamenView extends Component
 {   
     public $asignatura, $curso,  $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $descripcion="", $estado="A";
-    public $array_attach=[];
+    public $array_attach=[],$control = "enabled";
     public $docenteId, $examenId, $modalidadId, $periodoId;
     public $personas=[];
     public $tblrecords=[];
@@ -164,6 +165,14 @@ class VcExamenView extends Component
         $this->add();
         $this->asignarNotas();
 
+        $this->control = "enabled";
+        $sistema = TdPeriodoSistemaEducativos::query()
+        ->where("codigo",$this->termino)
+        ->first();
+
+        if ($sistema->cerrar==1){
+            $this->control = "disabled";
+        }
     }
 
      public function add(){

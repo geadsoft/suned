@@ -59,6 +59,10 @@ class VcActividadAdd extends Component
         $this->tbltermino = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
         ->where('tipo','EA')
+        ->when($id==0,function($query){
+            return $query->where('cerrar',0);
+        })
+        ->orderByRaw("cerrar,codigo")
         ->get();
 
         $this->termino = $this->tbltermino[0]['codigo'];
@@ -124,6 +128,16 @@ class VcActividadAdd extends Component
     }
 
     public function edit($id){
+
+        
+        $sistema = TdPeriodoSistemaEducativos::query()
+        ->where("codigo",$this->termino)
+        ->first();
+
+        if ($sistema->cerrar==1){
+            $this->control = "disabled";
+        }
+
         
         $record = TmActividades::query()
         ->join("tm_horarios_docentes as d","d.id","=","tm_actividades.paralelo")
@@ -213,7 +227,6 @@ class VcActividadAdd extends Component
         $message = "";
         
     }
-
 
     public function createData(){
 

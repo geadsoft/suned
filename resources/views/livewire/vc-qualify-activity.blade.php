@@ -15,7 +15,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Asignatura</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="asignaturaId" {{$control}}>
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="asignaturaId">
                                    <option value="">Seleccione Asignatura</option>
                                    @foreach ($tblasignatura as $asignatura) 
                                     <option value="{{$asignatura->id}}">{{$asignatura->descripcion}}</option>
@@ -100,7 +100,7 @@
                                         @foreach ($tbltarea as $col => $tarea)
                                         <td>
                                             <input type="number" step="0.01" min="0" max="10" value="0" class="form-control product-price bg-white border-0"
-                                            id="{{$fil}}-{{$col}}" wire:model="tblrecords.{{$persona->id}}.{{$tarea['id']}}" />
+                                            id="{{$fil}}-{{$col}}" wire:model="tblrecords.{{$persona->id}}.{{$tarea['id']}}" {{$control}}/>
                                         </td>
                                         @endforeach
                                         <td>

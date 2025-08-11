@@ -26,5 +26,19 @@
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="assets/libs/dom-autoscroller/dom-autoscroller.min.js"></script>
+
+    <script>
+       
+        window.addEventListener('trimestre-cerrado', event => {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Trimestre cerrado',
+                text: 'No es posible continuar. Para más información, comuníquese con la coordinación académica.',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#3085d6'
+            });
+        });
+
+    </script>
     
 @endsection
