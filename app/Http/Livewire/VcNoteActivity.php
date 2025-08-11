@@ -18,7 +18,7 @@ use Livewire\Component;
 class VcNoteActivity extends Component
 {
     public $nivel,$subtitulo="",$docente="",$materia="",$curso="";
-    public $periodoId, $modalidadId=0, $datos, $selectedId;
+    public $periodoId, $modalidadId=0, $datos, $selectedId,$mostrarNotas=false;
     public $asignaturas=[];
     public $tblrecords=[];
     public $tblescala=[];
@@ -175,7 +175,6 @@ class VcNoteActivity extends Component
 
     public function consulta(){
 
-        //$docente = TmPersonas::find($this->filters['docenteId']);
         $this->fechaActual = date("d/m/Y");
         $this->horaActual  = date("H:i:s");
 
@@ -262,6 +261,12 @@ class VcNoteActivity extends Component
     }
 
     public function asignarNotas(){
+
+        foreach($this->tbltermino as $trimestre){
+            if($trimestre->codigo == $this->filters['termino'] ){
+                $this->mostrarNotas = $trimestre->visualizar_nota;
+            }
+        }
 
         $this->tblgrupo  = TmActividades::query()
         ->join("tm_horarios_docentes as d",function($join){

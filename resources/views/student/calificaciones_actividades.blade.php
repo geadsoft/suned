@@ -26,6 +26,7 @@
     <!--ecommerce-customer init js -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> 
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
     <script>
         document.addEventListener('scroll-bottom', function () {

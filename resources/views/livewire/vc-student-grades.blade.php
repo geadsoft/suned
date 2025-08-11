@@ -74,6 +74,7 @@
                                 </div>
                             </div>
                             </div>
+                            @if($mostrarNotas==true)
                             <table class="table table-bordered table-sm fs-12" id="orderTable">
                                 <thead class="table-light">
                                     <tr><th colspan="8">
@@ -141,7 +142,30 @@
                                 </tr>
                                  @endforeach
                                 </tbody>
-                            </table>                            
+                            </table> 
+                            @else                              
+                                <div class="auth-page-content">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="text-center pt-4">
+                                                    <div class="">
+                                                        <img src="{{ URL::asset('assets/images/error500.png') }}" alt="" class="img-fluid error-500-img error-img" />
+                                                    </div>
+                                                    <div class="mt-n4">
+                                                        <h1 class="display-1 fw-medium">500</h1>
+                                                        <h3 class="text-uppercase">Acceso restringido 😭</h3>
+                                                        <p class="text-muted mt-1">No tienes acceso para visualizar las calificaciones en el trimestre seleccionado.
+                                                                    <br> Por favor, verifica más tarde o comunícate con la coordinación académica.
+                                                                    </p> 
+                                                        <button class="btn btn-success btn-border" onClick="window.location.href=window.location.href"><i class="ri-refresh-line align-bottom"></i>Actualizar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                            
+                            @endif                             
                         </div>
                         
                     </div>
