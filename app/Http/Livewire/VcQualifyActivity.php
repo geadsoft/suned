@@ -180,7 +180,6 @@ class VcQualifyActivity extends Component
         ->where("periodo_id",$this->periodoId)
         ->first();
 
-        dd($sistema);
 
         if ($sistema->cerrar==1){
             $this->control = "disabled";
