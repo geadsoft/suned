@@ -181,6 +181,7 @@ class VcQualifyExams extends Component
 
         $sistema = TdPeriodoSistemaEducativos::query()
         ->where("codigo",$this->filters['termino'])
+        ->where("periodo_id",$this->periodoId)
         ->first();
 
         if ($sistema->cerrar==1){
