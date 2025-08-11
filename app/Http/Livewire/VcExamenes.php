@@ -153,6 +153,7 @@ class VcExamenes extends Component
 
         $sistema = TdPeriodoSistemaEducativos::query()
         ->where("codigo",$record->termino)
+        ->where("periodo_id",$this->periodoId)
         ->first();
 
         if ($sistema->cerrar==1){

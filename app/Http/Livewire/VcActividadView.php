@@ -253,6 +253,7 @@ class VcActividadView extends Component
         $this->control = "enabled";
         $sistema = TdPeriodoSistemaEducativos::query()
         ->where("codigo",$this->termino)
+        ->where("periodo_id",$this->periodoId)
         ->first();
 
         if ($sistema->cerrar==1){
