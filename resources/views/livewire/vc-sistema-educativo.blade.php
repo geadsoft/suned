@@ -40,10 +40,16 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="mb-4">
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="metodo">
-                                <option value="T" selected>TRIMESTRE</option>
-                                <option value="Q">QUIMESTRE</option>
-                            </select>
+                            <div class="d-flex align-items-center gap-2">
+                                <select class="form-select" id="choices-publish-status-input"
+                                        data-choices data-choices-search-false wire:model="metodo">
+                                    <option value="T" selected>TRIMESTRE</option>
+                                    <option value="Q">QUIMESTRE</option>
+                                </select>
+                                <button class="btn btn-soft-success btn-sm" wire:click.prevent='grabaTermino'>
+                                    <i class="ri-save-2-line me-1 fs-18"></i> 
+                                </button>
+                            </div>
                         </div>
                         <div class="table-card">
                             <table class="table table-sm align-middle table-nowrap" id="orderTable">
@@ -64,7 +70,7 @@
                                     <input class="form-check-input" type="checkbox" id="{{$metodo['linea']}}-{{$key}}" wire:model.prevent="arrmetodo.{{$key}}.cerrar">
                                 </td>
                                 <td class="text-center">
-                                    <input class="form-check-input" type="checkbox" id="{{$metodo['linea']}}-{{$key}}" wire:model.prevent="arrmetodo.{{$key}}.visualizar_nota">
+                                    <input class="form-check-input" type="checkbox" id="{{$metodo['linea']}}-{{$key}}" wire:model.prevent="arrmetodo.{{$key}}.visualiza_nota">
                                 </td>
                                 </tr>
                                 @endforeach
@@ -291,7 +297,11 @@
                             
                         </div>
                         <!--end tab-content-->
+                        <!--<div class="text-end mb-3">
+                            <button type="submit" class="btn btn-success w-sm">Grabar</button>
+                        </div>-->
                     </div>
+                    
                 </div>
                 <!--end card-->
             </div>
@@ -330,9 +340,11 @@
                         <button type="button" class="btn btn-success w-xs" wire:click='grabaHora'>Grabar</button>
                     </div>
                 </div>
+                
                 <!-- end modal-content -->
             </div>
             <!-- modal-dialog -->
+            
         </div>
         <!-- end modal -->
     </form>

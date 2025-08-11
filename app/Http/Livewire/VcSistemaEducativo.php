@@ -317,6 +317,9 @@ class VcSistemaEducativo extends Component
             $dataRow['evaluacion'] =  '';
             $dataRow['descripcion'] =  $data['descripcion'];
             $dataRow['nota'] =  0;
+            $dataRow['glosa'] =  '';
+            $dataRow['cerrar'] = $data['cerrar'];
+            $dataRow['visualizar_nota'] = $data['visualizar_nota'];
             $dataRow['usuario'] = auth()->user()->name;
             array_push($this->detalle,$dataRow);
         }
@@ -338,6 +341,9 @@ class VcSistemaEducativo extends Component
                 $dataRow['evaluacion'] =  $col;
                 $dataRow['descripcion'] =  $data['descripcion'];
                 $dataRow['nota'] =  0;
+                $dataRow['glosa'] =  '';
+                $dataRow['cerrar'] =  0;
+                $dataRow['visualizar_nota'] =  0;
                 $dataRow['usuario'] = auth()->user()->name;
                 array_push($this->detalle,$dataRow);
             }
@@ -353,6 +359,9 @@ class VcSistemaEducativo extends Component
             $dataRow['evaluacion'] =  '';
             $dataRow['descripcion'] =  $data['descripcion'];
             $dataRow['nota'] =  0;
+            $dataRow['glosa'] =  '';
+            $dataRow['cerrar'] =  0;
+            $dataRow['visualizar_nota'] =  0;
             $dataRow['usuario'] = auth()->user()->name;
             array_push($this->detalle,$dataRow);
         }
@@ -367,6 +376,9 @@ class VcSistemaEducativo extends Component
             $dataRow['evaluacion'] =  $data['equivale'];
             $dataRow['descripcion'] =  $data['descripcion'];
             $dataRow['nota'] =  $data['nota'];
+            $dataRow['glosa'] =  $data['glosa'];
+            $dataRow['cerrar'] =  0;
+            $dataRow['visualizar_nota'] =  0;
             $dataRow['usuario'] = auth()->user()->name;
             array_push($this->detalle,$dataRow);
         }
@@ -377,5 +389,26 @@ class VcSistemaEducativo extends Component
         
     } 
 
+    public function grabaTermino(){
+
+
+        foreach ($this->arrmetodo as $metodo) {
+            $record = TdPeriodoSistemaEducativos::query()
+                ->where('periodo_id', $this->periodoId)
+                ->where('tipo', 'EA')
+                ->where('codigo', $metodo['codigo']) // ← clave para el registro correcto
+                ->first();
+
+            if ($record) {
+                $record->update([
+                    'cerrar' => !empty($metodo['cerrar']) ? 1 : 0,
+                    'visualizar_nota' => !empty($metodo['visualiza_nota']) ? 1 : 0,
+                ]);
+            }
+        }
+
+        return redirect(request()->header('Referer'));
+
+    }
 
 }
