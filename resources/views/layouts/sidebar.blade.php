@@ -155,7 +155,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/academic/qualify-suppletory">
+                                            <a class="nav-link menu-link" href="/student/qualify-conduct">
                                                 </i>Calificar Conducta<span></span>
                                             </a>
                                         </li>

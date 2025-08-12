@@ -68,4 +68,9 @@ class EstudiantesController extends Controller
         return view('student/boletin_calificaciones');
     }
 
+    public function qualify_conduct()
+    {      
+        return view('student/evalua_conducta');
+    }
+
 }

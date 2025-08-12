@@ -41,16 +41,6 @@ class VcDailyAttendance extends Component
         5 => 'V',
     ];
 
-    /*public $objdia=[
-        "Monday" => "L",
-        "Tuesday" => "M",
-        "Wednesday" => "X",
-        "Thursday" => "J",
-        "Friday" => "V",
-        "Saturday" => "S",
-        "Sunday" => "D"
-    ];*/
-
     public $objmes = [
         1 => 'Enero',
         2 => 'Febrero',
