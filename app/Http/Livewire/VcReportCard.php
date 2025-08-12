@@ -10,6 +10,7 @@ use App\Models\TmGeneralidades;
 use App\Models\TmCursos;
 use App\Models\TmHorariosDocentes;
 use App\Models\TdObservacionActa;
+use App\Models\TdConductas;
 
 
 use Livewire\Component;
@@ -128,10 +129,7 @@ class VcReportCard extends Component
         ->get();
 
         $this->filters['modalidadId'] = $this->modalidadId;
-
-        
-        
-                
+     
         return view('livewire.vc-report-card');
     }
 
@@ -790,6 +788,21 @@ class VcReportCard extends Component
             $faltas[$person->id]['total'] = $faltas[$person->id]['faltas']+$faltas[$person->id]['fjustificada'];
         }
 
+        //Conducta
+        $arrconducta=[];
+        foreach ($this->tblpersonas as $person) {
+            $conducta =  TdConductas::query()
+            ->where("periodo_id",$this->filters['periodoId'])
+            ->where("modalidad_id",$this->filters['modalidadId'])
+            ->where("termino",$this->filters['termino'])
+            ->where("curso_id",$this->filters['paralelo'])
+            ->where("persona_id",$person->id)
+            ->first();
+
+            if($conducta){
+                $arrconducta[$person->id]['evaluacion'] = $conducta->evaluacion;
+            }
+        }   
 
         if ($this->calificacion=="L"){
 
@@ -805,6 +818,7 @@ class VcReportCard extends Component
                 'arrescala' => $arrescala,
                 'faltas' => $faltas,
                 'arrComentario' => $this->arrComentario,
+                'arrconducta' => $arrconducta,
             ]);
 
         }else{
@@ -821,6 +835,7 @@ class VcReportCard extends Component
                 'arrescala' => $arrescala,
                 'faltas' => $faltas,
                 'arrComentario' => $this->arrComentario,
+                'arrconducta' => $arrconducta,
             ]);
 
         }

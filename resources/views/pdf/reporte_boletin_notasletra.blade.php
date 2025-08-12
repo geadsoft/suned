@@ -110,6 +110,30 @@
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$tblrecords[$record->id]['ZZ']['cuantitativo']}}</strong></td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$tblrecords[$record->id]['ZZ']['cualitativo']}}</strong></td>
                     </tr>
+                    <tr id="{{$record->id}}-conduta">
+                        <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;" class="align-middle"><strong>COMPORTAMIENTO</strong></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                        @if(isset($arrconducta[$record->id]['evaluacion']))                      
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$arrconducta[$record->id]['evaluacion']}}</strong></td>
+                        @else
+                        <td></td>
+                        @endif
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                        <td class="text-center align-middle" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                        <td class="text-center align-middle" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                        @if(isset($arrconducta[$record->id]['evaluacion'])) 
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$arrconducta[$record->id]['evaluacion']}}</strong></td>
+                        @else
+                        <td></td>
+                        @endif
+                        @if(isset($arrconducta[$record->id]['evaluacion'])) 
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$arrconducta[$record->id]['evaluacion']}}</strong></td>
+                        @else 
+                        <td></td>
+                        @endif
+                    </tr>
                     <tr>
                         <td colspan="5" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">
                             <table cellpadding="0" cellspancing="0" class="table table-sm table-bordered">
