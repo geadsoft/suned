@@ -265,14 +265,21 @@ class VcReportCard extends Component
                 }
                 $col = $key2."-prom";
                 $this->tblrecords[$idPerson]['ZZ'][$col] = 0;
-                $this->tblrecords[$idPerson]['ZZ']['promedio'] = 0.00;
+                /*$this->tblrecords[$idPerson]['ZZ']['promedio'] = 0.00;
                 $this->tblrecords[$idPerson]['ZZ']['nota70'] = 0.00;
                 $this->tblrecords[$idPerson]['ZZ']['examen'] = 0.00;
                 $this->tblrecords[$idPerson]['ZZ']['nota30'] = 0.00;
                 $this->tblrecords[$idPerson]['ZZ']['cuantitativo'] = 0.00;
-                $this->tblrecords[$idPerson]['ZZ']['cualitativo'] = "";
+                $this->tblrecords[$idPerson]['ZZ']['cualitativo'] = "";*/
 
             }
+
+            $this->tblrecords[$idPerson]['ZZ']['promedio'] = 0.00;
+            $this->tblrecords[$idPerson]['ZZ']['nota70'] = 0.00;
+            $this->tblrecords[$idPerson]['ZZ']['examen'] = 0.00;
+            $this->tblrecords[$idPerson]['ZZ']['nota30'] = 0.00;
+            $this->tblrecords[$idPerson]['ZZ']['cuantitativo'] = 0.00;
+            $this->tblrecords[$idPerson]['ZZ']['cualitativo'] = "";
         
         }
 
@@ -452,12 +459,12 @@ class VcReportCard extends Component
                         $this->tblrecords[$key1][$key2]['nota70'] = 0.00;
                     }
 
-                    /*if ($this->tblrecords[$key1][$key2]['examen'] > 0){
+                    if ($this->tblrecords[$key1][$key2]['examen'] > 0){
                         $nota30 = round($this->tblrecords[$key1][$key2]['examen']*0.30,2);
                         $this->tblrecords[$key1][$key2]['nota30'] = round($nota30, 2);
                     }else{
                         $this->tblrecords[$key1][$key2]['nota30'] = 0.00;
-                    }*/
+                    }
 
                     $this->tblrecords[$key1][$key2]['cuantitativo'] = $nota70+$nota30; 
 
