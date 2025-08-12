@@ -496,7 +496,7 @@ class VcReportCard extends Component
             $this->tblrecords[$key]['ZZ']['nota30'] = round($nota30/$count,2);
             $this->tblrecords[$key]['ZZ']['cuantitativo'] = round($promfinal/$count,2);
 
-        }*/
+        }
                 
         // Escala Cualitativa
         foreach ($this->tblrecords as $key1 => $records){
