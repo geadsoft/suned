@@ -396,6 +396,8 @@ class VcReportCard extends Component
                 
                 if (isset($this->tblrecords[$idPerson][$fil]['examen'])) {
                     $this->tblrecords[$idPerson][$fil]['examen'] = $objnota;
+                }else{
+                    $this->tblrecords[$idPerson][$fil]['examen'] = 0.00;
                 }
             }
         
