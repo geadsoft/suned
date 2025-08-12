@@ -478,6 +478,8 @@ class VcReportCard extends Component
 
             foreach ($records as $key2 => $recno){
                 
+                $notaex += $recno['examen'];
+                
                 if (isset($recno['AI-prom'])){
                     $aiprom += $recno['AI-prom'];
                 }
@@ -488,7 +490,6 @@ class VcReportCard extends Component
                 
                 $promedio += $recno['promedio'];
                 $nota70 += $recno['nota70'];
-                $notaex += $recno['examen'];
                 $nota30 += $recno['nota30'];
                 $promfinal += $recno['cuantitativo'];
             }
