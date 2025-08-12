@@ -252,6 +252,32 @@ class VcReportCard extends Component
 
         } 
 
+        foreach ($this->tblpersonas as $key => $person)
+        { 
+            $idPerson = $person->id;
+            $this->tblrecords[$idPerson]['ZZ']['id'] = 0;
+            $this->tblrecords[$idPerson]['ZZ']['asignaturaId'] = 0;
+            $this->tblrecords[$idPerson]['ZZ']['nombres'] = 'PROMEDIO FINAL';
+
+            foreach ($this->tblgrupo as $key2 => $grupo){
+
+                foreach ($grupo as $key3 => $actividad){
+                    $col = $key2.$actividad->id;
+                    $this->tblrecords[$idPerson]['ZZ'][$col] = 0.00;                   
+                }
+                $col = $key2."-prom";
+                $this->tblrecords[$idPerson]['ZZ'][$col] = 0;
+                $this->tblrecords[$idPerson]['ZZ']['promedio'] = 0.00;
+                $this->tblrecords[$idPerson]['ZZ']['nota70'] = 0.00;
+                $this->tblrecords[$idPerson]['ZZ']['examen'] = 0.00;
+                $this->tblrecords[$idPerson]['ZZ']['nota30'] = 0.00;
+                $this->tblrecords[$idPerson]['ZZ']['cuantitativo'] = "";
+                $this->tblrecords[$idPerson]['ZZ']['cualitativo'] = "";
+
+            }
+        
+        }
+
         //Observaciones
         $observaciones = TdObservacionActa::query()
         ->where("termino",$this->filters['termino'])
@@ -418,6 +444,43 @@ class VcReportCard extends Component
                 $this->tblrecords[$key1][$key2]['nota30'] = round($nota30, 2);
                 $this->tblrecords[$key1][$key2]['cuantitativo'] = $nota70+$nota30; 
             }
+        }
+
+        // Promedio Final
+        foreach ($this->tblrecords as $key => $records){
+            $aiprom = 0;
+            $agprom = 0;
+            $promedio = 0;
+            $nota70 = 0;
+            $examen = 0;
+            $nota30 = 0;
+            $promfinal = 0;
+            $count = count($records)-1;
+
+            foreach ($records as $key2 => $recno){
+
+                if (isset($recno['AI-prom'])){
+                    $aiprom += $recno['AI-prom'];
+                }
+
+                if (isset($recno['AG-prom'])){
+                    $agprom += $recno['AG-prom'];
+                }                
+                
+                $promedio += $recno['promedio'];
+                $nota70 += $recno['nota70'];
+                $examen += $recno['examen'];
+                $nota30 += $recno['nota30'];
+                $promfinal += $recno['cuantitativo'];
+            }
+            $this->tblrecords[$key]['ZZ']['AI-prom']  = round($aiprom/$count,2);
+            $this->tblrecords[$key]['ZZ']['AG-prom']  = round($agprom/$count,2);
+            $this->tblrecords[$key]['ZZ']['promedio'] = round($promedio/$count,2);
+            $this->tblrecords[$key]['ZZ']['nota70'] = round($nota70/$count,2);
+            $this->tblrecords[$key]['ZZ']['examen'] = round($examen/$count,2);
+            $this->tblrecords[$key]['ZZ']['nota30'] = round($nota30/$count,2);
+            $this->tblrecords[$key]['ZZ']['cuantitativo'] = round($promfinal/$count,2);
+
         }
                 
         // Escala Cualitativa
