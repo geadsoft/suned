@@ -403,6 +403,8 @@ class VcReportCard extends Component
         
         }
 
+
+        
         // Calcula Promedio
         foreach ($this->tblrecords as $key1 => $records){
             foreach ($records as $key2 => $recno){
@@ -446,7 +448,7 @@ class VcReportCard extends Component
                     $this->tblrecords[$key1][$key2]['nota70'] = 0.00;
                 }
 
-                if ($this->tblrecords[$key1][$key2]['examen']>0){
+                if (isset($this->tblrecords[$idPerson][$fil]['examen'])){
                     $nota30 = round($this->tblrecords[$key1][$key2]['examen']*0.30,2);
                     $this->tblrecords[$key1][$key2]['nota30'] = round($nota30, 2);
                 }else{
