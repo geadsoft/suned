@@ -256,10 +256,7 @@ class VcReportCard extends Component
             $this->tblrecords[$idPerson]['ZZ']['id'] = 0;
             $this->tblrecords[$idPerson]['ZZ']['asignaturaId'] = 0;
             $this->tblrecords[$idPerson]['ZZ']['nombres'] = 'PROMEDIO FINAL';
-
-            $record = $this->actividad($data->id);
-            $this->tblgrupo = $record->groupBy('actividad')->toBase();
-
+            
             foreach ($this->tblgrupo as $key2 => $grupo){
 
                 foreach ($grupo as $key3 => $actividad){
@@ -404,64 +401,63 @@ class VcReportCard extends Component
         
         }
 
-        dd($this->tblrecords);
+
         // Calcula Promedio
         foreach ($this->tblrecords as $key1 => $records){
 
-            if ($key1=='ZZ'){
-                continue;
-            }
+            if ($key1!='ZZ'){
+                
+                foreach ($records as $key2 => $recno){
+                    $promedio = 0;
+                    $countprm = 0;
+                    foreach ($this->tblgrupo as $grupo){
 
-            foreach ($records as $key2 => $recno){
-                $promedio = 0;
-                $countprm = 0;
-                foreach ($this->tblgrupo as $grupo){
+                        $tipo  = $grupo->actividad;
+                        $suma  = 0;
+                        $count = 0;
 
-                    $tipo  = $grupo->actividad;
-                    $suma  = 0;
-                    $count = 0;
-
-                    foreach ($recno as $campo => $valor){
-                    
-                        $ncampo = substr($campo, 0, 2); 
+                        foreach ($recno as $campo => $valor){
                         
-                        if ($ncampo==$tipo){
-                            $suma += $valor;
-                            $count += 1;
+                            $ncampo = substr($campo, 0, 2); 
+                            
+                            if ($ncampo==$tipo){
+                                $suma += $valor;
+                                $count += 1;
+                            }
+
+                        }
+
+                        $col = $tipo."-prom";
+                        if ($count > 0){
+                            $this->tblrecords[$key1][$key2][$col] = round($suma/($count-1), 2);
+                            $promedio += $suma/($count-1);
+                            $countprm += 1;
                         }
 
                     }
-
-                    $col = $tipo."-prom";
-                    if ($count > 0){
-                        $this->tblrecords[$key1][$key2][$col] = round($suma/($count-1), 2);
-                        $promedio += $suma/($count-1);
-                        $countprm += 1;
+                    if ($countprm > 0){
+                        $this->tblrecords[$key1][$key2]['promedio'] = round($promedio/($countprm), 2);  
+                    }else{
+                        $this->tblrecords[$key1][$key2]['promedio'] = 0.00;
                     }
 
-                }
-                if ($countprm > 0){
-                    $this->tblrecords[$key1][$key2]['promedio'] = round($promedio/($countprm), 2);  
-                }else{
-                    $this->tblrecords[$key1][$key2]['promedio'] = 0.00;
-                }
+                    if ($promedio>0){
+                        $nota70 = round($this->tblrecords[$key1][$key2]['promedio']*0.70,2);
+                        $this->tblrecords[$key1][$key2]['nota70'] = round($nota70, 2);
+                    }else{
+                        $this->tblrecords[$key1][$key2]['nota70'] = 0.00;
+                    }
 
-                if ($promedio>0){
-                    $nota70 = round($this->tblrecords[$key1][$key2]['promedio']*0.70,2);
-                    $this->tblrecords[$key1][$key2]['nota70'] = round($nota70, 2);
-                }else{
-                    $this->tblrecords[$key1][$key2]['nota70'] = 0.00;
+                    if ($this->tblrecords[$key1][$key2]['examen']>0){
+                        $nota30 = round($this->tblrecords[$key1][$key2]['examen']*0.30,2);
+                        $this->tblrecords[$key1][$key2]['nota30'] = round($nota30, 2);
+                    }else{
+                        $this->tblrecords[$key1][$key2]['nota30'] = 0.00;
+                    }
+
+                    $this->tblrecords[$key1][$key2]['cuantitativo'] = $nota70+$nota30; 
+
                 }
-
-                if ($this->tblrecords[$key1][$key2]['examen']>0){
-                    $nota30 = round($this->tblrecords[$key1][$key2]['examen']*0.30,2);
-                    $this->tblrecords[$key1][$key2]['nota30'] = round($nota30, 2);
-                }else{
-                    $this->tblrecords[$key1][$key2]['nota30'] = 0.00;
-                }
-
-                $this->tblrecords[$key1][$key2]['cuantitativo'] = $nota70+$nota30; 
-
             }
         }
 
