@@ -408,8 +408,6 @@ class VcReportCard extends Component
                 
                 foreach ($records as $key2 => $recno){
 
-                    dd($this->tblrecords, $recno, $key1, $key2);
-
                     $promedio = 0;
                     $countprm = 0;
                     foreach ($this->tblgrupo as $grupo){
