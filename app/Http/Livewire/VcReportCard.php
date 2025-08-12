@@ -433,16 +433,25 @@ class VcReportCard extends Component
                 }
                 if ($countprm > 0){
                     $this->tblrecords[$key1][$key2]['promedio'] = round($promedio/($countprm), 2);  
+                }else{
+                    $this->tblrecords[$key1][$key2]['promedio'] = 0.00;
                 }
 
                 if ($promedio>0){
                     $nota70 = round($this->tblrecords[$key1][$key2]['promedio']*0.70,2);
-                    $nota30 = round($this->tblrecords[$key1][$key2]['examen']*0.30,2);
-                    
                     $this->tblrecords[$key1][$key2]['nota70'] = round($nota70, 2);
-                    $this->tblrecords[$key1][$key2]['nota30'] = round($nota30, 2);
-                    $this->tblrecords[$key1][$key2]['cuantitativo'] = $nota70+$nota30; 
+                }else{
+                    $this->tblrecords[$key1][$key2]['nota70'] = 0.00;
                 }
+
+                if ($this->tblrecords[$key1][$key2]['examen']>0){
+                    $nota30 = round($this->tblrecords[$key1][$key2]['examen']*0.30,2);
+                    $this->tblrecords[$key1][$key2]['nota30'] = round($nota30, 2);
+                }else{
+                    $this->tblrecords[$key1][$key2]['nota30'] = 0.00;
+                }
+
+                $this->tblrecords[$key1][$key2]['cuantitativo'] = $nota70+$nota30; 
 
             }
         }
