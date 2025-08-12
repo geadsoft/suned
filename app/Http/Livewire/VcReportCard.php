@@ -265,12 +265,6 @@ class VcReportCard extends Component
                 }
                 $col = $key2."-prom";
                 $this->tblrecords[$idPerson]['ZZ'][$col] = 0;
-                /*$this->tblrecords[$idPerson]['ZZ']['promedio'] = 0.00;
-                $this->tblrecords[$idPerson]['ZZ']['nota70'] = 0.00;
-                $this->tblrecords[$idPerson]['ZZ']['examen'] = 0.00;
-                $this->tblrecords[$idPerson]['ZZ']['nota30'] = 0.00;
-                $this->tblrecords[$idPerson]['ZZ']['cuantitativo'] = 0.00;
-                $this->tblrecords[$idPerson]['ZZ']['cualitativo'] = "";*/
 
             }
 
