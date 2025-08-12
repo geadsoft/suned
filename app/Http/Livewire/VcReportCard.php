@@ -509,7 +509,7 @@ class VcReportCard extends Component
 
         if($this->calificacion=="L"){
 
-             foreach($this->tblrecords as $person => $record){
+            foreach($this->tblrecords as $person => $record){
 
                 foreach ($this->asignaturas as $key => $data)
                 {   
@@ -566,6 +566,55 @@ class VcReportCard extends Component
 
                 }
 
+                //Promedio Final
+                if (isset($this->tblrecords[$person]['ZZ']["AI-prom"])){
+
+                    $aiprom = $this->tblrecords[$person]['ZZ']["AI-prom"];
+                    if ($aiprom>0){
+                        $resultado = array_filter($notas, function($notas) use ($aiprom) {
+                            return $aiprom >= $notas['nota'] && $aiprom <= $notas['nota2'];
+                        });
+                        $this->tblrecords[$person]['ZZ']["AI-prom"] = reset($resultado)['codigo'];
+                    }
+
+                };
+
+                if (isset($this->tblrecords[$person]['ZZ']["AG-prom"])){
+
+                    $agprom = $this->tblrecords[$person]['ZZ']["AG-prom"];
+                    if ($agprom>0){
+                        $resultado = array_filter($notas, function($notas) use ($agprom) {
+                            return $agprom >= $notas['nota'] && $agprom <= $notas['nota2'];
+                        });
+                        $this->tblrecords[$person]['ZZ']["AG-prom"] = reset($resultado)['codigo'];
+                    }
+
+                };
+
+                $promedio = $this->tblrecords[$person]['ZZ']["promedio"];
+                $examen   = $this->tblrecords[$person]['ZZ']["examen"];
+                $cuantitativo = $this->tblrecords[$person]['ZZ']["cuantitativo"];
+                
+                if ($promedio>0){
+                        $resultado = array_filter($notas, function($notas) use ($promedio) {
+                        return $promedio >= $notas['nota'] && $promedio <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person]['ZZ']["promedio"] = reset($resultado)['codigo'];
+                }
+
+                if ($examen>0){
+                        $resultado = array_filter($notas, function($notas) use ($examen) {
+                        return $examen >= $notas['nota'] && $examen <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person]['ZZ']["examen"] = reset($resultado)['codigo'];
+                }
+
+                if ($cuantitativo>0){
+                        $resultado = array_filter($notas, function($notas) use ($cuantitativo) {
+                        return $cuantitativo >= $notas['nota'] && $cuantitativo <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person]['ZZ']["cuantitativo"] = reset($resultado)['codigo'];
+                }
 
             }
 
