@@ -244,7 +244,7 @@ class VcReportCard extends Component
                 $this->tblrecords[$idPerson][$index]['nota70'] = 0.00;
                 $this->tblrecords[$idPerson][$index]['examen'] = 0.00;
                 $this->tblrecords[$idPerson][$index]['nota30'] = 0.00;
-                $this->tblrecords[$idPerson][$index]['cuantitativo'] = "";
+                $this->tblrecords[$idPerson][$index]['cuantitativo'] = 0.00;
                 $this->tblrecords[$idPerson][$index]['cualitativo'] = "";
             }
 
@@ -269,7 +269,7 @@ class VcReportCard extends Component
                 $this->tblrecords[$idPerson]['ZZ']['nota70'] = 0.00;
                 $this->tblrecords[$idPerson]['ZZ']['examen'] = 0.00;
                 $this->tblrecords[$idPerson]['ZZ']['nota30'] = 0.00;
-                $this->tblrecords[$idPerson]['ZZ']['cuantitativo'] = "";
+                $this->tblrecords[$idPerson]['ZZ']['cuantitativo'] = 0.00;
                 $this->tblrecords[$idPerson]['ZZ']['cualitativo'] = "";
 
             }
@@ -474,7 +474,7 @@ class VcReportCard extends Component
                 $nota30 += $recno['nota30'];
                 $promfinal += $recno['cuantitativo'];
             }
-            
+
             $this->tblrecords[$key]['ZZ']['AI-prom']  = round($aiprom/$count,2);
             $this->tblrecords[$key]['ZZ']['AG-prom']  = round($agprom/$count,2);
             $this->tblrecords[$key]['ZZ']['promedio'] = round($promedio/$count,2);
