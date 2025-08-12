@@ -408,10 +408,11 @@ class VcReportCard extends Component
                 
                 foreach ($records as $key2 => $recno){
 
-                    
-
                     $promedio = 0;
                     $countprm = 0;
+                    $nota30 = 0;
+                    $nota70=0;
+
                     foreach ($this->tblgrupo as $grupo){
 
                         $tipo  = $grupo->actividad;
@@ -447,6 +448,7 @@ class VcReportCard extends Component
                         $nota70 = round($this->tblrecords[$key1][$key2]['promedio']*0.70,2);
                         $this->tblrecords[$key1][$key2]['nota70'] = round($nota70, 2);
                     }else{
+
                         $this->tblrecords[$key1][$key2]['nota70'] = 0.00;
                     }
 
