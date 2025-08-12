@@ -407,6 +407,9 @@ class VcReportCard extends Component
             if ($key1!='ZZ'){
                 
                 foreach ($records as $key2 => $recno){
+
+                    dd($records, $recno, $key1, $key2);
+
                     $promedio = 0;
                     $countprm = 0;
                     foreach ($this->tblgrupo as $grupo){
