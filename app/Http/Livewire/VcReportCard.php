@@ -403,7 +403,7 @@ class VcReportCard extends Component
         
         }
 
-
+        dd($this->tblrecords);
         
         // Calcula Promedio
         foreach ($this->tblrecords as $key1 => $records){
