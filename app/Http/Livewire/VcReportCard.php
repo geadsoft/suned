@@ -257,6 +257,9 @@ class VcReportCard extends Component
             $this->tblrecords[$idPerson]['ZZ']['asignaturaId'] = 0;
             $this->tblrecords[$idPerson]['ZZ']['nombres'] = 'PROMEDIO FINAL';
 
+            $record = $this->actividad($data->id);
+            $this->tblgrupo = $record->groupBy('actividad')->toBase();
+
             foreach ($this->tblgrupo as $key2 => $grupo){
 
                 foreach ($grupo as $key3 => $actividad){
@@ -402,7 +405,6 @@ class VcReportCard extends Component
         }
 
         dd($this->tblrecords);
-
         // Calcula Promedio
         foreach ($this->tblrecords as $key1 => $records){
 
