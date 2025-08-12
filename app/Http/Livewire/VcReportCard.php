@@ -483,8 +483,6 @@ class VcReportCard extends Component
             $promfinal = 0;
             $count = count($records)-1;
 
-            dd($records);
-
             foreach ($records as $key2 => $recno){
                 
                 $notaex += $recno['examen'];
