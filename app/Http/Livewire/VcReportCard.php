@@ -471,16 +471,13 @@ class VcReportCard extends Component
             $agprom = 0;
             $promedio = 0;
             $nota70 = 0;
-            $examen = 0;
+            $notaex = 0;
             $nota30 = 0;
             $promfinal = 0;
             $count = count($records)-1;
 
             foreach ($records as $key2 => $recno){
                 
-                $a = $recno['examen'];
-                dd($a);
-
                 if (isset($recno['AI-prom'])){
                     $aiprom += $recno['AI-prom'];
                 }
@@ -491,7 +488,7 @@ class VcReportCard extends Component
                 
                 $promedio += $recno['promedio'];
                 $nota70 += $recno['nota70'];
-                $examen += $recno['examen'];
+                $notaex += $recno['examen'];
                 $nota30 += $recno['nota30'];
                 $promfinal += $recno['cuantitativo'];
             }
@@ -500,7 +497,7 @@ class VcReportCard extends Component
             $this->tblrecords[$key]['ZZ']['AG-prom']  = round($agprom/$count,2);
             $this->tblrecords[$key]['ZZ']['promedio'] = round($promedio/$count,2);
             $this->tblrecords[$key]['ZZ']['nota70'] = round($nota70/$count,2);
-            $this->tblrecords[$key]['ZZ']['examen'] = round($examen/$count,2);
+            $this->tblrecords[$key]['ZZ']['examen'] = round($notaex/$count,2);
             $this->tblrecords[$key]['ZZ']['nota30'] = round($nota30/$count,2);
             $this->tblrecords[$key]['ZZ']['cuantitativo'] = round($promfinal/$count,2);
 
