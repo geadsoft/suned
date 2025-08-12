@@ -478,7 +478,7 @@ class VcReportCard extends Component
 
             foreach ($records as $key2 => $recno){
 
-                dd($recno);
+                dd($recno['examen']);
 
                 if (isset($recno['AI-prom'])){
                     $aiprom += $recno['AI-prom'];
