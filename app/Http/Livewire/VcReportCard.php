@@ -401,9 +401,8 @@ class VcReportCard extends Component
         
         }
 
-
         // Calcula Promedio
-        /*foreach ($this->tblrecords as $key1 => $records){
+        foreach ($this->tblrecords as $key1 => $records){
 
             if ($key1!='ZZ'){
                 
