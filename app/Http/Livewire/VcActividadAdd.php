@@ -130,13 +130,13 @@ class VcActividadAdd extends Component
     public function edit($id){
 
         
-        $sistema = TdPeriodoSistemaEducativos::query()
+        /*$sistema = TdPeriodoSistemaEducativos::query()
         ->where("codigo",$this->termino)
         ->first();
 
         if ($sistema->cerrar==1){
             $this->control = "disabled";
-        }
+        }*/
 
         
         $record = TmActividades::query()

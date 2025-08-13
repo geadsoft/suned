@@ -24,7 +24,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="paralelo-select" class="form-label fw-semibold">Paralelos Asignados</label>
-                                <select class="form-select" id="paralelo-select" data-choices data-choices-search-false wire:model.defer="paralelo" {{$control}} required>
+                                <select class="form-select" id="paralelo-select" data-choices data-choices-search-false wire:model.defer="paralelo"  required>
                                    <option value="">Seleccione Paralelo</option>
                                    @foreach ($tblparalelo as $paralelo) 
                                     <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
@@ -33,7 +33,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="termino" class="form-label fw-semibold">Término</label>
-                                <select class="form-select" id="termino" data-choices data-choices-search-false wire:model.defer="termino" {{$control}} required>
+                                <select class="form-select" id="termino" data-choices data-choices-search-false wire:model.defer="termino" required>
                                     @foreach ($tbltermino as $terminos) 
                                     <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
                                     @endforeach 
@@ -42,7 +42,7 @@
                             <div class="row mb-3">
                                 <div class="col-sm-6">
                                     <label for="bloque-select" class="form-label fw-semibold">Bloque</label>
-                                    <select class="form-select" id="bloque-select" data-choices data-choices-search-false wire:model.defer="bloque" {{$control}}>
+                                    <select class="form-select" id="bloque-select" data-choices data-choices-search-false wire:model.defer="bloque">
                                         @foreach ($tblbloque as $bloques) 
                                         <option value="{{$bloques->codigo}}">{{$bloques->descripcion}}</option>
                                         @endforeach 
@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="tipo-select" class="form-label fw-semibold">Tipo Actividad</label>
-                                    <select class="form-select" id="tipo-select" data-choices data-choices-search-false wire:model.defer="tipo" {{$control}}>
+                                    <select class="form-select" id="tipo-select" data-choices data-choices-search-false wire:model.defer="tipo">
                                         @foreach ($tblactividad as $actividades) 
                                         <option value="{{$actividades->codigo}}">{{$actividades->descripcion}}</option>
                                         @endforeach 
@@ -61,7 +61,7 @@
                             <div class="mb-3">
                                 <div class="mb-3">
                                     <label class="actividad" for="product-title-input">Nombre Actividad</label>
-                                    <input type="text" class="form-control" id="actividad-input" value="" placeholder="Ingrese nombre de actividad" wire:model.defer="nombre" {{$control}} required>
+                                    <input type="text" class="form-control" id="actividad-input" value="" placeholder="Ingrese nombre de actividad" wire:model.defer="nombre" required>
                                     <div class="invalid-feedback">Por favor ingrese un nombre de actividad.</div>
                                 </div>
                             </div>
@@ -80,16 +80,16 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="fechaMaxima" class="form-label fw-semibold">Fecha Máxima de Entrega</label>
-                            <input type="date" class="form-control" id="fechaMaxima" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha" {{$control}} required> 
+                            <input type="date" class="form-control" id="fechaMaxima" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha"  required> 
                         </div>
                         <!-- Input Time -->
                         <div class="mb-3">
                             <label for="horamaxima" class="form-label">Hora Máxima de Entrega</label>
-                            <input type="time" class="form-control" id="horamaxima" wire:model.defer="hora" {{$control}} required>
+                            <input type="time" class="form-control" id="horamaxima" wire:model.defer="hora" required>
                         </div>
                         <div class="mb-3">
                             <label for="archivo-select" class="form-label fw-semibold">Permitir la subida de archivos</label>
-                            <select class="form-select" id="archivo-select" data-choices data-choices-search-false wire:model.defer="archivo" {{$control}}>
+                            <select class="form-select" id="archivo-select" data-choices data-choices-search-false wire:model.defer="archivo" >
                                 <option value="SI" selected>SI</option>
                                 <option value="NO">NO</option>
                             </select>
@@ -97,7 +97,7 @@
 
                         <div class="mb-3">
                             <label for="puntaje-input" class="form-label fw-semibold">Puntaje</label>
-                            <input id="puntaje-input" type="number" min="1" max="10" step="1" class="form-control" value="10" wire:model.defer="puntaje" {{$control}} required>    
+                            <input id="puntaje-input" type="number" min="1" max="10" step="1" class="form-control" value="10" wire:model.defer="puntaje"  required>    
                         </div>
                         <br>
                     </div>
@@ -115,7 +115,7 @@
                         <div style="display: none">{{$texteditor}}</div>
                         <div class="mb-3" wire:ignore>
                             <label class="form-label fw-semibold">Descripción de Actividad</label>
-                            <textarea id="editor" wire:model="texteditor" {{$control}} disabled>
+                            <textarea id="editor" wire:model="texteditor"  disabled>
                                 
                             </textarea>
                         </div>
