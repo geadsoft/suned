@@ -6,15 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acta de Calificaciones</title>
     <style>
+        body{
+            margin: 0;
+            padding: 0;
+            font-size: 10px;
+        }
+
         table {
             border-collapse: collapse; /* Une los bordes */
             width: 100%;
             font-size:10px;
+            page-break-inside: avoid;
         }
 
         table th, table td {
             padding: 4px 6px;
         }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+
+        .content {
+            transform: scale(0.9);
+            transform-origin: top left;
+        }
+
     </style>
 
     <!-- Bootstrap CSS -->
@@ -27,6 +45,8 @@
         </table>
         <br>
     </section>
+
+    
     
     @foreach ($tblpersons as $index => $record)
 
@@ -198,25 +218,6 @@
 
     @endforeach
 
-    <!--<div style="position: absolute;
-      display: inline-block;
-      bottom: 0;
-      width: 100%;
-      height: 30px;">
-        <footer>
-            <table cellpadding="0" cellspacing="0" class="table table-nowrap align-middle" width="100%">
-                <tr style="font-size:10px">
-                    <td width="40%">
-                        <span>SAMS | School and Administrative Management System</span>
-                    </td>
-                    <td width="40%" class="text-left">
-                        Usuario:<span> {{auth()->user()->name}} </span>
-                    </td>
-                </tr>
-            </table>
-        </footer>
-    </div>-->
-
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <script type="text/php">
@@ -227,6 +228,8 @@
             ');
         }
 	</script>
+
+    
 
 </body>
 </html>
