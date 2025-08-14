@@ -175,9 +175,7 @@
             @if ($this->actividadId==0)
             <button type="submit" class="btn btn-success w-sm">Grabar</button>
             @else
-                @if ($control=="enabled")
                 <button type="submit" class="btn btn-success w-sm">Actualizar</button>
-                @endif
             @endif
             <a class="btn btn-secondary w-sm" href="/activities/activity"><i class="me-1 align-bottom"></i>Cancelar</a>
         </div>
