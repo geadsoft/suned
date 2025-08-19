@@ -14,7 +14,7 @@ class VcResources extends Component
 
     public $periodoId, $docenteId;
      public $selectedId = null;
-    public $detalles = [];
+    public $detalles = [], $cursos = [];
 
     public $tipolink=[
         'youtube' => "ri-youtube-line",
@@ -75,14 +75,43 @@ class VcResources extends Component
         ->where("tm_recursos.docente_id",$this->docenteId)
         ->get();
 
+        $this->loadCursos($tblrecords);
+
         return view('livewire.vc-resources',[
             'tblrecords' => $tblrecords,
-            'files' => $files
+            'files' => $files,
+            'cursos' => $this->cursos,
         ]);
     }
 
     public function paginationView(){
         return 'vendor.livewire.bootstrap'; 
+    }
+
+    public function loadCursos($tblrecords){
+
+        $this->cursos=[];
+
+        foreach($tblrecords as $records){
+
+            $tdcursos = TdRecursosCursos::query()
+            ->join("tm_cursos as c","c.id","=","td_recursos_cursos.curso_id")
+            ->join("tm_servicios as s","s.id","=","c.servicio_id")
+            ->join("tm_generalidades as g","g.id","=","s.modalidad_id")
+            ->select("g.descripcion as modalidad","s.descripcion as curso")
+            ->where('recurso_id', $records['id'])
+            ->get();
+
+            foreach($tdcursos as $cursos){
+                $arrcursos =[
+                    'recursoId' => $records['id'],
+                    'modalidad' => $cursos->modalidad,
+                    'curso' => $cursos->curso,
+                ];
+                array_push($this->cursos,$arrcursos);
+            }
+        }
+    
     }
 
     public function verDetalles($id)

@@ -29,6 +29,7 @@
                                         <th>Nombre</th>
                                         <th>Tipo</th>
                                         <th>Asignatura</th>
+                                        <th>Cursos</th>
                                         <th>Acción</th>
                                     </tr>
                                 </thead>
@@ -73,6 +74,13 @@
                                             @endforeach
                                         </td>
                                         <td>{{$record['descripcion']}}</td>
+                                        <td>
+                                            @foreach ($cursos as $data)
+                                                @if ($data['recursoId']==$record['id'])
+                                                <div>{{$data['modalidad']}} - {{$data['curso']}} </div>
+                                                @endif
+                                            @endforeach
+                                        </td>
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
