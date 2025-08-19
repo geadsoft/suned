@@ -7,6 +7,7 @@ use App\Models\TmActividades;
 use App\Models\TdActividadesEntregas;
 use App\Models\TmFiles;
 use App\Models\TdPeriodoSistemaEducativos;
+use App\Models\TdCalificacionActividades;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -183,6 +184,8 @@ class VcExamenes extends Component
 
     public function deleteData(){
 
+        TdActividadesEntregas::where('actividad_id',$this->selectId)->delete();
+        TdCalificacionActividades::where('actividad_id',$this->selectId)->delete();
         TmFiles::where('actividad_id',$this->selectId)->delete();
         
         TmActividades::find($this->selectId)->delete();
