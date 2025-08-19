@@ -285,6 +285,8 @@ var T_check = null;
         selectable: true,
         navLinks: true,
         initialView: getInitialView(),
+        firstDay: 1, // 👉 empieza lunes
+        locale: 'es', // 👉 activa español (lunes = primer día)
         themeSystem: 'bootstrap',
         headerToolbar: {
             left: 'prev,next today',

@@ -186,8 +186,8 @@
                                             <input type="hidden" id="eventid" name="eventid" value="" />
                                             <div class="col-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Description</label>
-                                                    <textarea type="text" class="form-control" id="event-description" placeholder="Ingrese descripción del evento" wire:model.defer="comentario" required></textarea>
+                                                    <label class="form-label">Descripción</label>
+                                                    <textarea type="text" class="form-control" id="event-description"  rows="10"  placeholder="Ingrese descripción del evento" wire:model.defer="comentario" required></textarea>
                                                 </div>
                                             </div><!--end col-->
                                         </div><!--end row-->
@@ -259,7 +259,7 @@
                                                     <i class="ri-discuss-line text-muted fs-16"></i>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <p class="d-block text-muted mb-0" id="event-description-tag">{{$comentario}}</p>
+                                                    <p class="d-block text-muted mb-0" id="event-description-tag" >{{$comentario}}</p>
                                                 </div>
                                             </div>
                                         </div>
