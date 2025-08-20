@@ -26,6 +26,7 @@
         <table cellpadding="0" cellspancing="0" width="100%">
             <tr style="font-size:12px">
                 <td width="100%">
+                   <div class="col-4"><img class="img-fluid" style="position: absolute;top: 30%; left: 2%; width: 15%;height:60pt;" src="{{ URL::asset('assets/images/LogoReport.png')}}" alt=""></div>
                    <p class="text-center" style="margin: 0px;">UNIDAD EDUCATIVA AMERICAN SCHOOL - {{$datos['nivel']}}</p>
                    <p class="text-center" style="margin: 0px;">ACTA DE CALIFICACIONES</p>
                    <p class="text-center" style="margin: 0px;">{{$datos['subtitulo']}}</p>

@@ -53,9 +53,10 @@
         <section style ="margin-top: -110px;">
             <table cellpadding="0" cellspancing="0" class="table table-sm table-bordered">
                 
-                <tr><td colspan="10">
-                    <!--<p class="text-end" style="margin: 0px;">Fecha: {{$fechaActual}}</p>
-                    <p class="text-end" style="margin: 0px;">Hora: {{$horaActual}}</p>-->
+                <tr>
+                    <td colspan="10">
+                    <div class="col-4"><img class="img-fluid" style="position: absolute;top: 1%; left: 2%; width: 45%;height:60pt;" 
+                    src="../public/assets/images/LogoReport.png" alt=""></div>
                     <p class="text-center" style="margin: 0px; font-size: 12px;"><strong>UNIDAD EDUCATIVA AMERICAN SCHOOL</strong></p>
                     <p class="text-center" style="margin: 0px; font-size: 12px;"><strong>Modalidad: {{$datos['nivel']}} </strong></p>
                     <p class="text-center" style="margin: 0px; font-size: 12px;"><strong>ACTA DE CALIFICACIONES</strong></p>
