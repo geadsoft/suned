@@ -15,7 +15,7 @@
         table {
             border-collapse: collapse; /* Une los bordes */
             width: 100%;
-            font-size:10px;
+            font-size:9px;
             page-break-inside: avoid;
         }
 
