@@ -60,14 +60,14 @@
                                 <tr wire:key="persona-{{ $record->id }}">
                                     <td style="vertical-align: middle;">{{ $record['apellidos'] }} {{ $record['nombres'] }}</td> 
                                     <td>
-                                        <input list="asistencias" name="asistencia" class="form-control form-control-sm" type="text" wire:model="tblrecords.{{$record->id}}.evaluacion">
+                                        <!--<input list="asistencias" name="asistencia" class="form-control form-control-sm" type="text" wire:model="tblrecords.{{$record->id}}.evaluacion">
                                         <datalist id="asistencias">
-                                        <option value="A">
-                                        <option value="B">
-                                        <option value="C">
-                                        <option value="D">
-                                        <option value="E">
-                                        </datalist>
+                                        </datalist>-->
+                                        <select class="form-select" id="evaluacion-{{$record->id}}" data-choices data-choices-search-false wire:model="tblrecords.{{$record->id}}.evaluacion">
+                                        @foreach($tblescala as $escala)
+                                            <option value="{{$escala->codigo}}">{{$escala->codigo}}</option>
+                                        @endforeach
+                                        </select>
                                     </td>
                                 </tr>
                                 @endforeach

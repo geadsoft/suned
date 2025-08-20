@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('termino',3);
             $table->bigInteger('curso_id')->unsigned();
             $table->bigInteger('persona_id')->unsigned();
-            $table->string('evaluacion',1);
+            $table->string('evaluacion',2);
             $table->string('usuario');
             $table->timestamps();
 

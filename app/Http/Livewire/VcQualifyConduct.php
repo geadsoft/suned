@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class VcQualifyConduct extends Component
 {   
-    public $modalidadId, $termino, $periooId, $cursoId;
+    public $modalidadId, $termino, $periooId, $cursoId, $tblescala;
 
     protected $listeners = ['setData'];
     
@@ -27,6 +27,12 @@ class VcQualifyConduct extends Component
         $this->tbltermino = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
         ->where('tipo','EA')
+        ->orderByRaw("cerrar,codigo")
+        ->get();
+
+        $this->tblescala =  TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','EC')
         ->orderByRaw("cerrar,codigo")
         ->get();
 
