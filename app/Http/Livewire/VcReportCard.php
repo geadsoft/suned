@@ -784,9 +784,15 @@ class VcReportCard extends Component
         ->select("s.descripcion","tm_cursos.paralelo","g.descripcion as nivel")
         ->first();
 
+        $trimestre = TdPeriodoSistemaEducativos::query()
+        ->where('codigo',$this->filters['termino'])
+        ->where('periodo_id',$this->filters['periodoId'])
+        ->first();
+
         $datos = [
             'nivel' => $curso['nivel'],
-            'subtitulo' => "Periodo Lectivo ".$periodo['descripcion'].' / Tercer Trimestre - Primer Parcial',
+            'trimestre' => $trimestre->descripcion,
+            'subtitulo' => "Periodo Lectivo ".$periodo['descripcion'],
             'curso' => $curso['descripcion'].' '.$curso['paralelo'],
         ];
 
@@ -802,7 +808,9 @@ class VcReportCard extends Component
             $conteos = DB::table('td_asistencia_diarias')
             ->selectRaw("
                 SUM(CASE WHEN valor = 'F' THEN 1 ELSE 0 END) as total_f,
-                SUM(CASE WHEN valor = 'FJ' THEN 1 ELSE 0 END) as total_fj
+                SUM(CASE WHEN valor = 'FJ' THEN 1 ELSE 0 END) as total_fj,
+                SUM(CASE WHEN valor = 'A' THEN 1 ELSE 0 END) as total_a,
+                SUM(CASE WHEN valor = 'AJ' THEN 1 ELSE 0 END) as total_aj
             ")
             ->where('persona_id', $person->id)
             ->first();
@@ -810,6 +818,9 @@ class VcReportCard extends Component
             $faltas[$person->id]['faltas'] = $conteos->total_f ?? 0;
             $faltas[$person->id]['fjustificada'] = $conteos->total_fj ?? 0;
             $faltas[$person->id]['total'] = $faltas[$person->id]['faltas']+$faltas[$person->id]['fjustificada'];
+            $faltas[$person->id]['atrasos'] = $conteos->total_f ?? 0;
+            $faltas[$person->id]['ajustificada'] = $conteos->total_fj ?? 0;
+            $faltas[$person->id]['total_a'] = $faltas[$person->id]['atrasos']+$faltas[$person->id]['ajustificada'];
         }
 
         //Conducta

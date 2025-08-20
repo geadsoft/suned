@@ -56,8 +56,10 @@
                 <tr><td colspan="10">
                     <!--<p class="text-end" style="margin: 0px;">Fecha: {{$fechaActual}}</p>
                     <p class="text-end" style="margin: 0px;">Hora: {{$horaActual}}</p>-->
-                    <p class="text-center" style="margin: 0px; font-size: 12px;"><strong>UNIDAD EDUCATIVA AMERICAN SCHOOL - {{$datos['nivel']}}</strong></p>
+                    <p class="text-center" style="margin: 0px; font-size: 12px;"><strong>UNIDAD EDUCATIVA AMERICAN SCHOOL</strong></p>
+                    <p class="text-center" style="margin: 0px; font-size: 12px;"><strong>Modalidad: {{$datos['nivel']}} </strong></p>
                     <p class="text-center" style="margin: 0px; font-size: 12px;"><strong>ACTA DE CALIFICACIONES</strong></p>
+                    <p class="text-center" style="margin: 0px; font-size: 12px;"><strong>{{$datos['trimestre']}}</strong></p>
                     <p class="text-center" style="margin: 0px; font-size: 12px;"><strong>{{$datos['subtitulo']}}</strong></p>
                     </td>
                 </tr>
@@ -164,6 +166,14 @@
                                     <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$faltas[$record->id]['faltas']}}</td>
                                     <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"><strong>Total Faltas</strong></td>
                                     <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$faltas[$record->id]['total']}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"><strong>Atrasos Justificadas</strong></td>
+                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$faltas[$record->id]['ajustificada']}}</td>
+                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"><strong>Atrasos Injustificadas</strong></td>
+                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$faltas[$record->id]['atrasos']}}</td>
+                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"><strong>Total Atrasos</strong></td>
+                                    <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$faltas[$record->id]['total_a']}}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="6" class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"><strong>Observaciones</strong></td>
