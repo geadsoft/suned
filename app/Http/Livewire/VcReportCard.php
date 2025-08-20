@@ -818,8 +818,8 @@ class VcReportCard extends Component
             $faltas[$person->id]['faltas'] = $conteos->total_f ?? 0;
             $faltas[$person->id]['fjustificada'] = $conteos->total_fj ?? 0;
             $faltas[$person->id]['total'] = $faltas[$person->id]['faltas']+$faltas[$person->id]['fjustificada'];
-            $faltas[$person->id]['atrasos'] = $conteos->total_f ?? 0;
-            $faltas[$person->id]['ajustificada'] = $conteos->total_fj ?? 0;
+            $faltas[$person->id]['atrasos'] = $conteos->total_a ?? 0;
+            $faltas[$person->id]['ajustificada'] = $conteos->total_aj ?? 0;
             $faltas[$person->id]['total_a'] = $faltas[$person->id]['atrasos']+$faltas[$person->id]['ajustificada'];
         }
 
