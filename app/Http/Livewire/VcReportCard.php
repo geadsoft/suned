@@ -105,7 +105,6 @@ class VcReportCard extends Component
         ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
         ->where('m.modalidad_id', $this->modalidadId)
         ->where('m.periodo_id', $this->periodoId)
-        ->where('m.estado','A')
         ->whereNotIn('m.id', $matriculasConPase);
 
         // Consulta de pases activos
@@ -114,7 +113,6 @@ class VcReportCard extends Component
         ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
         ->where('p.modalidad_id', $this->modalidadId)
         ->where('m.periodo_id', $this->periodoId)
-        ->where('m.estado','A')
         ->where('p.estado', 'A');
 
         // UNION de ambas consultas
@@ -508,18 +506,26 @@ class VcReportCard extends Component
         }
                 
         // Escala Cualitativa
+        $rangos = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->filters['periodoId'])
+        ->where("tipo","EC")
+        ->selectRaw("min(nota) as min, max(nota)+case when max(nota)=10 then 0 else 0.99 end as max, evaluacion as codigo, glosa as descr")
+        ->groupBy("evaluacion","glosa")
+        ->get()->toArray();
+
         foreach ($this->tblrecords as $key1 => $records){
 
             foreach ($records as $key2 => $recno){
 
                 $promedio = $recno['cuantitativo']; 
                     
-                foreach ($this->tblescala as $escala) {
+                foreach ($rangos as $escala) {
                     
-                    $nota = $escala['nota'];                  
+                    $nota1 = $escala['min'];
+                    $nota2 = $escala['max'];                  
                     $letra = $escala['evaluacion'];
 
-                    if ($promedio >= ($nota-1)+0.01 && $promedio <= $nota) {
+                    if ($promedio >= ($nota1) && $promedio <= $nota2) {
                         $this->tblrecords[$key1][$key2]['cualitativo'] = $letra;
                     }
                     
