@@ -172,7 +172,6 @@ class VcReportCard extends Component
             return $query->where('tm_personas.id', $this->filters['estudianteId']);
         })
         ->where('m.curso_id', $this->filters['paralelo'])
-        ->where('m.estado','A')
         ->select('tm_personas.*', 'm.documento')
         ->orderBy('tm_personas.apellidos')
         ->get();
