@@ -16,6 +16,7 @@ class TmPaseCursos extends Model
         'nivel_id',
         'grado_id',
         'curso_id',
+        'curso_anterior',
         'estado',
         'usuario',
     ];

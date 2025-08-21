@@ -22,6 +22,7 @@ class VcPassCourse extends Component
     public $nivelId, $pase_nivelId;
     public $gradoId, $pase_gradoId;
     public $cursoId, $pase_cursoId;
+    public $paseId=null;
     public $datos =[
         'grupoId' => 0,
         'periodoId' => 0,
@@ -43,16 +44,30 @@ class VcPassCourse extends Component
     public function render()
     {   
         $tblgenerals = TmGeneralidades::all();
-        $tblrecords =  TmPaseCursos::query()
+        $q1 = TmPaseCursos::query()
         ->join('tm_matriculas as m','m.id','=','tm_pase_cursos.matricula_id')
         ->join('tm_servicios as s','s.id','=','m.grado_id')
         ->join('tm_generalidades as g','g.id','=','m.modalidad_id') 
-        ->join('tm_cursos as c','c.id','=','m.curso_id')
-        ->selectRaw("m.documento,m.estudiante_id,s.descripcion, g.descripcion as nomModalidad, c.paralelo, tm_pase_cursos.*")      
-        ->get();
+        ->join('tm_cursos as c','c.id','=','m.curso_id')        
+        ->selectRaw("m.documento,s.descripcion, g.descripcion as nomModalidad, c.paralelo, tm_pase_cursos.*")
+        ->whereNull('curso_anterior');  // equivalente a curso_anterior is null
 
+        $q2 = TmPaseCursos::query()
+        ->join('tm_pase_cursos as pa','pa.id','=','tm_pase_cursos.curso_anterior')
+        ->join('tm_matriculas as m','m.id','=','pa.matricula_id')
+        ->join('tm_servicios as s','s.id','=','pa.grado_id')
+        ->join('tm_generalidades as g','g.id','=','pa.modalidad_id') 
+        ->join('tm_cursos as c','c.id','=','pa.curso_id')
+        ->selectRaw("m.documento,s.descripcion, g.descripcion as nomModalidad, c.paralelo, tm_pase_cursos.*") 
+        ->where('tm_pase_cursos.curso_anterior','>',0);
 
-        return view('livewire.vc-pass-course',[
+        // unir con unionAll
+        $tblrecords = $q1->unionAll($q2)
+            ->orderBy('estudiante_id')
+            ->orderByDesc('created_at')
+            ->get();
+
+            return view('livewire.vc-pass-course',[
             'tblgenerals' => $tblgenerals,
             'tblrecords' => $tblrecords
         ]);
@@ -112,7 +127,6 @@ class VcPassCourse extends Component
     public function setPersona($matriculaId){
 
         $matricula = TmMatricula::find($matriculaId);
-
         $this->matriculaId = $matricula->id;
 
         $this->grupoId = $matricula->modalidad_id;
@@ -124,8 +138,22 @@ class VcPassCourse extends Component
         $this->personaId = $matricula->estudiante_id;
         $this->persona = $matricula->estudiante->nombres.' '.$matricula->estudiante->apellidos;
 
-        $pase =  TmPaseCursos::query();
         
+        $pase = TmPaseCursos::query()
+        ->where("matricula_id",$this->matriculaId)
+        ->orderby("created_at","desc")
+        ->first();
+
+        if ($pase){
+
+            $this->paseId  = $pase->id;
+            $this->grupoId = $pase->modalidad_id;
+            $this->nivelId = $pase->nivel_id;
+            $this->updatednivelId($this->nivelId);
+            $this->gradoId = $pase->grado_id;
+            $this->updatedgradoId($this->gradoId);
+            $this->cursoId = $pase->curso_id;
+        }      
 
     }
     
@@ -175,6 +203,7 @@ class VcPassCourse extends Component
             'nivel_id' => $this -> pase_nivelId,
             'grado_id' => $this ->pase_gradoId,
             'curso_id' => $this -> pase_cursoId,
+            'curso_anterior' => $this -> paseId,
             'usuario' => auth()->user()->name,
             'estado' => "A",
         ]);
