@@ -523,7 +523,7 @@ class VcReportCard extends Component
                     
                     $nota1 = $escala['min'];
                     $nota2 = $escala['max'];                  
-                    $letra = $escala['evaluacion'];
+                    $letra = $escala['codigo'];
 
                     if ($promedio >= ($nota1) && $promedio <= $nota2) {
                         $this->tblrecords[$key1][$key2]['cualitativo'] = $letra;
