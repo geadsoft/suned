@@ -105,6 +105,7 @@ class VcReportCard extends Component
         ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
         ->where('m.modalidad_id', $this->modalidadId)
         ->where('m.periodo_id', $this->periodoId)
+        ->where('m.estado','A')
         ->whereNotIn('m.id', $matriculasConPase);
 
         // Consulta de pases activos
@@ -113,6 +114,7 @@ class VcReportCard extends Component
         ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
         ->where('p.modalidad_id', $this->modalidadId)
         ->where('m.periodo_id', $this->periodoId)
+        ->where('m.estado','A')
         ->where('p.estado', 'A');
 
         // UNION de ambas consultas
@@ -170,6 +172,7 @@ class VcReportCard extends Component
             return $query->where('tm_personas.id', $this->filters['estudianteId']);
         })
         ->where('m.curso_id', $this->filters['paralelo'])
+        ->where('m.estado','A')
         ->select('tm_personas.*', 'm.documento')
         ->orderBy('tm_personas.apellidos')
         ->get();
