@@ -74,6 +74,10 @@ class VcStudentActivities extends Component
             $join->on('e.actividad_id', '=', 'tm_actividades.id')
             ->where('e.persona_id', '=', $this->personaId);
         })
+        ->leftJoin('td_calificacion_actividades as c', function ($join){
+            $join->on('c.actividad_id', '=', 'tm_actividades.id')
+            ->where('c.persona_id', '=', $this->personaId);
+        })
         ->when($this->filters['actividad'],function($query){
             return $query->where('tm_actividades.actividad',"{$this->filters['actividad']}");
         })
@@ -81,18 +85,18 @@ class VcStudentActivities extends Component
             return $query->where('a.id',"{$this->filters['asignaturaId']}");
         })
         ->when($this->filters['pendientes'],function($query){
-            return $query->whereRaw("e.fecha is null and tm_actividades.subir_archivo = 'SI'");
+            return $query->whereRaw("c.nota is null and tm_actividades.subir_archivo = 'SI'");
         })
         //->where("tipo",'AC')
         ->where("h.curso_id",$this->cursoId)
-        ->select("tm_actividades.*","a.descripcion as asignatura","p.apellidos","p.nombres","e.nota","e.fecha as fechaentrega")        
+        ->select("tm_actividades.*","a.descripcion as asignatura","p.apellidos","p.nombres","c.nota","e.fecha as fechaentrega")        
         ->orderBy("fecha","desc")
         ->paginate(6);
 
         $this->pendientes = TmActividades::query()
         ->join("tm_horarios_docentes as d","d.id","=","tm_actividades.paralelo")
         ->join("tm_horarios as h","h.id","=","d.horario_id")
-        ->leftJoin('td_actividades_entregas as e', function ($join){
+        ->leftJoin('td_calificacion_actividades as e', function ($join){
             $join->on('e.actividad_id', '=', 'tm_actividades.id')
             ->where('e.persona_id', '=', $this->personaId);
         })
@@ -102,7 +106,7 @@ class VcStudentActivities extends Component
         ->when($this->filters['asignaturaId'],function($query){
             return $query->where('d.asignatura_id',"{$this->filters['asignaturaId']}");
         })
-        ->whereRaw("e.fecha is null")
+        ->whereRaw("e.nota is null")
         //->where("tipo",'AC')
         ->where("h.curso_id",$this->cursoId)  
         ->where("subir_archivo",'SI')   
