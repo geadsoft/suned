@@ -295,7 +295,7 @@ class VcActividadAdd extends Component
 
             $name    = $file->getClientOriginalName();
             $name    = pathinfo($name, PATHINFO_FILENAME);
-            $archivo = $name;
+            $archivo = str_replace(".", "_", $name);
             $name = preg_replace('/[^A-Za-z0-9_\-]/', '_', $name); // sanitizar nombre
 
             

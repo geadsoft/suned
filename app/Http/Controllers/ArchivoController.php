@@ -75,6 +75,13 @@ class ArchivoController extends Controller
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx',
             'image/jpeg' => 'jpg',
             'image/png' => 'png',
+
+            // Videos
+            'video/mp4' => 'mp4',
+            'video/x-msvideo' => 'avi',   // AVI
+            'video/x-matroska' => 'mkv',  // MKV
+            'video/webm' => 'webm',
+
             default => 'bin',
         };
 
