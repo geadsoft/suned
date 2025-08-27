@@ -34,6 +34,8 @@ class VcDeliverActivity extends Component
         'jpg' => 'ri-picture-in-picture-fill',
         'png' => 'ri-picture-in-picture-fill',
         'bin' => 'ri-database-2-line',
+        'mp4' => 'ri-movie-line',
+        'avi' => 'ri-movie-line',
     ];
 
     public $arrcolor = [  
@@ -48,6 +50,8 @@ class VcDeliverActivity extends Component
         'pdf' => 'text-danger',
         'html' => 'text-info',
         'bin' => 'text-primary',
+        'mp4' => 'text-warning',
+        'avi' => 'text-warning',
     ];
 
     protected $listeners = ['updateEditorData','cancel','apiDrive'];
