@@ -18,7 +18,7 @@ class VcDeliverActivity extends Component
     use WithFileUploads;
     
     public $selectId, $record, $display_estado="", $display_text="display:none", $fieldset="enabled";
-    public $data, $personaId, $tiempo, $estado="No Entregado", $texteditor="", $descripcion;
+    public $data, $personaId, $tiempo, $estado="No Entregado", $texteditor="", $descripcion, $periodoId;
     public $array_attach=[], $files=[], $entregas=[], $datos=[];
     public $showEditor = false;
     public bool $showModal=false;
@@ -78,6 +78,9 @@ class VcDeliverActivity extends Component
         $this->selectId  = $id;
         $this->personaId = auth()->user()->personaId;
         $this->datos = $data;
+
+        $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
+        $this->periodoId = $tblperiodos['id'];
 
         $this->attach_add();
         $this->load();
