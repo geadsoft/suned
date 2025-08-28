@@ -129,15 +129,6 @@ class VcActividadAdd extends Component
 
     public function edit($id){
 
-        $sistema = TdPeriodoSistemaEducativos::query()
-        ->where("codigo",$record->termino)
-        ->where("periodo_id",$this->periodoId)
-        ->first();
-
-        if ($sistema->cerrar==1){
-            $this->fieldset= "disabled";
-        }
-
         $record = TmActividades::query()
         ->join("tm_horarios_docentes as d","d.id","=","tm_actividades.paralelo")
         ->join("tm_horarios as h","h.id","=","d.horario_id")
@@ -146,9 +137,17 @@ class VcActividadAdd extends Component
         ->first()
         ->toArray();
 
+        $sistema = TdPeriodoSistemaEducativos::query()
+        ->where("codigo",$record['termino'])
+        ->where("periodo_id",$this->periodoId)
+        ->first();
+
+        if ($sistema->cerrar==1){
+            $this->fieldset= "disabled";
+        }
+
         $this->modalidadId  = $record['grupo_id'];
         $this->asignaturaId = $record['asignatura_id'];
-
 
         $this->updatedasignaturaId($this->asignaturaId);
 
@@ -162,7 +161,6 @@ class VcActividadAdd extends Component
         $this->enlace = $record['enlace'];
         $this->texteditor = $record['descripcion'];
         $this->estado = $record['estado'];
-
 
         $this->control="disabled";
 
