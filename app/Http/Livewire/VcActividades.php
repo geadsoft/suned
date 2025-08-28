@@ -40,6 +40,7 @@ class VcActividades extends Component
     ];
     
     public $filters=[
+        'periodoId' => '',
         'modalidadId' => '',
         'asignaturaId' => '',
         'paralelo' => '',
@@ -61,8 +62,8 @@ class VcActividades extends Component
 
         $this->docenteId = auth()->user()->personaId;
 
-        $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
-        $this->periodoId = $tblperiodos['id'];
+        $periodos = TmPeriodosLectivos::where("aperturado",1)->first();
+        $this->filters['periodoId'] = $periodos['id'];
 
         $modalidad = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
@@ -70,7 +71,7 @@ class VcActividades extends Component
         ->select("g.id","g.descripcion")
         ->groupBy("g.id","g.descripcion")
         ->where("d.docente_id",$this->docenteId)
-        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->get();
 
         $this->filters['modalidadId']=$modalidad[0]['id'];
@@ -80,14 +81,15 @@ class VcActividades extends Component
     
     public function render()
     {
-        
+        $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
+
         $tblmodalidad = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
         ->select("g.id","g.descripcion")
         ->groupBy("g.id","g.descripcion")
         ->where("d.docente_id",$this->docenteId)
-        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->get();
 
         $this->tblparalelo = TmHorarios::query()
@@ -95,7 +97,7 @@ class VcActividades extends Component
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->where("d.docente_id",$this->docenteId)
-        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion, s.modalidad_id, s.nivel_id, s.grado_id')
         ->groupBy("c.id","s.descripcion","c.paralelo","s.modalidad_id","s.nivel_id","s.grado_id")
         ->orderByRaw("s.modalidad_id, s.nivel_id, s.grado_id")
@@ -108,7 +110,7 @@ class VcActividades extends Component
         ->select("m.id","m.descripcion")
         ->groupBy("m.id","m.descripcion")
         ->where("d.docente_id",$this->docenteId)
-        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->get();
       
         $tblrecords = TmHorarios::query()
@@ -132,6 +134,7 @@ class VcActividades extends Component
         ->when($this->filters['asignaturaId'],function($query){
             return $query->where('m.id',"{$this->filters['asignaturaId']}");
         })
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->where("a.docente_id",$this->docenteId)
         ->where("a.tipo","AC")
         ->selectRaw('m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
@@ -142,6 +145,7 @@ class VcActividades extends Component
             'tblrecords' => $tblrecords,
             'tblmodalidad' => $tblmodalidad,
             'tblparalelo' => $this->paralelos,
+            'tblperiodos' => $tblperiodos,
         ]);
 
     }
@@ -156,7 +160,7 @@ class VcActividades extends Component
 
         $sistema = TdPeriodoSistemaEducativos::query()
         ->where("codigo",$record->termino)
-        ->where("periodo_id",$this->periodoId)
+        ->where("periodo_id",$this->filters['periodoId'])
         ->first();
 
         if ($sistema->cerrar==1){

@@ -14,7 +14,7 @@ class VcClasesVirtual extends Component
 {
     
     public $showEditModal, $paralelo, $actividadId=0, $asignaturaId=0, $display="display: none";
-    public $cursosTodos, $selectId, $modalidadId;
+    public $cursosTodos, $selectId, $modalidadId, $periodoId;
     
     public $record=[];
     public $tblparalelo=[];
@@ -36,8 +36,8 @@ class VcClasesVirtual extends Component
 
         $this->docenteId = auth()->user()->personaId;
 
-        $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
-        $this->periodoId = $tblperiodos['id'];
+        $periodos = TmPeriodosLectivos::where("aperturado",1)->first();
+        $this->periodoId = $periodos['id'];
 
         $this->cursosTodos = false;
         if (auth()->user()->can('Ver Cursos CV')) {
@@ -49,6 +49,8 @@ class VcClasesVirtual extends Component
     public function render()
     {   
         $this->display = "display: none";
+
+        $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
 
         $this->tblmodalidad = TmGeneralidades::where('superior',1)->get();
 
@@ -118,7 +120,8 @@ class VcClasesVirtual extends Component
         }
 
         return view('livewire.vc-clases-virtual',[
-            'tblrecords' =>  $tblrecords
+            'tblrecords' =>  $tblrecords,
+            'tblperiodos' => $tblperiodos,
         ]);
     }
 

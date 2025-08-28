@@ -14,15 +14,22 @@
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
                         <div class="row g-3 mb-3">
+                            <div class="col-xxl-1 col-sm-6">
+                                <select class="form-select" id="select_periodo" data-choices data-choices-search-false  wire:model="filters.periodoId">
+                                    @foreach ($tblperiodos as $periodos) 
+                                    <option value="{{$periodos->id}}">{{$periodos->periodo}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
                             <div class="col-xxl-2 col-sm-6">
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.modalidadId">
+                                <select class="form-select" id="select_modalidad" data-choices data-choices-search-false  wire:model="filters.modalidadId">
                                     @foreach ($tblmodalidad as $modalidad) 
                                     <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
                                     @endforeach 
                                 </select>
                             </div>
                             <div class="col-xxl-3 col-sm-6">
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.paralelo">
+                                <select class="form-select" id="select_paralelo" data-choices data-choices-search-false  wire:model="filters.paralelo">
                                     <option value="">Seleccione Curso</option>
                                    @foreach ($tblparalelo as $paralelo) 
                                     <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
@@ -57,14 +64,14 @@
                                 </div>
                             </div>
                             <!--end col-->
-                            <div class="col-xxl-1 col-sm-4">
+                            <!--<div class="col-xxl-1 col-sm-4">
                                 <div>
                                     <button type="button" class="btn btn-primary w-100" onclick="SearchData();"> <i
                                             class="ri-equalizer-fill me-1 align-bottom"></i>
                                         Filters
                                     </button>
                                 </div>
-                            </div>
+                            </div>-->
                             <!--end col-->
                         </div>
                         <!--end row-->

@@ -14,6 +14,13 @@
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
                         <div class="row g-3 mb-3">
+                            <div class="col-xxl-1 col-sm-6">
+                                <select class="form-select" id="select_periodo" data-choices data-choices-search-false  wire:model="filters.periodoId">
+                                    @foreach ($tblperiodos as $periodos) 
+                                    <option value="{{$periodos->id}}">{{$periodos->periodo}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
                             <div class="col-xxl-2 col-sm-6">
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.modalidadId">
                                     @foreach ($tblmodalidad as $modalidad) 
