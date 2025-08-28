@@ -118,7 +118,7 @@ class VcDeliverActivity extends Component
         ->first();
 
         $sistema = TdPeriodoSistemaEducativos::query()
-        ->where("codigo",$record->termino)
+        ->where("codigo",$this->record->termino)
         ->where("periodo_id",$this->periodoId)
         ->first();
 
