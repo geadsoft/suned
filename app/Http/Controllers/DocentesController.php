@@ -268,4 +268,9 @@ class DocentesController extends Controller
         return view('teachers/estudiante_parcial');
     }
 
+    public function flipbook_viewer($id)
+    {
+        return view('teachers/librodigital',['id' => $id]);
+    }
+
 }

@@ -36,7 +36,9 @@ class VcCambiarModalidad extends Component
                 $this->foto='';
             }
         
-            $record = TmCambiaModalidad::where('persona_id',$this->personaId)->first();
+            $record = TmCambiaModalidad::where('persona_id',$this->personaId)
+            ->orberBy('created_at','desc')
+            ->first();
 
             if(empty($record) && $this->personas->tipopersona=='E'){
                 auth()->user()->createData($this->personaId);
