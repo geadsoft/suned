@@ -101,7 +101,7 @@ class VcCambiarModalidad extends Component
             ->selectRaw('g.descripcion as nommodalidad, s.descripcion as nomservicio, tm_pase_cursos.curso_id')
             ->where('tm_pase_cursos.matricula_id',$datos->matricula_id)
             ->where('tm_pase_cursos.estado','A')
-            ->orderBy('created_at','desc')
+            ->orderBy('tm_pase_cursos.created_at','desc')
             ->first();
 
             if ($pasecurso){
