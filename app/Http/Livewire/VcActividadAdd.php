@@ -130,7 +130,8 @@ class VcActividadAdd extends Component
     public function edit($id){
 
         $sistema = TdPeriodoSistemaEducativos::query()
-        ->where("codigo",$this->termino)
+        ->where("codigo",$record->termino)
+        ->where("periodo_id",$this->periodoId)
         ->first();
 
         if ($sistema->cerrar==1){
