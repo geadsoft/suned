@@ -37,7 +37,7 @@ class VcCambiarModalidad extends Component
             }
         
             $record = TmCambiaModalidad::where('persona_id',$this->personaId)
-            ->orberBy('created_at','desc')
+            ->orderBy('created_at','desc')
             ->first();
 
             if(empty($record) && $this->personas->tipopersona=='E'){
