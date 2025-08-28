@@ -266,156 +266,27 @@
                     @endif 
                     @if($record->subir_archivo=='SI')     
                     <div class="text-center" style="{{$display_estado}}">
+                        @if ($fieldset=="enabled")
                         @if (empty($entrega))
                         <button type="button" class="btn btn-primary" id="btnentrega" wire:click='entrega' ><i class="ri-upload-2-line align-bottom me-1"></i>Agregar Entrega</button>
                         @else
                         <button type="button" class="btn btn-primary" id="btnentrega" wire:click='entrega' ><i class="ri-edit-2-fill align-bottom me-1"></i>Editar Entrega</button>
                         @endif
+                        @endif
                         <button type="button" class="btn btn-soft-primary" wire:click="retornar()"><i class="align-bottom me-1"></i>Cancelar</button>
                     </div>
                     @else
                         <div class="text-center" style="{{$display_estado}}">
-                            <a type="button" href="/student/activities" class="btn btn-soft-info btn-label previestab"
-                    data-previous="pills-bill-registration-tab"><i
-                        class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Mis Actividades</a>
+                            <a type="button" href="/student/activities" class="btn btn-soft-info btn-label previestab"  data-previous="pills-bill-registration-tab">
+                            <i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Mis Actividades</a>
                         </div>
                     @endif
                     
                 </div><!--end card-body-->
-                
-                
                 <!-- end card body -->
             </div><!--end card-->
             
         </div>
-
-
-        <!--<div class="col-xxl-3">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Ticket Details</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive table-card">
-                        <table class="table table-borderless align-middle mb-0">
-                            <tbody>
-                                <tr>
-                                    <td class="fw-medium">Ticket</td>
-                                    <td>#VLZ<span id="t-no">135</span> </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium">Client</td>
-                                    <td id="t-client">Themesbrand</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium">Project</td>
-                                    <td>Velzon - Admin Dashboard</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium">Assigned To:</td>
-                                    <td>
-                                        <div class="avatar-group">
-                                            <a href="javascript:void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" data-bs-original-title="Erica Kernan">
-                                                <img src="{{ URL::asset('assets/images/users/avatar-4.jpg') }}" alt="" class="rounded-circle avatar-xs" />
-                                            </a>
-                                            <a href="javascript:void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" data-bs-original-title="Alexis Clarke">
-                                                <img src="{{ URL::asset('assets/images/users/avatar-10.jpg') }}" alt="" class="rounded-circle avatar-xs" />
-                                            </a>
-                                            <a href="javascript:void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover" data-bs-original-title="James Price">
-                                                <img src="{{ URL::asset('assets/images/users/avatar-3.jpg') }}" alt="" class="rounded-circle avatar-xs" />
-                                            </a>
-                                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" data-bs-original-title="Add Members">
-                                                <div class="avatar-xs">
-                                                    <div class="avatar-title fs-16 rounded-circle bg-light border-dashed border text-primary">
-                                                        +
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium">Status:</td>
-                                    <td>
-                                        <select class="form-select" id="t-status" data-choices data-choices-search-false aria-label="Default select example">
-                                            <option value>Stauts</option>
-                                            <option value="New" selected>New</option>
-                                            <option value="Open">Open</option>
-                                            <option value="Inprogress">Inprogress</option>
-                                            <option value="Closed">Closed</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium">Priority</td>
-                                    <td>
-                                        <span class="badge bg-danger" id="t-priority">High</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium">Create Date</td>
-                                    <td id="c-date">20 Dec, 2021</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium">Due Date</td>
-                                    <td id="d-date">29 Dec, 2021</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium">Last Activity</td>
-                                    <td>14 min ago</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium">Labels</td>
-                                    <td class="hstack text-wrap gap-1">
-                                        <span class="badge badge-soft-primary">Admin</span>
-                                        <span class="badge badge-soft-primary">UI</span>
-                                        <span class="badge badge-soft-primary">Dashboard</span>
-                                        <span class="badge badge-soft-primary">Design</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <h6 class="card-title fw-semibold mb-0">Files Attachment</h6>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex align-items-center border border-dashed p-2 rounded">
-                        <div class="flex-shrink-0 avatar-sm">
-                            <div class="avatar-title bg-light rounded">
-                                <i class="ri-file-zip-line fs-20 text-primary"></i>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1"><a href="javascript:void(0);">Velzon-admin.zip</a></h6>
-                            <small class="text-muted">3.2 MB</small>
-                        </div>
-                        <div class="hstack gap-3 fs-16">
-                            <a href="javascript:void(0);" class="text-muted"><i class="ri-download-2-line"></i></a>
-                            <a href="javascript:void(0);" class="text-muted"><i class="ri-delete-bin-line"></i></a>
-                        </div>
-                    </div>
-                    <div class="d-flex  align-items-center border border-dashed p-2 rounded mt-2">
-                        <div class="flex-shrink-0 avatar-sm">
-                            <div class="avatar-title bg-light rounded">
-                                <i class="ri-file-ppt-2-line fs-20 text-danger"></i>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-1"><a href="javascript:void(0);">Velzon-admin.ppt</a></h6>
-                            <small class="text-muted">4.5 MB</small>
-                        </div>
-                        <div class="hstack gap-3 fs-16">
-                            <a href="javascript:void(0);" class="text-muted"><i class="ri-download-2-line"></i></a>
-                            <a href="javascript:void(0);" class="text-muted"><i class="ri-delete-bin-line"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>-->
     </div>
     </form>
  
