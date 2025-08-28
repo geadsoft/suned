@@ -17,13 +17,13 @@
                     <form>
                         @if ($cursosTodos==true) 
                             <div class="row g-3 mb-3">
-                                <div class="col-xxl-1 col-sm-6">
+                                <!--<div class="col-xxl-1 col-sm-6">
                                     <select class="form-select" id="select_periodo" data-choices data-choices-search-false  wire:model="periodoId">
                                         @foreach ($tblperiodos as $periodos) 
                                         <option value="{{$periodos->id}}">{{$periodos->periodo}}</option>
                                         @endforeach 
                                     </select>
-                                </div>
+                                </div>-->
                                 <div class="col-xxl-2 col-sm-2">
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="modalidadId">
                                         <option value="">Seleccione Modalidad</option>

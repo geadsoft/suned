@@ -74,7 +74,6 @@ class VcClasesVirtual extends Component
             ->when($this->modalidadId,function($query){
                 return $query->where('tm_horarios.grupo_id',"{$this->modalidadId}");
             })
-            ->where("tm_horarios.periodo_id",$this->periodoId)
             ->where("a.tipo","CV")
             ->where("a.estado","A")
             ->selectRaw('g.descripcion as modalidad, m.descripcion as asignatura, s.descripcion as curso, c.paralelo as aula, a.*')
@@ -89,7 +88,6 @@ class VcClasesVirtual extends Component
             ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
             ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
             ->where("d.docente_id",$this->docenteId)
-            ->where("tm_horarios.periodo_id",$this->periodoId)
             ->where("tm_horarios.grupo_id",$this->modalidadId)
             ->selectRaw('m.id, m.descripcion')
             ->groupBy('m.id','m.descripcion')
