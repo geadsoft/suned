@@ -176,13 +176,13 @@
         </div>
         </fieldset>
         <div class="text-end mb-3">
-            <fieldset {{$fieldset}}>
+            @if ($this->fieldset=='enabled')
             @if ($this->actividadId==0)
                 <button type="submit" class="btn btn-success w-sm">Grabar</button>
             @else
                 <button type="submit" class="btn btn-success w-sm">Actualizar</button>
             @endif
-            </fieldset>
+            @endif            
             <a class="btn btn-secondary w-sm" href="/activities/activity"><i class="me-1 align-bottom"></i>Cancelar</a>
         </div>
     </form>
