@@ -152,7 +152,7 @@ class VcActividades extends Component
 
     public function edit($Id)
     {
-        $record = TmActividades::find($Id);
+        /*$record = TmActividades::find($Id);
 
         $sistema = TdPeriodoSistemaEducativos::query()
         ->where("codigo",$record->termino)
@@ -162,7 +162,7 @@ class VcActividades extends Component
         if ($sistema->cerrar==1){
            $this->dispatchBrowserEvent('trimestre-cerrado');
            return;
-        }
+        }*/
         
         
         return redirect()->to('/activities/activity-edit/'.$Id);

@@ -20,7 +20,7 @@ class VcActividadAdd extends Component
     use WithFileUploads;
 
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $hora;
-    public $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
+    public $archivo='SI', $puntaje=10, $enlace="", $control="enabled", $fieldset="enabled";
     public $periodoId, $modalidadId, $tbltermino, $tblbloque, $tblactividad, $texteditor="";
     public $tblparalelo=[], $tblasignatura=[];
     public $array_attach=[];
@@ -129,16 +129,14 @@ class VcActividadAdd extends Component
 
     public function edit($id){
 
-        
-        /*$sistema = TdPeriodoSistemaEducativos::query()
+        $sistema = TdPeriodoSistemaEducativos::query()
         ->where("codigo",$this->termino)
         ->first();
 
         if ($sistema->cerrar==1){
-            $this->control = "disabled";
-        }*/
+            $this->fieldset= "disabled";
+        }
 
-        
         $record = TmActividades::query()
         ->join("tm_horarios_docentes as d","d.id","=","tm_actividades.paralelo")
         ->join("tm_horarios as h","h.id","=","d.horario_id")

@@ -1,5 +1,6 @@
 <div>
     <form id="createactivity-form" autocomplete="off" wire:submit.prevent="{{ 'createData' }}" class="needs-validation">
+        <fieldset disabled>
         <div class="row">
             <div class="col-lg-8">
                     <div class="card">
@@ -106,8 +107,10 @@
                 <!-- end card -->
             </div>
         </div>
+        </fieldset>
         <!-- end row -->
 
+        <fieldset disabled>
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -171,12 +174,15 @@
                 </div>
             </div>
         </div>
+        </fieldset>
         <div class="text-end mb-3">
+            <fieldset disabled>
             @if ($this->actividadId==0)
-            <button type="submit" class="btn btn-success w-sm">Grabar</button>
+                <button type="submit" class="btn btn-success w-sm">Grabar</button>
             @else
                 <button type="submit" class="btn btn-success w-sm">Actualizar</button>
             @endif
+            </fieldset>
             <a class="btn btn-secondary w-sm" href="/activities/activity"><i class="me-1 align-bottom"></i>Cancelar</a>
         </div>
     </form>
