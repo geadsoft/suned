@@ -181,7 +181,7 @@ class VcStudentActivities extends Component
 
     public function mostrar($id){
 
-        $record = TmActividades::find($id);
+        /*$record = TmActividades::find($id);
 
         $sistema = TdPeriodoSistemaEducativos::query()
         ->where("codigo",$record->termino)
@@ -191,8 +191,7 @@ class VcStudentActivities extends Component
         if ($sistema->cerrar==1){
            $this->dispatchBrowserEvent('trimestre-cerrado');
            return;
-        }
-
+        }*/
 
         $datos = TmActividades::query()
         ->join("tm_horarios_docentes as d","d.id","=","tm_actividades.paralelo")

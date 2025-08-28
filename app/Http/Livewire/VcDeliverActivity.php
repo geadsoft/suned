@@ -16,7 +16,7 @@ class VcDeliverActivity extends Component
     
     use WithFileUploads;
     
-    public $selectId, $record, $display_estado="", $display_text="display:none";
+    public $selectId, $record, $display_estado="", $display_text="display:none", $fieldset="enabled";
     public $data, $personaId, $tiempo, $estado="No Entregado", $texteditor="", $descripcion;
     public $array_attach=[], $files=[], $entregas=[], $datos=[];
     public $showEditor = false;
@@ -114,8 +114,16 @@ class VcDeliverActivity extends Component
         ->join("tm_asignaturas as a","a.id","=","h.asignatura_id")
         ->where("tm_actividades.id",$this->selectId) 
         ->select("tm_actividades.*","a.descripcion as asignatura")   
-        ->where("tm_actividades.id",$this->selectId)
         ->first();
+
+        $sistema = TdPeriodoSistemaEducativos::query()
+        ->where("codigo",$record->termino)
+        ->where("periodo_id",$this->periodoId)
+        ->first();
+
+        if ($sistema->cerrar==1){
+            $this->fieldset= "disabled";
+        }
         
         $this->descripcion = json_encode($this->record['descripcion']);
         
