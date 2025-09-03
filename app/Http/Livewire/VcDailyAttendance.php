@@ -188,17 +188,32 @@ class VcDailyAttendance extends Component
         $anio = str_pad($periodo->periodo, 4, '0', STR_PAD_LEFT); 
         $mes  = str_pad($this->filters['mes'], 2, '0', STR_PAD_LEFT);
 
-
         foreach ($this->tblrecords as $index => $data)
         {
-            $personaId = $data['personaId'];
+            $personaId = $index;
 
             foreach ($this->diasHabiles as $dias){
 
                 $dia   = str_pad($dias['fecha'], 2, '0', STR_PAD_LEFT);
                 $fecha = date("Y-m-d", strtotime("$anio-$mes-$dia"));
+
+                TdAsistenciaDiarias::updateOrCreate(
+                [
+                    'periodo_id' => $this->periodoId,
+                    'mes' => $this->filters['mes'],
+                    'docente_id' => $this->filters['docenteId'],
+                    'asignatura_id' => null,
+                    'curso_id' => $this->filters['cursoId'],
+                    'persona_id' => $personaId,
+                    'fecha' => $fecha,                    
+                ],
+                [
+                    'valor' => $this->tblrecords[$personaId][$dias['fecha']],
+                    'usuario' => auth()->user()->name,
+                ]
+            );
                 
-                $asistencia = TdAsistenciaDiarias::query()
+                /*$asistencia = TdAsistenciaDiarias::query()
                     ->where("periodo_id", $this->periodoId)
                     ->where("mes", $this->filters['mes'])
                     ->whereRaw("DAY(fecha) = ?", [$dias['fecha']])
@@ -227,7 +242,7 @@ class VcDailyAttendance extends Component
                         'estado' => 'A',
                     ]);
 
-                }
+                }*/
 
             }
         
