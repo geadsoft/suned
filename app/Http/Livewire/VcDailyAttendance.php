@@ -95,6 +95,7 @@ class VcDailyAttendance extends Component
         ->select("p.*")
         ->where("tm_horarios.curso_id",$this->filters['cursoId'])
         ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("m.estado","A")
         ->orderBy("p.apellidos")
         ->get();
 
@@ -116,6 +117,7 @@ class VcDailyAttendance extends Component
         ->select("p.*")
         ->where("tm_horarios.curso_id",$this->filters['cursoId'])
         ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("m.estado","A")
         ->orderBy("p.apellidos")
         ->get();
         

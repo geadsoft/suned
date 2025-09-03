@@ -31,8 +31,8 @@ class VcStudentActivities extends Component
         $this->fecha = date('Y-m-d',strtotime($ldate));
         $this->personaId = auth()->user()->personaId;
 
-        $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
-        $this->periodoId = $tblperiodos['id'];
+        $periodos = TmPeriodosLectivos::where("aperturado",1)->first();
+        $this->periodoId = $periodos['id'];
 
         $matricula = TmCambiaModalidad::query()
         ->where('persona_id',$this->personaId)
@@ -56,6 +56,8 @@ class VcStudentActivities extends Component
     
     public function render()
     {
+        $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
+        
         $this->materias = TmHorarios::query()
         ->join("tm_horarios_docentes as a","a.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","a.asignatura_id")
