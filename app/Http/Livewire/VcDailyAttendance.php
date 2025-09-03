@@ -161,7 +161,9 @@ class VcDailyAttendance extends Component
             $index = $data->persona_id;
             $dia = intval(date("d", strtotime($data->fecha)));
 
-            $this->tblrecords[$index][$dia] = $data->valor;
+            if (isset($this->tblrecords[$index][$dia])) {
+                $this->tblrecords[$index][$dia] = $data->valor;
+            }
         }
 
     }
