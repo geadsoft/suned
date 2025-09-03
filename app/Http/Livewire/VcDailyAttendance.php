@@ -148,7 +148,6 @@ class VcDailyAttendance extends Component
 
     public function loadfalta(){
 
-
         $faltas = TdAsistenciaDiarias::query()
         ->where("curso_id",$this->filters['cursoId'])
         ->where("docente_id",$this->filters['docenteId'])
@@ -208,9 +207,11 @@ class VcDailyAttendance extends Component
                     ->first();
 
                 if ($asistencia) {
+
                     $asistencia->update([
                         'valor' => $this->tblrecords[$personaId][$dias['fecha']],
                     ]);
+                    
                 }else{
                     
                     TdAsistenciaDiarias::Create([
