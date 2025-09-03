@@ -191,7 +191,7 @@ class VcDailyAttendance extends Component
 
         foreach ($this->tblrecords as $index => $data)
         {
-            $personaId = $index;
+            $personaId = $data['personaId'];
 
             foreach ($this->diasHabiles as $dias){
 
@@ -211,7 +211,7 @@ class VcDailyAttendance extends Component
                     $asistencia->update([
                         'valor' => $this->tblrecords[$personaId][$dias['fecha']],
                     ]);
-                    
+
                 }else{
                     
                     TdAsistenciaDiarias::Create([
