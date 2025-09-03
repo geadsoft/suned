@@ -42,12 +42,28 @@ class VcShowAssistance extends Component
         ->where("valor", "F")
         ->count();
 
+        $this->faltasJus = TdAsistenciaDiarias::query()
+        ->where("periodo_id", $this->periodoId)
+        ->where("persona_id", $this->personaId)
+        ->where("curso_id", $this->cursoId)
+        ->whereRaw("fecha <= ?", [date("Ymd", strtotime($this->fecha))])
+        ->where("valor", "FJ")
+        ->count();
+
         $this->atraso = TdAsistenciaDiarias::query()
         ->where("periodo_id", $this->periodoId)
         ->where("persona_id", $this->personaId)
         ->where("curso_id", $this->cursoId)
         ->whereRaw("fecha <= ?", [date("Ymd", strtotime($this->fecha))])
         ->where("valor", "A")
+        ->count();
+
+        $this->atrasoJus = TdAsistenciaDiarias::query()
+        ->where("periodo_id", $this->periodoId)
+        ->where("persona_id", $this->personaId)
+        ->where("curso_id", $this->cursoId)
+        ->whereRaw("fecha <= ?", [date("Ymd", strtotime($this->fecha))])
+        ->where("valor", "AJ")
         ->count();
 
         $tblrecords = TdAsistenciaDiarias::query()

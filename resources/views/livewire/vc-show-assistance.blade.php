@@ -135,10 +135,16 @@
                                             @if ($record['valor'] == "F")
                                                 <i class="ri-close-circle-fill fs-18 text-danger"></i> 
                                             @endif
+                                            @if ($record['valor'] == "FJ")
+                                                <i class="ri-checkbox-circle-fill fs-18 text-success"></i> 
+                                            @endif
                                         </td>
                                         <td class="text-center">
                                             @if ($record['valor'] == "A")
                                                 <i class="ri-close-circle-fill fs-18 text-danger"></i> 
+                                            @endif
+                                            @if ($record['valor'] == "AJ")
+                                                <i class="ri-checkbox-circle-fill fs-18 text-success"></i> 
                                             @endif
                                         </td>
                                     </tr>
