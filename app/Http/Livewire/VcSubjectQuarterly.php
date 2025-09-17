@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class VcSubjectQuarterly extends Component
 {   
-     public $periodoId, $modalidadId=0, $tblpersonas, $datos, $bloqueEx, $estudianteId, $mensaje="", $calificacion="N";
+     public $periodoId, $modalidadId=0, $tblpersonas=[], $datos, $bloqueEx, $estudianteId, $mensaje="", $calificacion="N";
     public $nivel,$subtitulo="",$docente="",$materia="",$curso="", $periodolectivo="";
     public $arrComentario=[];
     public $arrtipo=[];
@@ -83,45 +83,6 @@ class VcSubjectQuarterly extends Component
         ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion,s.calificacion')
         ->get();
 
-        // Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
-        $matriculasConPase = DB::table('tm_pase_cursos')
-        ->where('estado', 'A')
-        ->pluck('matricula_id');
-
-        // Consulta de matrículas SIN pase
-        $matriculasQuery = DB::table('tm_matriculas as m')
-        ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
-        ->where('m.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
-        ->where('m.estado','A')
-        ->whereNotIn('m.id', $matriculasConPase);
-
-        // Consulta de pases activos
-        $pasesQuery = DB::table('tm_pase_cursos as p')
-        ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
-        ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
-        ->where('p.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
-        ->where('m.estado','A')
-        ->where('p.estado', 'A');
-        
-
-        // UNION de ambas consultas
-        $unionQuery = $matriculasQuery->unionAll($pasesQuery);
-
-        // Consulta principal con joinSub en Eloquent
-        $this->tblpersonas = TmPersonas::query()
-            ->joinSub($unionQuery, 'm', function ($join) {
-            $join->on('tm_personas.id', '=', 'm.estudiante_id');
-        })
-        ->when(!empty($this->filters['estudianteId']), function($query) {
-            return $query->where('tm_personas.id', $this->filters['estudianteId']);
-        })
-        ->where('m.curso_id', $this->filters['paralelo'])
-        ->select('tm_personas.*', 'm.documento')
-        ->orderBy('tm_personas.apellidos')
-        ->get();
-
         return view('livewire.vc-subject-quarterly');
     }
 
@@ -136,6 +97,8 @@ class VcSubjectQuarterly extends Component
 
     public function loadPersonas(){
 
+        $this->tblpersonas = [];
+
         // Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
         $matriculasConPase = DB::table('tm_pase_cursos')
         ->where('estado', 'A')
@@ -157,7 +120,6 @@ class VcSubjectQuarterly extends Component
         ->where('m.periodo_id', $this->periodoId)
         ->where('m.estado','A')
         ->where('p.estado', 'A');
-        
 
         // UNION de ambas consultas
         $unionQuery = $matriculasQuery->unionAll($pasesQuery);
@@ -166,9 +128,6 @@ class VcSubjectQuarterly extends Component
         $this->tblpersonas = TmPersonas::query()
             ->joinSub($unionQuery, 'm', function ($join) {
             $join->on('tm_personas.id', '=', 'm.estudiante_id');
-        })
-        ->when(!empty($this->filters['estudianteId']), function($query) {
-            return $query->where('tm_personas.id', $this->filters['estudianteId']);
         })
         ->where('m.curso_id', $this->filters['paralelo'])
         ->select('tm_personas.*', 'm.documento')
@@ -189,6 +148,7 @@ class VcSubjectQuarterly extends Component
         ->orderBy("a.descripcion")
         ->get();
 
+        $this->loadPersonas();
         
         foreach ($this->tblpersonas as $key => $person)
         { 
@@ -252,6 +212,8 @@ class VcSubjectQuarterly extends Component
         
         }
 
+        $this->asignarNotas();
+        
     }
 
     public function actividad($id){

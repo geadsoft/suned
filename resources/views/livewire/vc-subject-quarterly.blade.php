@@ -15,7 +15,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.paralelo" wire:change="consulta()">
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.paralelo" wire:change="add()">
                                 <option value="">Seleccione Paralelo</option>
                                 @foreach ($tblparalelo as $paralelo) 
                                 <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
@@ -32,7 +32,7 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino" wire:change="consulta()">
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino" wire:change="add()">
                                 @foreach ($tbltermino as $terminos) 
                                 <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
                                 @endforeach 
@@ -93,17 +93,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($tblpersonas as $fil => $record)
+                                    @foreach ($tblpersonas as $fil => $person)
+
                                     <tr id="{{$fil}}" class="detalle">
-                                        <td class="align-middle">{{$record["apellidos"]}} {{$record["nombres"]}}</td>
+                                        <td class="align-middle">{{$person["apellidos"]}} {{$person["nombres"]}}</td>
                                         @foreach($asignaturas as $key => $materia)
-                                            @if(isset($tblrecords[$record->id][$materia->id]['cuantitativo']))
-                                            <td class="align-middle text-center">{{number_format($tblrecords[$record->id][$materia->id]['cuantitativo'],2)}}</td>
-                                            @endif
+                                            
+                                            <td class="align-middle text-center">{{number_format($tblrecords[$person->id][$materia->id]['cuantitativo'],2)}}</td>
+                                            
                                         @endforeach
-                                        @if(isset($tblrecords[$record->id]['ZZ']['cuantitativo']))
-                                        <td class="align-middle text-center">{{number_format($tblrecords[$record->id]['ZZ']['cuantitativo'],2)}}</td>
-                                        @endif
+                                        
+                                        <td class="align-middle text-center">{{number_format($tblrecords[$person->id]['ZZ']['cuantitativo'],2)}}</td>
+                                        
                                     </tr>
                                     @endforeach
                                 </tbody>
