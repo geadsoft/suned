@@ -708,16 +708,16 @@
                                 <div class="menu-dropdown collapse" id="cursos" style="">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="pages-profile.html" class="nav-link" data-key="t-simple-page">Asignaturas Parcial</a>
+                                            <a href="/report/partial-subject" class="nav-link" data-key="t-simple-page">Asignaturas Parcial</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Asignaturas Trimestral</a>
+                                            <a href="/report/quarterly-subject" class="nav-link" data-key="t-settings">Asignaturas Trimestral</a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="/report/partial-student" class="nav-link" data-key="t-simple-page">Estudiante Parcial</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Estudiante Trimestral</a>
+                                            <a href="/report/quarterly-student" class="nav-link" data-key="t-settings">Estudiante Trimestral</a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Estudiante Total</a>
@@ -743,8 +743,26 @@
                                         <li class="nav-item">
                                             <a href="/report/exams-qualify" class="nav-link" data-key="t-settings">Examenes</a>
                                         </li>
+                                        <!--<li class="nav-item">
+                                            <a href="/student/report-card" class="nav-link" data-key="t-settings">Trimestral</a>
+                                        </li>-->
+                                    </ul>
+                                </div>
+                            </li>
+                            @endcan
+                            @can('Reportes Boletines')
+                            <li class="nav-item">
+                                <a href="#boletin" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="boletin" data-key="t-profile">Boletines</a>
+                                <div class="menu-dropdown collapse" id="boletin" style="">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="/report/partial-bulletin" class="nav-link" data-key="t-simple-page">Parcial</a>
+                                        </li>
                                         <li class="nav-item">
                                             <a href="/student/report-card" class="nav-link" data-key="t-settings">Trimestral</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/report/annual-bolletin" class="nav-link" data-key="t-settings">Anual</a>
                                         </li>
                                     </ul>
                                 </div>

@@ -1,51 +1,29 @@
 <div>
-    <div id="flipbook" class="w-full h-screen"></div>
-
-    {{-- Librerías necesarias --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+    <div id="flipbook" class="relative w-full h-[600px]"></div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const fileId = @json($fileId);
-            const url = `https://drive.google.com/uc?export=download&id=${fileId}`;
-
-            alert(url)
-
-            pdfjsLib.getDocument(url).promise.then(function (pdf) {
-                let pagesPromises = [];
-                
-                for (let i = 1; i <= pdf.numPages; i++) {
-                    pagesPromises.push(pdf.getPage(i).then(function (page) {
-                        let viewport = page.getViewport({ scale: 1.2 });
-                        let canvas = document.createElement("canvas");
-                        let context = canvas.getContext("2d");
-                        canvas.height = viewport.height;
-                        canvas.width = viewport.width;
-
-                        return page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
-                            return canvas;
-                        });
-                    }));
+            const pageFlip = new St.PageFlip(
+                document.getElementById("flipbook"),
+                {
+                    width: 400,  // ancho de página
+                    height: 600, // alto de página
+                    size: "stretch",
+                    minWidth: 315,
+                    maxWidth: 1000,
+                    minHeight: 420,
+                    maxHeight: 1350,
+                    drawShadow: true,
+                    flippingTime: 700,
+                    usePortrait: true,
+                    startPage: 0,
+                    autoSize: true,
+                    maxShadowOpacity: 0.5,
+                    showCover: true,
                 }
+            );
 
-                Promise.all(pagesPromises).then(function (canvases) {
-                    let flipbook = document.getElementById("flipbook");
-                    canvases.forEach(canvas => {
-                        let pageDiv = document.createElement("div");
-                        pageDiv.appendChild(canvas);
-                        flipbook.appendChild(pageDiv);
-                    });
-
-                    $("#flipbook").turn({
-                        width: 900,
-                        height: 600,
-                        autoCenter: true,
-                        elevation: 50,
-                        gradients: true
-                    });
-                });
-            });
+            pageFlip.loadFromImages(@json($pages));
         });
     </script>
 </div>

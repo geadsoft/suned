@@ -287,11 +287,6 @@ class VcReportQuarterlyTeacher extends Component
             $this->tblrecords[$personaId]['promedio'] = 0.00;
             $this->tblrecords[$personaId]['prom70'] = 0.00;
 
-            /*foreach ($this->tblexamen as $col => $actividad)
-            {
-                $column = 'EX'.$actividad->persona_id;
-                $this->tblrecords[$personaId][$column] = 0.00;    
-            }*/
             $this->tblrecords[$personaId]['promExamen'] = 0.00;
             $this->tblrecords[$personaId]['prom30'] = 0.00;
             $this->tblrecords[$personaId]['cuanti'] = 0.00;

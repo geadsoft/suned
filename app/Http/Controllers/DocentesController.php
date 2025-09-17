@@ -268,9 +268,24 @@ class DocentesController extends Controller
         return view('teachers/estudiante_parcial');
     }
 
+    public function estudiante_notas_trimestral()
+    {
+        return view('teachers/estudiante_trimestral');
+    }
+
     public function flipbook_viewer($id)
     {
         return view('teachers/librodigital',['id' => $id]);
+    }
+
+    public function asignatura_parcial()
+    {
+        return view('teachers/asignatura_parcial');
+    }
+
+    public function asignatura_trimestral()
+    {
+        return view('teachers/asignatura_trimestral');
     }
 
 }

@@ -76,6 +76,10 @@ Route::get('/report/detailed-rating',[App\Http\Controllers\DocentesController::c
 Route::get('/report/partial-teacher',[App\Http\Controllers\DocentesController::class, 'informe_parcial'])->name('informe_parcial');
 Route::get('/report/quarterly-teacher',[App\Http\Controllers\DocentesController::class, 'informe_trimestral'])->name('informe_trimestral');
 Route::get('/report/partial-student',[App\Http\Controllers\DocentesController::class, 'estudiante_notas_parcial'])->name('estudiante_notas_parcial');
+Route::get('/report/quarterly-student',[App\Http\Controllers\DocentesController::class, 'estudiante_notas_trimestral'])->name('estudiante_notas_trimestral');
+Route::get('/report/partial-subject',[App\Http\Controllers\DocentesController::class, 'asignatura_parcial'])->name('asignatura_parcial');
+Route::get('/report/quarterly-subject',[App\Http\Controllers\DocentesController::class, 'asignatura_trimestral'])->name('asignatura_trimestral');
+
 Route::get('/report/student-grades',[App\Http\Controllers\EstudiantesController::class, 'student_grades'])->name('student_grades');
 Route::get('/report/note-activity',[App\Http\Controllers\EstudiantesController::class, 'note_activity'])->name('note_activity');
 
