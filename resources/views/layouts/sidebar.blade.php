@@ -743,9 +743,9 @@
                                         <li class="nav-item">
                                             <a href="/report/exams-qualify" class="nav-link" data-key="t-settings">Examenes</a>
                                         </li>
-                                        <!--<li class="nav-item">
-                                            <a href="/student/report-card" class="nav-link" data-key="t-settings">Trimestral</a>
-                                        </li>-->
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link" data-key="t-settings">Final</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </li>
@@ -756,7 +756,7 @@
                                 <div class="menu-dropdown collapse" id="boletin" style="">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="/report/partial-bulletin" class="nav-link" data-key="t-simple-page">Parcial</a>
+                                            <a href="/student/partial-bulletin" class="nav-link" data-key="t-simple-page">Parcial</a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="/student/report-card" class="nav-link" data-key="t-settings">Trimestral</a>

@@ -12,11 +12,11 @@
             Reporte
         @endslot
         @slot('title')
-            Informe de Aprendizaje Trimestral
+            Informe de Aprendizaje Parcial
         @endslot
     @endcomponent
 
-    @livewire('vc-report-card')
+    @livewire('vc-partial-bulletin')
 
 @endsection
 @section('script')
