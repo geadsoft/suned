@@ -78,4 +78,9 @@ class EstudiantesController extends Controller
         return view('student/boletin_calificaciones_parcial');
     }
 
+    public function final_bulletin()
+    {      
+        return view('student/boletin_calificaciones_final');
+    }
+
 }

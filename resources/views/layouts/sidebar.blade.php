@@ -762,7 +762,7 @@
                                             <a href="/student/report-card" class="nav-link" data-key="t-settings">Trimestral</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="/report/annual-bolletin" class="nav-link" data-key="t-settings">Anual</a>
+                                            <a href="/student/final-bulletin" class="nav-link" data-key="t-settings">Anual</a>
                                         </li>
                                     </ul>
                                 </div>
