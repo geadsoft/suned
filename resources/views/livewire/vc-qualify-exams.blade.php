@@ -83,7 +83,7 @@
                                         @foreach ($tblexamen as $col => $tarea)
                                         <td>
                                             <input type="number" step="0.01" min="0" max="10" value="0" class="form-control product-price bg-white border-0"
-                                            id="{{$fil}}-{{$col}}" wire:model="tblrecords.{{$persona->id}}.{{$tarea['id']}}" />
+                                            id="{{$fil}}-{{$col}}" wire:model="tblrecords.{{$persona->id}}.{{$tarea['id']}}" {{$control}}/>
                                         </td>
                                         @endforeach
                                         <td>
