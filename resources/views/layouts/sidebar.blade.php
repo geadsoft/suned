@@ -119,12 +119,6 @@
                                                 </i>Asistencia Diaria<span></span>
                                             </a>
                                         </li>
-                                        
-                                        <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/academic/justify-faults">
-                                                </i>Justificar Faltas<span></span>
-                                            </a>
-                                        </li>
                                     </ul>
                                 </div>
                             </li>

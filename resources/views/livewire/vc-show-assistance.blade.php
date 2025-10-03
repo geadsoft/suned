@@ -6,7 +6,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <p class="fw-medium text-muted mb-0">Faltas</p>
-                            <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="{{$faltas}}"></span>
+                            <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="">{{$faltas}}</span>
                             </h2>
                             <!--<p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">
                                     <i class="ri-arrow-up-line align-middle"></i> 17.32 %
@@ -31,7 +31,7 @@
                         <div>
                             <p class="fw-medium text-muted mb-0">Faltas Justificadas</p>
                             <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
-                                    data-target="{{$faltasJus}}"></span></h2>
+                                    data-target="">{{$faltasJus}}</span></h2>
                             <!--<p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">
                                     <i class="ri-arrow-down-line align-middle"></i> 0.96 %
                                 </span> vs. previous month</p>-->
@@ -55,7 +55,7 @@
                         <div>
                             <p class="fw-medium text-muted mb-0">Atrasos</p>
                             <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
-                                    data-target="{{$atraso}}"></span></h2>
+                                    data-target="">{{$atraso}}</span></h2>
                             <!--<p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">
                                     <i class="ri-arrow-down-line align-middle"></i> 3.87 %
                                 </span> vs. previous month</p>-->
@@ -79,7 +79,7 @@
                         <div>
                             <p class="fw-medium text-muted mb-0">Atrasos Justificados</p>
                             <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
-                                    data-target="{{$atrasoJus}}"></span></h2>
+                                    data-target="">{{$atrasoJus}}</span></h2>
                             <!--<p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">
                                     <i class="ri-arrow-up-line align-middle"></i> 1.09 %
                                 </span> vs. previous month</p>-->
@@ -101,6 +101,18 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card" id="orderList">
+                <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3" role="tablist">
+                    @foreach ($tbltermino as $termino)
+                    <li class="nav-item">
+                        <a class="nav-link All py-3 {{ $this->tabactive == $termino->codigo ? 'active' : '' }}" 
+                        data-bs-toggle="tab" 
+                        role="tab"
+                        aria-selected="{{ $this->tabactive == $termino->codigo ? 'true' : 'false' }}"
+                        wire:click="filtrar('{{ $termino->codigo }}')"> {{ $termino->descripcion }}
+                        </a>
+                    </li>
+                    @endforeach
+                </ul>
                 <div class="card-header  border-0">
                     <div class="d-flex align-items-center">
                         <h5 class="card-title mb-0 flex-grow-1">Faltas y Atrasos</h5>

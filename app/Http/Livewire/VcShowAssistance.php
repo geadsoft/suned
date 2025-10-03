@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 use App\Models\TdAsistenciaDiarias;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmCambiaModalidad;
+use App\Models\TdPeriodoSistemaEducativos;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,12 +13,16 @@ class VcShowAssistance extends Component
 {
     use WithPagination;
 
-    public $periodoId, $personaId, $cursoId, $faltas=10, $faltasJus=0, $atraso=0, $atrasoJus=0;
+    public $periodoId, $personaId, $cursoId, $faltas=10, $faltasJus=0, $atraso=0, $atrasoJus=0, $tabactive='';
+    public $tbltermino=[];
     
 
     public function mount()
-    {
-         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
+    {   
+        $ldate = date('Y-m-d H:i:s');
+        $this->fecha = date('Y-m-d',strtotime($ldate));
+
+        $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
         $this->personaId = auth()->user()->personaId;
 
@@ -27,8 +32,13 @@ class VcShowAssistance extends Component
 
         $this->cursoId = $matricula->curso_id;
 
-        $ldate = date('Y-m-d H:i:s');
-        $this->fecha = date('Y-m-d',strtotime($ldate));
+        $this->tbltermino = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId )
+        ->where('tipo','EA')
+        ->orderByRaw("cerrar,codigo")
+        ->get();
+
+        $this->tabactive = $this->tbltermino[0]['codigo']; 
 
     }
     
@@ -38,6 +48,7 @@ class VcShowAssistance extends Component
         ->where("periodo_id", $this->periodoId)
         ->where("persona_id", $this->personaId)
         ->where("curso_id", $this->cursoId)
+        ->where("termino",$this->tabactive)
         ->whereRaw("fecha <= ?", [date("Ymd", strtotime($this->fecha))])
         ->where("valor", "F")
         ->count();
@@ -46,6 +57,7 @@ class VcShowAssistance extends Component
         ->where("periodo_id", $this->periodoId)
         ->where("persona_id", $this->personaId)
         ->where("curso_id", $this->cursoId)
+        ->where("termino",$this->tabactive)
         ->whereRaw("fecha <= ?", [date("Ymd", strtotime($this->fecha))])
         ->where("valor", "FJ")
         ->count();
@@ -54,6 +66,7 @@ class VcShowAssistance extends Component
         ->where("periodo_id", $this->periodoId)
         ->where("persona_id", $this->personaId)
         ->where("curso_id", $this->cursoId)
+        ->where("termino",$this->tabactive)
         ->whereRaw("fecha <= ?", [date("Ymd", strtotime($this->fecha))])
         ->where("valor", "A")
         ->count();
@@ -62,6 +75,7 @@ class VcShowAssistance extends Component
         ->where("periodo_id", $this->periodoId)
         ->where("persona_id", $this->personaId)
         ->where("curso_id", $this->cursoId)
+        ->where("termino",$this->tabactive)
         ->whereRaw("fecha <= ?", [date("Ymd", strtotime($this->fecha))])
         ->where("valor", "AJ")
         ->count();
@@ -70,6 +84,7 @@ class VcShowAssistance extends Component
         ->where("periodo_id",$this->periodoId)
         ->where("persona_id",$this->personaId)
         ->where("curso_id",$this->cursoId)
+        ->where("termino",$this->tabactive)
         ->whereRaw("fecha <= ".date("Ymd", strtotime($this->fecha))." and valor <> ''")
         ->orderBy("fecha","desc")
         ->paginate(12);
@@ -77,6 +92,11 @@ class VcShowAssistance extends Component
         return view('livewire.vc-show-assistance',[
             'tblrecords' => $tblrecords,
         ]);
+    }
+
+    public function filtrar($codigo)
+    {
+        $this->tabactive = $codigo;
     }
 
     public function paginationView(){

@@ -6,6 +6,7 @@ use App\Models\TmHorariosDocentes;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmHorarios;
 use App\Models\TdAsistenciaDiarias;
+use App\Models\TdPeriodoSistemaEducativos;
 
 use Livewire\Component;
 
@@ -39,6 +40,13 @@ class VcTeacherAssistance extends Component
         $this->filters['periodoId']  = $tblperiodos['id'];
         $this->filters['periodo'] = $tblperiodos['periodo'];
 
+        $this->tbltermino = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->filters['periodoId'])
+        ->where('tipo','EA')
+        ->orderByRaw("cerrar,codigo")
+        ->get();
+        
+        $this->filters['termino'] = $this->tbltermino[0]['codigo'];
         $this->filters['modalidadId'] = "";
        
     }
@@ -136,6 +144,7 @@ class VcTeacherAssistance extends Component
         $faltas = TdAsistenciaDiarias::query()
         ->where("curso_id",$this->filters['cursoId'])
         ->where("docente_id",$this->filters['docenteId'])
+        ->where("termino", $this->filters['termino'])
         ->where("periodo_id",$this->filters['periodoId'])
         ->where("fecha", $this->filters['fecha'])
         ->whereRaw("valor<>''")
@@ -183,6 +192,7 @@ class VcTeacherAssistance extends Component
                     'periodo_id' => $this->filters['periodoId'],
                     'mes' => $this->filters['mes'],
                     'docente_id' => $this->filters['docenteId'],
+                    'termino' => $this->filters['termino'],
                     'asignatura_id' => $this->filters['asignaturaId'],
                     'curso_id' => $this->filters['cursoId'],
                     'persona_id' => $personaId,
