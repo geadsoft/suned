@@ -14,6 +14,7 @@ class TdAsistenciaDiarias extends Model
         'periodo_id',
         'mes',
         'docente_id',
+        'termino',
         'asignatura_id',
         'curso_id',
         'persona_id',

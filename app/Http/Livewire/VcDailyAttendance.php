@@ -8,6 +8,7 @@ use App\Models\TmActividades;
 use App\Models\TdAsistenciaDiarias;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmCursos;
+use App\Models\TdPeriodoSistemaEducativos;
 
 
 use Livewire\Component;
@@ -29,6 +30,7 @@ class VcDailyAttendance extends Component
         'fecha' => '',
         'mes' => 1,
         'periodo' => 0,
+        'termino' => '1T'
     ];
 
     protected $listeners = ['setData'];
@@ -66,7 +68,14 @@ class VcDailyAttendance extends Component
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
         $this->filters['periodo'] = $tblperiodos['periodo'];
+
+        $this->tbltermino = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','EA')
+        ->orderByRaw("cerrar,codigo")
+        ->get();
         
+        $this->filters['termino'] = $this->tbltermino[0]['codigo'];
     }
 
     public function render()
@@ -151,6 +160,7 @@ class VcDailyAttendance extends Component
         $faltas = TdAsistenciaDiarias::query()
         ->where("curso_id",$this->filters['cursoId'])
         ->where("docente_id",$this->filters['docenteId'])
+        ->where("termino", $this->filters['termino'])
         ->where("periodo_id", $this->periodoId)
         ->where("mes", $this->filters['mes'])
         ->whereRaw("valor<>''")
@@ -198,25 +208,10 @@ class VcDailyAttendance extends Component
 
                 $dia   = str_pad($dias['fecha'], 2, '0', STR_PAD_LEFT);
                 $fecha = date("Y-m-d", strtotime("$anio-$mes-$dia"));
-
-                /*TdAsistenciaDiarias::updateOrCreate(
-                    [
-                        'periodo_id' => $this->periodoId,
-                        'mes' => $this->filters['mes'],
-                        'docente_id' => $this->filters['docenteId'],
-                        'asignatura_id' => null,
-                        'curso_id' => $this->filters['cursoId'],
-                        'persona_id' => $personaId,
-                        'fecha' => $fecha,                    
-                    ],
-                    [
-                        'valor' => $this->tblrecords[$personaId][$dias['fecha']],
-                        'usuario' => auth()->user()->name,
-                    ]
-                );*/
                 
                 $asistencia = TdAsistenciaDiarias::query()
                     ->where("periodo_id", $this->periodoId)
+                    ->where("termino", $this->filters['termino'])
                     ->where("mes", $this->filters['mes'])
                     ->whereRaw("DAY(fecha) = ?", [$dias['fecha']])
                     ->where("persona_id", $personaId)
@@ -231,18 +226,22 @@ class VcDailyAttendance extends Component
 
                 }else{
                     
-                    TdAsistenciaDiarias::Create([
-                        'periodo_id' => $this->periodoId,
-                        'mes' => $this->filters['mes'],
-                        'docente_id' => $this->filters['docenteId'],
-                        'asignatura_id' => null,
-                        'curso_id' => $this->filters['cursoId'],
-                        'persona_id' => $personaId,
-                        'fecha' => $fecha,
-                        'valor' =>  $this->tblrecords[$personaId][$dias['fecha']],
-                        'usuario' => auth()->user()->name
-                    ]);
+                    if(!empty($this->tblrecords[$personaId][$dias['fecha']])){
 
+                        TdAsistenciaDiarias::Create([
+                            'periodo_id' => $this->periodoId,
+                            'mes' => $this->filters['mes'],
+                            'docente_id' => $this->filters['docenteId'],
+                            'termino' => $this->filters['termino'],
+                            'asignatura_id' => null,
+                            'curso_id' => $this->filters['cursoId'],
+                            'persona_id' => $personaId,
+                            'fecha' => $fecha,
+                            'valor' =>  $this->tblrecords[$personaId][$dias['fecha']],
+                            'usuario' => auth()->user()->name
+                        ]);
+
+                    }
                 }
 
             }

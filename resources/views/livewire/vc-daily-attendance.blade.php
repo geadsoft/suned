@@ -1,30 +1,44 @@
 <div>
     <form id="createactivity-form" autocomplete="off" wire:submit.prevent="{{ 'createData' }}" class="needs-validation" >
         <div class="row">
-            <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label for="choices-publish-status-input" class="form-label fw-semibold">Modalidad</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
-                                   <option value="">Seleccione Modalidad</option>
-                                   @foreach ($tblmodalidad as $modalidad) 
-                                    <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
-                                    @endforeach 
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="filters.cursoId"  wire:change="consulta()">
-                                   <option value="">Seleccione Paralelo</option>
-                                   @foreach ($tblparalelo as $paralelo) 
-                                    <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}-{{$paralelo->paralelo}}</option>
-                                    @endforeach 
-                                </select>
-                            </div>
-                            
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="choices-publish-status-input" class="form-label fw-semibold">Modalidad</label>
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
+                                <option value="">Seleccione Modalidad</option>
+                                @foreach ($tblmodalidad as $modalidad) 
+                                <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
+                                @endforeach 
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="filters.cursoId"  wire:change="consulta()">
+                                <option value="">Seleccione Paralelo</option>
+                                @foreach ($tblparalelo as $paralelo) 
+                                <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}-{{$paralelo->paralelo}}</option>
+                                @endforeach 
+                            </select>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 d-flex gap-3 align-items-stretch">
+                <div class="card flex-fill">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino" wire:change="consulta()">
+                                @foreach ($tbltermino as $terminos) 
+                                <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
+                                @endforeach 
+                            </select>
                         </div>
                     </div>
+                </div>
             </div>
             <div class="col-lg-12">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
