@@ -64,13 +64,14 @@ class VcExamenAdd extends Component
         })
         ->get();
 
+        $this->termino = $this->tbltermino[0]['codigo'];
+
         $this->attach_add();
         $this->updatedTermino();
 
         if ($id>0){
             $this->edit($id);
         }
-
 
     }
     
