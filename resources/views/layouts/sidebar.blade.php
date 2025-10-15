@@ -114,18 +114,18 @@
                                                 </i>Asistencia Diaria<span></span>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
+                                        <!--<li class="nav-item">
                                             <a class="nav-link menu-link" href="/academic/daily-attendance">
                                                 </i>Asistencia Diaria<span></span>
                                             </a>
+                                        </li>-->
+                                        @can('Asistencia Materia')
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/student/teacher-assistance">Asistencia por Materia</a>
                                         </li>
+                                        @endcan
                                     </ul>
                                 </div>
-                            </li>
-                            @endcan
-                            @can('Asistencia Materia')
-                            <li class="nav-item">
-                                <a class="nav-link menu-link" href="/student/teacher-assistance">Asistencia por Materia</a>
                             </li>
                             @endcan
                             @can('Calificaciones')

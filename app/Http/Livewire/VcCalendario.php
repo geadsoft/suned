@@ -136,8 +136,8 @@ class VcCalendario extends Component
     public function loadEvent(){
 
         $this->eventos = TmCalendarioEventos::query()
-        ->where('periodo',$this->periodo)
-        //->where('mes',$this->mes)
+        ->where('start_date','>=',$this->fechaEmpieza) 
+        ->where('end_date','>=',$this->fechaTermina)
         ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
         ->get();
 
