@@ -109,8 +109,6 @@ class VcShowAssistance extends Component
         ->where("valor", "AJ")
         ->count();
 
-        dd($this->faltas);
-
     }
 
     public function filtrar($codigo)

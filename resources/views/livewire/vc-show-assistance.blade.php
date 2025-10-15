@@ -6,7 +6,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <p class="fw-medium text-muted mb-0">Faltas</p>
-                            <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="">{{$faltas}}</span>
+                            <h2 class="mt-4 ff-secondary fw-semibold">{{$faltas}}</span>
                             </h2>
                             <!--<p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">
                                     <i class="ri-arrow-up-line align-middle"></i> 17.32 %
