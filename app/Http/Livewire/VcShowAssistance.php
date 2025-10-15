@@ -48,7 +48,9 @@ class VcShowAssistance extends Component
         ->where("periodo_id", $this->periodoId)
         ->where("persona_id", $this->personaId)
         ->where("curso_id", $this->cursoId)
-        ->where("termino",$this->tabactive)
+        ->when($this->tabactive,function($query){
+            return $query->where('termino',"{$this->tabactive}");
+        })
         ->whereRaw("fecha <= ?", [date("Ymd", strtotime($this->fecha))])
         ->where("valor", "F")
         ->count();
@@ -57,7 +59,9 @@ class VcShowAssistance extends Component
         ->where("periodo_id", $this->periodoId)
         ->where("persona_id", $this->personaId)
         ->where("curso_id", $this->cursoId)
-        ->where("termino",$this->tabactive)
+        ->when($this->tabactive,function($query){
+            return $query->where('termino',"{$this->tabactive}");
+        })
         ->whereRaw("fecha <= ?", [date("Ymd", strtotime($this->fecha))])
         ->where("valor", "FJ")
         ->count();
@@ -66,7 +70,9 @@ class VcShowAssistance extends Component
         ->where("periodo_id", $this->periodoId)
         ->where("persona_id", $this->personaId)
         ->where("curso_id", $this->cursoId)
-        ->where("termino",$this->tabactive)
+        ->when($this->tabactive,function($query){
+            return $query->where('termino',"{$this->tabactive}");
+        })
         ->whereRaw("fecha <= ?", [date("Ymd", strtotime($this->fecha))])
         ->where("valor", "A")
         ->count();
@@ -75,7 +81,9 @@ class VcShowAssistance extends Component
         ->where("periodo_id", $this->periodoId)
         ->where("persona_id", $this->personaId)
         ->where("curso_id", $this->cursoId)
-        ->where("termino",$this->tabactive)
+        ->when($this->tabactive,function($query){
+            return $query->where('termino',"{$this->tabactive}");
+        })
         ->whereRaw("fecha <= ?", [date("Ymd", strtotime($this->fecha))])
         ->where("valor", "AJ")
         ->count();
@@ -84,7 +92,9 @@ class VcShowAssistance extends Component
         ->where("periodo_id",$this->periodoId)
         ->where("persona_id",$this->personaId)
         ->where("curso_id",$this->cursoId)
-        ->where("termino",$this->tabactive)
+        ->when($this->tabactive,function($query){
+            return $query->where('termino',"{$this->tabactive}");
+        })
         ->whereRaw("fecha <= ".date("Ymd", strtotime($this->fecha))." and valor <> ''")
         ->orderBy("fecha","desc")
         ->paginate(12);
@@ -95,8 +105,13 @@ class VcShowAssistance extends Component
     }
 
     public function filtrar($codigo)
-    {
-        $this->tabactive = $codigo;
+    {   
+        if $codigo=='A'{
+            $this->tabactive = '';
+        }else {
+            $this->tabactive = $codigo;
+        }
+       
     }
 
     public function paginationView(){

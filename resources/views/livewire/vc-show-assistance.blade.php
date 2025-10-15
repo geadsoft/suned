@@ -112,6 +112,14 @@
                         </a>
                     </li>
                     @endforeach
+                    <li class="nav-item">
+                        <a class="nav-link All py-3" 
+                        data-bs-toggle="tab" 
+                        role="tab"
+                        aria-selected="false"
+                        wire:click="filtrar('A')"> ANUAL
+                        </a>
+                    </li>
                 </ul>
                 <div class="card-header  border-0">
                     <div class="d-flex align-items-center">
