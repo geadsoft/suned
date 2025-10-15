@@ -44,6 +44,27 @@ class VcShowAssistance extends Component
     
     public function render()
     {
+        
+        $tblrecords = TdAsistenciaDiarias::query()
+        ->where("periodo_id",$this->periodoId)
+        ->where("persona_id",$this->personaId)
+        ->where("curso_id",$this->cursoId)
+        ->when($this->tabactive,function($query){
+            return $query->where('termino',"{$this->tabactive}");
+        })
+        ->whereRaw("fecha <= ".date("Ymd", strtotime($this->fecha))." and valor <> ''")
+        ->orderBy("fecha","desc")
+        ->paginate(12);
+
+        $this->consulta();
+        
+        return view('livewire.vc-show-assistance',[
+            'tblrecords' => $tblrecords,
+        ]);
+    }
+
+    public function consulta(){
+
         $this->faltas = TdAsistenciaDiarias::query()
         ->where("periodo_id", $this->periodoId)
         ->where("persona_id", $this->personaId)
@@ -88,20 +109,6 @@ class VcShowAssistance extends Component
         ->where("valor", "AJ")
         ->count();
 
-        $tblrecords = TdAsistenciaDiarias::query()
-        ->where("periodo_id",$this->periodoId)
-        ->where("persona_id",$this->personaId)
-        ->where("curso_id",$this->cursoId)
-        ->when($this->tabactive,function($query){
-            return $query->where('termino',"{$this->tabactive}");
-        })
-        ->whereRaw("fecha <= ".date("Ymd", strtotime($this->fecha))." and valor <> ''")
-        ->orderBy("fecha","desc")
-        ->paginate(12);
-        
-        return view('livewire.vc-show-assistance',[
-            'tblrecords' => $tblrecords,
-        ]);
     }
 
     public function filtrar($codigo)
