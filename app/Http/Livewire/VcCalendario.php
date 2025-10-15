@@ -12,7 +12,7 @@ class VcCalendario extends Component
 {
     public $showEditModal = false, $eControl = 'disabled', $periodo, $mes;
     public $actividad='GE', $evento, $startdate, $enddate, $comentario, $selectId, $eventoId;
-    public $arrevent=[], $lstevent;
+    public $arrevent=[], $lstevent, $fechaEmpieza, $fechaTermina;
 
     protected $listeners = ['postAdded','newEvent','viewEvent'];
 
@@ -22,6 +22,9 @@ class VcCalendario extends Component
         
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
+        $this->fechaEmpieza = $tblperiodos['fecha_empieza'];
+        $this->fechaTermina = $tblperiodos['fecha_termina'];
+
         $this->periodo = date('Y');
         $this->mes = date('m');
         $this->loadEvent();
