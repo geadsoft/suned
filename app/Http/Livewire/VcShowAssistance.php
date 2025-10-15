@@ -106,7 +106,7 @@ class VcShowAssistance extends Component
 
     public function filtrar($codigo)
     {   
-        if $codigo=='A'{
+        if ($codigo=='A') {
             $this->tabactive = '';
         }else {
             $this->tabactive = $codigo;
