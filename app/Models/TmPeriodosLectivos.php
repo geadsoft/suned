@@ -22,6 +22,8 @@ class TmPeriodosLectivos extends Model
         'evaluacion_sumativa',
         'aperturado',
         'estado',
+        'fecha_empieza',
+        'fecha_termina',
         'usuario',
     ];
 }

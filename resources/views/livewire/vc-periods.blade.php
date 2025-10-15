@@ -135,13 +135,29 @@
                                                     @endfor
                                                 </select>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="date-field" class="form-label">Nº Recibo</label>
-                                                <input type="text" class="form-control" id="txtrecibo" placeholder="Enter your Names" wire:model.defer="record.num_recibo" readonly>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="txtrecibo" class="form-label">Nº Recibo</label>
+                                                    <input type="text" class="form-control" id="txtrecibo" placeholder="Enter your Names"
+                                                        wire:model.defer="record.num_recibo" readonly>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="txtmatricula" class="form-label">Nº Matrícula</label>
+                                                    <input type="text" class="form-control" id="txtmatricula" placeholder="Enter your Names"
+                                                        wire:model.defer="record.num_matricula" readonly>
+                                                </div>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="date-field" class="form-label">Nº Matricula</label>
-                                                <input type="text" class="form-control" id="txtrecibo" placeholder="Enter your Names" wire:model.defer="record.num_matricula" readonly>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="txtrecibo" class="form-label">Fecha Empieza</label>
+                                                    <input type="date" class="form-control" id="fechaEmpieza" data-provider="flatpickr" 
+                                                    data-date-format="d-m-Y" data-time="true" wire:model.defer="record.fecha_empieza" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="txtmatricula" class="form-label">Fecha Termina</label>
+                                                    <input type="date" class="form-control" id="fechaTermina" data-provider="flatpickr" 
+                                                    data-date-format="d-m-Y" data-time="true" wire:model.defer="record.fecha_termina" required>
+                                                </div>
                                             </div>
                                             <div>
                                                 <label for="record.estado" class="form-label">Status</label>

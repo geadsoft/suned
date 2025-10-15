@@ -71,6 +71,8 @@ class VcPeriods extends Component
         $this->record['num_matricula']= 0;
         $this->record['mes_pension']= 5;
         $this->record['estado']= 'I';     
+        $this->record['fecha_empieza']= '';
+        $this->record['fecha_termina']= '';
         $this->dispatchBrowserEvent('show-form');
 
     }
@@ -115,6 +117,8 @@ class VcPeriods extends Component
             'record.descripcion' => 'required',
             'record.periodo' => 'required',
             'record.mes_pension' => 'required',
+            'record.fecha_empieza' => 'required',
+            'record.fecha_termina' => 'required',
         ]);
 
 
@@ -134,6 +138,8 @@ class VcPeriods extends Component
                 'secretaria_id' =>0,
                 'coordinador_id' =>0,
                 'estado' => $this -> record['estado'],
+                'fecha_empieza' => $this -> record['fecha_empieza'],
+                'fecha_termina' => $this -> record['fecha_termina'],
                 'usuario' => auth()->user()->name,
             ]);
 
@@ -153,10 +159,12 @@ class VcPeriods extends Component
             'record.periodo' => 'required',
             'record.descripcion' => 'required',
             'record.mes_pension' => 'required',
-            'record.estado'=> 'required',           
+            'record.estado'=> 'required',   
+            'record.fecha_empieza' => 'required',
+            'record.fecha_termina' => 'required',        
         ]);
         
-        $data = TmPeriodosLectivos::where('estado','A')->first();
+        /*$data = TmPeriodosLectivos::where('estado','A')->first();
 
         if(!empty($data) & $this->record['estado']=='A'){
             $message = "Existe periodo aperturado, debe cerrar periodo!";
@@ -164,7 +172,7 @@ class VcPeriods extends Component
 
             $this->dispatchBrowserEvent('hide-form');
             return;
-        }
+        }*/
         
         if ($this->selectId){
             
@@ -173,6 +181,8 @@ class VcPeriods extends Component
                 'descripcion' => $this -> record['descripcion'],
                 'mes_pension' => $this -> record['mes_pension'],
                 'estado' => $this -> record['estado'],
+                'fecha_empieza' => $this -> record['fecha_empieza'],
+                'fecha_termina' => $this -> record['fecha_termina'],
             ]);
             
         }
