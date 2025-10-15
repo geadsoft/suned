@@ -6,7 +6,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <p class="fw-medium text-muted mb-0">Faltas</p>
-                            <h2 class="mt-4 ff-secondary fw-semibold">{{$faltas}}</span>
+                            <h2 class="mt-4 ff-secondary fw-semibold">{{$faltas}}
                             </h2>
                             <!--<p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">
                                     <i class="ri-arrow-up-line align-middle"></i> 17.32 %
@@ -30,8 +30,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <p class="fw-medium text-muted mb-0">Faltas Justificadas</p>
-                            <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
-                                    data-target="">{{$faltasJus}}</span></h2>
+                            <h2 class="mt-4 ff-secondary fw-semibold">{{$faltasJus}}</h2>
                             <!--<p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">
                                     <i class="ri-arrow-down-line align-middle"></i> 0.96 %
                                 </span> vs. previous month</p>-->
@@ -54,8 +53,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <p class="fw-medium text-muted mb-0">Atrasos</p>
-                            <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
-                                    data-target="">{{$atraso}}</span></h2>
+                            <h2 class="mt-4 ff-secondary fw-semibold">{{$atraso}}</h2>
                             <!--<p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">
                                     <i class="ri-arrow-down-line align-middle"></i> 3.87 %
                                 </span> vs. previous month</p>-->
@@ -78,8 +76,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <p class="fw-medium text-muted mb-0">Atrasos Justificados</p>
-                            <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value"
-                                    data-target="">{{$atrasoJus}}</span></h2>
+                            <h2 class="mt-4 ff-secondary fw-semibold">{{$atrasoJus}}</h2>
                             <!--<p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">
                                     <i class="ri-arrow-up-line align-middle"></i> 1.09 %
                                 </span> vs. previous month</p>-->
