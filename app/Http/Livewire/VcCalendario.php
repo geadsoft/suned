@@ -260,8 +260,9 @@ class VcCalendario extends Component
         $messig = $mes+1;
 
         $this->lstevent = TmCalendarioEventos::query()
-        ->where('periodo',$this->periodo)
-        ->where('mes',$messig)
+        ->whereDate('start_date','>=',$fechafin)
+        /*->where('periodo',$this->periodo)
+        ->where('mes',$messig)*/
         ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
         ->get();
 
