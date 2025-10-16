@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('tm_pase_cursos', function (Blueprint $table) {
             $table->bigInteger('curso_anterior')->after('modalidad_id')->nullable()->unsigned();
-            $table->foreign('curso_anterior')->references('id')->on('tm_cursos');
+            $table->foreign('curso_anterior')->references('id')->on('tm_pase_cursos');
         });
     }
 
