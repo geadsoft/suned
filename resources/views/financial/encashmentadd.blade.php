@@ -34,7 +34,7 @@
         })
 
         window.addEventListener('msg-pago', event => {
-            swal("Error!", "Pago es mayor a las deudas aplicadas..", "warning");
+            swal("Error!", "Existe diferencia entre valor aplicado y valor a cancelar", "warning");
         })
 
         $("#cmbtipopago").change(function(){

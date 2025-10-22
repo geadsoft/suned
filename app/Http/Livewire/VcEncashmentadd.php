@@ -195,10 +195,6 @@ class VcEncashmentadd extends Component
         $monto = (array_sum(array_column($objDeuda,'valpago')));
         $mNumber_monto = (float) str_replace(',', '', $monto);
         $mNumber_pago = (float) str_replace(',', '', $this->cancela);
-        /*foreach ($objDeuda as $deuda)
-        {
-            $monto += floatval($deuda['valpago']);
-        }*/
         
         if ($mNumber_pago>$mNumber_monto){
             return true ; 
@@ -232,16 +228,9 @@ class VcEncashmentadd extends Component
             'record.estudiante_id' => 'required',
             'record.monto' => 'required',
         ]);
-        
 
         $comentario = "";
         $this->tblCobro = TrCobrosCabs::orderBy('id', 'desc')->first();
-
-        /*if ($this->tblCobro==null){
-            $this->secuencia = 1;  
-        } else {  
-            $this->secuencia = intval($this->tblCobro['documento'])+1;
-        }*/
 
         /*-- Begin Registro de Recibo */
         $pLectivo        = TmPeriodosLectivos::find($this->periodo_id);
@@ -291,47 +280,51 @@ class VcEncashmentadd extends Component
             $this->valpago = floatval($deuda['valpago']);
             $this->despago = floatval($deuda['desct']);
            
-            if ($this->totalPago>$this->valpago){
+            if ($this->totalPago>=$this->valpago){
                 $this->totalPago = $this->totalPago-$this->valpago;
             }else{
                 $this->valpago = $this->totalPago;
             }
 
-            TrDeudasDets::Create([
-                'deudacab_id' =>  $deuda ['id'],  
-                'cobro_id' => $this->selectId,
-                'fecha' => $this -> fecha,
-                'detalle' => $deuda['detalle'],
-                'tipo' => "PAG",
-                'referencia' => $this->document,
-                'tipovalor' => "CR",
-                'valor' => $this->valpago,
-                'estado' => "P",
-                'usuario' => auth()->user()->name,
-                ]);
-            
-            if ($this->despago>0){
-
+            if ($this->valpago>0){
+                
                 TrDeudasDets::Create([
-                    'deudacab_id' =>  $deuda['id'],  
+                    'deudacab_id' =>  $deuda ['id'],  
                     'cobro_id' => $this->selectId,
-                    'fecha' => $this -> record['fecha'],
+                    'fecha' => $this -> fecha,
                     'detalle' => $deuda['detalle'],
-                    'tipo' => "DES",
+                    'tipo' => "PAG",
                     'referencia' => $this->document,
                     'tipovalor' => "CR",
-                    'valor' => $this->despago,
+                    'valor' => $this->valpago,
                     'estado' => "P",
                     'usuario' => auth()->user()->name,
                     ]);
-            }
+                
+                if ($this->despago>0){
 
-            $tbldeuda = TrDeudasCabs::find($deuda['id']);
-            $tbldeuda->update([
-                'descuento' => $tbldeuda['descuento']+($this->despago), 
-                'credito' => $tbldeuda['credito']+($this->valpago+$this->despago),
-                'saldo' => $tbldeuda['saldo']-($this->valpago+$this->despago),
-            ]); 
+                    TrDeudasDets::Create([
+                        'deudacab_id' =>  $deuda['id'],  
+                        'cobro_id' => $this->selectId,
+                        'fecha' => $this -> record['fecha'],
+                        'detalle' => $deuda['detalle'],
+                        'tipo' => "DES",
+                        'referencia' => $this->document,
+                        'tipovalor' => "CR",
+                        'valor' => $this->despago,
+                        'estado' => "P",
+                        'usuario' => auth()->user()->name,
+                        ]);
+                }
+
+                $tbldeuda = TrDeudasCabs::find($deuda['id']);
+                $tbldeuda->update([
+                    'descuento' => $tbldeuda['descuento']+($this->despago), 
+                    'credito' => $tbldeuda['credito']+($this->valpago+$this->despago),
+                    'saldo' => $tbldeuda['saldo']-($this->valpago+$this->despago),
+                ]); 
+
+            }
         
         }
         
