@@ -1,4 +1,5 @@
 <div>
+    <form id="buzon-form" autocomplete="off" wire:submit.prevent="{{ 'createData' }}" class="needs-validation">
     <div class="row">
         <div class="col-lg-12">
             <div class="card rounded-0 bg-soft-success mx-n4 mt-n4 border-top">
@@ -9,7 +10,7 @@
                                 <h4 class="display-6 coming-soon-text">Buzón de Sugerencias, Quejas</h4>
                                 <p class="text-muted fs-15 mt-3">Si tienes sugerencias, comentarios o necesitas asistencia, no dudes en escribirnos. Puedes contactarnos o enviarnos un correo electrónico.</p>
                                 <div class="hstack flex-wrap gap-2">
-                                    <button type="button" class="btn btn-primary btn-label rounded-pill"><i
+                                    <button type="submit" class="btn btn-primary btn-label rounded-pill"><i
                                         class="ri-send-plane-fill label-icon align-middle rounded-pill fs-16 me-2"></i> Enviar
                                     </button>
                                     <!--<button type="button" class="btn btn-info btn-label rounded-pill"><i
@@ -54,7 +55,7 @@
                                     <select class="form-select" id="asignatura-select" data-choices data-choices-search-false wire:model.defer="tipo" required>
                                     <option value="">Seleccione</option>
                                     <option value="C">Cédula</option>
-                                    <option value="C">Ruc</option>
+                                    <option value="R">Ruc</option>
                                     </select>
                                 </div>
                             </div>
@@ -96,17 +97,17 @@
                         </div>
                         <div style="display: none">{{$texteditor}}</div>
                         <div class="mb-3" wire:ignore>
-                            <label class="form-label fw-semibold"></label>
-                            <textarea id="editor" wire:model="texteditor" disabled>
+                            <label class="form-label fw-semibold">Descripción de Actividad</label>
+                            <textarea id="editor" wire:model="texteditor"  disabled>
                                 
                             </textarea>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
         <!--end col-->
     </div>    
+    </form>  
 </div>
 

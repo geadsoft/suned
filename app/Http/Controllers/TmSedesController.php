@@ -47,6 +47,23 @@ class TmSedesController extends Controller
         return view('academic/mailbox');
     }
 
+    public function buzon_opiniones()
+    {
+        return view('academic/mailbox_opinions');
+    }
+
+    public function ppe()
+    {
+        return view('academic/ppe');
+    }
+
+    public function ppe_fases($fase)
+    {
+        return view('academic/ppefases',[
+            'fase' => $fase
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

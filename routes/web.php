@@ -71,7 +71,9 @@ Route::get('/academic/information-student',[App\Http\Controllers\DocentesControl
 Route::get('/academic/pass-course',[App\Http\Controllers\TmSedesController::class, 'pasecurso'])->name('pasecurso');
 Route::get('/academic/calendar-events',[App\Http\Controllers\DocentesController::class, 'calendario_view'])->name('calendario_view');
 Route::get('/academic/suggestion-box',[App\Http\Controllers\TmSedesController::class, 'buzon'])->name('buzon');
-
+Route::get('/academic/mailbox-opinions',[App\Http\Controllers\TmSedesController::class, 'buzon_opiniones'])->name('buzon_opiniones');
+Route::get('/academic/ppe',[App\Http\Controllers\TmSedesController::class, 'ppe'])->name('ppe');
+Route::get('/ppe/phases/{fase}',[App\Http\Controllers\TmSedesController::class, 'ppe_fases'])->name('ppe_fases');
 
 Route::get('/report/total-rating',[App\Http\Controllers\DocentesController::class, 'calificacion_total'])->name('calificacion_total');
 Route::get('/report/exams-qualify',[App\Http\Controllers\DocentesController::class, 'calificacion_examen'])->name('calificacion_examen');

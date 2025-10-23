@@ -54,6 +54,13 @@
                     </a>
                 </li>
                 @endcan
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="/academic/mailbox-opinions">
+                        <i class="ri-inbox-archive-line fs-20"></i> <span>Buzón de Opiniones</span>
+                    </a>
+                </li>
+
                 @can('Asignaturas')
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/student/subject">
@@ -536,6 +543,11 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/academic/calendario">
                         <i class="las la-calendar-alt fs-20"></i>Eventos / Comunicados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/academic/ppe">
+                        <i class="ri-open-arm-fill fs-20"></i>PPE</span>
                     </a>
                 </li>
                 @endcan
