@@ -67,22 +67,36 @@
             <div class="card">
                 <div class="card-body">
                     <div class="text-muted">
-                        @if ($fase===1)
-                        <h6 class="mb-3 fw-semibold text-uppercase">FASE DE FORMACIÓN</h6>
-                        <p>Implica un proceso de sensibilización sobre la problemática seleccionada a través de recursos como textos, gráficos, datos estadísticos, 
-                        videos, cursos MOOC, entre otros. En esta fase, es importante motivar la búsqueda de información por parte de cada estudiante.</p>
-                        @endif
-                        @if ($fase===2)
-                        <h6 class="mb-3 fw-semibold text-uppercase">FASE DE EJECUCIÓN</h6>
-                        <p>Implica el desarrollo y participación de los y las estudiantes, en cada una de las actividades planificadas y sugeridas en los programas 
-                        desarrollados por el Nivel Central de la Autoridad Educativa Nacional en coordinación con las instancias competentes.</p>
-                        @endif
-                        @if ($fase===3)
-                        <h6 class="mb-3 fw-semibold text-uppercase">FASE DE PRESENTACIÓN</h6>
-                        <p>Para esta fase se propone un ejercicio de retroalimentación entre pares que permita identificar aprendizajes, resultados, obstáculos y expectativas. 
-                        A partir de este ejercicio educativo, se organiza una jornada de presentación, tipo casa abierta, para compartir con todas la comunidad educativa el 
-                        trabajo realizado.</p>
-                        @endif
+                        @switch($fase)
+                            @case(1)
+                                <h6 class="mb-3 fw-semibold text-uppercase">FASE DE FORMACIÓN</h6>
+                                <p>
+                                    Implica un proceso de sensibilización sobre la problemática seleccionada a través de recursos como textos, gráficos, datos estadísticos, 
+                                    videos, cursos MOOC, entre otros. En esta fase, es importante motivar la búsqueda de información por parte de cada estudiante.
+                                </p>
+                                @break
+
+                            @case(2)
+                                <h6 class="mb-3 fw-semibold text-uppercase">FASE DE EJECUCIÓN</h6>
+                                <p>
+                                    Implica el desarrollo y participación de los y las estudiantes, en cada una de las actividades planificadas y sugeridas en los programas 
+                                    desarrollados por el Nivel Central de la Autoridad Educativa Nacional en coordinación con las instancias competentes.
+                                </p>
+                                @break
+
+                            @case(3)
+                                <h6 class="mb-3 fw-semibold text-uppercase">FASE DE PRESENTACIÓN</h6>
+                                <p>
+                                    Para esta fase se propone un ejercicio de retroalimentación entre pares que permita identificar aprendizajes, resultados, obstáculos y expectativas. 
+                                    A partir de este ejercicio educativo, se organiza una jornada de presentación, tipo casa abierta, para compartir con toda la comunidad educativa el 
+                                    trabajo realizado.
+                                </p>
+                                @break
+
+                            @default
+                                <h6 class="mb-3 fw-semibold text-uppercase">SIN FASE DEFINIDA</h6>
+                                <p>No se ha definido una fase válida.</p>
+                        @endswitch
                     </div>
                     <div class="text-end">
                         <button type="submit" class="btn btn-success w-sm">Grabar</button>
