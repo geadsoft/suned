@@ -64,6 +64,11 @@ class TmSedesController extends Controller
         ]);
     }
 
+    public function ppe_estudiantes()
+    {
+        return view('academic/ppeestudiantes');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

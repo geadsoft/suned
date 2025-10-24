@@ -27,10 +27,10 @@
                                 <div class="external-event bg-soft-primary text-primary" data-class="bg-soft-primary">
                                     <i class="mdi mdi-checkbox-blank-circle font-size-11 me-2"></i>General
                                 </div>
-                                <div class="external-event bg-soft-primary text-secondary" data-class="bg-soft-secondary">
+                                <div class="external-event bg-soft-secondary text-secondary" data-class="bg-soft-secondary">
                                     <i class="mdi mdi-checkbox-blank-circle font-size-11 me-2"></i>Notificación Docente
                                 </div>
-                                <div class="external-event bg-soft-primary text-dark" data-class="bg-soft-dark">
+                                <div class="external-event bg-soft-dark text-dark" data-class="bg-soft-dark">
                                     <i class="mdi mdi-checkbox-blank-circle font-size-11 me-2"></i>Feriado
                                 </div>
                             </div>

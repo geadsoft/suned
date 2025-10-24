@@ -1,70 +1,46 @@
 <div>
+    <form id="fase-form" autocomplete="off" wire:submit.prevent="{{ 'createData' }}" class="needs-validation">
     <div class="row">
         <div class="col-xxl-3">
-            <!--<div class="card">
-                <div class="card-body text-center">
-                    <h6 class="card-title mb-3 flex-grow-1 text-start">Time Tracking</h6>
-                    <div class="mb-2">
-                        <lord-icon src="https://cdn.lordicon.com/kbtmbyzy.json" trigger="loop"
-                            colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px">
-                        </lord-icon>
-                    </div>
-                    <h3 class="mb-1">9 hrs 13 min</h3>
-                    <h5 class="fs-14 mb-4">Profile Page Satructure</h5>
-                    <div class="hstack gap-2 justify-content-center">
-                        <button class="btn btn-danger btn-sm"><i class="ri-stop-circle-line align-bottom me-1"></i>
-                            Stop</button>
-                        <button class="btn btn-success btn-sm"><i class="ri-play-circle-line align-bottom me-1"></i>
-                            Start</button>
-                    </div>
-                </div>
-            </div>-->
-            <!--end card-->
             <div class="card mb-3">
                 <div class="card-body">
                     
                     <div class="input-group mb-3">
                         <span class="input-group-text">Dias de Clases</span>
-                        <input type="text" aria-label="First name" class="form-control">
+                        <input type="number" aria-label="First name" class="form-control product-price text-end" wire:model="filas">
+                        
+                        <a id="btnstudents" class ="btn btn-success btn-sm" wire:click="newdetalle()"><i class="ri-add-fill align-bottom me-1"></i></a>
+                            
                     </div>
-                    <div class="table-card">
-                        <table class="table mb-0">
+                    
+                    <div class="card">
+                        <table class="table mb-3">
+                            <thead class="text-muted table-light">
+                                <tr class="text-uppercase">
+                                    <th class="sort" data-sort="id" style="width: 90px;">Linea</th>
+                                    <th class="sort">Fecha</th>
+                                </tr>
+                            </thead>
                             <tbody>
+                                @foreach($this->objdetalle as $key => $detalle)
                                 <tr>
-                                    <td class="fw-medium">1</td>
-                                    <td></td>
+                                    <td class="fw-medium">
+                                        <input type="number" step="0.01" class="form-control form-control-sm bg-light border-0 product-price"
+                                        id="linea-{{$key}}" value="{{$detalle['linea']}}"/>
+                                    </td>
+                                    <td><input type="date" class="form-control form-control-sm bg-light border-0" id="fechaActual-{{$key}}" 
+                                            data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="objdetalle.{{$key}}.fecha"></td>
                                 </tr>
-                                <tr>
-                                    <td class="fw-medium">2</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium">3</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium">4</td>
-                                    <td><span class="badge badge-soft-danger"></span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium">5</td>
-                                    <td><span class="badge badge-soft-secondary"></span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-medium">6</td>
-                                    <td></td>
-                                </tr>
+                                @endforeach                               
                             </tbody>
                         </table>
-                        <!--end table-->
                     </div>
                 </div>
             </div>
-            <!--end card-->
             
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-3">Clase Virtual</h5>
+                    <h5 class="card-title mb-3">Link - Clase Virtual</h5>
                     <div class="vstack gap-2">
                         <div class="border rounded border-dashed p-2">
                             <div class="d-flex align-items-center">
@@ -76,18 +52,12 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1 overflow-hidden">
-                                    <h5 class="fs-15 mb-1"><a href="javascript:void(0);"
-                                            class="text-body text-truncate d-block">Clase Virtual</a></h5>
-                                    <div class="text-muted">2.2MB</div>
+                                    <textarea id="editor" class="form-control w-100" rows="3" wire:model.defer="enlace" required></textarea>
                                 </div>
                             </div>
                         </div>
-
-                        
-                        <div class="mt-2 text-center">
-                            <button type="button" class="btn btn-secondary">View more</button>
-                        </div>
                     </div>
+
                 </div>
             </div>
             <!--end card-->
@@ -97,9 +67,26 @@
             <div class="card">
                 <div class="card-body">
                     <div class="text-muted">
-                        <h6 class="mb-3 fw-semibold text-uppercase">Fase de Formación</h6>
+                        @if ($fase==1)
+                        <h6 class="mb-3 fw-semibold text-uppercase">FASE DE FORMACIÓN</h6>
                         <p>Implica un proceso de sensibilización sobre la problemática seleccionada a través de recursos como textos, gráficos, datos estadísticos, 
                         videos, cursos MOOC, entre otros. En esta fase, es importante motivar la búsqueda de información por parte de cada estudiante.</p>
+                        @endif
+                        @if ($fase==2)
+                        <h6 class="mb-3 fw-semibold text-uppercase">FASE DE EJECUCIÓN</h6>
+                        <p>Implica el desarrollo y participación de los y las estudiantes, en cada una de las actividades planificadas y sugeridas en los programas 
+                        desarrollados por el Nivel Central de la Autoridad Educativa Nacional en coordinación con las instancias competentes.</p>
+                        @endif
+                        @if ($fase==2)
+                        <h6 class="mb-3 fw-semibold text-uppercase">FASE DE PRESENTACIÓN</h6>
+                        <p>Para esta fase se propone un ejercicio de retroalimentación entre pares que permita identificar aprendizajes, resultados, obstáculos y expectativas. 
+                        A partir de este ejercicio educativo, se organiza una jornada de presentación, tipo casa abierta, para compartir con todas la comunidad educativa el 
+                        trabajo realizado.</p>
+                        @endif
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-success w-sm">Grabar</button>
+                        <a class="btn btn-secondary w-sm" href="/academic/ppe"><i class="me-1 align-bottom"></i>Cancelar</a>
                     </div>
                 </div>
             </div>
@@ -124,277 +111,51 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="tab-pane active" id="home-1" role="tabpanel">
-                            <h5 class="card-title mb-4">Estudiantes</h5>
-                            
-                            <!--<form class="mt-4">
-                                <div class="row g-3">
-                                    <div class="col-lg-12">
-                                        <label for="exampleFormControlTextarea1" class="form-label">Leave a
-                                            Comments</label>
-                                        <textarea class="form-control bg-light border-light" id="exampleFormControlTextarea1" rows="3"
-                                            placeholder="Enter comments"></textarea>
-                                    </div>
-                                    
-                                    <div class="col-12 text-end">
-                                        <button type="button" class="btn btn-ghost-secondary btn-icon waves-effect me-1"><i
-                                                class="ri-attachment-line fs-16"></i></button>
-                                        <a href="javascript:void(0);" class="btn btn-success">Post Comments</a>
+                            <h5 class="card-title mb-4">Calificación</h5>
+                        </div>
+                        <div class="table-responsive table-card mb-1">
+                                <table class="table table-nowrap align-middle" id="orderTable">
+                                    <thead class="text-muted table-light">
+                                        <tr class="text-uppercase">
+                                            <th class="sort" data-sort="id">Identificación</th>
+                                            <th class="sort" data-sort="superior">Nombres</th>
+                                            @foreach($this->objdetalle as $key => $detalle)
+                                            <th class="sort" data-sort="codigo">{{$detalle['fecha']}}</th>
+                                            @endforeach
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list form-check-all">
+                                    @foreach ($personas as $person)    
+                                        <tr>
+                                            <td>{{$person->identificacion}}</td>
+                                            <td>{{$person->apellidos}} {{$person->nombres}}</td>
+                                            @foreach($this->objdetalle as $key => $detalle)
+                                            <td>
+                                            <input type="number" class="form-control product-price bg-light border-0" id="ln-{{$person->id}}-{{$key}}" value=""/>
+                                            </td>
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                                
+                                <div class="noresult" style="display: none">
+                                    <div class="text-center">
+                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+                                            colors="primary:#405189,secondary:#0ab39c" style="width:75px;height:75px">
+                                        </lord-icon>
+                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                        <p class="text-muted">We've searched more than 150+ Orders We did
+                                            not find any
+                                            orders for you search.</p>
                                     </div>
                                 </div>
-                                -->
-                            </form>
-                        </div>
-                        <!--end tab-pane-->
-                        <div class="tab-pane" id="messages-1" role="tabpanel">
-                            <div class="table-responsive table-card">
-                                <table class="table table-borderless align-middle mb-0">
-                                    <thead class="table-light text-muted">
-                                        <tr>
-                                            <th scope="col">File Name</th>
-                                            <th scope="col">Type</th>
-                                            <th scope="col">Size</th>
-                                            <th scope="col">Upload Date</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar-sm">
-                                                        <div
-                                                            class="avatar-title bg-soft-primary text-primary rounded fs-20">
-                                                            <i class="ri-file-zip-fill"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="ms-3 flex-grow-1">
-                                                        <h6 class="fs-15 mb-0"><a href="javascript:void(0)">App
-                                                                pages.zip</a></h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>Zip File</td>
-                                            <td>2.22 MB</td>
-                                            <td>21 Dec, 2021</td>
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="javascript:void(0);" class="btn btn-light btn-icon"
-                                                        id="dropdownMenuLink1" data-bs-toggle="dropdown"
-                                                        aria-expanded="true">
-                                                        <i class="ri-equalizer-fill"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-menu-end"
-                                                        aria-labelledby="dropdownMenuLink1"
-                                                        data-popper-placement="bottom-end"
-                                                        style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 23px);">
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                                                    class="ri-eye-fill me-2 align-middle text-muted"></i>View</a>
-                                                        </li>
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                                                    class="ri-download-2-fill me-2 align-middle text-muted"></i>Download</a>
-                                                        </li>
-                                                        <li class="dropdown-divider"></li>
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                                                    class="ri-delete-bin-5-line me-2 align-middle text-muted"></i>Delete</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar-sm">
-                                                        <div class="avatar-title bg-soft-danger text-danger rounded fs-20">
-                                                            <i class="ri-file-pdf-fill"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="ms-3 flex-grow-1">
-                                                        <h6 class="fs-15 mb-0"><a href="javascript:void(0);">Velzon
-                                                                admin.ppt</a></h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>PPT File</td>
-                                            <td>2.24 MB</td>
-                                            <td>25 Dec, 2021</td>
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="javascript:void(0);" class="btn btn-light btn-icon"
-                                                        id="dropdownMenuLink2" data-bs-toggle="dropdown"
-                                                        aria-expanded="true">
-                                                        <i class="ri-equalizer-fill"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-menu-end"
-                                                        aria-labelledby="dropdownMenuLink2"
-                                                        data-popper-placement="bottom-end"
-                                                        style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 23px);">
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                                                    class="ri-eye-fill me-2 align-middle text-muted"></i>View</a>
-                                                        </li>
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                                                    class="ri-download-2-fill me-2 align-middle text-muted"></i>Download</a>
-                                                        </li>
-                                                        <li class="dropdown-divider"></li>
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                                                    class="ri-delete-bin-5-line me-2 align-middle text-muted"></i>Delete</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar-sm">
-                                                        <div class="avatar-title bg-soft-info text-info rounded fs-20">
-                                                            <i class="ri-folder-line"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="ms-3 flex-grow-1">
-                                                        <h6 class="fs-15 mb-0"><a
-                                                                href="javascript:void(0);">Images.zip</a></h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>ZIP File</td>
-                                            <td>1.02 MB</td>
-                                            <td>28 Dec, 2021</td>
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="javascript:void(0);" class="btn btn-light btn-icon"
-                                                        id="dropdownMenuLink3" data-bs-toggle="dropdown"
-                                                        aria-expanded="true">
-                                                        <i class="ri-equalizer-fill"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-menu-end"
-                                                        aria-labelledby="dropdownMenuLink3"
-                                                        data-popper-placement="bottom-end"
-                                                        style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 23px);">
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                                                    class="ri-eye-fill me-2 align-middle"></i>View</a></li>
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                                                    class="ri-download-2-fill me-2 align-middle"></i>Download</a>
-                                                        </li>
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                                                    class="ri-delete-bin-5-line me-2 align-middle"></i>Delete</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar-sm">
-                                                        <div class="avatar-title bg-soft-danger text-danger rounded fs-20">
-                                                            <i class="ri-image-2-fill"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="ms-3 flex-grow-1">
-                                                        <h6 class="fs-15 mb-0"><a
-                                                                href="javascript:void(0);">Bg-pattern.png</a></h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>PNG File</td>
-                                            <td>879 KB</td>
-                                            <td>02 Nov 2021</td>
-                                            <td>
-                                                <div class="dropdown">
-                                                    <a href="javascript:void(0);" class="btn btn-light btn-icon"
-                                                        id="dropdownMenuLink4" data-bs-toggle="dropdown"
-                                                        aria-expanded="true">
-                                                        <i class="ri-equalizer-fill"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-menu-end"
-                                                        aria-labelledby="dropdownMenuLink4"
-                                                        data-popper-placement="bottom-end"
-                                                        style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 23px);">
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                                                    class="ri-eye-fill me-2 align-middle"></i>View</a></li>
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                                                    class="ri-download-2-fill me-2 align-middle"></i>Download</a>
-                                                        </li>
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i
-                                                                    class="ri-delete-bin-5-line me-2 align-middle"></i>Delete</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <!--end table-->
                             </div>
+
+                            
+
                         </div>
-                        <!--end tab-pane-->
-                        <div class="tab-pane" id="profile-1" role="tabpanel">
-                            <h6 class="card-title mb-4 pb-2">Time Entries</h6>
-                            <div class="table-responsive table-card">
-                                <table class="table align-middle mb-0">
-                                    <thead class="table-light text-muted">
-                                        <tr>
-                                            <th scope="col">Member</th>
-                                            <th scope="col">Date</th>
-                                            <th scope="col">Duration</th>
-                                            <th scope="col">Timer Idle</th>
-                                            <th scope="col">Tasks Title</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="d-flex align-items-center">
-                                                    <img src="{{ URL::asset('assets/images/users/avatar-8.jpg') }}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                    <div class="flex-grow-1 ms-2">
-                                                        <a href="{{URL::asset('/pages-profile')}}" class="fw-medium">Thomas
-                                                            Taylor</a>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>02 Jan, 2022</td>
-                                            <td>3 hrs 12 min</td>
-                                            <td>05 min</td>
-                                            <td>Apps Pages</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img src="{{ URL::asset('assets/images/users/avatar-10.jpg') }}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                    <div class="flex-grow-1 ms-2">
-                                                        <a href="{{URL::asset('/pages-profile')}}" class="fw-medium">Tonya Noble</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>28 Dec, 2021</td>
-                                            <td>1 hrs 35 min</td>
-                                            <td>-</td>
-                                            <td>Profile Page Design</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="d-flex align-items-center">
-                                                    <img src="{{ URL::asset('assets/images/users/avatar-10.jpg') }}" alt=""
-                                                        class="rounded-circle avatar-xxs">
-                                                    <div class="flex-grow-1 ms-2">
-                                                        <a href="{{URL::asset('/pages-profile')}}" class="fw-medium">Tonya Noble</a>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>27 Dec, 2021</td>
-                                            <td>4 hrs 26 min</td>
-                                            <td>03 min</td>
-                                            <td>Ecommerce Dashboard</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <!--end table-->
-                            </div>
-                        </div>
-                        <!--edn tab-pane-->
+
 
                     </div>
                     <!--end tab-content-->
@@ -405,6 +166,7 @@
         <!--end col-->
     </div>
     <!--end row-->
+    </form>
 
     <div class="modal fade" id="inviteMembersModal" tabindex="-1" aria-labelledby="inviteMembersModalLabel"
         aria-hidden="true">
