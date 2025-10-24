@@ -545,6 +545,8 @@
                         <i class="las la-calendar-alt fs-20"></i>Eventos / Comunicados</span>
                     </a>
                 </li>
+                @endcan
+                @can('PPE')
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/academic/ppe">
                         <i class="ri-open-arm-fill fs-20"></i>PPE</span>
