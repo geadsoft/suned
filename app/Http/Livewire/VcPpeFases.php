@@ -13,7 +13,7 @@ class VcPpeFases extends Component
 {   
     public $fecha, $hora, $fase, $periodoId, $docenteId, $filas=0, $enlace;
     public $objdetalle=[];
-    public $personas;
+    public $personas=[];
 
 
     public function mount($fase)
@@ -56,6 +56,7 @@ class VcPpeFases extends Component
 
         $tblfases = TmPpeFases::query()
         ->where('periodo_id',$this->periodoId)
+        ->where('fase',$this->fase)
         ->where('persona_id',$this->docenteId)
         ->where('enlace',"")
         ->get();
@@ -69,13 +70,16 @@ class VcPpeFases extends Component
         
         $tblfases = TmPpeFases::query()
         ->where('periodo_id', $this->periodoId)
+        ->where('fase',$this->fase)
         ->where('persona_id', $this->docenteId)
         ->whereNotNull('enlace')       // que no sea NULL
         ->where('enlace', '<>', '')    // que no esté vacío
         ->first();
 
-        $this->enlace = $tblfases->enlace; 
-        $this->loadPersonas();
+        if ($tblfases){
+            $this->enlace = $tblfases->enlace; 
+            $this->loadPersonas();
+        }
         
     }
 

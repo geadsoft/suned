@@ -47,7 +47,7 @@
                 <img src="{{URL::asset('assets/images/nft/wallet/ejecucion.jpg')}}" alt="" height="100" class="mb-3 pb-2">
                 <h5>Fase Ejecución</h5>
                 <p class="text-muted pb-1">Fomentar la participación activa de los estudiantes en las actividades planificadas por los programas institucionales.</p>
-                <a href="#!" class="btn btn-soft-info" target="_blank">Acceder -  Fase 02</a>
+                <a href="/ppe/phases/2" class="btn btn-soft-info" target="_blank">Acceder -  Fase 02</a>
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@
                 <img src="{{URL::asset('assets/images/nft/wallet/presentacion.jpg')}}" alt="" height="100" class="mb-3 pb-2">
                 <h5>Fase Presentación</h5>
                 <p class="text-muted pb-1">Fortalecer el aprendizaje y la reflexión mediante la retroalimentación entre pares y la socialización de resultados con la comunidad educativa.</p>
-                <a href="#!" class="btn btn-soft-info" target="_blank">Acceder - Fase 03</a>
+                <a href="/ppe/phases/3" class="btn btn-soft-info" target="_blank">Acceder - Fase 03</a>
             </div>
         </div>
     </div>

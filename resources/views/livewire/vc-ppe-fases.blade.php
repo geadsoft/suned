@@ -113,14 +113,14 @@
                         <div class="tab-pane active" id="home-1" role="tabpanel">
                             <h5 class="card-title mb-4">Calificación</h5>
                         </div>
-                        <div class="table-responsive table-card mb-1">
-                                <table class="table table-nowrap align-middle" id="orderTable">
+                        <div class="table-responsive  table-card mb-1">
+                                <table class="table table-sm table-nowrap align-middle" id="orderTable">
                                     <thead class="text-muted table-light">
                                         <tr class="text-uppercase">
-                                            <th class="sort" data-sort="id">Identificación</th>
-                                            <th class="sort" data-sort="superior">Nombres</th>
+                                            <th data-sort="id">Identificación</th>
+                                            <th data-sort="superior">Nombres</th>
                                             @foreach($this->objdetalle as $key => $detalle)
-                                            <th class="sort" data-sort="codigo">{{$detalle['fecha']}}</th>
+                                            <th class="text-center" style="width: 130px;">{{$detalle['fecha']}}</th>
                                             @endforeach
                                         </tr>
                                     </thead>
