@@ -139,14 +139,16 @@
                                         @endif
                                         <span class="job-type">{{ $record['nombres'] }}</span>
                                     </div> </td>
-
-                                        @foreach ($tblgrupo as $grupo)
-                                            @if (isset($record[$grupo->actividad."-prom"]))
-                                                <td class="text-center">{{number_format($record[$grupo->actividad."-prom"],2)}}</td>
-                                            @else
-                                                <td class="text-center">0.00</td>
-                                            @endif
-                                        @endforeach
+                                        @if (isset($record["AI-prom"]))
+                                            <td class="text-center">{{number_format($record[$grupo->actividad."-prom"],2)}}</td>
+                                        @else
+                                            <td class="text-center">0.00</td>
+                                        @endif
+                                        @if (isset($record["AG-prom"]))
+                                            <td class="text-center">{{number_format($record[$grupo->actividad."-prom"],2)}}</td>
+                                        @else
+                                            <td class="text-center">0.00</td>
+                                        @endif                                        
                                     @endif
                                     <td class="text-center">{{number_format($record["promedio"],2)}}</td>   
                                     <td class="text-center">{{$record["cualitativa"]}}</td> 
