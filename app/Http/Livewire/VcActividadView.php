@@ -275,7 +275,9 @@ class VcActividadView extends Component
 
         foreach ($notas as $recno){
             $personaId = $recno->persona_id;
-            $this->tblrecords[$personaId]['nota'] =  $recno->nota;
+            if (isset($this->tblrecords[$personaId])) {
+                $this->tblrecords[$personaId]['nota'] =  $recno->nota;
+            }
         }
 
 
