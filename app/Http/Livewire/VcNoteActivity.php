@@ -220,12 +220,18 @@ class VcNoteActivity extends Component
             $this->tblrecords[$index]['nombres'] = strtoupper($data->descripcion);
                        
             $record = $this->actividad($data->id);
-            $this->tblgrupo = $record
+            $this->tblgrupo = TdPeriodoSistemaEducativos::query()
+            ->where('periodo_id',$this->periodoId)
+            ->where('tipo','AC')
+            ->where('codigo','<>','EX')
+            ->get();
+            
+            /*$record
             ->groupBy('actividad')
             ->sortBy(function ($items, $key) {
                 return $key === 'AI' ? 0 : 1;
             })
-            ->toBase();
+            ->toBase();*/
             
             foreach ($this->tblgrupo as $key2 => $grupo){
 
@@ -273,7 +279,7 @@ class VcNoteActivity extends Component
             }
         }
 
-        $this->tblgrupo  = TmActividades::query()
+        /*$this->tblgrupo  = TmActividades::query()
         ->join("tm_horarios_docentes as d",function($join){
             $join->on("d.id","=","tm_actividades.paralelo")
                 ->on("d.docente_id","=","tm_actividades.docente_id");
@@ -291,7 +297,7 @@ class VcNoteActivity extends Component
         ->selectRaw("tm_actividades.actividad")
         ->where("tipo","AC")
         ->groupBy("tm_actividades.actividad")
-        ->get();
+        ->get();*/
 
         $notas = TmActividades::query()
         ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
