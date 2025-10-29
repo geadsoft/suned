@@ -226,6 +226,8 @@ class VcNoteActivity extends Component
                 return $key === 'AI' ? 0 : 1;
             })
             ->toBase();
+
+            dd($this->tblgrupo);
             
             foreach ($this->tblgrupo as $key2 => $grupo){
 
