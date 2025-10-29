@@ -10,6 +10,7 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TmFiles;
 use App\Models\TdCalificacionActividades;
 use App\Models\TdPeriodoSistemaEducativos;
+use App\Models\TmPersonas;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -76,7 +77,7 @@ class VcExamenView extends Component
 
     public function render()
     {
-        
+
         $this->loadPersonas();        
         return view('livewire.vc-examen-view');
     }
