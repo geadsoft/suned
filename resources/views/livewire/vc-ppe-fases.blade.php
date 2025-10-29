@@ -40,17 +40,17 @@
             
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title mb-3">Link - Clase Virtual</h5>
+                    <div class="d-flex align-items-center">
+                        <div class="avatar-sm me-2">
+                            <div class="avatar-title bg-light text-secondary rounded fs-24">
+                                <i class="ri-video-chat-line"></i>
+                            </div>
+                        </div>
+                        <h5 class="card-title mb-0">Link - Clase Virtual</h5>
+                    </div>
                     <div class="vstack gap-2">
                         <div class="border rounded border-dashed p-2">
                             <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm">
-                                        <div class="avatar-title bg-light text-secondary rounded fs-24">
-                                            <i class="ri-video-chat-line"></i>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="flex-grow-1 overflow-hidden">
                                     <textarea id="editor" class="form-control w-100" rows="3" wire:model.defer="enlace" required></textarea>
                                 </div>
