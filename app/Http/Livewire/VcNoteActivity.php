@@ -193,7 +193,7 @@ class VcNoteActivity extends Component
         $this->materia = ''; // $titulo['asignatura'];
         $this->curso = $titulo['servicio'].' '.$titulo['paralelo'];
             
-        //$this->add();
+        $this->add();
         $this->asignarNotas();
 
     }
