@@ -122,7 +122,7 @@ class VcNoteActivity extends Component
         ->orderBy("tm_personas.apellidos")
         ->get();
 
-        $this->tblgrupo  = TmActividades::query()
+        /*$this->tblgrupo  = TmActividades::query()
         ->join("tm_horarios_docentes as d",function($join){
             $join->on("d.id","=","tm_actividades.paralelo")
                 ->on("d.docente_id","=","tm_actividades.docente_id");
@@ -140,7 +140,7 @@ class VcNoteActivity extends Component
         ->selectRaw("tm_actividades.actividad")
         ->where("tipo","AC")
         ->groupBy("tm_actividades.actividad")
-        ->get();
+        ->get();*/
 
         return view('livewire.vc-note-activity');
     }
