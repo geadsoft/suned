@@ -106,9 +106,8 @@
                                     </tr>
                                     <tr>
                                         <td class="align-middle text-center" colspan="2" rowspan="2" style="font-weight: normal; padding: 0px 10px;">ASIGNATURAS</td>
-                                        @foreach ($tblgrupo as $grupo)
-                                            <td class="align-middle text-center" rowspan="2" style="font-weight: normal; padding: 0px 10px;">{{$this->arrtipo[$grupo->actividad]}}</td>
-                                        @endforeach
+                                        <td class="align-middle text-center" rowspan="2" style="font-weight: normal; padding: 0px 10px;">Actividad Individual</td>
+                                        <td class="align-middle text-center" rowspan="2" style="font-weight: normal; padding: 0px 10px;">Actividad Grupal</td>
                                         <td class="align-middle text-center" colspan="2" style="font-weight: normal; padding: 0px 10px;">Primer Parcial</td>
                                         <!--<td class="align-middle text-center" rowspan="2" style="font-weight: normal; padding: 0px 10px;">RECOMENDACIONES</td>
                                         <td class="align-middle text-center" rowspan="2" style="font-weight: normal; padding: 0px 10px;">PLAN DE MEJORA ACADÉMICO</td>-->
@@ -127,13 +126,16 @@
                                     @else
                                     <td>{{$fil+1}}</td>
                                     <td>{{$record["nombres"]}}</td>
-                                        @foreach ($tblgrupo as $grupo)
-                                            @if (isset($record[$grupo->actividad."-prom"]))
-                                                <td class="text-center">{{number_format($record[$grupo->actividad."-prom"],2)}}</td>
-                                            @else
-                                                <td class="text-center">0.00</td>
-                                            @endif
-                                        @endforeach
+                                        @if (isset($record[$grupo->"AI-prom"]))
+                                            <td class="text-center">{{number_format($record[$grupo->"AI-prom"],2)}}</td>
+                                        @else
+                                            <td class="text-center">0.00</td>
+                                        @endif
+                                        @if (isset($record[$grupo->"AG-prom"]))
+                                            <td class="text-center">{{number_format($record[$grupo->"AG-prom"],2)}}</td>
+                                        @else
+                                            <td class="text-center">0.00</td>
+                                        @endif                                        
                                     @endif
                                     <td class="text-center">{{number_format($record["promedio"],2)}}</td>   
                                     <td class="text-center">{{$record["cualitativa"]}}</td> 
