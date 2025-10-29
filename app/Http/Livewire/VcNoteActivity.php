@@ -193,7 +193,7 @@ class VcNoteActivity extends Component
         $this->materia = ''; // $titulo['asignatura'];
         $this->curso = $titulo['servicio'].' '.$titulo['paralelo'];
             
-        $this->add();
+        //$this->add();
         $this->asignarNotas();
 
     }
@@ -220,12 +220,7 @@ class VcNoteActivity extends Component
             $this->tblrecords[$index]['nombres'] = strtoupper($data->descripcion);
                        
             $record = $this->actividad($data->id);
-            $this->tblgrupo = $record
-            ->groupBy('actividad')
-            ->sortBy(function ($items, $key) {
-                return $key === 'AI' ? 0 : 1;
-            })
-            ->toBase();
+            $this->tblgrupo = $record->groupBy('actividad')->toBase();
             
             foreach ($this->tblgrupo as $key2 => $grupo){
 
@@ -299,10 +294,10 @@ class VcNoteActivity extends Component
             $join->on('d.id', '=', 'tm_actividades.paralelo')
                 ->on('d.docente_id', 'tm_actividades.docente_id');
         })
-        ->when($this->filters['termino'], function($query) {
+        ->when(!empty($this->filters['termino']), function($query) {
             return $query->where('tm_actividades.termino', $this->filters['termino']);
         })
-        ->when($this->filters['bloque'], function($query) {
+        ->when(!empty($this->filters['bloque']), function($query) {
             return $query->where('tm_actividades.bloque', $this->filters['bloque']);
         })
         ->where('tm_actividades.tipo', 'AC')
