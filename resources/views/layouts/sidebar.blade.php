@@ -548,16 +548,11 @@
                 @endcan
                 @can('PPE')
                 <li class="nav-item">
-                    @can('PPE-Programa')
+                    
                     <a class="nav-link menu-link" href="/academic/ppe">
                         <i class="ri-open-arm-fill fs-20"></i>PPE</span>
                     </a>
-                    @endcan
-                    @can('PPE-Fases')
-                    <a class="nav-link menu-link" href="/academic/fases-ppe">
-                        <i class="ri-open-arm-fill fs-20"></i>PPE</span>
-                    </a>
-                    @endcan
+                    
                 </li>
                 @endcan
                 @can('Recursos')
