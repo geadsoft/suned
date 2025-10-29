@@ -273,7 +273,7 @@ class VcNoteActivity extends Component
             }
         }
 
-        $grupoAc  = TmActividades::query()
+        $this->tblgrupo  = TmActividades::query()
         ->join("tm_horarios_docentes as d",function($join){
             $join->on("d.id","=","tm_actividades.paralelo")
                 ->on("d.docente_id","=","tm_actividades.docente_id");
@@ -342,7 +342,7 @@ class VcNoteActivity extends Component
             $promedio = 0;
             $countprm = 0;
             
-            foreach ($grupoAc as $grupo){
+            foreach ($this->tblgrupo as $grupo){
 
                 $suma  = 0;
                 $count = 0;
