@@ -252,7 +252,9 @@ class VcExamenView extends Component
 
         foreach ($notas as $recno){
             $personaId = $recno->persona_id;
-            $this->tblrecords[$personaId]['nota'] =  $recno->nota;
+            if (isset($tblrecords[$personaId])){
+                $this->tblrecords[$personaId]['nota'] =  $recno->nota;
+            }
         }
 
 
