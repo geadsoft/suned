@@ -220,7 +220,14 @@ class VcNoteActivity extends Component
             $this->tblrecords[$index]['nombres'] = strtoupper($data->descripcion);
                        
             $record = $this->actividad($data->id);
-            $this->tblgrupo = $record->groupBy('actividad')->toBase();
+            $orden = ['AI', 'AG'];
+
+            $this->tblgrupo = $record
+                ->groupBy('actividad')
+                ->sortBy(function ($items, $key) use ($orden) {
+                    return array_search($key, $orden);
+                })
+                ->toBase();
             
             foreach ($this->tblgrupo as $key2 => $grupo){
 
