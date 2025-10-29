@@ -294,10 +294,10 @@ class VcNoteActivity extends Component
             $join->on('d.id', '=', 'tm_actividades.paralelo')
                 ->on('d.docente_id', 'tm_actividades.docente_id');
         })
-        ->when(!empty($this->filters['termino']), function($query) {
+        ->when($this->filters['termino'], function($query) {
             return $query->where('tm_actividades.termino', $this->filters['termino']);
         })
-        ->when(!empty($this->filters['bloque']), function($query) {
+        ->when($this->filters['bloque'], function($query) {
             return $query->where('tm_actividades.bloque', $this->filters['bloque']);
         })
         ->where('tm_actividades.tipo', 'AC')
