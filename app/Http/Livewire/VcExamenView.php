@@ -262,6 +262,8 @@ class VcExamenView extends Component
 
     public function grabarNota(){
 
+        dd($this->tblrecords);
+
         foreach ($this->tblrecords as $records){
 
                 TdCalificacionActividades::query()
