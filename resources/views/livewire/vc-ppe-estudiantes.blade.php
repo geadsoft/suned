@@ -85,7 +85,7 @@
                                     <div class="modal-body">
                                             <div class="col-lg-12">
                                                 <div>
-                                                    <table class="invoice-table table table-borderless table-nowrap mb-0" id="tblpension">
+                                                    <table class="invoice-table table table-sm table-borderless table-nowrap mb-0" id="tblpension">
                                                         <thead class="align-middle">
                                                             <tr class="table-active">
                                                                 <th scope="col" style="width: 25px;">

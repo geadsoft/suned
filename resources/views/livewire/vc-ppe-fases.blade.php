@@ -108,14 +108,14 @@
             <div class="card">
                 <div class="card-header">
                     <div>
-                        <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                        <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0 mb-1" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#home-1" role="tab">
-                                    Estudiantes
+                                    Calificación
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#messages-1" role="tab">
+                                <a class="nav-link" data-bs-toggle="tab" href="#activity" role="tab">
                                     Actividades
                                 </a>
                             </li>
@@ -124,10 +124,8 @@
                 </div>
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="home-1" role="tabpanel">
-                            <h5 class="card-title mb-4">Calificación</h5>
-                        </div>
-                        <div class="table-responsive  table-card mb-1">
+                        <div class="tab-pane active" id="home-1" role="tabpanel">                       
+                            <div class="table-responsive  table-card mb-1">
                                 <table class="table table-sm table-nowrap align-middle" id="orderTable">
                                     <thead class="text-muted table-light">
                                         <tr class="text-uppercase">
@@ -141,36 +139,75 @@
                                     <tbody class="list form-check-all">
                                     @foreach ($personas as $person)    
                                         <tr>
-                                            <td>{{$person->identificacion}}</td>
-                                            <td>{{$person->apellidos}} {{$person->nombres}}</td>
+                                            <td>{{$tblrecords[$person->id]['nui']}}</td>
+                                            <td>{{$tblrecords[$person->id]['nombres']}}</td>
                                             @foreach($this->objdetalle as $key => $detalle)
                                             <td>
-                                            <input type="number" class="form-control product-price bg-light border-0" id="ln-{{$person->id}}-{{$key}}" value=""/>
+                                            <input type="number" class="form-control product-price bg-light border-0 text-end" id="ln-{{$person->id}}-{{$key}}" wire:model="tblrecords.{{$person->id}}.dia{{$key}}"/>
                                             </td>
                                             @endforeach
                                         </tr>
                                     @endforeach
                                     </tbody>
                                 </table>
-                                
-                                <div class="noresult" style="display: none">
-                                    <div class="text-center">
-                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                            colors="primary:#405189,secondary:#0ab39c" style="width:75px;height:75px">
-                                        </lord-icon>
-                                        <h5 class="mt-2">Sorry! No Result Found</h5>
-                                        <p class="text-muted">We've searched more than 150+ Orders We did
-                                            not find any
-                                            orders for you search.</p>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="activity" role="tabpanel">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="flex-shrink-0 mb-3 ms-auto">
+                                    <button type="button" wire:click.prevent="addActivity()" class="btn btn-danger add-btn" id="create-btn">
+                                        <i class="ri-add-line align-bottom me-1"></i> Crear
+                                    </button>
                                 </div>
                             </div>
-
-                            
-
-                        </div>
-
-
+                            <div class="table-responsive  table-card mb-1">
+                                <table class="table table-sm table-nowrap align-middle" id="orderTable">
+                                    <thead class="text-muted table-light">
+                                        <tr class="text-uppercase">
+                                            <th data-sort="superior">Actividad</th>
+                                            <th data-sort="superior">Descripcion</th>
+                                            <th data-sort="superior">Fecha Limite</th>
+                                            <th data-sort="superior" class="text-center">Subir Archivo</th>
+                                            <th data-sort="superior" class="text-end">Nota</th>
+                                            <th data-sort="superior" class="text-center">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list form-check-all">
+                                    @foreach ($actividades as $activity) 
+                                        <tr>
+                                            @if($activity->actividad=='AI')
+                                            <td>Individual</td>
+                                            @else
+                                            <td>Grupal</td>
+                                            @endif
+                                            <td>{{$activity->nombre}}</td>
+                                            <td>{{date('d/m/Y',strtotime($activity->fecha_entrega))}} <small class="text-muted">{{date('H:i',strtotime($activity->fecha_entrega))}}</small> </td>
+                                            <td class="text-center">{{$activity->subir_archivo}}</td>
+                                            <td class="text-end">0</td>
+                                            <td class="text-center">
+                                                <ul class="list-inline hstack gap-2 mb-0 justify-content-center">
+                                                    <li class="list-inline-item edit" data-bs-toggle="tooltip"
+                                                        data-bs-trigger="hover" data-bs-placement="top" title="Editar">
+                                                        <a href="" wire:click.prevent="edit({{ $activity->id }})"
+                                                            class="text-secondary d-inline-block edit-item-btn">
+                                                            <i class="ri-pencil-fill fs-16"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                        data-bs-trigger="hover" data-bs-placement="top" title="Eliminar">
+                                                        <a href="" wire:click.prevent="delete({{ $activity->id }})"
+                                                            class="text-danger d-inline-block remove-item-btn">
+                                                            <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                       
                     </div>
                     <!--end tab-content-->
                 </div>
@@ -182,141 +219,79 @@
     <!--end row-->
     </form>
 
-    <div class="modal fade" id="inviteMembersModal" tabindex="-1" aria-labelledby="inviteMembersModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0">
-                <div class="modal-header p-3 ps-4 bg-soft-success">
-                    <h5 class="modal-title" id="inviteMembersModalLabel">Team Members</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div wire.ignore.self class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" >
+            <div class="modal-content">
+                
+                <div class="modal-header bg-light p-3">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        @if($showEditModal)
+                            <span>Editar Actividad &nbsp;</span>
+                        @else
+                            <span>Agregar Actividad &nbsp;</span>
+                        @endif
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
                 </div>
-                <div class="modal-body p-4">
-                    <div class="search-box mb-3">
-                        <input type="text" class="form-control bg-light border-light" placeholder="Search here...">
-                        <i class="ri-search-line search-icon"></i>
-                    </div>
-
-                    <div class="mb-4 d-flex align-items-center">
-                        <div class="me-2">
-                            <h5 class="mb-0 fs-13">Members :</h5>
+                <form autocomplete="off" wire:submit.prevent="{{ $showEditModal ? 'updateActivity' : 'createActivity' }}">
+                    
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="tipo-select" class="form-label fw-semibold">Tipo Actividad</label>
+                            <select class="form-select" id="tipo-select" data-choices data-choices-search-false wire:model.defer="tipo">
+                                @foreach ($tblactividad as $actividades) 
+                                <option value="{{$actividades->codigo}}">{{$actividades->descripcion}}</option>
+                                @endforeach 
+                            </select>
                         </div>
-                        <div class="avatar-group justify-content-center">
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-placement="top" title="Tonya Noble">
-                                <div class="avatar-xs">
-                                    <img src="{{ URL::asset('assets/images/users/avatar-10.jpg') }}" alt="" class="rounded-circle img-fluid">
-                                </div>
-                            </a>
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-placement="top" title="Thomas Taylor">
-                                <div class="avatar-xs">
-                                    <img src="{{ URL::asset('assets/images/users/avatar-8.jpg') }}" alt="" class="rounded-circle img-fluid">
-                                </div>
-                            </a>
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-placement="top" title="Nancy Martino">
-                                <div class="avatar-xs">
-                                    <img src="{{ URL::asset('assets/images/users/avatar-2.jpg') }}" alt="" class="rounded-circle img-fluid">
-                                </div>
-                            </a>
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Actividad</label>
+                            <input type="text" wire:model.defer="descripcion" class="form-control" name="descripcion"
+                                placeholder="Enter name" required />
+                        </div>
+                        <div class="row mb-3"> 
+                            <div class="col-sm-3">
+                                <label for="fechaMaxima" class="form-label fw-semibold">Fecha Máxima de Entrega</label>
+                                <input type="date" class="form-control" id="fechaMaxima" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fechaentrega"  required> 
+                            </div>
+                            <!-- Input Time -->
+                            <div class="col-sm-3">
+                                <label for="horamaxima" class="form-label">Hora Máxima de Entrega</label>
+                                <input type="time" class="form-control" id="horamaxima" wire:model.defer="horaentrega" required>
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="archivo-select" class="form-label fw-semibold">Permitir la subida de archivos</label>
+                                <select class="form-select" id="archivo-select" data-choices data-choices-search-false wire:model.defer="archivo" >
+                                    <option value="SI" selected>SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="puntaje-input" class="form-label fw-semibold">Puntaje</label>
+                                <input id="puntaje-input" type="number" min="1" max="10" step="1" class="form-control" value="10" wire:model.defer="puntaje"  required>    
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="puntaje-input" class="form-label fw-semibold">Comentario</label>
+                            <textarea id="editor" class="form-control w-100" rows="5" wire:model.defer="comentario"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold" for="product-title-input">Link externo</label>
+                            <input type="text" class="form-control" id="product-title-input" placeholder="Ingrese enlace externo" pattern="https://.*" size="30" wire:model.defer="enlace2">
+                            <div class="invalid-feedback">Por favor ingrese enlace externo.</div>
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-success" id="add-btn">Grabar</button>
                         </div>
                     </div>
-                    <div class="mx-n4 px-4" data-simplebar style="max-height: 225px;">
-                        <div class="vstack gap-3">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-xs flex-shrink-0 me-3">
-                                    <img src="{{ URL::asset('assets/images/users/avatar-2.jpg') }}" alt="" class="img-fluid rounded-circle">
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-13 mb-0"><a href="javascript:void(0);"
-                                            class="text-body d-block">Nancy Martino</a></h5>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <button type="button" class="btn btn-light btn-sm">Add</button>
-                                </div>
-                            </div>
-                            <!-- end member item -->
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-xs flex-shrink-0 me-3">
-                                    <div class="avatar-title bg-soft-danger text-danger rounded-circle">
-                                        HB
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-13 mb-0"><a href="javascript:void(0);"
-                                            class="text-body d-block">Henry Baird</a></h5>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <button type="button" class="btn btn-light btn-sm">Add</button>
-                                </div>
-                            </div>
-                            <!-- end member item -->
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-xs flex-shrink-0 me-3">
-                                    <img src="{{ URL::asset('assets/images/users/avatar-3.jpg') }}" alt="" class="img-fluid rounded-circle">
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-13 mb-0"><a href="javascript:void(0);"
-                                            class="text-body d-block">Frank Hook</a></h5>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <button type="button" class="btn btn-light btn-sm">Add</button>
-                                </div>
-                            </div>
-                            <!-- end member item -->
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-xs flex-shrink-0 me-3">
-                                    <img src="{{ URL::asset('assets/images/users/avatar-4.jpg') }}" alt="" class="img-fluid rounded-circle">
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-13 mb-0"><a href="javascript:void(0);"
-                                            class="text-body d-block">Jennifer Carter</a></h5>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <button type="button" class="btn btn-light btn-sm">Add</button>
-                                </div>
-                            </div>
-                            <!-- end member item -->
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-xs flex-shrink-0 me-3">
-                                    <div class="avatar-title bg-soft-success text-success rounded-circle">
-                                        AC
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-13 mb-0"><a href="javascript:void(0);"
-                                            class="text-body d-block">Alexis Clarke</a></h5>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <button type="button" class="btn btn-light btn-sm">Add</button>
-                                </div>
-                            </div>
-                            <!-- end member item -->
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-xs flex-shrink-0 me-3">
-                                    <img src="{{ URL::asset('assets/images/users/avatar-7.jpg') }}" alt="" class="img-fluid rounded-circle">
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-13 mb-0"><a href="javascript:void(0);"
-                                            class="text-body d-block">Joseph Parker</a></h5>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <button type="button" class="btn btn-light btn-sm">Add</button>
-                                </div>
-                            </div>
-                            <!-- end member item -->
-                        </div>
-                        <!-- end list -->
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light w-xs" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success w-xs">Assigned</button>
-                </div>
+                </form>
             </div>
-            <!-- end modal-content -->
         </div>
-        <!-- modal-dialog -->
     </div>
+    
     <!-- end modal -->
 </div>
