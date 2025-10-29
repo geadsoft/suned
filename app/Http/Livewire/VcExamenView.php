@@ -76,15 +76,14 @@ class VcExamenView extends Component
 
     public function render()
     {
-        $actividad = TmActividades::find($this->examenId);
-
+        
         $this->loadPersonas();        
         return view('livewire.vc-examen-view');
     }
 
     public function loadPersonas(){
 
-        $actividad = TmActividades::find($this->actividadId);
+        $actividad = TmActividades::find($this->examenId);
         
         $curso = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
