@@ -220,18 +220,12 @@ class VcNoteActivity extends Component
             $this->tblrecords[$index]['nombres'] = strtoupper($data->descripcion);
                        
             $record = $this->actividad($data->id);
-            $this->tblgrupo = TdPeriodoSistemaEducativos::query()
-            ->where('periodo_id',$this->periodoId)
-            ->where('tipo','AC')
-            ->where('codigo','<>','EX')
-            ->get();
-            
-            /*$record
+            $this->tblgrupo = $record
             ->groupBy('actividad')
             ->sortBy(function ($items, $key) {
                 return $key === 'AI' ? 0 : 1;
             })
-            ->toBase();*/
+            ->toBase();
             
             foreach ($this->tblgrupo as $key2 => $grupo){
 
