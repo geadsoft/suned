@@ -370,6 +370,8 @@ class VcNoteActivity extends Component
             if ($countprm > 0){
                 $this->tblrecords[$data]['promedio'] = $promedio/($countprm);  
             }
+
+            dd($this->tblrecords);
                     
         }
 
