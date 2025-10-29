@@ -106,9 +106,8 @@
                                     </tr>
                                     <tr>
                                         <td class="align-middle text-center" colspan="2" rowspan="2" style="font-weight: normal; padding: 0px 10px;">ASIGNATURAS</td>
-                                        @foreach ($tblgrupo as $grupo)
-                                            <td class="align-middle text-center" rowspan="2" style="font-weight: normal; padding: 0px 10px;">{{$this->arrtipo[$grupo->actividad]}}</td>
-                                        @endforeach
+                                        <td class="align-middle text-center" rowspan="2" style="font-weight: normal; padding: 0px 10px;">Actividad Individual</td>
+                                        <td class="align-middle text-center" rowspan="2" style="font-weight: normal; padding: 0px 10px;">Actividad Grupal</td>
                                         <td class="align-middle text-center" colspan="2" style="font-weight: normal; padding: 0px 10px;">Primer Parcial</td>
                                         <!--<td class="align-middle text-center" rowspan="2" style="font-weight: normal; padding: 0px 10px;">RECOMENDACIONES</td>
                                         <td class="align-middle text-center" rowspan="2" style="font-weight: normal; padding: 0px 10px;">PLAN DE MEJORA ACADÉMICO</td>-->
