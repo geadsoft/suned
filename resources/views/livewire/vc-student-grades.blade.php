@@ -126,13 +126,13 @@
                                     @else
                                     <td>{{$fil+1}}</td>
                                     <td>{{$record["nombres"]}}</td>
-                                        @if (isset($record[$grupo->"AI-prom"]))
-                                            <td class="text-center">{{number_format($record[$grupo->"AI-prom"],2)}}</td>
+                                        @if (isset($record["AI-prom"]))
+                                            <td class="text-center">{{number_format($record["AI-prom"],2)}}</td>
                                         @else
                                             <td class="text-center">0.00</td>
                                         @endif
-                                        @if (isset($record[$grupo->"AG-prom"]))
-                                            <td class="text-center">{{number_format($record[$grupo->"AG-prom"],2)}}</td>
+                                        @if (isset($record["AG-prom"]))
+                                            <td class="text-center">{{number_format($record["AG-prom"],2)}}</td>
                                         @else
                                             <td class="text-center">0.00</td>
                                         @endif                                        
