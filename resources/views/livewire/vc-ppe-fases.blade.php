@@ -137,7 +137,8 @@
                                         </tr>
                                     </thead>
                                     <tbody class="list form-check-all">
-                                    @foreach ($personas as $person)    
+                                    @foreach ($personas as $person) 
+                                        @if($this->objdetalle)   
                                         <tr>
                                             <td>{{$tblrecords[$person->id]['nui']}}</td>
                                             <td>{{$tblrecords[$person->id]['nombres']}}</td>
@@ -147,6 +148,7 @@
                                             </td>
                                             @endforeach
                                         </tr>
+                                        @endif
                                     @endforeach
                                     </tbody>
                                 </table>

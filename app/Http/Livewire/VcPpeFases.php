@@ -150,7 +150,6 @@ class VcPpeFases extends Component
         }
 
         $fase = 'F'.$this->fase;
-        dd($this->tblrecords);
         
     }
 
