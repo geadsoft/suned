@@ -129,7 +129,7 @@ class VcPpeFases extends Component
 
         if ($tblfases){
             $this->enlace = $tblfases->enlace; 
-            $this->loadPersonas();
+            //$this->loadPersonas();
         }
 
         foreach($this->personas as $index => $persona){
@@ -150,6 +150,7 @@ class VcPpeFases extends Component
         }
 
         $fase = 'F'.$this->fase;
+        dd($this->tblrecords);
         
     }
 
