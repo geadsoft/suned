@@ -8,20 +8,22 @@ use App\Models\TmPpeFases;
 use App\Models\TmPpeEstudiantes;
 use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmPpeActividades;
+use Livewire\WithPagination;
 
 use Livewire\Component;
 
 class VcPpeFases extends Component
 {   
+    use WithPagination;
+    
     public $fecha, $hora, $fase, $periodoId, $docenteId, $filas=0, $enlace, $showEditModal=false;
     public $tipo="AI", $descripcion="", $fechaentrega, $horaentrega, $archivo="NO", $puntaje, $comentario, $enlace2="";
+    public $selectId, $nombreActividad;
 
     public $tblactividad=[];
     public $tblrecords=[];
     public $objdetalle=[];
     public $personas=[];
-    public $actividades=[];
-
 
     public function mount($fase)
     {
@@ -48,8 +50,22 @@ class VcPpeFases extends Component
     
     public function render()
     {
-        $this->loadPersonas();      
-        return view('livewire.vc-ppe-fases');
+        $this->loadPersonas();
+
+        $fase = 'F'.$this->fase;
+
+        $actividades = TmPpeActividades::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo',$fase)
+        ->paginate(12);
+        
+        return view('livewire.vc-ppe-fases',[
+            'actividades' => $actividades,
+        ]);
+    }
+
+    public function paginationView(){
+        return 'vendor.livewire.bootstrap'; 
     }
 
     public function newdetalle(){
@@ -65,6 +81,26 @@ class VcPpeFases extends Component
         } 
 
     }
+
+    public function edit($id){
+        
+        $this->showEditModal = true;
+        $activity  = TmPpeActividades::find($id);
+       
+        $this->selectId = $activity->id;
+        $this->tipo = $activity->actividad;
+        $this->descripcion = $activity->nombre;
+        $this->fechaentrega = date('Y-m-d',strtotime($activity->fecha_entrega));
+        $this->horaentrega = date('H:i',strtotime($activity->fecha_entrega));
+        $this->archivo = $activity->subir_archivo;
+        $this->puntaje = $activity->puntaje;
+        $this->comentario = $activity->descripcion;
+        $this->enlace2 = $activity->enlace;
+
+        $this->dispatchBrowserEvent('show-form');
+
+    }
+
 
     public function loadData(){
 
@@ -114,11 +150,6 @@ class VcPpeFases extends Component
         }
 
         $fase = 'F'.$this->fase;
-
-        $this->actividades = TmPpeActividades::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo',$fase)
-        ->get();
         
     }
 
@@ -195,6 +226,7 @@ class VcPpeFases extends Component
 
     }
 
+
     public function addActivity(){
         
         $ldate = date('Y-m-d H:i:s');
@@ -246,6 +278,49 @@ class VcPpeFases extends Component
 
     }
 
+    public function updateActivity(){
 
+        $this ->validate([
+            'tipo' => 'required',
+            'descripcion' => 'required',
+            'fechaentrega' => 'required',
+            'horaentrega' => 'required',
+            'puntaje' => 'required'
+        ]);        
+        
+        if ($this->selectId){
+            $record = TmPpeActividades::find($this->selectId);
+            $record->update([
+                'actividad' => $this->tipo,
+                'nombre' => $this->descripcion,
+                'descripcion' => $this->comentario,
+                'fecha_entrega' => $this->fechaentrega.' '.$this->horaentrega,
+                'subir_archivo' => $this->archivo,
+                'puntaje' => $this->puntaje,
+                'enlace' => $this->enlace2,
+            ]);
+            
+        }
+      
+        $this->dispatchBrowserEvent('hide-form');
+        
+    }
+    
+    public function delete( $id ){
+
+        $this->selectId = $id;
+        $activity  = TmPpeActividades::find($id);
+        $this->nombreActividad = $activity->nombre;
+
+        $this->dispatchBrowserEvent('show-delete');
+
+    }
+
+    public function deleteActivity(){
+
+        TmPpeActividades::find($this->selectId)->delete();
+        $this->dispatchBrowserEvent('hide-delete');
+
+    }
 
 }

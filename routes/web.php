@@ -75,6 +75,7 @@ Route::get('/academic/mailbox-opinions',[App\Http\Controllers\TmSedesController:
 Route::get('/academic/ppe',[App\Http\Controllers\TmSedesController::class, 'ppe'])->name('ppe');
 Route::get('/ppe/phases/{fase}',[App\Http\Controllers\TmSedesController::class, 'ppe_fases'])->name('ppe_fases');
 Route::get('/ppe/students/',[App\Http\Controllers\TmSedesController::class, 'ppe_estudiantes'])->name('ppe_estudiantes');
+Route::get('/ppe/program/',[App\Http\Controllers\TmSedesController::class, 'ppe_programa'])->name('ppe_programa');
 
 Route::get('/report/total-rating',[App\Http\Controllers\DocentesController::class, 'calificacion_total'])->name('calificacion_total');
 Route::get('/report/exams-qualify',[App\Http\Controllers\DocentesController::class, 'calificacion_examen'])->name('calificacion_examen');

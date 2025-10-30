@@ -12,11 +12,11 @@
             PPE
         @endslot
         @slot('title')
-            Fase del Programa
+            Programa
         @endslot
     @endcomponent
 
-    @livewire('vc-ppe-fases',['fase' => $fase])
+    @livewire('vc-ppe-programa')
 
 @endsection
 @section('script')
@@ -34,14 +34,7 @@
             $('#showModal').modal('hide');
         })
 
-         window.addEventListener('show-delete', event => {
-            $('#deleteOrder').modal('show');
-        })
-
-        window.addEventListener('hide-delete', event => {
-            $('#deleteOrder').modal('hide');
-        })
-
     </script>
+    
     
 @endsection
