@@ -6,11 +6,19 @@
                 <div class="card-body">
                     
                     <div class="input-group mb-3">
-                        <span class="input-group-text">Dias de Clases</span>
-                        <input type="number" aria-label="First name" class="form-control product-price text-end" wire:model="filas">
-                        
-                        <a id="btnstudents" class ="btn btn-success btn-sm" wire:click="newdetalle()"><i class="ri-add-fill align-bottom me-1"></i></a>
-                            
+                        <span class="input-group-text">Días de Clases</span>
+
+                        <input type="number" 
+                            class="form-control product-price text-end" 
+                            wire:model="filas"
+                            aria-label="Número de días">
+
+                        <button type="button" 
+                                id="btnstudents" 
+                                class="btn btn-soft-success btn-sm d-flex align-items-center justify-content-center"
+                                wire:click="newdetalle">
+                            <i class="ri-add-line fs-5"></i>
+                        </button>
                     </div>
                     
                     <div class="card">
@@ -138,7 +146,7 @@
                                     </thead>
                                     <tbody class="list form-check-all">
                                     @foreach ($personas as $person) 
-                                        @if($this->objdetalle)   
+                                        @if($this->tblrecords)   
                                         <tr>
                                             <td>{{$tblrecords[$person->id]['nui']}}</td>
                                             <td>{{$tblrecords[$person->id]['nombres']}}</td>

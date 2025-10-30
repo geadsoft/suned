@@ -223,6 +223,7 @@ class VcPpeFases extends Component
         ]); 
         
         $this->loadData();
+        $this->render();
 
     }
 
