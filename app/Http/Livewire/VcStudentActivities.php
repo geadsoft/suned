@@ -18,7 +18,7 @@ class VcStudentActivities extends Component
 
     public $fecha, $personaId, $periodoId, $cursoId, $modalidadId, $pendientes, $asignatura="TODOS";
     public $tab1 = "active", $tab2="", $tab3="", $tab4,  $tab5;
-    public $materias=[];
+    public $materias=[], $tbltermino, $termino;
     public $filters=[
         'actividad' => "",
         'asignaturaId' => "",
@@ -47,10 +47,17 @@ class VcStudentActivities extends Component
         ->where('estado','A')
         ->first();
 
-        if (!empty($pasecurso)){
-            
+        if (!empty($pasecurso)){  
             $this->cursoId = $pasecurso->curso_id;
         }
+
+        $this->tbltermino = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','EA')
+        ->orderByRaw("cerrar,codigo")
+        ->get();
+
+        $this->termino = $this->tbltermino[0]['codigo'];
 
     }
     
@@ -91,6 +98,7 @@ class VcStudentActivities extends Component
         })
         //->where("tipo",'AC')
         ->where("h.curso_id",$this->cursoId)
+        ->where("tm_actividades.termino",$this->termino)
         ->select("tm_actividades.*","a.descripcion as asignatura","p.apellidos","p.nombres","c.nota","e.fecha as fechaentrega")        
         ->orderBy("fecha","desc")
         ->paginate(6);
@@ -109,8 +117,8 @@ class VcStudentActivities extends Component
             return $query->where('d.asignatura_id',"{$this->filters['asignaturaId']}");
         })
         ->whereRaw("e.nota is null")
-        //->where("tipo",'AC')
-        ->where("h.curso_id",$this->cursoId)  
+        ->where("h.curso_id",$this->cursoId)
+        ->where("tm_actividades.termino",$this->termino)  
         ->where("subir_archivo",'SI')   
         ->orderBy("fecha","desc")
         ->count();
@@ -182,18 +190,6 @@ class VcStudentActivities extends Component
     }
 
     public function mostrar($id){
-
-        /*$record = TmActividades::find($id);
-
-        $sistema = TdPeriodoSistemaEducativos::query()
-        ->where("codigo",$record->termino)
-        ->where("periodo_id",$this->periodoId)
-        ->first();
-
-        if ($sistema->cerrar==1){
-           $this->dispatchBrowserEvent('trimestre-cerrado');
-           return;
-        }*/
 
         $datos = TmActividades::query()
         ->join("tm_horarios_docentes as d","d.id","=","tm_actividades.paralelo")

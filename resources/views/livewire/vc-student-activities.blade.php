@@ -8,6 +8,11 @@
                     <div class="mb-3">
                         <h5 class="mb-0 fw-semibold">Asignaturas</h5>
                     </div>
+                    <select class="form-select form-select-sm" id="termino" data-choices data-choices-search-false wire:model="termino">
+                        @foreach ($tbltermino as $terminos) 
+                        <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
+                        @endforeach 
+                    </select>
                     <div class="mt-3 mx-n4 px-4 file-menu-sidebar-scroll simplebar-scrollable-y" data-simplebar="init"><div class="simplebar-wrapper" style="margin: 0px -24px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px 24px;">
                         <ul class="list-unstyled file-manager-menu">
                             <li>
