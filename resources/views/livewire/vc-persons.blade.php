@@ -168,7 +168,7 @@
                                                                         class="ri-todo-line align-bottom me-2 text-muted fs-16"></i>
                                                                     Informe Estudiantil</a></li>
                                                             <li><a class="dropdown-item edit-item-btn"
-                                                                    href=""
+                                                                    href="" wire:click.prevent="generarBoletin({{ $record->matriculaId}})"
                                                                     data-bs-toggle="modal"><i
                                                                         class=" ri-star-half-line align-bottom me-2 text-muted fs-16"></i>
                                                                     Libreta Calificaciones</a></li>

@@ -105,6 +105,10 @@
             $('#reintegrar').modal('hide');
         })
 
+        window.addEventListener('abrir-pdf', e => {
+            window.open(e.detail.url, '_blank');
+        });
+
     </script>
     
 @endsection

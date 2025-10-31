@@ -8,6 +8,10 @@ use App\Models\TmGeneralidades;
 use App\Models\TmCursos;
 use App\Models\TmMatricula;
 use App\Models\User;
+use App\Models\TdPeriodoSistemaEducativos;
+use App\Models\TmActividades;
+use App\Models\TmHorarios;
+use App\Models\TdBoletinFinal;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +32,8 @@ class VcPersons extends Component
 
     public $datos, $estudiante, $selectId, $estado=false, $periodoOld, $matriculaId, $registros;
     public $resumenMatricula = [], $resumenNivel = [], $nivelestudio=[], $personaId;
+    public $termino, $tblboletin, $tblpersonas, $variables, $tblescala;
+
     public $filters = [
         'srv_nombre' => '',
         'srv_periodo' => '',
@@ -67,6 +73,17 @@ class VcPersons extends Component
 
         $anioant = TmPeriodosLectivos::where('periodo',$periodo['periodo']-1)->first();
         $this->periodoOld  = $anioant['id'];
+
+        $this->tbltermino = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->filters['srv_periodo'])
+        ->where('tipo','EA')
+        ->get();
+
+        $this->tblescala = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->filters['srv_periodo'])
+        ->where("tipo","EC")
+        ->selectRaw("*,nota + case when nota=10 then 0 else 0.99 end as nota2")
+        ->get();
     }
 
     public function render()
@@ -752,6 +769,634 @@ class VcPersons extends Component
         $this->filters['srv_estado'] = 'A';
         $data = json_encode($this->filters);
         return Excel::download(new ListaMatriculasExport($data), 'Reporte Matriculas.xlsx');
+
+    }
+
+    public function generarBoletin($id){
+
+        $matricula = TmMatricula::find($id);
+
+        $this->variables['periodoId']   =  $this->filters['srv_periodo'];
+        $this->variables['modalidadId']   = $matricula->modalidad_id;
+        $this->variables['paralelo'] = $matricula->curso_id;
+        $this->variables['bloque'] = "1P";
+        $this->variables['estudianteId'] = $matricula->estudiante_id;
+        
+        foreach ($this->tbltermino as $termObj) {
+
+            $this->termino = $termObj->codigo; // '1T','2T','3T'
+            $this->variables['termino'] = $this->termino;
+           
+            $this->tblpersonas = TmPersonas::where('id',$matricula->estudiante_id)->get();
+
+            $this->add();
+            $this->asignarNotas();
+
+            if (!in_array($this->termino, ['1T','2T','3T'])) {
+                continue;
+            }
+
+            $periodo = $this->variables['periodoId'];
+            $modalidad = $this->variables['modalidadId'];
+            $curso = $this->variables['paralelo'];
+            $term = $this->termino;
+
+
+            // 1) Recolectar persona_ids y asignatura_ids que vamos a procesar
+            $personaIds = [];
+            $asignaturaIds = [];
+            foreach ($this->tblboletin as $personaId => $record) {
+                foreach ($record as $k2 => $data) {
+                    if ($k2 === 'ZZ') continue;
+                    if (empty($data['asignaturaId'])) continue;
+                    $personaIds[] = $personaId;
+                    $asignaturaIds[] = $data['asignaturaId'];
+                }
+            }
+            $personaIds = array_values(array_unique($personaIds));
+            $asignaturaIds = array_values(array_unique($asignaturaIds));
+
+            // 2) Prefetch: traer todos los boletines existentes para esas personas/asignaturas
+            $existing = TdBoletinFinal::query()
+                ->where('periodo_id', $periodo)
+                ->where('modalidad_id', $modalidad)
+                ->where('curso_id', $curso)
+                ->when(!empty($personaIds), fn($q)=> $q->whereIn('persona_id', $personaIds))
+                ->when(!empty($asignaturaIds), fn($q)=> $q->whereIn('asignatura_id', $asignaturaIds))
+                ->get();
+
+            // 3) Mapear para acceso O(1)
+            $map = [];
+            foreach ($existing as $row) {
+                $map[$row->persona_id . '|' . $row->asignatura_id] = $row;
+            }
+
+            // 4) Dentro de una transacción, crear o actualizar según exista en el mapa
+            DB::transaction(function() use ($map, $periodo, $modalidad, $curso, $term) {
+                foreach ($this->tblboletin as $personaId => $record) {
+                    foreach ($record as $k2 => $data) {
+                        if ($k2 === 'ZZ') continue;
+                        $asigId = $data['asignaturaId'] ?? null;
+                        if (is_null($asigId)) continue;
+
+                        $key = $personaId . '|' . $asigId;
+
+                        $payload = [
+                            "{$term}_notaparcial"   => isset($data['promedio']) ? floatval($data['promedio']) : null,
+                            "{$term}_nota70"        => isset($data['nota70']) ? floatval($data['nota70']) : null,
+                            "{$term}_evaluacion"    => isset($data['examen']) ? floatval($data['examen']) : null,
+                            "{$term}_nota30"        => isset($data['nota30']) ? floatval($data['nota30']) : null,
+                            "{$term}_notatrimestre" => isset($data['cuantitativo']) ? floatval($data['cuantitativo']) : null,
+                        ];
+
+                        if (isset($map[$key])) {
+                            // existe: actualizar solo las columnas del término
+                            $map[$key]->update($payload);
+                        } else {
+                            // no existe: crear registro completo con claves foráneas + payload
+                            TdBoletinFinal::create(array_merge([
+                                'periodo_id'    => $periodo,
+                                'modalidad_id'  => $modalidad,
+                                'curso_id'      => $curso,
+                                'persona_id'    => $personaId,
+                                'asignatura_id' => $asigId,
+                            ], $payload));
+                            // si quieres evitar re-check en el mismo ciclo, agrega al mapa para próximas actualizaciones
+                            $map[$key] = true; // marca simple; no es modelo, pero evita crear doble
+                        }
+                    }
+                }
+            });
+        }
+
+        $boletin = TdBoletinFinal::query()
+        ->where('periodo_id',$this->variables['periodoId'])
+        ->where('modalidad_id',$this->variables['modalidadId'])
+        ->where('curso_id', $this->variables['paralelo'])
+        ->when($this->variables['estudianteId'], function($query) {
+            return $query->where('persona_id', $this->variables['estudianteId']);
+        })
+        ->get()->toArray();
+
+         // Escala Cualitativa
+        $rangos = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->variables['periodoId'])
+        ->where("tipo","EC")
+        ->selectRaw("min(nota) as min, max(nota)+case when max(nota)=10 then 0 else 0.99 end as max, evaluacion as codigo, glosa as descr")
+        ->groupBy("evaluacion","glosa")
+        ->get()->toArray();
+
+
+        foreach($boletin as $objnotas){
+
+            $promedioanual = $objnotas['1T_notatrimestre']+$objnotas['2T_notatrimestre']+$objnotas['3T_notatrimestre'];
+            $promediofinal = $promedioanual + $objnotas['supletorio'];
+            $notacualitativo = '';
+
+            foreach ($rangos as $escala) {
+                
+                $nota1 = $escala['min'];
+                $nota2 = $escala['max'];                  
+                $letra = $escala['codigo'];
+
+                if ($promediofinal >= ($nota1) && $promediofinal <= $nota2) {
+                    $notacualitativo = $letra;
+                }
+                
+            }
+
+            $updateNota = TdBoletinFinal::find($objnotas['id']);
+            $updateNota->update([
+                'promedio_anual' => round($promedioanual/3,2),
+                'supletorio' => 0,
+                'promedio_final' => round($promediofinal/2,2),
+                'promedio_cualitativo' => $notacualitativo
+            ]);
+
+        }
+
+        $datos = json_encode($this->variables);
+        $this->dispatchBrowserEvent('abrir-pdf', ['url' => "/preview-pdf/final-bulletin/{$datos}"]); 
+
+    }
+
+    public function add(){
+
+        $this->tblboletin=[];
+
+        $asignaturas = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
+        ->select("a.*")
+        ->where("tm_horarios.curso_id",$this->variables['paralelo'])
+        ->orderBy("a.descripcion")
+        ->get();
+
+        foreach ($this->tblpersonas as $key => $person)
+        { 
+            $idPerson = $person->id;
+
+            // Actualiza Datos Asignaturas
+            foreach ($asignaturas as $key => $data)
+            {   
+                $index = $data->id;
+                $this->tblboletin[$idPerson][$index]['id'] = 0;
+                $this->tblboletin[$idPerson][$index]['asignaturaId'] = $data->id;
+                $this->tblboletin[$idPerson][$index]['nombres'] = strtoupper($data->descripcion);
+                        
+                $record = $this->actividad($data->id);
+                $tblgrupo = $record->groupBy('actividad')->toBase();
+                
+                foreach ($tblgrupo as $key2 => $grupo){
+
+                    foreach ($grupo as $key3 => $actividad){
+                        $col = $key2.$actividad->id;
+                        $this->tblboletin[$idPerson][$index][$col] = 0.00;                   
+                    }
+                    $col = $key2."-prom";
+                    $this->tblboletin[$idPerson][$index][$col] = 0;
+                }
+
+                $this->tblboletin[$idPerson][$index]['promedio'] = 0.00;
+                $this->tblboletin[$idPerson][$index]['nota70'] = 0.00;
+                $this->tblboletin[$idPerson][$index]['examen'] = 0.00;
+                $this->tblboletin[$idPerson][$index]['nota30'] = 0.00;
+                $this->tblboletin[$idPerson][$index]['cuantitativo'] = 0.00;
+                $this->tblboletin[$idPerson][$index]['cualitativo'] = "";
+            }
+
+        } 
+
+        foreach ($this->tblpersonas as $key => $person)
+        { 
+            $idPerson = $person->id;
+            $this->tblboletin[$idPerson]['ZZ']['id'] = 0;
+            $this->tblboletin[$idPerson]['ZZ']['asignaturaId'] = 0;
+            $this->tblboletin[$idPerson]['ZZ']['nombres'] = 'PROMEDIO FINAL';
+            
+            foreach ($tblgrupo as $key2 => $grupo){
+
+                foreach ($grupo as $key3 => $actividad){
+                    $col = $key2.$actividad->id;
+                    $this->tblboletin[$idPerson]['ZZ'][$col] = 0.00;                   
+                }
+                $col = $key2."-prom";
+                $this->tblboletin[$idPerson]['ZZ'][$col] = 0;
+
+            }
+
+            $this->tblboletin[$idPerson]['ZZ']['promedio'] = 0.00;
+            $this->tblboletin[$idPerson]['ZZ']['nota70'] = 0.00;
+            $this->tblboletin[$idPerson]['ZZ']['examen'] = 0.00;
+            $this->tblboletin[$idPerson]['ZZ']['nota30'] = 0.00;
+            $this->tblboletin[$idPerson]['ZZ']['cuantitativo'] = 0.00;
+            $this->tblboletin[$idPerson]['ZZ']['cualitativo'] = "";
+        
+        }
+
+        /*//Observaciones
+        $observaciones = TdObservacionActa::query()
+        ->where("termino",$this->filters['termino'])
+        ->where("bloque",$this->filters['bloque'])
+        ->where("curso_id",$this->filters['paralelo'])
+        ->get();
+
+        foreach ($observaciones as $obsr) {
+            $this->arrComentario[$obsr->persona_id]['comentario'] = $obsr->comentario;
+        }
+        
+        $this->datos = json_encode($this->filters);*/
+    }
+
+    public function asignarNotas(){
+
+        $servicio = TmCursos::query()
+        ->join("tm_servicios as s","s.id","=","tm_cursos.servicio_id")
+        ->where("tm_cursos.id",$this->variables['paralelo'])
+        ->first();
+
+        $calificacion = $servicio->calificacion;
+
+        $tblgrupo  = TmActividades::query()
+        ->join("tm_horarios_docentes as d",function($join){
+            $join->on("d.id","=","tm_actividades.paralelo")
+                ->on("d.docente_id","=","tm_actividades.docente_id");
+        })
+        ->join("tm_horarios as h","h.id","=","d.horario_id")
+        ->when($this->variables['paralelo'],function($query){
+            return $query->where('h.curso_id',"{$this->variables['paralelo']}");
+        })
+        ->when($this->variables['termino'],function($query){
+            return $query->where('termino',"{$this->variables['termino']}");
+        })
+        /*->when($this->filters['bloque'],function($query){
+            return $query->where('bloque',"{$this->filters['bloque']}");
+        })*/
+        ->selectRaw("tm_actividades.actividad")
+        ->where("tipo","AC")
+        ->groupBy("tm_actividades.actividad")
+        ->get();
+
+        
+        foreach ($this->tblpersonas as $key => $person){
+
+            $idPerson = $person->id;
+            /*$this->filters['estudianteId'] = $idPerson;*/
+
+            $notas = TmActividades::query()
+            ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
+            ->join('tm_horarios_docentes as d', function($join) {
+                $join->on('d.id', '=', 'tm_actividades.paralelo')
+                    ->on('d.docente_id', 'tm_actividades.docente_id');
+            })
+            ->when(!empty($this->variables['termino']), function($query) {
+                return $query->where('tm_actividades.termino', $this->variables['termino']);
+            })
+            /*->when(!empty($this->filters['bloque']), function($query) {
+                return $query->where('tm_actividades.bloque', $this->filters['bloque']);
+            })*/
+            ->where('tm_actividades.tipo', 'AC')
+            ->where('n.persona_id', $idPerson)
+            ->select([
+                'tm_actividades.id as actividadId',
+                'tm_actividades.actividad',
+                'n.nota',
+                'd.asignatura_id'
+            ])
+            ->get(); 
+
+            foreach ($notas as $key => $objnota){
+
+                $fil  = $objnota->asignatura_id;
+                $tipo = $objnota->actividad;
+                $actividadId = $objnota->actividadId;
+                $col = $tipo.$actividadId;
+
+                if (isset($this->tblboletin[$idPerson][$fil][$col])) {
+                    $this->tblboletin[$idPerson][$fil][$col] = $objnota->nota;
+                }
+            }
+
+            //Asginar Nota Examen
+            /*$objtermino = TdPeriodoSistemaEducativos::query()
+            ->where('periodo_id',$this->filters['periodoId'])
+            ->where('tipo','EA')
+            ->get();
+
+            foreach($objtermino as $data){
+                if ($this->filters['termino'] == $data['codigo']){
+                    
+                }
+            }*/
+            $termino = $this->variables['termino'] ?? null;
+            $bloque = $this->variables['termino'] ?? null;
+            $bloqueEx = $bloque ? str_replace('T', 'E', $bloque) : null;
+            $estudianteId = $this->variables['estudianteId'] ?? null;
+
+            $examen = TmActividades::query()
+                ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
+                ->join('tm_horarios_docentes as d', function($join) {
+                    $join->on('d.id', '=', 'tm_actividades.paralelo')
+                        ->on('d.docente_id', '=', 'tm_actividades.docente_id');
+                })
+                ->when(!empty($termino), function($query) use ($termino) {
+                    return $query->where('tm_actividades.termino', $termino);
+                })
+                ->when(!empty($bloque), function($query) use ($bloqueEx) {
+                    return $query->where('tm_actividades.bloque', $bloqueEx);
+                })
+                ->where('tm_actividades.tipo', 'ET')
+                ->where('n.persona_id', $estudianteId)
+                ->groupBy('d.asignatura_id')
+                ->selectRaw('d.asignatura_id, ROUND(AVG(n.nota), 2) as promedio')
+                ->pluck('promedio', 'asignatura_id');
+
+            foreach ($examen as $key => $objnota){
+                
+                $fil = $key;
+                
+                if (isset($this->tblboletin[$idPerson][$fil]['examen'])) {
+                    $this->tblboletin[$idPerson][$fil]['examen'] = $objnota;
+                }
+            }
+        
+        }
+
+        // Calcula Promedio
+        foreach ($this->tblboletin as $key1 => $records){
+
+            if ($key1!='ZZ'){
+                
+                foreach ($records as $key2 => $recno){
+
+                    $promedio = 0;
+                    $countprm = 0;
+                    $nota30 = 0;
+                    $nota70=0;
+
+                    foreach ($tblgrupo as $grupo){
+
+                        $tipo  = $grupo->actividad;
+                        $suma  = 0;
+                        $count = 0;
+
+                        foreach ($recno as $campo => $valor){
+                        
+                            $ncampo = substr($campo, 0, 2); 
+                            
+                            if ($ncampo==$tipo){
+                                $suma += $valor;
+                                $count += 1;
+                            }
+
+                        }
+
+                        $col = $tipo."-prom";
+                        if ($count > 0){
+                            $this->tblboletin[$key1][$key2][$col] = round($suma/($count-1), 2);
+                            $promedio += $suma/($count-1);
+                            $countprm += 1;
+                        }
+
+                    }
+                    if ($countprm > 0){
+                        $this->tblboletin[$key1][$key2]['promedio'] = round($promedio/($countprm), 2);  
+                    }else{
+                        $this->tblboletin[$key1][$key2]['promedio'] = 0.00;
+                    }
+
+                    if ($promedio > 0){
+                        $nota70 = round($this->tblboletin[$key1][$key2]['promedio']*0.70,2);
+                        $this->tblboletin[$key1][$key2]['nota70'] = round($nota70, 2);
+                    }else{
+
+                        $this->tblboletin[$key1][$key2]['nota70'] = 0.00;
+                    }
+
+                    if ($this->tblboletin[$key1][$key2]['examen'] > 0){
+                        $nota30 = round($this->tblboletin[$key1][$key2]['examen']*0.30,2);
+                        $this->tblboletin[$key1][$key2]['nota30'] = round($nota30, 2);
+                    }else{
+                        $this->tblboletin[$key1][$key2]['nota30'] = 0.00;
+                    }
+
+                    $this->tblboletin[$key1][$key2]['cuantitativo'] = $nota70+$nota30; 
+
+                }
+            }
+        }
+
+        // Promedio Final
+        foreach ($this->tblboletin as $key => $records){
+            $aiprom = 0;
+            $agprom = 0;
+            $promedio = 0;
+            $nota70 = 0;
+            $notaex = 0;
+            $nota30 = 0;
+            $promfinal = 0;
+            $count = count($records)-1;
+
+            foreach ($records as $key2 => $recno){
+                
+                $notaex += $recno['examen'];
+                
+                if (isset($recno['AI-prom'])){
+                    $aiprom += $recno['AI-prom'];
+                }
+
+                if (isset($recno['AG-prom'])){
+                    $agprom += $recno['AG-prom'];
+                }                
+                
+                $promedio += $recno['promedio'];
+                $nota70 += $recno['nota70'];
+                $nota30 += $recno['nota30'];
+                $promfinal += $recno['cuantitativo'];
+            }
+
+            $this->tblboletin[$key]['ZZ']['AI-prom']  = round($aiprom/$count,2);
+            $this->tblboletin[$key]['ZZ']['AG-prom']  = round($agprom/$count,2);
+            $this->tblboletin[$key]['ZZ']['promedio'] = round($promedio/$count,2);
+            $this->tblboletin[$key]['ZZ']['nota70'] = round($nota70/$count,2);
+            $this->tblboletin[$key]['ZZ']['examen'] = round($notaex/$count,2);
+            $this->tblboletin[$key]['ZZ']['nota30'] = round($nota30/$count,2);
+            $this->tblboletin[$key]['ZZ']['cuantitativo'] = round($promfinal/$count,2);
+
+        }
+                
+        // Escala Cualitativa
+        $rangos = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->variables['periodoId'])
+        ->where("tipo","EC")
+        ->selectRaw("min(nota) as min, max(nota)+case when max(nota)=10 then 0 else 0.99 end as max, evaluacion as codigo, glosa as descr")
+        ->groupBy("evaluacion","glosa")
+        ->get()->toArray();
+
+        foreach ($this->tblboletin as $key1 => $records){
+
+            foreach ($records as $key2 => $recno){
+
+                $promedio = $recno['cuantitativo']; 
+                    
+                foreach ($rangos as $escala) {
+                    
+                    $nota1 = $escala['min'];
+                    $nota2 = $escala['max'];                  
+                    $letra = $escala['codigo'];
+
+                    if ($promedio >= ($nota1) && $promedio <= $nota2) {
+                        $this->tblboletin[$key1][$key2]['cualitativo'] = $letra;
+                    }
+                    
+                }
+            
+            }
+
+        }
+
+        $notas = $this->tblescala;        
+
+        if($calificacion=="L"){
+
+            foreach($this->tblboletin as $person => $record){
+
+                foreach ($this->asignaturas as $key => $data)
+                {   
+                    $index = $data->id;
+                    
+                    if (isset($this->tblboletin[$person][$index]["AI-prom"])){
+
+                        $aiprom = $this->tblboletin[$person][$index]["AI-prom"];
+                        if ($aiprom>0){
+                            $resultado = array_filter($notas, function($notas) use ($aiprom) {
+                                return $aiprom >= $notas['nota'] && $aiprom <= $notas['nota2'];
+                            });
+                            $this->tblboletin[$person][$index]["AI-prom"] = reset($resultado)['codigo'] ?? 0;
+                        }
+
+                    };
+
+                    if (isset($this->tblboletin[$person][$index]["AG-prom"])){
+
+                        $agprom = $this->tblboletin[$person][$index]["AG-prom"];
+                        if ($agprom>0){
+                            $resultado = array_filter($notas, function($notas) use ($agprom) {
+                                return $agprom >= $notas['nota'] && $agprom <= $notas['nota2'];
+                            });
+                            $this->tblboletin[$person][$index]["AG-prom"] = reset($resultado)['codigo'] ?? 0;
+                        }
+
+                    };
+
+                    $promedio = $this->tblboletin[$person][$index]["promedio"];
+                    $examen   = $this->tblboletin[$person][$index]["examen"];
+                    $cuantitativo = $this->tblboletin[$person][$index]["cuantitativo"];
+                   
+                    if ($promedio>0){
+                         $resultado = array_filter($notas, function($notas) use ($promedio) {
+                            return $promedio >= $notas['nota'] && $promedio <= $notas['nota2'];
+                        });
+                        $this->tblboletin[$person][$index]["promedio"] = reset($resultado)['codigo'] ?? 0;
+                    }
+
+                    if ($examen>0){
+                         $resultado = array_filter($notas, function($notas) use ($examen) {
+                            return $examen >= $notas['nota'] && $examen <= $notas['nota2'];
+                        });
+                        $this->tblboletin[$person][$index]["examen"] = reset($resultado)['codigo'] ?? 0;
+                    }
+
+                    if ($cuantitativo>0){
+                         $resultado = array_filter($notas, function($notas) use ($cuantitativo) {
+                            return $cuantitativo >= $notas['nota'] && $cuantitativo <= $notas['nota2'];
+                        });
+                        $this->tblboletin[$person][$index]["cuantitativo"] = reset($resultado)['codigo'] ?? 0;
+                    }
+
+                }
+
+                //Promedio Final
+                if (isset($this->tblboletin[$person]['ZZ']["AI-prom"])){
+
+                    $aiprom = $this->tblboletin[$person]['ZZ']["AI-prom"];
+                    if ($aiprom>0){
+                        $resultado = array_filter($notas, function($notas) use ($aiprom) {
+                            return $aiprom >= $notas['nota'] && $aiprom <= $notas['nota2'];
+                        });
+                        $this->tblboletin[$person]['ZZ']["AI-prom"] = reset($resultado)['codigo'] ?? 0;
+                    }
+
+                };
+
+                if (isset($this->tblboletin[$person]['ZZ']["AG-prom"])){
+
+                    $agprom = $this->tblboletin[$person]['ZZ']["AG-prom"];
+                    if ($agprom>0){
+                        $resultado = array_filter($notas, function($notas) use ($agprom) {
+                            return $agprom >= $notas['nota'] && $agprom <= $notas['nota2'];
+                        });
+                        $this->tblboletin[$person]['ZZ']["AG-prom"] = reset($resultado)['codigo'] ?? 0;
+                    }
+
+                };
+
+                $promedio = $this->tblboletin[$person]['ZZ']["promedio"];
+                $examen   = $this->tblboletin[$person]['ZZ']["examen"];
+                $cuantitativo = $this->tblboletin[$person]['ZZ']["cuantitativo"];
+                
+                if ($promedio>0){
+                        $resultado = array_filter($notas, function($notas) use ($promedio) {
+                        return $promedio >= $notas['nota'] && $promedio <= $notas['nota2'];
+                    });
+                    $this->tblboletin[$person]['ZZ']["promedio"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                if ($examen>0){
+                        $resultado = array_filter($notas, function($notas) use ($examen) {
+                        return $examen >= $notas['nota'] && $examen <= $notas['nota2'];
+                    });
+                    $this->tblboletin[$person]['ZZ']["examen"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                if ($cuantitativo>0){
+                        $resultado = array_filter($notas, function($notas) use ($cuantitativo) {
+                        return $cuantitativo >= $notas['nota'] && $cuantitativo <= $notas['nota2'];
+                    });
+                    $this->tblboletin[$person]['ZZ']["cuantitativo"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+            }
+
+        }
+
+
+    }
+
+    public function actividad($id){
+
+        $record = TmActividades::query()
+        ->join("tm_horarios_docentes as d",function($join){
+            $join->on("d.id","=","tm_actividades.paralelo")
+                ->on("d.docente_id","=","tm_actividades.docente_id");
+        })
+        ->join("tm_horarios as h","h.id","=","d.horario_id")
+        ->when($this->variables['paralelo'],function($query){
+            return $query->where('h.curso_id',"{$this->variables['paralelo']}");
+        })
+        ->when($this->variables['termino'],function($query){
+            return $query->where('termino',"{$this->variables['termino']}");
+        })
+        ->when($this->variables['bloque'],function($query){
+            return $query->where('bloque',"{$this->variables['bloque']}");
+        })
+        ->selectRaw("tm_actividades.id,tm_actividades.nombre,tm_actividades.actividad,tm_actividades.puntaje")
+        ->where("tipo","AC")
+        ->where("d.asignatura_id",$id)
+        ->orderByRaw("actividad desc")
+        ->get();
+
+        return  $record;
 
     }
     
