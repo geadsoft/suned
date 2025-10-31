@@ -208,6 +208,11 @@ class VcPassCourse extends Component
             'estado' => "A",
         ]);
 
+        $pase = TmPaseCursos::find($this->selectId);
+        $pase->update([
+            'estado' => 'I',
+        ]);
+
         $message = "Cambio de Modalidad grabada con Éxito......";
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
