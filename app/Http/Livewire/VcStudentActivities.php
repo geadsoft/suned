@@ -207,8 +207,12 @@ class VcStudentActivities extends Component
             'asignaturaId' => $datos->id,
         ];
 
-        $datos=json_encode($datos);
-        return redirect()->to('/student/deliver-activity/' . $id . ',' . $datos);
+        $datos = json_encode($datos);
+        $this->dispatchBrowserEvent('abrir-url', [
+            'id' => $id,
+            'datos' => $datos
+        ]);
+        //return redirect()->to('/student/deliver-activity/' . $id . ',' . $datos);
     }
     
 }

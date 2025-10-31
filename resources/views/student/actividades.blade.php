@@ -39,6 +39,13 @@
             });
         });
 
+        window.addEventListener('abrir-url', event => {
+            const datos = event.detail.datos;
+            const id = event.detail.id;
+            const url = `/student/deliver-activity/${id},${datos}`; // codifica datos si van por URL
+            window.open(url, '_blank');
+        });
+
     </script>
     
 @endsection
