@@ -547,17 +547,10 @@ class VcFinalBulletin extends Component
                 }
             }
 
-            //Asginar Nota Examen
-            $this->tbltermino = TdPeriodoSistemaEducativos::query()
-            ->where('periodo_id',$this->filters['periodoId'])
-            ->where('tipo','EA')
-            ->get();
-
-            foreach($this->tbltermino as $data){
-                if ($this->filters['termino'] == $data['codigo']){
-                    $this->bloqueEx = str_replace('T','E',$data['codigo']);
-                }
-            }
+            $termino = $this->filters['termino'] ?? null;
+            $bloque = $this->filters['termino'] ?? null;
+            $bloqueEx = $bloque ? str_replace('T', 'E', $bloque) : null;
+            $estudianteId = $this->filters['estudianteId'] ?? null;
 
             $examen = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
@@ -565,14 +558,14 @@ class VcFinalBulletin extends Component
                 $join->on('d.id', '=', 'tm_actividades.paralelo')
                     ->on('d.docente_id', '=', 'tm_actividades.docente_id');
             })
-            ->when(!empty($this->filters['termino']), function($query) {
-                return $query->where('tm_actividades.termino', $this->filters['termino']);
+            ->when(!empty($termino), function($query) use ($termino) {
+                return $query->where('tm_actividades.termino', $termino);
             })
-            ->when(!empty($this->filters['bloque']), function($query) {
-                return $query->where('tm_actividades.bloque', $this->bloqueEx);
+            ->when(!empty($bloque), function($query) use ($bloqueEx) {
+                return $query->where('tm_actividades.bloque', $bloqueEx);
             })
             ->where('tm_actividades.tipo', 'ET')
-            ->where('n.persona_id', $this->filters['estudianteId'])
+            ->where('n.persona_id', $estudianteId)
             ->groupBy('d.asignatura_id')
             ->selectRaw('d.asignatura_id, ROUND(AVG(n.nota), 2) as promedio')
             ->pluck('promedio', 'asignatura_id');
