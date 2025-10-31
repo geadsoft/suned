@@ -550,7 +550,7 @@ class VcFinalBulletin extends Component
             $termino = $this->filters['termino'] ?? null;
             $bloque = $this->filters['termino'] ?? null;
             $bloqueEx = $bloque ? str_replace('T', 'E', $bloque) : null;
-            $estudianteId = $this->filters['estudianteId'] ?? null;
+            $estudianteId = $this->filters['estudianteId'] ?? $idPerson;
 
             $examen = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
