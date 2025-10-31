@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 use App\Models\TmHorariosDocentes;
+use App\Models\TmActividades;
 
 use Livewire\Component;
 
@@ -51,6 +52,9 @@ class VcHorariosDocentes extends Component
         $record->update([
             'docente_id' => $id,
         ]);
+
+        TmActividades::where('paralelo', $this->selectId)
+        ->update(['docente_id' => $id]);
 
         $this->setHorario($this->horarioId);
 
