@@ -185,89 +185,6 @@ class VcFinalBulletin extends Component
             });
         }
 
-
-        /*foreach ($this->tbltermino as $key => $value) {
-            
-            $this->termino = $value->codigo;
-            $this->filters['termino'] = $value->codigo;
-
-            $this->loadPersonas();
-            $this->add();
-            $this->asignarNotas();  
-
-            foreach ($this->tblrecords as $key => $record) {
-                
-                foreach ($record as $key2 => $data) {  
-                    
-                    if($key2!='ZZ'){
-
-                        $boletin = TdBoletinFinal::query()
-                        ->where('periodo_id',$this->filters['periodoId'])
-                        ->where('modalidad_id',$this->filters['modalidadId'])
-                        ->where('curso_id', $this->filters['paralelo'])
-                        ->where('persona_id', $key)
-                        ->where('asignatura_id', $data['asignaturaId'])
-                        ->get()
-
-                        if($boletin){
-
-                            switch ($this->termino) {
-                                case '1T':
-                                    $boletin ->update([
-                                        '1T_notaparcial' => $data['promedio'];
-                                        '1T_nota70' =>  $data['nota70'];
-                                        '1T_evaluacion' => $data['examen'];
-                                        '1T_nota30' => $data['nota30'];
-                                        '1T_notatrimestre' => $data['cuantitativo'];
-                                    ]);
-                                    break;
-                                case '2T':
-                                    $boletin ->update([
-                                        '2T_notaparcial' => $data['promedio'];
-                                        '2T_nota70' =>  $data['nota70'];
-                                        '2T_evaluacion' => $data['examen'];
-                                        '2T_nota30' => $data['nota30'];
-                                        '2T_notatrimestre' => $data['cuantitativo'];
-                                    ]);
-                                    break;
-                                case '3T':
-                                    $boletin ->update([
-                                        '3T_notaparcial' => $data['promedio'];
-                                        '3T_nota70' =>  $data['nota70'];
-                                        '3T_evaluacion' => $data['examen'];
-                                        '3T_nota30' => $data['nota30'];
-                                        '3T_notatrimestre' => $data['cuantitativo'];
-                                    ]);
-                                    break;
-                            }
-                            
-
-                        }else{
-                            
-                            TmGeneralidades::Create([
-                                'periodo_id' => $this->filters['periodoId'],
-                                'modalidad_id' => $this->filters['modalidadId'],
-                                'curso_id' => $this->filters['paralelo'],
-                                'persona_id' => $key,
-                                'asignatura_id' =>  $data['asignaturaId'],
-                                '1T_notaparcial' => $data['promedio'];
-                                '1T_nota70' =>  $data['nota70'];
-                                '1T_evaluacion' => $data['examen'];
-                                '1T_nota30' => $data['nota30'];
-                                '1T_notatrimestre' => $data['cuantitativo'];  
-                                
-                            ]);
-
-                        }
-
-                    }
-                }
-
-            }
-            
-
-        }*/
-
         $boletin = TdBoletinFinal::query()
         ->where('periodo_id',$this->filters['periodoId'])
         ->where('modalidad_id',$this->filters['modalidadId'])
@@ -550,7 +467,7 @@ class VcFinalBulletin extends Component
             $termino = $this->filters['termino'] ?? null;
             $bloque = $this->filters['termino'] ?? null;
             $bloqueEx = $bloque ? str_replace('T', 'E', $bloque) : null;
-            $estudianteId = $this->filters['estudianteId'] ?? $idPerson;
+            $estudianteId = $idPerson;
 
             $examen = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
