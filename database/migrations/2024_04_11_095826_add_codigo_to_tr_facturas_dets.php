@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('tr_facturas_dets', function (Blueprint $table) {
-            $table->string('codigo',20)->after('cobro_id')->nullable();
+            $table->string('codigo',20)->after('deudadet_id')->nullable();
         });
     }
 

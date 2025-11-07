@@ -362,7 +362,7 @@ class VcReportCard extends Component
                 }
             }
 
-            //Asginar Nota Examen
+            /*//Asginar Nota Examen
             $this->tbltermino = TdPeriodoSistemaEducativos::query()
             ->where('periodo_id',$this->filters['periodoId'])
             ->where('tipo','EA')
@@ -372,7 +372,10 @@ class VcReportCard extends Component
                 if ($this->filters['termino'] == $data['codigo']){
                     $this->bloqueEx = str_replace('T','E',$data['codigo']);
                 }
-            }
+            }*/
+           
+            $bloque = $this->filters['termino'] ?? null;
+            $bloqueEx = $bloque ? str_replace('T', 'E', $bloque) : null;
 
             $examen = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
