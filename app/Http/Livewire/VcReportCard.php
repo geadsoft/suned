@@ -374,8 +374,8 @@ class VcReportCard extends Component
                 }
             }*/
            
-            $bloque = $this->filters['termino'] ?? null;
-            $bloqueEx = $bloque ? str_replace('T', 'E', $bloque) : null;
+            $bloque = $this->filters['bloque'] ?? null;
+            $bloqueEx = $bloque ? str_replace('P', 'E', $bloque) : null;
             $estudianteId = $idPerson;
 
             $examen = TmActividades::query()
