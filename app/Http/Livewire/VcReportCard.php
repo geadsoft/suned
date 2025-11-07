@@ -326,7 +326,7 @@ class VcReportCard extends Component
         foreach ($this->tblpersonas as $key => $person){
 
             $idPerson = $person->id;
-            $this->filters['estudianteId'] = $idPerson;
+            //$this->filters['estudianteId'] = $idPerson;
 
             $notas = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
@@ -376,6 +376,7 @@ class VcReportCard extends Component
            
             $bloque = $this->filters['termino'] ?? null;
             $bloqueEx = $bloque ? str_replace('T', 'E', $bloque) : null;
+            $estudianteId = $idPerson;
 
             $examen = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
@@ -386,11 +387,11 @@ class VcReportCard extends Component
             ->when(!empty($this->filters['termino']), function($query) {
                 return $query->where('tm_actividades.termino', $this->filters['termino']);
             })
-            ->when(!empty($this->filters['bloque']), function($query) {
-                return $query->where('tm_actividades.bloque', $this->bloqueEx);
+            ->when(!empty($bloque), function($query) use ($bloqueEx) {
+                return $query->where('tm_actividades.bloque', $bloqueEx);
             })
             ->where('tm_actividades.tipo', 'ET')
-            ->where('n.persona_id', $this->filters['estudianteId'])
+            ->where('n.persona_id', $estudianteId)
             ->groupBy('d.asignatura_id')
             ->selectRaw('d.asignatura_id, ROUND(AVG(n.nota), 2) as promedio')
             ->pluck('promedio', 'asignatura_id');
