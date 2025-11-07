@@ -9,6 +9,8 @@ use App\Models\TmPpeEstudiantes;
 use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmPpeActividades;
 use Livewire\WithPagination;
+use App\Models\TmGeneralidades;
+use App\Models\TmServicios;
 
 use Livewire\Component;
 
@@ -18,12 +20,25 @@ class VcPpeFases extends Component
     
     public $fecha, $hora, $fase, $periodoId, $docenteId, $filas=0, $enlace, $showEditModal=false;
     public $tipo="AI", $descripcion="", $fechaentrega, $horaentrega, $archivo="NO", $puntaje, $comentario, $enlace2="";
-    public $selectId, $nombreActividad;
+    public $selectId, $nombreActividad, $modalidadId, $gradoId;
 
     public $tblactividad=[];
     public $tblrecords=[];
     public $objdetalle=[];
     public $personas=[];
+    public $tblmodalidad;
+    public $detallelink=[];
+
+    public $filters=[
+        'modalidadId' => '',
+        'gradoId' => ''
+    ];
+
+    public $selTab=[
+        1 => 'active',
+        2 => '',
+        3 => ''
+    ];
 
     public function mount($fase)
     {
@@ -43,6 +58,10 @@ class VcPpeFases extends Component
         ->where('codigo','<>','EX')
         ->get();
 
+        $this->tblmodalidad = TmGeneralidades::where('superior',1)->get();
+        $this->modalidadId = $this->tblmodalidad->first()->id;
+        $this->filters['modalidadId'] = $this->modalidadId;
+
         $this->loadPersonas();
         $this->loadData();
 
@@ -55,12 +74,31 @@ class VcPpeFases extends Component
         $fase = 'F'.$this->fase;
 
         $actividades = TmPpeActividades::query()
+        ->when($this->filters['modalidadId'],function($query){
+            return $query->where('modalidad_id',"{$this->filters['modalidadId']}");
+        })
+        ->when($this->filters['gradoId'],function($query){
+            return $query->where('grado_id',"{$this->filters['gradoId']}");
+        })
         ->where('periodo_id',$this->periodoId)
         ->where('tipo',$fase)
+        ->where('actividad','<>','CV')
         ->paginate(12);
+
+        $tblgrados = TmServicios::query()
+        ->where('modalidad_id',$this->modalidadId)
+        ->where('nivel_id',11)
+        ->get(); 
+        
+        $filtrargrados = TmServicios::query()
+        ->where('modalidad_id',$this->filters['modalidadId'])
+        ->where('nivel_id',11)
+        ->get(); 
         
         return view('livewire.vc-ppe-fases',[
             'actividades' => $actividades,
+            'tblgrados' => $tblgrados,
+            'filtrargrados' => $filtrargrados,
         ]);
     }
 
@@ -118,20 +156,29 @@ class VcPpeFases extends Component
         }
 
         $this->filas = count($tblfases);
-        
-        $tblfases = TmPpeFases::query()
-        ->where('periodo_id', $this->periodoId)
-        ->where('fase',$this->fase)
-        ->where('persona_id', $this->docenteId)
-        ->whereNotNull('enlace')       // que no sea NULL
-        ->where('enlace', '<>', '')    // que no esté vacío
-        ->first();
 
-        if ($tblfases){
-            $this->enlace = $tblfases->enlace; 
-            //$this->loadPersonas();
+        //Clase Virtual
+        $clases = TmPpeActividades::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','F'.$this->fase)
+        ->where('docente_id',$this->docenteId)
+        ->where('actividad','CV')
+        ->get();
+
+        foreach ($clases as $key => $value) {
+            $arrlink = [
+                'id' => $value->id,
+                'modalidadId' => $value->modalidad_id,
+                'modalidad' => $value->modalidad->descripcion,
+                'gradoId' => $value->grado_id,
+                'grado' => $value->grado->descripcion,
+                'enlace' => $value->enlace
+            ];
+
+            array_push($this->detallelink,$arrlink);
         }
 
+        
         foreach($this->personas as $index => $persona){
 
             $personaId = $persona->id;
@@ -158,6 +205,8 @@ class VcPpeFases extends Component
         $this->personas =  TmPpeEstudiantes::query()
         ->join('tm_personas as p','p.id','=','tm_ppe_estudiantes.persona_id')
         ->where('periodo_id',$this->periodoId)
+        ->where('modalidad_id',$this->filters['modalidadId'])
+        ->where('grado_id',$this->filters['gradoId'])
         ->select('p.*')
         ->get(); 
 
@@ -166,6 +215,11 @@ class VcPpeFases extends Component
     public function createData(){
 
         $vacios = collect($this->objdetalle)->filter(fn($d) => empty($d->fecha))->count();
+
+        if ($vacios>0){
+            $this->dispatchBrowserEvent('msg-vacio');
+            return;
+        }
 
         foreach ($this->objdetalle as $index => $detalle)
         {
@@ -181,7 +235,7 @@ class VcPpeFases extends Component
             $mes = date('m', strtotime($detalle['fecha']));
             $periodo = date('Y', strtotime($detalle['fecha']));
 
-            $eventos = TmCalendarioEventos::Create([
+            /*$eventos = TmCalendarioEventos::Create([
                 'periodo' => $periodo,
                 'mes' => $mes,
                 'actividad' => 'PP',
@@ -208,19 +262,44 @@ class VcPpeFases extends Component
                     'usuario' => auth()->user()->name,
                 ]);
 
-            }
+            }*/
             
         }
 
         //Link clase virtual
-        TmPpeFases::Create([
+        /*TmPpeFases::Create([
             'periodo_id' => $this->periodoId,
             'persona_id' => $this->docenteId,
             'fase' => $this->fase,
             'fecha' => $this->fecha,
             'enlace' => $this->enlace,
             'usuario' => auth()->user()->name,
-        ]); 
+        ]);*/
+        
+        foreach($this->detallelink as $detalle){
+
+            if ($detalle['id']==0){
+
+                $tblData = TmPpeActividades::Create([
+                    'periodo_id' => $this->periodoId,
+                    'modalidad_id' => $detalle['modalidadId'],
+                    'grado_id' => $detalle['gradoId'],
+                    'docente_id' => $this->docenteId,
+                    'tipo' => 'F'.$this->fase,
+                    'actividad' => 'CV',
+                    'nombre' => 'Clase Virtual',
+                    'descripcion' => '',
+                    'fecha_entrega' => '1900-01-01',
+                    'subir_archivo' => 'NO',
+                    'puntaje' => 0,
+                    'enlace' => $detalle['enlace'],
+                    'estado' => "A",
+                    'usuario' => auth()->user()->name,
+                ]);
+
+            }
+
+        }
         
         $this->loadData();
         $this->render();
@@ -249,18 +328,18 @@ class VcPpeFases extends Component
             'puntaje' => 'required'
         ]);
 
-        $grados = TmPpeEstudiantes::query()
+        /*$grados = TmPpeEstudiantes::query()
         ->where('periodo_id', $this->periodoId)
         ->select('modalidad_id', 'grado_id')
         ->groupBy('modalidad_id', 'grado_id')
         ->get();
         
-        foreach ($grados as $key => $grado){
+        foreach ($grados as $key => $grado){*/
 
             $tblData = TmPpeActividades::Create([
                 'periodo_id' => $this->periodoId,
-                'modalidad_id' => $grado->modalidad_id,
-                'grado_id' => $grado->grado_id,
+                'modalidad_id' => $this->modalidadId,
+                'grado_id' => $this->gradoId,
                 'docente_id' => $this->docenteId,
                 'tipo' => 'F'.$this->fase,
                 'actividad' => $this->tipo,
@@ -273,7 +352,7 @@ class VcPpeFases extends Component
                 'estado' => "A",
                 'usuario' => auth()->user()->name,
             ]);
-        }
+        /*}*/
 
         $this->dispatchBrowserEvent('hide-form');
 
@@ -322,6 +401,70 @@ class VcPpeFases extends Component
         TmPpeActividades::find($this->selectId)->delete();
         $this->dispatchBrowserEvent('hide-delete');
 
+    }
+
+    public function updatedModalidadId($value)
+    {
+        // cargar grados filtrados por modalidad
+        $this->tblgrados = TmServicios::query()
+        ->where('modalidad_id',$value)
+        ->where('nivel_id',11)
+        ->get();    
+
+        $this->gradoId = null; // limpiar selección anterior, opcional
+    }
+
+    public function newlink(){
+
+        $this->gradoId='';
+         $this->enlace='';
+        
+        $this->dispatchBrowserEvent('show-class');
+
+    }
+
+    public function addlink(){
+
+        $modalidad = TmGeneralidades::find($this->modalidadId);
+        $grado = TmServicios::find($this->gradoId);
+
+        $arrlink = [
+            'id' => 0,
+            'modalidadId' => $this->modalidadId,
+            'modalidad' => $modalidad->descripcion,
+            'gradoId' => $this->gradoId,
+            'grado' => $grado->descripcion,
+            'enlace' => $this->enlace
+        ];
+
+        array_push($this->detallelink,$arrlink);
+        
+        $this->dispatchBrowserEvent('hide-class');
+
+    }
+
+    public function viewlink(){
+
+    }
+
+    public function dellink($linea){
+
+        $id = $this->detallelink[$linea]['id'];
+        
+        if ($id==0){
+            unset($this->detallelink[$linea]);
+        }else{
+            TmPpeActividades::where('id', $id)->delete();
+            $this->loadData();
+        }
+
+    }
+
+    public function filterTab($tab){
+        $this->selTab[1] = '';
+        $this->selTab[2] = '';
+        $this->selTab[3] = '';
+        $this->selTab[$tab] = 'active';
     }
 
 }

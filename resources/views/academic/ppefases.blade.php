@@ -34,12 +34,24 @@
             $('#showModal').modal('hide');
         })
 
-         window.addEventListener('show-delete', event => {
+        window.addEventListener('show-delete', event => {
             $('#deleteOrder').modal('show');
         })
 
         window.addEventListener('hide-delete', event => {
             $('#deleteOrder').modal('hide');
+        })
+
+        window.addEventListener('show-class', event => {
+            $('#showClass').modal('show');
+        })
+
+        window.addEventListener('hide-class', event => {
+            $('#showClass').modal('hide');
+        })
+
+        window.addEventListener('msg-vacio', event => {
+            swal("No hay fecha asignada!", "Por favor, prográmala para continuar.", "error");
         })
 
     </script>

@@ -26,4 +26,12 @@ class TmPpeActividades extends Model
         'estado',
         'usuario',
     ];
+
+    public function modalidad(){
+        return $this->belongsTo('App\Models\TmGeneralidades');
+    }
+
+    public function grado(){
+        return $this->belongsTo('App\Models\TmServicios');
+    }
 }

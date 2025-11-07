@@ -48,23 +48,55 @@
             
             <div class="card">
                 <div class="card-body">
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center mb-3">
                         <div class="avatar-sm me-2">
                             <div class="avatar-title bg-light text-secondary rounded fs-24">
                                 <i class="ri-video-chat-line"></i>
                             </div>
                         </div>
                         <h5 class="card-title mb-0">Link - Clase Virtual</h5>
+                        <div class="ms-auto">
+                            <button type="button" 
+                                    id="btnstudents" 
+                                    class="btn btn-soft-danger btn-sm"
+                                    wire:click="newlink">
+                                <i class="ri-share-line me-1 align-bottom"></i>Asignar Clases
+                            </button>
+                        </div>
                     </div>
-                    <div class="vstack gap-2">
-                        <div class="border rounded border-dashed p-2">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <textarea id="editor" class="form-control w-100" rows="3" wire:model.defer="enlace" required></textarea>
-                                </div>
+                    @foreach($detallelink as $key => $link)
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class=" ri-external-link-line me-1 align-bottom"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-2">
+                            <h6 class="mb-1"><a href="pages-profile.html">{{$link['modalidad']}} - {{$link['grado']}}</a></h6>
+                            <p class="text-muted mb-0 text-wrap text-break">
+                                {{ $link['enlace'] }}
+                            </p>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <div class="dropdown">
+                                <button class="btn btn-icon btn-sm fs-16 text-muted dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="ri-more-fill"></i>
+                                </button>
+                                <ul class="dropdown-menu" style="">
+                                    <li><a class="dropdown-item" href="javascript:void(0);" wire:click=""><i class="ri-eye-fill text-muted me-2 align-bottom"></i>Visualizar</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0);" wire:click="dellink({{$key}})"><i class="ri-delete-bin-5-fill text-muted me-2 align-bottom"></i>Eliminar</a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
+                    <!--<div class="vstack gap-2">
+                        <div class="border rounded border-dashed p-2">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <textarea id="editor-{{$key}}" class="form-control w-100" rows="3">{{ $link['enlace'] }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                    @endforeach
 
                 </div>
             </div>
@@ -115,11 +147,42 @@
             <!--end card-->
             <div class="card">
                 <div class="card-header">
-                    <div>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <!-- Pestañas a la izquierda -->
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                            <a class="nav-link {{$selTab[1]}}" data-bs-toggle="tab" href="#asistencia-1" wire:click="filterTab(1)">Asistencia</a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link {{$selTab[2]}}"  data-bs-toggle="tab" href="#activity" wire:click="filterTab(2)">Actividades</a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link {{$selTab[3]}}"  data-bs-toggle="tab" href="#home-1" wire:click="filterTab(3)">Calificación</a>
+                            </li>
+                        </ul>
+
+                        <!-- Combos a la derecha en línea -->
+                        <div class="d-flex gap-2">
+                            <select id="cmbmodalidad" type="select" class="form-select" data-trigger wire:model="filters.modalidadId">    
+                            @foreach ($tblmodalidad as $general)
+                                <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                            @endforeach
+                            </select>
+
+                            <select type="select" class="form-select" data-trigger id="cmdperiodo" style="width: 250px;" wire:model="filters.gradoId">
+                            <option value="">Seleccione Grado</option>
+                            @foreach ($filtrargrados as $grado)
+                                <option value="{{$grado->id}}">{{$grado->descripcion}}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <!--<div>
                         <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0 mb-1" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#home-1" role="tab">
-                                    Calificación
+                                <a class="nav-link active" data-bs-toggle="tab" href="#asistencia-1" role="tab">
+                                    Asistencia
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -127,12 +190,41 @@
                                     Actividades
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#home-1" role="tab">
+                                    Calificación
+                                </a>
+                            </li>
                         </ul>
                     </div>
+                    
+                        <div class="row g-2">
+                            <div class="col-lg-3" >
+                                <div>
+                                    <select id="cmbmodalidad" type="select" class="form-select form-select-sm" data-trigger wire:model="filters.modalidadId">    
+                                    @foreach ($tblmodalidad as $general)
+                                        <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3" >
+                                <div>
+                                    <select type="select" class="form-select form-select-sm" data-trigger id="cmdperiodo" wire:model="filters.gradoId">
+                                    <option value="">Seleccione Grado</option>
+                                    @foreach ($filtrargrados as $grado)
+                                        <option value="{{$grado->id}}">{{$grado->descripcion}}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>-->
+                    
                 </div>
                 <div class="card-body">
+                    
                     <div class="tab-content">
-                        <div class="tab-pane active" id="home-1" role="tabpanel">                       
+                        <div class="tab-pane {{$selTab[3]}}" id="home-1" role="tabpanel">                     
                             <div class="table-responsive  table-card mb-1">
                                 <table class="table table-sm table-nowrap align-middle" id="orderTable">
                                     <thead class="text-muted table-light">
@@ -162,7 +254,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="tab-pane" id="activity" role="tabpanel">
+                        <div class="tab-pane {{$selTab[2]}}" id="activity" role="tabpanel">
                             <div class="d-flex align-items-center mb-3">
                                 <div class="flex-shrink-0 mb-3 ms-auto">
                                     <button type="button" wire:click.prevent="addActivity()" class="btn btn-danger add-btn" id="create-btn">
@@ -230,7 +322,8 @@
     <!--end row-->
     </form>
 
-    <div wire.ignore.self class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    
+    <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered modal-xl" >
             <div class="modal-content">
                 
@@ -247,6 +340,26 @@
                 <form autocomplete="off" wire:submit.prevent="{{ $showEditModal ? 'updateActivity' : 'createActivity' }}">
                     
                     <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="cmbmodalidad" class="form-label">Modalidad</label>
+                            <select id="cmbmodalidad" class="form-select" wire:model="modalidadId">
+                            <option value="">-- Seleccione --</option>
+                            @foreach ($tblmodalidad as $general)
+                                <option value="{{ $general->id }}">{{ $general->descripcion }}</option>
+                            @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cmdgrado" class="form-label">Grado</label>
+                            <select id="cmdgrado" class="form-select" wire:model.defer="gradoId">
+                            <option value="">-- Seleccione --</option>
+                            @foreach ($tblgrados as $grado)
+                                <option value="{{ $grado->id }}">{{ $grado->descripcion }}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                        
                         <div class="mb-3">
                             <label for="tipo-select" class="form-label fw-semibold">Tipo Actividad</label>
                             <select class="form-select" id="tipo-select" data-choices data-choices-search-false wire:model.defer="tipo">
@@ -304,6 +417,56 @@
         </div>
     </div>
     <!-- end modal -->
+
+    <div class="modal fade" id="showClass" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" wire:ignore.self>
+        <div class="modal-dialog modal-dialog-centered modal-xs">
+            <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel">
+                <span>Agregar Link</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+
+            <form autocomplete="off" onsubmit="return false;">
+                <div class="modal-body">
+                <div class="mb-3">
+                    <label for="cmbmodalidad" class="form-label">Modalidad</label>
+                    <select id="cmbmodalidad" class="form-select" wire:model="modalidadId" required>
+                    <option value="">-- Seleccione --</option>
+                    @foreach ($tblmodalidad as $general)
+                        <option value="{{ $general->id }}">{{ $general->descripcion }}</option>
+                    @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="cmdgrado" class="form-label">Grado</label>
+                    <select id="cmdgrado" class="form-select" wire:model="gradoId" required>
+                    <option value="">-- Seleccione --</option>
+                    @foreach ($tblgrados as $grado)
+                        <option value="{{ $grado->id }}">{{ $grado->descripcion }}</option>
+                    @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <div class="flex-grow-1 overflow-hidden">
+                    <textarea id="editor" class="form-control w-100" rows="3" wire:model.defer="enlace" required></textarea>
+                    </div>
+                </div>
+                </div>
+
+                <div class="modal-footer">
+                <div class="hstack gap-2 justify-content-end">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" wire:click="addlink">Grabar</button>
+                </div>
+                </div>
+            </form>
+            </div>
+        </div>
+        </div>
 
     <!-- Modal -->
     <div wire.ignore.self class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true" wire:model='selectId'>
