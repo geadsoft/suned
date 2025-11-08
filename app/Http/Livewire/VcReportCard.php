@@ -341,7 +341,7 @@ class VcReportCard extends Component
                 return $query->where('tm_actividades.bloque', $this->filters['bloque']);
             })
             ->where('tm_actividades.tipo', 'AC')
-            ->where('n.persona_id', $this->filters['estudianteId'])
+            ->where('n.persona_id', $idPerson)
             ->select([
                 'tm_actividades.id as actividadId',
                 'tm_actividades.actividad',
@@ -376,7 +376,6 @@ class VcReportCard extends Component
            
             $bloque = $this->filters['bloque'] ?? null;
             $bloqueEx = $bloque ? str_replace('P', 'E', $bloque) : null;
-            $estudianteId = $idPerson;
 
             $examen = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
@@ -391,7 +390,7 @@ class VcReportCard extends Component
                 return $query->where('tm_actividades.bloque', $bloqueEx);
             })
             ->where('tm_actividades.tipo', 'ET')
-            ->where('n.persona_id', $estudianteId)
+            ->where('n.persona_id', $idPerson)
             ->groupBy('d.asignatura_id')
             ->selectRaw('d.asignatura_id, ROUND(AVG(n.nota), 2) as promedio')
             ->pluck('promedio', 'asignatura_id');
@@ -826,6 +825,8 @@ class VcReportCard extends Component
                 SUM(CASE WHEN valor = 'AJ' THEN 1 ELSE 0 END) as total_aj
             ")
             ->where('persona_id', $person->id)
+            ->where('periodo_id', $this->filters['periodoId'])
+            ->where('termino', $this->filters['termino'])
             ->first();
 
             $faltas[$person->id]['faltas'] = $conteos->total_f ?? 0;
