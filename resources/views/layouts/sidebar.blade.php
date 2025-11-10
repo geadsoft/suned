@@ -486,6 +486,13 @@
                     </a>
                 </li>
                 @endcan
+                @can('Mis Libros')
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/student/library">
+                        <i class="ri-book-3-line fs-20"></i>Biblioteca Digital</span>
+                    </a>
+                </li>
+                @endcan
                 @can('Clases Virtuales')
                 <li class="nav-item">
                     <!--<a class="nav-link menu-link" href="/activities/virtual-classes">
@@ -566,7 +573,14 @@
                         <i class="ri-folder-open-line fs-20"></i>Recursos</span>
                     </a>
                 </li>
-                @endcan                
+                @endcan  
+                @can('Biblioteca')
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="/teachers/library">
+                        <i class="ri-book-3-line fs-20"></i>Biblioteca Digital</span>
+                    </a>
+                </li>
+                @endcan              
                 @can('Personalizar')
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#personalizar" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="personalizar">

@@ -275,7 +275,9 @@ class DocentesController extends Controller
 
     public function flipbook_viewer($id)
     {
-        return view('teachers/librodigital',['id' => $id]);
+        return view('teachers/librodigital',[
+            'id' => $id,
+        ]);
     }
 
     public function asignatura_parcial()
@@ -286,6 +288,11 @@ class DocentesController extends Controller
     public function asignatura_trimestral()
     {
         return view('teachers/asignatura_trimestral');
+    }
+
+    public function library()
+    {
+        return view('teachers/biblioteca');
     }
 
 }

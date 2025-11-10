@@ -27,24 +27,7 @@ class ArchivoController extends Controller
 
     public function descargar($id)
     {
-        /*$file = TmFiles::find($id);
-        $accessToken = $this->token();
-
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $accessToken,
-        ])->get("https://www.googleapis.com/drive/v3/files/{$file->drive_id}?alt=media");
-
-        if ($response->successful()) {
-            $fileName = $file->nombre;
-            $filePath = 'archivos/' . $fileName;
-
-            Storage::disk('public')->put($filePath, $response->body());
-
-            return response()->download(storage_path('app/public/' . $filePath))->deleteFileAfterSend(true);
-        }
-
-        return abort(404, 'Archivo no disponible.');*/
-
+        
         $file = TmFiles::find($id);
 
         if (!$file || !$file->drive_id) {

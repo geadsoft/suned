@@ -19,12 +19,19 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-flipbook-viewer',['fileId' => $id])
+    @livewire('vc-flipbook-viewer',[
+        'id' => $id,
+    ])
 
 @endsection
 @section('script')
 
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
+    <!-- nouisliderribute js -->
+<script src="{{ URL::asset('assets/libs/nouislider/nouislider.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/wnumb/wNumb.min.js') }}"></script>
+
+<script src="{{ URL::asset('assets/js/pages/apps-nft-explore.init.js') }}"></script>
+
+<script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
  
 @endsection

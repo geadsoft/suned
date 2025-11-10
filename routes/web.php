@@ -28,6 +28,7 @@ use App\Http\Livewire\VcReportTQualify;
 use App\Http\Livewire\VcReportQuarterlyTeacher;
 use App\Http\Livewire\VcPartialBulletin;
 use App\Http\Livewire\VcFinalBulletin;
+use App\Http\Controllers\DocumentDownloadController;
 
 
 /*
@@ -164,6 +165,8 @@ Route::get('/subject/resource-add',[App\Http\Controllers\DocentesController::cla
 Route::get('/subject/resource-view/{id}',[App\Http\Controllers\DocentesController::class, 'resources_view'])->name('resources_view');
 Route::get('/subject/resource-edit/{id}',[App\Http\Controllers\DocentesController::class, 'resources_edit'])->name('resources_edit');
 Route::get('/subject/flipbook-viewer/{id}',[App\Http\Controllers\DocentesController::class, 'flipbook_viewer'])->name('flipbook_viewer');
+Route::get('/teachers/library',[App\Http\Controllers\DocentesController::class, 'library'])->name('library');
+Route::get('/student/library',[App\Http\Controllers\EstudiantesController::class, 'library'])->name('library');
 
 Route::get('/student/subject',[App\Http\Controllers\EstudiantesController::class, 'subject'])->name('subject');
 Route::get('/student/subject-view/{data}',[App\Http\Controllers\EstudiantesController::class, 'subject_view'])->name('subject_view');
@@ -178,9 +181,11 @@ Route::get('/student/report-card',[App\Http\Controllers\EstudiantesController::c
 Route::get('/student/qualify-conduct',[App\Http\Controllers\EstudiantesController::class, 'qualify_conduct'])->name('qualify_conduct');
 Route::get('/student/partial-bulletin',[App\Http\Controllers\EstudiantesController::class, 'partial_bulletin'])->name('partial_bulletin');
 Route::get('/student/final-bulletin',[App\Http\Controllers\EstudiantesController::class, 'final_bulletin'])->name('final_bulletin');
-
-
 Route::get('/descargar-archivo/{id}', [ArchivoController::class, 'descargar'])->name('archivo.descargar');
+
+Route::get('/view-pdf/{fileId}/download', [\App\Http\Controllers\DocumentDownloadController::class, 'downloadById'])
+    ->name('pdf.download')
+    ->middleware('auth'); // opcional
 
 Route::get('/download-pdf/{data}',[VcReportCashReceints::class, 'downloadPDF']);
 Route::get('/liveWire-pdf/{data}',[VcReportCashReceints::class, 'liveWirePDF']);
