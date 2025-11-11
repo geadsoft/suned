@@ -426,6 +426,7 @@ var T_check = null;
             // formEvent.classList.add("view-event");
             //document.getElementById('btn-delete-event').removeAttribute('hidden');
             viewEvent(selectedEvent.id);
+            
                         
         },
         /*dateClick: function (info) {
@@ -463,7 +464,24 @@ var T_check = null;
 
     calendar.render()
 
-    /*upcomingEvent(defaultEvents);*/
+    // Eventos prev/next para cargar datos según el mes visible
+    document.querySelector('.fc-prev-button').addEventListener('click', () => {
+        setTimeout(() => {
+            const fechaActual = calendar.getDate();
+            const mes = fechaActual.getMonth() + 2;
+            const anio = fechaActual.getFullYear();
+            Livewire.emit('viewEvent', mes, anio);
+        }, 50);
+    });
+
+    document.querySelector('.fc-next-button').addEventListener('click', () => {
+        setTimeout(() => {
+            const fechaActual = calendar.getDate();
+            const mes = fechaActual.getMonth() + 2;
+            const anio = fechaActual.getFullYear();
+            Livewire.emit('viewEvent', mes, anio);
+        }, 50);
+    });
     
     /*Add new event*/
     // Form to add new event

@@ -18,9 +18,9 @@ class VcViewCalendar extends Component
     public $showEditModal = false, $eControl = 'disabled', $periodo, $mes;
     public $actividad='GE', $evento, $startdate, $enddate, $comentario, $selectId, $eventoId;
     public $eventos, $arrevent=[], $lstevent, $array;
-    public $modalidadId, $gradoId;
+    public $modalidadId, $gradoId, $fechaEmpieza, $fechaTermina;
 
-    protected $listeners = ['postAdded','newEvent'];
+    protected $listeners = ['postAdded','newEvent','viewEvent'];
 
     public function mount()
     {
@@ -28,6 +28,10 @@ class VcViewCalendar extends Component
         
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
+        
+        $this->fechaEmpieza = $tblperiodos['fecha_empieza'];
+        $this->fechaTermina = $tblperiodos['fecha_termina'];
+
         $this->periodo = $tblperiodos['periodo'];
         $this->mes = date('m');
 
@@ -116,8 +120,8 @@ class VcViewCalendar extends Component
         }else{
 
             $this->eventos = TmCalendarioEventos::query()
-            ->where('periodo',$this->periodo)
-            //->where('mes',$this->mes)
+            ->whereDate('start_date', '>=', $this->fechaEmpieza)
+            ->whereDate('end_date', '<=', $this->fechaTermina)
             ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
             ->get();
 
@@ -225,6 +229,21 @@ class VcViewCalendar extends Component
 
             }
         }
+
+    }
+
+    public function viewEvent($mes,$periodo){
+
+        $timestamp = mktime(0, 0, 0, $mes+1, 1, $periodo);
+        $fechafin = date('Y-m-d', $timestamp);
+        $messig = $mes+1;
+
+        $this->lstevent = TmCalendarioEventos::query()
+        ->whereDate('start_date','>=',$fechafin)
+        /*->where('periodo',$this->periodo)
+        ->where('mes',$messig)*/
+        ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
+        ->get();
 
     }
     
