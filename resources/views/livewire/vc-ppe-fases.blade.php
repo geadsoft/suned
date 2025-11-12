@@ -151,7 +151,7 @@
                         <!-- Pestañas a la izquierda -->
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                            <a class="nav-link {{$selTab[1]}}" data-bs-toggle="tab" href="#asistencia-1" wire:click="filterTab(1)">Asistencia</a>
+                            <a class="nav-link {{$selTab[1]}}" data-bs-toggle="tab" href="#asistencia" wire:click="filterTab(1)">Asistencia</a>
                             </li>
                             <li class="nav-item">
                             <a class="nav-link {{$selTab[2]}}"  data-bs-toggle="tab" href="#activity" wire:click="filterTab(2)">Actividades</a>
@@ -169,7 +169,7 @@
                             @endforeach
                             </select>
 
-                            <select type="select" class="form-select" data-trigger id="cmdperiodo" style="width: 250px;" wire:model="filters.gradoId">
+                            <select type="select" class="form-select" data-trigger id="cmdperiodo" style="width: 250px;" wire:model="filters.gradoId" wire:change ="consultar">
                             <option value="">Seleccione Grado</option>
                             @foreach ($filtrargrados as $grado)
                                 <option value="{{$grado->id}}">{{$grado->descripcion}}</option>
@@ -224,6 +224,50 @@
                 <div class="card-body">
                     
                     <div class="tab-content">
+                        <div class="tab-pane {{$selTab[1]}}" id="asistencia" role="tabpanel">
+                            <div class="card mb-3">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    Digitar <b>F</b> solamente si el estudiante ha <b>faltado a clases</b>, <b>FJ</b> -> Falta Justificada, <b>A</b> -> Atraso, <b>AH</b> -> Atraso Justificado
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div> 
+                            </div> 
+                            <div class="card-body">                   
+                            <div class="table-responsive  table-card mb-1">
+                                <table class="table table-sm table-nowrap align-middle" id="orderTable">
+                                    <thead class="text-muted table-light">
+                                        <tr class="text-uppercase">
+                                            <th data-sort="id">Identificación</th>
+                                            <th data-sort="superior">Nombres</th>
+                                            @foreach($this->objdetalle as $key => $detalle)
+                                            <th class="text-center" style="width: 130px;">{{$detalle['fecha']}}</th>
+                                            @endforeach
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list form-check-all">
+                                    @foreach ($personas as $person) 
+                                        @if($this->tblasistencia)   
+                                        <tr>
+                                            <td>{{$tblasistencia[$person->id]['nui']}}</td>
+                                            <td>{{$tblasistencia[$person->id]['nombres']}}</td>
+                                            @foreach($this->objdetalle as $key => $detalle)
+                                            <td>
+                                            <input list="asistencias-{{$person->id}}-{{$key}}" class="form-control form-control-sm" type="text" id="ln-{{$person->id}}-{{$key}}" wire:model="tblasistencia.{{$person->id}}.{{date('md',strtotime($detalle['fecha']))}}">
+                                            <datalist id="asistencias-{{$person->id}}-{{$key}}">
+                                            <option value="F">
+                                            <option value="FJ">
+                                            <option value="A">
+                                            <option value="AH">
+                                            </datalist>
+                                            </td>
+                                            @endforeach
+                                        </tr>
+                                        @endif
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            </div>
+                        </div>
                         <div class="tab-pane {{$selTab[3]}}" id="home-1" role="tabpanel">                     
                             <div class="table-responsive  table-card mb-1">
                                 <table class="table table-sm table-nowrap align-middle" id="orderTable">
@@ -340,45 +384,56 @@
                 <form autocomplete="off" wire:submit.prevent="{{ $showEditModal ? 'updateActivity' : 'createActivity' }}">
                     
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="cmbmodalidad" class="form-label">Modalidad</label>
-                            <select id="cmbmodalidad" class="form-select" wire:model="modalidadId">
-                            <option value="">-- Seleccione --</option>
-                            @foreach ($tblmodalidad as $general)
-                                <option value="{{ $general->id }}">{{ $general->descripcion }}</option>
-                            @endforeach
-                            </select>
+                        <div class="row">
+                            <div class="col-lg-3 mb-3">
+                                <label for="cmbmodalidad" class="form-label">Clase</label>
+                                <select id="cmbmodalidad" class="form-select" wire:model="fechaentrega">
+                                <option value="">-- Seleccione --</option>
+                                @foreach ($objdetalle as $detalle)
+                                    <option value="{{ $detalle['fecha'] }}">{{ $detalle['fecha'] }}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                            <div class="col-lg-3 mb-3">
+                                <label for="cmbmodalidad" class="form-label">Modalidad</label>
+                                <select id="cmbmodalidad" class="form-select" wire:model="modalidadId">
+                                <option value="">-- Seleccione --</option>
+                                @foreach ($tblmodalidad as $general)
+                                    <option value="{{ $general->id }}">{{ $general->descripcion }}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <label for="cmdgrado" class="form-label">Grado</label>
+                                <select id="cmdgrado" class="form-select" wire:model.defer="gradoId">
+                                <option value="">-- Seleccione --</option>
+                                @foreach ($tblgrados as $grado)
+                                    <option value="{{ $grado->id }}">{{ $grado->descripcion }}</option>
+                                @endforeach
+                                </select>
+                            </div>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="cmdgrado" class="form-label">Grado</label>
-                            <select id="cmdgrado" class="form-select" wire:model.defer="gradoId">
-                            <option value="">-- Seleccione --</option>
-                            @foreach ($tblgrados as $grado)
-                                <option value="{{ $grado->id }}">{{ $grado->descripcion }}</option>
-                            @endforeach
-                            </select>
+                        <div class="row">
+                            <div class="col-lg-3 mb-3">
+                                <label for="tipo-select" class="form-label fw-semibold">Tipo Actividad</label>
+                                <select class="form-select" id="tipo-select" data-choices data-choices-search-false wire:model.defer="tipo">
+                                    @foreach ($tblactividad as $actividades) 
+                                    <option value="{{$actividades->codigo}}">{{$actividades->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="col-lg-9 mb-3">
+                                <label for="descripcion" class="form-label">Actividad</label>
+                                <input type="text" wire:model.defer="descripcion" class="form-control" name="descripcion"
+                                    placeholder="Enter name" required />
+                            </div>
                         </div>
-                        
-                        <div class="mb-3">
-                            <label for="tipo-select" class="form-label fw-semibold">Tipo Actividad</label>
-                            <select class="form-select" id="tipo-select" data-choices data-choices-search-false wire:model.defer="tipo">
-                                @foreach ($tblactividad as $actividades) 
-                                <option value="{{$actividades->codigo}}">{{$actividades->descripcion}}</option>
-                                @endforeach 
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="descripcion" class="form-label">Actividad</label>
-                            <input type="text" wire:model.defer="descripcion" class="form-control" name="descripcion"
-                                placeholder="Enter name" required />
-                        </div>
-                        <div class="row mb-3"> 
+                        <!--<div class="row mb-3"> 
                             <div class="col-sm-3">
                                 <label for="fechaMaxima" class="form-label fw-semibold">Fecha Máxima de Entrega</label>
                                 <input type="date" class="form-control" id="fechaMaxima" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fechaentrega"  required> 
                             </div>
-                            <!-- Input Time -->
+                            
                             <div class="col-sm-3">
                                 <label for="horamaxima" class="form-label">Hora Máxima de Entrega</label>
                                 <input type="time" class="form-control" id="horamaxima" wire:model.defer="horaentrega" required>
@@ -394,7 +449,7 @@
                                 <label for="puntaje-input" class="form-label fw-semibold">Puntaje</label>
                                 <input id="puntaje-input" type="number" min="1" max="10" step="1" class="form-control" value="10" wire:model.defer="puntaje"  required>    
                             </div>
-                        </div>
+                        </div>-->
                         <div class="mb-3">
                             <label for="puntaje-input" class="form-label fw-semibold">Comentario</label>
                             <textarea id="editor" class="form-control w-100" rows="5" wire:model.defer="comentario"></textarea>

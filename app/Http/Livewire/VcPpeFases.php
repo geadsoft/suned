@@ -11,8 +11,10 @@ use App\Models\TmPpeActividades;
 use Livewire\WithPagination;
 use App\Models\TmGeneralidades;
 use App\Models\TmServicios;
+use App\Models\TdPpeAsistencias;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 
 class VcPpeFases extends Component
 {   
@@ -23,6 +25,7 @@ class VcPpeFases extends Component
     public $selectId, $nombreActividad, $modalidadId, $gradoId;
 
     public $tblactividad=[];
+    public $tblasistencia=[];
     public $tblrecords=[];
     public $objdetalle=[];
     public $personas=[];
@@ -114,6 +117,7 @@ class VcPpeFases extends Component
         for ($i = 1; $i <= $this->filas; $i++) {
             
             $this->objdetalle[$i]['linea'] = $i ;
+            $this->objdetalle[$i]['id'] = 0;
             $this->objdetalle[$i]['fecha'] = "";
            
         } 
@@ -152,12 +156,15 @@ class VcPpeFases extends Component
 
         foreach($tblfases as $key => $fase){
             $this->objdetalle[$key]['linea'] = $key+1 ;
+            $this->objdetalle[$key]['id'] = $fase->id;
             $this->objdetalle[$key]['fecha'] = date('Y-m-d',strtotime($fase->fecha));
         }
 
         $this->filas = count($tblfases);
 
         //Clase Virtual
+        $this->detallelink=[];
+
         $clases = TmPpeActividades::query()
         ->where('periodo_id',$this->periodoId)
         ->where('tipo','F'.$this->fase)
@@ -179,7 +186,7 @@ class VcPpeFases extends Component
         }
 
         
-        foreach($this->personas as $index => $persona){
+        /*foreach($this->personas as $index => $persona){
 
             $personaId = $persona->id;
 
@@ -194,10 +201,50 @@ class VcPpeFases extends Component
             
             }
 
-        }
+        }*/
 
         $fase = 'F'.$this->fase;
         
+    }
+
+    public function consultar(){
+
+        $this->loadPersonas();
+
+        //Asistencia
+        foreach($this->personas as $index => $persona){
+
+            $personaId = $persona->id;
+            $this->tblasistencia[$personaId]['personaid'] = $persona->id;
+            $this->tblasistencia[$personaId]['nombres'] = $persona->apellidos.' '.$persona->nombres;
+            $this->tblasistencia[$personaId]['nui'] = $persona->identificacion;
+
+            foreach($this->objdetalle as $key => $detalle){
+
+                $mes = date('m', strtotime($detalle['fecha'])); 
+                $dia = date('d', strtotime($detalle['fecha']));
+                $col = $mes.$dia;
+                $this->tblasistencia[$personaId][$col] = '';
+            
+            }
+        }
+
+        //Asigna Asistencia
+        $asistencia = TdPpeAsistencias::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('docente_id',$this->docenteId)
+        ->where('curso_id',$this->filters['gradoId'])
+        ->where('fase','F'.$this->fase)
+        ->get();
+
+        foreach ($asistencia as $asistencia){
+            
+            $personaId = $asistencia->persona_id;
+            $col = date('md', strtotime($asistencia->fecha));
+            $this->tblasistencia[$personaId][$col] = $asistencia->valor;
+        }
+
+
     }
 
     public function loadPersonas(){
@@ -214,68 +261,35 @@ class VcPpeFases extends Component
 
     public function createData(){
 
-        $vacios = collect($this->objdetalle)->filter(fn($d) => empty($d->fecha))->count();
+        $fechasVacias = array_filter($this->objdetalle, fn($fase) => empty($fase['fecha']));
 
-        if ($vacios>0){
+        if (!empty($fechasVacias)) {
             $this->dispatchBrowserEvent('msg-vacio');
             return;
         }
 
-        foreach ($this->objdetalle as $index => $detalle)
-        {
-            TmPpeFases::Create([
-                'periodo_id' => $this->periodoId,
-                'persona_id' => $this->docenteId,
-                'fase' => $this->fase,
+        //Clases
+        foreach ($this->objdetalle as $detalle) {
+            $data = [
                 'fecha' => $detalle['fecha'],
-                'enlace' => "",
-                'usuario' => auth()->user()->name,
-            ]);
+            ];
 
-            $mes = date('m', strtotime($detalle['fecha']));
-            $periodo = date('Y', strtotime($detalle['fecha']));
-
-            /*$eventos = TmCalendarioEventos::Create([
-                'periodo' => $periodo,
-                'mes' => $mes,
-                'actividad' => 'PP',
-                'nombre' => 'Recepción de clase PPE',
-                'start_date' => $detalle['fecha'],
-                'end_date' => $detalle['fecha'],
-                'descripcion' => 'Fecha programada para la recepción y revisión de la clase correspondiente al Programa de Participación Estudiantil.',
-                'todos' => 0,
-                'usuario' => auth()->user()->name,
-            ]);
-
-            $grados = TmPpeEstudiantes::query()
-            ->where('periodo_id', $this->periodoId)
-            ->select('modalidad_id', 'grado_id')
-            ->groupBy('modalidad_id', 'grado_id')
-            ->get();
-            
-            foreach ($grados as $key => $grado){
-
-                TmCalendarioGrados::Create([
-                    'calendario_id' => $eventos->id,
-                    'modalidad_id' => $grado->modalidad_id,
-                    'grado_id' => $grado->grado_id,
+            if (empty($detalle['id']) || $detalle['id'] == 0) {
+                // Inserta nuevo registro
+                TmPpeFases::create([
+                    'periodo_id' => $this->periodoId,
+                    'persona_id' => $this->docenteId,
+                    'fase' => $this->fase,
+                    'enlace' => '',
                     'usuario' => auth()->user()->name,
-                ]);
-
-            }*/
-            
+                ] + $data);
+            } else {
+                // Actualiza registro existente
+                TmPpeFases::where('id', $detalle['id'])->update($data);
+            }
         }
-
-        //Link clase virtual
-        /*TmPpeFases::Create([
-            'periodo_id' => $this->periodoId,
-            'persona_id' => $this->docenteId,
-            'fase' => $this->fase,
-            'fecha' => $this->fecha,
-            'enlace' => $this->enlace,
-            'usuario' => auth()->user()->name,
-        ]);*/
-        
+    
+        // Link Clases
         foreach($this->detallelink as $detalle){
 
             if ($detalle['id']==0){
@@ -297,12 +311,178 @@ class VcPpeFases extends Component
                     'usuario' => auth()->user()->name,
                 ]);
 
-            }
+            } 
 
         }
-        
+
+        //Eventos
+        $linkEvent = collect($this->detallelink)->contains(fn($item) => $item['id'] == 0);
+        if ($linkEvent){  
+            
+            foreach ($this->detallelink as $link){
+
+                if ($link['id']==0){
+
+                    foreach ($this->objdetalle as $detalle) {
+
+                        $mes = date('m', strtotime($detalle['fecha']));
+                        $periodo = date('Y', strtotime($detalle['fecha']));
+
+                        $eventos = TmCalendarioEventos::query()
+                        ->where('actividad','PP')
+                        ->where('start_date',$detalle['fecha'])
+                        ->first();
+                        
+                        if ($eventos){
+
+                            TmCalendarioGrados::Create([
+                                'calendario_id' => $eventos->id,
+                                'modalidad_id' => $link['modalidadId'],
+                                'grado_id' => $link['gradoId'],
+                                'usuario' => auth()->user()->name,
+                            ]);
+
+                        }else{
+
+                            $eventos = TmCalendarioEventos::Create([
+                                'periodo' => $periodo,
+                                'mes' => $mes,
+                                'actividad' => 'PP',
+                                'nombre' => 'Recepción de clase PPE',
+                                'start_date' => $detalle['fecha'],
+                                'end_date' => $detalle['fecha'],
+                                'descripcion' => 'Fecha programada para la recepción y revisión de la clase correspondiente al Programa de Participación Estudiantil.',
+                                'todos' => 0,
+                                'usuario' => auth()->user()->name,
+                            ]);
+                            
+                            TmCalendarioGrados::Create([
+                                'calendario_id' => $eventos->id,
+                                'modalidad_id' => $link['modalidadId'],
+                                'grado_id' => $link['gradoId'],
+                                'usuario' => auth()->user()->name,
+                            ]);
+
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->grabaAsistencia();
         $this->loadData();
         $this->render();
+
+    }
+
+    public function grabaAsistencia(){
+
+        $this->loadPersonas();
+
+        $personaIds = collect($this->personas)->pluck('id')->unique()->values()->all();
+        $fechas = collect($this->objdetalle)->pluck('fecha')->unique()->values()->all();
+        
+        $periodoId = $this->periodoId;
+        $docenteId = $this->docenteId;
+        $faseStr = 'F' . $this->fase;
+        $cursoId = $this->filters['gradoId'];
+        $userName = auth()->user()->name;
+        $now = now();
+
+        // Mapear fecha -> col (mes + dia) para reutilizar
+        $fechaToCol = [];
+        foreach ($fechas as $fecha) {
+            $mes = date('m', strtotime($fecha));
+            $dia = date('d', strtotime($fecha));
+            $fechaToCol[$fecha] = $mes . $dia;
+        }
+
+        // Traer asistencias existentes en una sola consulta
+        $existing = TdPpeAsistencias::query()
+        ->where('periodo_id', $periodoId)
+        ->where('docente_id', $docenteId)
+        ->where('fase', $faseStr)
+        ->where('curso_id', $cursoId)
+        ->whereIn('persona_id', $personaIds)
+        ->whereIn('fecha', $fechas)
+        ->get()
+        ->keyBy(function($item) {
+            $fecha = date('Y-m-d', strtotime($item->fecha));
+            return "{$item->persona_id}|{$fecha}";
+        });
+
+        // Arrays para operaciones
+        $toInsert = [];
+        $toUpdate = []; // pairs [id => valor] o full row si prefieres
+
+        foreach ($this->personas as $persona) {
+            $personaId = $persona->id;
+
+            foreach ($this->objdetalle as $detalle) {
+                $fecha = $detalle['fecha'];
+                $mes = date('m', strtotime($fecha));
+                $dia = date('d', strtotime($fecha));
+                $col = $mes . $dia;
+
+                // ajusta a la fuente correcta (tblrecords o tblasistencia)
+                $valor = $this->tblasistencia[$personaId][$col] ?? null;
+                
+                $key = "{$personaId}|{$fecha}";
+
+                if (isset($existing[$key])) {
+                    // actualizar por id (evita duplicados)
+                    $existingRow = $existing[$key];
+                    $toUpdate[] = [
+                        'id' => $existingRow->id,
+                        'valor' => $valor,
+                        'usuario' => $userName,
+                        'updated_at' => $now,
+                    ];
+                } else {
+
+                    if ($valor == null || $valor =='') {
+                        continue;
+                    }
+
+                    // preparar inserción
+                    $toInsert[] = [
+                        'periodo_id' => $periodoId,
+                        'docente_id' => $docenteId,
+                        'fase'       => $faseStr,
+                        'curso_id'   => $cursoId,
+                        'persona_id' => $personaId,
+                        'fecha'      => $fecha,
+                        'valor'      => $valor,
+                        'usuario'    => $userName,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+                }
+            }
+        }
+
+        // Ejecutar en transacción
+        DB::transaction(function() use ($toInsert, $toUpdate) {
+            if (!empty($toInsert)) {
+                // Insert masivo
+                TdPpeAsistencias::insert($toInsert);
+            }
+
+            if (!empty($toUpdate)) {
+                // Actualizaciones masivas: no hay updatemany nativo, iteramos por lotes.
+                // Para evitar N queries enormes, agrupa en chunks (por ejemplo 100).
+                foreach (array_chunk($toUpdate, 100) as $chunk) {
+                    foreach ($chunk as $row) {
+                        TdPpeAsistencias::where('id', $row['id'])
+                            ->update([
+                                'valor' => $row['valor'],
+                                'usuario'=> $row['usuario'],
+                                'updated_at' => $row['updated_at'],
+                            ]);
+                    }
+                }
+            }
+        });
 
     }
 
