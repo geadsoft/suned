@@ -369,7 +369,10 @@ class VcPpeFases extends Component
             }
         }
 
-        $this->grabaAsistencia();
+        if(count($this->tblasistencia)>0){
+            $this->grabaAsistencia();
+        }
+        
         $this->loadData();
         $this->render();
 
