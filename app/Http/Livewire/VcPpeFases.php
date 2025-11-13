@@ -12,6 +12,7 @@ use Livewire\WithPagination;
 use App\Models\TmGeneralidades;
 use App\Models\TmServicios;
 use App\Models\TdPpeAsistencias;
+use App\Models\TdPpeCalificaciones;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -185,24 +186,6 @@ class VcPpeFases extends Component
             array_push($this->detallelink,$arrlink);
         }
 
-        
-        /*foreach($this->personas as $index => $persona){
-
-            $personaId = $persona->id;
-
-            foreach($this->objdetalle as $key => $fecha){
-
-                $col = 'dia'.$key;
-                
-                $this->tblrecords[$personaId]['personaid'] = $persona->id;
-                $this->tblrecords[$personaId]['nombres'] = $persona->apellidos.' '.$persona->nombres;
-                $this->tblrecords[$personaId]['nui'] = $persona->identificacion;
-                $this->tblrecords[$personaId][$col] = 0;
-            
-            }
-
-        }*/
-
         $fase = 'F'.$this->fase;
         
     }
@@ -242,6 +225,40 @@ class VcPpeFases extends Component
             $personaId = $asistencia->persona_id;
             $col = date('md', strtotime($asistencia->fecha));
             $this->tblasistencia[$personaId][$col] = $asistencia->valor;
+        }
+
+        //Calificacion
+        foreach($this->personas as $index => $persona){
+
+            $personaId = $persona->id;
+            $this->tblrecords[$personaId]['personaid'] = $persona->id;
+            $this->tblrecords[$personaId]['nombres'] = $persona->apellidos.' '.$persona->nombres;
+            $this->tblrecords[$personaId]['nui'] = $persona->identificacion;
+
+            foreach($this->objdetalle as $key => $detalle){
+
+                $mes = date('m', strtotime($detalle['fecha'])); 
+                $dia = date('d', strtotime($detalle['fecha']));
+                $col = $mes.$dia;
+                
+                $this->tblrecords[$personaId][$col] = 0;
+            
+            }
+        }
+
+        //Asigna Calificacion
+        $notas = TdPpeCalificaciones::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('docente_id',$this->docenteId)
+        ->where('curso_id',$this->filters['gradoId'])
+        ->where('fase','F'.$this->fase)
+        ->get();
+
+        foreach ($notas as $data){
+            
+            $personaId = $data->persona_id;
+            $col = date('md', strtotime($data->fecha));
+            $this->tblrecords[$personaId][$col] = $data->nota ?? 0; 
         }
 
 
@@ -372,9 +389,16 @@ class VcPpeFases extends Component
         if(count($this->tblasistencia)>0){
             $this->grabaAsistencia();
         }
+
+        if(count($this->tblrecords)>0){
+            $this->grabaNotas();
+        }
         
-        $this->loadData();
-        $this->render();
+        //$this->loadData();
+        //$this->render();
+        $message = "Registros grabada con Éxito......";
+        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+        
 
     }
 
@@ -489,6 +513,113 @@ class VcPpeFases extends Component
 
     }
 
+    public function grabaNotas(){
+
+        $this->loadPersonas();
+
+        $personaIds = collect($this->personas)->pluck('id')->unique()->values()->all();
+        $fechas = collect($this->objdetalle)->pluck('fecha')->unique()->values()->all();
+        
+        $periodoId = $this->periodoId;
+        $docenteId = $this->docenteId;
+        $faseStr = 'F' . $this->fase;
+        $cursoId = $this->filters['gradoId'];
+        $userName = auth()->user()->name;
+        $now = now();
+
+        // Mapear fecha -> col (mes + dia) para reutilizar
+        $fechaToCol = [];
+        foreach ($fechas as $fecha) {
+            $mes = date('m', strtotime($fecha));
+            $dia = date('d', strtotime($fecha));
+            $fechaToCol[$fecha] = $mes . $dia;
+        }
+
+        // Traer calificaciones existentes en una sola consulta
+        $existing = TdPpeCalificaciones::query()
+        ->where('periodo_id', $periodoId)
+        ->where('docente_id', $docenteId)
+        ->where('fase', $faseStr)
+        ->where('curso_id', $cursoId)
+        ->whereIn('persona_id', $personaIds)
+        ->whereIn('fecha', $fechas)
+        ->get()
+        ->keyBy(function($item) {
+            $fecha = date('Y-m-d', strtotime($item->fecha));
+            return "{$item->persona_id}|{$fecha}";
+        });
+
+        // Arrays para operaciones
+        $toInsert = [];
+        $toUpdate = []; // pairs [id => valor] o full row si prefieres
+
+        foreach ($this->personas as $persona) {
+            $personaId = $persona->id;
+
+            foreach ($this->objdetalle as $detalle) {
+                $fecha = $detalle['fecha'];
+                $mes = date('m', strtotime($fecha));
+                $dia = date('d', strtotime($fecha));
+                $col = $mes . $dia;
+
+                // ajusta a la fuente correcta (tblrecords o tblasistencia)
+                $nota = $this->tblrecords[$personaId][$col] ?? 0;
+                
+                $key = "{$personaId}|{$fecha}";
+
+                if (isset($existing[$key])) {
+                    // actualizar por id (evita duplicados)
+                    $existingRow = $existing[$key];
+                    $toUpdate[] = [
+                        'id' => $existingRow->id,
+                        'nota' => $nota,
+                        'usuario' => $userName,
+                        'updated_at' => $now,
+                    ];
+                } else {
+
+                    if ($nota == null || $nota ==0) {
+                        continue;
+                    }
+
+                    // preparar inserción
+                    $toInsert[] = [
+                        'periodo_id' => $periodoId,
+                        'docente_id' => $docenteId,
+                        'fase'       => $faseStr,
+                        'curso_id'   => $cursoId,
+                        'persona_id' => $personaId,
+                        'fecha'      => $fecha,
+                        'nota'      => $nota,
+                        'usuario'    => $userName,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
+                }
+            }
+        }
+
+        // Ejecutar en transacción
+        DB::transaction(function() use ($toInsert, $toUpdate) {
+            if (!empty($toInsert)) {
+                TdPpeCalificaciones::insert($toInsert);
+            }
+
+            if (!empty($toUpdate)) {
+                foreach (array_chunk($toUpdate, 100) as $chunk) {
+                    foreach ($chunk as $row) {
+                        TdPpeCalificaciones::where('id', $row['id'])
+                            ->update([
+                                'nota' => $row['nota'],
+                                'usuario'=> $row['usuario'],
+                                'updated_at' => $row['updated_at'],
+                            ]);
+                    }
+                }
+            }
+        });
+
+    }
 
     public function addActivity(){
         

@@ -232,8 +232,8 @@
                                 </div> 
                             </div> 
                             <div class="card-body">                   
-                            <div class="table-responsive  table-card mb-1">
-                                <table class="table table-sm table-nowrap align-middle" id="orderTable">
+                            <div class="table-responsive table-card mb-1">
+                                <table class="table table-sm table-nowrap align-middle" id="TableAsistencias">
                                     <thead class="text-muted table-light">
                                         <tr class="text-uppercase">
                                             <th data-sort="id">Identificación</th>
@@ -270,7 +270,7 @@
                         </div>
                         <div class="tab-pane {{$selTab[3]}}" id="home-1" role="tabpanel">                     
                             <div class="table-responsive  table-card mb-1">
-                                <table class="table table-sm table-nowrap align-middle" id="orderTable">
+                                <table class="table table-sm table-nowrap align-middle" id="TableNotas">
                                     <thead class="text-muted table-light">
                                         <tr class="text-uppercase">
                                             <th data-sort="id">Identificación</th>
@@ -288,7 +288,7 @@
                                             <td>{{$tblrecords[$person->id]['nombres']}}</td>
                                             @foreach($this->objdetalle as $key => $detalle)
                                             <td>
-                                            <input type="number" class="form-control product-price bg-light border-0 text-end" id="ln-{{$person->id}}-{{$key}}" wire:model="tblrecords.{{$person->id}}.dia{{$key}}"/>
+                                            <input type="number" class="form-control form-control-sm product-price bg-light border-0 text-end " id="nota-{{$person->id}}-{{$key}}" wire:model="tblrecords.{{$person->id}}.{{date('md',strtotime($detalle['fecha']))}}"/>
                                             </td>
                                             @endforeach
                                         </tr>

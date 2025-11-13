@@ -21,6 +21,7 @@
 @endsection
 @section('script')
 
+    <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
@@ -52,6 +53,21 @@
 
         window.addEventListener('msg-vacio', event => {
             swal("No hay fecha asignada!", "Por favor, prográmala para continuar.", "error");
+        })
+
+        window.addEventListener('msg-grabar', event => {
+            /*swal("Buen Trabajo!", event.detail.newName, "success");*/
+            Swal.fire({
+            title: 'Buen Trabajo!',
+            html:  event.detail.newName,
+            icon: 'success',
+            confirmButtonClass: 'btn btn-primary w-xs mt-2',
+            confirmButtonText: 'OK'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                location.reload(); // Actualiza la misma página
+            }
+            });
         })
 
     </script>
