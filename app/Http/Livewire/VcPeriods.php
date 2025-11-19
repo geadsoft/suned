@@ -140,6 +140,9 @@ class VcPeriods extends Component
                 'estado' => $this -> record['estado'],
                 'fecha_empieza' => $this -> record['fecha_empieza'],
                 'fecha_termina' => $this -> record['fecha_termina'],
+                'evaluacion' => '',
+                'evaluacion_formativa' => 0,
+                'evaluacion_sumativa' => 0,
                 'usuario' => auth()->user()->name,
             ]);
 
