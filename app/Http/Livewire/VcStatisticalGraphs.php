@@ -91,13 +91,13 @@ class VcStatisticalGraphs extends Component
         ->where("tm_matriculas.estado","A")
         ->get();
         
-        $ingresos = TrCobrosCabs::query()
+        /*$ingresos = TrCobrosCabs::query()
             ->whereYear('fechapago', $this->filters['periodo'])
             ->whereMonth('fechapago', $mesactual)
             ->where('estado', 'P')
             ->get();
 
-        $this->totalIngresos = $ingresos->sum('monto');
+        $this->totalIngresos = $ingresos->sum('monto');*/
 
         $this->hombres = $personas->where('genero','M')->count('id');
         $this->mujeres = $personas->where('genero','F')->count('id'); 
@@ -296,6 +296,20 @@ class VcStatisticalGraphs extends Component
         ->groupbyRaw("left(c.referencia,3), month(cr.fechapago), year(cr.fechapago)")
         ->orderbyRaw("month(cr.fechapago),left(c.referencia,3)")
         ->get();
+
+        //Ingresos
+        $ldate     = date('Y-m-d H:i:s');
+        $mesactual = intval(date('m',strtotime($ldate)));
+
+        $ingresos = TrCobrosCabs::query()
+            ->whereYear('fechapago', $this->filters['periodo'])
+            ->whereMonth('fechapago', $mesactual)
+            ->where('estado', 'P')
+            ->get();
+
+        $this->totalIngresos = $ingresos->sum('monto');
+
+        //Graficos
         
         if($tbldeudas!=null){
             $this->graphsDeudas($tbldeudas);
@@ -312,6 +326,7 @@ class VcStatisticalGraphs extends Component
         if($tblCobroMes!=null){
             $this->graphsCobros($tblCobroMes);
         }
+
 
  
     }
