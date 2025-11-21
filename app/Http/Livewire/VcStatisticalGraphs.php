@@ -109,6 +109,7 @@ class VcStatisticalGraphs extends Component
             "data"    => $this->data,
             "datadia" => $this->datIngdia,
             "datames" => $this->datIngmes,
+            'ingTotal' => $this->ingTotal, // <-- pasarla explícitamente
         ]);
 
     }
