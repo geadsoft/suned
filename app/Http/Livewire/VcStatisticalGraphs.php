@@ -303,6 +303,8 @@ class VcStatisticalGraphs extends Component
             ->get();
 
         $this->ingTotal = $montoMes->sum('monto');
+
+        logger('ingTotal = ' . $this->ingTotal);
         
         //Graficos        
         if($tbldeudas!=null){
