@@ -189,7 +189,7 @@ class VcStatisticalGraphs extends Component
         
         $montoMes = TrCobrosCabs::query()
         ->whereYear('fechapago', $this->filters['periodo'])
-        ->whereMonth('fechapago', $this->mesactual)
+        ->whereMonth('fechapago', $mesactual)
         ->where('estado', 'P')
         ->get();
 
