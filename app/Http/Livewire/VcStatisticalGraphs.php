@@ -95,14 +95,6 @@ class VcStatisticalGraphs extends Component
         $this->hombres = $personas->where('genero','M')->count('id');
         $this->mujeres = $personas->where('genero','F')->count('id'); 
 
-        $montoMes = TrCobrosCabs::query()
-        /*->whereYear('fechapago',$periodo)
-        ->whereMonth('fechapago', $mesactual)*/
-        ->where('estado', 'P')
-        ->get();
-
-        $TotalIngresos = 1000;
-
         return view('livewire.vc-statistical-graphs',[
             'tblgenerals' => $tblgenerals,
             'tblperiodos' => $tblperiodos,
