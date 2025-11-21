@@ -303,6 +303,10 @@ class VcStatisticalGraphs extends Component
             ->get();
 
         $this->ingTotal = $montoMes->sum('monto');
+
+        if ($this->ingTotal==0){
+            dd($this->filters['periodo'],$mesactual);
+        }
         
         //Graficos
         
