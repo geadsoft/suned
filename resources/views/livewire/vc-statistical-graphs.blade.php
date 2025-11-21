@@ -125,9 +125,9 @@
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-bold ff-secondary text-white mb-4">$<span
-                                            class="counter-value">{{$ingTotal}}</span>
-                                    </h4>
+                                    <h4 class="fs-22 fw-bold ff-secondary text-white mb-4">
+  $<span class="counter-value" data-target="{{ $ingTotal }}">{{ number_format($ingTotal, 2) }}</span>
+</h4>
                                     <a href=""
                                         class="text-decoration-underline text-white-50">.</a>
                                 </div>
