@@ -69,6 +69,7 @@ class VcStatisticalGraphs extends Component
         $this->lnperiodo    = $tblperiodos['periodo'];
 
         $this->consulta();
+        $this->updatedlnperiodoId();
     }
 
     public function render()
