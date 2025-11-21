@@ -95,6 +95,8 @@ class VcStatisticalGraphs extends Component
         $this->hombres = $personas->where('genero','M')->count('id');
         $this->mujeres = $personas->where('genero','F')->count('id'); 
 
+        $this->montomes();
+
         return view('livewire.vc-statistical-graphs',[
             'tblgenerals' => $tblgenerals,
             'tblperiodos' => $tblperiodos,
