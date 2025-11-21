@@ -101,7 +101,7 @@ class VcStatisticalGraphs extends Component
         ->where('estado', 'P')
         ->get();
 
-        $this->ingTotal = $montoMes->sum('monto');
+        $this->ingTotal = 1000;
 
         return view('livewire.vc-statistical-graphs',[
             'tblgenerals' => $tblgenerals,
