@@ -106,7 +106,6 @@
                         </div><!-- end card body -->
                     </div><!-- end card -->
                 </div><!-- end col -->
-                <span>{{ $ingTotal }}</span>
                 <div class="col-xl-3 col-md-6">
                     <!-- card -->
                     <div class="card card-animate bg-info">
@@ -126,8 +125,8 @@
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
                                     <h4 class="fs-22 fw-bold ff-secondary text-white mb-4">
-  $<span class="counter-value" data-target="{{ $ingTotal }}">{{ number_format($ingTotal, 2) }}</span>
-</h4>
+                                    $<span class="counter-value" data-target="{{ $ingTotal }}">{{ number_format($ingTotal, 2) }}</span>
+                                    </h4>
                                     <a href=""
                                         class="text-decoration-underline text-white-50">.</a>
                                 </div>
