@@ -253,6 +253,7 @@ class VcEncashment extends Component
             'RET' => 'Retención',
             'OTR' => 'Otros',
             'CON' => 'Convenio',
+            'NCR' => 'Nota de Crédito'
         ];
 
         $this->record = TrCobrosCabs::find($selectId);

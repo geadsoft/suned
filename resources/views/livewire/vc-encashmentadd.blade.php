@@ -158,6 +158,7 @@
                                                                 <option value="CON">Convenio</option>
                                                                 <option value="APP">App Movil</option>
                                                                 <option value="RET">Retención</option>
+                                                                <option value="NCR">Nota de Crédito</option>
                                                                 <option value="OTR">Otros</option>
                                                                 </select>
                                                             </div>
