@@ -308,7 +308,7 @@ class VcStatisticalGraphs extends Component
             ->get();
 
         $this->totalIngresos = $ingresos->sum('monto');
-        dd($this->totalIngresos);
+        //dd($this->totalIngresos);
 
         //Graficos
         
