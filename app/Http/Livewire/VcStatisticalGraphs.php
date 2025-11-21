@@ -101,7 +101,7 @@ class VcStatisticalGraphs extends Component
         ->where('estado', 'P')
         ->get();
 
-        $this->ingTotal = 1000;
+        $TotalIngresos = 1000;
 
         return view('livewire.vc-statistical-graphs',[
             'tblgenerals' => $tblgenerals,
@@ -109,7 +109,7 @@ class VcStatisticalGraphs extends Component
             "data"    => $this->data,
             "datadia" => $this->datIngdia,
             "datames" => $this->datIngmes,
-            'ingTotal' => $this->ingTotal, // <-- pasarla explícitamente
+            'ingTotal' => $TotalIngresos, // <-- pasarla explícitamente
         ]);
 
     }
