@@ -91,13 +91,13 @@ class VcStatisticalGraphs extends Component
         ->where("tm_matriculas.estado","A")
         ->get();
         
-        $ingresos = TrCobrosCabs::query()
+        $montoMes = TrCobrosCabs::query()
             ->whereYear('fechapago', $this->filters['periodo'])
             ->whereMonth('fechapago', $mesactual)
             ->where('estado', 'P')
             ->get();
 
-        $this->ingTotal = $ingresos->sum('monto');
+        $this->ingTotal = $montoMes->sum('monto');
 
         $this->hombres = $personas->where('genero','M')->count('id');
         $this->mujeres = $personas->where('genero','F')->count('id'); 
