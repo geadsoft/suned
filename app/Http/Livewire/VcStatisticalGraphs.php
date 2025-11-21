@@ -304,7 +304,7 @@ class VcStatisticalGraphs extends Component
 
         $this->ingTotal = $montoMes->sum('monto');
 
-        if ($this->ingTotal==0){
+        if (empty($this->ingTotal)) {
             dd($this->filters['periodo'],$mesactual);
         }
         
