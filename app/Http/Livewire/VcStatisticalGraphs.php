@@ -95,8 +95,6 @@ class VcStatisticalGraphs extends Component
         $this->hombres = $personas->where('genero','M')->count('id');
         $this->mujeres = $personas->where('genero','F')->count('id'); 
 
-        $this->montomes();
-
         return view('livewire.vc-statistical-graphs',[
             'tblgenerals' => $tblgenerals,
             'tblperiodos' => $tblperiodos,
@@ -112,6 +110,7 @@ class VcStatisticalGraphs extends Component
         
         $this->filters['mescobro'] = intval($this->lnmescobro);
         $this->consulta();
+        $this->montomes();
         $this->actualizaGraph();
 
     }
@@ -120,6 +119,7 @@ class VcStatisticalGraphs extends Component
         
         $this->filters['aniocobro'] = intval($this->lnaniocobro);
         $this->consulta();
+        $this->montomes();
         $this->actualizaGraph();
 
     }
@@ -128,6 +128,7 @@ class VcStatisticalGraphs extends Component
         
         $this->filters['fecha'] = $this->lsfecha;
         $this->consulta();
+        $this->montomes();
         $this->actualizaGraph();
     }
     
@@ -135,6 +136,7 @@ class VcStatisticalGraphs extends Component
         
         $this->filters['mesingreso'] = $this->lnmesingreso;
         $this->consulta();
+        $this->montomes();
         $this->actualizaGraph();
     }
 
@@ -142,6 +144,7 @@ class VcStatisticalGraphs extends Component
         
         $this->filters['anioingreso'] = $this->lnanioingreso;
         $this->consulta();
+        $this->montomes();
         $this->actualizaGraph();
     }
 
@@ -149,6 +152,7 @@ class VcStatisticalGraphs extends Component
         
         $this->filters['periodo'] = $this->lnperiodo;
         $this->consulta();
+        $this->montomes();
         $this->actualizaGraph();
     }
 
@@ -164,6 +168,7 @@ class VcStatisticalGraphs extends Component
         }
 
         $this->consulta();
+        $this->montomes();
         $this->actualizaGraph();
         
     }
@@ -172,6 +177,7 @@ class VcStatisticalGraphs extends Component
 
         $this->filters['idgrupo'] = $this->lngrupoId;
         $this->consulta();
+        $this->montomes();
         $this->actualizaGraph();
 
     }
@@ -308,13 +314,6 @@ class VcStatisticalGraphs extends Component
         ->groupbyRaw("left(c.referencia,3), month(cr.fechapago), year(cr.fechapago)")
         ->orderbyRaw("month(cr.fechapago),left(c.referencia,3)")
         ->get();
-
-        //Ingresos Mes
-        $ldate     = date('Y-m-d H:i:s');
-        $mesactual = intval(date('m',strtotime($ldate)));
-
-        $tmpPeriodo = TmPeriodosLectivos::find($this->filters['idperiodo']);
-        $periodo = $tmpPeriodo->periodo;
         
         //Graficos        
         if($tbldeudas!=null){
