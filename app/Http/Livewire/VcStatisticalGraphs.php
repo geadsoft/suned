@@ -91,11 +91,8 @@ class VcStatisticalGraphs extends Component
         ->where("tm_matriculas.estado","A")
         ->get();
         
-        $tmpPeriodo = TmPeriodosLectivos::find($this->filters['idperiodo']);
-        $periodo = $tmpPeriodo->periodo;
-
         $ingresos = TrCobrosCabs::query()
-            ->whereYear('fechapago', $periodo)
+            ->whereYear('fechapago', $this->filters['periodo'])
             ->whereMonth('fechapago', $mesactual)
             ->where('estado', 'P')
             ->get();
