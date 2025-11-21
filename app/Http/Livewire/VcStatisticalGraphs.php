@@ -69,7 +69,6 @@ class VcStatisticalGraphs extends Component
         $this->lnperiodo    = $tblperiodos['periodo'];
 
         $this->consulta();
-        $this->updatedlnperiodoId();
     }
 
     public function render()
@@ -92,14 +91,6 @@ class VcStatisticalGraphs extends Component
         ->where("tm_matriculas.estado","A")
         ->get();
         
-        $montoMes = TrCobrosCabs::query()
-            ->whereYear('fechapago', $this->filters['periodo'])
-            ->whereMonth('fechapago', $mesactual)
-            ->where('estado', 'P')
-            ->get();
-
-        $this->ingTotal = $montoMes->sum('monto');
-
         $this->hombres = $personas->where('genero','M')->count('id');
         $this->mujeres = $personas->where('genero','F')->count('id'); 
 
@@ -298,6 +289,21 @@ class VcStatisticalGraphs extends Component
         ->orderbyRaw("month(cr.fechapago),left(c.referencia,3)")
         ->get();
 
+        //Ingresos Mes
+        $ldate     = date('Y-m-d H:i:s');
+        $mesactual = intval(date('m',strtotime($ldate)));
+
+        $tmpPeriodo = TmPeriodosLectivos::find($this->filters['idperiodo']);
+        $periodo = $tmpPeriodo->periodo;
+
+        $montoMes = TrCobrosCabs::query()
+            ->whereYear('fechapago', $this->filters['periodo'])
+            ->whereMonth('fechapago', $mesactual)
+            ->where('estado', 'P')
+            ->get();
+
+        $this->ingTotal = $montoMes->sum('monto');
+        
         //Graficos
         
         if($tbldeudas!=null){
