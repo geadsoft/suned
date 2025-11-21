@@ -126,7 +126,7 @@
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
                                     <h4 class="fs-22 fw-bold ff-secondary text-white mb-4">$<span
-                                            class="counter-value" data-target="165.89">{{$totalIngresos}}</span>
+                                            class="counter-value">{{$totalIngresos}}</span>
                                     </h4>
                                     <a href=""
                                         class="text-decoration-underline text-white-50">.</a>
