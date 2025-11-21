@@ -194,6 +194,7 @@ class VcStatisticalGraphs extends Component
         ->get();
 
         $this->ingTotal = $montoMes->sum('monto');
+        dd($this->filters['periodo'],$mesactual,$this->ingTotal);
     }
 
     public function consulta(){
