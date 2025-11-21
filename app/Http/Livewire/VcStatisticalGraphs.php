@@ -69,6 +69,7 @@ class VcStatisticalGraphs extends Component
         $this->lnperiodo    = $tblperiodos['periodo'];
 
         $this->consulta();
+        $this->montomes();
     }
 
     public function render()
@@ -179,6 +180,20 @@ class VcStatisticalGraphs extends Component
         $this->dispatchBrowserEvent('graph-ingmes', ['newObj' => $this->datIngmes]);
         $this->dispatchBrowserEvent('graph-rubros', ['newObj' => $this->cobroMes]);
 
+    }
+
+    public function montomes(){
+
+        $ldate     = date('Y-m-d H:i:s');
+        $mesactual = intval(date('m',strtotime($ldate)));
+        
+        $montoMes = TrCobrosCabs::query()
+        ->whereYear('fechapago', $this->filters['periodo'])
+        ->whereMonth('fechapago', $this->mesactual)
+        ->where('estado', 'P')
+        ->get();
+
+        $this->ingTotal = $montoMes->sum('monto');
     }
 
     public function consulta(){
@@ -295,16 +310,6 @@ class VcStatisticalGraphs extends Component
 
         $tmpPeriodo = TmPeriodosLectivos::find($this->filters['idperiodo']);
         $periodo = $tmpPeriodo->periodo;
-
-        $montoMes = TrCobrosCabs::query()
-            ->whereYear('fechapago', $this->filters['periodo'])
-            ->whereMonth('fechapago', $mesactual)
-            ->where('estado', 'P')
-            ->get();
-
-        $this->ingTotal = $montoMes->sum('monto');
-
-        logger('ingTotal = ' . $this->ingTotal);
         
         //Graficos        
         if($tbldeudas!=null){
@@ -322,8 +327,6 @@ class VcStatisticalGraphs extends Component
         if($tblCobroMes!=null){
             $this->graphsCobros($tblCobroMes);
         }
-
-
  
     }
 
