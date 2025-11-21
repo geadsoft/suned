@@ -15,7 +15,7 @@ use Livewire\Component;
 class VcStatisticalGraphs extends Component
 {   
     public $data,$datIngdia,$datIngmes,$cobroMes;
-    public $fecha,$lnmes,$graphIngDia,$graphIngMes,$graphRubros,$lnperiodo,$lngrupo,$hombres, $mujeres, $totalIngresos=0.00;
+    public $fecha,$lnmes,$graphIngDia,$graphIngMes,$graphRubros,$lnperiodo,$lngrupo,$hombres, $mujeres, $ingTotal=0.00;
     public $filters = [
         'idperiodo' => '',
         'idgrupo' => '',
@@ -91,13 +91,13 @@ class VcStatisticalGraphs extends Component
         ->where("tm_matriculas.estado","A")
         ->get();
         
-        /*$ingresos = TrCobrosCabs::query()
+        $ingresos = TrCobrosCabs::query()
             ->whereYear('fechapago', $this->filters['periodo'])
             ->whereMonth('fechapago', $mesactual)
             ->where('estado', 'P')
             ->get();
 
-        $this->totalIngresos = $ingresos->sum('monto');*/
+        $this->ingTotal = $ingresos->sum('monto');
 
         $this->hombres = $personas->where('genero','M')->count('id');
         $this->mujeres = $personas->where('genero','F')->count('id'); 
@@ -296,19 +296,6 @@ class VcStatisticalGraphs extends Component
         ->groupbyRaw("left(c.referencia,3), month(cr.fechapago), year(cr.fechapago)")
         ->orderbyRaw("month(cr.fechapago),left(c.referencia,3)")
         ->get();
-
-        //Ingresos
-        $ldate     = date('Y-m-d H:i:s');
-        $mesactual = intval(date('m',strtotime($ldate)));
-
-        $ingresos = TrCobrosCabs::query()
-            ->whereYear('fechapago', $this->filters['periodo'])
-            ->whereMonth('fechapago', $mesactual)
-            ->where('estado', 'P')
-            ->get();
-
-        $this->totalIngresos = $ingresos->sum('monto');
-        //dd($this->totalIngresos);
 
         //Graficos
         
