@@ -245,7 +245,7 @@
                                                             </div>
                                                             <div><i class="ri-phone-fill align-bottom fs-15"></i> {{$mensaje->telefono}}</div>
                                                             <div><i class="ri-mail-line align-bottom fs-15"></i> {{$mensaje->email}}</div>
-                                                            <div><i class="ri-user-fill fs-15"></i> {{$mensaje->usario}}</div>
+                                                            <div><i class="ri-user-fill fs-15"></i> {{$mensaje->usuario}}</div>
                                                         </div>
                                                     <!--</div>-->
                                                 </div>
