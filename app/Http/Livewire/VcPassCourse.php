@@ -137,7 +137,7 @@ class VcPassCourse extends Component
         $this->cursoId = $matricula->curso_id;
         $this->personaId = $matricula->estudiante_id;
         $this->persona = $matricula->estudiante->nombres.' '.$matricula->estudiante->apellidos;
-
+        $this->paseId  = 0;
         
         $pase = TmPaseCursos::query()
         ->where("matricula_id",$this->matriculaId)
@@ -208,11 +208,15 @@ class VcPassCourse extends Component
             'estado' => "A",
         ]);
 
-        $pase = TmPaseCursos::find($this->selectId);
-        $pase->update([
-            'estado' => 'I',
-        ]);
+        if ($this->paseId>0){
 
+            $pase = TmPaseCursos::find($this->paseId);
+            $pase->update([
+                'estado' => 'I',
+            ]);
+            
+        }   
+        
         $message = "Cambio de Modalidad grabada con Éxito......";
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
 
