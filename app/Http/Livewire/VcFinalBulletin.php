@@ -481,7 +481,7 @@ class VcFinalBulletin extends Component
                 return $query->where('tm_actividades.bloque', $bloqueEx);
             })
             ->where('tm_actividades.tipo', 'ET')
-            ->where('n.persona_id', $estudianteId)
+            ->where('n.persona_id', $idPerson)
             ->groupBy('d.asignatura_id')
             ->selectRaw('d.asignatura_id, ROUND(AVG(n.nota), 2) as promedio')
             ->pluck('promedio', 'asignatura_id');
