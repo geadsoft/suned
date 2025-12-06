@@ -211,7 +211,12 @@ class VcFinalBulletin extends Component
             $promedio_anual = round($promedioAnualSum / 3, 2);
             
             $promedioFinalSum = $promedio_anual + ($obj['supletorio'] ?? 0);
-            $promedio_final = round($promedioFinalSum / 2, 2);
+            if ($obj['supletorio']>0){
+                $promedio_final = round($promedioFinalSum / 2, 2);
+            }else{
+                $promedio_final = $promedio_anual;
+            }
+            
             $notacualitativo = '';
 
             foreach ($rangos as $escala) {
