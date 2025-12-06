@@ -26,7 +26,7 @@ class VcCertificados extends Component
     public $tipoDoc="MF", $periodoId, $cursoId, $nombres, $nui="", $documento, $fecha, $folio=0, $matricula=0, $nomcurso="";
     public $periodo, $foto="", $rector, $secretaria, $coordinador, $bachilleren="", $nota=0, $escala=''; 
     public $dttitulo="", $dtnombre="", $dtinstitucion="", $dtcargo="", $dtfecha, $refrendacion=0, $pagina=0, $fprorroga, $documentos="";
-    public $especializacion="",$paseCursoId,$matriculaId=0,$registrar;
+    public $especializacion="",$paseCursoId,$matriculaId=0,$registrar, $orden;
     public $refescala=[
         'EX' => 'Demuestra destacado desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un excente aporte a su formación integral.',
         'MB' => 'Demuestra muy buen desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un aporte a su formación integral.',
@@ -111,13 +111,13 @@ class VcCertificados extends Component
         from (
         SELECT (@row := @row + 1) as rownr,  t.documento, p.folio
         FROM tm_matriculas t, tm_periodos_lectivos p, (SELECT @row := 0) r
-        where t.periodo_id = p.id and p.id = ".$tblmatricula['periodo_id'].") as d 
+        where t.periodo_id = p.id and p.id = ".$tblmatricula['periodo_id']."  order by t.id) as d 
         where documento = '".$this->documento."'");
         
         foreach ($objData as $row){
             $this->folio     = $row->folio; 
             $this->documento = $row->documento;
-            $this->matricula = substr($row->documento,-4); 
+            $this->matricula = str_pad($row->rownr, 4, '0', STR_PAD_LEFT); 
         }
         
         $cursos     = TmCursos::find($this->cursoId);
@@ -483,7 +483,11 @@ class VcCertificados extends Component
         }
 
         if ($modo=='P'){
-            return redirect()->to('/preview-pdf/certificados/'.$reporte['id']);
+            //return redirect()->to('/preview-pdf/certificados/'.$reporte['id']);
+            $this->dispatchBrowserEvent('abrir-pdf', [
+                'url' => url('/preview-pdf/certificados/'.$reporte['id'])
+            ]);
+
         }else{
             return redirect()->to('/download-pdf/certificados/'.$reporte['id']); 
         }
