@@ -210,7 +210,7 @@ class VcFinalBulletin extends Component
             $promedioAnualSum = $objnotas['1T_notatrimestre']+$objnotas['2T_notatrimestre']+$objnotas['3T_notatrimestre'];
             $promedio_anual = round($promedioAnualSum / 3, 2);
             
-            $promedioFinalSum = $promedioAnualSum + ($obj['supletorio'] ?? 0);
+            $promedioFinalSum = $promedio_anual + ($obj['supletorio'] ?? 0);
             $promedio_final = round($promedioFinalSum / 2, 2);
             $notacualitativo = '';
 
