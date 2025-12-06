@@ -307,7 +307,7 @@
                                 <div class="col-sm-6">
                                     <div class="mb-3">
                                         <input type="text" class="form-control border-0 text-center" name="identidad" id="billinginfo-firstName" placeholder="" wire:model="secretaria">
-                                        <label class="form-label" for="project-title-input">{{ $tipoDoc == 'PA' ? 'COORDINADOR DE PASANTIAS' : 'SECRETARIA GENERAL' }}</label>
+                                        <label class="form-label" for="project-title-input">{{ $tipoDoc == 'PA' ? 'COORDINADOR (A)' : 'SECRETARIA GENERAL' }}</label>
                                     </div>
                                 </div>
                             </div>                                                            

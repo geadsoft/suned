@@ -91,10 +91,10 @@
                 </tr>
                 <tr style="font-size:13px">
                     <td width="50%" class="text-center">
-                        <span><strong>RECTOR</strong></span>
+                        <span><strong>RECTOR(A)</strong></span>
                     </td>
                     <td width="50%" class="text-center">
-                        <span><strong>SECRETARIA</strong></span>
+                        <span><strong>COORDINADOR(A)</strong></span>
                     </td>
                 </tr>
             </table>
