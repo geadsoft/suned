@@ -202,9 +202,16 @@ class VcFinalBulletin extends Component
         ->groupBy("evaluacion","glosa")
         ->get()->toArray();
 
+        $ids = collect($boletin)->pluck('id');
+        $idsExistentes = TdBoletinFinal::whereIn('id', $ids)->pluck('id')->toArray();
+
         $updates = [];
 
         foreach ($boletin as $obj) {
+            if (!in_array($obj['id'], $idsExistentes)) {
+                continue; // evitar INSERTS
+            }
+
             // cálculo de promedios (mantengo tu lógica de divisiones/round)
             $promedioAnualSum = $obj['1T_notatrimestre'] + $obj['2T_notatrimestre'] + $obj['3T_notatrimestre'];
             $promedio_anual = round($promedioAnualSum / 3, 2);
@@ -224,7 +231,6 @@ class VcFinalBulletin extends Component
             $updates[] = [
                 'id' => $obj['id'],
                 'promedio_anual' => $promedio_anual,
-                'supletorio' => 0,
                 'promedio_final' => $promedio_final,
                 'promedio_cualitativo' => $notacualitativo,
             ];
