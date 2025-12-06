@@ -88,4 +88,9 @@ class EstudiantesController extends Controller
         return view('student/biblioteca');
     }
 
+    public function prematricula()
+    {
+        return view('academic/registration_online');
+    }
+
 }

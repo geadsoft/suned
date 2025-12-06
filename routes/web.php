@@ -74,6 +74,8 @@ Route::get('/academic/calendar-events',[App\Http\Controllers\DocentesController:
 Route::get('/academic/suggestion-box',[App\Http\Controllers\TmSedesController::class, 'buzon'])->name('buzon');
 Route::get('/academic/mailbox-opinions',[App\Http\Controllers\TmSedesController::class, 'buzon_opiniones'])->name('buzon_opiniones');
 Route::get('/academic/ppe',[App\Http\Controllers\TmSedesController::class, 'ppe'])->name('ppe');
+Route::get('/academic/online-registration',[App\Http\Controllers\EstudiantesController::class, 'prematricula'])->name('prematricula');
+
 Route::get('/ppe/phases/{fase}',[App\Http\Controllers\TmSedesController::class, 'ppe_fases'])->name('ppe_fases');
 Route::get('/ppe/students/',[App\Http\Controllers\TmSedesController::class, 'ppe_estudiantes'])->name('ppe_estudiantes');
 Route::get('/ppe/program/',[App\Http\Controllers\TmSedesController::class, 'ppe_programa'])->name('ppe_programa');
