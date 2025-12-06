@@ -349,6 +349,10 @@
                     <h5 class="card-title mb-0">Matrícula</h5>
                 </div>
                 <div class="card-body">
+                    <div class="mb-3">
+                        <label for="choices-categories-input" class="form-label">Fecha Solicitud</label>
+                        <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="dtfecha"> 
+                    </div>
                     <fieldset {{$control}}>
                     <div class="mb-3">
                         <label for="choices-categories-input" class="form-label">Documento No.</label>
