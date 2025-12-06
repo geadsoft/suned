@@ -202,25 +202,18 @@ class VcFinalBulletin extends Component
         ->groupBy("evaluacion","glosa")
         ->get()->toArray();
 
-        $ids = collect($boletin)->pluck('id');
-        $idsExistentes = TdBoletinFinal::whereIn('id', $ids)->pluck('id')->toArray();
+        $promedioanual=0;
+        $promediofinal=0;
 
-        $updates = [];
+        foreach($boletin as $objnotas){
 
-        foreach ($boletin as $obj) {
-            if (!in_array($obj['id'], $idsExistentes)) {
-                continue; // evitar INSERTS
-            }
-
-            // cálculo de promedios (mantengo tu lógica de divisiones/round)
-            $promedioAnualSum = $obj['1T_notatrimestre'] + $obj['2T_notatrimestre'] + $obj['3T_notatrimestre'];
+            $promedioAnualSum = $objnotas['1T_notatrimestre']+$objnotas['2T_notatrimestre']+$objnotas['3T_notatrimestre'];
             $promedio_anual = round($promedioAnualSum / 3, 2);
-
+            
             $promedioFinalSum = $promedioAnualSum + ($obj['supletorio'] ?? 0);
             $promedio_final = round($promedioFinalSum / 2, 2);
-
-            // Obtener nota cualitativa (rompemos el loop cuando la encontramos)
             $notacualitativo = '';
+
             foreach ($rangos as $escala) {
                 if ($promedio_final >= $escala['min'] && $promedio_final <= $escala['max']) {
                     $notacualitativo = $escala['codigo'];
@@ -228,20 +221,14 @@ class VcFinalBulletin extends Component
                 }
             }
 
-            $updates[] = [
-                'id' => $obj['id'],
-                'promedio_anual' => $promedio_anual,
-                'promedio_final' => $promedio_final,
-                'promedio_cualitativo' => $notacualitativo,
-            ];
-        }
+            $updateNota = TdBoletinFinal::find($objnotas['id']);
+            $updateNota->update([
+                'promedio_anual' => $promedio_anual
+                'supletorio' => 0,
+                'promedio_final' => $promedio_final
+                'promedio_cualitativo' => $notacualitativo
+            ]);
 
-        if (!empty($updates)) {
-            TdBoletinFinal::upsert(
-                $updates,
-                ['id'],
-                ['promedio_anual', 'supletorio', 'promedio_final', 'promedio_cualitativo']
-            );
         }
 
         //$this->loadPersonas();
