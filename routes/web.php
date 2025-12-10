@@ -41,6 +41,9 @@ use App\Http\Controllers\DocumentDownloadController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
 Route::get('/cambia/modalidad',[App\Http\Controllers\HomeController::class, 'cambiaModalida'])->name('cambiaModalida');
 
 Route::get('/headquarters/campus',[App\Http\Controllers\TmEmpresasController::class, 'index'])->name('index');
