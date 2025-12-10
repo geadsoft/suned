@@ -207,134 +207,6 @@ class VcLibrary extends Component
     public function apiDrive(){
 
         $accessToken = $this->token();
-
-        sleep(3); // Simula espera
-
-        if (empty($accessToken)) {
-            throw new \Exception("No se obtuvo access token desde \$this->token()");
-        }
-
-        // 2) Guardar temporalmente en disco (storage/app/tmp)
-        $uploadedFile = $this->record['archivo'];
-        $folderId = '1x2ECW-r4JdnRkMixMPKU37zPdh1X1iGE';
-        $origName = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-        $ext = $uploadedFile->getClientOriginalExtension();
-        $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $origName);
-        $unique = $safeName . '_' . now()->format('Ymd_His') . '.' . $ext;
-        $rel = $uploadedFile->storeAs($tmpDir, $unique, 'local');
-        $path = storage_path('app/' . $rel);
-        if (!file_exists($path)) throw new \Exception("No temporal file: {$path}");
-
-        $size = filesize($path);
-        $mime = $uploadedFile->getClientMimeType() ?: 'application/octet-stream';
-        $name = $unique;
-
-        try {
-            // INIT - capturar headers y body
-            $initUrl = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable';
-            $meta = ['name' => $name];
-            if ($folderId) $meta['parents'] = [$folderId];
-
-            $ch = curl_init($initUrl);
-            curl_setopt_array($ch, [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => true,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_HTTPHEADER => [
-                    "Authorization: Bearer {$access}",
-                    'Content-Type: application/json; charset=UTF-8',
-                    "X-Upload-Content-Type: {$mime}",
-                    "X-Upload-Content-Length: {$size}",
-                ],
-                CURLOPT_POSTFIELDS => json_encode($meta),
-                CURLOPT_TIMEOUT => 0,
-            ]);
-            $resp = curl_exec($ch);
-            $err = curl_error($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            $hsize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-            $headers = substr($resp, 0, $hsize);
-            $body = substr($resp, $hsize);
-            curl_close($ch);
-
-            logger()->info('Drive init', ['http' => $httpCode, 'err' => $err, 'headers' => $headers, 'body' => $body]);
-
-            if ($err) throw new \Exception("Init curl error: {$err}");
-            if ($httpCode < 200 || $httpCode >= 300) {
-                throw new \Exception("Init failed HTTP {$httpCode}. Body: {$body}");
-            }
-
-            if (!preg_match('/Location:\s*(\S+)/i', $headers, $m)) {
-                throw new \Exception("No Location header en init. Headers: {$headers} Body: {$body}");
-            }
-            $uploadUrl = trim($m[1]);
-
-            // UPLOAD por chunks con reintentos simples
-            $chunkSize = 10 * 1024 * 1024;
-            $handle = fopen($path, 'rb');
-            if ($handle === false) throw new \Exception("No se abre archivo {$path}");
-
-            $offset = 0;
-            $fileId = null;
-            while ($offset < $size) {
-                $bytes = min($chunkSize, $size - $offset);
-                $data = fread($handle, $bytes);
-                if ($data === false) { fclose($handle); throw new \Exception("Error leyendo chunk at {$offset}"); }
-
-                $start = $offset;
-                $end = $offset + $bytes - 1;
-                $contentRange = "bytes {$start}-{$end}/{$size}";
-
-                $tries = 0;
-                RETRY:
-                $tries++;
-                $ch = curl_init($uploadUrl);
-                curl_setopt_array($ch, [
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_CUSTOMREQUEST => 'PUT',
-                    CURLOPT_POSTFIELDS => $data,
-                    CURLOPT_HTTPHEADER => [
-                        "Authorization: Bearer {$access}",
-                        "Content-Length: {$bytes}",
-                        "Content-Range: {$contentRange}",
-                    ],
-                    CURLOPT_TIMEOUT => 0,
-                ]);
-                $resp = curl_exec($ch);
-                $err = curl_error($ch);
-                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                curl_close($ch);
-
-                logger()->info('Drive chunk', ['start'=>$start,'end'=>$end,'http'=>$httpCode,'err'=>$err,'resp_snippet'=>substr($resp,0,400)]);
-
-                if ($err) {
-                    if ($tries < 3) { sleep(1); goto RETRY; }
-                    fclose($handle); throw new \Exception("Chunk curl error: {$err}");
-                }
-
-                if (in_array($httpCode, [200,201])) {
-                    $json = json_decode($resp, true);
-                    $fileId = $json['id'] ?? null;
-                    break;
-                } elseif ($httpCode == 308) {
-                    // continuar
-                    // opcional parsear Range devuelto para recalcular offset
-                    $offset = $end + 1;
-                    continue;
-                } else {
-                    fclose($handle);
-                    throw new \Exception("Chunk failed HTTP {$httpCode}. Resp: {$resp}");
-                }
-            }
-
-            fclose($handle);
-            if (!$fileId) throw new \Exception("No se obtuvo fileId tras upload. Último http: {$httpCode}");
-            return $fileId;
-        } finally {
-            @unlink($path);
-        }
- 
-        /*$accessToken = $this->token();
         $fileId  ="";
         $msgfile ="";
 
@@ -409,7 +281,7 @@ class VcLibrary extends Component
         $contents = Storage::disk('public')->exists('archivos/'.$filesave);
         if ($contents){
             Storage::disk('public')->delete('archivos/'.$filesave);
-        }*/
+        }
 
     }
 
