@@ -137,6 +137,10 @@ class VcLibrary extends Component
             'record.asignatura' => 'required',
         ]);*/
 
+        $this->validate([
+            'record.archivo' => 'required|mimes:pdf|max:204800', // 200 MB (KB)
+        ]);
+
         if (count($this->selectedCursos)==0){
             return;
         }
@@ -202,21 +206,157 @@ class VcLibrary extends Component
     }
 
     public function apiDrive(){
- 
+
         $accessToken = $this->token();
+
+        sleep(3); // Simula espera
+        
+        if (empty($accessToken)) {
+            throw new \Exception("No se obtuvo access token desde \$this->token()");
+        }
+
+        // 2) Guardar temporalmente en disco (storage/app/tmp)
+        $uploadedFile = $this->record['archivo'];
+        $folderId = '1x2ECW-r4JdnRkMixMPKU37zPdh1X1iGE';
+        $tmpDir = 'tmp';
+        $origName = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+        $ext = $uploadedFile->getClientOriginalExtension();
+        $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $origName);
+        $unique = $safeName . '_' . now()->format('Ymd_His') . '.' . $ext;
+        $relativePath = $uploadedFile->storeAs($tmpDir, $unique, 'local'); // storage/app/tmp/...
+        $fullPath = storage_path('app/' . $relativePath);
+
+        if (!file_exists($fullPath)) {
+            throw new \Exception("No se pudo guardar archivo temporal en {$fullPath}");
+        }
+
+        $fileSize = filesize($fullPath);
+        $mime = $uploadedFile->getClientMimeType() ?: 'application/octet-stream';
+        $fileName = $unique;
+
+        try {
+            // 3) Iniciar sesión resumible (POST, obtener Location header)
+            $initUrl = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable';
+            $metadata = ['name' => $fileName];
+            if ($folderId) $metadata['parents'] = [$folderId];
+
+            $ch = curl_init($initUrl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, true); // queremos headers para capturar Location
+            curl_setopt($ch, CURLOPT_NOBODY, false);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                "Authorization: Bearer {$accessToken}",
+                'Content-Type: application/json; charset=UTF-8',
+                "X-Upload-Content-Type: {$mime}",
+                "X-Upload-Content-Length: {$fileSize}",
+            ]);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($metadata));
+            $resp = curl_exec($ch);
+
+            if ($resp === false) {
+                $err = curl_error($ch);
+                curl_close($ch);
+                throw new \Exception("Error iniciando sesión resumible: {$err}");
+            }
+
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+            $headers = substr($resp, 0, $headerSize);
+            $body = substr($resp, $headerSize);
+            curl_close($ch);
+
+            if ($httpCode < 200 || $httpCode >= 300) {
+                // mostrar body para debug
+                throw new \Exception("Inicio de sesión resumible falló. HTTP {$httpCode}. Body: {$body}");
+            }
+
+            // Parsear Location header
+            if (!preg_match('/Location:\s*(\S+)/i', $headers, $m)) {
+                throw new \Exception("No se obtuvo Location header para la sesión resumible. Headers: {$headers}");
+            }
+            $uploadUrl = trim($m[1]);
+
+            // 4) Subir por chunks (PUT con Content-Range)
+            $chunkSize = 10 * 1024 * 1024; // 10 MB
+            $handle = fopen($fullPath, 'rb');
+            if ($handle === false) {
+                throw new \Exception("No se pudo abrir el archivo temporal para lectura: {$fullPath}");
+            }
+
+            $offset = 0;
+            $fileId = null;
+
+            while ($offset < $fileSize) {
+                $bytesToRead = min($chunkSize, $fileSize - $offset);
+                $data = fread($handle, $bytesToRead);
+                if ($data === false) {
+                    fclose($handle);
+                    throw new \Exception("Error leyendo chunk del archivo en offset {$offset}");
+                }
+
+                $start = $offset;
+                $end = $offset + $bytesToRead - 1;
+                $contentRange = "bytes {$start}-{$end}/{$fileSize}";
+
+                $ch = curl_init($uploadUrl);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT'); // PUT para resumable
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    "Authorization: Bearer {$accessToken}",
+                    "Content-Length: {$bytesToRead}",
+                    "Content-Range: {$contentRange}",
+                ]);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 0); // sin timeout rígido
+                $resp = curl_exec($ch);
+
+                if ($resp === false) {
+                    $err = curl_error($ch);
+                    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    curl_close($ch);
+                    fclose($handle);
+                    throw new \Exception("Error upload chunk: {$err} (HTTP {$httpCode})");
+                }
+
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+
+                if (in_array($httpCode, [200, 201])) {
+                    // terminado; $resp contiene metadata JSON del archivo
+                    $json = json_decode($resp, true);
+                    $fileId = $json['id'] ?? null;
+                    break;
+                } elseif ($httpCode == 308) {
+                    // Resume Incomplete: continuar con siguiente chunk
+                    // Opcional: parsear Range header para saber el offset correcto
+                    $offset = $end + 1;
+                    continue;
+                } else {
+                    fclose($handle);
+                    throw new \Exception("Error en chunk upload. HTTP {$httpCode}. Resp: {$resp}");
+                }
+            }
+
+            fclose($handle);
+
+            if (!$fileId) {
+                throw new \Exception("No se obtuvo fileId después de la subida resumible.");
+            }
+
+            // 5) Retornar fileId (o hacer lo que necesites)
+            return $fileId;
+        } finally {
+            // 6) Limpiar el temporal siempre
+            try { @unlink($fullPath); } catch (\Throwable $_) {}
+        }
+ 
+        /*$accessToken = $this->token();
         $fileId  ="";
         $msgfile ="";
 
         sleep(3); // Simula espera
 
-        /*if ($attach['id']>0) { 
-            continue;
-        }
-
-        if ($attach['adjunto']=="") { 
-            continue;
-        }*/
-        
         $file = $this->record['archivo'];
 
         $name    = $file->getClientOriginalName();
@@ -286,7 +426,7 @@ class VcLibrary extends Component
         $contents = Storage::disk('public')->exists('archivos/'.$filesave);
         if ($contents){
             Storage::disk('public')->delete('archivos/'.$filesave);
-        }
+        }*/
 
     }
 
