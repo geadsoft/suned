@@ -150,6 +150,18 @@
                             </select>
                         </div>
                         @endif
+                        @if ($tipoDoc=='AP')
+                        <div class="col-xxl-4 mb-3">
+                            <label class="form-label" for="project-title-input">Escala Calificación</label>
+                            <select class="form-select" name="cmbperiodo" wire:model="escala">
+                                <option value="">Seleccione</option>
+                                <option value="EX">Excelente</option>
+                                <option value="MB">Muy Bueno</option>
+                                <option value="B">Bueno</option>
+                                <option value="R">Regular</option>
+                            </select>
+                        </div>
+                        @endif
                         <div class="col-xxl-2 mb-3">
                            @if ($tipoDoc=='CO' || $tipoDoc=='AP' || $tipoDoc=='RR' || $tipoDoc=='SD' )
                             <label class="form-label" for="project-title-input">Nota</label>
@@ -224,8 +236,8 @@
                                 <strong>{{$nombres}}</strong>,con C.I <strong>{{$nui}}</strong> Alumno del <strong>{{$bachilleren}}</strong>,
                                 periodo lectivo <strong>{{$periodo}}</strong>, obtuvo el siguiente aprovechamiento:</p>
                                 <div class="row">
-                                    <div class="col-xxl-3">
-                                        <p>({{$nota}}) {{$escala}}</p>
+                                    <div class="col-xxl-5">
+                                        <p>{{$nota}} ({{$notaletra}}) {{$notaEscala[$escala]}}</p>
                                     </div>
                                 </div>
                                 <p><br><br> Así consta en los registros del plantel a los cuales me remito de uds.

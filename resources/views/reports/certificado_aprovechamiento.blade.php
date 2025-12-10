@@ -50,7 +50,7 @@
                             <strong>{{$data['nombres']}}</strong> CON C.I. <strong>{{$data['identificacion']}}</strong> 
                             ALUMNO DEL <strong>{{$data['especializacion']}}</strong>, PERIODO LECTIVO {{$data['periodo']}} OBTUVO
                             EL SIGUIENTE APROVECHAMIENTO:</p>
-                            <p class="text-center"> {{$data['nota']}} ({{$numletra}}) </p>
+                            <p class="text-center"> {{$data['nota']}} ({{$numletra}}) {{$escala}}</p>
                             <p><br><br>
                             ASI CONSTA EN LOS REGISTROS DEL PLANTEL A LOS CUALES ME REMITO.<br>
                             DE UDS.       

@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div class="bookmark-icon position-absolute top-0 end-0 p-2">
-                    <button type="button" class="btn btn-icon-{{$key}}" data-bs-toggle="button" aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
+                    <button type="button" class="btn btn-icon-{{$key}}" data-bs-toggle="button" aria-pressed="true" wire:click="eliminar({{$records->id}})"><i class="mdi mdi-delete-forever fs-16"></i></button>
                 </div>
                 <div class="card-body">
                     <p class="fw-medium mb-0 float-end"><i class="mdi mdi-hexagram text-success align-middle"></i></p>

@@ -229,7 +229,6 @@ class VcFinalBulletin extends Component
             $updateNota = TdBoletinFinal::find($objnotas['id']);
             $updateNota->update([
                 'promedio_anual' => $promedio_anual,
-                'supletorio' => 0,
                 'promedio_final' => $promedio_final,
                 'promedio_cualitativo' => $notacualitativo
             ]);

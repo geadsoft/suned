@@ -21,7 +21,7 @@
             <table cellpadding="0" cellspancing="0" width="100%" style="font-size:14px">
                 <tr>
                     <td width="100%" style="vertical-align: top; padding-top: 8px">
-                        <img src="../public/assets/images/AmericanSchooll.jpg" height="80px">
+                        <!--<img src="../public/assets/images/AmericanSchooll.jpg" height="80px">-->
                     </td>        
                 </tr>
             </table>

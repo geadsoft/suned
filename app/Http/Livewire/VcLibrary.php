@@ -194,6 +194,13 @@ class VcLibrary extends Component
         
     }
 
+    public function eliminar($id){
+
+        TdLibrosCursos::where('libro_id',$id)->delete();
+        TmLibros::find($id)->delete();
+
+    }
+
     public function apiDrive(){
  
         $accessToken = $this->token();

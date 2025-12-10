@@ -12,6 +12,8 @@ use App\Models\TmReportes;
 use App\Models\TrCalificacionesCabs;
 use App\Models\TrCalificacionesDets;
 use App\Models\TmAsignaturas;
+use App\Models\TdPeriodoSistemaEducativos;
+use App\Models\TdBoletinFinal;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Storage;
@@ -26,12 +28,20 @@ class VcCertificados extends Component
     public $tipoDoc="MF", $periodoId, $cursoId, $nombres, $nui="", $documento, $fecha, $folio=0, $matricula=0, $nomcurso="";
     public $periodo, $foto="", $rector, $secretaria, $coordinador, $bachilleren="", $nota=0, $escala=''; 
     public $dttitulo="", $dtnombre="", $dtinstitucion="", $dtcargo="", $dtfecha, $refrendacion=0, $pagina=0, $fprorroga, $documentos="";
-    public $especializacion="",$paseCursoId,$matriculaId=0,$registrar, $orden;
+    public $especializacion="",$paseCursoId,$matriculaId=0,$registrar, $orden, $notaletra;
     public $refescala=[
         'EX' => 'Demuestra destacado desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un excente aporte a su formación integral.',
         'MB' => 'Demuestra muy buen desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un aporte a su formación integral.',
         'B'  => 'Demuestra buen desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un aporte a su formación integral.',
         'R'  => 'Demuestra regular desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un aporte a su formación integral.'
+    ];
+
+    public $notaEscala = [
+        ''   => '',
+        'EX' => 'EXCELENTE',
+        'MB' => 'MUY BUENO',
+        'B'  => 'BUENO',
+        'R'  => 'REGULAR'
     ];
 
     public $mes = [
@@ -162,8 +172,11 @@ class VcCertificados extends Component
         }
 
         $this->periodo = $tblmatricula->periodo->descripcion;
-
         $this->dispatchBrowserEvent('hide-form');
+
+        if($this->tipoDoc=='AP'){
+            $this->loadNotas();
+        }
 
     }
 
@@ -210,6 +223,31 @@ class VcCertificados extends Component
             $this->control="";
         }else{
             $this->control="disabled";
+        }
+        
+    }
+
+    public function loadNotas(){
+
+        $escala[0]= ['valor' => 'EX','min' => 9.50,'max' => 10];
+        $escala[0]= ['valor' => 'MB','min' => 8.00,'max' => 9.49];
+        $escala[0]= ['valor' => 'B','min' => 6.55,'max' => 7.99];
+        $escala[0]= ['valor' => 'R','min' => 0,'max' => 6.49];
+
+        $this->nota = TdBoletinFinal::where('persona_id', 1238)
+        ->where('periodo_id', 9)
+        ->where('curso_id', 502)
+        ->selectRaw('ROUND(SUM(promedio_final) / COUNT(id), 2) AS promedio')
+        ->value('promedio');
+
+        $formatter = new NumeroALetras();
+        $this->notaletra = $formatter->toWords($this->nota, 2);
+
+        foreach($escala as $obj){
+            if ($this->nota >= $obj['min'] && $this->nota<= $obj['max']) {
+                $this->escala = $obj['valor'];
+                break;
+            }
         }
 
     }
@@ -554,6 +592,7 @@ class VcCertificados extends Component
         ->get();
 
         return $notas;
+
     }
 
     public function liveWirePDF($idReporte)
@@ -572,6 +611,7 @@ class VcCertificados extends Component
 
         $formatter = new NumeroALetras();
         $numletra = $formatter->toWords($data['nota'], 2);
+        $escala = $this->notaEscala[$data['escala']];
 
         $mes  = ["01" => 'Enero', "02" => 'Febrero', "03" => 'Marzo', "04" => 'Abril', "05" => 'Mayo', "06" => 'Junio',
         "07" => 'Julio', "08" => 'Agosto', "09" => 'Septiembre', "10" => 'Octubre', "11" => 'Noviembre', "12" => 'Diciembre'];
@@ -631,6 +671,7 @@ class VcCertificados extends Component
                     'data'  => $data,
                     'mes'   => $mes,
                     'numletra' => $numletra,
+                    'escala' => $escala,
                 ]);
         
                 return $pdf->setPaper('a4')->stream('Certificado Aprovechamiento.pdf');

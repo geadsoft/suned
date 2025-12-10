@@ -740,10 +740,10 @@ class VcReportCard extends Component
         $this->tblescala = $escalas;
 
         // Definimos los rangos
-        TdPeriodoSistemaEducativos::query()
+        /*TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->filters['periodoId'])
         ->where("tipo","EC")
-        ->get()->toArray();
+        ->get()->toArray();*/
 
         $rangos = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->filters['periodoId'])
