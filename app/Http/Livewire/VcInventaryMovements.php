@@ -42,7 +42,7 @@ class VcInventaryMovements extends Component
         "DEP" => 'Depósito',
         "TRA" => 'Transferencia',
         "APP" => 'App Movil',
-
+        "CON" => 'Convenio',
     ];
 
     public $filters=[

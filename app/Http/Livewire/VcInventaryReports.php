@@ -66,6 +66,7 @@ class VcInventaryReports extends Component
         "DEP" => 'Depósito',
         "TRA" => 'Transferencia',
         "APP" => 'App Movil',
+        "CON" => 'Convenio',
 
     ];
 
@@ -396,6 +397,7 @@ class VcInventaryReports extends Component
             'DEP' => 'Deposito',
             'TRA' => 'Transferencia',
             'APP' => 'Aplicación Movil',
+            'CON' => 'Convenio',
         ];
 
         $totalmonto  = (array_sum(array_column($invtra,'total')));
@@ -535,6 +537,7 @@ class VcInventaryReports extends Component
             'DEP' => 'Deposito',
             'TRA' => 'Transferencia',
             'APP' => 'Aplicación Movil',
+            'CON' => 'Convenio',
         ];
         
         $totalmonto  = (array_sum(array_column($invtra,'total')));
