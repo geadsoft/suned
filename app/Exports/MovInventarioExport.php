@@ -50,6 +50,7 @@ class MovInventarioExport implements FromView, ShouldAutoSize
         "DEP" => 'Depósito',
         "TRA" => 'Transferencia',
         "APP" => 'App Movil',
+        "CON" => 'Convenio',
 
     ];
 
