@@ -32,7 +32,7 @@ class VcViewCalendar extends Component
         $this->fechaEmpieza = $tblperiodos['fecha_empieza'];
         $this->fechaTermina = $tblperiodos['fecha_termina'];
 
-        $this->periodo = $tblperiodos['periodo'];
+        $this->periodo = date('Y');
         $this->mes = date('m');
 
         $this->loadEvent();
@@ -132,12 +132,29 @@ class VcViewCalendar extends Component
         }
 
         $fechafin = date('Y-m-t');
+ 
+        if ($persona->tipopersona=='E'){
 
-        $this->lstevent = TmCalendarioEventos::query()
-        ->where('periodo',$this->periodo)
-        ->where('start_date','>',$fechafin)
-        ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
-        ->get();
+            $this->lstevent = TmCalendarioEventos::query()
+            ->join('tm_calendario_grados as g','g.calendario_id','=','tm_calendario_eventos.id')
+            ->where('periodo',$this->periodo)
+            ->where('start_date','>',$fechafin)
+            ->where('g.modalidad_id',$this->modalidadId)
+            ->where('g.grado_id',$this->gradoId)
+            ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
+            ->get();
+
+        }else{
+
+            $this->lstevent = TmCalendarioEventos::query()
+            ->where('periodo',$this->periodo)
+            ->where('start_date','>',$fechafin)
+            ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
+            ->get();
+
+        }
+
+        
 
         //Asigna Eventos
         $this->arrevent = json_encode($this->array);
