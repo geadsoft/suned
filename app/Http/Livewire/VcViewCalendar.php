@@ -131,7 +131,7 @@ class VcViewCalendar extends Component
 
         }
 
-        $fechafin = date('Y-m-t');
+        /*$fechafin = date('Y-m-t');
  
         if ($persona->tipopersona=='E'){
 
@@ -152,15 +152,14 @@ class VcViewCalendar extends Component
             ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
             ->get();
 
-        }
+        }*/
 
-        
-
+    
         //Asigna Eventos
-        $this->arrevent = json_encode($this->array);
-        
-        
+        $this->arrevent = json_encode($this->array);        
         $this->dispatchBrowserEvent('load-calendar', ['newObj' => $this->arrevent]);
+
+        $this->viewEvent($this->mes,$this->periodo);
 
     }
 
@@ -255,13 +254,15 @@ class VcViewCalendar extends Component
 
         $timestamp = mktime(0, 0, 0, $mes+1, 1, $periodo);
         $fechafin = date('Y-m-d', $timestamp);
-        $messig = $mes+1;
+        $ultimoDia = \Carbon\Carbon::parse('2026-02-10')->endOfMonth()->toDateString();
 
         $this->lstevent = TmCalendarioEventos::query()
         ->whereDate('start_date','>=',$fechafin)
+        ->whereDate('start_date','<=',$ultimoDia)
         /*->where('periodo',$this->periodo)
         ->where('mes',$messig)*/
         ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
+        ->orderby('end_date')
         ->get();
 
     }
