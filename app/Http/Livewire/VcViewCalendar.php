@@ -108,8 +108,10 @@ class VcViewCalendar extends Component
             // Eventos Modalidad
             $eventModalidad = TmCalendarioEventos::query()
             ->join('tm_calendario_grados as g','g.calendario_id','=','tm_calendario_eventos.id')
-            ->where('periodo',$this->periodo)
+            //->where('periodo',$this->periodo)
             //->where('mes',$this->mes)
+            ->whereDate('start_date', '>=', $this->fechaEmpieza)
+            ->whereDate('end_date', '<=', $this->fechaTermina)
             ->where('g.modalidad_id',$this->modalidadId)
             ->where('g.grado_id',$this->gradoId)
             ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
