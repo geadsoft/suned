@@ -38,12 +38,32 @@
                                 <div class='card mb-3'>
                                     <div class='card-body'>
                                         @foreach($lstevent as $key => $events)
-                                        <div class='d-flex'>
-                                            <div class='flex-grow-1'><i class='mdi mdi-checkbox-blank-circle me-2 text-{{$key}}'></i><span class='fw-medium'> {{date('d/m/Y',strtotime($events['start_date']))}} - {{date('d/m/Y',strtotime($events['end_date']))}}</span></div>
-                                            <div class='flex-shrink-0'><small class='badge badge-soft-primary ms-auto'>{{$events['nombre']}}</small></div>
+
+                                        <div class="mb-3">
+
+                                            {{-- NOMBRE DEL EVENTO --}}
+                                            <div class="d-flex align-items-center mb-1">
+                                                <i class="mdi mdi-checkbox-blank-circle me-2 text-{{ $key }}"></i>
+
+                                                <span class="badge bg-light text-primary fw-semibold fs-11">
+                                                    {{ $events['nombre'] }}
+                                                </span>
+                                            </div>
+
+                                            {{-- FECHAS --}}
+                                            <div class="ms-4 fw-semibold text-dark fs-10">
+                                                {{ \Carbon\Carbon::parse($events['start_date'])->format('d/m/Y') }}
+                                                —
+                                                {{ \Carbon\Carbon::parse($events['end_date'])->format('d/m/Y') }}
+                                            </div>
+
+                                            {{-- DESCRIPCIÓN --}}
+                                            <p class="text-muted ms-4 mb-0">
+                                                {{ $events['descripcion'] }}
+                                            </p>
+
                                         </div>
-                                        <p class='text-muted text-truncate-two-lines mb-0'>{{$events['descripcion']}}</p>
-                                        <div class='mb-3'></div>
+
                                         @endforeach
                                     </div>
                                 </div>
