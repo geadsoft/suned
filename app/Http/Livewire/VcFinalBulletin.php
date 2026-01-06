@@ -981,10 +981,11 @@ class VcFinalBulletin extends Component
 
             if($conducta){
                 $arrconducta[$person->id]['evaluacion'] = $conducta->evaluacion;
+            }else{
+                $arrconducta[$person->id]['evaluacion'] = '';
             }
         } 
-
-
+        
         if ($this->calificacion=="L"){
 
             $pdf = PDF::loadView('pdf/reporte_boletin_final_notasletra',[

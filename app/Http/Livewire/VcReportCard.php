@@ -31,6 +31,7 @@ class VcReportCard extends Component
         'periodoId' => 0,
         'modalidadId' => 0,
         'paralelo' => 0, 
+        'paralelo_pase' => 0,
         'termino' => '1T',
         'bloque' => '1P',
         'estudianteId' => 0,
@@ -136,6 +137,7 @@ class VcReportCard extends Component
 
     public function loadPersonas(){
 
+        
         // Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
         $matriculasConPase = DB::table('tm_pase_cursos')
         ->where('estado', 'A')
@@ -185,9 +187,18 @@ class VcReportCard extends Component
                 ->on("d.docente_id","=","tm_actividades.docente_id");
         })
         ->join("tm_horarios as h","h.id","=","d.horario_id")
-        ->when($this->filters['paralelo'],function($query){
-            return $query->where('h.curso_id',"{$this->filters['paralelo']}");
-        })
+        ->when(
+            $this->filters['paralelo'],
+            function ($query) {
+                $query->where('h.curso_id', $this->filters['paralelo']);
+            }
+        )
+        /*->when(
+            $this->filters['paralelo_pase'] > 0,
+            function ($query) {
+                $query->where('h.curso_id', $this->filters['paralelo_pase']);
+            }
+        )*/
         ->when($this->filters['termino'],function($query){
             return $query->where('termino',"{$this->filters['termino']}");
         })
@@ -207,7 +218,7 @@ class VcReportCard extends Component
     public function add(){
 
         $this->tblrecords=[];
-
+        
         $this->asignaturas = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
@@ -216,9 +227,33 @@ class VcReportCard extends Component
         ->orderBy("a.descripcion")
         ->get();
 
+        $pases = DB::table('tm_pase_cursos as p')
+        ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
+        ->where('p.curso_id', $this->filters['paralelo'])
+        ->where('p.estado',"A")
+        ->select('m.curso_id', 'p.modalidad_id', 'p.estudiante_id')
+        ->get();
+
         foreach ($this->tblpersonas as $key => $person)
         { 
             $idPerson = $person->id;
+
+            $registro = $pases->firstWhere('estudiante_id', $idPerson);
+
+            if($registro){
+
+
+                $this->filters['paralelo_pase'] = $registro->curso_id;
+
+                /*$this->asignaturas = TmHorarios::query()
+                ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+                ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
+                ->select("a.*")
+                ->where("tm_horarios.curso_id",$this->filters['paralelo_pase'])
+                ->orderBy("a.descripcion")
+                ->get();*/
+
+            }
 
             // Actualiza Datos Asignaturas
             foreach ($this->asignaturas as $key => $data)
@@ -308,9 +343,18 @@ class VcReportCard extends Component
                 ->on("d.docente_id","=","tm_actividades.docente_id");
         })
         ->join("tm_horarios as h","h.id","=","d.horario_id")
-        ->when($this->filters['paralelo'],function($query){
-            return $query->where('h.curso_id',"{$this->filters['paralelo']}");
-        })
+        ->when(
+            $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
+            function ($query) {
+                $query->where('h.curso_id', $this->filters['paralelo']);
+            }
+        )
+        ->when(
+            $this->filters['paralelo_pase'] > 0,
+            function ($query) {
+                $query->where('h.curso_id', $this->filters['paralelo_pase']);
+            }
+        )
         ->when($this->filters['termino'],function($query){
             return $query->where('termino',"{$this->filters['termino']}");
         })
@@ -384,9 +428,18 @@ class VcReportCard extends Component
                     ->on('d.docente_id', '=', 'tm_actividades.docente_id');
             })
             ->join("tm_horarios as h","h.id","=","d.horario_id")
-            ->when($this->filters['paralelo'],function($query){
-                return $query->where('h.curso_id',"{$this->filters['paralelo']}");
-            })
+            ->when(
+                $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
+                function ($query) {
+                    $query->where('h.curso_id', $this->filters['paralelo']);
+                }
+            )
+            ->when(
+                $this->filters['paralelo_pase'] > 0,
+                function ($query) {
+                    $query->where('h.curso_id', $this->filters['paralelo_pase']);
+                }
+            )
             ->when(!empty($this->filters['termino']), function($query) {
                 return $query->where('tm_actividades.termino', $this->filters['termino']);
             })
@@ -668,7 +721,18 @@ class VcReportCard extends Component
         $observaciones = TdObservacionActa::query()
         ->where("termino",$this->filters['termino'])
         ->where("bloque",$this->filters['bloque'])
-        ->where("curso_id",$this->filters['paralelo'])
+        ->when(
+            $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
+            function ($query) {
+                $query->where('h.curso_id', $this->filters['paralelo']);
+            }
+        )
+        ->when(
+            $this->filters['paralelo_pase'] > 0,
+            function ($query) {
+                $query->where('h.curso_id', $this->filters['paralelo_pase']);
+            }
+        )
         ->where("persona_id",$this->estudianteId)
         ->first();
         
@@ -788,8 +852,9 @@ class VcReportCard extends Component
         $arrescala[3]["codigo2"] = "R";
         $arrescala[3]["desc2"] = "Regular";
 
-        $this->add();
+        $this->add(); 
         $this->asignarNotas();
+        $this->filters['paralelo_pase'] = 0;
 
         $periodo = TmPeriodosLectivos::find($this->filters['periodoId']);
 

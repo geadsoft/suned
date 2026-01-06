@@ -67,7 +67,7 @@ class VcDailyAttendance extends Component
 
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
-        $this->filters['periodo'] = $tblperiodos['periodo'];
+        $this->filters['periodo'] = intval(date('Y',strtotime($ldate)));
 
         $this->tbltermino = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
