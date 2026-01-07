@@ -152,8 +152,8 @@
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{number_format($tblrecords[$record->id][$col->id]['promedio_anual'],2)}}</strong></td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['supletorio'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['promedio_final'],2)}}</td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$tblrecords[$record->id][$col->id]['promedio_cualitativo']}}</strong></td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$tblrecords[$record->id][$col->id]['promocion']}}</strong></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; font-size: 9px;"><strong>{{$tblrecords[$record->id][$col->id]['promedio_cualitativo']}}</strong></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; font-size: 9px;"><strong>{{$tblrecords[$record->id][$col->id]['promocion']}}</strong></td>
                         
                     </tr>
                     @endforeach
