@@ -31,6 +31,7 @@ class VcFinalBulletin extends Component
         'periodoId' => 0,
         'modalidadId' => 0,
         'paralelo' => 0, 
+        'paralelo_pase' => 0,
         'termino' => '1T',
         'bloque' => '1P',
         'estudianteId' => 0,
@@ -300,9 +301,18 @@ class VcFinalBulletin extends Component
                 ->on("d.docente_id","=","tm_actividades.docente_id");
         })
         ->join("tm_horarios as h","h.id","=","d.horario_id")
-        ->when($this->filters['paralelo'],function($query){
-            return $query->where('h.curso_id',"{$this->filters['paralelo']}");
-        })
+        ->when(
+            $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
+            function ($query) {
+                $query->where('h.curso_id', $this->filters['paralelo']);
+            }
+        )
+        ->when(
+            $this->filters['paralelo_pase'] > 0,
+            function ($query) {
+                $query->where('h.curso_id', $this->filters['paralelo_pase']);
+            }
+        )
         ->when($this->filters['termino'],function($query){
             return $query->where('termino',"{$this->filters['termino']}");
         })
@@ -331,9 +341,38 @@ class VcFinalBulletin extends Component
         ->orderBy("a.descripcion")
         ->get();
 
+        $pases = DB::table('tm_pase_cursos as p')
+        ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
+        ->where('p.curso_id', $this->filters['paralelo'])
+        ->where('p.estado',"A")
+        ->select('m.curso_id', 'p.modalidad_id', 'p.estudiante_id')
+        ->get();
+
         foreach ($this->tblpersonas as $key => $person)
         { 
             $idPerson = $person->id;
+
+            $registro = $pases->firstWhere('estudiante_id', $idPerson);
+
+            if($registro){
+
+
+                $this->filters['paralelo_pase'] = $registro->curso_id;
+
+                $registros = TdCalificacionActividades::join('tm_actividades as a', 'a.id', '=', 'td_calificacion_actividades.actividad_id')
+                ->join('tm_horarios_docentes as d', 'd.id', '=', 'a.paralelo')
+                ->join('tm_horarios as h', 'h.id', '=', 'd.horario_id')
+                ->where('td_calificacion_actividades.persona_id', $idPerson)
+                ->where('h.curso_id',$this->filters['paralelo_pase'])
+                ->where('a.termino', $this->filters['termino'])
+                ->where('a.tipo', 'ET')
+                ->count('a.id');
+
+                if ($registros==0){
+                   $this->filters['paralelo_pase']=0; 
+                }
+
+            }
 
             // Actualiza Datos Asignaturas
             foreach ($this->asignaturas as $key => $data)
@@ -423,9 +462,18 @@ class VcFinalBulletin extends Component
                 ->on("d.docente_id","=","tm_actividades.docente_id");
         })
         ->join("tm_horarios as h","h.id","=","d.horario_id")
-        ->when($this->filters['paralelo'],function($query){
-            return $query->where('h.curso_id',"{$this->filters['paralelo']}");
-        })
+        ->when(
+            $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
+            function ($query) {
+                $query->where('h.curso_id', $this->filters['paralelo']);
+            }
+        )
+        ->when(
+            $this->filters['paralelo_pase'] > 0,
+            function ($query) {
+                $query->where('h.curso_id', $this->filters['paralelo_pase']);
+            }
+        )
         ->when($this->filters['termino'],function($query){
             return $query->where('termino',"{$this->filters['termino']}");
         })
@@ -487,6 +535,19 @@ class VcFinalBulletin extends Component
                 $join->on('d.id', '=', 'tm_actividades.paralelo')
                     ->on('d.docente_id', '=', 'tm_actividades.docente_id');
             })
+            ->join("tm_horarios as h","h.id","=","d.horario_id")
+            ->when(
+                $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
+                function ($query) {
+                    $query->where('h.curso_id', $this->filters['paralelo']);
+                }
+            )
+            ->when(
+                $this->filters['paralelo_pase'] > 0,
+                function ($query) {
+                    $query->where('h.curso_id', $this->filters['paralelo_pase']);
+                }
+            )
             ->when(!empty($termino), function($query) use ($termino) {
                 return $query->where('tm_actividades.termino', $termino);
             })
