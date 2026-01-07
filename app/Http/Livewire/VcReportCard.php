@@ -412,17 +412,7 @@ class VcReportCard extends Component
                 }
             }
 
-            /*//Asginar Nota Examen
-            $this->tbltermino = TdPeriodoSistemaEducativos::query()
-            ->where('periodo_id',$this->filters['periodoId'])
-            ->where('tipo','EA')
-            ->get();
-
-            foreach($this->tbltermino as $data){
-                if ($this->filters['termino'] == $data['codigo']){
-                    $this->bloqueEx = str_replace('T','E',$data['codigo']);
-                }
-            }*/
+            //Asginar Nota Examen
            
             $bloque = $this->filters['bloque'] ?? null;
             $bloqueEx = $bloque ? str_replace('P', 'E', $bloque) : null;

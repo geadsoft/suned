@@ -549,8 +549,8 @@ class VcFinalBulletin extends Component
                     $query->where('h.curso_id', $this->filters['paralelo_pase']);
                 }
             )
-            ->when(!empty($termino), function($query) use ($termino) {
-                return $query->where('tm_actividades.termino', $termino);
+            ->when(!empty($this->filters['termino']), function($query) {
+                return $query->where('tm_actividades.termino', $this->filters['termino']);
             })
             ->when(!empty($bloque), function($query) use ($bloqueEx) {
                 return $query->where('tm_actividades.bloque', $bloqueEx);
