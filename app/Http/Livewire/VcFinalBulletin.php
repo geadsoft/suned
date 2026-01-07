@@ -226,7 +226,7 @@ class VcFinalBulletin extends Component
                 }
             }
 
-            if ($promedio_anual >= 0 && $promedio_final <= 3.99) {
+            if ($promedio_anual >= 0 && $promedio_anual <= 3.99) {
                 $promocion = "PIERDE AÑO";
             } elseif ($promedio_anual <= 6.99) {
                 $promocion = "SUPLETORIO";
