@@ -188,7 +188,7 @@ class VcReportCard extends Component
         })
         ->join("tm_horarios as h","h.id","=","d.horario_id")
         ->when(
-            $this->filters['paralelo'],
+            $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
             function ($query) {
                 $query->where('h.curso_id', $this->filters['paralelo']);
             }
