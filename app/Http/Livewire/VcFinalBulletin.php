@@ -226,11 +226,11 @@ class VcFinalBulletin extends Component
                 }
             }
 
-            if ($promedio_final >= 0 && $promedio_final <= 3.99) {
+            if ($promedio_anual >= 0 && $promedio_final <= 3.99) {
                 $promocion = "PIERDE AÑO";
-            } elseif ($promedio_final <= 6.99) {
+            } elseif ($promedio_anual <= 6.99) {
                 $promocion = "SUPLETORIO";
-            } elseif ($promedio_final <= 10) {
+            } elseif ($promedio_anual <= 10) {
                 $promocion = "APROBADO";
             }
 
