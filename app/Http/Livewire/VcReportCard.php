@@ -11,6 +11,7 @@ use App\Models\TmCursos;
 use App\Models\TmHorariosDocentes;
 use App\Models\TdObservacionActa;
 use App\Models\TdConductas;
+use App\Models\TdCalificacionActividades;
 
 
 use Livewire\Component;
@@ -245,7 +246,7 @@ class VcReportCard extends Component
 
                 $this->filters['paralelo_pase'] = $registro->curso_id;
 
-                $registros = CalificacionActividad::join('tm_actividades as a', 'a.id', '=', 'td_calificacion_actividades.actividad_id')
+                $registros = TdCalificacionActividades::join('tm_actividades as a', 'a.id', '=', 'td_calificacion_actividades.actividad_id')
                 ->join('tm_horarios_docentes as d', 'd.id', '=', 'a.paralelo')
                 ->join('tm_horarios as h', 'h.id', '=', 'd.horario_id')
                 ->where('td_calificacion_actividades.persona_id', $idPerson)
