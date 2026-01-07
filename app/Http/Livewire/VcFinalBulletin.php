@@ -226,11 +226,20 @@ class VcFinalBulletin extends Component
                 }
             }
 
+            if ($promedio_final >= 0 && $promedio_final <= 3.99) {
+                $promocion = "PIERDE AÑO";
+            } elseif ($promedio_final <= 6.99) {
+                $promocion = "SUPLETORIO";
+            } elseif ($promedio_final <= 10) {
+                $promocion = "APROBADO";
+            }
+
             $updateNota = TdBoletinFinal::find($objnotas['id']);
             $updateNota->update([
                 'promedio_anual' => $promedio_anual,
                 'promedio_final' => $promedio_final,
-                'promedio_cualitativo' => $notacualitativo
+                'promedio_cualitativo' => $notacualitativo,
+                'promocion' => $promocion
             ]);
 
         }
