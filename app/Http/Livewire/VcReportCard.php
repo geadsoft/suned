@@ -245,13 +245,18 @@ class VcReportCard extends Component
 
                 $this->filters['paralelo_pase'] = $registro->curso_id;
 
-                /*$this->asignaturas = TmHorarios::query()
-                ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-                ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
-                ->select("a.*")
-                ->where("tm_horarios.curso_id",$this->filters['paralelo_pase'])
-                ->orderBy("a.descripcion")
-                ->get();*/
+                $registros = CalificacionActividad::join('tm_actividades as a', 'a.id', '=', 'td_calificacion_actividades.actividad_id')
+                ->join('tm_horarios_docentes as d', 'd.id', '=', 'a.paralelo')
+                ->join('tm_horarios as h', 'h.id', '=', 'd.horario_id')
+                ->where('td_calificacion_actividades.persona_id', $idPerson)
+                ->where('h.curso_id',$this->filters['paralelo_pase'])
+                ->where('td_calificacion_actividades.termino', '3T')
+                ->where('a.tipo', 'ET')
+                ->count('a.id');
+
+                if ($registros==0){
+                   $this->filters['paralelo_pase']=0; 
+                }
 
             }
 
