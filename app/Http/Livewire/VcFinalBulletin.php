@@ -12,6 +12,7 @@ use App\Models\TmHorariosDocentes;
 use App\Models\TdObservacionActa;
 use App\Models\TdConductas;
 use App\Models\TdBoletinFinal;
+use App\Models\TdCalificacionActividades;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
