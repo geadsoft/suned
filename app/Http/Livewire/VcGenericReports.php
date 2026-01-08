@@ -108,7 +108,7 @@ class VcGenericReports extends Component
             ->when($this->referencia,function($query){
                 return $query->whereRaw("left(tr_deudas_cabs.referencia,3) = '{$this->referencia}'");
             })
-            ->where('p.estado','A')
+            ->where('m.estado','A')
             ->whereRaw($this->tipo.$this->relacion.floatval($this->valor))
             ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
             'c.paralelo','tr_deudas_cabs.glosa', 'debito','credito','descuento','saldo')
@@ -154,7 +154,7 @@ class VcGenericReports extends Component
             ->when($this->referencia,function($query){
                 return $query->whereRaw("left(tr_deudas_cabs.referencia,3) = '{$this->referencia}'");
             })
-            ->where('p.estado','A')
+            ->where('m.estado','A')
             /*->where('dt.tipo','PAG')*/
             ->whereRaw('dt.credito '.$this->relacion.floatval($this->valor))
             ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'g.descripcion as grupo', 's.descripcion as curso', 
@@ -213,7 +213,7 @@ class VcGenericReports extends Component
         ->when($this->referencia,function($query){
             return $query->whereRaw("left(tr_deudas_cabs.referencia,3) = '{$this->referencia}'");
         })
-        ->where('p.estado','A')
+        ->where('m.estado','A')
         ->whereRaw($campo.$this->relacion.floatval($this->valor))
         ->select('documento', 'tr_deudas_cabs.fecha', 'p.nombres', 'p.apellidos', 'p.identificacion', 'g.descripcion as grupo', 's.descripcion as curso', 
         'c.paralelo','tr_deudas_cabs.glosa', 'debito','dt.credito','dt.descuento','saldo')
