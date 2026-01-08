@@ -196,6 +196,7 @@ class VcPassCourse extends Component
 
     public function setGrabar(){
 
+
         TmPaseCursos::Create([
             'matricula_id' => $this -> matriculaId,
             'estudiante_id' => $this -> personaId,
@@ -203,7 +204,7 @@ class VcPassCourse extends Component
             'nivel_id' => $this -> pase_nivelId,
             'grado_id' => $this ->pase_gradoId,
             'curso_id' => $this -> pase_cursoId,
-            'curso_anterior' => $this -> paseId,
+            'curso_anterior' => $this->paseId == 0 ? null : $this->paseId,
             'usuario' => auth()->user()->name,
             'estado' => "A",
         ]);
