@@ -961,7 +961,23 @@ class VcFinalBulletin extends Component
         })
         ->get()->toArray();
 
+        $promedios = TdBoletinFinal::query()
+        ->select(
+            'persona_id',
+            DB::raw('ROUND(AVG(`1T_notatrimestre`), 2) AS promedio_1T'),
+            DB::raw('ROUND(AVG(`2T_notatrimestre`), 2) AS promedio_2T'),
+            DB::raw('ROUND(AVG(`3T_notatrimestre`), 2) AS promedio_3T'),
+            DB::raw('ROUND(AVG(`promedio_anual`), 2) AS promedio_an'),
+            DB::raw('ROUND(AVG(`promedio_final`), 2) AS promedio_fn'),
+        )
+        ->where('periodo_id', $this->filters['periodoId'])
+        ->where('modalidad_id', $this->filters['modalidadId'])
+        ->where('curso_id', $this->filters['paralelo'])
+        ->groupBy('persona_id')
+        ->get();
+
         $this->tblrecords=[];
+        $progeneral=[];
 
         foreach($boletin as $key => $nota){
 
@@ -989,6 +1005,16 @@ class VcFinalBulletin extends Component
             $this->tblrecords[$personaId][$asignaturaId]['promedio_cualitativo'] = $nota['promedio_cualitativo'];
             $this->tblrecords[$personaId][$asignaturaId]['promocion'] = $nota['promocion'];
         }
+
+        foreach($promedios as $key => $nota){
+           $personaId  = $nota['persona_id'];
+           $progeneral[$personaId]['promedio1T'] = $nota['promedio_1T'];
+           $progeneral[$personaId]['promedio2T'] = $nota['promedio_2T'];
+           $progeneral[$personaId]['promedio3T'] = $nota['promedio_3T'];
+           $progeneral[$personaId]['promanual'] = $nota['promedio_an'];
+           $progeneral[$personaId]['promfinal'] = $nota['promedio_fn'];
+        }
+
 
         $periodo = TmPeriodosLectivos::find($this->filters['periodoId']);
 
@@ -1072,6 +1098,7 @@ class VcFinalBulletin extends Component
                 'faltas' => $faltas,
                 'arrComentario' => $this->arrComentario,
                 'arrconducta' => $arrconducta,
+                'progeneral' => $progeneral,
             ]);
 
         }else{
@@ -1089,6 +1116,7 @@ class VcFinalBulletin extends Component
                 'faltas' => $faltas,
                 'arrComentario' => $this->arrComentario,
                 'arrconducta' => $arrconducta,
+                'progeneral' => $progeneral,
             ]);
 
         }

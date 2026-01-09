@@ -59,32 +59,33 @@
             <table cellpadding="0" cellspancing="0" class="table table-sm table-bordered">
                 
                 <tr>
-                    <td colspan="24">
+                    <td colspan="21">
                     <div class="col-4"><img class="img-fluid" style="position: absolute;top: 1%; left: 2%; width: 45%;height:60pt;" 
                     src="../public/assets/images/LogoReport.png" alt=""></div>
                     <p class="text-center" style="margin: 0px; font-size: 10px;"><strong>UNIDAD EDUCATIVA AMERICAN SCHOOL</strong></p>
                     <p class="text-center" style="margin: 0px; font-size: 10px;"><strong>Modalidad: {{$datos['nivel']}} </strong></p>
-                    <p class="text-center" style="margin: 0px; font-size: 10px;"><strong>ACTA DE CALIFICACIONES FINAL</strong></p>
-                    <p class="text-center" style="margin: 0px; font-size: 10px;"><strong>{{$datos['trimestre']}}</strong></p>
+                    <p class="text-center" style="margin: 0px; font-size: 10px;"><strong>BOLETIN DE CALIFICACIONES FINAL</strong></p>
                     <p class="text-center" style="margin: 0px; font-size: 10px;"><strong>{{$datos['subtitulo']}}</strong></p>
+                    <br>
+                    <br>
                     </td>
                 </tr>
                 <tr>
                     <td class="align-middle" colspan="3"><strong>NOMBRES DE ESTUDIANTE</strong></td>
-                    <td class="align-middle" colspan="19">{{$record['apellidos']}} {{$record['nombres']}}</td>
+                    <td class="align-middle" colspan="16">{{$record['apellidos']}} {{$record['nombres']}}</td>
                     <td class="align-middle"><strong>MATRICULA</strong></td>
                     <td class="align-middle text-right">{{$record['documento']}}</td>
                 </tr>
                 <tr>
                     <td class="align-middle" colspan="3"><strong>GRADO/CURSO</strong></td>
-                    <td class="align-middler" colspan="19">{{$datos['curso']}}</td>
+                    <td class="align-middler" colspan="16">{{$datos['curso']}}</td>
                     <td class="align-middler" colspan="2"></td>
                 </tr>
                 <tr>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">ASIGNATURA</th>
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #d2d3d6ff;" colspan="6" >I TRIMESTRE</th>
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #d2d3d6ff;" colspan="6">II TRIMESTRE</th>
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #d2d3d6ff;" colspan="6">III TRIMESTRE</th>
+                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #d2d3d6ff;" colspan="5" >I TRIMESTRE</th>
+                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #d2d3d6ff;" colspan="5">II TRIMESTRE</th>
+                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #d2d3d6ff;" colspan="5">III TRIMESTRE</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;" rowspan="2">PROMEDIO ANUAL</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;" rowspan="2">EX. SUPLETORIO</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;" rowspan="2">PROMEDIO FINAL</th>
@@ -93,21 +94,21 @@
                 </tr>
                 <tr>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:15px;">1P</th>
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;">Promedio Paciales</th>
+                    <!--<th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;">Promedio Paciales</th>-->
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:15px;">{{$notaParcial}}%</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;">Evaluación</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:15px;">{{$notaExamen}}%</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;">Total Trimestre</th>
 
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:15px;">1P</th>
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;">Promedio Paciales</th>
+                    <!--<th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;">Promedio Paciales</th>-->   
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:15px;">{{$notaParcial}}%</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;">Evaluación</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:15px;">{{$notaExamen}}%</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;">Total Trimestre</th>
 
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:15px;">1P</th>
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;">Promedio Paciales</th>
+                    <!--<th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;">Promedio Paciales</th>-->
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:15px;">{{$notaParcial}}%</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;">Evaluación</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:15px;">{{$notaExamen}}%</th>
@@ -129,21 +130,21 @@
                             <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">0.00</td>
                         @endif-->
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{number_format($tblrecords[$record->id][$col->id]['1T_notaparcial'],2)}}</strong></td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['1T_notaparcial'],2)}}</td>
+                        <!--<td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['1T_notaparcial'],2)}}</td>-->
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['1T_nota70'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['1T_evaluacion'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['1T_nota30'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{number_format($tblrecords[$record->id][$col->id]['1T_notatrimestre'],2)}}</strong></td>
                         
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{number_format($tblrecords[$record->id][$col->id]['2T_notaparcial'],2)}}</strong></td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['2T_notaparcial'],2)}}</td>
+                        <!--<td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['2T_notaparcial'],2)}}</td>-->
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['2T_nota70'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['2T_evaluacion'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['2T_nota30'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{number_format($tblrecords[$record->id][$col->id]['2T_notatrimestre'],2)}}</strong></td>
 
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{number_format($tblrecords[$record->id][$col->id]['3T_notaparcial'],2)}}</strong></td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['3T_notaparcial'],2)}}</td>
+                        <!--<td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['3T_notaparcial'],2)}}</td>-->
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['3T_nota70'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['3T_evaluacion'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['3T_nota30'],2)}}</td>
@@ -159,22 +160,48 @@
                     @endforeach
                     
                     <tr id="{{$record->id}}-conduta">
+                        <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;" class="align-middle"><strong>PROMEDIO GENERAL</strong></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                        <!--<td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>-->
+                        <td></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$progeneral[$record->id]['promedio1T']}}</strong></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                        <td></td>
+                        <!--<td></td>-->
+                        <td></td>
+                        <td></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$progeneral[$record->id]['promedio2T']}}</strong></td>
+                        <td></td>
+                        <td></td>
+                        <!--<td></td>-->
+                        <td></td>
+                        <td></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$progeneral[$record->id]['promedio3T']}}</strong></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$progeneral[$record->id]['promanual']}}</strong></td>
+                        <td></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$progeneral[$record->id]['promfinal']}}</strong></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr id="{{$record->id}}-general">
                         <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;" class="align-middle"><strong>COMPORTAMIENTO</strong></td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                        <!--<td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>-->
                         <td></td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$arrconducta[$record->id]['evaluacion']}}</td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$arrconducta[$record->id]['evaluacion']}}</strong></td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
                         <td></td>
+                        <!--<td></td>-->
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
+                        <!--<td></td>-->
                         <td></td>
                         <td></td>
                         <td></td>
@@ -185,7 +212,7 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td colspan="10" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">
+                        <td colspan="8" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">
                             <table cellpadding="0" cellspancing="0" class="table table-sm table-bordered">
                                 <tr>
                                     <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"><strong>Faltas Justificadas</strong></td>
@@ -223,7 +250,7 @@
                                 </tr>
                             </table>
                         </td>
-                        <td colspan="14" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">
+                        <td colspan="13" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">
                             <table cellpadding="0" cellspancing="0" class="table table-sm table-bordered">
                                 <tr>
                                     <td colspan="6" class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"> <strong>ESCALA DE CALIFICACIONES</strong></td>
