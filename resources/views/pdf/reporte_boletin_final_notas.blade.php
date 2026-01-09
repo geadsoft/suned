@@ -161,23 +161,11 @@
                     
                     <tr id="{{$record->id}}-conduta">
                         <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;" class="align-middle"><strong>PROMEDIO GENERAL</strong></td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
-                        <!--<td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>-->
-                        <td></td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
+                        <td colspan="4" class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$progeneral[$record->id]['promedio1T']}}</strong></td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
-                        <td></td>
-                        <!--<td></td>-->
-                        <td></td>
-                        <td></td>
+                        <td colspan="4" class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$progeneral[$record->id]['promedio2T']}}</strong></td>
-                        <td></td>
-                        <td></td>
-                        <!--<td></td>-->
-                        <td></td>
-                        <td></td>
+                        <td colspan="4"></td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$progeneral[$record->id]['promedio3T']}}</strong></td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$progeneral[$record->id]['promanual']}}</strong></td>
                         <td></td>
