@@ -136,27 +136,30 @@
                                     <tr class="tr-{{$key}}">
                                     <td>{{$recno->apellidos}} {{$recno->nombres}}</td>
                                     <td>
-                                        @php
+                                        <!--@php
                                             $fecha = $tblrecords[$recno->id]['archivo'];
-                                        @endphp
-                                        @if ($fecha!="")
+                                        @endphp-->
+                                       
+                                        @if ($tblrecords[$recno->id]['archivo'])
+                                        @foreach ($tblrecords[$recno->id]['archivo'] as $key => $file)
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 text-muted">
                                                 <a class="active"><i class="ri-attachment-2 align-bottom me-2"></i> 
-                                                <span class="file-list-link">{{$tblrecords[$recno->id]['archivo']}} <small class="text-muted"> 
-                                                @lang('translation.'.(date('l',strtotime($fecha)))),
-                                                {{date('d',strtotime($fecha))}} de @lang('months.'.(date('m',strtotime($fecha)))) del {{date('Y',strtotime($fecha))}}
-                                                {{date('H:i',strtotime($fecha))}}</small> </span>
+                                                <span class="file-list-link">{{$file['nombre']}} <small class="text-muted"> 
+                                                @lang('translation.'.(date('l',strtotime($file['fecha'])))),
+                                                {{date('d',strtotime($file['fecha']))}} de @lang('months.'.(date('m',strtotime($file['fecha'])))) del {{date('Y',strtotime($file['fecha']))}}
+                                                {{date('H:i',strtotime($file['fecha']))}}</small> </span>
                                                 </a>
                                             </div>
                                             <div class="flex-shrink-0">
                                                 <div class="d-flex gap-3">
-                                                    <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0" wire:click='download_drive({{$tblrecords[$recno->id]['entregaId']}})'>
+                                                    <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0" wire:click='download_drive({{$file['entregaId']}})'>
                                                         <i class="ri-download-2-line text-muted align-bottom me-1" ></i>
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                         @endif
                                     </td>
                                     <td>
