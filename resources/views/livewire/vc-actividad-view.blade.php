@@ -140,7 +140,7 @@
                                             $fecha = $tblrecords[$recno->id]['archivo'];
                                         @endphp-->
                                        
-                                        @if ($tblrecords[$recno->id]['archivo'])
+                                        @if ($tblrecords[$recno->id]['archivo']!="")
                                         @foreach ($tblrecords[$recno->id]['archivo'] as $key => $file)
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 text-muted">
