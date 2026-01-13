@@ -193,7 +193,7 @@ class VcActividadView extends Component
             
         }
         
-        dd($this->tblrecords);
+        
 
     }
 
