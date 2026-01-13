@@ -181,11 +181,16 @@ class VcActividadView extends Component
         foreach ($this->array_entregas as $key =>$entrega)
         { 
             $personaId = $entrega->persona_id;
-            $this->tblrecords[$personaId]['archivo'][] = [
-                'nombre'    => $entrega->nombre,
-                'fecha'      => $entrega->created_at,
-                'entrega_id' => $entrega->id,
-            ];
+            
+            if (!isset($this->tblrecords[$personaId]['archivo'])) {
+        $this->tblrecords[$personaId]['archivo'] = [];
+    }
+
+    $this->tblrecords[$personaId]['archivo'][] = [
+        'nombre'     => $entrega->nombre,
+        'fecha'      => $entrega->created_at,
+        'entrega_id' => $entrega->id,
+    ];
 
             /*$this->tblrecords[$personaId]['archivo'] =  $entrega->nombre;
             $this->tblrecords[$personaId]['fecha'] =  $entrega->create_at;
