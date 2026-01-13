@@ -165,7 +165,7 @@ class VcActividadView extends Component
             $this->tblrecords[$data->id]['personaId'] = $data->id;
             $this->tblrecords[$data->id]['nui'] = $data->identificacion;
             $this->tblrecords[$data->id]['nombres'] = $data->apellidos.' '.$data->nombres;
-            $this->tblrecords[$data->id]['archivo'] = "";
+            $this->tblrecords[$data->id]['archivo'] = [];
             $this->tblrecords[$data->id]['fecha'] = "";
             $this->tblrecords[$data->id]['entregaId'] = 0;
             $this->tblrecords[$data->id]['nota'] = 0;
