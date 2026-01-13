@@ -186,13 +186,14 @@ class VcActividadView extends Component
                 'fecha'      => $entrega->created_at,
                 'entrega_id' => $entrega->id,
             ];
-            
+
             /*$this->tblrecords[$personaId]['archivo'] =  $entrega->nombre;
             $this->tblrecords[$personaId]['fecha'] =  $entrega->create_at;
             $this->tblrecords[$personaId]['entregaId'] =  $entrega->id;*/
             
         }
         
+        dd($this->tblrecords);
 
     }
 
