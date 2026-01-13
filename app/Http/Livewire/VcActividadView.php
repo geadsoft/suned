@@ -177,11 +177,11 @@ class VcActividadView extends Component
         ->where('entrega',1)
         ->get();
 
-        $datafiles = [];
+
         foreach ($this->array_entregas as $key =>$entrega)
         { 
             $personaId = $entrega->persona_id;
-            $this->tblrecords[$personaId]['archivo'] = [
+            $this->tblrecords[$personaId]['archivo'][] = [
                 'nombre'    => $entrega->nombre,
                 'fecha'      => $entrega->created_at,
                 'entrega_id' => $entrega->id,
