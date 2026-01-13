@@ -145,7 +145,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 text-muted">
                                                 <a class="active"><i class="ri-attachment-2 align-bottom me-2"></i> 
-                                                <span class="file-list-link">{{$file->nombre}} <small class="text-muted"> 
+                                                <span class="file-list-link">{{$file['nombre']}} <small class="text-muted"> 
                                                 @lang('translation.'.(date('l',strtotime($file['fecha'])))),
                                                 {{date('d',strtotime($file['fecha']))}} de @lang('months.'.(date('m',strtotime($file['fecha'])))) del {{date('Y',strtotime($file['fecha']))}}
                                                 {{date('H:i',strtotime($file['fecha']))}}</small> </span>
