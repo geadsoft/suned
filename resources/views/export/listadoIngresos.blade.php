@@ -15,12 +15,12 @@ $positiveChanges = 0;
 <table class="table-text-center">
     <thead>
         <tr>
-            <th colspan="12">
+            <th colspan="13">
                 <p class="text-center" style="margin: 0px;">UNIDAD EDUCATIVA AMERICAN SCHOOL</p>
             </th> 
         </tr>
         <tr>
-            <th colspan="12">
+            <th colspan="13">
                 <p class="text-center" style="margin: 0px;">CONCILIACIÓN DE INGRESOS / COBROS</p>
             </th> 
         </tr> 

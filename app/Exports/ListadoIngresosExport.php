@@ -78,11 +78,12 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
             'E' => 37,
             'F' => 37,
             'G' => 15,
-            'H' => 40,
-            'I' => 20,
-            'J' => 21,
-            'K' => 15,
-            'L' => 25
+            'H' => 20,
+            'I' => 21,
+            'J' => 15,
+            'K' => 40,
+            'L' => 15,
+            'M' => 25
         ];
     }
 
@@ -98,7 +99,7 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
             // Styling an entire column.
             'C'  => ['font' => ['size' => 16]],
         ];*/
-        $range = 'A1:L3';
+        $range = 'A1:M3';
         $style = [
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
