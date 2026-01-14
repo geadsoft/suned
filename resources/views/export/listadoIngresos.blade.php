@@ -16,7 +16,7 @@ $positiveChanges = 0;
     <thead>
         <tr>
             <th colspan="12">
-                <p class="text-center" style="margin: 0px;">UNIDAD EDUCATIVA AMERICAN SCHOOL - {{$datos['nivel']}}</p>
+                <p class="text-center" style="margin: 0px;">UNIDAD EDUCATIVA AMERICAN SCHOOL</p>
             </th> 
         </tr>
         <tr>
