@@ -71,32 +71,18 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
 
     public function columnWidths():array{
         return [
-            'A' => 40,
-            'B' => 15,
-            'C' => 15,
+            'A' => 14,
+            'B' => 14,
+            'C' => 10,
             'D' => 15,
-            'E' => 15,
-            'F' => 15,
+            'E' => 37,
+            'F' => 37,
             'G' => 15,
-            'H' => 15,
-            'I' => 15,
-            'J' => 15,
+            'H' => 40,
+            'I' => 20,
+            'J' => 21,
             'K' => 15,
-            'L' => 15,
-            'M' => 15,
-            'N' => 15,
-            'O' => 15,
-            'P' => 15,
-            'Q' => 15,
-            'R' => 15,
-            'S' => 15,
-            'T' => 15,
-            'U' => 15,
-            'V' => 15,
-            'W' => 15,
-            'X' => 15,
-            'Y' => 15,
-            'Z' => 15
+            'L' => 25
         ];
     }
 
@@ -112,7 +98,7 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
             // Styling an entire column.
             'C'  => ['font' => ['size' => 16]],
         ];*/
-        $range = 'A1:K6';
+        $range = 'A1:L3';
         $style = [
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
