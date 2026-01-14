@@ -976,6 +976,18 @@ class VcFinalBulletin extends Component
         ->groupBy('persona_id')
         ->get();
 
+        /*$promo = TdBoletinFinal::query()
+        ->select('persona_id', DB::raw('COUNT(promocion) as total_supletorios'))
+        ->where('promocion', 'SUPLETORIO')
+        ->where('periodo_id',$this->filters['periodoId'])
+        ->where('modalidad_id',$this->filters['modalidadId'])
+        ->where('curso_id', $this->filters['paralelo'])
+        ->when($this->filters['estudianteId'], function($query) {
+            return $query->where('persona_id', $this->filters['estudianteId']);
+        })
+        ->groupBy('persona_id')
+        ->get()->pluck('total_supletorios', 'persona_id')->toArray();*/
+
         $this->tblrecords=[];
         $progeneral=[];
 
@@ -1014,7 +1026,6 @@ class VcFinalBulletin extends Component
            $progeneral[$personaId]['promanual'] = $nota['promedio_an'];
            $progeneral[$personaId]['promfinal'] = $nota['promedio_fn'];
         }
-
 
         $periodo = TmPeriodosLectivos::find($this->filters['periodoId']);
 
@@ -1071,16 +1082,17 @@ class VcFinalBulletin extends Component
             $conducta =  TdConductas::query()
             ->where("periodo_id",$this->filters['periodoId'])
             ->where("modalidad_id",$this->filters['modalidadId'])
-            ->where("termino",'1T')
             ->where("curso_id",$this->filters['paralelo'])
             ->where("persona_id",$person->id)
-            ->first();
+            ->select('termino','evaluacion','persona_id')
+            ->get()->toArray();
 
-            if($conducta){
-                $arrconducta[$person->id]['evaluacion'] = $conducta->evaluacion;
-            }else{
-                $arrconducta[$person->id]['evaluacion'] = '';
-            }
+            $arrconducta = collect($conducta)
+            ->groupBy('persona_id')
+            ->map(function ($items) {
+                return $items->pluck('evaluacion', 'termino');
+            })
+            ->toArray();
         } 
         
         if ($this->calificacion=="L"){
@@ -1121,7 +1133,7 @@ class VcFinalBulletin extends Component
 
         }
 
-        return $pdf->setPaper('a4','landscape')->stream('Informe Aprendizaje.pdf');
+        return $pdf->setPaper('a4','landscape')->stream('Boletin Final.pdf');
 
     }
 
