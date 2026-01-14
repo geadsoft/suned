@@ -52,7 +52,7 @@ $positiveChanges = 0;
             <td>{{$record["tipopago"]}}</td>
             <td>{{$record["referencia"]}}</td>
             <td>{{$record["entidad"]}}</td>
-
+            <td>{{number_format($record["valor"],2)}}</td>
             <td>{{$record["detalle"]}}</td>
             <td>{{number_format($record["pago"],2)}}</td>
             <td>{{$record["usuario"]}}</td>

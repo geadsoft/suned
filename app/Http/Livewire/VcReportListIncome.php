@@ -239,7 +239,7 @@ class VcReportListIncome extends Component
     public function exportExcel(){
 
         $data = json_encode($this->filters);
-        return Excel::download(new ListadoIngresosExport($data), 'Calificaciones Totales.xlsx');
+        return Excel::download(new ListadoIngresosExport($data), 'Conciliar Ingresos.xlsx');
 
     }
 
