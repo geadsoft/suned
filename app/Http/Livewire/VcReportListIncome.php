@@ -10,6 +10,10 @@ use PDF;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+use App\Exports\ListadoIngresosExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\Exportable;
+
 class VcReportListIncome extends Component
 {
     use WithPagination;
