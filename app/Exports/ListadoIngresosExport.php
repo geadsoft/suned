@@ -56,7 +56,7 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
             ->where('tr_cobros_cabs.fecha','<=',date('Ymd',strtotime($this->filters['srv_fechafin'])));
         })
         ->select('tr_cobros_cabs.fecha','tr_cobros_cabs.fechapago','tr_cobros_cabs.documento','tr_cobros_cabs.monto','p.nombres', 'p.apellidos', 's.descripcion', 'c.paralelo',
-        'cd.tipopago','dd.detalle','cd.referencia','bc.descripcion as entidad','cd.valor','tr_cobros_cabs.usuario'
+        'cd.tipopago','dd.detalle','cd.referencia','bc.descripcion as entidad','dd.valor','tr_cobros_cabs.usuario'
         )
         ->where('dd.tipo','<>','DES')
         ->where('tr_cobros_cabs.tipo','=','CP')
