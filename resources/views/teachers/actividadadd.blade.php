@@ -32,6 +32,10 @@
     
 
     <script>
+
+        window.addEventListener('msg-alert', event => {
+            swal("Mensaje!",event.detail.newName, "error");
+        })
        
         window.addEventListener('msg-grabar', event => {
             /*swal("Buen Trabajo!", event.detail.newName, "success");*/
