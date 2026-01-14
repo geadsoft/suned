@@ -15,20 +15,15 @@ $positiveChanges = 0;
 <table class="table-text-center">
     <thead>
         <tr>
-            <th colspan="{{$column}}">
+            <th colspan="12">
                 <p class="text-center" style="margin: 0px;">UNIDAD EDUCATIVA AMERICAN SCHOOL - {{$datos['nivel']}}</p>
             </th> 
         </tr>
         <tr>
-            <th colspan="{{$column}}">
+            <th colspan="12">
                 <p class="text-center" style="margin: 0px;">CONCILIACIÓN DE INGRESOS / COBROS</p>
             </th> 
         </tr> 
-        <tr>
-            <th colspan="{{$column}}">
-                <p class="text-center" style="margin: 0px;">{{$datos['curso']}}</p>
-            </th> 
-        </tr>
         <tr>
             <th>FECHA EMISIÓN</th>
             <th>FECHA PAGO</th>
