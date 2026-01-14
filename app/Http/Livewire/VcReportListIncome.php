@@ -232,5 +232,12 @@ class VcReportListIncome extends Component
         return $pdf->setPaper('a4')->stream('Cobros diarios.pdf');
     }
 
+    public function exportExcel(){
+
+        $data = json_encode($this->filters);
+        return Excel::download(new ListadoIngresosExport($data), 'Calificaciones Totales.xlsx');
+
+    }
+
 
 }

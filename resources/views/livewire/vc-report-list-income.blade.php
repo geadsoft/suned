@@ -4,18 +4,18 @@
             <div class="card" id="paymentList">
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
-                        <div class="row g-3">
-                            <div class="col-xxl-2 col-sm-4">
+                        <div class="row mb-3">
+                            <div class="col-sm-2">
                                 <div>
                                     <select class="form-select" name="cmbperiodo" wire:model="filters.srv_periodo" id="cmbperiodo">
-                                        <option value="">Select Period</option>
+                                        <option value="">Todos</option>
                                         @foreach ($tblperiodos as $periodo)
                                             <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                           <div class="col-xxl-2 col-sm-4">
+                           <div class="col-sm-2">
                                 <div>
                                     <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo" id="cmbgrupo">
                                         <option value="">Todos</option>
@@ -27,7 +27,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-xxl-3 col-sm-4">
+                            <div class="col-sm-4">
                                 <div>
                                     <select class="form-select" name="cmbcurso" wire:model="filters.srv_curso" id="cmbcurso">
                                         <option value="">Todos</option>
@@ -37,29 +37,38 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-auto ms-auto">
-                                <div class="form-check form-switch hstack text-nowrap gap-2">
-                                    <input class="form-check-input" type="checkbox" role="switch" wire:model="estado">
-                                    <label class="form-check-label" for="estado">Recibos anulados</label>
+                            <div class="col-sm-2">
+                                <div class="">
+                                        <input type="date" class="form-control" id="fechaini" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.srv_fechaini"> 
                                 </div>
                             </div>
-                            <div class="col-xxl-7 col-sm-4">
+                            <div class="col-sm-2">
+                                <div class="">
+                                        <input type="date" class="form-control" id="fechafin" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.srv_fechafin"> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
                                 <div class="search-box">
                                     <input type="text" class="form-control search"
                                         placeholder="Buscar por Apellidos, Nombre o Recibo" wire:model="filters.srv_nombre">
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
                             </div>
-                            <div class="col-xxl-2 col-sm-4">
-                                <div class="">
-                                        <input type="date" class="form-control" id="fechaini" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.srv_fechaini"> 
-                                </div>
+                            <div class="col-sm-1">
+                                <label class="form-check-label" for="estado">
+                                    Anulados
+                                </label>
+                               <div class="form-check form-switch vstack gap-1">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    role="switch"
+                                    id="estado"
+                                    wire:model="estado">
                             </div>
-                            <div class="col-xxl-2 col-sm-4">
-                                <div class="">
-                                        <input type="date" class="form-control" id="fechafin" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="filters.srv_fechafin"> 
-                                </div>
-                            </div>
+                            </div>                                                         
                             <div class="col-xxl-1 col-sm-4">
                                 <div>
                                     <button type="button" class="btn btn-primary w-100" wire:click="deleteFilters()"> <i
@@ -69,14 +78,13 @@
                                 </div>
                             </div>
                             <div class="col-md-auto ms-auto">
+                                <div class="col-md-auto ms-auto text-end">
                                 <div class="hstack text-nowrap gap-2">
-                                    <!--<a href="/download-pdf/cobros/{{$datos}}" class="btn btn-success"><i class="ri-download-2-line align-bottom me-1"></i>Download PDF</a>
-                                    <a href="/preview-pdf/cobros/{{$datos}}" class="btn btn-danger" target="_blank"><i class="ri-printer-fill align-bottom me-1"></i> Print</a>
-                                    <a class="btn btn-info add-btn" href="/financial/encashment-add"><i class="ri-add-fill me-1 align-bottom"></i> New Record</a>-->
+                                    <!--<a href="/preview-pdf/total-rating/{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" target="_blank"><i class="ri-printer-fill fs-22"></i></a>-->
+                                    <a href="" wire:click.prevent="exportExcel()" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-file-excel-2-line align-bottom fs-22"></i></a>
                                 </div>
                             </div>
-                            
-                            
+                            </div>
                         </div>
                         <!--end row-->
                     </form>
