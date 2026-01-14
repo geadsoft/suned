@@ -1,14 +1,10 @@
 <?php
 
 namespace App\Exports;
-
-
-use App\Models\TmPersonas; 
+use App\Models\TrCobrosCabs;
+use App\Models\TmGeneralidades;
 use App\Models\TmPeriodosLectivos;
-use App\Models\TmHorarios;
-use App\Models\TmHorariosDocentes;
-use App\Models\TmActividades;
-use App\Models\TdPeriodoSistemaEducativos;
+use App\Models\TmCursos;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -21,7 +17,7 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class CalificacionesTotalesExport implements FromView, WithColumnWidths, WithStyles
+class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
 {
     use Exportable;
 
