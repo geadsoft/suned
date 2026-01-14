@@ -61,7 +61,7 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
         ->where('dd.tipo','<>','DES')
         ->where('tr_cobros_cabs.tipo','=','CP')
         ->where('tr_cobros_cabs.estado','=',$this->filters['srv_estado'])
-        ->groupBy('fecha')
+        ->orderBy('tr_cobros_cabs.fecha')
         ->get();
 
         return view('export.listadoIngresos',[
