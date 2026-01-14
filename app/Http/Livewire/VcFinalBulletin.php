@@ -976,7 +976,7 @@ class VcFinalBulletin extends Component
         ->groupBy('persona_id')
         ->get();
 
-        /*$promo = TdBoletinFinal::query()
+        $promo = TdBoletinFinal::query()
         ->select('persona_id', DB::raw('COUNT(promocion) as total_supletorios'))
         ->where('promocion', 'SUPLETORIO')
         ->where('periodo_id',$this->filters['periodoId'])
@@ -986,7 +986,7 @@ class VcFinalBulletin extends Component
             return $query->where('persona_id', $this->filters['estudianteId']);
         })
         ->groupBy('persona_id')
-        ->get()->pluck('total_supletorios', 'persona_id')->toArray();*/
+        ->get()->pluck('total_supletorios', 'persona_id')->toArray();
 
         $this->tblrecords=[];
         $progeneral=[];
@@ -1111,6 +1111,7 @@ class VcFinalBulletin extends Component
                 'arrComentario' => $this->arrComentario,
                 'arrconducta' => $arrconducta,
                 'progeneral' => $progeneral,
+                'promo' => $promo,
             ]);
 
         }else{
@@ -1129,6 +1130,7 @@ class VcFinalBulletin extends Component
                 'arrComentario' => $this->arrComentario,
                 'arrconducta' => $arrconducta,
                 'progeneral' => $progeneral,
+                'promo' => $promo,
             ]);
 
         }

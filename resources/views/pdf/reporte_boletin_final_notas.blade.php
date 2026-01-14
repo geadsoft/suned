@@ -88,7 +88,7 @@
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #d2d3d6ff;" colspan="5">III TRIMESTRE</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;" rowspan="2">PROMEDIO ANUAL</th>
                     
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;" rowspan="2">EX. SUPLETORIO</th>
+                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;" rowspan="2">{{ ($promo[$record->id] ?? 0) > 0 ? 'EX. SUPLETORIO' : '' }}</th>
                     
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;" rowspan="2">PROMEDIO FINAL</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:30px;" rowspan="2">PROM. CUALITATIVO</th>
@@ -154,7 +154,7 @@
 
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{number_format($tblrecords[$record->id][$col->id]['promedio_anual'],2)}}</strong></td>
                         
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['supletorio'],2)}}</td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{ ($promo[$record->id] ?? 0) > 0 ? number_format($tblrecords[$record->id][$col->id]['supletorio'],2) : '' }}</td>
                         
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['promedio_final'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; font-size: 7px;"><strong>{{$tblrecords[$record->id][$col->id]['promedio_cualitativo']}}</strong></td>
