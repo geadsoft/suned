@@ -32,10 +32,11 @@ $positiveChanges = 0;
             <th>ESTUDIANTE</th>
             <th>CURSO</th>
             <th>FORMA DE PAGO</th>
-            <th>DETALLE</th>
             <th>REFERENCIA</th>
             <th>ENTIDAD</th>
             <th>VALOR</th>
+            <th>DETALLE</th>
+            <th>PAGO</th>
             <th>USUARIO</th>
         </tr>
     </thead>
@@ -49,10 +50,11 @@ $positiveChanges = 0;
             <td>{{$record["apellidos"]}} {{$record["nombres"]}}</td>
             <td>{{$record["descripcion"]}} {{$record["paralelo"]}}</td>
             <td>{{$record["tipopago"]}}</td>
-            <td>{{$record["detalle"]}}</td>
             <td>{{$record["referencia"]}}</td>
             <td>{{$record["entidad"]}}</td>
-            <td>{{number_format($record["valor"],2)}}</td>
+
+            <td>{{$record["detalle"]}}</td>
+            <td>{{number_format($record["pago"],2)}}</td>
             <td>{{$record["usuario"]}}</td>
         </tr> 
     @endforeach
