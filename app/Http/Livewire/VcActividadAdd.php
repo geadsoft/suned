@@ -235,7 +235,7 @@ class VcActividadAdd extends Component
             'puntaje' => 'required'
         ]);
 
-        if ($this->archivo=='SI'){
+        /*if ($this->archivo=='SI'){
 
             foreach ($this->array_attach as $attach){
                 $file = $attach['adjunto'];
@@ -249,7 +249,7 @@ class VcActividadAdd extends Component
                 }
             }
 
-        }
+        }*/
         
 
         $msgfile="";
