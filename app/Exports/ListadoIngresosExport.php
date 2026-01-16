@@ -37,30 +37,69 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
         ->join("tm_matriculas as m","m.id","=","dc.matricula_id")
         ->join("tm_personas as p","p.id","=","m.estudiante_id")
         ->join("tm_cursos as c","c.id","=","m.curso_id")
-        ->join("tm_servicios as s","s.id","=","c.servicio_id")  
-        ->join("tm_generalidades as bc","bc.id","=","cd.entidad_id") 
-        ->when($this->filters['srv_nombre'],function($query){
-            return $query->where('tr_cobros_cabs.documento',"{$this->filters['srv_nombre']}");
-        })        
-        ->when($this->filters['srv_periodo'],function($query){
-            return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
+        ->join("tm_servicios as s","s.id","=","c.servicio_id")
+        ->join("tm_generalidades as bc","bc.id","=","cd.entidad_id")
+
+        ->when($this->filters['srv_nombre'], function ($query) {
+            return $query->where('tr_cobros_cabs.documento', $this->filters['srv_nombre']);
         })
-        ->when($this->filters['srv_grupo'],function($query){
-            return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
+        ->when($this->filters['srv_periodo'], function ($query) {
+            return $query->where('m.periodo_id', $this->filters['srv_periodo']);
         })
-        ->when($this->filters['srv_curso'],function($query){
-            return $query->where('m.id',"{$this->filters['srv_curso']}");
+        ->when($this->filters['srv_grupo'], function ($query) {
+            return $query->where('m.modalidad_id', $this->filters['srv_grupo']);
         })
-        ->when($this->filters['srv_fechaini'],function($query){
-            return $query->where('tr_cobros_cabs.fecha','>=',date('Ymd',strtotime($this->filters['srv_fechaini'])))
-            ->where('tr_cobros_cabs.fecha','<=',date('Ymd',strtotime($this->filters['srv_fechafin'])));
+        ->when($this->filters['srv_curso'], function ($query) {
+            return $query->where('m.id', $this->filters['srv_curso']);
         })
-        ->select('tr_cobros_cabs.fecha','tr_cobros_cabs.fechapago','tr_cobros_cabs.documento','tr_cobros_cabs.monto','p.nombres', 'p.apellidos', 's.descripcion', 'c.paralelo',
-        'cd.tipopago','dd.detalle','cd.referencia','bc.descripcion as entidad','dd.valor as pago','cd.valor','tr_cobros_cabs.usuario'
+        ->when($this->filters['srv_fechaini'], function ($query) {
+            return $query->whereBetween(
+                'tr_cobros_cabs.fecha',
+                [
+                    date('Ymd', strtotime($this->filters['srv_fechaini'])),
+                    date('Ymd', strtotime($this->filters['srv_fechafin']))
+                ]
+            );
+        })
+
+        ->select(
+            'tr_cobros_cabs.fecha',
+            'tr_cobros_cabs.fechapago',
+            'tr_cobros_cabs.documento',
+            'tr_cobros_cabs.monto',
+            'p.nombres',
+            'p.apellidos',
+            's.descripcion',
+            'c.paralelo',
+            'cd.tipopago',
+            DB::raw("GROUP_CONCAT(dd.detalle ORDER BY dd.detalle SEPARATOR ', ') as detalle"),
+            'cd.referencia',
+            'bc.descripcion as entidad',
+            DB::raw('SUM(dd.valor) as pago'),
+            'cd.valor',
+            'tr_cobros_cabs.usuario'
         )
+
         ->where('dd.tipo','<>','DES')
         ->where('tr_cobros_cabs.tipo','=','CP')
         ->where('tr_cobros_cabs.estado','=',$this->filters['srv_estado'])
+
+        ->groupBy(
+            'tr_cobros_cabs.fecha',
+            'tr_cobros_cabs.fechapago',
+            'tr_cobros_cabs.documento',
+            'tr_cobros_cabs.monto',
+            'p.nombres',
+            'p.apellidos',
+            's.descripcion',
+            'c.paralelo',
+            'cd.tipopago',
+            'cd.referencia',
+            'bc.descripcion',
+            'cd.valor',
+            'tr_cobros_cabs.usuario'
+        )
+
         ->orderBy('tr_cobros_cabs.fecha')
         ->get();
 
