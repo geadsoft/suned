@@ -69,7 +69,7 @@ class VcLibrary extends Component
         ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
         ->join("tm_generalidades as g2","g2.id","=","s.nivel_id")
         ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->where("d.docente_id",$this->docenteId)        
+        /*->where("d.docente_id",$this->docenteId)*/        
         ->selectRaw('g.descripcion as modalidad,g2.descripcion as nivel,s.descripcion as curso,s.id')
         ->groupByRaw('g.descripcion,g2.descripcion,s.descripcion,s.id')
         ->get();

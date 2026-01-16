@@ -94,7 +94,7 @@
     </div>
 
     <div class="modal fade show" id="addBookModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" wire:ignore.self>
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content border-0">
                 
                 <div class="modal-body">
@@ -160,7 +160,45 @@
                                         <h5 class="card-title mb-0">Cursos</h5>
                                     </div>
                                     <div class="card-body">
+                                        <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3" role="tablist">
                                         @foreach ($tblparalelo as $modalidad => $niveles)
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ $modalidad == 'Presencial' ? 'active' : '' }} py-3" data-bs-toggle="tab" id="{{$modalidad}}" href="#detalle-{{$modalidad}}" role="tab"
+                                                aria-selected="true">
+                                                <i class=" me-1 align-bottom"></i> {{$modalidad}}
+                                            </a>
+                                        </li>
+                                        @endforeach
+                                        <div class="tab-content text-muted">
+                                            @foreach ($tblparalelo as $modalidad => $niveles)
+                                                <div class="tab-pane fade {{ $modalidad == 'Presencial' ? 'show active' : '' }}"
+                                                    id="detalle-{{$modalidad}}"
+                                                    role="tabpanel">
+                                                    @foreach ($niveles as $nivel => $cursos)
+                                                        <li>
+                                                            <em>{{ $nivel }}</em>
+                                                            <ul>
+                                                                @foreach ($cursos as $curso)
+                                                                    <li>
+                                                                        <label>
+                                                                            <input type="checkbox" wire:model.defer="selectedCursos" value="{{ $curso->id }}">
+                                                                            {{ $curso->curso }}
+                                                                        </label>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </li>
+                                                    @endforeach
+                                                </div>
+                                            @endforeach
+                                        </div>
+
+
+
+
+
+                                        </ul>
+                                        <!--@foreach ($tblparalelo as $modalidad => $niveles)
                                         <strong>{{ $modalidad }}</strong>
                                         <ul>
                                             @foreach ($niveles as $nivel => $cursos)
@@ -179,7 +217,7 @@
                                                 </li>
                                             @endforeach
                                         </ul>
-                                        @endforeach
+                                        @endforeach-->
                                     </div>
                                 </div>
                             </div>
