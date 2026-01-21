@@ -287,7 +287,6 @@ class VcStatisticalGraphs extends Component
             return $query->where('m.modalidad_id',"{$this->filters['idgrupo']}");
         })
         ->where('tr_cobros_cabs.tipo','CP')
-        ->where('d.tipo','PAG')
         ->where('tr_cobros_cabs.estado','P')
         ->whereRaw('year(tr_cobros_cabs.fechapago) = '.$this->filters['anioingreso'])
         ->whereRaw('month(tr_cobros_cabs.fechapago) <= '.$this->filters['mesingreso'])
