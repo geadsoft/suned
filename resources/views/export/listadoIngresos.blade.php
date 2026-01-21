@@ -15,12 +15,12 @@ $positiveChanges = 0;
 <table class="table-text-center">
     <thead>
         <tr>
-            <th colspan="13">
+            <th colspan="12">
                 <p class="text-center" style="margin: 0px;">UNIDAD EDUCATIVA AMERICAN SCHOOL</p>
             </th> 
         </tr>
         <tr>
-            <th colspan="13">
+            <th colspan="12">
                 <p class="text-center" style="margin: 0px;">CONCILIACIÓN DE INGRESOS / COBROS</p>
             </th> 
         </tr> 
@@ -36,7 +36,6 @@ $positiveChanges = 0;
             <th>ENTIDAD</th>
             <th>VALOR</th>
             <th>DETALLE</th>
-            <th>PAGO</th>
             <th>USUARIO</th>
         </tr>
     </thead>
@@ -54,7 +53,6 @@ $positiveChanges = 0;
             <td>{{$record["entidad"]}}</td>
             <td>{{number_format($record["valor"],2)}}</td>
             <td>{{$record["detalle"]}}</td>
-            <td>{{number_format($record["pago"],2)}}</td>
             <td>{{$record["usuario"]}}</td>
         </tr> 
     @endforeach

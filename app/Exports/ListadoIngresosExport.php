@@ -122,8 +122,7 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
             'I' => 21,
             'J' => 15,
             'K' => 40,
-            'L' => 15,
-            'M' => 25
+            'L' => 25,
         ];
     }
 
