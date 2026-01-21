@@ -280,9 +280,9 @@ class VcStatisticalGraphs extends Component
         $cobros = TrCobrosCabs::query()
         ->join("tr_cobros_dets as d","d.cobrocab_id","=","tr_cobros_cabs.id")
         ->join("tm_matriculas as m","m.id","=","tr_cobros_cabs.matricula_id")
-        ->when($this->filters['idperiodo'],function($query){
+        /*->when($this->filters['idperiodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['idperiodo']}");
-        })
+        })*/
         ->when($this->filters['idgrupo'],function($query){
             return $query->where('m.modalidad_id',"{$this->filters['idgrupo']}");
         })
