@@ -195,14 +195,21 @@ class VcStatisticalGraphs extends Component
         $ldate     = date('Y-m-d H:i:s');
         $mesactual = intval(date('m',strtotime($ldate)));
 
-        $tmpPeriodo = TmPeriodosLectivos::find($this->filters['idperiodo']);
-        $periodo = $tmpPeriodo->periodo;
-        
-        $montoMes = TrCobrosCabs::query()
-        ->whereYear('fechapago',$periodo)
-        ->whereMonth('fechapago', $mesactual)
-        ->where('estado', 'P')
-        ->get();
+        if($this->filters['idperiodo']==''){
+
+            $montoMes = TrCobrosCabs::query()
+            ->where('estado', 'P')
+            ->get();
+        }else{
+             $tmpPeriodo = TmPeriodosLectivos::find($this->filters['idperiodo']);
+            $periodo = $tmpPeriodo->periodo;
+            
+            $montoMes = TrCobrosCabs::query()
+            ->whereYear('fechapago',$periodo)
+            ->whereMonth('fechapago', $mesactual)
+            ->where('estado', 'P')
+            ->get();
+        }      
 
         $this->ingTotal = $montoMes->sum('monto');
     }
