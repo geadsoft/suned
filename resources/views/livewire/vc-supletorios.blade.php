@@ -14,24 +14,37 @@
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form>
                         <div class="row g-3 mb-3">
-                            <div class="col-xxl-5 col-sm-6">
+                            <div class="col-xxl-1 col-sm-6">
+                                <select class="form-select" id="select_periodo" data-choices data-choices-search-false  wire:model="filters.periodoId">
+                                    @foreach ($tblperiodos as $periodos) 
+                                    <option value="{{$periodos->id}}">{{$periodos->periodo}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="col-xxl-2 col-sm-6">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.modalidadId">
+                                    @foreach ($tblmodalidad as $modalidad) 
+                                    <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="col-xxl-3 col-sm-6">
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.paralelo">
-                                    <option value="">Seleccione Paralelo</option>
+                                    <option value="">Seleccione Curso</option>
                                    @foreach ($tblparalelo as $paralelo) 
                                     <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
                                     @endforeach 
                                 </select>
                             </div>
-                            <!--<div class="col-xxl-2 col-sm-4">
-                                <div>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.tipo">
-                                        <option value="">Seleccione Actividad</option>
-                                        <option value="AI">Actividad Individual</option>
-                                        <option value="AG">Actividad Grupal</option>
-                                    </select>
-                                </div>
-                            </div>-->
-                            <!--end col-->
+                            
+                            <div class="col-xxl-2 col-sm-6">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false  wire:model="filters.asignaturaId">
+                                    <option value="">Seleccione Asignatura</option>
+                                   @foreach ($tblasignaturas as $asignatura) 
+                                    <option value="{{$asignatura->id}}">{{$asignatura->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino">
@@ -42,16 +55,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <!--end col-->
-                            <!--<div class="col-xxl-2 col-sm-4">
-                                <div>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque">
-                                        <option value="">Seleccione Bloque</option>
-                                        <option value="1P" selected>Primer Parcial</option>
-                                    </select>
-                                </div>
-                            </div>-->
-                            <!--end col-->
                             <div class="col-xxl-1 col-sm-4">
                                 <div>
                                     <button type="button" class="btn btn-primary w-100" onclick="SearchData();"> <i
@@ -88,7 +91,7 @@
                                         <td>{{$record['curso']}}</td>
                                         <td>{{$record['aula']}}</td>
                                         <td>{{$record['asignatura']}}</td>
-                                        <td> {{$arrtermino[$record['termino']]}}</td>
+                                        <td> {{$arrtermino[$record['tipo']]}}</td>
                                         <td>{{$record['nombre']}}</td>
                                         <td>{{$record['fecha']}}</td>
                                         <td>{{$record['created_at']}}</td>

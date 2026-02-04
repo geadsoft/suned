@@ -33,18 +33,43 @@
     <script>
        
         window.addEventListener('msg-grabar', event => {
-            swal("Buen Trabajo!", event.detail.newName, "success");
+            /*swal("Buen Trabajo!", event.detail.newName, "success");*/
+            Swal.fire({
+            title: 'Buen Trabajo!',
+            html:  event.detail.newName,
+            icon: 'success',
+            confirmButtonClass: 'btn btn-primary w-xs mt-2',
+            confirmButtonText: 'OK'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.emit('retornar'); // Actualiza la misma página
+            }
+            });
         })
 
-        window.addEventListener('chk-editor', event => {
+        window.addEventListener('iniciar-descarga', event => {
+            const url = event.detail.url;
+            window.open(url, '_blank');
+        });
 
-            ClassicEditor.create(document.querySelector('#ckeditor-classic')).then(function (editor) {
-            editor.ui.view.editable.element.style.height = '200px';
-            })["catch"](function (error) {
-            console.error(error);
-            });
-
-         })
+        document.addEventListener('livewire:load', function () {
+            ClassicEditor
+                .create(document.querySelector('#editor'))
+                .then(function(editor){
+                    editor.model.document.on('change:data',()=> {
+                        Livewire.emit('updateEditorData', editor.getData());
+                    })
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        })
+        
+        Livewire.on('setEditorData', (datosDelEditor) => {
+            alert(datosDelEditor);
+            const editor = ClassicEditor.instances['editor']; // Si tienes múltiples instancias, usa el selector correspondiente
+            editor.setData(datosDelEditor);
+        });
 
     </script>
     

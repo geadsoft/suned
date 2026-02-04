@@ -36,6 +36,8 @@ class VcAccountStatus extends Component
         'idactual' => 0,
     ];
 
+    
+
     public function render()
     {
        
@@ -280,6 +282,25 @@ class VcAccountStatus extends Component
         ]);
 
         return $pdf->setPaper('a4')->stream('Estado de Cuenta.pdf');
+    }
+
+    public function printCertificadoPDF($matriculaId)
+    {
+        $matricula = TmMatricula::find($matriculaId);
+
+        $ldate = date('Y-m-d H:i:s');
+        $fecha = date('Y-m-d',strtotime($ldate));
+        $mes  = ["01" => 'Enero', "02" => 'Febrero', "03" => 'Marzo', "04" => 'Abril', "05" => 'Mayo', "06" => 'Junio',
+        "07" => 'Julio', "08" => 'Agosto', "09" => 'Septiembre', "10" => 'Octubre', "11" => 'Noviembre', "12" => 'Diciembre'];
+
+        $pdf = PDF::loadView('reports/certificado_valores',[
+            'data' => $matricula,
+            'fecha' => $fecha,
+            'mes' => $mes,
+        ]);
+
+        return $pdf->setPaper('a4')->stream('Certificado Deuda.pdf');
+
     }
 
     

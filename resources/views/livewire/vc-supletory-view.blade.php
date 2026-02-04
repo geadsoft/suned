@@ -11,55 +11,52 @@
                         </div>
                         <div class="card-body border border-dashed border-end-0 border-start-0">  
                             <div class="row align-items-start mb-3">
-                                <div class="col-sm-2">
-                                    <div class="mb-3">
-                                        <label for="asignatura-input" class="form-label form-control border-0 fw-semibold fs-14">Asignatura</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="curso-input" class="form-label form-control border-0 fw-semibold fs-14">Curso</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="termino-input" class="form-label form-control border-0 fw-semibold fs-14">Tipo de Exámen</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="nombre-input" class="form-label form-control border-0 fw-semibold fs-14">Nombre de Exámen</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="puntaj-input" class="form-label form-control border-0 fw-semibold fs-14">Puntaje</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="fecha-input" class="form-label form-control border-0 fw-semibold fs-14">Fecha Limite de Entrega</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="descripcion-input" class="form-label form-control border-0 fw-semibold fs-14">Descripcion de Actividad</label>
-                                    </div>
-                                   
-                                </div>
-                                <div class="col-sm-10">  
-                                    <div class="mb-3">
-                                        <label class="form-control border-0 fs-14">{{$asignatura}}</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-control border-0 fs-14">{{$curso}}</label>
-                                    </div>
-                                    <div class="mb-3">
-                                      <label class="form-control border-0 fs-14">{{$arrtermino[$termino]}}</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-control border-0 fs-14">{{$nombre}}</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-control border-0 fs-14">{{$puntaje}}</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-control border-0 fs-14"> @lang('translation.'.(date('l',strtotime($fecha)))),
-                                            {{date('d',strtotime($fecha))}} de @lang('months.'.(date('m',strtotime($fecha)))) del {{date('Y',strtotime($fecha))}}
-                                        </label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-control border-0 fs-14">{{$descripcion}}</label>
-                                    </div>
-                                    
+                                <div class="table-responsive">
+                                    <table class="table table-borderless table-nowrap">
+                                    <tbody>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Asignatura</td>
+                                            <td class="fs-14">{{$asignatura}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Curso</td>
+                                            <td class="fs-14">{{$curso}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Termino</td>
+                                            <td class="fs-14">{{$arrtipo[$tipo]}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Nombre</td>
+                                            <td class="fs-14">{{$nombre}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Puntaje</td>
+                                            <td class="fs-14">{{$puntaje}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Fecha Limite</td>
+                                            <td class="fs-14">@lang('translation.'.(date('l',strtotime($fecha)))),
+                                            {{date('d',strtotime($fecha))}} de @lang('months.'.(date('m',strtotime($fecha)))) del {{date('Y',strtotime($fecha))}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Hora Limite</td>
+                                            <td class="fs-14">{{date('H:i',strtotime($fecha))}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Descripción</td>
+                                            <td class="fs-14">
+                                                <body onload="addElement({{$descripcion}})">
+                                                <div id="elemnt"></div>
+                                                </body>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold fs-14" width="17%" >Estado</td>
+                                            <td class="border-0 fs-14 badge bg-primary">{{$arrestado[$estado]}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                                 </div>
                             </div>
 
@@ -67,17 +64,29 @@
                                 <label class="form-label form-control border-0 fw-semibold fs-14">Archivos Adjuntos</label>
                                 <table class="table table-nowrap align-middle" id="orderTable">
                                     <tbody>
-                                    @foreach ($array_attach as $key => $recno) 
-                                    <tr class="det-{{$recno['linea']}}">
-                                    <td>
-                                        <div class="input-group">
-                                        <input type="file" id="file-{{$recno['linea']}}" wire:model.prevent="" class="form-control">
+                                    @foreach ($array_attach as $key => $file) 
+                                    <div class="d-flex align-items-center border border-dashed p-2 rounded">
+                                        
+                                        <div class="flex-shrink-0 avatar-sm">
+                                            <div class="avatar-title bg-light rounded">
+                                                <i class="ri-attachment-2 fs-20 text-info"></i>
+                                            </div>
                                         </div>
-                                    </td>
-                                    </tr>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-1">
+                                            <!--<a href="{{ route('archivo.descargar', ['id' => $file['id']]) }}" target="_blank">
+                                                {{ $file['adjunto'] }}
+                                            </a>-->
+                                            <a href="{{ route('archivo.descargar', ['id' => $file['id']]) }}" download> {{$file['adjunto']}}</a>
+                                            </h6>
+                                        </div>
+                                        <!--<div class="hstack gap-3 fs-16">
+                                            <a type="button" class="text-muted" wire:click='download_drive({{$file['id']}})'><i class="ri-download-2-line"></i></a>
+                                        </div>-->
+                                    </div>
                                     @endforeach
                                     </tbody>
-                                </table>
+                                </table> 
                                  <!-- warning Alert -->
                                  @if (empty($array_attach))
                                     <div class="alert alert-warning" role="alert">
@@ -88,17 +97,78 @@
 
                             <div class="mb-3">
                                 <label class="form-label form-control border-0 fw-semibold fs-14">Links Externos</label>
-                            </div>
-                            <!--<div class="mb-3">
-                                <label class="form-label fw-semibold" for="product-title-input">Envíos de Estudiantes</label>
-                                <input type="text" class="form-control" id="product-title-input" value="" placeholder="Ingrese enlace externo" wire:model.defer="enlace">
-                            </div>-->
-                            <div class="alert alert-warning" role="alert">
-                                <strong> Esta actividad no tiene respuestas de estudiantes. </strong>
-                            </div>
+                                <!--<input type="text" class="form-control" id="product-title-input" placeholder="Ingrese enlace externo" pattern="https://.*" size="30" wire:model.defer="enlace" disabled>-->
+                                 @if($enlace<>'')
+                                
+                                    <div class="d-flex mb-3">
+                                        <div class="flex-grow-1 ms-3">
+                                            <p class="text-muted mb-2">{{$enlace}}</p>
+                                        </div>
+                                        <div>
+                                           
+                                            <a href="{{$enlace}}" class="badge bg-primary-subtle text-primary" target="_blank" src="about:blank">Abri Enlace<i class="ri-arrow-right-up-line align-bottom"></i></a>
+                                            
+                                        </div>
+                                    </div>
+                                
+                                @endif
 
-                            <div class="d-flex align-items-start gap-3 mt-4">
-                                <a class="btn btn-soft-info w-sm" href="/activities/exams"><i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Volver al Listado</a>
+
+                            </div>
+                            
+                            <div class="mb-3">
+                                <table class="table table-nowrap table-sm align-middle" id="orderTable">
+                                    <thead class="text-muted table-light">
+                                        <tr class="text-uppercase">
+                                            <th colspan="2">Entregas</th>
+                                            <th class="text-center">Nota</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach ($personas as $key => $recno) 
+                                    <tr class="tr-{{$key}}">
+                                    <td>{{$recno->apellidos}} {{$recno->nombres}}</td>
+                                    <td>
+                                        @php
+                                            $fecha = $tblrecords[$recno->id]['archivo'];
+                                        @endphp
+                                        @if ($fecha!="")
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 text-muted">
+                                                <a class="active"><i class="ri-attachment-2 align-bottom me-2"></i> 
+                                                <span class="file-list-link">{{$tblrecords[$recno->id]['archivo']}} <small class="text-muted"> 
+                                                @lang('translation.'.(date('l',strtotime($fecha)))),
+                                                {{date('d',strtotime($fecha))}} de @lang('months.'.(date('m',strtotime($fecha)))) del {{date('Y',strtotime($fecha))}}
+                                                {{date('H:i',strtotime($fecha))}}</small> </span>
+                                                </a>
+                                            </div>
+                                            <div class="flex-shrink-0">
+                                                <div class="d-flex gap-3">
+                                                    <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0" wire:click='download_drive({{$tblrecords[$recno->id]['entregaId']}})'>
+                                                        <i class="ri-download-2-line text-muted align-bottom me-1" ></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" min="0" max="10" value="0" class="form-control product-price bg-white border-0 text-center"
+                                            id="nota-{{$key}}" wire:model="tblrecords.{{$recno->id}}.nota" {{$control}}/>
+                                    </td>
+                                    </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table> 
+                            </div>
+                            <div class="d-flex justify-content-between align-items-start mt-4">
+                                <a class="btn btn-soft-info w-sm" href="/activities/suppletory">
+                                    <i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Volver al Listado
+                                </a>
+
+                                <a class="btn btn-soft-success w-sm" wire:click="grabarNota">
+                                    <i class="label-icon align-middle fs-16 me-2"></i>Grabar Nota
+                                </a>
                             </div>
 
                         </div>

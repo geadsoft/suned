@@ -93,6 +93,7 @@ Route::get('/report/quarterly-student',[App\Http\Controllers\DocentesController:
 Route::get('/report/partial-subject',[App\Http\Controllers\DocentesController::class, 'asignatura_parcial'])->name('asignatura_parcial');
 Route::get('/report/quarterly-subject',[App\Http\Controllers\DocentesController::class, 'asignatura_trimestral'])->name('asignatura_trimestral');
 
+
 Route::get('/report/student-grades',[App\Http\Controllers\EstudiantesController::class, 'student_grades'])->name('student_grades');
 Route::get('/report/note-activity',[App\Http\Controllers\EstudiantesController::class, 'note_activity'])->name('note_activity');
 
@@ -186,8 +187,8 @@ Route::get('/student/report-card',[App\Http\Controllers\EstudiantesController::c
 Route::get('/student/qualify-conduct',[App\Http\Controllers\EstudiantesController::class, 'qualify_conduct'])->name('qualify_conduct');
 Route::get('/student/partial-bulletin',[App\Http\Controllers\EstudiantesController::class, 'partial_bulletin'])->name('partial_bulletin');
 Route::get('/student/final-bulletin',[App\Http\Controllers\EstudiantesController::class, 'final_bulletin'])->name('final_bulletin');
-Route::get('/descargar-archivo/{id}', [ArchivoController::class, 'descargar'])->name('archivo.descargar');
 
+Route::get('/descargar-archivo/{id}', [ArchivoController::class, 'descargar'])->name('archivo.descargar');
 Route::get('/view-pdf/{fileId}/download', [\App\Http\Controllers\DocumentDownloadController::class, 'downloadById'])
     ->name('pdf.download')
     ->middleware('auth'); // opcional
@@ -234,6 +235,7 @@ Route::get('/preview-pdf/informacion-student/{id}',[VcStudents::class, 'printFic
 Route::get('/preview-pdf/report-card/{data}',[VcReportCard::class, 'printPDF']);
 Route::get('/preview-pdf/partial-bulletin/{data}',[VcPartialBulletin::class, 'printPDF']);
 Route::get('/preview-pdf/final-bulletin/{data}',[VcFinalBulletin::class, 'printPDF']);
+Route::get('/preview-pdf/debt-certificate/{id}',[VcAccountStatus::class, 'printCertificadoPDF']);
 
 
 Route::get('/invoice/genera/{id}',[VcGeneraXML::class, 'setGeneraXML']);
