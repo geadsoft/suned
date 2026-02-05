@@ -149,8 +149,6 @@ class VcFinalBulletin extends Component
                 $map[$row->persona_id . '|' . $row->asignatura_id] = $row;
             }
 
-            dd($this->tblrecords);
-
             // 4) Dentro de una transacción, crear o actualizar según exista en el mapa
             DB::transaction(function() use ($map, $periodo, $modalidad, $curso, $term) {
                 foreach ($this->tblrecords as $personaId => $record) {
@@ -166,8 +164,8 @@ class VcFinalBulletin extends Component
                             "{$term}_nota70"        => isset($data['nota70']) ? floatval($data['nota70']) : null,
                             "{$term}_evaluacion"    => isset($data['examen']) ? floatval($data['examen']) : null,
                             "{$term}_nota30"        => isset($data['nota30']) ? floatval($data['nota30']) : null,
-                            "{$term}_supletorio"    => isset($data['supletorio']) ? floatval($data['supletorio']) : null,
-                            "{$term}_notatrimestre" => isset($data['cuantitativo']) ? floatval($data['cuantitativo']) : null,                            
+                            "{$term}_notatrimestre" => isset($data['cuantitativo']) ? floatval($data['cuantitativo']) : null,
+                            "supletorio"            => isset($data['supletorio']) ? floatval($data['supletorio']) : null,                            
                         ];
 
                         if (isset($map[$key])) {
