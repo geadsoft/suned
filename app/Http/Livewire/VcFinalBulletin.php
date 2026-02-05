@@ -165,6 +165,7 @@ class VcFinalBulletin extends Component
                             "{$term}_evaluacion"    => isset($data['examen']) ? floatval($data['examen']) : null,
                             "{$term}_nota30"        => isset($data['nota30']) ? floatval($data['nota30']) : null,
                             "{$term}_notatrimestre" => isset($data['cuantitativo']) ? floatval($data['cuantitativo']) : null,
+                            "{$term}_supletorio" => isset($data['supletorio']) ? floatval($data['supletorio']) : null,
                         ];
 
                         if (isset($map[$key])) {
