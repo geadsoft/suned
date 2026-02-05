@@ -575,6 +575,8 @@ class VcFinalBulletin extends Component
             ->selectRaw('d.asignatura_id, ROUND(AVG(n.nota), 2) as promedio')
             ->pluck('promedio', 'asignatura_id');
 
+            dd($this->tblrecords,$supletorios);
+
             foreach ($supletorios as $key => $objnota){
                 
                 $fil = $key;
