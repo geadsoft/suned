@@ -530,25 +530,14 @@ class VcFinalBulletin extends Component
             $bloque = $this->filters['bloque'] ?? null;
             $bloqueEx = $bloque ? str_replace('P', 'E', $bloque) : null;
             
+
+            //Examenes
             $examen = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
             ->join('tm_horarios_docentes as d', function($join) {
                 $join->on('d.id', '=', 'tm_actividades.paralelo')
                     ->on('d.docente_id', '=', 'tm_actividades.docente_id');
             })
-            /*->join("tm_horarios as h","h.id","=","d.horario_id")
-            ->when(
-                $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
-                function ($query) {
-                    $query->where('h.curso_id', $this->filters['paralelo']);
-                }
-            )
-            ->when(
-                $this->filters['paralelo_pase'] > 0,
-                function ($query) {
-                    $query->where('h.curso_id', $this->filters['paralelo_pase']);
-                }
-            )*/
             ->when(!empty($this->filters['termino']), function($query) {
                 return $query->where('tm_actividades.termino', $this->filters['termino']);
             })
@@ -569,6 +558,29 @@ class VcFinalBulletin extends Component
                     $this->tblrecords[$idPerson][$fil]['examen'] = $objnota;
                 }
             }
+
+            //Supletorios
+            $supletorios = TmActividades::query()
+            ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
+            ->join('tm_horarios_docentes as d', function($join) {
+                $join->on('d.id', '=', 'tm_actividades.paralelo')
+                    ->on('d.docente_id', '=', 'tm_actividades.docente_id');
+            })
+            ->where('tm_actividades.tipo', 'ES')
+            ->where('n.persona_id', $idPerson)
+            ->groupBy('d.asignatura_id')
+            ->selectRaw('d.asignatura_id, ROUND(AVG(n.nota), 2) as promedio')
+            ->pluck('promedio', 'asignatura_id');
+
+            foreach ($supletorios as $key => $objnota){
+                
+                $fil = $key;
+                
+                if (isset($this->tblrecords[$idPerson][$fil]['supletrio'])) {
+                    $this->tblrecords[$idPerson][$fil]['supletorio'] = $objnota;
+                }
+            }
+
         
         }
 
