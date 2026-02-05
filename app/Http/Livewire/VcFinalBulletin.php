@@ -586,8 +586,6 @@ class VcFinalBulletin extends Component
         
         }
 
-        dd($this->tblrecords,$supletorios);
-
         // Calcula Promedio
         foreach ($this->tblrecords as $key1 => $records){
 
