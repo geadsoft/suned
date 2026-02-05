@@ -577,7 +577,7 @@ class VcFinalBulletin extends Component
                 
                 $fil = $key;
                 
-                if (isset($this->tblrecords[$idPerson][$fil]['supletrio'])) {
+                if (isset($this->tblrecords[$idPerson][$fil]['supletorio'])) {
                     $this->tblrecords[$idPerson][$fil]['supletorio'] = $objnota;
                 }
             }
