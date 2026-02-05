@@ -583,10 +583,10 @@ class VcFinalBulletin extends Component
                     $this->tblrecords[$idPerson][$fil]['supletorio'] = $objnota;
                 }
             }
-
-            dd($this->tblrecords,$supletorios);
         
         }
+
+        dd($this->tblrecords,$supletorios);
 
         // Calcula Promedio
         foreach ($this->tblrecords as $key1 => $records){
