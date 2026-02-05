@@ -401,6 +401,7 @@ class VcFinalBulletin extends Component
                 $this->tblrecords[$idPerson][$index]['nota70'] = 0.00;
                 $this->tblrecords[$idPerson][$index]['examen'] = 0.00;
                 $this->tblrecords[$idPerson][$index]['nota30'] = 0.00;
+                $this->tblrecords[$idPerson][$index]['supletorio'] = 0.00;
                 $this->tblrecords[$idPerson][$index]['cuantitativo'] = 0.00;
                 $this->tblrecords[$idPerson][$index]['cualitativo'] = "";
             }
@@ -429,6 +430,7 @@ class VcFinalBulletin extends Component
             $this->tblrecords[$idPerson]['ZZ']['nota70'] = 0.00;
             $this->tblrecords[$idPerson]['ZZ']['examen'] = 0.00;
             $this->tblrecords[$idPerson]['ZZ']['nota30'] = 0.00;
+            $this->tblrecords[$idPerson]['ZZ']['supletorio'] = 0.00;
             $this->tblrecords[$idPerson]['ZZ']['cuantitativo'] = 0.00;
             $this->tblrecords[$idPerson]['ZZ']['cualitativo'] = "";
         
