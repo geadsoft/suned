@@ -55,7 +55,7 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
         })
         ->when($this->filters['srv_fechaini'], function ($query) {
             return $query->whereBetween(
-                'tr_cobros_cabs.fechapago',
+                'tr_cobros_cabs.fecha',
                 [
                     date('Ymd', strtotime($this->filters['srv_fechaini'])),
                     date('Ymd', strtotime($this->filters['srv_fechafin']))
