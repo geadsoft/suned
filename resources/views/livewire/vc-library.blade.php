@@ -192,11 +192,6 @@
                                                 </div>
                                             @endforeach
                                         </div>
-
-
-
-
-
                                         </ul>
                                         <!--@foreach ($tblparalelo as $modalidad => $niveles)
                                         <strong>{{ $modalidad }}</strong>
@@ -233,6 +228,11 @@
                                 Cargando archivo...
                             </div>
                         </div>
+                        @if ($errors->has('record.archivo'))
+                            <div class="alert alert-danger">
+                                {{ $errors->first('record.archivo') }}
+                            </div>
+                        @endif
                         <div class="hstack gap-2 justify-content-end">
                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
                             <button type="submit" class="btn btn-success" id="addNewMember">Grabar</button>

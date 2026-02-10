@@ -19,12 +19,8 @@
 @endsection
 @section('script')
 
-    <script src="{{ URL::asset('build/libs/nouislider/nouislider.min.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/wnumb/wNumb.min.js') }}"></script>
-
-    <script src="{{ URL::asset('build/js/pages/apps-nft-explore.init.js') }}"></script>
-
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
+    <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
 
     <script>       
 
@@ -35,7 +31,7 @@
         window.addEventListener('hide-form', event => {
             $('#addBookModal').modal('hide');
         })
-
+        
     </script>
 
 @endsection

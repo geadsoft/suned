@@ -123,77 +123,88 @@ class VcLibrary extends Component
 
     }
 
+    public function updatedRecordArchivo()
+    {
+        $this->validateOnly(
+            'record.archivo',
+            [
+                'record.archivo' => 'required|file|mimes:pdf|max:30720',
+            ],
+            [
+                'record.archivo.max' => 'El archivo PDF supera el tamaño máximo de 30 MB.',
+            ]
+        );
+    }
 
     public function createData(){
 
-        /*$this ->validate([
-            'record.periodoId' => 'required',
-            'record.docenteId' => 'required',
-            'record.nombre' => 'required',
-            'record.autor' => 'required',
-            'record.portada' => 'required',
-            'record.archivo' => 'required',
-            'record.asignatura' => 'required',
-        ]);*/
-
-        $this->validate([
-            'record.archivo' => 'required|file|mimes:pdf|max:204800', // 204800 KB = 200 MB
-        ]);
-
-        if (count($this->selectedCursos)==0){
-            return;
-        }
-
-        $pathfile = '';
-        $nameFile = '';
-        $this->fileimg = $this->record['portada'];
+        try {
         
-        if($this->record['portada'] ?? null){
-            $this ->validate([
-                'fileimg' => ['image', 'mimes:jpg,jpeg,png', 'max:1024'],
-                ]);
+            $this->validate(
+                ['record.archivo' => 'required|file|mimes:pdf|max:30720'],
+                ['record.archivo.max' => 'El archivo PDF supera el tamaño máximo de 30 MB.']
+            );
 
-            $nameFile = $this->record['portada']->getClientOriginalName();
-            $contents = Storage::disk('public')->exists('libros/'.$nameFile);
-            if ($contents){
-                Storage::disk('public')->delete('libros/'.$nameFile);
+            if (count($this->selectedCursos)==0){
+                return;
             }
 
-            //Elimino foto anterior
-            $contents = Storage::disk('public')->exists('libros/'.$this->record['imagen']);
-            if ($contents){
-                Storage::disk('public')->delete('libros/'.$this->record['imagen']);
+            $pathfile = '';
+            $nameFile = '';
+            $this->fileimg = $this->record['portada'];
+            
+            if($this->record['portada'] ?? null){
+                $this ->validate([
+                    'fileimg' => ['image', 'mimes:jpg,jpeg,png', 'max:1024'],
+                    ]);
+
+                $nameFile = $this->record['portada']->getClientOriginalName();
+                $contents = Storage::disk('public')->exists('libros/'.$nameFile);
+                if ($contents){
+                    Storage::disk('public')->delete('libros/'.$nameFile);
+                }
+
+                //Elimino foto anterior
+                $contents = Storage::disk('public')->exists('libros/'.$this->record['imagen']);
+                if ($contents){
+                    Storage::disk('public')->delete('libros/'.$this->record['imagen']);
+                }
+
+                $pathfile = 'storage/'.$this->record['portada']->storeAs('public/libros', $nameFile);
+                                
             }
 
-            $pathfile = 'storage/'.$this->record['portada']->storeAs('public/libros', $nameFile);
-                            
-        }
+            if ($this->record['archivo']!=""){
+                $this->apiDrive();
+            }
 
-        if ($this->record['archivo']!=""){
-            $this->apiDrive();
-        }
-
-        $libros = TmLibros::Create([
-            'periodo_id' => $this -> record['periodoId'],
-            'docente_id' => $this -> record['docenteId'],
-            'nombre' => $this -> record['nombre'],
-            'autor' => $this -> record['autor'],
-            'portada' => $pathfile,
-            'drive_id' => $this -> record['driveId'],
-            'asignatura_id' => $this -> record['asignaturaId'],
-            'usuario' => auth()->user()->name,
-        ]);
-
-        foreach($this->selectedCursos as $recurso){
-            TdLibrosCursos::Create([
-                'libro_id' => $libros->id,
-                'curso_id' => $recurso,
+            $libros = TmLibros::Create([
+                'periodo_id' => $this -> record['periodoId'],
+                'docente_id' => $this -> record['docenteId'],
+                'nombre' => $this -> record['nombre'],
+                'autor' => $this -> record['autor'],
+                'portada' => $pathfile,
+                'drive_id' => $this -> record['driveId'],
+                'asignatura_id' => $this -> record['asignaturaId'],
                 'usuario' => auth()->user()->name,
             ]);
-        } 
 
-        $this->selectedCursos = [];
-        $this->dispatchBrowserEvent('hide-form', ['message'=> 'Registro grabado con éxito!']);  
+            foreach($this->selectedCursos as $recurso){
+                TdLibrosCursos::Create([
+                    'libro_id' => $libros->id,
+                    'curso_id' => $recurso,
+                    'usuario' => auth()->user()->name,
+                ]);
+            } 
+
+            $this->selectedCursos = [];
+            $this->dispatchBrowserEvent('hide-form', ['message'=> 'Registro grabado con éxito!']);  
+
+        } catch (ValidationException $e) {
+
+            return;
+            
+        }
         
     }
 
