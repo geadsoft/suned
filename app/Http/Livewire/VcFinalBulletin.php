@@ -529,15 +529,10 @@ class VcFinalBulletin extends Component
                 }
             }
 
-            if($idPerson=1160){
-                dd($this->tblrecords);
-            }
-
             $termino = $this->filters['termino'] ?? null;
             $bloque = $this->filters['bloque'] ?? null;
             $bloqueEx = $bloque ? str_replace('P', 'E', $bloque) : null;
             
-
             //Examenes
             $examen = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
@@ -600,7 +595,10 @@ class VcFinalBulletin extends Component
                     $this->tblrecords[$idPerson][$fil]['supletorio'] = $objnota;
                 }
             }
-        
+
+            if($idPerson=1160){
+                dd($this->tblrecords,$notas->toAarray());
+            }
         }
 
         // Calcula Promedio
