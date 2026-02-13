@@ -296,6 +296,39 @@
             </tr>
         </table>
     </section>
+    <section>
+        <table cellpadding="0" cellspancing="0" width="100%">
+            <tr>
+                <td width="40%" style="vertical-align: top; padding-top: 10px; position: relative">
+                    <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
+                        <thead class="table-light">
+                            <tr>
+                                <th colspan="4">APP Movil</th>
+                            </tr>
+                            <tr style="background-color:#222454">
+                                <th style="color:#FFFFFF">Recibo</th>
+                                <th style="color:#FFFFFF">Referencia</th>
+                                <th style="color:#FFFFFF">Entidad</th>
+                                <th style="color:#FFFFFF">Valor</th>
+                            </tr>
+                        <thead>
+                        <tbody class="list"> 
+                        @foreach ($resumenpago as $resumen) 
+                            @if($resumen['tipo']=='APP')
+                                <tr>
+                                    <td class="">{{$resumen['recibo']}}</td>
+                                    <td class="">{{$resumen['referencia']}}</td>
+                                    <td class="">{{$resumen['entidad']}}</td>
+                                    <td>{{number_format($resumen['valor'],2)}}</td>
+                                </tr>
+                            @endif
+                         @endforeach
+                        </tbody>
+                    </table>
+                </td>           
+            </tr>
+        </table>
+    </section>
 
     <div style="position: absolute;
       display: inline-block;
