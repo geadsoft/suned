@@ -106,8 +106,7 @@ class VcFinalBulletin extends Component
 
             $this->termino = $termObj->codigo; // '1T','2T','3T'
             $this->filters['termino'] = $this->termino;
-            $this->filters['paralelo_pase'] = 0;
-
+            
             $this->loadPersonas();
             $this->add();
             $this->asignarNotas();
@@ -354,6 +353,7 @@ class VcFinalBulletin extends Component
         foreach ($this->tblpersonas as $key => $person)
         { 
             $idPerson = $person->id;
+            $this->filters['paralelo_pase'] = 0;
 
             $registro = $pases->firstWhere('estudiante_id', $idPerson);
 
