@@ -517,10 +517,6 @@ class VcFinalBulletin extends Component
             ])
             ->get(); 
 
-            if($idPerson=1160){
-                dd($notas);
-            }
-
             foreach ($notas as $key => $objnota){
 
                 $fil  = $objnota->asignatura_id;
@@ -531,6 +527,10 @@ class VcFinalBulletin extends Component
                 if (isset($this->tblrecords[$idPerson][$fil][$col])) {
                     $this->tblrecords[$idPerson][$fil][$col] = $objnota->nota;
                 }
+            }
+
+            if($idPerson=1160){
+                dd($this->tblrecords);
             }
 
             $termino = $this->filters['termino'] ?? null;
