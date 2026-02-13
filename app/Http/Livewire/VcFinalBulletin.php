@@ -517,6 +517,10 @@ class VcFinalBulletin extends Component
             ])
             ->get(); 
 
+            if($idPerson=1160){
+                dd($notas);
+            }
+
             foreach ($notas as $key => $objnota){
 
                 $fil  = $objnota->asignatura_id;
