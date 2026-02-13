@@ -517,6 +517,28 @@ class VcFinalBulletin extends Component
             ])
             ->get(); 
 
+            $notas2 = TmActividades::query()
+            ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
+            ->join('tm_horarios_docentes as d', function($join) {
+                $join->on('d.id', '=', 'tm_actividades.paralelo')
+                    ->on('d.docente_id', 'tm_actividades.docente_id');
+            })
+            ->when(!empty($this->filters['termino']), function($query) {
+                return $query->where('tm_actividades.termino', $this->filters['termino']);
+            })
+            ->when(!empty($this->filters['bloque']), function($query) {
+                return $query->where('tm_actividades.bloque', $this->filters['bloque']);
+            })
+            ->where('tm_actividades.tipo', 'AC')
+            ->where('n.persona_id', $idPerson)
+            ->select([
+                'tm_actividades.id as actividadId',
+                'tm_actividades.actividad',
+                'n.nota',
+                'd.asignatura_id'
+            ])
+            ->get()->toArray(); 
+
             foreach ($notas as $key => $objnota){
 
                 $fil  = $objnota->asignatura_id;
@@ -597,7 +619,7 @@ class VcFinalBulletin extends Component
             }
 
             if($idPerson=1160){
-                dd($this->tblrecords,$notas->toAarray());
+                dd($this->tblrecords,$notas2);
             }
         }
 
