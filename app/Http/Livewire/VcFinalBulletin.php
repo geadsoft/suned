@@ -1268,7 +1268,7 @@ class VcFinalBulletin extends Component
             ->select('termino','evaluacion','persona_id')
             ->get()->toArray();
 
-            $arrconducta = collect($conducta)
+            $arrconducta[] = collect($conducta)
             ->groupBy('persona_id')
             ->map(function ($items) {
                 return $items->pluck('evaluacion', 'termino');
