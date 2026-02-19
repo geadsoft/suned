@@ -36,6 +36,7 @@ class VcFinalBulletin extends Component
         'termino' => '1T',
         'bloque' => '1P',
         'estudianteId' => 0,
+        'calificacion' => 'N'
     ];
 
     public function mount()
@@ -52,7 +53,7 @@ class VcFinalBulletin extends Component
         ->where("periodo_id",$this->periodoId)
         ->where("tipo","EC")
         ->selectRaw("*,nota + case when nota=10 then 0 else 0.99 end as nota2")
-        ->get();
+        ->get()->toArray();
 
         $tipoactividad = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->periodoId)
@@ -110,11 +111,11 @@ class VcFinalBulletin extends Component
             $this->loadPersonas();
             $this->add();
             $this->asignarNotas();
-
+            
             if (!in_array($this->termino, ['1T','2T','3T'])) {
                 continue;
             }
-
+            
             $periodo = $this->filters['periodoId'];
             $modalidad = $this->filters['modalidadId'];
             $curso = $this->filters['paralelo'];
@@ -459,7 +460,8 @@ class VcFinalBulletin extends Component
         ->where("tm_cursos.id",$this->filters['paralelo'])
         ->first();
 
-        $this->calificacion = $servicio->calificacion;
+        /*$this->calificacion = $servicio->calificacion;*/
+        $this->filters['calificacion'] = $servicio->calificacion;
 
         $this->tblgrupo  = TmActividades::query()
         ->join("tm_horarios_docentes as d",function($join){
@@ -732,8 +734,8 @@ class VcFinalBulletin extends Component
 
         }
 
-        $notas = $this->tblescala;        
-
+        /*$notas = $this->tblescala;
+ 
         if($this->calificacion=="L"){
 
             foreach($this->tblrecords as $person => $record){
@@ -745,19 +747,11 @@ class VcFinalBulletin extends Component
                     if (isset($this->tblrecords[$person][$index]["AI-prom"])){
 
                         $aiprom = $this->tblrecords[$person][$index]["AI-prom"];
-                        /*if ($aiprom>0){
+                        if ($aiprom>0){
                             $resultado = array_filter($notas, function($notas) use ($aiprom) {
                                 return $aiprom >= $notas['nota'] && $aiprom <= $notas['nota2'];
                             });
                             $this->tblrecords[$person][$index]["AI-prom"] = reset($resultado)['codigo'] ?? 0;
-                        }*/
-                        if ($aiprom > 0) {
-                            $resultado = $notas->filter(function ($nota) use ($aiprom) {
-                                return $aiprom >= $nota->nota && $aiprom <= $nota->nota2;
-                            });
-
-                            $this->tblrecords[$person][$index]["AI-prom"] = 
-                                optional($resultado->first())->codigo ?? 0;
                         }
 
                     };
@@ -765,20 +759,11 @@ class VcFinalBulletin extends Component
                     if (isset($this->tblrecords[$person][$index]["AG-prom"])){
 
                         $agprom = $this->tblrecords[$person][$index]["AG-prom"];
-                        /*if ($agprom>0){
+                        if ($agprom>0){
                             $resultado = array_filter($notas, function($notas) use ($agprom) {
                                 return $agprom >= $notas['nota'] && $agprom <= $notas['nota2'];
                             });
                             $this->tblrecords[$person][$index]["AG-prom"] = reset($resultado)['codigo'] ?? 0;
-                        }*/
-                        
-                        if ($agprom > 0) {
-                            $resultado = $notas->filter(function ($nota) use ($agprom) {
-                                return $agprom >= $nota->nota && $agprom <= $nota->nota2;
-                            });
-
-                            $this->tblrecords[$person][$index]["AG-prom"] = 
-                                optional($resultado->first())->codigo ?? 0;
                         }
 
                     };
@@ -788,42 +773,24 @@ class VcFinalBulletin extends Component
                     $cuantitativo = $this->tblrecords[$person][$index]["cuantitativo"];
                    
                     if ($promedio>0){
-                        /*$resultado = array_filter($notas, function($notas) use ($promedio) {
+                        $resultado = array_filter($notas, function($notas) use ($promedio) {
                             return $promedio >= $notas['nota'] && $promedio <= $notas['nota2'];
                         });
-                        $this->tblrecords[$person][$index]["promedio"] = reset($resultado)['codigo'] ?? 0;*/
-
-                        $resultado = $notas->filter(function ($nota) use ($promedio) {
-                            return $promedio >= $nota->nota && $promedio <= $nota->nota2;
-                        });
-
-                        $this->tblrecords[$person][$index]["promedio"] = optional($resultado->first())->codigo ?? 0;
+                        $this->tblrecords[$person][$index]["promedio"] = reset($resultado)['codigo'] ?? 0;
                     }
 
                     if ($examen>0){
-                        /*$resultado = array_filter($notas, function($notas) use ($examen) {
+                        $resultado = array_filter($notas, function($notas) use ($examen) {
                             return $examen >= $notas['nota'] && $examen <= $notas['nota2'];
                         });
-                        $this->tblrecords[$person][$index]["examen"] = reset($resultado)['codigo'] ?? 0;*/
-
-                        $resultado = $notas->filter(function ($nota) use ($examen) {
-                            return $examen >= $nota->nota && $examen <= $nota->nota2;
-                        });
-
-                        $this->tblrecords[$person][$index]["examen"] = optional($resultado->first())->codigo ?? 0;
+                        $this->tblrecords[$person][$index]["examen"] = reset($resultado)['codigo'] ?? 0;
                     }
 
                     if ($cuantitativo>0){
-                        /*$resultado = array_filter($notas, function($notas) use ($cuantitativo) {
+                        $resultado = array_filter($notas, function($notas) use ($cuantitativo) {
                             return $cuantitativo >= $notas['nota'] && $cuantitativo <= $notas['nota2'];
                         });
-                        $this->tblrecords[$person][$index]["cuantitativo"] = reset($resultado)['codigo'] ?? 0;*/
-
-                        $resultado = $notas->filter(function ($nota) use ($cuantitativo) {
-                            return $cuantitativo >= $nota->nota && $cuantitativo <= $nota->nota2;
-                        });
-
-                        $this->tblrecords[$person][$index]["cuantitativo"] = optional($resultado->first())->codigo ?? 0;
+                        $this->tblrecords[$person][$index]["cuantitativo"] = reset($resultado)['codigo'] ?? 0;
                     }
 
                 }
@@ -833,16 +800,10 @@ class VcFinalBulletin extends Component
 
                     $aiprom = $this->tblrecords[$person]['ZZ']["AI-prom"];
                     if ($aiprom>0){
-                        /*$resultado = array_filter($notas, function($notas) use ($aiprom) {
+                        $resultado = array_filter($notas, function($notas) use ($aiprom) {
                             return $aiprom >= $notas['nota'] && $aiprom <= $notas['nota2'];
                         });
-                        $this->tblrecords[$person]['ZZ']["AI-prom"] = reset($resultado)['codigo'] ?? 0;*/
-
-                        $resultado = $notas->filter(function ($nota) use ($aiprom) {
-                            return $aiprom >= $nota->nota && $aiprom <= $nota->nota2;
-                        });
-
-                        $this->tblrecords[$person]['ZZ']["AI-prom"] = optional($resultado->first())->codigo ?? 0;
+                        $this->tblrecords[$person]['ZZ']["AI-prom"] = reset($resultado)['codigo'] ?? 0;
                     }
 
                 };
@@ -851,16 +812,10 @@ class VcFinalBulletin extends Component
 
                     $agprom = $this->tblrecords[$person]['ZZ']["AG-prom"];
                     if ($agprom>0){
-                        /*$resultado = array_filter($notas, function($notas) use ($agprom) {
+                        $resultado = array_filter($notas, function($notas) use ($agprom) {
                             return $agprom >= $notas['nota'] && $agprom <= $notas['nota2'];
                         });
-                        $this->tblrecords[$person]['ZZ']["AG-prom"] = reset($resultado)['codigo'] ?? 0;*/
-
-                        $resultado = $notas->filter(function ($nota) use ($agprom) {
-                            return $agprom >= $nota->nota && $agprom <= $nota->nota2;
-                        });
-
-                        $this->tblrecords[$person]['ZZ']["AG-prom"] = optional($resultado->first())->codigo ?? 0;
+                        $this->tblrecords[$person]['ZZ']["AG-prom"] = reset($resultado)['codigo'] ?? 0;
                     }
 
                 };
@@ -870,47 +825,29 @@ class VcFinalBulletin extends Component
                 $cuantitativo = $this->tblrecords[$person]['ZZ']["cuantitativo"];
                 
                 if ($promedio>0){
-                    /*$resultado = array_filter($notas, function($notas) use ($promedio) {
+                    $resultado = array_filter($notas, function($notas) use ($promedio) {
                         return $promedio >= $notas['nota'] && $promedio <= $notas['nota2'];
                     });
-                    $this->tblrecords[$person]['ZZ']["promedio"] = reset($resultado)['codigo'] ?? 0;*/
-
-                    $resultado = $notas->filter(function ($nota) use ($promedio) {
-                        return $promedio >= $nota->nota && $promedio <= $nota->nota2;
-                    });
-
-                    $this->tblrecords[$person]['ZZ']["promedio"] = optional($resultado->first())->codigo ?? 0;
+                    $this->tblrecords[$person]['ZZ']["promedio"] = reset($resultado)['codigo'] ?? 0;
                 }
 
                 if ($examen>0){
-                    /*$resultado = array_filter($notas, function($notas) use ($examen) {
+                    $resultado = array_filter($notas, function($notas) use ($examen) {
                         return $examen >= $notas['nota'] && $examen <= $notas['nota2'];
                     });
-                    $this->tblrecords[$person]['ZZ']["examen"] = reset($resultado)['codigo'] ?? 0;*/
-
-                    $resultado = $notas->filter(function ($nota) use ($examen) {
-                        return $examen >= $nota->nota && $examen <= $nota->nota2;
-                    });
-
-                    $this->tblrecords[$person]['ZZ']["examen"] = optional($resultado->first())->codigo ?? 0;
+                    $this->tblrecords[$person]['ZZ']["examen"] = reset($resultado)['codigo'] ?? 0;
                 }
 
                 if ($cuantitativo>0){
-                    /*$resultado = array_filter($notas, function($notas) use ($cuantitativo) {
+                    $resultado = array_filter($notas, function($notas) use ($cuantitativo) {
                         return $cuantitativo >= $notas['nota'] && $cuantitativo <= $notas['nota2'];
                     });
-                    $this->tblrecords[$person]['ZZ']["cuantitativo"] = reset($resultado)['codigo'] ?? 0;*/
-
-                    $resultado = $notas->filter(function ($nota) use ($cuantitativo) {
-                        return $cuantitativo >= $nota->nota && $cuantitativo <= $nota->nota2;
-                    });
-
-                    $this->tblrecords[$person]['ZZ']["cuantitativo"] = optional($resultado->first())->codigo ?? 0;
+                    $this->tblrecords[$person]['ZZ']["cuantitativo"] = reset($resultado)['codigo'] ?? 0;
                 }
 
             }
 
-        }
+        }*/
 
 
     }
@@ -930,6 +867,157 @@ class VcFinalBulletin extends Component
         $this->comentarioId = $observaciones?->id ?? 0;
         
         $this->dispatchBrowserEvent('add-mensaje');
+
+    }
+
+    public function actualiza_notas(){
+
+        $notas = $this->tblescala;
+
+        $this->asignaturas = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
+        ->select("a.*")
+        ->where("tm_horarios.curso_id",$this->filters['paralelo'])
+        ->orderBy("a.descripcion")
+        ->get();
+ 
+        foreach($this->tblrecords as $person => $record){
+
+            foreach ($this->asignaturas as $key => $data)
+            {   
+                $index = $data->id;
+            
+                $nota1T = $this->tblrecords[$person][$index]["1T_notaparcial"];
+                if ($nota1T>0){
+                    $resultado = array_filter($notas, function($notas) use ($nota1T) {
+                        return $nota1T >= $notas['nota'] && $nota1T <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["1T_notaparcial"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                $nota1T70 = $this->tblrecords[$person][$index]["1T_nota70"];
+                if ($nota1T70>0){
+                    $resultado = array_filter($notas, function($notas) use ($nota1T70) {
+                        return $nota1T70 >= $notas['nota'] && $nota1T70 <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["1T_nota70"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                $examen1T = $this->tblrecords[$person][$index]["1T_evaluacion"];
+                if ($examen1T>0){
+                    $resultado = array_filter($notas, function($notas) use ($examen1T) {
+                        return $examen1T >= $notas['nota'] && $examen1T <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["1T_evaluacion"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                $nota1T30 = $this->tblrecords[$person][$index]["1T_nota30"];
+                if ($nota1T30>0){
+                    $resultado = array_filter($notas, function($notas) use ($nota1T30) {
+                        return $nota1T30 >= $notas['nota'] && $nota1T30 <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["1T_nota30"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                $nota1Trimestre = $this->tblrecords[$person][$index]["1T_notatrimestre"];
+                if ($nota1Trimestre>0){
+                    $resultado = array_filter($notas, function($notas) use ($nota1Trimestre) {
+                        return $nota1Trimestre >= $notas['nota'] && $nota1Trimestre <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["1T_notatrimestre"] = reset($resultado)['codigo'] ?? 0;
+                } 
+                
+                /* 2trimestre */
+                $nota2T = $this->tblrecords[$person][$index]["2T_notaparcial"];
+                if ($nota2T>0){
+                    $resultado = array_filter($notas, function($notas) use ($nota2T) {
+                        return $nota2T >= $notas['nota'] && $nota2T <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["2T_notaparcial"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                $nota2T70 = $this->tblrecords[$person][$index]["2T_nota70"];
+                if ($nota1T70>0){
+                    $resultado = array_filter($notas, function($notas) use ($nota2T70) {
+                        return $nota2T70 >= $notas['nota'] && $nota2T70 <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["2T_nota70"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                $examen2T = $this->tblrecords[$person][$index]["2T_evaluacion"];
+                if ($examen2T>0){
+                    $resultado = array_filter($notas, function($notas) use ($examen2T) {
+                        return $examen2T >= $notas['nota'] && $examen2T <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["2T_evaluacion"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                $nota2T30 = $this->tblrecords[$person][$index]["2T_nota30"];
+                if ($nota2T30>0){
+                    $resultado = array_filter($notas, function($notas) use ($nota2T30) {
+                        return $nota2T30 >= $notas['nota'] && $nota2T30 <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["2T_nota30"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                $nota2Trimestre = $this->tblrecords[$person][$index]["2T_notatrimestre"];
+                if ($nota2Trimestre>0){
+                    $resultado = array_filter($notas, function($notas) use ($nota2Trimestre) {
+                        return $nota2Trimestre >= $notas['nota'] && $nota2Trimestre <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["2T_notatrimestre"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                /* 3trimestre*/
+                $nota3T = $this->tblrecords[$person][$index]["3T_notaparcial"];
+                if ($nota3T>0){
+                    $resultado = array_filter($notas, function($notas) use ($nota3T) {
+                        return $nota3T >= $notas['nota'] && $nota3T <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["3T_notaparcial"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                $nota3T70 = $this->tblrecords[$person][$index]["3T_nota70"];
+                if ($nota3T70>0){
+                    $resultado = array_filter($notas, function($notas) use ($nota3T70) {
+                        return $nota3T70 >= $notas['nota'] && $nota3T70 <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["3T_nota70"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                $examen3T = $this->tblrecords[$person][$index]["3T_evaluacion"];
+                if ($examen3T>0){
+                    $resultado = array_filter($notas, function($notas) use ($examen3T) {
+                        return $examen3T >= $notas['nota'] && $examen3T <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["3T_evaluacion"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                $nota3T30 = $this->tblrecords[$person][$index]["3T_nota30"];
+                if ($nota3T30>0){
+                    $resultado = array_filter($notas, function($notas) use ($nota3T30) {
+                        return $nota3T30 >= $notas['nota'] && $nota3T30 <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["3T_nota30"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                $nota3Trimestre = $this->tblrecords[$person][$index]["3T_notatrimestre"];
+                if ($nota3Trimestre>0){
+                    $resultado = array_filter($notas, function($notas) use ($nota3Trimestre) {
+                        return $nota3Trimestre >= $notas['nota'] && $nota3Trimestre <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person][$index]["3T_notatrimestre"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+
+
+
+            }
+
+        }
+
+        dd($this->tblrecords);
 
     }
 
@@ -971,6 +1059,7 @@ class VcFinalBulletin extends Component
         $this->filters['termino']   = $data->termino;
         $this->filters['bloque']  = $data->bloque;
         $this->filters['estudianteId'] = $data->estudianteId;
+        $this->filters['calificacion'] = $data->calificacion;
 
         $this->modalidadId =  $data->modalidadId;
         $this->periodoId = $data->periodoId;
@@ -994,10 +1083,10 @@ class VcFinalBulletin extends Component
         $this->tblescala = $escalas;
 
         // Definimos los rangos
-        TdPeriodoSistemaEducativos::query()
+        /*TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->filters['periodoId'])
         ->where("tipo","EC")
-        ->get()->toArray();
+        ->get()->toArray();*/
 
         $rangos = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->filters['periodoId'])
@@ -1187,7 +1276,9 @@ class VcFinalBulletin extends Component
             ->toArray();
         } 
         
-        if ($this->calificacion=="L"){
+        /*if ($this->filters['calificacion']=="L"){
+
+            $this->actualiza_notas();
 
             $pdf = PDF::loadView('pdf/reporte_boletin_final_notasletra',[
                 'tblrecords' => $this->tblrecords,
@@ -1206,7 +1297,8 @@ class VcFinalBulletin extends Component
                 'promo' => $promo,
             ]);
 
-        }else{
+        }else{*/
+
 
             $pdf = PDF::loadView('pdf/reporte_boletin_final_notas',[
                 'tblrecords' => $this->tblrecords,
@@ -1225,7 +1317,7 @@ class VcFinalBulletin extends Component
                 'promo' => $promo,
             ]);
 
-        }
+        /*}*/
 
         return $pdf->setPaper('a4','landscape')->stream('Boletin Final.pdf');
 
