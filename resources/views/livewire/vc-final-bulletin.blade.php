@@ -22,7 +22,12 @@
                                 @endforeach 
                             </select>
                         </div>
-                        
+                        @if (session()->has('error'))
+                            <!-- Warning Alert -->
+                            <div class="alert alert-warning alert-dismissible alert-label-icon rounded-label fade show" role="alert">
+                                <i class="ri-alert-line label-icon"></i><strong>Error</strong> - {{ session('error') }}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

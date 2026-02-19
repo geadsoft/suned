@@ -103,6 +103,11 @@ class VcFinalBulletin extends Component
 
     public function generarBoletin(){
 
+        if (empty($this->filters['paralelo']) || empty($this->filters['modalidadId'])) {
+            session()->flash('error', 'Debe seleccionar Modalidad y Paralelo.');
+            return;
+        }
+
         foreach ($this->tbltermino as $termObj) {
 
             $this->termino = $termObj->codigo; // '1T','2T','3T'
