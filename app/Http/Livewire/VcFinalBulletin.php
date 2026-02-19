@@ -1257,24 +1257,18 @@ class VcFinalBulletin extends Component
         }
 
         //Conducta
-        $arrconducta=[];
-        foreach ($this->tblpersonas as $person) {
+        $arrconducta = TdConductas::query()
+        ->where("periodo_id", $this->filters['periodoId'])
+        ->where("modalidad_id", $this->filters['modalidadId'])
+        ->where("curso_id", $this->filters['paralelo'])
+        ->whereIn("persona_id", $this->tblpersonas->pluck('id'))
+        ->select('termino', 'evaluacion', 'persona_id')
+        ->get()
+        ->groupBy('persona_id')
+        ->map(function ($items) {
+            return $items->pluck('evaluacion', 'termino');
+        })->toArray();
 
-            $conducta =  TdConductas::query()
-            ->where("periodo_id",$this->filters['periodoId'])
-            ->where("modalidad_id",$this->filters['modalidadId'])
-            ->where("curso_id",$this->filters['paralelo'])
-            ->where("persona_id",$person->id)
-            ->select('termino','evaluacion','persona_id')
-            ->get()->toArray();
-
-            $arrconducta[] = collect($conducta)
-            ->groupBy('persona_id')
-            ->map(function ($items) {
-                return $items->pluck('evaluacion', 'termino');
-            })
-            ->toArray();
-        } 
         
         /*if ($this->filters['calificacion']=="L"){
 
