@@ -162,8 +162,8 @@
                                 </lord-icon>
                                 <div class="mt-4 text-center">
                                     <h4>Estás a punto de eliminar el registro ?</h4>
-                                    <p class="text-muted fs-15 mb-4">Al eliminar el registro afectara al stock de productos y 
-                                        se eliminará toda su información de nuestra base de datos. y</p>
+                                    <p class="text-muted fs-15 mb-4">Al eliminar el registro del examen, se eliminará toda la información asociada en el sistema
+                                    ,(calificaciones, entregas, archivos y reportes académicos). Esta acción es irreversible.</p>
                                     <div class="hstack gap-2 justify-content-center remove">
                                         <button class="btn btn-link link-success fw-medium text-decoration-none"
                                             data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i>

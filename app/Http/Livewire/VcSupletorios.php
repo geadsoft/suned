@@ -6,6 +6,10 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TmActividades;
 use App\Models\TdPeriodoSistemaEducativos;
 
+use App\Models\TdActividadesEntregas;
+use App\Models\TmFiles;
+use App\Models\TdCalificacionActividades;
+
 use Livewire\Component;
 use Livewire\WithPagination;
 

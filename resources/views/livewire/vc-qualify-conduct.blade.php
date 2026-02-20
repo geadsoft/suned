@@ -64,6 +64,7 @@
                                         <datalist id="asistencias">
                                         </datalist>-->
                                         <select class="form-select" id="evaluacion-{{$record->id}}" data-choices data-choices-search-false wire:model="tblrecords.{{$record->id}}.evaluacion">
+                                        <option value="">-- Seleccione --</option>
                                         @foreach($tblescala as $escala)
                                             <option value="{{$escala->codigo}}">{{$escala->codigo}}</option>
                                         @endforeach
