@@ -560,8 +560,8 @@ class VcFinalBulletin extends Component
                 $join->on('d.id', '=', 'tm_actividades.paralelo')
                     ->on('d.docente_id', '=', 'tm_actividades.docente_id');
             })
-            /*->join("tm_horarios as h","h.id","=","d.horario_id")
-            ->when(
+            ->join("tm_horarios as h","h.id","=","d.horario_id")
+            /*->when(
                 $this->filters['paralelo']  && ($this->filters['paralelo_pase'] == 0),
                 function ($query) {
                     $query->where('h.curso_id', $this->filters['paralelo']);
@@ -578,6 +578,9 @@ class VcFinalBulletin extends Component
             })
             ->when(!empty($bloque), function($query) use ($bloqueEx) {
                 return $query->where('tm_actividades.bloque', $bloqueEx);
+            })
+            ->when(!empty($this->filters['modalidadId']), function($query) {
+                return $query->where('h.grupo_id', $this->filters['modalidadId']);
             })
             ->where('tm_actividades.tipo', 'ET')
             ->where('n.persona_id', $idPerson)
