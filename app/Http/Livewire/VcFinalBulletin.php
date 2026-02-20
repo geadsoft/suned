@@ -224,7 +224,7 @@ class VcFinalBulletin extends Component
                 if($objnotas['supletorio']>=7){
                     $promedio_final = 7; 
                 }else{
-                    $promedio_final = $promedio_anual //round($promedioFinalSum / 2, 2);
+                    $promedio_final = $promedio_anual; //round($promedioFinalSum / 2, 2);
                 }
             }else{
                 $promedio_final = $promedio_anual;
