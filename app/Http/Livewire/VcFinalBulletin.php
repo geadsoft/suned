@@ -251,6 +251,10 @@ class VcFinalBulletin extends Component
                 $promocion = "PIERDE AÑO";
             }
 
+            if($objnotas['supletorio']>=7 && $promedio_final==7){
+                $promocion = "APROBADO";
+            }
+
             $updateNota = TdBoletinFinal::find($objnotas['id']);
             $updateNota->update([
                 'promedio_anual' => $promedio_anual,
