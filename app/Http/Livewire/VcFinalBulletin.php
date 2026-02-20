@@ -588,10 +588,6 @@ class VcFinalBulletin extends Component
             ->selectRaw('d.asignatura_id, ROUND(AVG(n.nota), 2) as promedio')
             ->pluck('promedio', 'asignatura_id');
 
-            if($idPerson==112 && $this->filters['termino']=='2T'){
-                dd($examen);
-            }
-
             foreach ($examen as $key => $objnota){
                 
                 $fil = $key;
