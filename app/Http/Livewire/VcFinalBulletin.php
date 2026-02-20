@@ -221,7 +221,11 @@ class VcFinalBulletin extends Component
             
             $promedioFinalSum = $promedio_anual + ($objnotas['supletorio'] ?? 0);
             if ($objnotas['supletorio']>0){
-                $promedio_final = round($promedioFinalSum / 2, 2);
+                if($objnotas['supletorio']>=7){
+                    $promedio_final = 7; 
+                }else{
+                    $promedio_final = $promedio_anual //round($promedioFinalSum / 2, 2);
+                }
             }else{
                 $promedio_final = $promedio_anual;
             }
@@ -241,6 +245,10 @@ class VcFinalBulletin extends Component
                 $promocion = "SUPLETORIO";
             } elseif ($promedio_anual <= 10) {
                 $promocion = "APROBADO";
+            }
+
+            if($objnotas['supletorio']>0 && $objnotas['supletorio']<7){
+                $promocion = "PIERDE AÑO";
             }
 
             $updateNota = TdBoletinFinal::find($objnotas['id']);
@@ -362,7 +370,7 @@ class VcFinalBulletin extends Component
             $this->filters['paralelo_pase'] = 0;
 
             $registro = $pases->firstWhere('estudiante_id', $idPerson);
-
+            
             if($registro){
 
 
@@ -548,7 +556,7 @@ class VcFinalBulletin extends Component
                 $join->on('d.id', '=', 'tm_actividades.paralelo')
                     ->on('d.docente_id', '=', 'tm_actividades.docente_id');
             })
-            ->join("tm_horarios as h","h.id","=","d.horario_id")
+            /*->join("tm_horarios as h","h.id","=","d.horario_id")
             ->when(
                 $this->filters['paralelo']  && ($this->filters['paralelo_pase'] == 0),
                 function ($query) {
@@ -560,7 +568,7 @@ class VcFinalBulletin extends Component
                 function ($query) {
                     $query->where('h.curso_id', $this->filters['paralelo_pase']);
                 }
-            )
+            )*/
             ->when(!empty($this->filters['termino']), function($query) {
                 return $query->where('tm_actividades.termino', $this->filters['termino']);
             })
