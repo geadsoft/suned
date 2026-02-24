@@ -498,6 +498,17 @@ class VcPromocion extends Component
 
     public function calificaciones($matricula){
 
+        $pases = DB::table('tm_pase_cursos as p')
+        ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
+        ->where('p.matricula_id',$matricula['id'])
+        ->where('p.estado',"A")
+        ->select('m.curso_id', 'p.modalidad_id', 'p.estudiante_id')
+        ->first();
+
+        if(!empty($pases)){
+            $matricula['curso_id'] = $pases->curso_id; 
+        }
+
         $notas = TdBoletinFinal::query()
         ->join('tm_asignaturas as a','a.id','=','td_boletin_finals.asignatura_id')
         ->join('tm_generalidades as g','g.id','=','a.area_id')
@@ -508,8 +519,7 @@ class VcPromocion extends Component
         ->orderBy('g.descripcion')
         ->get();
 
-        dd($notas);
-        
+                
         $objnotas = [];
         $total=0;
         foreach($notas as $record){
