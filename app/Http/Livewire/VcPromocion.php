@@ -507,6 +507,8 @@ class VcPromocion extends Component
         ->where('td_boletin_finals.persona_id',$matricula['estudiante_id'])
         ->orderBy('g.descripcion')
         ->get();
+
+        dd($notas);
         
         $objnotas = [];
         $total=0;
