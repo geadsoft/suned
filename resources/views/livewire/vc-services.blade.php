@@ -155,17 +155,17 @@
                                     <div class="modal-body">
                                         <div class="id" id="modal-id">
                                             @if($showEditModal)
-                                                <label for="record.id" class="form-label">ID</label>
+                                                <label for="record.id" class="form-label mb-3">ID</label>
                                                 <input type="text" wire:model.defer="record.id" class="form-control" placeholder="ID" readonly />
                                             @endif
                                         </div>
                                         <div class="mb-3">
-                                            <label for="txtnombre" class="form-label">Description</label>
+                                            <label for="txtnombre" class="form-label">Descripción</label>
                                             <input type="text" wire:model.defer="record.descripcion" class="form-control" name="txtnombre"
                                                 placeholder="Enter name" required />
                                         </div>
                                         <div class="mb-3">
-                                            <label for="cmbmodalidad" class="form-label">Cluster</label>
+                                            <label for="cmbmodalidad" class="form-label">Modalidad</label>
                                             <select type="select" class="form-select" data-trigger name="cmbmodalidad" wire:model.defer="record.modalidad_id" required>
                                             <option value=""></option>
                                             @foreach ($tblgenerals as $general)
@@ -175,31 +175,32 @@
                                             @endforeach
                                             </select>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="cmbnivel" class="form-label">Level</label>
-                                            <select type="select" class="form-select" data-trigger name="cmbnivel" wire:model.defer="record.nivel_id" required>
-                                            <option value=""></option>
-                                            @foreach ($tblgenerals as $general)
-                                                @if ($general->superior == 2)
-                                                <option value="{{$general->id}}">{{$general->descripcion}}</option>
-                                                @endif
-                                            @endforeach
-                                            </select>
+                                        <div class="row">
+                                            <div class="col-sm-7 mb-3">
+                                                <label for="cmbnivel" class="form-label">Nivel</label>
+                                                <select type="select" class="form-select" data-trigger name="cmbnivel" wire:model.defer="record.nivel_id" required>
+                                                <option value=""></option>
+                                                @foreach ($tblgenerals as $general)
+                                                    @if ($general->superior == 2)
+                                                    <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                                    @endif
+                                                @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-5 mb-3">
+                                                <label for="cmbgrado" class="form-label">Curso</label>
+                                                <select type="select" class="form-select" data-trigger name="cmbgrado" wire:model.defer="record.grado_id" required>
+                                                <option value=""></option>
+                                                @foreach ($tblgenerals as $general)
+                                                    @if ($general->superior == 3)
+                                                    <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                                    @endif
+                                                @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-
                                         <div class="mb-3">
-                                            <label for="cmbgrado" class="form-label">Course</label>
-                                            <select type="select" class="form-select" data-trigger name="cmbgrado" wire:model.defer="record.grado_id" required>
-                                            <option value=""></option>
-                                            @foreach ($tblgenerals as $general)
-                                                @if ($general->superior == 3)
-                                                <option value="{{$general->id}}">{{$general->descripcion}}</option>
-                                                @endif
-                                            @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="cmbespecialidad" class="form-label">Specialization</label>
+                                            <label for="cmbespecialidad" class="form-label">Especilización</label>
                                             <select type="select" class="form-select" data-trigger name="cmbcmbespecialidad" wire:model.defer="record.especializacion_id" required>
                                             <option value=""></option>
                                             @foreach ($tblgenerals as $general)
