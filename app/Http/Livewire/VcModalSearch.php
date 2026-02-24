@@ -83,8 +83,6 @@ class VcModalSearch extends Component
     }
 
     public function setPersona($matriculaId){
-
-        
         
         if ($this->opcion=='INV'){
             $this->emitTo('vc-inventary-register','setPersona',$matriculaId);
@@ -92,6 +90,11 @@ class VcModalSearch extends Component
         
         if ($this->opcion=='CERT'){
             $this->emitTo('vc-certificados','setPersona',$matriculaId);
+            $this->dispatchBrowserEvent('hide-form');
+        }
+
+        if ($this->opcion=='PROMOCION'){
+            $this->emitTo('vc-promocion','setPersona',$matriculaId);
             $this->dispatchBrowserEvent('hide-form');
         }
 

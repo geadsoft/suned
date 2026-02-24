@@ -34,254 +34,45 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
-                    @if($tipoDoc=='PP')
-                        <div class="row">
-                            <div class="col-xxl-2 mb-3">
-                                <label class="form-label" for="project-title-input">Emisión</label>
-                                <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="fecha" disabled> 
-                            </div>
-                            <div class="col-xxl-10 mb-3">
-                                <label class="form-label" for="project-title-input">Estudiante</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="estudiante-input" placeholder="Nombres Completos"  wire:model="nombres" required>
-                                    <a class="btn btn-info add-btn" wire:click="search()"><i class="ri-user-search-fill me-1 align-bottom"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xxl-4 mb-3">
-                                <label class="form-label" for="project-title-input">Identificación</label>
-                                <input type="text" class="form-control" id="nui-input" wire:model="nui" disabled>
-                            </div>
-                            <div class="col-xxl-6 mb-3">
-                                <label class="form-label" for="project-title-input">Curso</label>
-                                <select class="form-select" name="cmbperiodo" wire:model="cursoId" disabled>
-                                    <option value="">-</option>
-                                    @foreach ($tblcursos as $curso)
-                                        <option value="{{$curso->id}}">{{$curso->descripcion}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xxl-6 mb-3">
-                                <label class="form-label" for="project-title-input">Promovido</label>
-                                <select class="form-select" name="cmbperiodo" wire:model="paseCursoId" required>
-                                    <option value="">-</option>
-                                    @foreach ($tblcursos as $curso)
-                                        <option value="{{$curso->id}}">{{$curso->descripcion}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    @else
                     <div class="row">
-                        <div class="mb-3">
+                        <div class="col-xxl-2 mb-3">
+                            <label class="form-label" for="project-title-input">Emisión</label>
+                            <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="fecha" disabled> 
+                        </div>
+                        <div class="col-xxl-10 mb-3">
                             <label class="form-label" for="project-title-input">Estudiante</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="estudiante-input" placeholder="Nombres Completos"  wire:model="nombres" required>
                                 <a class="btn btn-info add-btn" wire:click="search()"><i class="ri-user-search-fill me-1 align-bottom"></i></a>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-xxl-4 mb-3">
                             <label class="form-label" for="project-title-input">Identificación</label>
-                            <input type="text" class="form-control" id="nui-input" placeholder="Identificación" wire:model="nui" required>
-                        </div>
-                        @if($tipoDoc!='RR' && $tipoDoc!='SD' && $tipoDoc!='ND')
-                        <div class="col-xxl-2 mb-3">
-                            <label class="form-label" for="project-title-input">Periodo Lectivo</label>
-                            <input type="text" class="form-control" id="periodo-input" placeholder="Periodo Lectivo" wire:model="periodo" required>
+                            <input type="text" class="form-control" id="nui-input" wire:model="nui" disabled>
                         </div>
                         <div class="col-xxl-6 mb-3">
                             <label class="form-label" for="project-title-input">Curso</label>
-                            <select class="form-select" name="cmbperiodo" wire:model="cursoId" required>
-                                <option value="">Curso</option>
+                            <select class="form-select" name="cmbperiodo" wire:model="cursoId" disabled>
+                                <option value="">-</option>
                                 @foreach ($tblcursos as $curso)
                                     <option value="{{$curso->id}}">{{$curso->descripcion}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        @endif
-                        @if($tipoDoc=='RR' || $tipoDoc=='SD' )
-                        <div class="col-xxl-2 mb-3">
-                            <label class="form-label" for="project-title-input">Periodo Lectivo</label>
-                            <input type="text" class="form-control" id="periodo-input" placeholder="Periodo Lectivo" wire:model="periodo" required>
-                        </div>
-                        <div class="col-xxl-6 mb-3">
-                            <label class="form-label" for="project-title-input">Especialización</label>
-                            <input type="text" class="form-control" id="bachilleren" placeholder="Especializacion" wire:model="bachilleren">
-                        </div>
-                        @endif
-                        @if( $tipoDoc=='ND' )
-                        <div class="col-xxl-6 mb-3">
-                            <label class="form-label" for="project-title-input">Periodo Lectivo</label>
-                            <input type="text" class="form-control" id="periodo-input" placeholder="Periodo Lectivo" wire:model="periodo" required>
-                        </div>
-                        @endif
-
                     </div>
                     <div class="row">
-                        @if ($tipoDoc=='PA')
-                        <div class="col-xxl-8 mb-3">
-                            <label class="form-label" for="project-title-input">Especialización</label>
-                            <input type="text" class="form-control" id="bachilleren" placeholder="Especializacion" wire:model="bachilleren">
-                        </div>
-                        @endif
-                        @if ($tipoDoc=='CO')
-                        <div class="col-xxl-4 mb-3">
-                            <label class="form-label" for="project-title-input">Conducta Cualitativa</label>
-                            <select class="form-select" name="cmbperiodo" wire:model="escala">
-                                <option value="">Seleccione Conducta</option>
-                                <option value="A">Muy Satisfactorio</option>
-                                <option value="B">Satisfactorio</option>
-                                <option value="C">Poco Satisfactorio</option>
-                                <option value="D">Mejorable</option>
-                                <option value="E">Insatisfactorio</option>
+                        <div class="col-xxl-6 mb-3">
+                            <label class="form-label" for="project-title-input">Promovido</label>
+                            <select class="form-select" name="cmbperiodo" wire:model="paseCursoId" required>
+                                <option value="">-</option>
+                                @foreach ($tblcursos as $curso)
+                                    <option value="{{$curso->id}}">{{$curso->descripcion}}</option>
+                                @endforeach
                             </select>
                         </div>
-                        @endif
-                        <div class="col-xxl-2 mb-3">
-                           @if ($tipoDoc=='CO' || $tipoDoc=='AP' || $tipoDoc=='RR' || $tipoDoc=='SD' )
-                            <label class="form-label" for="project-title-input">Nota</label>
-                            <input type="text" class="form-control" id="nota" placeholder="nota" wire:model="nota">
-                            @endif
-                        </div>
-                    </div> 
-                    <div class="row mb-3">
-                        <div class="mb-3">
-                            <label class="form-label"></label>
-                            @if ($tipoDoc=='MF')
-                                <div id="ckeditor-classic">
-                                    <p><strong>Certifico:</strong></p>
-                                    <p>Que el (la) alumno <strong>{{$nombres}}</strong> previo el cumplimiento de los registros legales y reglamentarios se matriculo en el 
-                                    <strong>{{$nomcurso}}</strong> en la jornada matutina de este plantel</p> 
-                                    <p>asi consta registrado en el libro de matricula correspondiente al año lectivo</p>
-                                    <p><strong>{{$periodo}}</strong></p>
-                                    <div class="row">
-                                        <div class="col-xxl-3">
-                                            <p><strong>FOLIO N. {{$folio}}</strong></p>
-                                        </div>
-                                        <div class="col-xxl-3">
-                                            <p><strong>MATRICULA N. {{$matricula}}</strong></p>
-                                        </div>
-                                    </div>                          
-                                </div>
-                            @endif
-                            @if ($tipoDoc=='MA')
-                                <div id="ckeditor-classic">
-                                    <p>El Rectorado y la Secretaría de la Unidad Educativa American School certifica que el (la) alumno 
-                                    <strong>{{$nombres}}</strong> con C.I. <strong>{{$nui}}</strong> del 
-                                    <strong>{{$nomcurso}}</strong>, estuvo matriculado (a) en el periodo <strong>{{$periodo}}</strong>
-                                    , con código AMIE 09H02249 en la Secretaría de Educación</p>
-                                    <p>CORREO: info@americanschool.edu.ec - PAGINA WEB: www.americanschool.edu.ec</p>
-                                    <div class="row">
-                                        <div class="col-xxl-12">
-                                            <p><br><br>Así consta en los registros del plantel a los cuales me remito</p>
-                                        </div>
-                                    </div>                          
-                                </div>
-                            @endif
-                            @if ($tipoDoc=='PA')
-                                <div id="ckeditor-classic">
-                                <p>Mediante el presente documento se Certifica que el (la) estudiante: <strong>{{$nombres}}</strong>, titular de la
-                                cédula de identidad {{$nui}}, <strong>{{$bachilleren}} de la Unidad Educativa AMERICAN SCHOOL</strong>, desempeño y
-                                desarrolló las Actividades y Tareas programadas durante su Pasantías en nuestra Institución, por un total de 120 Horas,
-                                demostrando alto compromiso de responsabilidad, dedicación, y cumplimiento de labores asignadas.<br><br>
-                                Certificado que se expide a petición de la parte interesada en la ciudad de Guayaquil a los {{date('d',strtotime($fecha))}}
-                                días del mes de {{$mes[(int)date('m',strtotime($fecha))]}} de {{date('Y',strtotime($fecha))}}.
-                                </p>
-                                </div>
-                            @endif
-                            @if ($tipoDoc=='CO')
-                                <div id="ckeditor-classic">
-                                <p>El suscrito Rectorado y Secretaìa del colegio particular "AMERICAN SCHOOL" Certifica que el (la) Sr (Srta): 
-                                <strong>{{$nombres}}</strong>, Obtuvo la siguiente conducta en el <strong>{{$bachilleren}}</strong>.<br><br></p>
-                                <div class="row">
-                                    <div class="col-xxl-3">
-                                        <p><strong>{{$escala}}</strong>({{$nota}})<strong> EN CONDUCTA</strong></p>
-                                    </div>
-                                    <div class="col-xxl-3">
-                                        <p>En el periodo Lectivo <strong>{{$periodo}}</strong></p>
-                                    </div>
-                                </div>
-                                <p><br><br> Así consta en los registros del plantel a los cuales me remito de uds.
-                                </p>
-                                </div>
-                            @endif
-                            @if ($tipoDoc=='AP')
-                                <div id="ckeditor-classic">
-                                <p>El Rectorado y Secretaría de la Unidad Educativa "AMERICAN SCHOOL" Certifica que el Alumno (a)
-                                <strong>{{$nombres}}</strong>,con C.I <strong>{{$nui}}</strong> Alumno del <strong>{{$bachilleren}}</strong>,
-                                periodo lectivo <strong>{{$periodo}}</strong>, obtuvo el siguiente aprovechamiento:</p>
-                                <div class="row">
-                                    <div class="col-xxl-3">
-                                        <p>({{$nota}}) {{$escala}}</p>
-                                    </div>
-                                </div>
-                                <p><br><br> Así consta en los registros del plantel a los cuales me remito de uds.
-                                </p>
-                                </div>
-                            @endif
-                            @if ($tipoDoc=='PR')
-                                <div id="ckeditor-classic">
-                                <p>Agradeciéndole de antemano por su gentil gestión solicito a Ud muy respetuosamente el pase reglamentario
-                                para que el Sr (ita) <strong>{{$nombres}} con C.I. {{$nui}}</strong>, pueda contiuar sus estudios en nuestro
-                                plantel en el {{$bachilleren}} en el actual periodo {{$periodo}}.<br><br>
-                                de Uds.
-                                </p>
-                                </div>
-                            @endif
-                            @if ($tipoDoc=='AR')
-                                <div id="ckeditor-classic">
-                                <p>En atención a la solicitud presentada por el representante legal del estudiante <strong>{{$nombres}}</strong> del 
-                                <strong>{{$bachilleren}}</strong> periodo lectivo {{$periodo}} me permito poner a su conocimiento que este <strong>RECTORADO ACEPTA
-                                RECIBIRLO CON PASE REGLAMENTARIO</strong> para que continue sus estudios en el plantel de mi dirección.<br><br>
-                                Por la atención que se dé a la presente, reitero a usted mis sincero agradecimiento.
-                                </p>
-                                </div>
-                            @endif
-                            @if ($tipoDoc=='ER')
-                                <div id="ckeditor-classic">
-                                <p>Por medio de la presente tengo a bien saludarlo a la vez que pongo a su conocimiento para los fines de la ley, que vista
-                                la solicitud presentada por el representante legal del alumno (a) <strong>{{$nombres}}</strong> del 
-                                <strong>{{$bachilleren}}</strong>, jornada matutina, periodo lectivo {{$periodo}}, asi como la aceptación por parte del colegio
-                                de su acertada dirección para recibirlo, de acuerdo con las facultades que me otorga el reglamento general de ley de educación
-                                y cultura en vigencia, exitiendo el pase reglamentado a favor del alumno (a) <strong>{{$nombres}}</strong> (anexo notas correspondiente
-                                al primer quimestre)<br><br>
-                                Agradezco de antemano, por la atención que se designe brindar a la presente, y me suscribo de usted.
-                                </p>
-                                </div>
-                            @endif
-                            @if ($tipoDoc=='RR')
-                                <div id="ckeditor-classic">
-                                <p>Yo, Gladys Quiroz con C.I 090036728-5, Rectoror (a) de la Unidad Educativa American Shool certifico que el 
-                                Sr. (Srta.) <strong>{{$nombres}}</strong> con C.I {{$nui}}, constan en los archivos de la institución, en el periodo lectivo
-                                {{$periodo}}, como {{$bachilleren}}, con especializacion {{$especializacion}}, con calificación <strong>{{$nota}}</strong>, graduado 
-                                {{$dtfecha}}, con Refrendación #{{$refrendacion}}, Página #{{$pagina}}<br>
-                                Por lo cual solicitamos una prorroga hasta el dia {{$fprorroga}} para la entrega del {{$documentos}}
-                                </p>
-                                </div>
-                            @endif
-                            @if ($tipoDoc=='SD')
-                                <div id="ckeditor-classic">
-                                <p>Yo, Gladys Quiroz con C.I 090036728-5, Rectoror (a) de la Unidad Educativa American Shool certifico que el 
-                                Sr. (Srta.) <strong>{{$nombres}}</strong> con C.I {{$nui}}, constan en los archivos de la institución, en el periodo lectivo
-                                {{$periodo}}, como {{$bachilleren}}, con especializacion {{$especializacion}}, con calificación <strong>{{$nota}}</strong>, graduado 
-                                {{$dtfecha}}, con Refrendación #{{$refrendacion}}, Página #{{$pagina}}<br>
-                                </p>
-                                </div>
-                            @endif
-                            @if ($tipoDoc=='ND')
-                                <div id="ckeditor-classic">
-                                <p>Yo, Gladys Quiroz con C.I 090036728-5, Rectoror (a) de la Unidad Educativa American Shool certifico que el 
-                                Sr. (Srta.) <strong>{{$nombres}}, NO</strong> constan en los archivos de la institución, en el (los) años lectivo
-                                {{$periodo}}.
-                                </p>
-                                </div>
-                            @endif
-                        </div>
                     </div>
-                    @endif
                     <div class="card mb-3">
                         <div class="card-header">
                             <label class="form-label">Firman</label>
@@ -313,13 +104,12 @@
             
             <!-- end card -->
             <div class="text-end mb-4">
-                <button type="button" class="btn btn-danger w-sm" wire:click='print("P")'><i class="ri-printer-line align-bottom me-1"></i>Print</button>
-                <button type="button" class="btn btn-success w-sm" wire:click='print("D")'><i class="ri-download-2-line align-bottom me-1"></i>Download PDF</button>
+                <button type="button" class="btn btn-danger w-sm" wire:click='print("P")'><i class="ri-printer-line align-bottom me-1"></i>Imprimir</button>
+                <button type="button" class="btn btn-success w-sm" wire:click='print("D")'><i class="ri-download-2-line align-bottom me-1"></i>PDF</button>
             </div>
         </div>
         <!-- end col -->
-        <div class="col-lg-4">
-            @if ($tipoDoc != 'PR' && $tipoDoc != 'AR' && $tipoDoc != 'ER' && $tipoDoc != 'RR' && $tipoDoc != 'SD')
+        <div class="col-lg-4"> 
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">Ficha</h5>
@@ -331,12 +121,9 @@
                 <!-- end card body -->
             </div>
             <!-- end card -->
-            @endif
-
             <div class="card">
-                @if ($tipoDoc != 'PR' && $tipoDoc != 'AR' && $tipoDoc != 'ER' && $tipoDoc != 'RR' && $tipoDoc != 'SD')
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Matrícula</h5>
+                    <h5 class="card-title mb-0">Datos</h5>
                 </div>
                 <div class="card-body">
                     <fieldset {{$control}}>
@@ -346,7 +133,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="choices-categories-input" class="form-label">Fecha Registro</label>
-                        <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="fecha"> 
+                        <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="fechaMatricula"> 
                     </div>
                     <div class="mb-3">
                         <label for="choices-categories-input" class="form-label">Folio No.</label>
@@ -358,73 +145,6 @@
                     </div>
                     </fieldset>
                 </div>
-                @endif 
-                @if ($tipoDoc == 'PR' || $tipoDoc == 'AR' || $tipoDoc == 'ER')
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Datos</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="choices-categories-input" class="form-label">Fecha Solicitud</label>
-                        <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="dtfecha"> 
-                    </div>
-                    <div class="mb-3">
-                        <label for="choices-categories-input" class="form-label">Sigla</label>
-                        <input type="text" class="form-control" id="titulo-input" placeholder="Titulo" wire:model="dttitulo" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="choices-categories-input" class="form-label">Destinatario</label>
-                        <input type="text" class="form-control" id="nombre-input" placeholder="Rector" wire:model="dtnombre" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="choices-categories-input" class="form-label">Cargo</label>
-                        <input type="text" class="form-control" id="cargo-input" placeholder="Cargo" wire:model="dtcargo" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="choices-categories-input" class="form-label">Institución</label>
-                        <input type="text" class="form-control" id="institucion-input" placeholder="Institucion" wire:model="dtinstitucion" required>
-                    </div>
-                </div>
-                @endif
-                @if ($tipoDoc == 'RR' || $tipoDoc == 'SD')
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Datos</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="choices-categories-input" class="form-label">Fecha de Grado</label>
-                        <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="dtfecha"> 
-                    </div>
-                    <div class="mb-3">
-                        <label for="choices-categories-input" class="form-label">Refrendación #</label>
-                        <input type="numeric" class="form-control" id="refrendacion-input" placeholder="Refredacion #" wire:model="refrendacion" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="choices-categories-input" class="form-label">Página</label>
-                        <input type="numeric" class="form-control" id="pagina-input" placeholder="Página #" wire:model="pagina" required>
-                    </div>
-                     @if ($tipoDoc == 'RR')
-                    <div class="mb-3">
-                        <label for="choices-categories-input" class="form-label">Fecha de Prorroga</label>
-                        <input type="date" class="form-control" id="fechaProrroga" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model="fprorroga">
-                    </div>
-                    <div class="mb-3">
-                        <label for="choices-categories-input" class="form-label">Documento</label>
-                        <select class="form-select" name="cmbperiodo" wire:model="documentos">
-                            <option value="">Seleccione Documento</option>
-                            <option value="AC">Acta</option>
-                            <option value="TI">Título</option>
-                            <option value="AT">Acta y Título</option>
-                        </select>
-                    </div>
-                    @endif
-                </div>
-                @endif
-                
-
-
-
-
                 <!-- end card body -->
             </div>
             <!-- end card -->
@@ -590,7 +310,7 @@
                 
                 <form autocomplete="off" wire:submit.prevent="">
                     <div class="modal-body">                                        
-                            @livewire('vc-modal-search',['opcion' => 'cert'])                                      
+                            @livewire('vc-modal-search',['opcion' => 'PROMOCION'])                                      
                     </div>
                     <div class="modal-footer">
                         <div class="hstack gap-2 justify-content-end">

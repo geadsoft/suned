@@ -38,6 +38,10 @@
             swal("Error al Imprimir!", "Datos incompletos..", "error");
         })
 
+        window.addEventListener('openPdf', event => {
+            window.open(event.detail.url, '_blank');
+        });
+
     </script>
 
 @endsection

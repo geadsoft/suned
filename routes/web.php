@@ -10,6 +10,7 @@ use App\Http\Livewire\VcGenericReports;
 use App\Http\Livewire\VcAccountStatus;
 use App\Http\Livewire\VcPersons;
 use App\Http\Livewire\VcCertificados;
+use App\Http\Livewire\VcPromocion;
 use App\Http\Livewire\VcRatingsDetail;
 use App\Http\Livewire\VcSolicitudes;
 use App\Http\Livewire\VcGeneraXML;
@@ -216,6 +217,8 @@ Route::get('/preview-pdf/generic-report/{report},{data}',[VcGenericReports::clas
 Route::get('/download-pdf/generic-report/{report},{data}',[VcGenericReports::class, 'liveWirePDF']);
 Route::get('/preview-pdf/certificados/{data}',[VcCertificados::class, 'liveWirePDF']);
 Route::get('/download-pdf/certificados/{data}',[VcCertificados::class, 'downloadPDF']);
+Route::get('/preview-pdf/certificado-promocion/{data}',[VcPromocion::class, 'liveWirePDF']);
+
 Route::get('/preview-pdf/ratings/{data}',[VcRatingsDetail::class, 'printPDF']);
 Route::get('/download-pdf/ratings/{data}',[VcRatingsDetail::class, 'downloadPDF']);
 Route::get('/preview-pdf/requests',[VcSolicitudes::class, 'printPDF']);

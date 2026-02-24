@@ -12,6 +12,8 @@ use App\Models\TmReportes;
 use App\Models\TrCalificacionesCabs;
 use App\Models\TrCalificacionesDets;
 use App\Models\TmAsignaturas;
+use App\Models\TdBoletinFinal;
+
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Storage;
@@ -22,8 +24,8 @@ use Illuminate\Support\Facades\DB;
 
 class VcPromocion extends Component
 {
-    public $tblperiodo, $control="";
-    public $tipoDoc="PP", $periodoId, $cursoId, $nombres, $nui="", $documento, $fecha, $folio=0, $matricula=0, $nomcurso="";
+    public $tblperiodo, $control="disabled";
+    public $tipoDoc="PP", $periodoId, $cursoId, $nombres, $nui="", $documento, $fecha, $folio=0, $matricula=0, $nomcurso="", $fechaMatricula;
     public $periodo, $foto="", $rector, $secretaria, $coordinador, $bachilleren="", $nota=0, $escala=''; 
     public $dttitulo="", $dtnombre="", $dtinstitucion="", $dtcargo="", $dtfecha, $refrendacion=0, $pagina=0, $fprorroga, $documentos="";
     public $especializacion="",$paseCursoId,$matriculaId=0,$registrar;
@@ -104,10 +106,9 @@ class VcPromocion extends Component
         $this->matriculaId = $idMatricula;
         $tblmatricula    = TmMatricula::find($idMatricula);
         $this->documento =  $tblmatricula['documento'];
-        $this->fecha     =  date('Y-m-d',strtotime($tblmatricula['fecha']));
         $this->cursoId   =  $tblmatricula->curso_id;
-
-        dd($tblmatricula);
+        $this->periodoId =  $tblmatricula->periodo_id;
+        $this->fechaMatricula =  date('Y-m-d',strtotime($tblmatricula->fecha)); 
 
         $objData = DB::Select("select truncate(rownr/100,0) + folio as folio, rownr, documento 
         from (
@@ -485,7 +486,10 @@ class VcPromocion extends Component
         }
 
         if ($modo=='P'){
-            return redirect()->to('/preview-pdf/certificados/'.$reporte['id']);
+            //return redirect()->to('/preview-pdf/certificado-promocion/'.$reporte['id']);
+            $this->dispatchBrowserEvent('openPdf', [
+                'url' => url('/preview-pdf/certificado-promocion/'.$reporte['id'])
+            ]);
         }else{
             return redirect()->to('/download-pdf/certificados/'.$reporte['id']); 
         }
@@ -494,32 +498,32 @@ class VcPromocion extends Component
 
     public function calificaciones($matricula){
 
-        $notas = TrCalificacionesDets::query()
-        ->join('tr_calificaciones_cabs as c','c.id','=','tr_calificaciones_dets.calificacioncab_id')
-        ->join('tm_asignaturas as a','a.id','=','c.asignatura_id')
+        $notas = TdBoletinFinal::query()
+        ->join('tm_asignaturas as a','a.id','=','td_boletin_finals.asignatura_id')
         ->join('tm_generalidades as g','g.id','=','a.area_id')
-        ->select('tr_calificaciones_dets.*','a.descripcion as materia','g.descripcion as area')
-        ->where('tr_calificaciones_dets.estudiante_id',$matricula['estudiante_id'])
-        ->where('c.periodo_id',$matricula['periodo_id'])
-        ->where('c.curso_id',$matricula['curso_id'])
+        ->select('td_boletin_finals.*','a.descripcion as materia','g.descripcion as area')
+        ->where('td_boletin_finals.periodo_id',$matricula['periodo_id'])
+        ->where('td_boletin_finals.curso_id',$matricula['curso_id'])
+        ->where('td_boletin_finals.persona_id',$matricula['estudiante_id'])
+        ->orderBy('g.descripcion')
         ->get();
-
+        
         $objnotas = [];
         $total=0;
         foreach($notas as $record){
             $data['area']    = $record['area'];
             $data['materia'] = $record['materia']; 
 
-            if ($record['escala_cualitativa']!=''){
+            /*if ($record['escala_cualitativa']!=''){
                 $data['nota']  = $record['escala_cualitativa']; 
                 $data['letra'] = $this->refescala[$record['escala_cualitativa']];
-            }else{
-                $data['nota'] = $record['calificacion'];
-                $total =$total+$record['calificacion'];
+            }else{*/
+                $data['nota'] = $record['promedio_final'];
+                $total =$total+$record['promedio_final'];
                 $formatter = new NumeroALetras();
-                $notaletra = $formatter->toWords($record['calificacion'], 2);
+                $notaletra = $formatter->toWords($record['promedio_final'], 2);
                 $data['letra'] = $notaletra;
-            }
+            /*}*/
             
             array_push($objnotas, $data);
         }
@@ -574,151 +578,21 @@ class VcPromocion extends Component
         $mes  = ["01" => 'Enero', "02" => 'Febrero', "03" => 'Marzo', "04" => 'Abril', "05" => 'Mayo', "06" => 'Junio',
         "07" => 'Julio', "08" => 'Agosto', "09" => 'Septiembre', "10" => 'Octubre', "11" => 'Noviembre', "12" => 'Diciembre'];
 
-        $arraydcto = [
-            'AC' => 'Acta',
-            'TI' => 'Título',
-            'AT' => 'Acta y TÍtulo',
-        ];
+        $notas = $this->calificaciones($matricula);
+        $pdf = PDF::loadView('reports/certificado_promocion',[
+            'data'  => $data,
+            'sede'  => $sede,
+            'notas' => $notas,
+            'mes'   => $mes,
+        ]);
 
-        switch ($data['tipo']) {
-            case 'MF':
-                
-                $pdf = PDF::loadView('reports/matricula_folio',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                    'foto'  => $this->foto,
-                ]);
-        
-                return $pdf->setPaper('a4')->stream('Certificado Folio.pdf');
-
-                break;
-            case 'MA':
-                
-                $pdf = PDF::loadView('reports/certificado_matricula',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                ]);
-        
-                return $pdf->setPaper('a4')->stream('Certificado Matrícula.pdf');
-
-                break;
-            case 'PA':
-                
-                $pdf = PDF::loadView('reports/certificado_pasantias',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                ]);
-        
-                return $pdf->setPaper('a4')->stream('Certificado Pasantias.pdf');
-
-                break;
-            case 'CO':
-                
-                $pdf = PDF::loadView('reports/certificado_conducta',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                    'numletra' => $numletra,
-                ]);
-        
-                return $pdf->setPaper('a4')->stream('Certificado Conducta.pdf');
-
-                break;
-            case 'AP':
-                
-                $pdf = PDF::loadView('reports/certificado_aprovechamiento',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                    'numletra' => $numletra,
-                ]);
-        
-                return $pdf->setPaper('a4')->stream('Certificado Aprovechamiento.pdf');
-
-                break;
-            case 'PR':
-                
-                $pdf = PDF::loadView('reports/certificado_pase',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                ]);
-        
-                return $pdf->setPaper('a4')->stream('Solicitud Pase Reglamentado.pdf');
-
-                break;
-            case 'AR':
-
-                $pdf = PDF::loadView('reports/certificado_acepta_pase',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                ]);
-        
-                return $pdf->setPaper('a4')->stream('Solicitud Aceptación Pase Reglamentado.pdf');
-            
-            case 'ER':
-
-                    $notas = $this->promedio($matricula);
-
-                    $pdf = PDF::loadView('reports/certificado_emision_pase',[
-                        'sede'  => $sede,
-                        'data'  => $data,
-                        'mes'   => $mes,
-                        'notas' => $notas,
-                    ]);
-            
-                    return $pdf->setPaper('a4')->stream('Solicitud Emisión Pase Reglamentado.pdf');
-    
-                break;
-            case 'RR':
-
-                $pdf = PDF::loadView('reports/certificado_rezago',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                    'arraydcto' =>  $arraydcto,
-                ]);
-        
-                return $pdf->setPaper('a4')->stream('Certificado Rezago Refrendación.pdf');
-
-                break;
-            case 'SD':
-
-                $pdf = PDF::loadView('reports/certificado_distritosi',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                ]);
-        
-                return $pdf->setPaper('a4')->stream('Certificado Subsecretaría y Distrito.pdf');
-
-                break;
-            case 'ND':
-
-                $pdf = PDF::loadView('reports/certificado_distritono',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                ]);
-        
-                return $pdf->setPaper('a4')->stream('Certificado Subsecretaría y Distrito.pdf');
-
-                break;
-            case 'PP':
-
-                    $notas = $this->calificaciones($matricula);
-
-                    $pdf = PDF::loadView('reports/certificado_promocion',[
-                        'data'  => $data,
-                        'sede'  => $sede,
-                        'notas' => $notas,
-                        'mes'   => $mes,
-                    ]);
-            
-                    return $pdf->setPaper('a4')->stream('Certificado de Promoción.pdf');
-    
-                    break;
-        }
+        return $pdf->setPaper('a4')->stream('Certificado de Promoción.pdf');
         
     }
 
     public function downloadPDF($idReporte)
     {
-
+        $sede  = TmSedes::orderBy('id','desc')->first();
         $data = TmReportes::find($idReporte);
 
         $this->foto    = $data['identificacion'].'.jpg';
@@ -735,128 +609,16 @@ class VcPromocion extends Component
         $mes  = ["01" => 'Enero', "02" => 'Febrero', "03" => 'Marzo', "04" => 'Abril', "05" => 'Mayo', "06" => 'Junio',
         "07" => 'Julio', "08" => 'Agosto', "09" => 'Septiembre', "10" => 'Octubre', "11" => 'Noviembre', "12" => 'Diciembre'];
 
-        $arraydcto = [
-            'AC' => 'Acta',
-            'TI' => 'Título',
-            'AT' => 'Acta y TÍtulo',
-        ];
 
-        switch ($data['tipo']) {
-            case 'MF':
-                
-                $pdf = PDF::loadView('reports/matricula_folio',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                    'foto'  => $this->foto,
-                ]);
-        
-                return $pdf->download('Certificado Folio.pdf');
+        $notas = $this->calificaciones($matricula);
+        $pdf = PDF::loadView('reports/certificado_promocion',[
+            'data'  => $data,
+            'sede'  => $sede,
+            'notas' => $notas,
+            'mes'   => $mes,
+        ]);
 
-                break;
-            case 'MA':
-                
-                $pdf = PDF::loadView('reports/certificado_matricula',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                ]);
-        
-                return $pdf->download('Certificado Matrícula.pdf');
-
-                break;
-            case 'PA':
-                
-                $pdf = PDF::loadView('reports/certificado_pasantias',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                ]);
-        
-                return $pdf->download('Certificado Pasantias.pdf');
-
-                break;
-            case 'CO':
-                
-                $pdf = PDF::loadView('reports/certificado_conducta',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                    'numletra' => $numletra,
-                ]);
-        
-                return $pdf->download('Certificado Conducta.pdf');
-
-                break;
-            case 'AP':
-                
-                $pdf = PDF::loadView('reports/certificado_aprovechamiento',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                    'numletra' => $numletra,
-                ]);
-        
-                return $pdf->download('Certificado Aprovechamiento.pdf');
-
-                break;
-            case 'PR':
-                
-                $pdf = PDF::loadView('reports/certificado_pase',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                ]);
-        
-                return $pdf->download('Solicitud Pase Reglamentado.pdf');
-
-                break;
-            case 'AR':
-
-                $pdf = PDF::loadView('reports/certificado_acepta_pase',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                ]);
-
-                return $pdf->download('Solicitud Aceptación Pase Reglamentado.pdf');
-            
-            case 'ER':
-
-                    $pdf = PDF::loadView('reports/certificado_emision_pase',[
-                        'data'  => $data,
-                        'mes'   => $mes,
-                    ]);
-            
-                    return $pdf->download('Solicitud Emisión Pase Reglamentado.pdf');
-    
-                break;
-            case 'RR':
-
-                $pdf = PDF::loadView('reports/certificado_rezago',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                    'arraydcto' =>  $arraydcto,
-                ]);
-        
-                return $pdf->download('Certificado Rezago Refrendación.pdf');
-
-                break;
-            case 'SD':
-
-                $pdf = PDF::loadView('reports/certificado_distritosi',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                ]);
-        
-                return $pdf->download('Certificado Subsecretaría y Distrito.pdf');
-
-                break;
-            case 'ND':
-
-                $pdf = PDF::loadView('reports/certificado_distritono',[
-                    'data'  => $data,
-                    'mes'   => $mes,
-                ]);
-        
-                return $pdf->download('Certificado Subsecretaría y Distrito.pdf');
-
-                break;
-        }
-
+        return $pdf->download('Certificado de Promoción.pdf');
 
     }
 

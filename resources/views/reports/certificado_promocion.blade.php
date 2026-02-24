@@ -40,7 +40,7 @@
                         <td width="10%">
                         </td>
                         <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
-                            <p style style="line-height: 200%" class="text-justify"><br>
+                            <p style="margin-top:0 line-height: 200%" class="text-justify"><br>
                             De conformidad con lo prescrito en el Art. 197 del Reglamento General a la Ley Orgánica 
                             de Educación Intercultural y demás normativas vigentes, certifica que el/la estudiante
                             <strong>{{$data['nombres']}}</strong>, del <strong>{{$data['curso']}}: </strong> obtuvo las
@@ -53,7 +53,7 @@
             </table>
     </section>
     <section>
-        <table cellpadding="0" cellspancing="0" width="100%" style="font-size:12px">
+        <table cellpadding="0" cellspacing="0" width="100%" style="font-size:12px">
         <tbody>                
             <tr style="font-size:13px">  
                 <td width="10%">
@@ -100,7 +100,7 @@
                 <td width="4%">
                 </td>
             </tr>
-                            </tbody>
+        </tbody>
         </table>
     </section>
     <section>
@@ -110,10 +110,10 @@
                         <td width="10%">
                         </td>
                         <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
-                            <p style="line-height: 200%" class="text-justify"><br>
+                            <p style="margin-top:0 line-height: 200%" class="text-justify"><br>
                             Por lo tanto es promovido/a al <strong>{{$data['curso_promovido']}}.</strong><br>
                             Para constancia suscriben en unidad de acto <strong>{{$data['rector']}}</strong><br>
-                            Dado y firmado en:<br>
+                            Dado y firmado en:<br><br>
                             Guayaquil, {{date('d',strtotime($data['emision']))}} de 
                             {{$mes[date('m',strtotime($data['emision']))]}} de {{date('Y',strtotime($data['emision']))}}
                             </p>
