@@ -519,7 +519,7 @@ class VcPromocion extends Component
         ->orderBy('g.descripcion')
         ->get();
 
-        dd( $notas);
+        dd($pases);
                 
         $objnotas = [];
         $total=0;
