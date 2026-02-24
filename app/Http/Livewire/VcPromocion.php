@@ -502,7 +502,7 @@ class VcPromocion extends Component
         ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
         ->where('p.matricula_id',$matricula['id'])
         ->where('p.estado',"A")
-        ->select('m.curso_id', 'p.modalidad_id', 'p.estudiante_id')
+        ->select('p.curso_id', 'p.modalidad_id', 'p.estudiante_id')
         ->first();
 
         if(!empty($pases)){
@@ -518,8 +518,6 @@ class VcPromocion extends Component
         ->where('td_boletin_finals.persona_id',$matricula['estudiante_id'])
         ->orderBy('g.descripcion')
         ->get();
-
-        dd($pases);
                 
         $objnotas = [];
         $total=0;
