@@ -11,23 +11,17 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-    <section class="header" style ="top: -287px;">
-        <table cellpadding="0" cellspancing="0" width="100%">
-        </table>
-        <br>
-    </section>
-
-    <section style ="margin-top: -110px;">
-            <table cellpadding="0" cellspancing="0" width="100%" style="font-size:14px">
+    <section style ="margin-top: -50px;">
+            <table cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                    <td style="vertical-align: top; padding-top: 8px">
-                        <img src="../public/assets/images/Gob_Ecuador.png" height="100px">
+                    <td>
+                        <img src="../public/assets/images/Gob_Ecuador.png" height="170px">
                     </td>        
                 </tr>
             </table>
-            <table cellpadding="0" cellspacing="0" class="" width="100%">
+            <table cellpadding="0" cellspacing="0" width="100%" style ="margin-top: -40px;">
                 <tr style="font-size:10px">
-                    <td width="60%" class="text-center">
+                    <td width="100%" class="text-center">
                         <p style="margin-top:0; margin-bottom:0;"><span style="font-size:14px"><strong>{{$sede['nombre']}}</strong></p> 
                         <p style="margin-top:0; margin-bottom:0;"><span style="font-size:14px"><strong>CERTIFICADO DE PROMOCIÓN</strong></p> 
                         <p style="margin-top:0; margin-bottom:0;"><span style="font-size:14px"><strong>AÑO LECTIVO {{$data['periodo']}}</strong></p>
@@ -37,7 +31,7 @@
             <table cellpadding="0" cellspacing="0" class="" style="font-size:12px">
                 <tbody>
                     <tr style="font-size:13px">
-                        <td width="10%">
+                        <td width="5%">
                         </td>
                         <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
                             <p style="margin-top:0 line-height: 200%" class="text-justify"><br>
@@ -56,9 +50,9 @@
         <table cellpadding="0" cellspacing="0" width="100%" style="font-size:12px">
         <tbody>                
             <tr style="font-size:13px">  
-                <td width="10%">
+                <td width="5%">
                 </td>
-                <td width="86%">               
+                <td width="90%">               
                     <table width="100%" style="font-size:10px; border: 1px solid black;">
                         <thead>
                             <tr style="border: 1px solid black;">
@@ -97,7 +91,7 @@
                         </tbody>
                     </table>
                 </td>
-                <td width="4%">
+                <td width="5%">
                 </td>
             </tr>
         </tbody>
@@ -107,7 +101,7 @@
             <table cellpadding="0" cellspacing="0" width="100%" style="font-size:12px">
                 <tbody>
                     <tr style="font-size:13px">
-                        <td width="10%">
+                        <td width="5%">
                         </td>
                         <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
                             <p style="margin-top:0 line-height: 200%" class="text-justify"><br>
