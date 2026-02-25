@@ -482,54 +482,6 @@ class VcBoletinPase extends Component
 
 
     public function asignarNotas(){
-
-        $servicio = TmCursos::query()
-        ->join("tm_servicios as s","s.id","=","tm_cursos.servicio_id")
-        ->when(
-            $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
-            function ($query) {
-                $query->where('tm_cursos.id', $this->filters['paralelo']);
-            }
-        )
-        ->when(
-            $this->filters['paralelo_pase'] > 0,
-            function ($query) {
-                $query->where('tm_cursos.id', $this->filters['paralelo_pase']);
-            }
-        )
-        ->first();
-
-        $this->filters['calificacion'] = $servicio->calificacion;
-
-        $this->tblgrupo  = TmActividades::query()
-        ->join("tm_horarios_docentes as d",function($join){
-            $join->on("d.id","=","tm_actividades.paralelo")
-                ->on("d.docente_id","=","tm_actividades.docente_id");
-        })
-        ->join("tm_horarios as h","h.id","=","d.horario_id")
-        ->when(
-            $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
-            function ($query) {
-                $query->where('h.curso_id', $this->filters['paralelo']);
-            }
-        )
-        ->when(
-            $this->filters['paralelo_pase'] > 0,
-            function ($query) {
-                $query->where('h.curso_id', $this->filters['paralelo_pase']);
-            }
-        )
-        ->when($this->filters['termino'],function($query){
-            return $query->where('termino',"{$this->filters['termino']}");
-        })
-        ->when($this->filters['bloque'],function($query){
-            return $query->where('bloque',"{$this->filters['bloque']}");
-        })
-        ->selectRaw("tm_actividades.actividad")
-        ->where("tipo","AC")
-        ->groupBy("tm_actividades.actividad")
-        ->get();
-
         
         foreach ($this->tblpersonas as $key => $person){
 
@@ -552,6 +504,55 @@ class VcBoletinPase extends Component
                 $this->filters['paralelo']=$person->curso_paseId;
             }
 
+            $servicio = TmCursos::query()
+            ->join("tm_servicios as s","s.id","=","tm_cursos.servicio_id")
+            ->when(
+                $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
+                function ($query) {
+                    $query->where('tm_cursos.id', $this->filters['paralelo']);
+                }
+            )
+            ->when(
+                $this->filters['paralelo_pase'] > 0,
+                function ($query) {
+                    $query->where('tm_cursos.id', $this->filters['paralelo_pase']);
+                }
+            )
+            ->first();
+
+            $this->filters['calificacion'] = $servicio->calificacion;
+
+            $this->tblgrupo  = TmActividades::query()
+            ->join("tm_horarios_docentes as d",function($join){
+                $join->on("d.id","=","tm_actividades.paralelo")
+                    ->on("d.docente_id","=","tm_actividades.docente_id");
+            })
+            ->join("tm_horarios as h","h.id","=","d.horario_id")
+            ->when(
+                $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
+                function ($query) {
+                    $query->where('h.curso_id', $this->filters['paralelo']);
+                }
+            )
+            ->when(
+                $this->filters['paralelo_pase'] > 0,
+                function ($query) {
+                    $query->where('h.curso_id', $this->filters['paralelo_pase']);
+                }
+            )
+            ->when($this->filters['termino'],function($query){
+                return $query->where('termino',"{$this->filters['termino']}");
+            })
+            ->when($this->filters['bloque'],function($query){
+                return $query->where('bloque',"{$this->filters['bloque']}");
+            })
+            ->selectRaw("tm_actividades.actividad")
+            ->where("tipo","AC")
+            ->groupBy("tm_actividades.actividad")
+            ->get();
+
+
+            //Asignar Notas Actividades
             $notas = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
             ->join('tm_horarios_docentes as d', function($join) {
