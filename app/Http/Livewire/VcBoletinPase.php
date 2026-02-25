@@ -18,9 +18,9 @@ use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use PDF;
 
-class VcFinalBulletin extends Component
-{   
-    public $periodoId, $modalidadId=0, $tblpersonas=[], $datos, $bloqueEx, $estudianteId, $mensaje="", $calificacion="N";
+class VcBoletinPase extends Component
+{
+    public $periodoId, $modalidadId=0, $tblpersonas=[], $datos, $bloqueEx, $estudianteId, $mensaje="", $calificacion="N", $cursos;
     public $arrComentario=[];
     public $arrtipo=[];
     public $tblbloque=[];
@@ -76,37 +76,19 @@ class VcFinalBulletin extends Component
     {
         $periodos = TmPeriodosLectivos::orderBy('periodo','desc')->get();
 
-        $this->tblmodalidad = TmGeneralidades::query()
-        ->where("superior",1)
-        ->get();
-        
         $this->tblbloque = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
         ->where('tipo','PA')
         ->where('evaluacion',$this->termino)
         ->get();
-        
-       $this->tblparalelo = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
-        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->where('tm_horarios.grupo_id',$this->modalidadId)
-        ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion,s.calificacion')
-        ->get();
 
-        $this->filters['modalidadId'] = $this->modalidadId;
-
-        return view('livewire.vc-final-bulletin',[
+        return view('livewire.vc-boletin-pase',[
             'periodos' => $periodos,
         ]);
     }
 
     public function generarBoletin(){
 
-        if (empty($this->filters['paralelo']) || empty($this->filters['modalidadId'])) {
-            session()->flash('error', 'Debe seleccionar Modalidad y Paralelo.');
-            return;
-        }
 
         foreach ($this->tbltermino as $termObj) {
 
@@ -122,88 +104,112 @@ class VcFinalBulletin extends Component
             }
             
             $periodo = $this->filters['periodoId'];
-            $modalidad = $this->filters['modalidadId'];
-            $curso = $this->filters['paralelo'];
+            /*$modalidad = $this->filters['modalidadId'];
+            $curso = $this->filters['paralelo_pase'];*/
             $term = $this->termino;
 
-            // 1) Recolectar persona_ids y asignatura_ids que vamos a procesar
-            $personaIds = [];
-            $asignaturaIds = [];
-            foreach ($this->tblrecords as $personaId => $record) {
+            foreach ($this->tblpersonas as $person){    
+
+                // 1) Recolectar persona_ids y asignatura_ids que vamos a procesar
+                $personaIds = [];
+                $asignaturaIds = [];
+                /*foreach ($this->tblrecords as $personaId => $record) {
+                    foreach ($record as $k2 => $data) {
+                        if ($k2 === 'ZZ') continue;
+                        if (empty($data['asignaturaId'])) continue;
+                        $personaIds[] = $personaId;
+                        $asignaturaIds[] = $data['asignaturaId'];
+                    }
+                }*/
+                $modalidad = $person->modalidad_id;
+                $curso = $person->curso_paseId;
+
+                $record = $this->tblrecords[$person->id];
                 foreach ($record as $k2 => $data) {
                     if ($k2 === 'ZZ') continue;
                     if (empty($data['asignaturaId'])) continue;
-                    $personaIds[] = $personaId;
+                    $personaIds[] = $person->id;
                     $asignaturaIds[] = $data['asignaturaId'];
                 }
-            }
-            $personaIds = array_values(array_unique($personaIds));
-            $asignaturaIds = array_values(array_unique($asignaturaIds));
 
-            // 2) Prefetch: traer todos los boletines existentes para esas personas/asignaturas
-            $existing = TdBoletinFinal::query()
-                ->where('periodo_id', $periodo)
-                ->where('modalidad_id', $modalidad)
-                ->where('curso_id', $curso)
-                ->when(!empty($personaIds), fn($q)=> $q->whereIn('persona_id', $personaIds))
-                ->when(!empty($asignaturaIds), fn($q)=> $q->whereIn('asignatura_id', $asignaturaIds))
-                ->get();
+                $personaIds = array_values(array_unique($personaIds));
+                $asignaturaIds = array_values(array_unique($asignaturaIds));
 
-            // 3) Mapear para acceso O(1)
-            $map = [];
-            foreach ($existing as $row) {
-                $map[$row->persona_id . '|' . $row->asignatura_id] = $row;
-            }
+                // 2) Prefetch: traer todos los boletines existentes para esas personas/asignaturas
+                $existing = TdBoletinFinal::query()
+                    ->where('periodo_id', $periodo)
+                    ->where('modalidad_id', $modalidad)
+                    ->where('curso_id', $curso)
+                    ->when(!empty($personaIds), fn($q)=> $q->whereIn('persona_id', $personaIds))
+                    ->when(!empty($asignaturaIds), fn($q)=> $q->whereIn('asignatura_id', $asignaturaIds))
+                    ->get();
 
-            // 4) Dentro de una transacción, crear o actualizar según exista en el mapa
-            DB::transaction(function() use ($map, $periodo, $modalidad, $curso, $term) {
-                foreach ($this->tblrecords as $personaId => $record) {
-                    foreach ($record as $k2 => $data) {
-                        if ($k2 === 'ZZ') continue;
-                        $asigId = $data['asignaturaId'] ?? null;
-                        if (is_null($asigId)) continue;
-
-                        $key = $personaId . '|' . $asigId;
-
-                        $payload = [
-                            "{$term}_notaparcial"   => isset($data['promedio']) ? floatval($data['promedio']) : null,
-                            "{$term}_nota70"        => isset($data['nota70']) ? floatval($data['nota70']) : null,
-                            "{$term}_evaluacion"    => isset($data['examen']) ? floatval($data['examen']) : null,
-                            "{$term}_nota30"        => isset($data['nota30']) ? floatval($data['nota30']) : null,
-                            "{$term}_notatrimestre" => isset($data['cuantitativo']) ? floatval($data['cuantitativo']) : null,
-                            "supletorio"            => isset($data['supletorio']) ? floatval($data['supletorio']) : null,                            
-                        ];
-
-                        if (isset($map[$key])) {
-                            // existe: actualizar solo las columnas del término
-                            $map[$key]->update($payload);
-                        } else {
-                            // no existe: crear registro completo con claves foráneas + payload
-                            TdBoletinFinal::create(array_merge([
-                                'periodo_id'    => $periodo,
-                                'modalidad_id'  => $modalidad,
-                                'curso_id'      => $curso,
-                                'persona_id'    => $personaId,
-                                'asignatura_id' => $asigId,
-                            ], $payload));
-                            // si quieres evitar re-check en el mismo ciclo, agrega al mapa para próximas actualizaciones
-                            $map[$key] = true; // marca simple; no es modelo, pero evita crear doble
-                        }
-                    }
+                // 3) Mapear para acceso O(1)
+                $map = [];
+                foreach ($existing as $row) {
+                    $map[$row->persona_id . '|' . $row->asignatura_id] = $row;
                 }
-            });
+
+                // 4) Dentro de una transacción, crear o actualizar según exista en el mapa
+                $personaId = $personaIds[0];
+                DB::transaction(function() use ($map, $periodo, $modalidad, $curso, $term, $personaId) {
+                        $record = $this->tblrecords[$personaId];
+                    /*foreach ($this->tblrecords as $personaId => $record) {*/
+                        foreach ($record as $k2 => $data) {
+                            if ($k2 === 'ZZ') continue;
+                            $asigId = $data['asignaturaId'] ?? null;
+                            if (is_null($asigId)) continue;
+
+                            $key = $personaId . '|' . $asigId;
+
+                            $payload = [
+                                "{$term}_notaparcial"   => isset($data['promedio']) ? floatval($data['promedio']) : null,
+                                "{$term}_nota70"        => isset($data['nota70']) ? floatval($data['nota70']) : null,
+                                "{$term}_evaluacion"    => isset($data['examen']) ? floatval($data['examen']) : null,
+                                "{$term}_nota30"        => isset($data['nota30']) ? floatval($data['nota30']) : null,
+                                "{$term}_notatrimestre" => isset($data['cuantitativo']) ? floatval($data['cuantitativo']) : null,
+                                "supletorio"            => isset($data['supletorio']) ? floatval($data['supletorio']) : null,                            
+                            ];
+
+                            if (isset($map[$key])) {
+                                // existe: actualizar solo las columnas del término
+                                $map[$key]->update($payload);
+                            } else {
+                                // no existe: crear registro completo con claves foráneas + payload
+                                TdBoletinFinal::create(array_merge([
+                                    'periodo_id'    => $periodo,
+                                    'modalidad_id'  => $modalidad,
+                                    'curso_id'      => $curso,
+                                    'persona_id'    => $personaId,
+                                    'asignatura_id' => $asigId,
+                                ], $payload));
+                                // si quieres evitar re-check en el mismo ciclo, agrega al mapa para próximas actualizaciones
+                                $map[$key] = true; // marca simple; no es modelo, pero evita crear doble
+                            }
+                        }
+                    /*}*/
+                });
+
+            }
+        }
+
+        $personaIds = [];
+        foreach ($this->tblrecords as $personaId => $record) {
+            foreach ($record as $k2 => $data) {
+                if ($k2 === 'ZZ') continue;
+                if (empty($data['asignaturaId'])) continue;
+                $personaIds[] = $personaId;
+            }
         }
 
         $boletin = TdBoletinFinal::query()
         ->where('periodo_id',$this->filters['periodoId'])
-        ->where('modalidad_id',$this->filters['modalidadId'])
-        ->where('curso_id', $this->filters['paralelo'])
-        ->when($this->filters['estudianteId'], function($query) {
-            return $query->where('persona_id', $this->filters['estudianteId']);
-        })
+        ->where('persona_id',$personaIds)
+        ->when(!empty($personaIds), fn($q)=> $q->whereIn('persona_id', $personaIds))
         ->get()->toArray();
 
-         // Escala Cualitativa
+
+        // Escala Cualitativa
         $rangos = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->filters['periodoId'])
         ->where("tipo","EC")
@@ -272,44 +278,39 @@ class VcFinalBulletin extends Component
 
     public function loadPersonas(){
 
-        // Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
-        $matriculasConPase = DB::table('tm_pase_cursos')
-        ->where('estado', 'A')
-        ->pluck('matricula_id');
-
-        // Consulta de matrículas SIN pase
-        $matriculasQuery = DB::table('tm_matriculas as m')
-        ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
-        ->where('m.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
-        ->where('m.estado','A')
-        ->whereNotIn('m.id', $matriculasConPase);
-
         // Consulta de pases activos
         $pasesQuery = DB::table('tm_pase_cursos as p')
         ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
-        ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
-        ->where('p.modalidad_id', $this->modalidadId)
+        ->selectRaw('m.estudiante_id,m.documento,p.modalidad_id,m.periodo_id,m.curso_id, p.curso_id as curso_paseId')
         ->where('m.periodo_id', $this->periodoId)
         ->where('m.estado','A')
         ->where('p.estado', 'A');
-        
-
-        // UNION de ambas consultas
-        $unionQuery = $matriculasQuery; //->unionAll($pasesQuery);
 
         // Consulta principal con joinSub en Eloquent
         $this->tblpersonas = TmPersonas::query()
-            ->joinSub($unionQuery, 'm', function ($join) {
+            ->joinSub($pasesQuery, 'm', function ($join) {
             $join->on('tm_personas.id', '=', 'm.estudiante_id');
         })
         ->when($this->filters['estudianteId'], function($query) {
             return $query->where('tm_personas.id', $this->filters['estudianteId']);
         })
-        ->where('m.curso_id', $this->filters['paralelo'])
-        ->select('tm_personas.*', 'm.documento')
+        ->select('tm_personas.*', 'm.documento','m.modalidad_id','m.curso_id','m.curso_paseId')
         ->orderBy('tm_personas.apellidos')
         ->get();
+
+        $this->cursos = TmCursos::query()
+        ->join("tm_servicios as s","s.id","=","tm_cursos.servicio_id")
+        ->join("tm_generalidades as g","g.id","=","s.modalidad_id")
+        ->join("tm_pase_cursos as p","p.curso_id","=","tm_cursos.id")
+        ->where("tm_cursos.periodo_id",$this->filters['periodoId'])
+        ->select(
+            "p.estudiante_id",
+            "s.descripcion as curso",
+            "tm_cursos.paralelo",
+            "g.descripcion as modalidad"
+        )
+        ->get()
+        ->keyBy('estudiante_id')->toArray();
 
     }
 
@@ -353,48 +354,58 @@ class VcFinalBulletin extends Component
 
         $this->tblrecords=[];
 
-        $this->asignaturas = TmHorarios::query()
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
-        ->select("a.*")
-        ->where("tm_horarios.curso_id",$this->filters['paralelo'])
-        ->orderBy("a.descripcion")
-        ->get();
-
-        $pases = DB::table('tm_pase_cursos as p')
-        ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
-        ->where('p.curso_id', $this->filters['paralelo'])
-        ->where('p.estado',"A")
-        ->select('m.curso_id', 'p.modalidad_id', 'p.estudiante_id')
-        ->get();
-
         foreach ($this->tblpersonas as $key => $person)
         { 
             $idPerson = $person->id;
-            $this->filters['paralelo_pase'] = 0;
-
-            $registro = $pases->firstWhere('estudiante_id', $idPerson);
             
-            if($registro){
+            /*$pases = DB::table('tm_pase_cursos as p')
+            ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
+            ->where('p.curso_id', $this->filters['paralelo'])
+            ->where('p.estado',"A")
+            ->select('m.curso_id', 'p.modalidad_id', 'p.estudiante_id')
+            ->get();*/
 
+            $this->filters['paralelo_pase'] = $person->curso_id;
 
-                $this->filters['paralelo_pase'] = $registro->curso_id;
+            /*$registro = $pases->firstWhere('estudiante_id', $idPerson);
+            if($registro){*/
 
-                $registros = TdCalificacionActividades::join('tm_actividades as a', 'a.id', '=', 'td_calificacion_actividades.actividad_id')
-                ->join('tm_horarios_docentes as d', 'd.id', '=', 'a.paralelo')
-                ->join('tm_horarios as h', 'h.id', '=', 'd.horario_id')
-                ->where('td_calificacion_actividades.persona_id', $idPerson)
-                ->where('h.curso_id',$this->filters['paralelo_pase'])
-                ->where('a.termino', $this->filters['termino'])
-                ->where('a.tipo', 'ET')
-                ->count('a.id');
+            $existsExam = TdCalificacionActividades::join('tm_actividades as a', 'a.id', '=', 'td_calificacion_actividades.actividad_id')
+            ->join('tm_horarios_docentes as d', 'd.id', '=', 'a.paralelo')
+            ->join('tm_horarios as h', 'h.id', '=', 'd.horario_id')
+            ->where('td_calificacion_actividades.persona_id', $idPerson)
+            ->where('h.curso_id',$this->filters['paralelo_pase'])
+            ->where('a.termino', $this->filters['termino'])
+            ->where('a.tipo', 'ET')
+            ->count('a.id');
 
-                if ($registros==0){
-                   $this->filters['paralelo_pase']=0; 
-                }
-
+            if ($existsExam==0){
+                $this->filters['paralelo_pase']=0; 
+            }else{
+                $this->filters['paralelo']=$person->curso_paseId;
             }
 
+            /*}*/
+
+            $this->asignaturas = TmHorarios::query()
+            ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+            ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
+            ->select("a.*")
+            ->when(
+                $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
+                function ($query) {
+                    $query->where('tm_horarios.curso_id', $this->filters['paralelo']);
+                }
+            )
+            ->when(
+                $this->filters['paralelo_pase'] > 0,
+                function ($query) {
+                    $query->where('tm_horarios.curso_id', $this->filters['paralelo_pase']);
+                }
+            )
+            ->orderBy("a.descripcion")
+            ->get();
+            
             // Actualiza Datos Asignaturas
             foreach ($this->asignaturas as $key => $data)
             {   
@@ -474,10 +485,20 @@ class VcFinalBulletin extends Component
 
         $servicio = TmCursos::query()
         ->join("tm_servicios as s","s.id","=","tm_cursos.servicio_id")
-        ->where("tm_cursos.id",$this->filters['paralelo'])
+        ->when(
+            $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
+            function ($query) {
+                $query->where('tm_cursos.id', $this->filters['paralelo']);
+            }
+        )
+        ->when(
+            $this->filters['paralelo_pase'] > 0,
+            function ($query) {
+                $query->where('tm_cursos.id', $this->filters['paralelo_pase']);
+            }
+        )
         ->first();
 
-        /*$this->calificacion = $servicio->calificacion;*/
         $this->filters['calificacion'] = $servicio->calificacion;
 
         $this->tblgrupo  = TmActividades::query()
@@ -513,7 +534,6 @@ class VcFinalBulletin extends Component
         foreach ($this->tblpersonas as $key => $person){
 
             $idPerson = $person->id;
-            /*$this->filters['estudianteId'] = $idPerson;*/
 
             $notas = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
@@ -535,7 +555,7 @@ class VcFinalBulletin extends Component
                 'n.nota',
                 'd.asignatura_id'
             ])
-            ->get(); 
+            ->get();
 
             foreach ($notas as $key => $objnota){
 
@@ -560,19 +580,6 @@ class VcFinalBulletin extends Component
                 $join->on('d.id', '=', 'tm_actividades.paralelo')
                     ->on('d.docente_id', '=', 'tm_actividades.docente_id');
             })
-            ->join("tm_horarios as h","h.id","=","d.horario_id")
-            ->when(
-                $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
-                function ($query) {
-                    $query->where('h.curso_id', $this->filters['paralelo']);
-                }
-            )
-            ->when(
-                $this->filters['paralelo_pase'] > 0,
-                function ($query) {
-                    $query->where('h.curso_id', $this->filters['paralelo_pase']);
-                }
-            )
             ->when(!empty($this->filters['termino']), function($query) {
                 return $query->where('tm_actividades.termino', $this->filters['termino']);
             })
@@ -1081,16 +1088,6 @@ class VcFinalBulletin extends Component
         $this->modalidadId =  $data->modalidadId;
         $this->periodoId = $data->periodoId;
 
-        $asignaturas = TmHorarios::query()
-        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
-        ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
-        ->select("a.*")
-        ->where("tm_horarios.curso_id",$this->filters['paralelo'])
-        ->orderBy("a.descripcion")
-        ->get();
-
-        //$this->loadPersonas();
-
         $escalas = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->filters['periodoId'])
         ->where("tipo","EC")
@@ -1148,81 +1145,96 @@ class VcFinalBulletin extends Component
         $arrescala[3]["codigo2"] = "R";
         $arrescala[3]["desc2"] = "Regular";
 
-        $this->loadPersonas();        
-
-        $boletin = TdBoletinFinal::query()
-        ->where('periodo_id',$this->filters['periodoId'])
-        ->where('modalidad_id',$this->filters['modalidadId'])
-        ->where('curso_id', $this->filters['paralelo'])
-        ->when($this->filters['estudianteId'], function($query) {
-            return $query->where('persona_id', $this->filters['estudianteId']);
-        })
-        ->get()->toArray();
-
-        $promedios = TdBoletinFinal::query()
-        ->select(
-            'persona_id',
-            DB::raw('ROUND(AVG(`1T_notatrimestre`), 2) AS promedio_1T'),
-            DB::raw('ROUND(AVG(`2T_notatrimestre`), 2) AS promedio_2T'),
-            DB::raw('ROUND(AVG(`3T_notatrimestre`), 2) AS promedio_3T'),
-            DB::raw('ROUND(AVG(`promedio_anual`), 2) AS promedio_an'),
-            DB::raw('ROUND(AVG(`promedio_final`), 2) AS promedio_fn'),
-        )
-        ->where('periodo_id', $this->filters['periodoId'])
-        ->where('modalidad_id', $this->filters['modalidadId'])
-        ->where('curso_id', $this->filters['paralelo'])
-        ->groupBy('persona_id')
-        ->get();
-
-        $promo = TdBoletinFinal::query()
-        ->select('persona_id', DB::raw('COUNT(promocion) as total_supletorios'))
-        ->where('promocion', 'SUPLETORIO')
-        ->where('periodo_id',$this->filters['periodoId'])
-        ->where('modalidad_id',$this->filters['modalidadId'])
-        ->where('curso_id', $this->filters['paralelo'])
-        ->when($this->filters['estudianteId'], function($query) {
-            return $query->where('persona_id', $this->filters['estudianteId']);
-        })
-        ->groupBy('persona_id')
-        ->get()->pluck('total_supletorios', 'persona_id')->toArray();
-
+        $this->loadPersonas(); 
+        
         $this->tblrecords=[];
         $progeneral=[];
 
-        foreach($boletin as $key => $nota){
+        foreach($this->tblpersonas as $person){
 
-            $personaId    = $nota['persona_id'];
-            $asignaturaId = $nota['asignatura_id'];
+            $this->filters['modalidadId'] = $person->modalidad_id;
+            $this->filters['paralelo'] = $person->curso_paseId;
+            $this->filters['estudianteId'] = $person->id;
 
-            $this->tblrecords[$personaId][$asignaturaId]['1T_notaparcial'] = $nota['1T_notaparcial'];
-            $this->tblrecords[$personaId][$asignaturaId]['1T_nota70'] = $nota['1T_nota70'];
-            $this->tblrecords[$personaId][$asignaturaId]['1T_evaluacion'] = $nota['1T_evaluacion'];
-            $this->tblrecords[$personaId][$asignaturaId]['1T_nota30'] = $nota['1T_nota30'];
-            $this->tblrecords[$personaId][$asignaturaId]['1T_notatrimestre'] = $nota['1T_notatrimestre'];
-            $this->tblrecords[$personaId][$asignaturaId]['2T_notaparcial'] =  $nota['2T_notaparcial'];
-            $this->tblrecords[$personaId][$asignaturaId]['2T_nota70'] = $nota['2T_nota70'];
-            $this->tblrecords[$personaId][$asignaturaId]['2T_evaluacion'] = $nota['2T_evaluacion'];
-            $this->tblrecords[$personaId][$asignaturaId]['2T_nota30'] = $nota['2T_nota30'];
-            $this->tblrecords[$personaId][$asignaturaId]['2T_notatrimestre'] = $nota['2T_notatrimestre'];
-            $this->tblrecords[$personaId][$asignaturaId]['3T_notaparcial'] = $nota['3T_notaparcial'];
-            $this->tblrecords[$personaId][$asignaturaId]['3T_nota70'] = $nota['3T_nota70'];
-            $this->tblrecords[$personaId][$asignaturaId]['3T_evaluacion'] = $nota['3T_evaluacion'];
-            $this->tblrecords[$personaId][$asignaturaId]['3T_nota30'] = $nota['3T_nota30'];
-            $this->tblrecords[$personaId][$asignaturaId]['3T_notatrimestre'] = $nota['3T_notatrimestre'];
-            $this->tblrecords[$personaId][$asignaturaId]['promedio_anual'] = $nota['promedio_anual'];
-            $this->tblrecords[$personaId][$asignaturaId]['supletorio'] = $nota['supletorio'];
-            $this->tblrecords[$personaId][$asignaturaId]['promedio_final'] = $nota['promedio_final'];
-            $this->tblrecords[$personaId][$asignaturaId]['promedio_cualitativo'] = $nota['promedio_cualitativo'];
-            $this->tblrecords[$personaId][$asignaturaId]['promocion'] = $nota['promocion'];
-        }
+            $asignaturas = TmHorarios::query()
+            ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+            ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
+            ->select("a.*")
+            ->where("tm_horarios.curso_id",$this->filters['paralelo'])
+            ->orderBy("a.descripcion")
+            ->get();
 
-        foreach($promedios as $key => $nota){
-           $personaId  = $nota['persona_id'];
-           $progeneral[$personaId]['promedio1T'] = $nota['promedio_1T'];
-           $progeneral[$personaId]['promedio2T'] = $nota['promedio_2T'];
-           $progeneral[$personaId]['promedio3T'] = $nota['promedio_3T'];
-           $progeneral[$personaId]['promanual'] = $nota['promedio_an'];
-           $progeneral[$personaId]['promfinal'] = $nota['promedio_fn'];
+            $tblasignatura[$person->id] = $asignaturas;
+
+            $boletin = TdBoletinFinal::query()
+            ->where('periodo_id',$this->filters['periodoId'])
+            ->where('modalidad_id',$this->filters['modalidadId'])
+            ->where('curso_id', $this->filters['paralelo'])
+            ->where('persona_id', $this->filters['estudianteId'])
+            ->get()->toArray();
+
+            $promedios = TdBoletinFinal::query()
+            ->select(
+                'persona_id',
+                DB::raw('ROUND(AVG(`1T_notatrimestre`), 2) AS promedio_1T'),
+                DB::raw('ROUND(AVG(`2T_notatrimestre`), 2) AS promedio_2T'),
+                DB::raw('ROUND(AVG(`3T_notatrimestre`), 2) AS promedio_3T'),
+                DB::raw('ROUND(AVG(`promedio_anual`), 2) AS promedio_an'),
+                DB::raw('ROUND(AVG(`promedio_final`), 2) AS promedio_fn'),
+            )
+            ->where('periodo_id', $this->filters['periodoId'])
+            ->where('modalidad_id', $this->filters['modalidadId'])
+            ->where('curso_id', $this->filters['paralelo'])
+            ->where('persona_id', $this->filters['estudianteId'])
+            ->groupBy('persona_id')
+            ->get();
+
+            $promo = TdBoletinFinal::query()
+            ->select('persona_id', DB::raw('COUNT(promocion) as total_supletorios'))
+            ->where('promocion', 'SUPLETORIO')
+            ->where('periodo_id',$this->filters['periodoId'])
+            ->where('modalidad_id',$this->filters['modalidadId'])
+            ->where('curso_id', $this->filters['paralelo'])
+            ->where('persona_id', $this->filters['estudianteId'])
+            ->groupBy('persona_id')
+            ->get()->pluck('total_supletorios', 'persona_id')->toArray();
+
+            foreach($boletin as $key => $nota){
+
+                $personaId    = $nota['persona_id'];
+                $asignaturaId = $nota['asignatura_id'];
+
+                $this->tblrecords[$personaId][$asignaturaId]['1T_notaparcial'] = $nota['1T_notaparcial'];
+                $this->tblrecords[$personaId][$asignaturaId]['1T_nota70'] = $nota['1T_nota70'];
+                $this->tblrecords[$personaId][$asignaturaId]['1T_evaluacion'] = $nota['1T_evaluacion'];
+                $this->tblrecords[$personaId][$asignaturaId]['1T_nota30'] = $nota['1T_nota30'];
+                $this->tblrecords[$personaId][$asignaturaId]['1T_notatrimestre'] = $nota['1T_notatrimestre'];
+                $this->tblrecords[$personaId][$asignaturaId]['2T_notaparcial'] =  $nota['2T_notaparcial'];
+                $this->tblrecords[$personaId][$asignaturaId]['2T_nota70'] = $nota['2T_nota70'];
+                $this->tblrecords[$personaId][$asignaturaId]['2T_evaluacion'] = $nota['2T_evaluacion'];
+                $this->tblrecords[$personaId][$asignaturaId]['2T_nota30'] = $nota['2T_nota30'];
+                $this->tblrecords[$personaId][$asignaturaId]['2T_notatrimestre'] = $nota['2T_notatrimestre'];
+                $this->tblrecords[$personaId][$asignaturaId]['3T_notaparcial'] = $nota['3T_notaparcial'];
+                $this->tblrecords[$personaId][$asignaturaId]['3T_nota70'] = $nota['3T_nota70'];
+                $this->tblrecords[$personaId][$asignaturaId]['3T_evaluacion'] = $nota['3T_evaluacion'];
+                $this->tblrecords[$personaId][$asignaturaId]['3T_nota30'] = $nota['3T_nota30'];
+                $this->tblrecords[$personaId][$asignaturaId]['3T_notatrimestre'] = $nota['3T_notatrimestre'];
+                $this->tblrecords[$personaId][$asignaturaId]['promedio_anual'] = $nota['promedio_anual'];
+                $this->tblrecords[$personaId][$asignaturaId]['supletorio'] = $nota['supletorio'];
+                $this->tblrecords[$personaId][$asignaturaId]['promedio_final'] = $nota['promedio_final'];
+                $this->tblrecords[$personaId][$asignaturaId]['promedio_cualitativo'] = $nota['promedio_cualitativo'];
+                $this->tblrecords[$personaId][$asignaturaId]['promocion'] = $nota['promocion'];
+            }
+
+            foreach($promedios as $key => $nota){
+            $personaId  = $nota['persona_id'];
+            $progeneral[$personaId]['promedio1T'] = $nota['promedio_1T'];
+            $progeneral[$personaId]['promedio2T'] = $nota['promedio_2T'];
+            $progeneral[$personaId]['promedio3T'] = $nota['promedio_3T'];
+            $progeneral[$personaId]['promanual'] = $nota['promedio_an'];
+            $progeneral[$personaId]['promfinal'] = $nota['promedio_fn'];
+            }
+
         }
 
         $periodo = TmPeriodosLectivos::find($this->filters['periodoId']);
@@ -1230,9 +1242,16 @@ class VcFinalBulletin extends Component
         $curso = TmCursos::query()
         ->join("tm_servicios as s","s.id","=","tm_cursos.servicio_id")
         ->join("tm_generalidades as g","g.id","=","s.modalidad_id")
-        ->where("tm_cursos.id",$this->filters['paralelo'])
-        ->select("s.descripcion","tm_cursos.paralelo","g.descripcion as nivel")
-        ->first();
+        ->join("tm_pase_cursos as p","p.curso_id","=","tm_cursos.id")
+        ->where("tm_cursos.periodo_id",$this->filters['periodoId'])
+        ->select(
+            "p.estudiante_id",
+            "s.descripcion as curso",
+            "tm_cursos.paralelo",
+            "g.descripcion as modalidad"
+        )
+        ->get()
+        ->keyBy('estudiante_id')->toArray();
 
         $trimestre = TdPeriodoSistemaEducativos::query()
         ->where('codigo',$this->filters['termino'])
@@ -1240,10 +1259,10 @@ class VcFinalBulletin extends Component
         ->first();
 
         $datos = [
-            'nivel' => $curso['nivel'],
+            'nivel' => '',
             'trimestre' => $trimestre->descripcion,
             'subtitulo' => "Periodo Lectivo ".$periodo['descripcion'],
-            'curso' => $curso['descripcion'].' '.$curso['paralelo'],
+            'curso' => '',
         ];
 
         $this->fechaActual = date("d/m/Y");
@@ -1276,8 +1295,6 @@ class VcFinalBulletin extends Component
         //Conducta
         $arrconducta = TdConductas::query()
         ->where("periodo_id", $this->filters['periodoId'])
-        ->where("modalidad_id", $this->filters['modalidadId'])
-        ->where("curso_id", $this->filters['paralelo'])
         ->whereIn("persona_id", $this->tblpersonas->pluck('id'))
         ->select('termino', 'evaluacion', 'persona_id')
         ->get()
@@ -1310,10 +1327,9 @@ class VcFinalBulletin extends Component
 
         }else{*/
 
-
-            $pdf = PDF::loadView('pdf/reporte_boletin_final_notas',[
+            $pdf = PDF::loadView('pdf/reporte_boletin_final_pase',[
                 'tblrecords' => $this->tblrecords,
-                'asignaturas' => $asignaturas,
+                'asignaturas' => $tblasignatura,
                 'tblpersons' => $this->tblpersonas,
                 'datos' => $datos,
                 'fechaActual' => $this->fechaActual,
@@ -1326,6 +1342,7 @@ class VcFinalBulletin extends Component
                 'arrconducta' => $arrconducta,
                 'progeneral' => $progeneral,
                 'promo' => $promo,
+                'curso' => $curso,
             ]);
 
         /*}*/
@@ -1339,8 +1356,6 @@ class VcFinalBulletin extends Component
         $this->filters['estudianteId'] = $id;
         $this->datos = json_encode($this->filters);
         
-        $this->dispatchBrowserEvent('abrir-pdf', ['url' => "/preview-pdf/final-bulletin/{$this->datos}"]);         
+        $this->dispatchBrowserEvent('abrir-pdf', ['url' => "/preview-pdf/final-bulletin-pase/{$this->datos}"]);         
     }
-
-
 }

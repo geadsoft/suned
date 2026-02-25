@@ -83,6 +83,11 @@ class EstudiantesController extends Controller
         return view('student/boletin_calificaciones_final');
     }
 
+    public function final_bulletin_pase()
+    {      
+        return view('student/boletin_calificaciones_pase');
+    }
+
     public function library()
     {
         return view('student/biblioteca');

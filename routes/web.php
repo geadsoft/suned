@@ -29,6 +29,7 @@ use App\Http\Livewire\VcReportTQualify;
 use App\Http\Livewire\VcReportQuarterlyTeacher;
 use App\Http\Livewire\VcPartialBulletin;
 use App\Http\Livewire\VcFinalBulletin;
+use App\Http\Livewire\VcBoletinPase;
 use App\Http\Controllers\DocumentDownloadController;
 
 
@@ -188,6 +189,7 @@ Route::get('/student/report-card',[App\Http\Controllers\EstudiantesController::c
 Route::get('/student/qualify-conduct',[App\Http\Controllers\EstudiantesController::class, 'qualify_conduct'])->name('qualify_conduct');
 Route::get('/student/partial-bulletin',[App\Http\Controllers\EstudiantesController::class, 'partial_bulletin'])->name('partial_bulletin');
 Route::get('/student/final-bulletin',[App\Http\Controllers\EstudiantesController::class, 'final_bulletin'])->name('final_bulletin');
+Route::get('/student/final-bulletin-pase',[App\Http\Controllers\EstudiantesController::class, 'final_bulletin_pase'])->name('final_bulletin_pase');
 
 Route::get('/descargar-archivo/{id}', [ArchivoController::class, 'descargar'])->name('archivo.descargar');
 Route::get('/view-pdf/{fileId}/download', [\App\Http\Controllers\DocumentDownloadController::class, 'downloadById'])
@@ -238,6 +240,7 @@ Route::get('/preview-pdf/informacion-student/{id}',[VcStudents::class, 'printFic
 Route::get('/preview-pdf/report-card/{data}',[VcReportCard::class, 'printPDF']);
 Route::get('/preview-pdf/partial-bulletin/{data}',[VcPartialBulletin::class, 'printPDF']);
 Route::get('/preview-pdf/final-bulletin/{data}',[VcFinalBulletin::class, 'printPDF']);
+Route::get('/preview-pdf/final-bulletin-pase/{data}',[VcBoletinPase::class, 'printPDF']);
 Route::get('/preview-pdf/debt-certificate/{id}',[VcAccountStatus::class, 'printCertificadoPDF']);
 
 
