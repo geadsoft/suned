@@ -296,7 +296,7 @@ class VcFinalBulletin extends Component
         
 
         // UNION de ambas consultas
-        $unionQuery = $matriculasQuery; //->unionAll($pasesQuery);
+        $unionQuery = $matriculasQuery->unionAll($pasesQuery);
 
         // Consulta principal con joinSub en Eloquent
         $this->tblpersonas = TmPersonas::query()
@@ -480,7 +480,7 @@ class VcFinalBulletin extends Component
         /*$this->calificacion = $servicio->calificacion;*/
         $this->filters['calificacion'] = $servicio->calificacion;
 
-        $this->tblgrupo  = TmActividades::query()
+        /*$this->tblgrupo  = TmActividades::query()
         ->join("tm_horarios_docentes as d",function($join){
             $join->on("d.id","=","tm_actividades.paralelo")
                 ->on("d.docente_id","=","tm_actividades.docente_id");
@@ -507,13 +507,71 @@ class VcFinalBulletin extends Component
         ->selectRaw("tm_actividades.actividad")
         ->where("tipo","AC")
         ->groupBy("tm_actividades.actividad")
-        ->get();
+        ->get();*/
 
+        $pases = DB::table('tm_pase_cursos as p')
+        ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
+        ->where('p.curso_id', $this->filters['paralelo'])
+        ->where('p.estado',"A")
+        ->select('m.curso_id', 'p.modalidad_id', 'p.estudiante_id')
+        ->get();
         
         foreach ($this->tblpersonas as $key => $person){
 
             $idPerson = $person->id;
-            /*$this->filters['estudianteId'] = $idPerson;*/
+            
+            $this->filters['paralelo_pase'] = 0;
+
+            $registro = $pases->firstWhere('estudiante_id', $idPerson);
+            
+            if($registro){
+
+
+                $this->filters['paralelo_pase'] = $registro->curso_id;
+
+                $registros = TdCalificacionActividades::join('tm_actividades as a', 'a.id', '=', 'td_calificacion_actividades.actividad_id')
+                ->join('tm_horarios_docentes as d', 'd.id', '=', 'a.paralelo')
+                ->join('tm_horarios as h', 'h.id', '=', 'd.horario_id')
+                ->where('td_calificacion_actividades.persona_id', $idPerson)
+                ->where('h.curso_id',$this->filters['paralelo_pase'])
+                ->where('a.termino', $this->filters['termino'])
+                ->where('a.tipo', 'ET')
+                ->count('a.id');
+
+                if ($registros==0){
+                   $this->filters['paralelo_pase']=0; 
+                }
+
+            }
+
+            $this->tblgrupo  = TmActividades::query()
+            ->join("tm_horarios_docentes as d",function($join){
+                $join->on("d.id","=","tm_actividades.paralelo")
+                    ->on("d.docente_id","=","tm_actividades.docente_id");
+            })
+            ->join("tm_horarios as h","h.id","=","d.horario_id")
+            ->when(
+                $this->filters['paralelo'] && ($this->filters['paralelo_pase'] == 0),
+                function ($query) {
+                    $query->where('h.curso_id', $this->filters['paralelo']);
+                }
+            )
+            ->when(
+                $this->filters['paralelo_pase'] > 0,
+                function ($query) {
+                    $query->where('h.curso_id', $this->filters['paralelo_pase']);
+                }
+            )
+            ->when($this->filters['termino'],function($query){
+                return $query->where('termino',"{$this->filters['termino']}");
+            })
+            ->when($this->filters['bloque'],function($query){
+                return $query->where('bloque',"{$this->filters['bloque']}");
+            })
+            ->selectRaw("tm_actividades.actividad")
+            ->where("tipo","AC")
+            ->groupBy("tm_actividades.actividad")
+            ->get();
 
             $notas = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
