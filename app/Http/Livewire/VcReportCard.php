@@ -329,6 +329,8 @@ class VcReportCard extends Component
         foreach ($observaciones as $obsr) {
             $this->arrComentario[$obsr->persona_id]['comentario'] = $obsr->comentario;
         }
+
+        dd($this->tblrecords);
         
         $this->datos = json_encode($this->filters);
     }
@@ -442,11 +444,6 @@ class VcReportCard extends Component
                 }
             }
  
-            if($idPerson=='3401'){
-                dd($this->tblrecords);
-            }
-
-
             //Asginar Nota Examen
            
             $bloque = $this->filters['bloque'] ?? null;
