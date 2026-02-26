@@ -275,6 +275,8 @@ class VcReportCard extends Component
 
             }
 
+            dd('persona');
+
             // Actualiza Datos Asignaturas
             foreach ($this->asignaturas as $key => $data)
             {   
