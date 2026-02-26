@@ -46,9 +46,7 @@ class VcModalValores extends Component
                           When left(referencia,3) = 'PEN' Then 'Pensión'
                           Else 'Derecho de Grado' End as concepto, neto, debito, credito, id as deudaid, month(fecha) as mes, left(referencia,3) as tipo")
         ->where('matricula_id',$matriculaId)
-        ->where('credito','=',0)
-        ->orWhere('saldo','>',0)
-        //->where('saldo','>',0)
+        ->havingRaw('(debito - credito) > 0')
         ->get();
 
         
