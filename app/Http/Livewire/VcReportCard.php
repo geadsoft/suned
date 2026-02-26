@@ -196,7 +196,7 @@ class VcReportCard extends Component
             $this->filters['paralelo_pase']=0; 
         }
 
-        dd($this->filters['paralelo_pase']);
+        dd($this->filters['paralelo_pase'],$this->filters['paralelo']);
 
         $record = TmActividades::query()
         ->join("tm_horarios_docentes as d",function($join){
