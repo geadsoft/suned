@@ -278,6 +278,8 @@ class VcReportCard extends Component
 
             }
 
+            dd(1);
+
             // Actualiza Datos Asignaturas
             foreach ($this->asignaturas as $key => $data)
             {   
@@ -285,6 +287,8 @@ class VcReportCard extends Component
                 $this->tblrecords[$idPerson][$index]['id'] = 0;
                 $this->tblrecords[$idPerson][$index]['asignaturaId'] = $data->id;
                 $this->tblrecords[$idPerson][$index]['nombres'] = strtoupper($data->descripcion);
+
+                
                         
                 $record = $this->actividad($idPerson,$data->id);
 
