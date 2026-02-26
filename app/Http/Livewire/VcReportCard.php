@@ -196,6 +196,8 @@ class VcReportCard extends Component
             $this->filters['paralelo_pase']=0; 
         }
 
+        dd($registros);
+
         $record = TmActividades::query()
         ->join("tm_horarios_docentes as d",function($join){
             $join->on("d.id","=","tm_actividades.paralelo")
@@ -257,7 +259,6 @@ class VcReportCard extends Component
             $registro = $pases->firstWhere('estudiante_id', $idPerson);
 
             if($registro){
-
 
                 $this->filters['paralelo_pase'] = $registro->curso_id;
 
