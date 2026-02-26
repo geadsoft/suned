@@ -180,7 +180,7 @@ class VcReportCard extends Component
 
     }
 
-    public function actividad($id){
+    public function actividad($idPerson,$id){
 
         $registros = TdCalificacionActividades::join('tm_actividades as a', 'a.id', '=', 'td_calificacion_actividades.actividad_id')
         ->join('tm_horarios_docentes as d', 'd.id', '=', 'a.paralelo')
@@ -267,7 +267,7 @@ class VcReportCard extends Component
                 $this->tblrecords[$idPerson][$index]['asignaturaId'] = $data->id;
                 $this->tblrecords[$idPerson][$index]['nombres'] = strtoupper($data->descripcion);
                         
-                $record = $this->actividad($data->id);
+                $record = $this->actividad($idPerson,$data->id);
 
                 if($index = 3401 && $data->id==1){
                     dd($record,$this->filters['paralelo'], $this->filters['paralelo_pase']);
