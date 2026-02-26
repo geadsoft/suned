@@ -212,6 +212,10 @@ class VcReportCard extends Component
         ->orderByRaw("actividad desc")
         ->get();
 
+        if($id==1){
+            dd($record)
+        }
+
         return  $record;
 
     }
@@ -329,8 +333,6 @@ class VcReportCard extends Component
         foreach ($observaciones as $obsr) {
             $this->arrComentario[$obsr->persona_id]['comentario'] = $obsr->comentario;
         }
-
-        dd($this->tblrecords);
         
         $this->datos = json_encode($this->filters);
     }
