@@ -186,7 +186,7 @@ class VcReportCard extends Component
         ->join('tm_horarios_docentes as d', 'd.id', '=', 'a.paralelo')
         ->join('tm_horarios as h', 'h.id', '=', 'd.horario_id')
         ->where('td_calificacion_actividades.persona_id', $idPerson)
-        ->where('h.asignatura_id', $id)
+        ->where('d.asignatura_id', $id)
         ->where('h.curso_id',$this->filters['paralelo_pase'])
         ->where('a.termino', $this->filters['termino'])
         ->where('a.tipo', 'ET')
