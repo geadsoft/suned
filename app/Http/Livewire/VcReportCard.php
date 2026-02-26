@@ -215,6 +215,8 @@ class VcReportCard extends Component
         ->orderByRaw("actividad desc")
         ->get();
 
+        dd( $record);
+
         return  $record;
 
     }
