@@ -213,7 +213,7 @@ class VcReportCard extends Component
         ->get();
 
         if($id==1){
-            dd($record)
+            dd($record);
         }
 
         return  $record;
