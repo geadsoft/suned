@@ -428,6 +428,8 @@ class VcReportCard extends Component
             ])
             ->get(); 
 
+
+
             foreach ($notas as $key => $objnota){
 
                 $fil  = $objnota->asignatura_id;
@@ -439,6 +441,11 @@ class VcReportCard extends Component
                     $this->tblrecords[$idPerson][$fil][$col] = $objnota->nota;
                 }
             }
+ 
+            if($idPerson=='3401'){
+                dd($this->tblrecords);
+            }
+
 
             //Asginar Nota Examen
            
