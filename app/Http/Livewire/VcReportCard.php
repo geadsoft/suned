@@ -192,6 +192,10 @@ class VcReportCard extends Component
         ->where('a.tipo', 'ET')
         ->count('a.id');
 
+        if( $id=1 &&  $idPerson=3401){
+            dd($registros);
+        }
+
         if ($registros==0){
             $this->filters['paralelo_pase']=0;
         }
