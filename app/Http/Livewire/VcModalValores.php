@@ -47,6 +47,7 @@ class VcModalValores extends Component
                           Else 'Derecho de Grado' End as concepto, neto, debito, credito, id as deudaid, month(fecha) as mes, left(referencia,3) as tipo")
         ->where('matricula_id',$matriculaId)
         ->where('credito','=',0)
+        ->orWhere('saldo','>',0)
         //->where('saldo','>',0)
         ->get();
 
