@@ -200,6 +200,9 @@ class VcReportCard extends Component
                 $query->where('h.curso_id', $this->filters['paralelo_pase']);
             }
         )*/
+        ->when($this->filters['paralelo'],function($query){
+            $query->where('h.curso_id', $this->filters['paralelo']);
+        })
         ->when($this->filters['termino'],function($query){
             return $query->where('termino',"{$this->filters['termino']}");
         })
