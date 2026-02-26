@@ -272,7 +272,7 @@ class VcReportCard extends Component
                 $record = $this->actividad($data->id);
 
                 if($index = 3401 && $data->id==1){
-                    dd($record);
+                    dd($record,$this->filters['paralelo'], $this->filters['paralelo_pase']);
                 }
 
                 $this->tblgrupo = $record->groupBy('actividad')->toBase();
