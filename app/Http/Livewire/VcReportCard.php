@@ -292,7 +292,9 @@ class VcReportCard extends Component
 
         } 
 
-        dd($this->tblrecords);
+        if($this->filters['estudiante_id']=3401){
+            dd($this->tblrecords);
+        }
 
         foreach ($this->tblpersonas as $key => $person)
         { 
