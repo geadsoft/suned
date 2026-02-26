@@ -212,10 +212,6 @@ class VcReportCard extends Component
         ->orderByRaw("actividad desc")
         ->get();
 
-        if($id==1){
-            dd($record);
-        }
-
         return  $record;
 
     }
@@ -274,6 +270,11 @@ class VcReportCard extends Component
                 $this->tblrecords[$idPerson][$index]['nombres'] = strtoupper($data->descripcion);
                         
                 $record = $this->actividad($data->id);
+
+                if($index = 3401 && $data->id==1){
+                    dd($record);
+                }
+
                 $this->tblgrupo = $record->groupBy('actividad')->toBase();
                 
                 foreach ($this->tblgrupo as $key2 => $grupo){
