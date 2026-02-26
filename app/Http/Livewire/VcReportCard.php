@@ -249,8 +249,7 @@ class VcReportCard extends Component
         ->select('m.curso_id', 'p.modalidad_id', 'p.estudiante_id')
         ->get();
 
-        dd('persona');
-
+    
         foreach ($this->tblpersonas as $key => $person)
         { 
             $idPerson = $person->id;
