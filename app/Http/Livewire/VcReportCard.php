@@ -184,8 +184,8 @@ class VcReportCard extends Component
 
         $registros = TdCalificacionActividades::join('tm_actividades as a', 'a.id', '=', 'td_calificacion_actividades.actividad_id')
         ->join("tm_horarios_docentes as d",function($join){
-            $join->on("d.id","=","tm_actividades.paralelo")
-                ->on("d.docente_id","=","tm_actividades.docente_id");
+            $join->on("d.id","=","a.paralelo")
+                ->on("d.docente_id","=","a.docente_id");
         })
         ->join('tm_horarios as h', 'h.id', '=', 'd.horario_id')
         ->where('td_calificacion_actividades.persona_id', $idPerson)
