@@ -236,6 +236,8 @@ class VcReportCard extends Component
 
     public function add(){
 
+        dd('ingresa');
+
         $this->tblrecords=[];
         
         $this->asignaturas = TmHorarios::query()
@@ -277,8 +279,6 @@ class VcReportCard extends Component
                 }*/
 
             }
-
-            dd(1);
 
             // Actualiza Datos Asignaturas
             foreach ($this->asignaturas as $key => $data)
