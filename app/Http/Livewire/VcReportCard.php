@@ -240,7 +240,7 @@ class VcReportCard extends Component
         { 
             $idPerson = $person->id;
 
-            /*$registro = $pases->firstWhere('estudiante_id', $idPerson);
+            $registro = $pases->firstWhere('estudiante_id', $idPerson);
 
             if($registro){
 
@@ -259,7 +259,7 @@ class VcReportCard extends Component
                    $this->filters['paralelo_pase']=0; 
                 }
 
-            }*/
+            }
 
             // Actualiza Datos Asignaturas
             foreach ($this->asignaturas as $key => $data)
@@ -292,7 +292,6 @@ class VcReportCard extends Component
 
         } 
 
-        
         foreach ($this->tblpersonas as $key => $person)
         { 
             $idPerson = $person->id;
