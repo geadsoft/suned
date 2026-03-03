@@ -264,7 +264,7 @@ class VcReportCard extends Component
 
             }
 
-            $this->tblgrupo  = TmActividades::query()
+            /*$this->tblgrupo  = TmActividades::query()
             ->join("tm_horarios_docentes as d",function($join){
                 $join->on("d.id","=","tm_actividades.paralelo")
                     ->on("d.docente_id","=","tm_actividades.docente_id");
@@ -291,7 +291,7 @@ class VcReportCard extends Component
             ->selectRaw("tm_actividades.actividad")
             ->where("tipo","AC")
             ->groupBy("tm_actividades.actividad")
-            ->get();
+            -> get();*/
 
             // Actualiza Datos Asignaturas
             foreach ($this->asignaturas as $key => $data)

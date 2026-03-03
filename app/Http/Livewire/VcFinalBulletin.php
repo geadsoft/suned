@@ -377,7 +377,6 @@ class VcFinalBulletin extends Component
             
             if($registro){
 
-
                 $this->filters['paralelo_pase'] = $registro->curso_id;
 
                 $registros = TdCalificacionActividades::join('tm_actividades as a', 'a.id', '=', 'td_calificacion_actividades.actividad_id')
@@ -595,7 +594,7 @@ class VcFinalBulletin extends Component
             ])
             ->get(); 
 
-            foreach ($notas as $key => $objnota){
+            foreach ($notas as $key2 => $objnota){
 
                 $fil  = $objnota->asignatura_id;
                 $tipo = $objnota->actividad;
@@ -643,12 +642,12 @@ class VcFinalBulletin extends Component
             ->selectRaw('d.asignatura_id, ROUND(AVG(n.nota), 2) as promedio')
             ->pluck('promedio', 'asignatura_id');
 
-            foreach ($examen as $key => $objnota){
+            foreach ($examen as $key3 => $objnotaEx){
                 
-                $fil = $key;
+                $fil = $key3;
                 
                 if (isset($this->tblrecords[$idPerson][$fil]['examen'])) {
-                    $this->tblrecords[$idPerson][$fil]['examen'] = $objnota;
+                    $this->tblrecords[$idPerson][$fil]['examen'] = $objnotaEx;
                 }
             }
 
@@ -665,12 +664,12 @@ class VcFinalBulletin extends Component
             ->selectRaw('d.asignatura_id, ROUND(AVG(n.nota), 2) as promedio')
             ->pluck('promedio', 'asignatura_id');
 
-            foreach ($supletorios as $key => $objnota){
+            foreach ($supletorios as $key4 => $objnotaSu){
                 
-                $fil = $key;
+                $fil = $key4;
                 
                 if (isset($this->tblrecords[$idPerson][$fil]['supletorio'])) {
-                    $this->tblrecords[$idPerson][$fil]['supletorio'] = $objnota;
+                    $this->tblrecords[$idPerson][$fil]['supletorio'] = $objnotaSu;
                 }
             }
 
