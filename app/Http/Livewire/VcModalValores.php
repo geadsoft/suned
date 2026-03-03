@@ -77,7 +77,7 @@ class VcModalValores extends Component
             $record->update([
                 'neto'   => $data[3],
                 'debito' => $data[3],
-                'saldo'  => $data[3],
+                'saldo'  => ($record->saldo)-$data[3],
             ]);
 
             $deudadets = TrDeudasDets::where('deudacab_id',$iddeuda)
