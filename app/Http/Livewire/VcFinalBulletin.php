@@ -1233,16 +1233,21 @@ class VcFinalBulletin extends Component
         ->get();
 
         $promo = TdBoletinFinal::query()
-        ->select('persona_id', DB::raw('COUNT(promocion) as total_supletorios'))
-        ->where('promocion', 'SUPLETORIO')
-        ->where('periodo_id',$this->filters['periodoId'])
-        ->where('modalidad_id',$this->filters['modalidadId'])
+        ->select('persona_id', DB::raw('COUNT(*) as total_supletorios'))
+        ->where('periodo_id', $this->filters['periodoId'])
+        ->where('modalidad_id', $this->filters['modalidadId'])
         ->where('curso_id', $this->filters['paralelo'])
-        ->when($this->filters['estudianteId'], function($query) {
-            return $query->where('persona_id', $this->filters['estudianteId']);
+        ->where(function ($query) {
+            $query->where('promocion', 'SUPLETORIO')
+                ->orWhere('supletorio', '>', 0);
+        })
+        ->when($this->filters['estudianteId'], function ($query) {
+            $query->where('persona_id', $this->filters['estudianteId']);
         })
         ->groupBy('persona_id')
-        ->get()->pluck('total_supletorios', 'persona_id')->toArray();
+        ->get()
+        ->pluck('total_supletorios', 'persona_id')
+        ->toArray();
 
         $this->tblrecords=[];
         $progeneral=[];
