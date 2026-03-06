@@ -1339,8 +1339,8 @@ class VcFinalBulletin extends Component
         $arrconducta = TdConductas::query()
         ->join("td_periodo_sistema_educativos as s", function($join){
             $join->on("s.periodo_id","=","td_conductas.periodo_id")
-                ->on("s.tipo","=","EC")
-                ->on("s.codigo","=","td_conductas.evaluacion");
+                ->on("s.codigo","=","td_conductas.evaluacion")
+                ->where("s.tipo","EC");
         })
         ->where("td_conductas.periodo_id", $this->filters['periodoId'])
         ->where("td_conductas.modalidad_id", $this->filters['modalidadId'])
