@@ -1375,6 +1375,8 @@ class VcFinalBulletin extends Component
             $arrconducta[$persona]['promedio_letra'] = $letra;
         }
 
+        dd($arrconducta);
+
         /*if ($this->filters['calificacion']=="L"){
 
             $this->actualiza_notas();
