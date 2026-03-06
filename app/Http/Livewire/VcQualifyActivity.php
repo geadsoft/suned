@@ -352,60 +352,28 @@ class VcQualifyActivity extends Component
     public function setData()
     {
 
-        $dataRow=[
-            'id' => 0,
-            'actividad_id' => 0,
-            'persona_id' => 0,
-            'nota' => 0,
-            'estado' => 0,
-            'usuario' => 0,
-        ];
+        foreach ($this->tblrecords as $personaId => $data) {
 
-        foreach ($this->tblrecords as $index => $data)
-        {   
-            $dataRow   = [];
-            $personaId = $index;
-            foreach ($this->tblactividad as $col => $actividad)
-            {
-                $actividadId   = $actividad['id'];
-                $dataRow['id'] = 0;               
-
-                $tmpnota = TdCalificacionActividades::query()
-                ->where('actividad_id',$actividadId) 
-                ->where('persona_id',$personaId)
-                ->first();
-                
-                $dataRow['id'] = $tmpnota?->id ?? 0;  
-
-                $dataRow['actividad_id'] = $actividad['id'];
-                $dataRow['persona_id']=$personaId;
-                $dataRow['nota'] = $this->tblrecords[$personaId][$actividadId];
-                $dataRow['estado'] = 'A';
-                $dataRow['usuario'] = auth()->user()->name;   
-                
-                if ($index!="ZZ"){
-                    array_push($this->detalle,$dataRow);
-                }
-               
+            if ($personaId == "ZZ") {
+                continue;
             }
-            
-        }
 
-        foreach ($this->detalle as $detalle){
+            foreach ($this->tblactividad as $actividad) {
 
-                TdCalificacionActividades::query()
-                ->where("actividad_id","=",$detalle['actividad_id'])
-                ->where("persona_id","=",$detalle['persona_id'])
-                ->delete();
-                
-                TdCalificacionActividades::Create([
-                    'actividad_id' => $detalle['actividad_id'],
-                    'persona_id' => $detalle['persona_id'],
-                    'nota' =>  $detalle['nota'],
-                    'usuario' => auth()->user()->name,
-                    'estado' => 'A',
-                ]);
+                $actividadId = $actividad['id'];
 
+                TdCalificacionActividades::updateOrCreate(
+                    [
+                        'actividad_id' => $actividadId,
+                        'persona_id'   => $personaId
+                    ],
+                    [
+                        'nota'    => $this->tblrecords[$personaId][$actividadId] ?? 0,
+                        'estado'  => 'A',
+                        'usuario' => auth()->user()->name
+                    ]
+                );
+            }
         }
 
         $message = "Calificaciones grabada con Éxito......";
