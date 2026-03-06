@@ -1367,7 +1367,7 @@ class VcFinalBulletin extends Component
 
             foreach ($this->tblescala as $eq) {
                 if ($promedio >= $eq['nota'] && $promedio <= $eq['nota2']) {
-                    $letra = $eq->codigo;
+                    $letra = $eq['codigo'];
                     break;
                 }
             }
