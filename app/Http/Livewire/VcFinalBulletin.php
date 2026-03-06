@@ -1354,7 +1354,7 @@ class VcFinalBulletin extends Component
             $promedio = round($items->avg('nota'),2);
 
             return [
-                'evaluaciones' => $items->pluck('evaluacion', 'termino')->toArray(),
+                'conducta' => $items->pluck('evaluacion', 'termino')->toArray(),
                 'promedio' => $promedio
             ];
         })
@@ -1375,7 +1375,7 @@ class VcFinalBulletin extends Component
             $arrconducta[$persona]['promedio_letra'] = $letra;
         }
 
-        dd($arrconducta);
+
 
         /*if ($this->filters['calificacion']=="L"){
 
