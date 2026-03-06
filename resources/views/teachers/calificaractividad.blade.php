@@ -78,7 +78,8 @@
             confirmButtonText: 'OK'
             }).then((result) => {
             if (result.isConfirmed) {
-                location.reload(); // Actualiza la misma página
+                //location.reload(); // Actualiza la misma página
+                Livewire.dispatch('refreshComponent');
             }
             });
         })

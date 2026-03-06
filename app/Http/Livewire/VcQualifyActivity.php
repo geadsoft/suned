@@ -25,6 +25,7 @@ class VcQualifyActivity extends Component
     public $arrnotas=[];
     public $docenteId;
 
+
     public $filters=[
         'paralelo' => 0, 
         'termino' => '1T',
@@ -32,7 +33,7 @@ class VcQualifyActivity extends Component
         'actividad' => 'AI',
     ];
 
-    protected $listeners = ['setData'];
+    protected $listeners = ['setData','refreshComponent' => '$refresh'];
 
     public function mount()
     {
@@ -58,7 +59,6 @@ class VcQualifyActivity extends Component
 
     public function render()
     {   
-        
         $this->tblmodalidad = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
@@ -67,7 +67,7 @@ class VcQualifyActivity extends Component
         ->selectRaw('g.id, g.descripcion')
         ->groupBy('g.id','g.descripcion')
         ->get();
-        
+
         $this->tblbloque = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
         ->where('tipo','PA')
@@ -96,6 +96,15 @@ class VcQualifyActivity extends Component
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
 
+        $tbldocentes = TmHorarios::query()
+        ->join('tm_horarios_docentes as d', 'd.horario_id', '=', 'tm_horarios.id')
+        ->join('tm_personas as p', 'p.id', '=', 'd.docente_id')
+        ->where('tm_horarios.periodo_id', 9)
+        ->where('tm_horarios.grupo_id', 2)
+        ->groupBy('p.id', 'p.apellidos', 'p.nombres')
+        ->select('p.id', 'p.apellidos', 'p.nombres')
+        ->get();
+
         $this->loadPersonas();
         
         return view('livewire.vc-qualify-activity',[
@@ -103,6 +112,7 @@ class VcQualifyActivity extends Component
             'tbltarea' => $this->tblactividad,
             'tblparalelo' => $this->tblparalelo,
             'tblnotas' => $this->arrnotas,
+            'tbldocentes' => $tbldocentes,
         ]);
     }
 
@@ -400,7 +410,12 @@ class VcQualifyActivity extends Component
 
         $message = "Calificaciones grabada con Éxito......";
         $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
-    
+
+        $this->filters['paralelo']='';
+        $this->tblparalelo=[];
+        $this->tblactividad=[];
+        $this->tblrecords=[];
+
 
     }
 

@@ -13,7 +13,19 @@
                                     @endforeach 
                                 </select>
                             </div>
-                            <div class="mb-3">
+                            <div class="row">
+                            @can('Actualiza Notas')
+                            <div class="col-lg-6 mb-3">
+                                <label for="choices-publish-status-input" class="form-label fw-semibold">Docente</label>
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="docenteId">
+                                   <option value="">Seleccione Docente</option>
+                                   @foreach ($tbldocentes as $docente) 
+                                    <option value="{{$docente->id}}">{{$docente->nombres}} {{$docente->apellidos}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            @endcan
+                            <div class="@can('Actualiza Notas') col-lg-6 @else col-lg-12 @endcan mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Asignatura</label>
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="asignaturaId">
                                    <option value="">Seleccione Asignatura</option>
@@ -21,6 +33,7 @@
                                     <option value="{{$asignatura->id}}">{{$asignatura->descripcion}}</option>
                                     @endforeach 
                                 </select>
+                            </div>
                             </div>
                             <div class="mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
