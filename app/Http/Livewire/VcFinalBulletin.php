@@ -1337,18 +1337,44 @@ class VcFinalBulletin extends Component
 
         //Conducta
         $arrconducta = TdConductas::query()
-        ->where("periodo_id", $this->filters['periodoId'])
-        ->where("modalidad_id", $this->filters['modalidadId'])
-        ->where("curso_id", $this->filters['paralelo'])
-        ->whereIn("persona_id", $this->tblpersonas->pluck('id'))
-        ->select('termino', 'evaluacion', 'persona_id')
+        ->join("td_periodo_sistema_educativos as s", function($join){
+            $join->on("s.periodo_id","=","td_conductas.periodo_id")
+                ->on("s.tipo","=","EC")
+                ->on("s.codigo","=","td_conductas.evaluacion");
+        })
+        ->where("td_conductas.periodo_id", $this->filters['periodoId'])
+        ->where("td_conductas.modalidad_id", $this->filters['modalidadId'])
+        ->where("td_conductas.curso_id", $this->filters['paralelo'])
+        ->whereIn("td_conductas.persona_id", $this->tblpersonas->pluck('id'))
+        ->select('termino', 'evaluacion', 'persona_id','s.nota')
         ->get()
         ->groupBy('persona_id')
         ->map(function ($items) {
-            return $items->pluck('evaluacion', 'termino');
-        })->toArray();
 
-        
+            $promedio = round($items->avg('nota'),2);
+
+            return [
+                'evaluaciones' => $items->pluck('evaluacion', 'termino')->toArray(),
+                'promedio' => $promedio
+            ];
+        })
+        ->toArray();
+
+        foreach ($arrconducta as $persona => $data) {
+
+            $promedio = $data['promedio'];
+            $letra = '';
+
+            foreach ($this->tblescala as $eq) {
+                if ($promedio >= $eq['nota'] && $promedio <= $eq['nota2']) {
+                    $letra = $eq->codigo;
+                    break;
+                }
+            }
+
+            $arrconducta[$persona]['promedio_letra'] = $letra;
+        }
+
         /*if ($this->filters['calificacion']=="L"){
 
             $this->actualiza_notas();

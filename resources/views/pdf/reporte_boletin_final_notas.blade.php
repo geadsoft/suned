@@ -180,14 +180,14 @@
                     <tr id="{{$record->id}}-conducta">
                         <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;" class="align-middle"><strong>COMPORTAMIENTO</strong></td>
                         <td colspan="4" class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"></td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{ $arrconducta[$record->id]['1T'] ?? '-' }}</strong></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{ $arrconducta[$record->id]['evaluacion']['1T'] ?? '-' }}</strong></td>
                         <td colspan="4"></td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{ $arrconducta[$record->id]['2T'] ?? '-' }}</strong></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{ $arrconducta[$record->id]['evaluacion']['2T'] ?? '-' }}</strong></td>
                         <td colspan="4"></td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{ $arrconducta[$record->id]['3T'] ?? '-' }}</strong></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{ $arrconducta[$record->id]['evaluacion']['3T'] ?? '-' }}</strong></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{ $arrconducta[$record->id]['promedio_letra'] ?? '-' }}</strong></td>
                         <td></td>
                         <td></td>
                     </tr>
