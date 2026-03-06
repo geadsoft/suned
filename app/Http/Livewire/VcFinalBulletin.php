@@ -1346,7 +1346,7 @@ class VcFinalBulletin extends Component
         ->where("td_conductas.modalidad_id", $this->filters['modalidadId'])
         ->where("td_conductas.curso_id", $this->filters['paralelo'])
         ->whereIn("td_conductas.persona_id", $this->tblpersonas->pluck('id'))
-        ->select('termino', 'evaluacion', 'persona_id','s.nota')
+        ->select('termino', 'td_conductas.evaluacion', 'persona_id','s.nota')
         ->get()
         ->groupBy('persona_id')
         ->map(function ($items) {
