@@ -500,24 +500,32 @@ class VcPromocion extends Component
     {
         $formatter = new NumeroALetras();
 
-        // Separar entero y decimal
+        // Asegurar 2 decimales
         $partes = explode('.', number_format($numero, 2, '.', ''));
 
         $entero = (int)$partes[0];
         $decimal = $partes[1];
 
-        // Convertir entero
+        // Parte entera
         $textoEntero = $formatter->toWords($entero);
 
-        // Convertir decimal dígito por dígito
-        $digitos = str_split($decimal);
-        $textoDecimal = [];
+        // 🔥 Lógica inteligente
+        if ($decimal[0] === '0') {
+            // Leer dígito por dígito
+            $digitos = str_split($decimal);
+            $textoDecimal = [];
 
-        foreach ($digitos as $digito) {
-            $textoDecimal[] = $formatter->toWords($digito);
+            foreach ($digitos as $digito) {
+                $textoDecimal[] = $formatter->toWords($digito);
+            }
+
+            $textoDecimal = implode(' ', $textoDecimal);
+        } else {
+            // Leer como número normal
+            $textoDecimal = $formatter->toWords((int)$decimal);
         }
 
-        return $textoEntero . ' coma ' . implode(' ', $textoDecimal);
+        return $textoEntero . ' COMA ' . $textoDecimal;
     }
 
     public function calificaciones($matricula){
