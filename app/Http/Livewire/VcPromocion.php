@@ -496,6 +496,30 @@ class VcPromocion extends Component
 
     }
 
+    function numeroDecimalALetras($numero)
+    {
+        $formatter = new NumeroALetras();
+
+        // Separar entero y decimal
+        $partes = explode('.', number_format($numero, 2, '.', ''));
+
+        $entero = (int)$partes[0];
+        $decimal = $partes[1];
+
+        // Convertir entero
+        $textoEntero = $formatter->toWords($entero);
+
+        // Convertir decimal dígito por dígito
+        $digitos = str_split($decimal);
+        $textoDecimal = [];
+
+        foreach ($digitos as $digito) {
+            $textoDecimal[] = $formatter->toWords($digito);
+        }
+
+        return $textoEntero . ' coma ' . implode(' ', $textoDecimal);
+    }
+
     public function calificaciones($matricula){
 
         $pases = DB::table('tm_pase_cursos as p')
@@ -531,8 +555,9 @@ class VcPromocion extends Component
             }else{*/
                 $data['nota'] = $record['promedio_final'];
                 $total =$total+$record['promedio_final'];
-                $formatter = new NumeroALetras();
-                $notaletra = $formatter->toWords($record['promedio_final'], 2);
+                //$formatter = new NumeroALetras();
+                //$notaletra = $formatter->toWords($record['promedio_final'], 2);
+                $notaletra =  $this->numeroDecimalALetras($record['promedio_final']);
                 $data['letra'] = $notaletra;
             /*}*/
             
@@ -543,8 +568,9 @@ class VcPromocion extends Component
         $data['materia'] = '';
         $data['nota'] = $promedio;
 
-        $formatter = new NumeroALetras();
-        $notaletra = $formatter->toWords($promedio, 2);
+        //$formatter = new NumeroALetras();
+        //$notaletra = $formatter->toWords($promedio, 2);
+        $notaletra =  $this->numeroDecimalALetras($promedio);
         $data['letra']=$notaletra;
         array_push($objnotas, $data);
 
@@ -583,8 +609,9 @@ class VcPromocion extends Component
             $this->foto='';
         }
 
-        $formatter = new NumeroALetras();
-        $numletra = $formatter->toWords($data['nota'], 2);
+        //$formatter = new NumeroALetras();
+        //$numletra = $formatter->toWords($data['nota'], 2);
+        $numletra =  $this->numeroDecimalALetras($data['nota']);
 
         $mes  = ["01" => 'Enero', "02" => 'Febrero', "03" => 'Marzo', "04" => 'Abril', "05" => 'Mayo', "06" => 'Junio',
         "07" => 'Julio', "08" => 'Agosto', "09" => 'Septiembre', "10" => 'Octubre', "11" => 'Noviembre', "12" => 'Diciembre'];
@@ -614,8 +641,9 @@ class VcPromocion extends Component
             $this->foto='';
         }
 
-        $formatter = new NumeroALetras();
-        $numletra = $formatter->toWords($data['nota'], 2);
+        //$formatter = new NumeroALetras();
+        //$numletra = $formatter->toWords($data['nota'], 2);
+        $numletra =  $this->numeroDecimalALetras($data['nota']);
 
         $mes  = ["01" => 'Enero', "02" => 'Febrero', "03" => 'Marzo', "04" => 'Abril', "05" => 'Mayo', "06" => 'Junio',
         "07" => 'Julio', "08" => 'Agosto', "09" => 'Septiembre', "10" => 'Octubre', "11" => 'Noviembre', "12" => 'Diciembre'];
