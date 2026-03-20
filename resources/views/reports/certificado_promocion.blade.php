@@ -12,7 +12,7 @@
 </head>
 <body>
     <section style ="margin-top: -50px;">
-            <table cellpadding="0" cellspacing="0" width="100%">
+            <table cellpadding="0" cellspacing="0" width="100%" border="1">
                 <tr>
                     <td>
                         <img src="../public/assets/images/Gob_Ecuador.png" height="170px">
