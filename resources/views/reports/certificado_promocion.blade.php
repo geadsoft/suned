@@ -17,8 +17,8 @@
                     <td>
                         <img src="../public/assets/images/Gob_Ecuador.png" height="170px">
                     </td>   
-                    <td class="d-flex justify-content-end">
-                        <img src="../public/assets/images/American Schooll.png" height="55">
+                    <td class="text-end">
+                        <img src="../public/assets/images/American Schooll.png" height="55" style="display:block; margin-left:auto;">
                     </td>     
                 </tr>
             </table>
