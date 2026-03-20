@@ -14,11 +14,15 @@
     <section style ="margin-top: -50px;">
             <table cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                    <td style="width: 70%;">
+                    <td width="5%">
+                    </td>
+                    <td style="width: 60%; text-align: left;">
                         <img src="../public/assets/images/Gob_Ecuador.png" height="170px">
                     </td>   
                     <td style="width: 30%; text-align: right;">
                         <img src="../public/assets/images/American Schooll.png" height="55">
+                    </td>
+                    <td width="5%">
                     </td>     
                 </tr>
             </table>
