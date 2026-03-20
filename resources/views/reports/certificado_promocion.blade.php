@@ -12,13 +12,13 @@
 </head>
 <body>
     <section style ="margin-top: -50px;">
-            <table cellpadding="0" cellspacing="0" width="100%" border="1">
+            <table cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                    <td>
+                    <td style="width: 70%;">
                         <img src="../public/assets/images/Gob_Ecuador.png" height="170px">
                     </td>   
-                    <td class="text-end">
-                        <img src="../public/assets/images/American Schooll.png" height="55" style="display:block; margin-left:auto;">
+                    <td style="width: 30%; text-align: right;">
+                        <img src="../public/assets/images/American Schooll.png" height="55">
                     </td>     
                 </tr>
             </table>
