@@ -16,7 +16,10 @@
                 <tr>
                     <td>
                         <img src="../public/assets/images/Gob_Ecuador.png" height="170px">
-                    </td>        
+                    </td>   
+                    <td>
+                        <img src="../public/assets/images/American Schooll.png" height="170px">
+                    </td>     
                 </tr>
             </table>
             <table cellpadding="0" cellspacing="0" width="100%" style ="margin-top: -40px;">
@@ -103,11 +106,16 @@
                     <tr style="font-size:13px">
                         <td width="5%">
                         </td>
-                        <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
-                            <p style="margin-top:0 line-height: 200%" class="text-justify"><br>
-                            Por lo tanto es promovido/a al <strong>{{$data['curso_promovido']}}.</strong><br>
+                        <td width="90%"><span style="horizontal-align: top; padding-top: 20px">
+                            <p style="margin-top:0; line-height: 200%" class="text-justify"><br>
+                            @if(!($data['graduado'] ?? false))
+                                Por lo tanto es promovido/a al <strong>{{$data['curso_promovido']}}.</strong><br>
+                            @else
+                                Por lo tanto, ha culminado sus estudios.<br>
+                            @endif
+
                             Para constancia suscriben en unidad de acto <strong>{{$data['rector']}}</strong><br>
-                            Dado y firmado en:<br><br>
+                            Dado y firmado en:<br><br><br>
                             Guayaquil, {{date('d',strtotime($data['emision']))}} de 
                             {{$mes[date('m',strtotime($data['emision']))]}} de {{date('Y',strtotime($data['emision']))}}
                             </p>
@@ -130,25 +138,25 @@
                     <td width="50%" class="text-center">
                         <span><strong>________________________________</strong></span>
                     </td>
-                    <td width="50%" class="text-center">
+                    <!--<td width="50%" class="text-center">
                         <span><strong>________________________________</strong></span>
-                    </td>
+                    </td>-->
                 </tr>
                 <tr style="font-size:13px">
                     <td width="50%" class="text-center">
                         <span>{{$data['rector']}}</span>
                     </td>
-                    <td width="50%" class="text-center">
+                    <!--<td width="50%" class="text-center">
                         <span>{{$data['secretaria']}}</span>
-                    </td>
+                    </td>-->
                 </tr>
                 <tr style="font-size:13px">
                     <td width="50%" class="text-center">
                         <span><strong>RECTOR</strong></span>
                     </td>
-                    <td width="50%" class="text-center">
+                    <!--<td width="50%" class="text-center">
                         <span><strong>SECRETARIA</strong></span>
-                    </td>
+                    </td>-->
                 </tr>
             </table>
         </section>

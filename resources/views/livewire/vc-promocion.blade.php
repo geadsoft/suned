@@ -65,12 +65,18 @@
                     <div class="row">
                         <div class="col-xxl-6 mb-3">
                             <label class="form-label" for="project-title-input">Promovido</label>
-                            <select class="form-select" name="cmbperiodo" wire:model="paseCursoId" required>
+                            <select class="form-select" name="cmbperiodo" wire:model="paseCursoId" {{ $graduado ? 'disabled' : 'required' }}>
                                 <option value="">-</option>
                                 @foreach ($tblcursos as $curso)
                                     <option value="{{$curso->id}}">{{$curso->descripcion}}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="col-xxl-2 mb-3 d-flex align-items-end">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" role="switch" wire:model="graduado">
+                                <label class="form-check-label" for="estado">Graduado</label>
+                            </div>
                         </div>
                     </div>
                     <div class="card mb-3">

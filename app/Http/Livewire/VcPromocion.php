@@ -28,7 +28,7 @@ class VcPromocion extends Component
     public $tipoDoc="PP", $periodoId, $cursoId, $nombres, $nui="", $documento, $fecha, $folio=0, $matricula=0, $nomcurso="", $fechaMatricula;
     public $periodo, $foto="", $rector, $secretaria, $coordinador, $bachilleren="", $nota=0, $escala=''; 
     public $dttitulo="", $dtnombre="", $dtinstitucion="", $dtcargo="", $dtfecha, $refrendacion=0, $pagina=0, $fprorroga, $documentos="";
-    public $especializacion="",$paseCursoId,$matriculaId=0,$registrar;
+    public $especializacion="",$paseCursoId,$matriculaId=0,$registrar, $graduado=false;
     public $refescala=[
         'EX' => 'Demuestra destacado desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un excente aporte a su formación integral.',
         'MB' => 'Demuestra muy buen desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un aporte a su formación integral.',
@@ -109,6 +109,7 @@ class VcPromocion extends Component
         $this->cursoId   =  $tblmatricula->curso_id;
         $this->periodoId =  $tblmatricula->periodo_id;
         $this->fechaMatricula =  date('Y-m-d',strtotime($tblmatricula->fecha)); 
+        $this->graduado = false;
 
         $objData = DB::Select("select truncate(rownr/100,0) + folio as folio, rownr, documento 
         from (
@@ -215,6 +216,13 @@ class VcPromocion extends Component
             $this->control="disabled";
         }
 
+    }
+
+    public function updatedGraduado($value)
+    {
+        if ($value) {
+            $this->paseCursoId = "";
+        }
     }
 
     public function validar(){
@@ -389,7 +397,7 @@ class VcPromocion extends Component
                     'nui' => 'required',
                     'periodo' => 'required',
                     'nomcurso' => 'required',
-                    'paseCursoId' => 'required',
+                    'paseCursoId' => $this->graduado ? 'nullable' : 'required',
                     'rector' => 'required',
                     'secretaria' => 'required',
                 ]); 
@@ -418,7 +426,7 @@ class VcPromocion extends Component
         $data     = TmReportes::where('tipo',$this->tipoDoc)->first();
         $nomcurso_pase ='';
 
-        if ($this->tipoDoc=='PP'){
+        if ($this->tipoDoc=='PP' && !$this->graduado){
             $servicio = TmServicios::find($this->paseCursoId);
             $nomcurso_pase = $servicio->descripcion;
         }
@@ -448,6 +456,7 @@ class VcPromocion extends Component
                 'documento' => $this->documentos,
                 'matricula_id' => $this->matriculaId,
                 'curso_promovido' => $nomcurso_pase,
+                'graduado' => $this->graduado,
                 'rector' => $this->rector,
                 'secretaria' => $this->secretaria,
                 'coordinador' => $this->coordinador,

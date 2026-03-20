@@ -40,6 +40,17 @@
             swal("Buen Trabajo!", event.detail.newName, "success");
         })
 
+        window.addEventListener('abrir-modal-replica', event => {
+            var modal = new bootstrap.Modal(document.getElementById('replicaModal'));
+            modal.show();
+        });
+        
+        window.addEventListener('hide-replica-modal', event => {
+            var modalEl = document.getElementById('replicaModal');
+            var modal = bootstrap.Modal.getInstance(modalEl);
+            if(modal) modal.hide();
+        });
+
     </script>
     
 @endsection

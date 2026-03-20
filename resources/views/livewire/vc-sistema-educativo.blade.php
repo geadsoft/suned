@@ -22,8 +22,26 @@
                             @foreach ($plectivo as $lectivo) 
                             <option value="{{$lectivo->id}}">{{$lectivo->descripcion}}</option>
                             @endforeach
-                        </select>
-                        
+                        </select>  
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <select class="form-select" id="choices-publish-status-input" wire:model="modalidadId">
+                                @foreach ($tblmodalidad as $modalidad) 
+                                <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
+                                @endforeach
+                            </select>
+                            @if ($this->editRecno)
+                            <button type="button" class="btn btn-soft-warning btn-sm" wire:click.prevent='edit()' data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+                                <i class="ri-edit-2-fill me-1 fs-18"></i> 
+                            </button>
+                            @else
+                            <button class="btn btn-soft-warning btn-sm" data-bs-toggle="modal" wire:click="abrirModalReplica()">
+                                <i class="ri-add-line me-1 fs-18"></i> 
+                            </button>
+                            @endif
+                            <button class="btn btn-soft-success btn-sm" wire:click.prevent='add()' data-bs-toggle="tooltip" data-bs-placement="top" title="Grabar">
+                                <i class="mdi mdi-content-save-check me-1 fs-18"></i> 
+                            </button>
+                        </div>                      
                         <div class="hstack gap-2 justify-content-center">
                             <div class="mb-3">
                                 <label for="sumativa" class="form-label">Evaluación Formativa</label>
@@ -81,19 +99,22 @@
                 </div>
                 <!--end card-->
                 <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="d-flex mb-3">
+                    <div class="card-header">
+                        <div class="d-flex">
                             <h6 class="card-title mb-0 flex-grow-1">Horas de Clase</h6>
                             <div class="flex-shrink-0">
                                 <button type="button" class="btn btn-soft-secondary btn-sm" data-bs-toggle="modal" wire:click='addhora'><i class="ri-time-line me-1 align-bottom"></i>
                                     Asignar Hora</button>
                             </div>
                         </div>
-                        <select class="form-select mb-3" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
+                    </div>
+                    <div class="card-body">
+                        
+                        <!--<select class="form-select mb-3" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
                             @foreach ($tblmodalidad as $modalidad) 
                             <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
                             @endforeach
-                        </select>
+                        </select>-->
                         <ul class="list-unstyled vstack gap-3 mb-0">
                             @foreach ($arrhora as $hora) 
                             <div class="d-flex">
@@ -113,22 +134,6 @@
                                     </ul>
                                 </div>
                             </div>
-                            <!--<li>
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <p class="text-muted mb-0">{{$hora->hora_ini}}</p>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted mb-0">{{$hora->hora_fin}}</p>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <button class="btn btn-icon btn-sm fs-16 text-muted dropdown" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="ri-more-fill"></i>
-                                            </button>
-                                    </div>
-                                </div>
-                            </li>-->
                              @endforeach
                         </ul>
                     </div>
@@ -156,10 +161,10 @@
                                 @foreach ($arrparcial as $key => $parcial) 
                                 <tr class="par-{{$key}}">
                                 <td>                                    
-                                    <input type="text" id="linea-{{$key}}" wire:model.prevent="arrparcial.{{$key}}.linea" class="form-control" disabled>
+                                    <input type="text" id="linea-{{$key}}" wire:model.prevent="arrparcial.{{$key}}.linea" class="form-control form-control-sm" disabled>
                                 </td>
                                 <td>
-                                    <input type="check" id="name-{{$key}}" wire:model.prevent="arrparcial.{{$key}}.descripcion" class="form-control">
+                                    <input type="check" id="name-{{$key}}" wire:model.prevent="arrparcial.{{$key}}.descripcion" class="form-control form-control-sm">
                                 </td>
                                 @foreach ($this->arrmetodo as $metodo)
                                     <td class="text-center">
@@ -183,57 +188,118 @@
                                 @endforeach
                                 </tbody>
                             </table>
-
-                            <div class="pt-3 border-top border-top-dashed mt-4">
-                                <div class="d-flex mb-3">
-                                    <h6 class="mb-3 flex-grow-1 fw-semibold text-uppercase">Actividades</h6>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!--end card-->
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex">
+                                    <h6 class="flex-grow-1 fw-semibold text-uppercase">Actividades</h6>
                                     <div class="flex-shrink-0">
                                         <button type="button" wire:click.prevent="addline()" class="btn btn-soft-secondary btn-sm" data-bs-toggle="modal" id="create-btn"
                                             data-bs-target=""><i class="ri-add-line align-bottom me-1"></i> Agregar
                                         </button>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="card-body">
                                 <table class="table table-nowrap align-middle table-sm" id="orderTable">
-                                <thead class="text-muted table-light">
-                                    <tr class="text-uppercase text-center">
-                                        <th style="width: 100px;">Linea</th>
-                                        <th style="width: 100px;">Código</th>
-                                        <th>Descripción</th>
-                                        <th style="width: 90px;">Acción</th>
+                                    <thead class="text-muted table-light">
+                                        <tr class="text-uppercase text-center">
+                                            <th style="width: 100px;">Linea</th>
+                                            <th style="width: 100px;">Código</th>
+                                            <th>Descripción</th>
+                                            <th style="width: 90px;">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach ($arractividad as $key => $actividad) 
+                                    <tr class="act-{{$actividad['linea']}}">
+                                        <td>
+                                            <input type="text" id="act-linea-{{$actividad['linea']}}" wire:model.prevent="arractividad.{{$key}}.linea" class="form-control form-control-sm" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="text" id="act-name-{{$actividad['linea']}}" wire:model.prevent="arractividad.{{$key}}.codigo" class="form-control form-control-sm">
+                                        </td>
+                                        <td>
+                                            <input type="text" id="act-name-{{$actividad['linea']}}" wire:model.prevent="arractividad.{{$key}}.descripcion" class="form-control form-control-sm">
+                                        </td>
+                                        <td>
+                                        <ul class="list-inline hstack gap-2 mb-0">
+                                            <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                <a class="text-danger d-inline-block remove-item-btn"
+                                                    data-bs-toggle="modal" href="" wire:click.prevent="delete()">
+                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                @foreach ($arractividad as $key => $actividad) 
-                                <tr class="act-{{$actividad['linea']}}">
-                                    <td>
-                                        <input type="text" id="act-linea-{{$actividad['linea']}}" wire:model.prevent="arractividad.{{$key}}.linea" class="form-control" disabled>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex">
+                                    <h6 class="flex-grow-1 fw-semibold text-uppercase">Exámenes</h6>
+                                    <div class="flex-shrink-0">
+                                        <button type="button" wire:click.prevent="addExamen()" class="btn btn-soft-secondary btn-sm" data-bs-toggle="modal" id="btn-add-exam"
+                                            data-bs-target=""><i class="ri-add-line align-bottom me-1"></i> Agregar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-nowrap align-middle table-sm" id="examenTable">
+                                    <thead class="text-muted table-light">
+                                        <tr class="text-uppercase text-center">
+                                            <th style="width: 100px;">Linea</th>
+                                            <th style="width: 100px;">Código</th>
+                                            <th>Descripción</th>
+                                            <th style="width: 90px;">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach ($arrexamen as $key => $examen) 
+                                    <tr class="exa-{{$examen['linea']}}">
+                                        <td>
+                                            <input type="text" id="exa-linea-{{$examen['linea']}}" wire:model.prevent="arrexamen.{{$key}}.linea" class="form-control form-control-sm" disabled>
+                                        </td>
+                                        <td>
+                                            <input type="text" id="exa-codigo-{{$examen['linea']}}" wire:model.prevent="arrexamen.{{$key}}.codigo" class="form-control form-control-sm">
+                                        </td>
+                                        <td>
+                                            <input type="text" id="exa-name-{{$examen['linea']}}" wire:model.prevent="arrexamen.{{$key}}.descripcion" class="form-control form-control-sm">
+                                        </td>
+                                        <td>
+                                        <ul class="list-inline hstack gap-2 mb-0">
+                                            <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                <a class="text-danger d-inline-block remove-item-btn"
+                                                    data-bs-toggle="modal" href="" wire:click.prevent="deleteExamen()">
+                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </td>
-                                    <td>
-                                        <input type="text" id="act-name-{{$actividad['linea']}}" wire:model.prevent="arractividad.{{$key}}.codigo" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="text" id="act-name-{{$actividad['linea']}}" wire:model.prevent="arractividad.{{$key}}.descripcion" class="form-control">
-                                    </td>
-                                    <td>
-                                    <ul class="list-inline hstack gap-2 mb-0">
-                                        <li class="list-inline-item" data-bs-toggle="tooltip"
-                                            data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                            <a class="text-danger d-inline-block remove-item-btn"
-                                                data-bs-toggle="modal" href="" wire:click.prevent="delete()">
-                                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </td>
-                                </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                    </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--end card-->
+
                 <div class="card">
                     
                     <div class="card-body">
@@ -247,7 +313,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div data-simplebar style="height: 508px;" class="px-3 mx-n3 mb-2">
+                                <div data-simplebar style="height: 410px;" class="px-3 mx-n3 mb-2">
                                     
                                     <table class="table table-nowrap align-middle table-sm" id="orderTable">
                                         <thead class="text-muted table-light text-center">
@@ -263,16 +329,16 @@
                                         @foreach ($arrescala as $key => $escala) 
                                         <tr>
                                             <td>
-                                                <input type="text" id="valor-{{$key}}" wire:model.prevent="arrescala.{{$key}}.valor" class="form-control">
+                                                <input type="text" id="valor-{{$key}}" wire:model.prevent="arrescala.{{$key}}.valor" class="form-control form-control-sm">
                                             </td>
                                             <td>
-                                                <input type="text" id="nota-{{$key}}" wire:model.prevent="arrescala.{{$key}}.nota" class="form-control">
+                                                <input type="text" id="nota-{{$key}}" wire:model.prevent="arrescala.{{$key}}.nota" class="form-control form-control-sm">
                                             </td>
                                             <td>
-                                                <input type="text" id="detalle-{{$key}}" wire:model.prevent="arrescala.{{$key}}.descripcion" class="form-control">
+                                                <input type="text" id="detalle-{{$key}}" wire:model.prevent="arrescala.{{$key}}.descripcion" class="form-control form-control-sm">
                                             </td>
                                             <td>
-                                                <input type="text" id="equivale-{{$key}}" wire:model.prevent="arrescala.{{$key}}.equivale" class="form-control">
+                                                <input type="text" id="equivale-{{$key}}" wire:model.prevent="arrescala.{{$key}}.equivale" class="form-control form-control-sm">
                                             </td>
                                             <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
@@ -346,259 +412,119 @@
             <!-- modal-dialog -->
             
         </div>
-        <!-- end modal -->
+        <!-- end modal -->        
     </form>
 
+    <!-- Modal Visual de Replica -->
+    <div wire:ignore.self class="modal fade" id="replicaModal" tabindex="-1" aria-labelledby="replicaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold text-white" id="replicaModalLabel">
+                        <i class="ri-information-line me-2"></i> Replicar datos del periodo anterior
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Seleccione los elementos que desea replicar.</p>
+                    <div class="row g-3 mt-2">
 
-    <!--<form id="createactivity-form" autocomplete="off" wire:submit.prevent="{{ 'createData' }}" class="needs-validation" >
-        <div class="row">
-            <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header  border-0">
-                            <div class="d-flex align-items-center">
-                                <h6 class="card-title mb-0 flex-grow-1 text-primary fw-semibold"><i
-                                            class="ri-calendar-check-fill align-middle me-1 text-primary fs-20"></i>Registro de Sistema Acádemico</h5>
+                        <!-- Calificaciones -->
+                        <div class="col-md-4">
+                            <div class="card h-100 border-success shadow-sm">
+                                <div class="card-body text-center">
+                                    <i class="ri-bar-chart-2-fill text-success fs-2 mb-2"></i>
+                                    <h6 class="card-title">Calificaciones</h6>
+                                    <div class="form-check form-switch mt-2">
+                                        <input class="form-check-input" type="checkbox" wire:model="replica.calificacion" id="replicaCalificacion" checked>
+                                        <label class="form-check-label" for="replicaCalificacion">Activar</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-body border border-dashed border-end-0 border-start-0">  
-                            <div class="row mb-3">
-                                <div class="mb-3 col-sm-8">
 
-                                    <label for="sumativa" class="form-label">Periodo Lectivo</label>
-                                    <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="periodoId" required>
-                                        @foreach ($plectivo as $lectivo) 
-                                        <option value="{{$lectivo->id}}">{{$lectivo->descripcion}}</option>
-                                        @endforeach
-                                    </select>
-                                    <div class="d-flex align-items-center">
-                                        <label class="form-label flex-grow-1">-</label>
-                                        <div class="form-check form-check-success">
-                                            <input class="form-check-input" type="checkbox" role="switch" wire:model.defer="aperturado">
-                                            <label class="form-check-label" for="aperturado">Aperturado</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-3 col-sm-2">
-                                    <label for="sumativa" class="form-label">Evaluación Formativa</label>
-                                    <input type="text" wire:model.defer="eformativa" class="form-control" placeholder="valor" />
-                                </div>
-                                <div class="mb-3 col-sm-2">
-                                    <label for="formativa" class="form-label">Evaluación Sumativa</label>
-                                    <input type="text" wire:model.defer="esumativa" class="form-control" placeholder="valor" />
-                                </div>
-                            </div>
-
-
-                            <div class="row align-items-start mb-3">
-
-                                <div class="col-sm-6">
-                                    <div class="card-header">
-                                        <h5 class="card-title flex-grow-1 mb-0 text-primary fs-14"><i
-                                            class=" ri-honour-line align-middle me-1 text-success"></i>Evaluación</h5>
-                                    </div>
-                                    <div class="mb-3">
-                                        <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="metodo">
-                                            <option value="T" selected>TRIMESTRE</option>
-                                            <option value="Q">QUIMESTRE</option>
-                                        </select>
+                        <!-- Parciales -->
+                        <div class="col-md-4">
+                            <div class="card h-100 border-primary shadow-sm">
+                                <div class="card-body text-center">
+                                    <i class="ri-calendar-event-fill text-primary fs-2 mb-2"></i>
+                                    <h6 class="card-title">Parciales</h6>
+                                    <div class="form-check form-switch mt-2">
+                                        <input class="form-check-input" type="checkbox" wire:model="replica.parcial" id="replicaParcial" checked>
+                                        <label class="form-check-label" for="replicaParcial">Activar</label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row align-items-start mb-3">
-
-                                <div class="col-sm-6">  
-                                    <div class="mb-3">
-                                        <table class="table table-sm align-middle table-nowrap" id="orderTable">
-                                            <thead class="text-muted table-light">
-                                                <tr class="text-uppercase">
-                                                    <th>Linea</th>
-                                                    <th>Descripción</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach ($arrmetodo as $key => $metodo) 
-                                            <tr class="det-{{$metodo['linea']}}">
-                                            <td>{{$metodo['linea']}}</td>
-                                            <td>{{$metodo['descripcion']}}</td>
-                                            </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>  
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="mb-3 col-sm-6">
-                                    <div class="card-header">
-                                        <h5 class="card-title flex-grow-1 mb-0 text-primary fs-14"><i
-                                            class=" ri-honour-line align-middle me-1 text-success"></i>
-                                            Parciales</h5>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <table class="table table-sm align-middle table-nowrap" id="orderTable">
-                                            <thead class="text-muted table-light">
-                                                <tr class="text-uppercase text-center">
-                                                    <th style="width: 80px;">Linea</th>
-                                                    <th>Descripción</th>
-                                                    <th style="width: 70px;">1er T.</th>
-                                                    <th style="width: 70px;">2do T.</th>
-                                                    <th style="width: 70px;">3er T.</th>
-                                                    <th style="width: 90px;">Acción</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach ($arrparcial as $key => $parcial) 
-                                            <tr class="par-{{$key}}">
-                                            <td>                                    
-                                                <input type="text" id="linea-{{$key}}" wire:model.prevent="arrparcial.{{$key}}.linea" class="form-control" disabled>
-                                            </td>
-                                            <td>
-                                                <input type="check" id="name-{{$key}}" wire:model.prevent="arrparcial.{{$key}}.descripcion" class="form-control">
-                                            </td>
-                                            @foreach ($this->arrmetodo as $metodo)
-                                                <td class="text-center">
-                                                    <input class="form-check-input" type="checkbox" name="chkbill" id="{{$metodo['codigo']}}-{{$key}}" wire:model.prevent="arrparcial.{{$key}}.{{$metodo['codigo']}}">
-                                                </td>
-                                            @endforeach
-
-                                            <td>
-                                                <ul class="list-inline hstack gap-2 mb-0">
-                                                    <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                        data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                        <a class="text-danger d-inline-block remove-item-btn"
-                                                            data-bs-toggle="modal" href="" wire:click.prevent="delete()">
-                                                            <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-
-                                            </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>                    
-                                    </div>
-                                    
-                                    <div class="d-flex align-items-center mb-3">
-                                        
-                                        <h5 class="card-title flex-grow-1 mb-0 text-primary fs-14"><i
-                                            class="ri-stack-fill align-middle me-1 text-success"></i>
-                                            Actividades</h5>
-                                        <div class="flex-shrink-0">
-                                            <button type="button" wire:click.prevent="addline()" class="btn btn-soft-secondary btn-sm" data-bs-toggle="modal" id="create-btn"
-                                                data-bs-target=""><i class="ri-add-line align-bottom me-1"></i> Agregar
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <table class="table table-nowrap align-middle table-sm" id="orderTable">
-                                            <thead class="text-muted table-light">
-                                                <tr class="text-uppercase text-center">
-                                                    <th style="width: 100px;">Linea</th>
-                                                    <th style="width: 100px;">Código</th>
-                                                    <th>Descripción</th>
-                                                    <th style="width: 90px;">Acción</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach ($arractividad as $key => $actividad) 
-                                            <tr class="act-{{$actividad['linea']}}">
-                                                <td>
-                                                    <input type="text" id="act-linea-{{$actividad['linea']}}" wire:model.prevent="arractividad.{{$key}}.linea" class="form-control" disabled>
-                                                </td>
-                                                <td>
-                                                    <input type="text" id="act-name-{{$actividad['linea']}}" wire:model.prevent="arractividad.{{$key}}.codigo" class="form-control">
-                                                </td>
-                                                <td>
-                                                    <input type="text" id="act-name-{{$actividad['linea']}}" wire:model.prevent="arractividad.{{$key}}.descripcion" class="form-control">
-                                                </td>
-                                                <td>
-                                                <ul class="list-inline hstack gap-2 mb-0">
-                                                    <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                        data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                        <a class="text-danger d-inline-block remove-item-btn"
-                                                            data-bs-toggle="modal" href="" wire:click.prevent="delete()">
-                                                            <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                            </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>                    
-                                    </div>
-                                </div>
-                                <div class="mb-3 col-sm-6"> 
-                                    <div class="d-flex align-items-center mb-3">
-                                        
-                                        <h5 class="card-title flex-grow-1 mb-0 text-primary fs-14"><i
-                                            class="ri-medal-line align-middle me-1 text-success fs-14"></i>
-                                            Escala de Evaluación Cualitativa</h5>
-                                        <div class="flex-shrink-0">
-                                            <button type="button" wire:click.prevent="addescala()" class="btn btn-soft-secondary btn-sm" data-bs-toggle="modal" id="create-btn"
-                                                data-bs-target=""><i class="ri-add-line align-bottom me-1"></i> Agregar
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <table class="table table-nowrap align-middle table-sm" id="orderTable">
-                                        <thead class="text-muted table-light">
-                                            <tr class="text-uppercase">
-                                                <th style="width: 100px;">Valor</th>
-                                                <th style="width: 100px;">Nota</th>
-                                                <th>Descripción</th>
-                                                <th style="width: 150px;">Equivalencia</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach ($arrescala as $key => $escala) 
-                                        <tr>
-                                            <td>
-                                                <input type="text" id="valor-{{$key}}" wire:model.prevent="arrescala.{{$key}}.valor" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" id="nota-{{$key}}" wire:model.prevent="arrescala.{{$key}}.nota" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" id="detalle-{{$key}}" wire:model.prevent="arrescala.{{$key}}.descripcion" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" id="equivale-{{$key}}" wire:model.prevent="arrescala.{{$key}}.equivale" class="form-control">
-                                            </td>
-                                            <td>
-                                            <ul class="list-inline hstack gap-2 mb-0">
-                                                <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                    <a class="text-danger d-inline-block remove-item-btn"
-                                                        data-bs-toggle="modal" href="" wire:click.prevent="delete()">
-                                                        <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>  
-                                </div>
-                            </div> 
                         </div>
+
+                        <!-- Horarios -->
+                        <div class="col-md-4">
+                            <div class="card h-100 border-primary shadow-sm">
+                                <div class="card-body text-center">
+                                    <i class="ri-time-line text-primary fs-2 mb-2"></i>
+                                    <h6 class="card-title">Horarios</h6>
+                                    <div class="form-check form-switch mt-2">
+                                        <input class="form-check-input" type="checkbox" wire:model="replica.horario" id="replicaParcial" checked>
+                                        <label class="form-check-label" for="replicaParcial">Activar</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actividades -->
+                        <div class="col-md-4">
+                            <div class="card h-100 border-warning shadow-sm">
+                                <div class="card-body text-center">
+                                    <i class="ri-task-fill text-warning fs-2 mb-2"></i>
+                                    <h6 class="card-title">Actividades</h6>
+                                    <div class="form-check form-switch mt-2">
+                                        <input class="form-check-input" type="checkbox" wire:model="replica.actividades" id="replicaActividades" checked>
+                                        <label class="form-check-label" for="replicaActividades">Activar</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Exámenes -->
+                        <div class="col-md-4">
+                            <div class="card h-100 border-danger shadow-sm">
+                                <div class="card-body text-center">
+                                    <i class="ri-book-2-fill text-danger fs-2 mb-2"></i>
+                                    <h6 class="card-title">Exámenes</h6>
+                                    <div class="form-check form-switch mt-2">
+                                        <input class="form-check-input" type="checkbox" wire:model="replica.examenes" id="replicaExamenes" checked>
+                                        <label class="form-check-label" for="replicaExamenes">Activar</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Escala Cualitativa -->
+                        <div class="col-md-4">
+                            <div class="card h-100 border-secondary shadow-sm">
+                                <div class="card-body text-center">
+                                    <i class="ri-award-fill text-secondary fs-2 mb-2"></i>
+                                    <h6 class="card-title">Escala Cualitativa</h6>
+                                    <div class="form-check form-switch mt-2">
+                                        <input class="form-check-input" type="checkbox" wire:model="replica.escalaCualitativa" id="replicaEscala" checked>
+                                        <label class="form-check-label" for="replicaEscala">Activar</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                   
-
-                
-                                <div class="text-end mb-3">
-                                    <button type="submit" class="btn btn-success w-sm">Grabar</button>
-                                </div>
-                            
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" wire:click="replicarDatos">
+                        <i class="ri-check-line me-1"></i> Aceptar
+                    </button>
+                </div>
             </div>
-          
-
-            
         </div>
-       
-    </form>-->
+    </div>
+
+
 </div>
 

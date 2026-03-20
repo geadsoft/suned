@@ -33,6 +33,7 @@ class TmReportes extends Model
         'documento',
         'matricula_id',
         'curso_promovido',
+        'graduado',
         'secretaria',
         'coordinador',
     ];
