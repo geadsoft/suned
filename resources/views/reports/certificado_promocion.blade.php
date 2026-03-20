@@ -18,7 +18,7 @@
                         <img src="../public/assets/images/Gob_Ecuador.png" height="170px">
                     </td>   
                     <td>
-                        <img src="../public/assets/images/American Schooll.png" height="170px">
+                        <img src="../public/assets/images/American Schooll.png" height="70px">
                     </td>     
                 </tr>
             </table>
