@@ -277,6 +277,8 @@ class VcStatisticalGraphs extends Component
         ->where('m.estado','A')
         ->whereraw("left(tr_deudas_cabs.referencia,3)='PEN' and d.id is null")
         ->get();
+
+        dd($this->filters['mescobro'],$this->filters['aniocobro'], $tbldeudas);
         
 
         //Cobros ultimo 4 meses
@@ -369,7 +371,7 @@ class VcStatisticalGraphs extends Component
 
         $this->data = json_encode($array);
 
-        dd($tbldeudas,$this->data);
+        
        
     }
 
