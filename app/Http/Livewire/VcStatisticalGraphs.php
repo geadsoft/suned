@@ -60,7 +60,7 @@ class VcStatisticalGraphs extends Component
         $this->filters['mesingreso']  = intval(date('m',strtotime($ldate)));
         $this->filters['anioingreso'] = intval(date('Y',strtotime($ldate)));
 
-        $this->lngrupoId    = $tblgenerals['id'];
+        $this->lngrupoId    = '';
         $this->lnperiodoId  = $tblperiodos['id'];
         $this->lnmescobro   = intval(date('m',strtotime($ldate)));
         $this->lnaniocobro  = intval(date('Y',strtotime($ldate)));
