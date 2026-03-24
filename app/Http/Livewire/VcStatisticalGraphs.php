@@ -368,6 +368,8 @@ class VcStatisticalGraphs extends Component
         ];        
 
         $this->data = json_encode($array);
+
+        dd($tbldeudas,$this->data);
        
     }
 
