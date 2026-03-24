@@ -69,6 +69,7 @@ class VcStatisticalGraphs extends Component
         $this->lnanioingreso = intval(date('Y',strtotime($ldate)));
         $this->lnperiodo    = $tblperiodos['periodo'];
 
+        $this->updatedlngrupoId();
         $this->consulta();
         $this->montomes();
     }
