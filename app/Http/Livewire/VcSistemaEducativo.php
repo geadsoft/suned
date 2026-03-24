@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 use App\Models\TmPeriodosLectivos;
+use App\Models\TmSistemaEducativos;
 use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmGeneralidades;
 
@@ -10,7 +11,8 @@ use Livewire\Component;
 
 class VcSistemaEducativo extends Component
 {
-    public $periodoId, $plectivo, $metodo, $aperturado, $eformativa, $esumativa, $detalle=[], $modalidadId, $hora_ini, $hora_fin, $editRecno=false;
+    public $periodoId, $plectivo, $metodo, $aperturado, $eformativa, $esumativa, $detalle=[], $modalidadId, $hora_ini, $hora_fin, $editRecno=false, $fieldsetDisabled;
+    public $sistema;
     public $arrmetodo=[];
     public $arrparcial=[];
     public $arractividad=[];
@@ -49,9 +51,6 @@ class VcSistemaEducativo extends Component
         ->get();
         $this->periodoId = $this->plectivo[0]['id'];
         
-        $this->metodo = 'T';
-        $this->loadData();
-
         $modalidad = TmGeneralidades::query()
         ->where('superior',1)
         ->first();
@@ -62,13 +61,13 @@ class VcSistemaEducativo extends Component
         ->where('superior',1)
         ->get();
 
+        $this->metodo = 'T';
+        $this->loadData();
+
     }
 
     public function render()
     {
-        
-
-        //$this->updatedModalidadId($this->modalidadId);
         
         return view('livewire.vc-sistema-educativo',[
             'arrmetodo' => $this->arrmetodo,
@@ -80,7 +79,7 @@ class VcSistemaEducativo extends Component
 
     public function add()
     {
-        
+        $this->editRecno = false;
         $this->arrparcial=[];
         $this->arrmetodo=[];
         $this->arractividad=[];
@@ -88,8 +87,14 @@ class VcSistemaEducativo extends Component
         $this->arrescala=[];
 
         $this->addarr('T');
-        
+        $this->dispatchBrowserEvent('abrir-modal-replica');
     
+    }
+
+    public function edit()
+    {
+        $this->fieldsetDisabled=false;
+        $this->editRecno = true;
     }
 
     public function loadData()
@@ -100,13 +105,18 @@ class VcSistemaEducativo extends Component
         $this->arractividad=[];
         $this->arrexamen=[];
         $this->arrescala=[];
+
+        $this->sistema = TmSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('modalidad_id',$this->modalidadId)
+        ->first();
+
+        $this->metodo      = empty($this->sistema) ? 'T' : $this->sistema->evaluacion;
+        $this->esumativa   = empty($this->sistema) ? 0 : $this->sistema->evaluacion_sumativa;
+        $this->eformativa  = empty($this->sistema) ? 0 : $this->sistema->evaluacion_formativa;
       
         $record = TmPeriodosLectivos::find($this->periodoId);
-        $this->metodo = $record['evaluacion'];
-        $this->esumativa = $record['evaluacion_sumativa'];
-        $this->eformativa = $record['evaluacion_formativa'];
-        $this->aperturado = $record['aperturado'];
-        $this->modalidadId = $this->modalidadId;
+        $this->aperturado  = $record['aperturado'];
 
         $detalle = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
@@ -127,17 +137,19 @@ class VcSistemaEducativo extends Component
             $this->metodo = 'T';
             $this->addarr($this->metodo);
         }*/
-
+        $linea=0;
         foreach ($detalle as $key => $value) {
             if ($value['tipo']=='EA'){
                 $datos = [
-                    'linea' => $key+1,
+                    'linea' => $linea+1,
                     'codigo' => $value['codigo'],
                     'descripcion' => $value['descripcion'],
                     'cerrar' => $value['cerrar'],
-                    'visualiza_nota' => $value['visualizar_nota'],
+                    'visualizar_nota' => $value['visualizar_nota'],
+                    'id' => $value['id']
                 ];
                 array_push($this->arrmetodo,$datos);
+                $linea=$linea+1;
             }
         }
 
@@ -179,6 +191,7 @@ class VcSistemaEducativo extends Component
                     'linea' => $linea,
                     'codigo' => $value['codigo'],
                     'descripcion' => $value['descripcion'],
+                    'id' => $value['id']
                 ];
         
                 array_push($this->arractividad,$recno);
@@ -190,6 +203,7 @@ class VcSistemaEducativo extends Component
                     'linea' => $linea,
                     'codigo' => $value['codigo'],
                     'descripcion' => $value['descripcion'],
+                    'id' =>$value['id']
                 ];
         
                 array_push($this->arrexamen,$recno2);
@@ -205,9 +219,13 @@ class VcSistemaEducativo extends Component
                     'nota' => $value['nota'],
                     'descripcion' => $value['descripcion'],
                     'equivale' => $value['evaluacion'],
+                    'glosa' => $value['glosa'],
+                    'linea' => $linea,
+                    'id' => $value['id']
                 ];
         
                 array_push($this->arrescala,$recno);
+                $linea = $linea+1;
             }
         }
 
@@ -217,6 +235,7 @@ class VcSistemaEducativo extends Component
         ->where('modalidad_id',$this->modalidadId)
         ->get();
 
+        $this->fieldsetDisabled=true;
     }
 
 
@@ -231,6 +250,7 @@ class VcSistemaEducativo extends Component
     {   
 
         $this->addarr($this->metodo);
+
         
     }
 
@@ -244,8 +264,8 @@ class VcSistemaEducativo extends Component
     {
         $this->arrparcial=[];
         $this->arrmetodo=[];
-        $this->arractividad=[];
-        $this->arrescala=[];
+        //$this->arractividad=[];
+        //$this->arrescala=[];
 
         if ($ciclo=="Q"){
             $linea = 2;
@@ -260,6 +280,9 @@ class VcSistemaEducativo extends Component
                 'linea' => $i+1,
                 'codigo' => ($i+1).$ciclo,
                 'descripcion' =>  $this->romano[$i+1].' '.$this->evaluacion[$ciclo],
+                'cerrar' => false,
+                'visualizar_nota' => false,
+                'id' =>0
             ];
             array_push($this->arrmetodo,$datos);
         }
@@ -289,10 +312,21 @@ class VcSistemaEducativo extends Component
             'linea' => $linea,
             'codigo' => '',
             'descripcion' => '',
+            'id' => 0
         ];
 
         array_push($this->arractividad,$recno);
         
+    }
+
+    public function deleteActivity($linea)
+    {
+        $this->arractividad = array_filter($this->arractividad, function ($item) use ($linea) {
+            return $item['linea'] != $linea;
+        });
+
+        // Reindexar el array (importante para Livewire)
+        $this->arractividad = array_values($this->arractividad);
     }
 
     public function addExamen(){
@@ -305,10 +339,21 @@ class VcSistemaEducativo extends Component
             'linea' => $linea,
             'codigo' => '',
             'descripcion' => '',
+            'id' => 0
         ];
 
         array_push($this->arrexamen,$recno);
         
+    }
+
+    public function deleteExamen($linea)
+    {
+        $this->arrexamen = array_filter($this->arrexamen, function ($item) use ($linea) {
+            return $item['linea'] != $linea;
+        });
+
+        // Reindexar el array (importante para Livewire)
+        $this->arrexamen = array_values($this->arrexamen);
     }
 
     public function addescala(){
@@ -322,10 +367,23 @@ class VcSistemaEducativo extends Component
             'nota' => '',
             'descripcion' => '',
             'equivale' => '',
+            'linea' => $linea,
+            'id' => 0
         ];
 
         array_push($this->arrescala,$recno);
         
+    }
+
+    public function deleteEscala($linea){
+
+        $this->arrescala = array_filter($this->arrescala, function ($item) use ($linea) {
+            return $item['linea'] != $linea;
+        });
+
+        // Reindexar el array (importante para Livewire)
+        $this->arrescala = array_values($this->arrescala);
+
     }
 
     public function addhora(){
@@ -353,7 +411,7 @@ class VcSistemaEducativo extends Component
         return redirect(request()->header('Referer'));
     }
 
-    public function createData(){
+    /*public function createData(){
 
 
         $this ->validate([
@@ -364,7 +422,7 @@ class VcSistemaEducativo extends Component
             'esumativa' => 'required',
         ]);
 
-
+        $this->detalle = [];
         $record = TmPeriodosLectivos::find($this->periodoId);
         $record->update([
             'evaluacion' => $this->metodo,
@@ -377,6 +435,7 @@ class VcSistemaEducativo extends Component
         foreach ($this->arrmetodo as $index => $data)
         {          
             $dataRow['periodo_id'] =  $this->periodoId;
+            $dataRow['id'] = $data['id'];
             $dataRow['tipo'] =  'EA';
             $dataRow['codigo'] =  $data['codigo'];
             $dataRow['evaluacion'] =  '';
@@ -391,17 +450,35 @@ class VcSistemaEducativo extends Component
         }
 
         //Parcial
+        $detalle = TdPeriodoSistemaEducativos::selectRaw("
+            *,
+            case when evaluacion = '' then concat(ROW_NUMBER() OVER (PARTITION BY codigo ORDER BY descripcion),'T')  else evaluacion end as orden
+        ")
+        ->where('periodo_id',$this->periodoId)
+        ->where('modalidad_id',$this->modalidadId)
+        ->where('tipo','PA')
+        ->get();
+
         foreach ($this->arrparcial as $index => $data)
         {   
             foreach ($this->arrmetodo as $metodo){
 
                 $col = $metodo['codigo'];
 
+                $codigo = $data['codigo'];
+                $orden  = $metodo['codigo'];
+
+                $id = $detalle
+                ->first(function ($item) use ($codigo, $orden) {
+                    return $item->codigo == $codigo && $item->orden == $orden;
+                })->id ?? 0;
+
                 if ($data[$col]==false){
                     $col = '';
                 }
-                     
+                
                 $dataRow['periodo_id'] =  $this->periodoId;
+                $dataRow['id'] =  $id;
                 $dataRow['tipo'] =  'PA';
                 $dataRow['codigo'] =  $data['codigo'];
                 $dataRow['evaluacion'] =  $col;
@@ -421,6 +498,7 @@ class VcSistemaEducativo extends Component
         foreach ($this->arractividad as $index => $data)
         {   
             $dataRow['periodo_id'] =  $this->periodoId;
+            $dataRow['id'] = $data['id'];
             $dataRow['tipo'] =  'AC';
             $dataRow['codigo'] =  $data['codigo'];
             $dataRow['evaluacion'] =  '';
@@ -438,6 +516,7 @@ class VcSistemaEducativo extends Component
         foreach ($this->arrexamen as $index => $data)
         {   
             $dataRow['periodo_id'] =  $this->periodoId;
+            $dataRow['id'] = $data['id'];
             $dataRow['tipo'] =  'EX';
             $dataRow['codigo'] =  $data['codigo'];
             $dataRow['evaluacion'] =  '';
@@ -456,6 +535,7 @@ class VcSistemaEducativo extends Component
         {   
 
             $dataRow['periodo_id'] =  $this->periodoId;
+            $dataRow['id'] = $data['id'];
             $dataRow['tipo'] =  'EC';
             $dataRow['codigo'] =  $data['valor'];
             $dataRow['evaluacion'] =  $data['equivale'];
@@ -469,11 +549,176 @@ class VcSistemaEducativo extends Component
             array_push($this->detalle,$dataRow);
         }
 
-        TdPeriodoSistemaEducativos::where('periodo_id',$this->periodoId)->delete();
-        TdPeriodoSistemaEducativos::insert($this->detalle);    
+        /*TdPeriodoSistemaEducativos::where('periodo_id',$this->periodoId)->delete();
+        TdPeriodoSistemaEducativos::insert($this->detalle);
     
         
-    } 
+    }*/ 
+
+    public function createData()
+    {
+        
+        $this->validate([
+            'periodoId' => 'required',
+            'metodo' => 'required',
+            'aperturado' => 'required',
+            'eformativa' => 'required',
+            'esumativa' => 'required',
+        ]);
+
+        if(empty($this->sistema)){
+
+            TmSistemaEducativos::Create([
+                'periodo_id' => $this->periodoId,
+                'modalidad_id' => $this->modalidadId,
+                'evaluacion' => $this->metodo,
+                'evaluacion_formativa' => $this->eformativa,
+                'evaluacion_sumativa' => $this->esumativa,
+                'usuario' => auth()->user()->name,
+            ]);
+
+        }else{
+             
+            $sistema = TmSistemaEducativos::find($this->sistema->id);
+            $sistema->update([
+                'evaluacion_formativa' => $this->eformativa,
+                'evaluacion_sumativa' => $this->esumativa,
+            ]);           
+         
+        }
+
+        // limpiar
+        $this->detalle = [];
+
+        // actualizar cabecera
+        TmPeriodosLectivos::where('id', $this->periodoId)->update([
+            'evaluacion' => '',
+            'evaluacion_formativa' => 0,
+            'evaluacion_sumativa' => 0,
+            'aperturado' => $this->aperturado,
+        ]);
+
+        // construir detalle
+        $this->buildMetodo();
+        $this->buildParcial();
+        $this->buildActividad();
+        $this->buildExamen();
+        $this->buildEscala();
+
+        // guardar todo
+        $this->guardarDetalle();
+        $this->dispatchBrowserEvent('msg-grabar', [
+            'newName' => 'Configuración guardada correctamente'
+        ]);
+        
+
+    }
+
+    private function makeRow($data, $tipo, $extra = [])
+    {
+        return array_merge([
+            'id' => $data['id'] ?? 0,
+            'periodo_id' => $this->periodoId,
+            'tipo' => $tipo,
+            'codigo' => $data['codigo'] ?? '',
+            'evaluacion' => '',
+            'descripcion' => $data['descripcion'] ?? '',
+            'nota' => 0,
+            'glosa' => '',
+            'cerrar' => 0,
+            'visualizar_nota' => 0,
+            'modalidad_id' => $this->modalidadId,
+            'usuario' => auth()->user()->name,
+        ], $extra);
+    }
+
+    private function buildMetodo()
+    {
+    
+        foreach ($this->arrmetodo as $data) {
+            $this->detalle[] = $this->makeRow($data, 'EA', [
+                'cerrar' => $data['cerrar'],
+                'visualizar_nota' => $data['visualizar_nota'],
+            ]);
+        }
+    }
+
+    private function buildParcial()
+    {
+        $detalle = TdPeriodoSistemaEducativos::selectRaw("
+            *,
+            CASE 
+                WHEN evaluacion = '' 
+                THEN CONCAT(ROW_NUMBER() OVER (PARTITION BY codigo ORDER BY descripcion), ?)  
+                ELSE evaluacion 
+            END as orden
+        ", [$this->metodo])
+        ->where('periodo_id', $this->periodoId)
+        ->where('modalidad_id', $this->modalidadId)
+        ->where('tipo', 'PA')
+        ->get();
+
+        foreach ($this->arrparcial as $data) {
+            foreach ($this->arrmetodo as $metodo) {
+
+                $codigo = $data['codigo'];
+                $orden  = $metodo['codigo'];
+
+                $id = $detalle->first(fn($item) =>
+                    $item->codigo == $codigo && $item->orden == $orden
+                )->id ?? 0;
+
+                $evaluacion = $data[$metodo['codigo']] ? $metodo['codigo'] : '';
+
+                $this->detalle[] = $this->makeRow($data, 'PA', [
+                    'id' => $id,
+                    'evaluacion' => $evaluacion,
+                ]);
+            }
+        }
+      
+    }
+
+    private function buildActividad()
+    {
+        foreach ($this->arractividad as $data) {
+            $this->detalle[] = $this->makeRow($data, 'AC');
+        }
+    }
+
+    private function buildExamen()
+    {
+        foreach ($this->arrexamen as $data) {
+            $this->detalle[] = $this->makeRow($data, 'EX');
+        }
+    }
+
+    private function buildEscala()
+    {
+        foreach ($this->arrescala as $data) {
+            $this->detalle[] = $this->makeRow($data, 'EC', [
+                'codigo' => $data['valor'],
+                'evaluacion' => $data['equivale'],
+                'nota' => $data['nota'],
+                'glosa' => $data['glosa'],
+            ]);
+        }
+    }
+
+
+    private function guardarDetalle()
+    {
+        foreach ($this->detalle as $row) {
+
+            if (empty($row['id'])) {
+                unset($row['id']);
+                TdPeriodoSistemaEducativos::create($row);
+            } else {
+                TdPeriodoSistemaEducativos::where('id', $row['id'])->update($row);
+            }
+        }
+    }
+
 
     public function grabaTermino(){
 
@@ -488,7 +733,7 @@ class VcSistemaEducativo extends Component
             if ($record) {
                 $record->update([
                     'cerrar' => !empty($metodo['cerrar']) ? 1 : 0,
-                    'visualizar_nota' => !empty($metodo['visualiza_nota']) ? 1 : 0,
+                    'visualizar_notar' => !empty($metodo['visualiza_notar']) ? 1 : 0,
                 ]);
             }
         }
@@ -511,6 +756,7 @@ class VcSistemaEducativo extends Component
         
         $detalle = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$periodoOld->id)
+        ->where('modalidad_id',$this->modalidadId)
         ->get();
 
         $horarios = TdPeriodoSistemaEducativos::query()
@@ -545,6 +791,7 @@ class VcSistemaEducativo extends Component
             }
         
         }
+
         if ($this->replica['parcial']) { 
 
             foreach ($detalle as $key => $value) {
@@ -663,6 +910,16 @@ class VcSistemaEducativo extends Component
         $this->dispatchBrowserEvent('hide-replica-modal');
 
         $this->loadData();
+        $this->fieldsetDisabled=false;
+    }
+
+    public function sinReplicar()
+    { 
+        $this->dispatchBrowserEvent('hide-replica-modal');
+        $this->metodo = 'T';
+        $this->addarr('T');
+        $this->fieldsetDisabled=false;
+        
     }
 
 }

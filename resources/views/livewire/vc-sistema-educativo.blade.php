@@ -1,5 +1,5 @@
 <div>
-    <form>
+    <form autocomplete="off" class="needs-validation" >
         <div class="row">
             <div class="col-xxl-3">
                 <div class="card">
@@ -13,50 +13,59 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-2">
-                            <!--<lord-icon src="https://cdn.lordicon.com/kbtmbyzy.json" trigger="loop"
-                                colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px">
-                            </lord-icon>-->
-                        </div>
                         <select class="form-select mb-3" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="periodoId" required>
                             @foreach ($plectivo as $lectivo) 
                             <option value="{{$lectivo->id}}">{{$lectivo->descripcion}}</option>
                             @endforeach
                         </select>  
                         <div class="d-flex align-items-center gap-2 mb-3">
-                            <select class="form-select" id="choices-publish-status-input" wire:model="modalidadId">
+                            <select class="form-select flex-grow-1" id="choices-publish-status-input" wire:model="modalidadId">
                                 @foreach ($tblmodalidad as $modalidad) 
                                 <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
                                 @endforeach
                             </select>
-                            @if ($this->editRecno)
-                            <button type="button" class="btn btn-soft-warning btn-sm" wire:click.prevent='edit()' data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
-                                <i class="ri-edit-2-fill me-1 fs-18"></i> 
-                            </button>
+                            <div class="d-flex gap-2">
+                            @if ($this->fieldsetDisabled==false)
+                                <button type="button" class="btn btn-outline-dark btn-sm" wire:click="cancel()"  data-bs-toggle="tooltip" data-bs-placement="top" title="Cancelar">
+                                    <i class="ri-close-line me-1 fs-18"></i> 
+                                </button>
                             @else
-                            <button class="btn btn-soft-warning btn-sm" data-bs-toggle="modal" wire:click="abrirModalReplica()">
-                                <i class="ri-add-line me-1 fs-18"></i> 
-                            </button>
+                                @if ($this->editRecno)
+                                <button type="button" class="btn btn-outline-primary btn-sm" wire:click='edit()' data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+                                    <i class="ri-edit-2-fill me-1 fs-18"></i> 
+                                </button>
+                                @else
+                                <button type="button" class="btn btn-outline-warning btn-sm" wire:click="abrirModalReplica()"  data-bs-toggle="tooltip" data-bs-placement="top" title="Agregar">
+                                    <i class="ri-add-line me-1 fs-18"></i> 
+                                </button>
+                                @endif
                             @endif
-                            <button class="btn btn-soft-success btn-sm" wire:click.prevent='add()' data-bs-toggle="tooltip" data-bs-placement="top" title="Grabar">
-                                <i class="mdi mdi-content-save-check me-1 fs-18"></i> 
+                            <fieldset {{ $fieldsetDisabled ? 'disabled' : '' }}>
+                            <button class="btn btn-outline-success btn-sm" wire:click.prevent='createData' data-bs-toggle="tooltip" data-bs-placement="top" title="Grabar">
+                                <i class="ri-save-3-fill me-1 fs-18"></i> 
                             </button>
-                        </div>                      
+                            </fieldset>
+                            </div>
+                        </div>
+                                              
+                        <fieldset {{ $fieldsetDisabled ? 'disabled' : '' }}>
                         <div class="hstack gap-2 justify-content-center">
                             <div class="mb-3">
                                 <label for="sumativa" class="form-label">Evaluación Formativa</label>
-                                <input type="text" wire:model.defer="eformativa" class="form-control" placeholder="valor" />
+                                <input type="text" wire:model.defer="eformativa" class="form-control" placeholder="valor" required/>
                             </div>
                             <div class="mb-3">
                                 <label for="formativa" class="form-label">Evaluación Sumativa</label>
-                                <input type="text" wire:model.defer="esumativa" class="form-control" placeholder="valor" />
+                                <input type="text" wire:model.defer="esumativa" class="form-control" placeholder="valor" required/>
                             </div>
                         </div>
+                        </fieldset>
                     </div>
                 </div>
                 <!--end card-->
                 <div class="card mb-3">
                     <div class="card-body">
+                        <fieldset {{ $fieldsetDisabled ? 'disabled' : '' }}>
                         <div class="mb-4">
                             <div class="d-flex align-items-center gap-2">
                                 <select class="form-select" id="choices-publish-status-input"
@@ -64,9 +73,9 @@
                                     <option value="T" selected>TRIMESTRE</option>
                                     <option value="Q">QUIMESTRE</option>
                                 </select>
-                                <button class="btn btn-soft-success btn-sm" wire:click.prevent='grabaTermino'>
+                                <!--<button class="btn btn-soft-success btn-sm" wire:click.prevent='grabaTermino'>
                                     <i class="ri-save-2-line me-1 fs-18"></i> 
-                                </button>
+                                </button>-->
                             </div>
                         </div>
                         <div class="table-card">
@@ -85,16 +94,17 @@
                                 <td>{{$metodo['linea']}}</td>
                                 <td>{{$metodo['descripcion']}}</td>
                                 <td class="text-center">
-                                    <input class="form-check-input" type="checkbox" id="{{$metodo['linea']}}-{{$key}}" wire:model.prevent="arrmetodo.{{$key}}.cerrar">
+                                    <input class="form-check-input" type="checkbox" id="cerrar-{{$metodo['linea']}}-{{$key}}" wire:model.prevent="arrmetodo.{{$key}}.cerrar">
                                 </td>
                                 <td class="text-center">
-                                    <input class="form-check-input" type="checkbox" id="{{$metodo['linea']}}-{{$key}}" wire:model.prevent="arrmetodo.{{$key}}.visualiza_nota">
+                                    <input class="form-check-input" type="checkbox" id="ver-{{$metodo['linea']}}-{{$key}}" wire:model.prevent="arrmetodo.{{$key}}.visualizar_nota">
                                 </td>
                                 </tr>
                                 @endforeach
                                 </tbody>
                             </table>
                         </div>
+                        </fieldset>
                     </div>
                 </div>
                 <!--end card-->
@@ -102,10 +112,12 @@
                     <div class="card-header">
                         <div class="d-flex">
                             <h6 class="card-title mb-0 flex-grow-1">Horas de Clase</h6>
+                            <fieldset {{ $fieldsetDisabled ? 'disabled' : '' }}>
                             <div class="flex-shrink-0">
                                 <button type="button" class="btn btn-soft-secondary btn-sm" data-bs-toggle="modal" wire:click='addhora'><i class="ri-time-line me-1 align-bottom"></i>
                                     Asignar Hora</button>
                             </div>
+                            </fieldset>
                         </div>
                     </div>
                     <div class="card-body">
@@ -144,6 +156,7 @@
             <div class="col-xxl-9">
                 <div class="card">
                     <div class="card-body">
+                        <fieldset {{ $fieldsetDisabled ? 'disabled' : '' }}>
                         <div class="text-muted">
                             <h6 class="mb-3 fw-semibold text-uppercase">Parciales</h6>
                             <table class="table table-sm align-middle table-nowrap" id="orderTable">
@@ -151,9 +164,9 @@
                                     <tr class="text-uppercase text-center">
                                         <th style="width: 80px;">Linea</th>
                                         <th>Descripción</th>
-                                        <th style="width: 70px;">1er T.</th>
-                                        <th style="width: 70px;">2do T.</th>
-                                        <th style="width: 70px;">3er T.</th>
+                                        @foreach ($this->arrmetodo as $metodo)
+                                        <th style="width: 70px;">{{$metodo['codigo']}}</th>
+                                        @endforeach
                                         <th style="width: 90px;">Acción</th>
                                     </tr>
                                 </thead>
@@ -190,12 +203,14 @@
                             </table>
                             
                         </div>
+                        </fieldset>
                     </div>
                 </div>
                 <!--end card-->
                 <div class="row">
                     <div class="col-6">
                         <div class="card">
+                            <fieldset {{ $fieldsetDisabled ? 'disabled' : '' }}>
                             <div class="card-header">
                                 <div class="d-flex">
                                     <h6 class="flex-grow-1 fw-semibold text-uppercase">Actividades</h6>
@@ -213,7 +228,7 @@
                                             <th style="width: 100px;">Linea</th>
                                             <th style="width: 100px;">Código</th>
                                             <th>Descripción</th>
-                                            <th style="width: 90px;">Acción</th>
+                                            <th style="width: 30px;">...</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -233,7 +248,7 @@
                                             <li class="list-inline-item" data-bs-toggle="tooltip"
                                                 data-bs-trigger="hover" data-bs-placement="top" title="Remove">
                                                 <a class="text-danger d-inline-block remove-item-btn"
-                                                    data-bs-toggle="modal" href="" wire:click.prevent="delete()">
+                                                    data-bs-toggle="modal" href="" wire:click.prevent="deleteActivity({{$actividad['linea']}})">
                                                     <i class="ri-delete-bin-5-fill fs-16"></i>
                                                 </a>
                                             </li>
@@ -244,10 +259,12 @@
                                     </tbody>
                                 </table>
                             </div>
+                            </fieldset>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="card">
+                            <fieldset {{ $fieldsetDisabled ? 'disabled' : '' }}>
                             <div class="card-header">
                                 <div class="d-flex">
                                     <h6 class="flex-grow-1 fw-semibold text-uppercase">Exámenes</h6>
@@ -265,7 +282,7 @@
                                             <th style="width: 100px;">Linea</th>
                                             <th style="width: 100px;">Código</th>
                                             <th>Descripción</th>
-                                            <th style="width: 90px;">Acción</th>
+                                            <th style="width: 30px;">...</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -285,7 +302,7 @@
                                             <li class="list-inline-item" data-bs-toggle="tooltip"
                                                 data-bs-trigger="hover" data-bs-placement="top" title="Remove">
                                                 <a class="text-danger d-inline-block remove-item-btn"
-                                                    data-bs-toggle="modal" href="" wire:click.prevent="deleteExamen()">
+                                                    data-bs-toggle="modal" href="" wire:click.prevent="deleteExamen({{$examen['linea']}})">
                                                     <i class="ri-delete-bin-5-fill fs-16"></i>
                                                 </a>
                                             </li>
@@ -296,12 +313,13 @@
                                     </tbody>
                                 </table>
                             </div>
+                            </fieldset>
                         </div>
                     </div>
                 </div>
 
                 <div class="card">
-                    
+                    <fieldset {{ $fieldsetDisabled ? 'disabled' : '' }}>
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="tab-pane active" id="home-1" role="tabpanel">
@@ -313,7 +331,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div data-simplebar style="height: 410px;" class="px-3 mx-n3 mb-2">
+                                <div data-simplebar style="height: 430px;" class="px-3 mx-n3 mb-2">
                                     
                                     <table class="table table-nowrap align-middle table-sm" id="orderTable">
                                         <thead class="text-muted table-light text-center">
@@ -322,7 +340,7 @@
                                                 <th style="width: 100px;">Nota</th>
                                                 <th>Descripción</th>
                                                 <th style="width: 150px;">Equivalencia</th>
-                                                <th>...</th>
+                                                <th style="width: 30px;">...</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -345,7 +363,7 @@
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Remove">
                                                     <a class="text-danger d-inline-block remove-item-btn"
-                                                        data-bs-toggle="modal" href="" wire:click.prevent="delete()">
+                                                        data-bs-toggle="modal" href="" wire:click.prevent="deleteEscala({{$escala['linea']}})">
                                                         <i class="ri-delete-bin-5-fill fs-16"></i>
                                                     </a>
                                                 </li>
@@ -367,7 +385,7 @@
                             <button type="submit" class="btn btn-success w-sm">Grabar</button>
                         </div>-->
                     </div>
-                    
+                    </fieldset>
                 </div>
                 <!--end card-->
             </div>
@@ -516,7 +534,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-light" wire:click="sinReplicar">Cancelar</button>
                     <button type="button" class="btn btn-primary" wire:click="replicarDatos">
                         <i class="ri-check-line me-1"></i> Aceptar
                     </button>

@@ -20,25 +20,15 @@
 
 @endsection
 @section('script')
-    <script src="{{ URL::asset('assets/libs/list.js/list.js.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/libs/list.pagination.js/list.pagination.js.min.js') }}"></script>
-
+    
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
     <script>
        
-       window.addEventListener('show-form', event => {
-            $('#horaModal').modal('show');
-        })
-
-        window.addEventListener('hide-form', event => {
-            $('#horaModal').modal('hide');
-        })
-
         window.addEventListener('msg-grabar', event => {
             swal("Buen Trabajo!", event.detail.newName, "success");
-        })
+        });
 
         window.addEventListener('abrir-modal-replica', event => {
             var modal = new bootstrap.Modal(document.getElementById('replicaModal'));

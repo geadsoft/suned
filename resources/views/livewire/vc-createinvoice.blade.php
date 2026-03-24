@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="col-lg-2 col-sm-6">
                                     <label for="date-field">Fecha</label>
-                                    <input type="date" class="form-control bg-light border-0" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha" required>
+                                    <input type="date" class="form-control bg-light border-0" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha" required disabled>
                                 </div>
 
                             </div>

@@ -278,7 +278,7 @@
                             
                             <div class="w-100">
                                 <div class="mb-3">
-                                   <select class="form-select" name="cmbperiodo" wire:model="lnperiodo">
+                                   <select class="form-select" name="cmbperiodo" wire:model="filters.periodo">
                                         <option value="">Periodo</option>
                                         @foreach ($tblperiodos as $plectivo)
                                             <option value="{{$plectivo->periodo}}">{{$plectivo->periodo}}</option>
