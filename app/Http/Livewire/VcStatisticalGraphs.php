@@ -260,9 +260,9 @@ class VcStatisticalGraphs extends Component
         where d.tipo = 'OTR') as d"),function($join){
             $join->on('tr_deudas_cabs.id', '=', 'd.id');
         })
-        ->when($this->filters['idperiodo'],function($query){
+        /*->when($this->filters['idperiodo'],function($query){
             return $query->where('m.periodo_id',"{$this->filters['idperiodo']}");
-        })
+        })*/
         ->when($this->filters['idgrupo'],function($query){
             return $query->where('m.modalidad_id',"{$this->filters['idgrupo']}");
         })
