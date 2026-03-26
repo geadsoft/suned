@@ -53,6 +53,7 @@ class VcActividadAdd extends Component
 
         $this->docenteId = auth()->user()->personaId;
         $this->actividadId = $id;
+        dd($this->actividadId);
 
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
