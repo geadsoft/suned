@@ -218,6 +218,7 @@ class VcExamenAdd extends Component
         ->get();
 
         $this->bloque = optional($this->tblbloque->first())->codigo;
+        $this->bloque = str_replace('P','E',$this->bloque);
 
         // ========================
         // ACTIVIDAD (AC)
