@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 class VcQualifyConduct extends Component
 {   
     public $modalidadId, $termino, $periooId, $cursoId, $tblescala;
+    public $tbltermino=[];
 
     protected $listeners = ['setData'];
     
@@ -23,21 +24,7 @@ class VcQualifyConduct extends Component
 
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
-        
-        $this->tbltermino = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','EA')
-        ->orderByRaw("cerrar,codigo")
-        ->get();
 
-        $this->tblescala =  TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','EC')
-        ->orderByRaw("cerrar,codigo")
-        ->get();
-
-        $this->termino = $this->tbltermino[0]['codigo'];
-        
     }
 
     public function render()
@@ -53,6 +40,13 @@ class VcQualifyConduct extends Component
         ->orderBy('tm_cursos.grado_id')
         ->get();
 
+        $this->tblescala =  TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('modalidad_id', $this->modalidadId)
+        ->where('tipo','EC')
+        ->orderByRaw("cerrar,codigo")
+        ->get();
+
         $this->loadPersonas();
 
         return view('livewire.vc-qualify-conduct');
@@ -63,6 +57,24 @@ class VcQualifyConduct extends Component
         $this->loadPersonas();
         $this->add();
         $this->loadfalta();
+
+    }
+
+    public function updatedmodalidadId($id)
+    {
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->periodoId)
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->orderBy('codigo')
+            ->get();
+
+        $termino = optional($this->tbltermino->first())->codigo;
 
     }
     

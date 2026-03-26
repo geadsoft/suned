@@ -13,27 +13,29 @@
                                 @endforeach 
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="choices-publish-status-input" class="form-label fw-semibold">Asignatura</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="asignaturaId" {{$control}}>
-                                <option value="">Seleccione Asignatura</option>
-                                @foreach ($tblasignatura as $asignatura) 
-                                <option value="{{$asignatura->id}}">{{$asignatura->descripcion}}</option>
-                                @endforeach 
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="paralelo" required {{$control}}>
-                                <option value="">Seleccione Paralelo</option>
-                                @foreach ($tblparalelo as $paralelo) 
-                                <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
-                                @endforeach 
-                            </select>
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <label for="choices-publish-status-input" class="form-label fw-semibold">Asignatura</label>
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="asignaturaId" {{$control}}>
+                                    <option value="">Seleccione Asignatura</option>
+                                    @foreach ($tblasignatura as $asignatura) 
+                                    <option value="{{$asignatura->id}}">{{$asignatura->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="paralelo" required {{$control}}>
+                                    <option value="">Seleccione Paralelo</option>
+                                    @foreach ($tblparalelo as $paralelo) 
+                                    <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-sm-6">
-                                    <label for="choices-publish-status-input" class="form-label fw-semibold">Trimestre</label>
+                                <label for="choices-publish-status-input" class="form-label fw-semibold">Trimestre</label>
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="termino" required {{$control}}>
                                     @foreach ($tbltermino as $terminos) 
                                     <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
@@ -41,7 +43,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-6">
-                                <label for="choices-publish-status-input" class="form-label fw-semibold">Exámen</label>
+                                <label for="choices-publish-status-input" class="form-label fw-semibold">Bloque</label>
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="bloque" {{$control}}>
                                     @foreach ($tblbloque as $bloques) 
                                     <option value="{{$bloques['codigo']}}">{{$bloques['descripcion']}}</option>
@@ -49,8 +51,16 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <div class="mb-3">
+                        <div class="row mb-3">
+                            <div class="col-sm-2">
+                                <label for="tipo-select" class="form-label fw-semibold">Tipo Exámen</label>
+                                <select class="form-select" id="tipo-select" data-choices data-choices-search-false wire:model.defer="tipo">
+                                    @foreach ($tblactividad as $actividades) 
+                                    <option value="{{$actividades->codigo}}">{{$actividades->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="col-sm-10">
                                 <label class="form-label fw-semibold" for="product-title-input">Nombre de Exámen</label>
                                 <input type="text" class="form-control" id="product-title-input" value="" placeholder="Ingrese nombre de actividad" wire:model.defer="nombre" required>
                                 <div class="invalid-feedback">Por favor ingrese un nombre de actividad.</div>
@@ -64,38 +74,52 @@
                     <div class="card-header">
                         <h5 class="card-title mb-0">Información Adicional</h5>
                     </div>
-                    <div class="card-body">    
-                        <!--<div class="mb-3">
-                        <label class="form-label fw-semibold">Descripción de Actividad</label>
-                        <div id="ckeditor-classic">
-                            <p></p>
+                    <div class="card-body">  
+                        <div class="row mb-3 align-items-center">
+                            <label for="fechaActual" class="col-sm-5 col-form-label fw-semibold">
+                                Fecha Máxima de Entrega
+                            </label>
+                            <div class="col-sm-7">
+                                <input type="date" class="form-control" id="fechaActual"
+                                    wire:model.defer="fecha" required>
+                            </div>
                         </div>
-                    </div>-->
-                        <div class="mb-3">
-                            <label for="txtfecha" class="form-label fw-semibold">Fecha Máxima de Entrega</label>
-                            <input type="date" class="form-control" id="fechaActual" data-provider="flatpickr" data-date-format="d-m-Y" data-time="true" wire:model.defer="fecha" required> 
+
+                        <div class="row mb-3 align-items-center">
+                            <label for="horamaxima" class="col-sm-5 col-form-label">
+                                Hora Máxima de Entrega
+                            </label>
+                            <div class="col-sm-7">
+                                <input type="time" class="form-control" id="horamaxima"
+                                    wire:model.defer="hora" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="horamaxima" class="form-label">Hora Máxima de Entrega</label>
-                            <input type="time" class="form-control" id="horamaxima" wire:model.defer="hora" required>
+
+                        <div class="row mb-3 align-items-center">
+                            <label for="archivo" class="col-sm-5 col-form-label fw-semibold">
+                                Permitir subida de archivos
+                            </label>
+                            <div class="col-sm-7">
+                                <select class="form-select" id="archivo"
+                                    wire:model.defer="archivo">
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="choices-publish-status-input" class="form-label fw-semibold">Permitir la subida de archivos</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="archivo">
-                                <option value="SI" selected>SI</option>
-                                <option value="NO">NO</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-4">
-                            <label for="choices-publish-visibility-input" class="form-label fw-semibold">Puntaje</label>
-                            <input id="calificacion-insumo" type="number" min="1" max="10" step="1" class="form-control" value="10" wire:model.defer="puntaje" required> 
+                        <div class="row mb-3 align-items-center">
+                            <label for="puntaje" class="col-sm-5 col-form-label fw-semibold">
+                                Puntaje
+                            </label>
+                            <div class="col-sm-7">
+                                <input id="puntaje" type="number" min="1" max="10" step="1"
+                                    class="form-control" wire:model.defer="puntaje" required>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>    
-
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">

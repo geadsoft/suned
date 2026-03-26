@@ -17,7 +17,7 @@ class VcQualifyExams extends Component
     
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="3E", $tipo="EX", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $periodoId, $modalidadId=0;
-    public $tblparalelo=[], $tblasignatura=[];
+    public $tblparalelo=[], $tblasignatura=[], $tbltermino=[], $tblbloque=[];
     public $tblexamen=[];
     public $tblrecords=[];
     public $personas=[];
@@ -40,13 +40,7 @@ class VcQualifyExams extends Component
 
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
-
-        $this->tbltermino = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','EA')
-        ->get();
-
-        $this->updatedTermino();
+        
     }
 
     public function render()
@@ -109,6 +103,35 @@ class VcQualifyExams extends Component
         ->get();
 
         $this->tblrecords=[];
+
+    }
+
+    public function updatedmodalidadId($id)
+    {
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->periodoId)
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->get();
+
+        $termino = optional($this->tbltermino->first())->codigo;
+        $this->filters['termino'] = $termino;
+
+        // ========================
+        // BLOQUE (PA)
+        // ========================
+        $this->tblbloque = (clone $baseQuery)
+            ->where('tipo', 'PA')
+            ->where('evaluacion', $termino)
+            ->get();
+
+        $bloque = optional($this->tblbloque->first())->codigo;
+        $this->filters['bloque'] = $bloque;
 
     }
 

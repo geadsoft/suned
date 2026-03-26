@@ -69,11 +69,13 @@ class VcStudentGrades extends Component
 
         $this->tblescala = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->periodoId)
+        ->where("modalidad_id",$this->modalidadId)
         ->where("tipo","EC")
         ->get();
 
         $tipoactividad = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->periodoId)
+        ->where("modalidad_id",$this->modalidadId)
         ->where("tipo","AC")
         ->get();
 
@@ -83,6 +85,7 @@ class VcStudentGrades extends Component
     
         $this->tbltermino = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
+        ->where("modalidad_id",$this->modalidadId)
         ->where('tipo','EA')
         ->get();
 
@@ -90,7 +93,6 @@ class VcStudentGrades extends Component
 
         $this->add();
         $this->asignarNotas();
-        
         
     }
 
@@ -103,6 +105,7 @@ class VcStudentGrades extends Component
 
         $this->tblbloque = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
+        ->where("modalidad_id",$this->modalidadId)
         ->where('tipo','PA')
         ->where('evaluacion',$this->termino)
         ->get();

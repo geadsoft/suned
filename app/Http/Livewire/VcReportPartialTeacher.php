@@ -27,6 +27,8 @@ class VcReportPartialTeacher extends Component
 
     public $tblasignatura=[];
     public $tblparalelo=[];
+    public $tbltermino=[];
+    public $tblbloque=[];
     public $tblexamen=[];
     public $tblrecords=[];
     public $personas=[];
@@ -72,7 +74,6 @@ class VcReportPartialTeacher extends Component
         ->groupBy('g.id','g.descripcion')
         ->get();
 
-        
         $this->tblasignatura = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
@@ -98,9 +99,40 @@ class VcReportPartialTeacher extends Component
         return view('livewire.vc-report-partial-teacher');
     }
 
+
     public function updatedasignaturaId($id){
 
         $this->asignaturaId = $id;
+
+    }
+
+    public function updatedmodalidadId($id)
+    {
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->filters['periodoId'])
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->orderBy('codigo')
+            ->get();
+
+        $termino = optional($this->tbltermino->first())->codigo;
+        $this->filters['termino'] = $termino;
+
+        // ========================
+        // BLOQUE (PA)
+        // ========================
+        $this->tblbloque = (clone $baseQuery)
+            ->where('tipo', 'PA')
+            ->where('evaluacion', $termino)
+            ->get();
+
+        $bloque = optional($this->tblbloque->first())->codigo;
+        $this->filters['bloque'] = $bloque;
 
     }
 

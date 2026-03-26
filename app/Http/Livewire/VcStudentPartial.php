@@ -21,6 +21,7 @@ class VcStudentPartial extends Component
     public $tblrecords=[];
     public $tblescala=[];
     public $tbltermino=[];
+    public $tblbloque=[];
 
     public $filters=[
         'docenteId' => 0,
@@ -46,12 +47,12 @@ class VcStudentPartial extends Component
         ->where("tipo","EC")
         ->get();
 
-         $this->tbltermino = TdPeriodoSistemaEducativos::query()
+        /*$this->tbltermino = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
         ->where('tipo','EA')
         ->get();
 
-        $this->termino = $this->tbltermino[0]['codigo'];
+        $this->termino = $this->tbltermino[0]['codigo'];*/
 
     }
     
@@ -61,11 +62,11 @@ class VcStudentPartial extends Component
         ->where("superior",1)
         ->get();
 
-        $this->tblbloque = TdPeriodoSistemaEducativos::query()
+        /*$this->tblbloque = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
         ->where('tipo','PA')
         ->where('evaluacion',$this->termino)
-        ->get();
+        ->get();*/
         
        $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
@@ -114,6 +115,36 @@ class VcStudentPartial extends Component
 
         //$this->colspan = $this->colspan+count($record)+2;
         return  $record;
+
+    }
+
+    public function updatedmodalidadId($id)
+    {
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->periodoId)
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->orderBy('codigo')
+            ->get();
+
+        $termino = optional($this->tbltermino->first())->codigo;
+        $this->filters['termino']=$termino;
+
+        // ========================
+        // BLOQUE (PA)
+        // ========================
+        $this->tblbloque = (clone $baseQuery)
+            ->where('tipo', 'PA')
+            ->where('evaluacion', $termino)
+            ->get();
+
+        $bloque = optional($this->tblbloque->first())->codigo;
+        $this->filters['bloque']=$bloque;
 
     }
 

@@ -72,7 +72,7 @@
                                 
                                     <label for="choices-publish-status-input" class="form-label fw-semibold">Tipo Actividad</label>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.actividad"  wire:change="consulta()">
-                                        @foreach ($tblactividades as $actividades) 
+                                        @foreach ($tbltipo as $actividades) 
                                         <option value="{{$actividades->codigo}}">{{$actividades->descripcion}}</option>
                                         @endforeach 
                                     </select>

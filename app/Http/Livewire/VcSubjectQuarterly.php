@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Livewire;
+use App\Models\TmSistemaEducativos;
 use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmHorarios;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 class VcSubjectQuarterly extends Component
 {   
      public $periodoId, $modalidadId=0, $tblpersonas=[], $datos, $bloqueEx, $estudianteId, $mensaje="", $calificacion="N";
-    public $nivel,$subtitulo="",$docente="",$materia="",$curso="", $periodolectivo="";
+    public $nivel,$subtitulo="",$docente="",$materia="",$curso="", $periodolectivo="", $notaformativa=0, $notasumativa=0;
     public $arrComentario=[];
     public $arrtipo=[];
     public $tblbloque=[];
@@ -53,13 +54,6 @@ class VcSubjectQuarterly extends Component
         foreach ($tipoactividad as $objarr){
             $this->arrtipo[$objarr->codigo] = $objarr->descripcion;
         }
-    
-        $this->tbltermino = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','EA')
-        ->get();
-
-        $this->termino = $this->tbltermino[0]['codigo'];
         
     }
 
@@ -67,12 +61,6 @@ class VcSubjectQuarterly extends Component
     {   
         $this->tblmodalidad = TmGeneralidades::query()
         ->where("superior",1)
-        ->get();
-        
-        $this->tblbloque = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','PA')
-        ->where('evaluacion',$this->termino)
         ->get();
         
        $this->tblparalelo = TmHorarios::query()
@@ -243,6 +231,44 @@ class VcSubjectQuarterly extends Component
 
     }
 
+    public function updatedmodalidadId($id)
+    {
+        $sqlresult = TmSistemaEducativos::query()
+        ->where('periodo_id', $this->periodoId)
+        ->where('modalidad_id', $this->modalidadId)
+        ->first();
+
+        $this->notaformativa = ($sqlresult->evaluacion_formativa ?? 70)/100;
+        $this->notasumativa  = ($sqlresult->evaluacion_sumativa ?? 30)/100;
+
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->periodoId)
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->orderBy('codigo')
+            ->get();
+
+        $termino = optional($this->tbltermino->first())->codigo;
+        $this->filters['termino'] = $termino;
+
+        // ========================
+        // BLOQUE (PA)
+        // ========================
+        $this->tblbloque = (clone $baseQuery)
+            ->where('tipo', 'PA')
+            ->where('evaluacion', $termino)
+            ->get();
+
+        $bloque = optional($this->tblbloque->first())->codigo;
+        $this->filters['bloque'] = $bloque;
+
+    }
+
     public function asignarNotas(){ 
 
         $this->tblgrupo  = TmActividades::query()
@@ -306,14 +332,14 @@ class VcSubjectQuarterly extends Component
             }
 
             //Asginar Nota Examen
-            $this->tbltermino = TdPeriodoSistemaEducativos::query()
+            /*$this->tbltermino = TdPeriodoSistemaEducativos::query()
             ->where('periodo_id',$this->filters['periodoId'])
             ->where('tipo','EA')
-            ->get();
+            ->get();*/
 
             foreach($this->tbltermino as $data){
                 if ($this->filters['termino'] == $data['codigo']){
-                    $this->bloqueEx = str_replace('T','E',$data['codigo']);
+                    $this->bloqueEx = str_replace($this->filters['termino'],'E',$data['codigo']);
                 }
             }
 
@@ -390,7 +416,7 @@ class VcSubjectQuarterly extends Component
                     }
 
                     if ($promedio > 0){
-                        $nota70 = round($this->tblrecords[$key1][$key2]['promedio']*0.70,2);
+                        $nota70 = round($this->tblrecords[$key1][$key2]['promedio']*$this->notaformativa,2);
                         $this->tblrecords[$key1][$key2]['nota70'] = round($nota70, 2);
                     }else{
 
@@ -398,7 +424,7 @@ class VcSubjectQuarterly extends Component
                     }
 
                     if ($this->tblrecords[$key1][$key2]['examen'] > 0){
-                        $nota30 = round($this->tblrecords[$key1][$key2]['examen']*0.30,2);
+                        $nota30 = round($this->tblrecords[$key1][$key2]['examen']*$this->sumativa,2);
                         $this->tblrecords[$key1][$key2]['nota30'] = round($nota30, 2);
                     }else{
                         $this->tblrecords[$key1][$key2]['nota30'] = 0.00;

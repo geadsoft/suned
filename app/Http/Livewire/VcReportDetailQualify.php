@@ -7,6 +7,7 @@ use App\Models\TmHorarios;
 use App\Models\TmHorariosDocentes;
 use App\Models\TmActividades;
 use App\Models\TdCalificacionActividades;
+use App\Models\TdPeriodoSistemaEducativos;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,8 @@ class VcReportDetailQualify extends Component
 
     public $tblasignatura=[];
     public $tblparalelo=[];
+    public $tbltermino=[];
+    public $tblbloque=[];
     public $tblexamen=[];
     public $tblrecords=[];
     public $personas=[];
@@ -56,7 +59,7 @@ class VcReportDetailQualify extends Component
             $this->filters['paralelo'] = $this->tblparalelo[0]["id"];
             $this->consulta();
         }
-
+        
     }
 
     public function render()
@@ -108,6 +111,35 @@ class VcReportDetailQualify extends Component
         ->where("m.id",$id)
         ->selectRaw('d.id, concat(s.descripcion," ",c.paralelo) as descripcion')
         ->get();
+
+    }
+
+    public function updatedmodalidadId($id)
+    {
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->periodoId)
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->get();
+
+        $termino = optional($this->tbltermino->first())->codigo;
+        $this->filters['termino'] = $termino;
+
+        // ========================
+        // BLOQUE (PA)
+        // ========================
+        $this->tblbloque = (clone $baseQuery)
+            ->where('tipo', 'PA')
+            ->where('evaluacion', $termino)
+            ->get();
+
+        $bloque = optional($this->tblbloque->first())->codigo;
+        $this->filters['bloque'] = $bloque;
 
     }
 
@@ -313,19 +345,6 @@ class VcReportDetailQualify extends Component
         $tblrecords=[];
 
         $this->loadPersonas();
-
-        /*$personas = TmHorariosDocentes::query()
-        ->join("tm_horarios as h","h.id","=","tm_horarios_docentes.horario_id")
-        ->join("tm_matriculas as m",function($join){
-            $join->on("m.modalidad_id","=","h.grupo_id")
-                ->on("m.periodo_id","=","h.periodo_id")
-                ->on("m.curso_id","=","h.curso_id");
-        })
-        ->join("tm_personas as p","p.id","=","m.estudiante_id")
-        ->select("p.*")
-        ->where("tm_horarios_docentes.id",$this->filters['paralelo'])
-        ->orderBy("p.apellidos")
-        ->get();*/
 
         foreach ($this->personas as $key => $data)
         {   

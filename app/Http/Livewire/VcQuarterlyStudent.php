@@ -22,6 +22,7 @@ class VcQuarterlyStudent extends Component
     public $tblrecords=[];
     public $tblescala=[];
     public $tbltermino=[];
+    public $tblbloque=[];
 
     public $filters=[
         'docenteId' => 0,
@@ -42,18 +43,6 @@ class VcQuarterlyStudent extends Component
         $this->periodoId = $periodo['id'];
         $this->periodolectivo = "Periodo Lectivo ".$periodo['descripcion'];
 
-        $this->tblescala = TdPeriodoSistemaEducativos::query()
-        ->where("periodo_id",$this->periodoId)
-        ->where("tipo","EC")
-        ->get();
-
-         $this->tbltermino = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','EA')
-        ->get();
-
-        $this->termino = $this->tbltermino[0]['codigo'];
-
     }
 
     public function render()
@@ -62,13 +51,13 @@ class VcQuarterlyStudent extends Component
         ->where("superior",1)
         ->get();
 
-        $this->tblbloque = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','PA')
-        ->where('evaluacion',$this->termino)
+        $this->tblescala = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->periodoId)
+        ->where('modalidad_id',$this->modalidadId)
+        ->where("tipo","EC")
         ->get();
         
-       $this->tblparalelo = TmHorarios::query()
+        $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
         ->where("tm_horarios.periodo_id",$this->periodoId)
@@ -207,12 +196,40 @@ class VcQuarterlyStudent extends Component
 
     }
 
+    public function updatedmodalidadId($id)
+    {
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->periodoId)
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->orderBy('codigo')
+            ->get();
+
+        $this->termino = optional($this->tbltermino->first())->codigo;
+
+        // ========================
+        // BLOQUE (PA)
+        // ========================
+        $this->tblbloque = (clone $baseQuery)
+            ->where('tipo', 'PA')
+            ->where('evaluacion', $this->termino)
+            ->get();
+
+        $this->bloque = optional($this->tblbloque->first())->codigo;
+
+    }
+
     public function examenes(){
 
         //Asginar Nota Examen
         foreach($this->tbltermino as $data){
             if ($this->filters['termino'] == $data['codigo']){
-                $this->bloqueEx = str_replace('T','E',$data['codigo']);
+                $this->bloqueEx = str_replace($this->filters['termino'],'E',$data['codigo']);
             }
         }
 

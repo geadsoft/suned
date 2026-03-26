@@ -17,7 +17,7 @@ class VcQualifyActivity extends Component
 
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
     public $tblparalelo=[], $tblasignatura=[];
-    public $periodoId, $modalidadId=0, $tbltermino, $tblbloque, $tblactividades, $cursoId;
+    public $periodoId, $modalidadId=0, $tbltermino=[], $tblbloque=[], $tbltipo=[], $cursoId;
     public $tblactividad=[];
     public $tblrecords=[];
     public $personas=[];
@@ -42,19 +42,6 @@ class VcQualifyActivity extends Component
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
 
-        $this->tbltermino = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','EA')
-        ->get();
-
-        $this->termino = $this->tbltermino[0]['codigo'];
-
-        $this->tblactividades = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','AC')
-        ->where('codigo','<>','EX')
-        ->get();
-
     }
 
     public function render()
@@ -66,12 +53,6 @@ class VcQualifyActivity extends Component
         ->where("d.docente_id",$this->docenteId)
         ->selectRaw('g.id, g.descripcion')
         ->groupBy('g.id','g.descripcion')
-        ->get();
-
-        $this->tblbloque = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','PA')
-        ->where('evaluacion',$this->termino)
         ->get();
         
         $this->tblasignatura = TmHorarios::query()
@@ -114,6 +95,47 @@ class VcQualifyActivity extends Component
             'tblnotas' => $this->arrnotas,
             'tbldocentes' => $tbldocentes,
         ]);
+    }
+
+    public function updatedmodalidadId($id)
+    {
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->periodoId)
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->get();
+
+        $termino = optional($this->tbltermino->first())->codigo;
+        $this->filters['termino'] = $termino;
+
+        // ========================
+        // BLOQUE (PA)
+        // ========================
+        $this->tblbloque = (clone $baseQuery)
+            ->where('tipo', 'PA')
+            ->where('evaluacion', $termino)
+            ->get();
+
+        $bloque = optional($this->tblbloque->first())->codigo;
+        $this->filters['bloque'] = $bloque;
+
+        // ========================
+        // ACTIVIDAD (AC)
+        // ========================
+        $this->tbltipo = (clone $baseQuery)
+            ->where('tipo', 'AC')
+            ->where('codigo', '<>', 'EX')
+            ->get();
+
+        $tipo = optional($this->tbltipo->first())->codigo;
+        $this->filters['actividad'] = $tipo;
+
+
     }
 
     public function updatedasignaturaId($id){

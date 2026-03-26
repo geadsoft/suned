@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Livewire;
+use App\Models\TmSistemaEducativos;
 use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmHorarios;
@@ -36,6 +37,8 @@ class VcReportCard extends Component
         'termino' => '1T',
         'bloque' => '1P',
         'estudianteId' => 0,
+        'notaformativa' => 0,
+        'notasumativa' => 0,
     ];
 
     public function mount()
@@ -44,36 +47,9 @@ class VcReportCard extends Component
         $this->fechaActual = date("d/m/Y");
         $this->horaActual  = date("H:i:s");
 
-        //$this->personaId = auth()->user()->personaId;
-
         $periodo = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $periodo['id'];
         $this->filters['periodoId'] = $this->periodoId;
-        
-        $this->tblescala = TdPeriodoSistemaEducativos::query()
-        ->where("periodo_id",$this->periodoId)
-        ->where("tipo","EC")
-        ->selectRaw("*,nota + case when nota=10 then 0 else 0.99 end as nota2")
-        ->get();
-
-        $tipoactividad = TdPeriodoSistemaEducativos::query()
-        ->where("periodo_id",$this->periodoId)
-        ->where("tipo","AC")
-        ->get();
-
-        foreach ($tipoactividad as $objarr){
-            $this->arrtipo[$objarr->codigo] = $objarr->descripcion;
-        }
-    
-        $this->tbltermino = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','EA')
-        ->get();
-
-        $this->termino = $this->tbltermino[0]['codigo'];
-
-        //$this->add();
-        //$this->asignarNotas()
         
     }
     
@@ -81,12 +57,6 @@ class VcReportCard extends Component
     {
         $this->tblmodalidad = TmGeneralidades::query()
         ->where("superior",1)
-        ->get();
-        
-        $this->tblbloque = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','PA')
-        ->where('evaluacion',$this->termino)
         ->get();
         
        $this->tblparalelo = TmHorarios::query()
@@ -176,6 +146,63 @@ class VcReportCard extends Component
         ->where('m.curso_id', $this->filters['paralelo'])
         ->select('tm_personas.*', 'm.documento')
         ->orderBy('tm_personas.apellidos')
+        ->get();
+
+    }
+
+    public function updatedmodalidadId($id)
+    {
+        $sqlresult = TmSistemaEducativos::query()
+        ->where('periodo_id', $this->periodoId)
+        ->where('modalidad_id', $this->modalidadId)
+        ->first();
+
+        $this->filters['notaformativa'] = ($sqlresult->evaluacion_formativa ?? 70)/100;
+        $this->filters['notasumativa'] = ($sqlresult->evaluacion_sumativa ?? 30)/100;
+        
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->periodoId)
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->orderBy('codigo')
+            ->get();
+
+        $termino = optional($this->tbltermino->first())->codigo;
+        $this->filters['termino'] = $termino;
+
+        // ========================
+        // BLOQUE (PA)
+        // ========================
+        $this->tblbloque = (clone $baseQuery)
+            ->where('tipo', 'PA')
+            ->where('evaluacion', $termino)
+            ->get();
+
+        $bloque = optional($this->tblbloque->first())->codigo;
+        $this->filters['bloque'] = $bloque;
+
+        // ========================
+        // ACTIVIDAD (AC)
+        // ========================
+        $tipoactividad = (clone $baseQuery)
+        ->where('tipo', 'AC')
+        ->get();
+
+        foreach ($tipoactividad as $objarr){
+            $this->arrtipo[$objarr->codigo] = $objarr->descripcion;
+        }
+
+        // ========================
+        // ESCALA (EC)
+        // ========================
+        $this->tblescala = (clone $baseQuery)
+        ->where("tipo","EC")
+        ->selectRaw("*,nota + case when nota=10 then 0 else 0.99 end as nota2")
         ->get();
 
     }
@@ -367,6 +394,9 @@ class VcReportCard extends Component
 
 
     public function asignarNotas(){
+
+        $notaformativa = $this->filters['notaformativa'];
+        $notasumativa  = $this->filters['notasumativa'];
 
         $servicio = TmCursos::query()
         ->join("tm_servicios as s","s.id","=","tm_cursos.servicio_id")
@@ -562,7 +592,7 @@ class VcReportCard extends Component
                     }
 
                     if ($promedio > 0){
-                        $nota70 = round($this->tblrecords[$key1][$key2]['promedio']*0.70,2);
+                        $nota70 = round($this->tblrecords[$key1][$key2]['promedio']*$notaformativa,2);
                         $this->tblrecords[$key1][$key2]['nota70'] = round($nota70, 2);
                     }else{
 
@@ -570,7 +600,7 @@ class VcReportCard extends Component
                     }
 
                     if ($this->tblrecords[$key1][$key2]['examen'] > 0){
-                        $nota30 = round($this->tblrecords[$key1][$key2]['examen']*0.30,2);
+                        $nota30 = round($this->tblrecords[$key1][$key2]['examen']*$notasumativa,2);
                         $this->tblrecords[$key1][$key2]['nota30'] = round($nota30, 2);
                     }else{
                         $this->tblrecords[$key1][$key2]['nota30'] = 0.00;
@@ -836,6 +866,8 @@ class VcReportCard extends Component
         $this->filters['termino']   = $data->termino;
         $this->filters['bloque']  = $data->bloque;
         $this->filters['estudianteId'] = $data->estudianteId;
+        $this->filters['notaformativa'] = $data->notaformativa;
+        $this->filters['notasumativa'] = $data->notasumativa;
 
         $this->modalidadId =  $data->modalidadId;
         $this->periodoId = $data->periodoId;
@@ -852,6 +884,7 @@ class VcReportCard extends Component
 
         $escalas = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->filters['periodoId'])
+        ->where("modalidad_id",$this->filters['modalidadId'])
         ->where("tipo","EC")
         ->selectRaw("*,nota + case when nota=10 then 0 else 0.99 end as nota2")
         ->get()->toArray();
@@ -866,6 +899,7 @@ class VcReportCard extends Component
 
         $rangos = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->filters['periodoId'])
+        ->where("modalidad_id",$this->filters['modalidadId'])
         ->where("tipo","EC")
         ->selectRaw("min(nota) as min, max(nota)+case when max(nota)=10 then 0 else 0.99 end as max, evaluacion as codigo, glosa as descr")
         ->groupBy("evaluacion","glosa")
@@ -923,6 +957,7 @@ class VcReportCard extends Component
         $trimestre = TdPeriodoSistemaEducativos::query()
         ->where('codigo',$this->filters['termino'])
         ->where('periodo_id',$this->filters['periodoId'])
+        ->where('modalidad_id',$this->filters['modalidadId'])
         ->first();
 
         $datos = [
@@ -934,8 +969,8 @@ class VcReportCard extends Component
 
         $this->fechaActual = date("d/m/Y");
         $this->horaActual  = date("H:i:s");
-        $notaParcial = $periodo->evaluacion_formativa;
-        $notaExamen = $periodo->evaluacion_sumativa;
+        $notaParcial = $this->filters['notaformativa']*100;
+        $notaExamen  = $this->filters['notasumativa']*100;
 
         //Faltas
         $faltas = [];

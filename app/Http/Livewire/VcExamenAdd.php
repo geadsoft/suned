@@ -21,7 +21,7 @@ class VcExamenAdd extends Component
 
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1E", $tipo="EX", $nombre, $fecha, $hora;
     public $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
-    public $periodoId, $modalidadId, $tbltermino, $tblactividad, $texteditor="";
+    public $periodoId, $modalidadId, $tbltermino=[], $tblactividad=[], $texteditor="";
     public $tblparalelo=[], $tblasignatura=[];
     public $tblbloque=[];
     public $array_attach=[];
@@ -52,25 +52,15 @@ class VcExamenAdd extends Component
         $this->hora = date('H:i');
 
         $this->docenteId = auth()->user()->personaId;
+        $this->actividadId = $id;
 
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
 
-        $this->tbltermino = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','EA')
-        ->when($id==0,function($query){
-            return $query->where('cerrar',0);
-        })
-        ->get();
-
-        $this->termino = $this->tbltermino[0]['codigo'];
-
         $this->attach_add();
-        $this->updatedTermino();
 
-        if ($id>0){
-            $this->edit($id);
+        if ($this->actividadId>0){
+            $this->edit($this->actividadId);
         }
 
     }
@@ -197,6 +187,46 @@ class VcExamenAdd extends Component
     public function setEditorData($data){
         $this->texteditor = $data;
         
+    }
+
+    public function updatedmodalidadId($id)
+    {
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->periodoId)
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->when($this->actividadId == 0, function ($query) {
+                $query->where('cerrar', 0);
+            })
+            ->orderBy('cerrar')
+            ->orderBy('codigo')
+            ->get();
+
+        $this->termino = optional($this->tbltermino->first())->codigo;
+
+        // ========================
+        // BLOQUE (PA)
+        // ========================
+        $this->tblbloque = (clone $baseQuery)
+            ->where('tipo', 'PA')
+            ->where('evaluacion', $this->termino)
+            ->get();
+
+        $this->bloque = optional($this->tblbloque->first())->codigo;
+
+        // ========================
+        // ACTIVIDAD (AC)
+        // ========================
+        $this->tblactividad = (clone $baseQuery)
+            ->where('tipo', 'EX')
+            ->get();
+
+        $this->tipo = optional($this->tblactividad->first())->codigo;
     }
 
     public function updatedasignaturaId($id){

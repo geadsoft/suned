@@ -54,14 +54,6 @@ class VcReportQuarterlyTeacher extends Component
 
         $this->periodolectivo = "Periodo Lectivo ".$periodo['descripcion'];
 
-        $this->tbltermino = TdPeriodoSistemaEducativos::query()
-            ->where('periodo_id',$this->filters['periodoId'])
-            ->where('tipo','EA')
-            ->get();
-
-
-        $this->updatedTermino();
-
     }
 
     public function render()
@@ -104,6 +96,35 @@ class VcReportQuarterlyTeacher extends Component
     public function updatedasignaturaId($id){
 
         $this->asignaturaId = $id;
+
+    }
+
+    public function updatedmodalidadId($id)
+    {
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->filters['periodoId'])
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->get();
+
+        $termino = optional($this->tbltermino->first())->codigo;
+        $this->filters['termino'] = $termino;
+
+        // ========================
+        // BLOQUE (PA)
+        // ========================
+        $this->tblbloque = (clone $baseQuery)
+            ->where('tipo', 'PA')
+            ->where('evaluacion', $termino)
+            ->get();
+
+        $bloque = optional($this->tblbloque->first())->codigo;
+        $this->filters['bloque'] = $bloque;
 
     }
 

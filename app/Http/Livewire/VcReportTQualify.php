@@ -27,6 +27,8 @@ class VcReportTQualify extends Component
 
     public $tblmodalidad=[];
     public $tblasignatura=[];
+    public $tbltermino=[];
+    public $tblbloque=[];
     public $tblparalelo=[];
     public $tblexamen=[];
     public $tblrecords=[];
@@ -99,6 +101,35 @@ class VcReportTQualify extends Component
         ->get();
 
         return view('livewire.vc-report-t-qualify');
+    }
+
+    public function updatedmodalidadId($id)
+    {
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->filters['periodoId'])
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->get();
+
+        $termino = optional($this->tbltermino->first())->codigo;
+        $this->filters['termino'] = $termino;
+
+        // ========================
+        // BLOQUE (PA)
+        // ========================
+        $this->tblbloque = (clone $baseQuery)
+            ->where('tipo', 'PA')
+            ->where('evaluacion', $termino)
+            ->get();
+
+        $bloque = optional($this->tblbloque->first())->codigo;
+        $this->filters['bloque'] = $bloque;
+
     }
 
     public function updatedasignaturaId($id){

@@ -46,7 +46,7 @@ class VcPartialBulletin extends Component
         $this->periodoId = $periodo['id'];
         $this->filters['periodoId'] = $this->periodoId;
         
-        $this->tblescala = TdPeriodoSistemaEducativos::query()
+        /*$this->tblescala = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->periodoId)
         ->where("tipo","EC")
         ->selectRaw("*,nota + case when nota=10 then 0 else 0.99 end as nota2")
@@ -66,7 +66,7 @@ class VcPartialBulletin extends Component
         ->where('tipo','EA')
         ->get();
 
-        $this->termino = $this->tbltermino[0]['codigo'];
+        $this->termino = $this->tbltermino[0]['codigo'];*/
         
     }
 
@@ -76,11 +76,11 @@ class VcPartialBulletin extends Component
         ->where("superior",1)
         ->get();
         
-        $this->tblbloque = TdPeriodoSistemaEducativos::query()
+        /*$this->tblbloque = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
         ->where('tipo','PA')
         ->where('evaluacion',$this->termino)
-        ->get();
+        ->get();*/
         
        $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
@@ -167,6 +167,55 @@ class VcPartialBulletin extends Component
         ->where('m.curso_id', $this->filters['paralelo'])
         ->select('tm_personas.*', 'm.documento')
         ->orderBy('tm_personas.apellidos')
+        ->get();
+
+    }
+
+    public function updatedmodalidadId($id)
+    {
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->periodoId)
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->orderBy('codigo')
+            ->get();
+
+        $termino = optional($this->tbltermino->first())->codigo;
+        $this->filters['termino'] = $termino;
+
+        // ========================
+        // BLOQUE (PA)
+        // ========================
+        $this->tblbloque = (clone $baseQuery)
+            ->where('tipo', 'PA')
+            ->where('evaluacion', $termino)
+            ->get();
+
+        $bloque = optional($this->tblbloque->first())->codigo;
+        $this->filters['bloque'] = $bloque;
+
+        // ========================
+        // ACTIVIDAD (AC)
+        // ========================
+        $tipoactividad = (clone $baseQuery)
+        ->where('tipo', 'AC')
+        ->get();
+
+        foreach ($tipoactividad as $objarr){
+            $this->arrtipo[$objarr->codigo] = $objarr->descripcion;
+        }
+
+        // ========================
+        // ESCALA (EC)
+        // ========================
+        $this->tblescala = (clone $baseQuery)
+        ->where("tipo","EC")
+        ->selectRaw("*,nota + case when nota=10 then 0 else 0.99 end as nota2")
         ->get();
 
     }

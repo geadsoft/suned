@@ -39,19 +39,20 @@
                 <div class="card flex-fill">
                     <div class="card-body">
                         <div class="mb-3">
-                            <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino"  wire:change="consulta()">
-                                <option value="1T" selected>Primer Trimestre</option>
-                                <option value="2T">Segundo Trimestre</option>
-                                <option value="3T">Tercer Trimestre</option>
+                            <label for="choices-publish-status-input" class="form-label fw-semibold">Trimestre</label>
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino" wire:change="consulta()">
+                                @foreach ($tbltermino as $terminos) 
+                                <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
+                                @endforeach 
                             </select>
                         </div>
                         <div class="mb-3">
-                            
-                                <label for="choices-publish-status-input" class="form-label fw-semibold">Bloque</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque"  wire:change="consulta()">
-                                    <option value="1P" selected>Primer Parcial</option>
-                                </select>
+                            <label for="choices-publish-status-input" class="form-label fw-semibold">Bloque</label>
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="filters.bloque" wire:change="consulta()">
+                                @foreach ($tblbloque as $bloques) 
+                                <option value="{{$bloques['codigo']}}">{{$bloques['descripcion']}}</option>
+                                @endforeach 
+                            </select>
                         </div>
                     </div>
                 </div>

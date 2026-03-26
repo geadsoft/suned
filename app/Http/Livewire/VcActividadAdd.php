@@ -21,10 +21,10 @@ class VcActividadAdd extends Component
 
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $hora;
     public $archivo='SI', $puntaje=10, $enlace="", $control="enabled", $fieldset="enabled";
-    public $periodoId, $modalidadId, $tbltermino, $tblbloque, $tblactividad, $texteditor="";
+    public $periodoId, $modalidadId, $tbltermino=[], $tblbloque=[], $tblactividad=[], $texteditor="";
     public $tblparalelo=[], $tblasignatura=[];
     public $array_attach=[];
-    public $docenteId;
+    public $docenteId, $idActual;
 
     protected $listeners = ['updateEditorData','retornar'];
 
@@ -52,26 +52,10 @@ class VcActividadAdd extends Component
         $this->hora = date('H:i');
 
         $this->docenteId = auth()->user()->personaId;
+        $this->actividadId = $id;
 
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
-
-        $this->tbltermino = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','EA')
-        ->when($id==0,function($query){
-            return $query->where('cerrar',0);
-        })
-        ->orderByRaw("cerrar,codigo")
-        ->get();
-
-        $this->termino = $this->tbltermino[0]['codigo'];
-
-        $this->tblactividad = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','AC')
-        ->where('codigo','<>','EX')
-        ->get();
 
         $this->attach_add();
 
@@ -79,8 +63,8 @@ class VcActividadAdd extends Component
             $this->paralelo = $this->tblparalelo[0]["id"];
         }
 
-        if ($id>0){
-            $this->edit($id);
+        if ($this->actividadId>0){
+            $this->edit($this->actividadId);
         }
 
     }
@@ -88,12 +72,6 @@ class VcActividadAdd extends Component
     
     public function render()
     {
-        $this->tblbloque = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','PA')
-        ->where('evaluacion',$this->termino)
-        ->get();
-
         $this->tblmodalidad = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
@@ -203,6 +181,47 @@ class VcActividadAdd extends Component
     public function setEditorData($data){
         $this->texteditor = $data;
         
+    }
+
+    public function updatedmodalidadId($id)
+    {
+        // Base query reutilizable
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->periodoId)
+            ->where('modalidad_id', $this->modalidadId);
+
+        // ========================
+        // TERMINO (EA)
+        // ========================
+        $this->tbltermino = (clone $baseQuery)
+            ->where('tipo', 'EA')
+            ->when($this->actividadId == 0, function ($query) {
+                $query->where('cerrar', 0);
+            })
+            ->orderBy('cerrar')
+            ->orderBy('codigo')
+            ->get();
+
+        $this->termino = optional($this->tbltermino->first())->codigo;
+
+        // ========================
+        // BLOQUE (PA)
+        // ========================
+        $this->tblbloque = (clone $baseQuery)
+            ->where('tipo', 'PA')
+            ->where('evaluacion', $this->termino)
+            ->get();
+
+        $this->bloque = optional($this->tblbloque->first())->codigo;
+
+        // ========================
+        // ACTIVIDAD (AC)
+        // ========================
+        $this->tblactividad = (clone $baseQuery)
+            ->where('tipo', 'AC')
+            ->where('codigo', '<>', 'EX')
+            ->get();
+
+        $this->tipo = optional($this->tblactividad->first())->codigo;
     }
 
     public function updatedasignaturaId($id){
