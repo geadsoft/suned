@@ -50,7 +50,7 @@ class VcQualifyExams extends Component
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
         ->where("tm_horarios.periodo_id",$this->periodoId)
-        >when(!auth()->user()->can('Actualiza Notas'), function ($query) {
+        ->when(!auth()->user()->can('Actualiza Notas'), function ($query) {
             $query->where("d.docente_id", $this->docenteId);
         })
         ->selectRaw('g.id, g.descripcion')
