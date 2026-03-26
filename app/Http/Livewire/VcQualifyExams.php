@@ -148,7 +148,7 @@ class VcQualifyExams extends Component
 
     }
 
-    public function updatedTermino()
+    /*public function updatedTermino()
     {
         
         $this->tblbloque=[];
@@ -162,7 +162,7 @@ class VcQualifyExams extends Component
             }
         }
        
-    }
+    }*/
 
     public function loadPersonas(){
 
