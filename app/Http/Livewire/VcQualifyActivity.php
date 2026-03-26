@@ -46,11 +46,14 @@ class VcQualifyActivity extends Component
 
     public function render()
     {   
+        
         $this->tblmodalidad = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
         ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->where("d.docente_id",$this->docenteId)
+        ->when(!auth()->user()->can('Actualiza Notas'), function ($query) {
+            $query->where("d.docente_id", $this->docenteId);
+        })       
         ->selectRaw('g.id, g.descripcion')
         ->groupBy('g.id','g.descripcion')
         ->get();
@@ -80,8 +83,8 @@ class VcQualifyActivity extends Component
         $tbldocentes = TmHorarios::query()
         ->join('tm_horarios_docentes as d', 'd.horario_id', '=', 'tm_horarios.id')
         ->join('tm_personas as p', 'p.id', '=', 'd.docente_id')
-        ->where('tm_horarios.periodo_id', 9)
-        ->where('tm_horarios.grupo_id', 2)
+        ->where('tm_horarios.periodo_id', $this->periodoId)
+        ->where('tm_horarios.grupo_id', $this->modalidadId)
         ->groupBy('p.id', 'p.apellidos', 'p.nombres')
         ->select('p.id', 'p.apellidos', 'p.nombres')
         ->get();
