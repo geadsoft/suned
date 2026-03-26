@@ -202,7 +202,7 @@ class VcActividadAdd extends Component
             ->get();
 
         $this->termino = optional($this->tbltermino->first())->codigo;
-        dd($this->tbltermino);
+        dd($this->tbltermino, $this->periodoId, $this->modalidadId);
 
         // ========================
         // BLOQUE (PA)
