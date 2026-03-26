@@ -187,7 +187,7 @@ class VcActividadAdd extends Component
     {
         // Base query reutilizable
         $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->periodoId)
-            ->where('modalidad_id', $this->modalidadId);
+        ->where('modalidad_id', $this->modalidadId);
 
         // ========================
         // TERMINO (EA)
@@ -202,6 +202,7 @@ class VcActividadAdd extends Component
             ->get();
 
         $this->termino = optional($this->tbltermino->first())->codigo;
+        dd($this->tbltermino);
 
         // ========================
         // BLOQUE (PA)
