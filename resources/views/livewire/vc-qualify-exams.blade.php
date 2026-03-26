@@ -13,6 +13,7 @@
                                 @endforeach 
                             </select>
                         </div>
+                        <div class="row">
                         @can('Actualiza Notas')
                             <div class="col-lg-6 mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Docente</label>
@@ -32,6 +33,7 @@
                                 <option value="{{$asignatura->id}}">{{$asignatura->descripcion}}</option>
                                 @endforeach 
                             </select>
+                        </div>
                         </div>
                         <div class="mb-3">
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
