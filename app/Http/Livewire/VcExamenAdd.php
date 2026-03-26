@@ -215,10 +215,9 @@ class VcExamenAdd extends Component
         $this->tblbloque = (clone $baseQuery)
         ->where('tipo', 'PA')
         ->where('evaluacion', $this->termino)
-        ->selectRaw("*, REPLACE(codigo, 'P', 'E') as codigoEx")
         ->get();
 
-        $this->bloque = optional($this->tblbloque->first())->codigoEx;
+        $this->bloque = optional($this->tblbloque->first())->codigo;
 
         // ========================
         // ACTIVIDAD (AC)

@@ -115,7 +115,7 @@ class VcQualifyExams extends Component
         ->get();
 
         $this->tblrecords=[];
-        dd($this->tblbloque,$this->filters);
+        
 
     }
 
@@ -141,10 +141,9 @@ class VcQualifyExams extends Component
         $this->tblbloque = (clone $baseQuery)
         ->where('tipo', 'PA')
         ->where('evaluacion', $termino)
-        ->selectRaw("*, REPLACE(codigo, 'P', 'E') as codigoEx")
         ->get();
 
-        $bloque = optional($this->tblbloque->first())->codigoEx;
+        $bloque = optional($this->tblbloque->first())->codigo;
         $this->filters['bloque'] = $bloque;
 
     }
