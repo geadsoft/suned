@@ -138,10 +138,11 @@ class VcQualifyExams extends Component
         // BLOQUE (PA)
         // ========================
         $this->tblbloque = (clone $baseQuery)
-            ->where('tipo', 'PA')
-            ->where('evaluacion', $termino)
-            ->get();
-
+        ->where('tipo', 'PA')
+        ->where('evaluacion', $termino)
+        ->selectRaw("descripcion, REPLACE(codigo, 'P', 'E') as codigo")
+        ->get();
+        
         $bloque = optional($this->tblbloque->first())->codigo;
         $this->filters['bloque'] = $bloque;
 
