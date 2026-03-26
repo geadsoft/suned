@@ -27,7 +27,7 @@
                         @endcan
                         <div class="@can('Actualiza Notas') col-lg-6 @else col-lg-12 @endcan mb-3">
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Asignatura</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="asignaturaId" {{$control}}>
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="asignaturaId">
                                 <option value="">Seleccione Asignatura</option>
                                 @foreach ($tblasignatura as $asignatura) 
                                 <option value="{{$asignatura->id}}">{{$asignatura->descripcion}}</option>
@@ -62,7 +62,7 @@
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Exámen</label>
                             <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque"  wire:change="consulta()">
                                 @foreach ($tblbloque as $bloques) 
-                                    <option value="{{$bloques['codigo']}}">{{$bloques['descripcion']}}</option>
+                                    <option value="{{$bloques['codigoEx']}}">{{$bloques['descripcion']}}</option>
                                 @endforeach 
                             </select>
                         </div>

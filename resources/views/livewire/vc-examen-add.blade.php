@@ -46,7 +46,7 @@
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Bloque</label>
                                 <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="bloque" {{$control}}>
                                     @foreach ($tblbloque as $bloques) 
-                                    <option value="{{$bloques['codigo']}}">{{$bloques['descripcion']}}</option>
+                                    <option value="{{$bloques['codigoEx']}}">{{$bloques['descripcion']}}</option>
                                     @endforeach 
                                 </select>
                             </div>

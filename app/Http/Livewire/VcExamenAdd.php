@@ -101,7 +101,7 @@ class VcExamenAdd extends Component
        
     }
 
-    public function updatedTermino()
+    /*public function updatedTermino()
     {
         
         $this->tblbloque=[];
@@ -116,7 +116,7 @@ class VcExamenAdd extends Component
         }
 
        
-    }
+    }*/
 
     public function edit($id){
         
@@ -213,11 +213,12 @@ class VcExamenAdd extends Component
         // BLOQUE (PA)
         // ========================
         $this->tblbloque = (clone $baseQuery)
-            ->where('tipo', 'PA')
-            ->where('evaluacion', $this->termino)
-            ->get();
+        ->where('tipo', 'PA')
+        ->where('evaluacion', $this->termino)
+        ->selectRaw("*, REPLACE(codigo, 'P', 'E') as codigoEx")
+        ->get();
 
-        $this->bloque = optional($this->tblbloque->first())->codigo;
+        $this->bloque = optional($this->tblbloque->first())->codigoEx;
 
         // ========================
         // ACTIVIDAD (AC)
