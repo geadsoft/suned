@@ -93,6 +93,7 @@ class VcQualifyExams extends Component
             'tblexamen' => $this->tblexamen,
             'tblparalelo' => $this->tblparalelo,
             'tblnotas' => $this->arrnotas,
+            'tbldocentes' => $tbldocentes,
         ]);
 
     }
