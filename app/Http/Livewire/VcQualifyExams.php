@@ -144,12 +144,12 @@ class VcQualifyExams extends Component
         ->get();
 
         
-        $bloque = optional($this->tblbloque->first())->codigo;
+        $bloque = optional($this->tblbloque->first())->codigoEx;
         $this->filters['bloque'] = $bloque;
 
     }
 
-    public function updatedTermino()
+    /*public function updatedTermino()
     {
         
         $this->tblbloque=[];
@@ -163,7 +163,7 @@ class VcQualifyExams extends Component
             }
         }
        
-    }
+    }*/
 
     public function loadPersonas(){
 
