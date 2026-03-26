@@ -144,7 +144,7 @@ class VcQualifyExams extends Component
         ->get();
 
         $bloque = optional($this->tblbloque->first())->codigo;
-        $this->filters['bloque'] = $bloque;
+        $this->filters['bloque'] = str_replace('P','E',$bloque); 
 
     }
 
