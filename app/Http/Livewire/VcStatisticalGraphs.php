@@ -298,7 +298,7 @@ class VcStatisticalGraphs extends Component
         ->where('tr_cobros_cabs.tipo','CP')
         ->where('tr_cobros_cabs.estado','P')
         ->whereRaw('year(tr_cobros_cabs.fechapago) = '.$anio)
-        ->whereRaw('month(tr_cobros_cabs.fechapago) <= '.$mes)
+        ->whereRaw('month(tr_cobros_cabs.fechapago) = '.$mes)
         ->selectRaw('month(tr_cobros_cabs.fechapago) as mes,  sum(d.valor) AS monto')
         ->groupbyRaw('month(tr_cobros_cabs.fechapago)')
         ->orderby('mes','desc')
