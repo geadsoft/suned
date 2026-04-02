@@ -134,7 +134,7 @@ class VcRatingsDetail extends Component
         ->where("td_conductas.periodo_id", $this->periodoId)
         ->where("td_conductas.modalidad_id", $this->grupoId)
         ->where("td_conductas.curso_id", $this->cursoId)
-        ->whereIn("td_conductas.persona_id", $this->alumnos->pluck('id'))
+        ->whereIn("td_conductas.persona_id", $this->alumnos->pluck('persona_id'))
         ->select('termino', 'td_conductas.evaluacion', 'persona_id','s.nota')
         ->get()
         ->groupBy('persona_id')
@@ -163,6 +163,8 @@ class VcRatingsDetail extends Component
 
             $arrconducta[$persona]['promedio_letra'] = $letra;
         }
+
+
 
         //Detalle
         foreach ($this->alumnos as $persona)
