@@ -150,7 +150,7 @@
                                     <tr>
                                         <td>{{ $detalles[$idPersona]['linea'] ?? '' }}</td>
                                         <td>{{ $detalles[$idPersona]['nombres'] ?? '' }}</td>
-                                        <td>{{ $detalles[$idPersona]['comportamiento'] ?? '' }}</td>
+                                        <td class="text-center">{{ $detalles[$idPersona]['comportamiento'] ?? '' }}</td>
                                         @foreach ($asignaturas as $asignatura)
                                             @php
                                                 $idasignatura = $asignatura['asignatura_id'];
