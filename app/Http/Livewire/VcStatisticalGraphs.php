@@ -194,7 +194,7 @@ class VcStatisticalGraphs extends Component
 
     public function montomes(){
 
-        $ldate     = date('Y-m-d H:i:s');
+        /*$ldate     = date('Y-m-d H:i:s');
         $mesactual = intval(date('m',strtotime($ldate)));
 
         if($this->filters['idperiodo']==''){
@@ -203,7 +203,7 @@ class VcStatisticalGraphs extends Component
             ->where('estado', 'P')
             ->get();
         }else{
-             $tmpPeriodo = TmPeriodosLectivos::find($this->filters['idperiodo']);
+            $tmpPeriodo = TmPeriodosLectivos::find($this->filters['idperiodo']);
             $periodo = $tmpPeriodo->periodo;
             
             $montoMes = TrCobrosCabs::query()
@@ -213,7 +213,21 @@ class VcStatisticalGraphs extends Component
             ->get();
         }      
 
-        $this->ingTotal = $montoMes->sum('monto');
+        $this->ingTotal = $montoMes->sum('monto');*/
+        $inicio = now()->startOfMonth();
+        $fin = now()->endOfMonth();
+
+        $cobros = TrCobrosCabs::query()
+        ->join("tr_cobros_dets as d", "d.cobrocab_id", "=", "tr_cobros_cabs.id")
+        ->join("tm_matriculas as m", "m.id", "=", "tr_cobros_cabs.matricula_id")
+        ->where('tr_cobros_cabs.tipo', 'CP')
+        ->where('tr_cobros_cabs.estado', 'P')
+        ->whereBetween('tr_cobros_cabs.fechapago', [$inicio, $fin])
+        ->selectRaw('SUM(d.valor) as monto')
+        ->first();
+
+        $this->ingTotal = $cobros->monto ?? 0;
+
     }
 
     public function consulta(){
@@ -304,17 +318,7 @@ class VcStatisticalGraphs extends Component
         ->orderby('mes','desc')
         ->get()->toArray();
 
-        $inicio = now()->startOfMonth();
-        $fin = now()->endOfMonth();
-
-        $tblIngresoMes = TrCobrosCabs::query()
-        ->join("tr_cobros_dets as d", "d.cobrocab_id", "=", "tr_cobros_cabs.id")
-        ->join("tm_matriculas as m", "m.id", "=", "tr_cobros_cabs.matricula_id")
-        ->where('tr_cobros_cabs.tipo', 'CP')
-        ->where('tr_cobros_cabs.estado', 'P')
-        ->whereBetween('tr_cobros_cabs.fechapago', [$inicio, $fin])
-        ->selectRaw('SUM(d.valor) as monto')
-        ->first();
+        $tblIngresoMes =  array_slice( $cobros,0,4);
 
         //Cobro Mes
         $tblCobroMes = TrDeudasDets::query()
