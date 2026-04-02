@@ -73,8 +73,7 @@ class VcRatingsDetail extends Component
         $this->loadData(); 
     }
 
-
-    public function loadData(){   
+    public function boletin(){
 
         $records = TdBoletinFinal::query()
         ->join('tm_personas as p', 'p.id', '=', 'td_boletin_finals.persona_id')
@@ -92,6 +91,30 @@ class VcRatingsDetail extends Component
         ->orderBy('p.apellidos')
         ->orderBy('m.descripcion')
         ->get();
+
+        return $records;
+
+    }
+
+    public function loadData(){   
+
+        $this->detalles = $this->notas();
+
+        if (count($this->detalles)>0) {
+            $this->mostrar = true;
+        }
+
+        $this->filters['periodoId'] = $this->periodoId;
+        $this->filters['grupoId'] = $this->grupoId;
+        $this->filters['gradoId'] = $this->servicioId;
+        $this->filters['cursoId'] = $this->cursoId;
+        $this->datos = json_encode($this->filters);
+
+    }
+
+    public function notas(){
+
+        $records = $this->boletin();
 
         $this->alumnos = $records
         ->groupBy('persona_id')
@@ -115,7 +138,7 @@ class VcRatingsDetail extends Component
         ->values();
 
         $linea=1;
-        $this->detalle = [];
+        $detalle = [];
 
         //Conducta
         $escalas = TdPeriodoSistemaEducativos::query()
@@ -164,15 +187,13 @@ class VcRatingsDetail extends Component
             $arrconducta[$persona]['promedio_letra'] = $letra;
         }
 
-
-
         //Detalle
         foreach ($this->alumnos as $persona)
         {
             $idpersona = $persona['persona_id'];
-            $this->detalles[$idpersona]['linea'] = $linea;
-            $this->detalles[$idpersona]['nombres'] = $persona['apellidos'].' '.$persona['nombres'];
-            $this->detalles[$idpersona]['comportamiento'] = $arrconducta[$idpersona]['promedio_letra'] ?? '';
+            $detalles[$idpersona]['linea'] = $linea;
+            $detalles[$idpersona]['nombres'] = $persona['apellidos'].' '.$persona['nombres'];
+            $detalles[$idpersona]['comportamiento'] = $arrconducta[$idpersona]['promedio_letra'] ?? '';
 
             foreach($this->asignaturas as $asignatura){
                 $idasignatura = $asignatura['asignatura_id'];
@@ -182,84 +203,138 @@ class VcRatingsDetail extends Component
                 ->where('asignatura_id', $idasignatura)
                 ->first();
 
-                $this->detalles[$idpersona][$idasignatura]['1T'] = $nota->{'1T_notatrimestre'} ?? 0;
-                $this->detalles[$idpersona][$idasignatura]['2T'] = $nota->{'2T_notatrimestre'} ?? 0;
-                $this->detalles[$idpersona][$idasignatura]['3T'] = $nota->{'3T_notatrimestre'} ?? 0;
-                $this->detalles[$idpersona][$idasignatura]['PR'] = $nota->promedio_anual ?? 0;
-                $this->detalles[$idpersona][$idasignatura]['PF'] = $nota->promedio_final ?? 0;
+                $detalles[$idpersona][$idasignatura]['1T'] = $nota->{'1T_notatrimestre'} ?? 0;
+                $detalles[$idpersona][$idasignatura]['2T'] = $nota->{'2T_notatrimestre'} ?? 0;
+                $detalles[$idpersona][$idasignatura]['3T'] = $nota->{'3T_notatrimestre'} ?? 0;
+                $detalles[$idpersona][$idasignatura]['PR'] = $nota->promedio_anual ?? 0;
+                $detalles[$idpersona][$idasignatura]['PF'] = $nota->promedio_final ?? 0;
             }
 
             $linea = $linea+1;
         }
 
-        if (count($this->detalles)>0) {
-            $this->mostrar = true;
-        }
-
-        $this->filters['periodoId'] = $this->periodoId;
-        $this->filters['grupoId'] = $this->grupoId;
-        $this->filters['gradoId'] = $this->servicioId;
-        $this->filters['cursoId'] = $this->cursoId;
-        $this->datos = json_encode($this->filters);
+        return $detalles;
 
     }
 
     public function consulta()
     {
-        $arrNotas = [];
-        $tblrecords = TrCalificacionesCabs::query()
-        ->join("tr_calificaciones_dets as d","d.calificacioncab_id","=","tr_calificaciones_cabs.id")        
-        ->where('periodo_id',$this->periodoId)  
-        ->where('grupo_id',$this->grupoId)
-        ->where('servicio_id',$this->servicioId)
-        ->where('curso_id',$this->cursoId)
-        ->select('d.estudiante_id','d.calificacion','d.escala_cualitativa','tr_calificaciones_cabs.*')     
+        
+        $records = TdBoletinFinal::query()
+        ->join('tm_personas as p', 'p.id', '=', 'td_boletin_finals.persona_id')
+        ->join('tm_asignaturas as m', 'm.id', '=', 'td_boletin_finals.asignatura_id')
+        ->when($this->cursoId, function ($query) {
+            return $query->where('curso_id', $this->cursoId);
+        })
+        ->where('periodo_id', $this->periodoId)
+        ->select(
+            'td_boletin_finals.*',
+            'p.apellidos',
+            'p.nombres',
+            'm.descripcion as asignatura'
+        )
+        ->orderBy('p.apellidos')
+        ->orderBy('m.descripcion')
         ->get();
 
-        $this->materias = TrCalificacionesCabs::query()
-        ->join("tm_asignaturas as m","tr_calificaciones_cabs.asignatura_id","=","m.id")
-        ->where('periodo_id',$this->periodoId)  
-        ->where('grupo_id',$this->grupoId)
-        ->where('servicio_id',$this->servicioId)
-        ->where('curso_id',$this->cursoId)
-        ->where('periodo_id',$this->periodoId)  
-        ->select('tr_calificaciones_cabs.*','m.descripcion')     
-        ->get(); 
+        $alumnos = $records
+        ->groupBy('persona_id')
+        ->map(function ($items) {
+            return [
+                'persona_id' => $items->first()->persona_id,
+                'apellidos'  => $items->first()->apellidos,
+                'nombres'    => $items->first()->nombres,
+            ];
+        })
+        ->values();
 
-        $alumnos = $tblrecords->groupBy('estudiante_id');
+        $asignaturas = $records
+        ->groupBy('asignatura_id')
+        ->map(function ($items) {
+            return [
+                'asignatura_id' => $items->first()->asignatura_id,
+                'descripcion'   => $items->first()->asignatura,
+            ];
+        })
+        ->values();
 
-        foreach ($alumnos as $key => $pers)
-        {
-            $persona = TmPersonas::find($key)->toArray();
-            
-            $detalle['id']     = $key;
-            $detalle['nombres'] = $persona['apellidos'].' '.$persona['nombres'] ;
-            $detalle['comportamiento'] = '';
+        $linea=1;
+        $detalle = [];
 
-            foreach ($this->materias as $data)
-            {
-                $detalle['P1_'.$data['asignatura_id']] ='';
-                $detalle['P2_'.$data['asignatura_id']] ='';
-                $detalle['P3_'.$data['asignatura_id']] ='';
-                $detalle['PR_'.$data['asignatura_id']] ='';
-                $detalle['PF_'.$data['asignatura_id']] ='';
-            }
-            array_push($arrNotas,$detalle);
-        }
+        //Conducta
+        $escalas = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->periodoId)
+        ->where("modalidad_id",$this->grupoId)
+        ->where("tipo","EC")
+        ->selectRaw("*,nota + case when nota=10 then 0 else 0.99 end as nota2")
+        ->get()->toArray();
 
-        /*Asigna Calificación*/
-        foreach ($tblrecords as $data){
+        $arrconducta = TdConductas::query()
+        ->join("td_periodo_sistema_educativos as s", function($join){
+            $join->on("s.periodo_id","=","td_conductas.periodo_id")
+                ->on("s.codigo","=","td_conductas.evaluacion")
+                ->where("s.tipo","EC");
+        })
+        ->where("td_conductas.periodo_id", $this->periodoId)
+        ->where("td_conductas.modalidad_id", $this->grupoId)
+        ->where("td_conductas.curso_id", $this->cursoId)
+        ->whereIn("td_conductas.persona_id", $this->alumnos->pluck('persona_id'))
+        ->select('termino', 'td_conductas.evaluacion', 'persona_id','s.nota')
+        ->get()
+        ->groupBy('persona_id')
+        ->map(function ($items) {
 
-            foreach ($this->detalles as $fila => $detalle){
-                if ($detalle['id'] == $data['estudiante_id']){
+            $promedio = round($items->avg('nota'),2);
 
-                    $arrNotas[$fila][$data['parcial'].'_'.$data['asignatura_id']] = $data['calificacion']; 
+            return [
+                'conducta' => $items->pluck('evaluacion', 'termino')->toArray(),
+                'promedio' => $promedio
+            ];
+        })
+        ->toArray();
+
+        foreach ($arrconducta as $persona => $data) {
+
+            $promedio = $data['promedio'];
+            $letra = '';
+
+            foreach ($escalas as $eq) {
+                if ($promedio >= $eq['nota'] && $promedio <= $eq['nota2']) {
+                    $letra = $eq['codigo'];
+                    break;
                 }
             }
 
+            $arrconducta[$persona]['promedio_letra'] = $letra;
         }
-        
-        return $arrNotas;
+
+        //Detalle
+        foreach ($alumnos as $persona)
+        {
+            $idpersona = $persona['persona_id'];
+            $detalles[$idpersona]['linea'] = $linea;
+            $detalles[$idpersona]['nombres'] = $persona['apellidos'].' '.$persona['nombres'];
+            $detalles[$idpersona]['comportamiento'] = $arrconducta[$idpersona]['promedio_letra'] ?? '';
+
+            foreach($asignaturas as $asignatura){
+                $idasignatura = $asignatura['asignatura_id'];
+
+                $nota = $records
+                ->where('persona_id', $idpersona)
+                ->where('asignatura_id', $idasignatura)
+                ->first();
+
+                $detalles[$idpersona][$idasignatura]['1T'] = $nota->{'1T_notatrimestre'} ?? 0;
+                $detalles[$idpersona][$idasignatura]['2T'] = $nota->{'2T_notatrimestre'} ?? 0;
+                $detalles[$idpersona][$idasignatura]['3T'] = $nota->{'3T_notatrimestre'} ?? 0;
+                $detalles[$idpersona][$idasignatura]['PR'] = $nota->promedio_anual ?? 0;
+                $detalles[$idpersona][$idasignatura]['PF'] = $nota->promedio_final ?? 0;
+            }
+
+            $linea = $linea+1;
+        }
+
+        return $detalles;
 
     }
 
@@ -272,7 +347,7 @@ class VcRatingsDetail extends Component
         $this->cursoId    = $data->cursoId;
 
         $tblperiodo = TmPeriodosLectivos::find($this->periodoId);
-        $tblrecords = $this->consulta();
+        $tblrecords = $this->notas();
         $tblcia = TmSedes::all()->first();
 
         $this->consulta['referencia'] = $tblperiodo['descripcion'];
