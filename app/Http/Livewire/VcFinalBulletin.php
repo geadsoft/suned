@@ -1150,6 +1150,7 @@ class VcFinalBulletin extends Component
 
         $escalas = TdPeriodoSistemaEducativos::query()
         ->where("periodo_id",$this->filters['periodoId'])
+        ->where("modalidad_id",$this->filters['modalidadId'])
         ->where("tipo","EC")
         ->selectRaw("*,nota + case when nota=10 then 0 else 0.99 end as nota2")
         ->get()->toArray();
