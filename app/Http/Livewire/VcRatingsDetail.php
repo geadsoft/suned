@@ -18,7 +18,7 @@ class VcRatingsDetail extends Component
 {
     public $tblservicios=[],$tblcursos=[],$detalles=[], $tblcomponentes, $datos, $consulta=[];
     public $materias;
-    public $selectId,$grupoId,$servicioId,$periodoId,$cursoId,$mostrar=false;
+    public $selectId,$grupoId,$servicioId,$periodoId,$cursoId,$mostrar=true;
     public $filters=[
         'periodoId'=> 0,
         'grupoId'  => 0,
