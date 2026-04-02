@@ -10,6 +10,8 @@ use App\Models\TmServicios;
 use App\Models\TmHorarios;
 use App\Models\TmPersonas;
 use App\Models\TdBoletinFinal;
+use App\Models\TdPeriodoSistemaEducativos;
+use App\Models\TdConductas;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -168,7 +170,7 @@ class VcRatingsDetail extends Component
             $idpersona = $persona['persona_id'];
             $this->detalles[$idpersona]['linea'] = $linea;
             $this->detalles[$idpersona]['nombres'] = $persona['apellidos'].' '.$persona['nombres'];
-            $this->detalles[$idpersona]['comportamiento'] = $arrconducta[$idpersona]['promedio_letra'];
+            $this->detalles[$idpersona]['comportamiento'] = $arrconducta[$idpersona]['promedio_letra'] ?? '';
 
             foreach($this->asignaturas as $asignatura){
                 $idasignatura = $asignatura['asignatura_id'];
