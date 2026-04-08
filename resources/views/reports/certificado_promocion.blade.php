@@ -40,10 +40,10 @@
                         </td>
                         <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
                             <p style="margin-top:0 line-height: 200%" class="text-justify"><br>
-                            De conformidad con lo prescrito en el Art. 197 del Reglamento General a la Ley Orgánica 
-                            de Educación Intercultural y demás normativas vigentes, certifica que el/la estudiante
-                            <strong>{{$data['nombres']}}</strong>, del <strong>{{$data['curso']}}: </strong> obtuvo las
-                            siguientes calificaciones en el presente año lectivo:
+                            De conformidad con lo prescrito en el Art. 187 del Reglamento General a la Ley Orgánica 
+                            de Educación Intercultural y en concordancia con el articulo 33 del ACUERDO Nro. MINEDUC 2023-00063-A, certifica que el (la) estudiante
+                            <strong>{{$data['nombres']}}</strong>, del paralelo <strong>{{$data['curso']}}: </strong> obtuvo las
+                            siguientes calificaciones durante el presente año lectivo:
                         </td>
                         <td width="5%">
                         </td>
@@ -116,7 +116,7 @@
                                 Por lo tanto, ha culminado sus estudios.<br>
                             @endif
 
-                            Para constancia suscriben en unidad de acto <strong>{{$data['rector']}}</strong><br>
+                            Para certificar suscribe la <strong>{{$data['rector']}}</strong> como <strong>RECTORA</strong> de la institución quien certifica.<br>
                             Dado y firmado en:<br><br><br>
                             Guayaquil, {{date('d',strtotime($data['emision']))}} de 
                             {{$mes[date('m',strtotime($data['emision']))]}} de {{date('Y',strtotime($data['emision']))}}
