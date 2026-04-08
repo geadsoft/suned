@@ -132,7 +132,7 @@ class VcPromocion extends Component
         $this->cursoId = $cursos->servicio_id;
 
         
-        $this->nomcurso  = $servicio->descripcion;
+        $this->nomcurso  = $servicio->descripcion.' paralelo '.$cursos->paralelo;
         
         $especializacion = $servicio->especializacion->descripcion;
 

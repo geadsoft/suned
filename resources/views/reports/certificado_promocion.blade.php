@@ -42,7 +42,7 @@
                             <p style="margin-top:0 line-height: 200%" class="text-justify"><br>
                             De conformidad con lo prescrito en el Art. 187 del Reglamento General a la Ley Orgánica 
                             de Educación Intercultural y en concordancia con el articulo 33 del ACUERDO Nro. MINEDUC 2023-00063-A, certifica que el (la) estudiante
-                            <strong>{{$data['nombres']}}</strong>, del paralelo <strong>{{$data['curso']}}: </strong> obtuvo las
+                            <strong>{{$data['nombres']}}</strong>, del <strong>{{$data['curso']}} </strong> obtuvo las
                             siguientes calificaciones durante el presente año lectivo:
                         </td>
                         <td width="5%">
