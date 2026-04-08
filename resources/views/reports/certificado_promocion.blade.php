@@ -162,7 +162,7 @@
                         <div class="firma">
                             <div class="linea-firma">______________________________</div>
                             <div>{{$data['rector']}}</div>
-                            <div><strong>RECTOR</strong></div>
+                            <div><strong>RECTOR(A)</strong></div>
                         </div>
                     </td>
                 </tr>
@@ -173,25 +173,6 @@
       bottom: 0;
       width: 100%;
       height: 60px;">
-        <!--<section>
-            <table cellpadding="0" cellspacing="0" class="" width="100%">
-                <tr style="font-size:12px">
-                    <td width="50%" class="text-center">
-                        <span><strong>________________________________</strong></span>
-                    </td>
-                </tr>
-                <tr style="font-size:13px">
-                    <td width="50%" class="text-center">
-                        <span>{{$data['rector']}}</span>
-                    </td>
-                </tr>
-                <tr style="font-size:13px">
-                    <td width="50%" class="text-center">
-                        <span><strong>RECTOR</strong></span>
-                    </td>
-                </tr>
-            </table>
-        </section>-->
         <footer>
             <table cellpadding="0" cellspacing="0" width="100%" style="font-size:12px; color:#B0ACAC" >
                 <tr>
