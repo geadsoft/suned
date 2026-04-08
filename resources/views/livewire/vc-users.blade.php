@@ -13,7 +13,15 @@
                     </div>
                 </div>
                 <div class="card-body border border-dashed border-end-0 border-start-0">
-                    
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <div class="search-box">
+                                <input type="text" class="form-control search"
+                                    placeholder="Buscar por nombres, apellidos..." wire:model="filters.srv_nombre">
+                                <i class="ri-search-line search-icon"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body pt-0">
                     <div>

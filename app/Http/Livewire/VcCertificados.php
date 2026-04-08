@@ -86,13 +86,13 @@ class VcCertificados extends Component
 
         if ($this->tipoDoc == 'PA' || $this->tipoDoc == 'AR'){
             $tblcursos   = TmServicios::query()
-            ->where('nivel_id',11)
-            ->where('modalidad_id',2)
+            ->where('modalidad_id',$this->modalidadId)
+            ->where('nivel_id',$this->nivelId)
             ->orderByRaw('nivel_id,grado_id')
             ->get();
         }else{
             $tblcursos   = TmServicios::query()
-            ->where('modalidad_id',2)
+            ->where('modalidad_id',$this->modalidadId)
             ->orderByRaw('nivel_id,grado_id')
             ->get();
         }
@@ -115,8 +115,10 @@ class VcCertificados extends Component
         $tblmatricula    = TmMatricula::find($idMatricula);
         $this->documento =  $tblmatricula['documento'];
         $this->fecha     =  date('Y-m-d',strtotime($tblmatricula['fecha']));
+        $this->modalidadId = $tblmatricula->modalidad_id;
+        $this->nivelId   =  $tblmatricula->nivel_id;
         $this->cursoId   =  $tblmatricula->curso_id;
-
+    
         $objData = DB::Select("select truncate(rownr/100,0) + folio as folio, rownr, documento 
         from (
         SELECT (@row := @row + 1) as rownr,  t.documento, p.folio

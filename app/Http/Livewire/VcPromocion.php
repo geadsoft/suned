@@ -28,7 +28,7 @@ class VcPromocion extends Component
     public $tipoDoc="PP", $periodoId, $cursoId, $nombres, $nui="", $documento, $fecha, $folio=0, $matricula=0, $nomcurso="", $fechaMatricula;
     public $periodo, $foto="", $rector, $secretaria, $coordinador, $bachilleren="", $nota=0, $escala=''; 
     public $dttitulo="", $dtnombre="", $dtinstitucion="", $dtcargo="", $dtfecha, $refrendacion=0, $pagina=0, $fprorroga, $documentos="";
-    public $especializacion="",$paseCursoId,$matriculaId=0,$registrar, $graduado=false;
+    public $especializacion="",$paseCursoId,$matriculaId=0,$registrar, $graduado=false, $modalidadId, $nivelId;
     public $refescala=[
         'EX' => 'Demuestra destacado desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un excente aporte a su formación integral.',
         'MB' => 'Demuestra muy buen desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un aporte a su formación integral.',
@@ -78,13 +78,13 @@ class VcPromocion extends Component
 
         if ($this->tipoDoc == 'PA' || $this->tipoDoc == 'AR'){
             $tblcursos   = TmServicios::query()
-            ->where('nivel_id',11)
-            ->where('modalidad_id',2)
+            ->where('modalidad_id',$this->modalidadId)
+            ->where('nivel_id',$this->nivelId)
             ->orderByRaw('nivel_id,grado_id')
             ->get();
         }else{
             $tblcursos   = TmServicios::query()
-            ->where('modalidad_id',2)
+            ->where('modalidad_id',$this->modalidadId)
             ->orderByRaw('nivel_id,grado_id')
             ->get();
         }
@@ -103,9 +103,12 @@ class VcPromocion extends Component
 
     public function setPersona($idMatricula){
 
+
         $this->matriculaId = $idMatricula;
         $tblmatricula    = TmMatricula::find($idMatricula);
         $this->documento =  $tblmatricula['documento'];
+        $this->modalidadId = $tblmatricula->modalidad_id;
+        $this->nivelId   =  $tblmatricula->nivel_id;
         $this->cursoId   =  $tblmatricula->curso_id;
         $this->periodoId =  $tblmatricula->periodo_id;
         $this->fechaMatricula =  date('Y-m-d',strtotime($tblmatricula->fecha)); 
@@ -128,6 +131,7 @@ class VcPromocion extends Component
         $servicio   = TmServicios::find($cursos->servicio_id);
         $this->cursoId = $cursos->servicio_id;
 
+        
         $this->nomcurso  = $servicio->descripcion;
         
         $especializacion = $servicio->especializacion->descripcion;
