@@ -15,7 +15,8 @@
             <table cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                     <td style="width: 60%; text-align: left;">
-                        <img src="../public/assets/images/Gob_Ecuador.png" height="170px">
+                        <!--<img src="../public/assets/images/Gob_Ecuador.png" height="170px">-->
+                        <img src="../public/assets/images/Republica del Ecuador.jpg" height="170px">
                     </td>   
                     <td style="width: 30%; text-align: right;">
                         <img src="../public/assets/images/American Schooll.png" height="55">
@@ -73,23 +74,23 @@
                         </thead>
                         <tbody>
                             @foreach ($notas as $key => $record)
-                            @if ($record['area']!='')
-                            <tr>
-                                <td style="border: 1px solid black;" class="text-center">{{$record['area']}}</td>
-                                <td style="border: 1px solid black;" class="text-center">{{$record['materia']}}</td>
-                                <td style="border: 1px solid black;" class="text-center">{{$record['nota']}}</td>
-                                <td style="border: 1px solid black;">{{$record['letra']}}</td>
-                            </tr>
-                            @else
-                            <tr>
-                                <td colspan="2" style="border: 1px solid black;" class="text-center"><strong>PROMEDIO GENERAL</strong></td>
-                                <td style="border: 1px solid black;" class="text-center">{{$record['nota']}}</td>
-                                <td style="border: 1px solid black;">{{$record['letra']}}</td>
-                            </tr>
-                            @endif
+                                @if ($record['area']!='')
+                                    <tr>
+                                        <td style="border: 1px solid black;" class="text-left">{{$record['area']}}</td>
+                                        <td style="border: 1px solid black;" class="text-left">{{$record['materia']}}</td>
+                                        <td style="border: 1px solid black;" class="text-center">{{$record['nota']}}</td>
+                                        <td style="border: 1px solid black;">{{$record['letra']}}</td>
+                                    </tr>
+                                @else
+                                    <tr>
+                                        <td colspan="2" style="border: 1px solid black;" class="text-left"><strong>{{$record['materia']}}</strong></td>
+                                        <td style="border: 1px solid black;" class="text-center">{{$record['nota']}}</td>
+                                        <td style="border: 1px solid black;">{{$record['letra']}}</td>
+                                    </tr>
+                                @endif
                             @endforeach
                             <tr>
-                                <td colspan="2" style="border: 1px solid black;" class="text-center"><strong>EVALUACIÓN DEL COMPORTAMIENTO</strong></td>
+                                <td colspan="2" style="border: 1px solid black;" class="text-left"><strong>EVALUACIÓN DEL COMPORTAMIENTO</strong></td>
                                 <td style="border: 1px solid black;" class="text-center"></td>
                                 <td style="border: 1px solid black;"></td>
                             </tr>
@@ -103,30 +104,30 @@
         </table>
     </section>
     <section>
-            <table cellpadding="0" cellspacing="0" width="100%" style="font-size:12px">
-                <tbody>
-                    <tr style="font-size:13px">
-                        <td width="5%">
-                        </td>
-                        <td width="90%"><span style="horizontal-align: top; padding-top: 20px">
-                            <p style="margin-top:0; line-height: 200%" class="text-justify"><br>
-                            @if(!($data['graduado'] ?? false))
-                                Por lo tanto es promovido/a al <strong>{{$data['curso_promovido']}}.</strong><br>
-                            @else
-                                Por lo tanto, ha culminado sus estudios.<br>
-                            @endif
+        <table cellpadding="0" cellspacing="0" width="100%" style="font-size:12px">
+            <tbody>
+                <tr style="font-size:13px">
+                    <td width="5%">
+                    </td>
+                    <td width="90%"><span style="horizontal-align: top; padding-top: 20px">
+                        <p style="margin-top:0; line-height: 200%" class="text-justify"><br>
+                        @if(!($data['graduado'] ?? false))
+                            Por lo tanto es promovido/a al <strong>{{$data['curso_promovido']}}.</strong><br>
+                        @else
+                            Por lo tanto, ha culminado sus estudios.<br>
+                        @endif
 
-                            Para certificar suscribe la <strong>{{$data['rector']}}</strong> como <strong>RECTORA</strong> de la institución quien certifica.<br>
-                            Dado y firmado en:<br><br><br>
-                            Guayaquil, {{date('d',strtotime($data['emision']))}} de 
-                            {{$mes[date('m',strtotime($data['emision']))]}} de {{date('Y',strtotime($data['emision']))}}
-                            </p>
-                        </td>
-                        <td width="5%">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                        Para certificar suscribe la <strong>{{$data['rector']}}</strong> como <strong>RECTORA</strong> de la institución quien certifica.<br><br>
+                        Dado y firmado en:<br><br><br>
+                        Guayaquil, {{date('d',strtotime($data['emision']))}} de 
+                        {{$mes[date('m',strtotime($data['emision']))]}} de {{date('Y',strtotime($data['emision']))}}
+                        </p>
+                    </td>
+                    <td width="5%">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </section>
     <div style="position: absolute;
       display: inline-block;
@@ -162,6 +163,18 @@
                 </tr>
             </table>
         </section>
+        <footer>
+            <table cellpadding="0" cellspacing="0" class="table table-nowrap align-middle" width="100%">
+                <tr style="font-size:10px">
+                    <td width="35%">
+                        <span>SAMS | School and Administrative Management System</span>
+                    </td>
+                    <td width="40%" class="text-left">
+                        Usuario:<span> {{auth()->user()->name}} </span>
+                    </td>
+                </tr>
+            </table>
+        </footer>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

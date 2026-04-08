@@ -130,7 +130,6 @@ class VcPromocion extends Component
         $cursos     = TmCursos::find($this->cursoId);
         $servicio   = TmServicios::find($cursos->servicio_id);
         $this->cursoId = $cursos->servicio_id;
-
         
         $this->nomcurso  = $servicio->descripcion.' paralelo '.$cursos->paralelo;
         
@@ -569,28 +568,27 @@ class VcPromocion extends Component
         foreach($notas as $record){
             $data['area']    = $record['area'];
             $data['materia'] = $record['materia']; 
+            $data['nota'] = $record['promedio_final'];
+            $total =$total+$record['promedio_final'];
 
-            /*if ($record['escala_cualitativa']!=''){
-                $data['nota']  = $record['escala_cualitativa']; 
-                $data['letra'] = $this->refescala[$record['escala_cualitativa']];
-            }else{*/
-                $data['nota'] = $record['promedio_final'];
-                $total =$total+$record['promedio_final'];
-                //$formatter = new NumeroALetras();
-                //$notaletra = $formatter->toWords($record['promedio_final'], 2);
-                $notaletra =  $this->numeroDecimalALetras($record['promedio_final']);
-                $data['letra'] = $notaletra;
-            /*}*/
+            $notaletra =  $this->numeroDecimalALetras($record['promedio_final']);
+            $data['letra'] = $notaletra;
             
             array_push($objnotas, $data);
         }
+        $data['area']='';
+        $data['materia'] = 'SUMA TOTAL';
+        $data['nota'] = $total;
+
+        $notaletra =  $this->numeroDecimalALetras($total);
+        $data['letra']=$notaletra;
+        array_push($objnotas, $data);
+
         $promedio = round($total/count($objnotas), 2);
         $data['area']='';
-        $data['materia'] = '';
+        $data['materia'] = 'PROMEDIO GENERAL';
         $data['nota'] = $promedio;
 
-        //$formatter = new NumeroALetras();
-        //$notaletra = $formatter->toWords($promedio, 2);
         $notaletra =  $this->numeroDecimalALetras($promedio);
         $data['letra']=$notaletra;
         array_push($objnotas, $data);
