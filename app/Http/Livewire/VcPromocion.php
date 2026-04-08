@@ -131,7 +131,7 @@ class VcPromocion extends Component
         $servicio   = TmServicios::find($cursos->servicio_id);
         $this->cursoId = $cursos->servicio_id;
         
-        $this->nomcurso  = $servicio->descripcion.' paralelo '.$cursos->paralelo;
+        $this->nomcurso  = $servicio->descripcion.' paralelo "'.$cursos->paralelo.'"';
         
         $especializacion = $servicio->especializacion->descripcion;
 

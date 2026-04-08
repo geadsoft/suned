@@ -6,20 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificado de Promoción</title>
 
+    <style>
+        body {
+            font-family: "Times New Roman", serif;
+            color: #000;
+        }
+
+        .contenido {
+            font-size: 13px;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .firma {
+            font-size: 13px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .linea-firma {
+            margin-top: 60px;
+        }
+    </style>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-    <section style ="margin-top: -50px;">
+    <section class="header">
             <table cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                     <td style="width: 60%; text-align: left;">
                         <!--<img src="../public/assets/images/Gob_Ecuador.png" height="170px">-->
-                        <img src="../public/assets/images/Republica del Ecuador.jpg" height="170px">
+                        <img src="../public/assets/images/Republica del Ecuador.jpg" height="110px">
                     </td>   
                     <td style="width: 30%; text-align: right;">
-                        <img src="../public/assets/images/American Schooll.png" height="55">
+                        <img src="../public/assets/images/American Schooll.png" height="50px">
                     </td>
                     <td width="5%">
                     </td>     
@@ -28,9 +50,9 @@
             <table cellpadding="0" cellspacing="0" width="100%" style ="margin-top: -40px;">
                 <tr style="font-size:10px">
                     <td width="100%" class="text-center">
-                        <p style="margin-top:0; margin-bottom:0;"><span style="font-size:14px"><strong>{{$sede['nombre']}}</strong></p> 
-                        <p style="margin-top:0; margin-bottom:0;"><span style="font-size:14px"><strong>CERTIFICADO DE PROMOCIÓN</strong></p> 
-                        <p style="margin-top:0; margin-bottom:0;"><span style="font-size:14px"><strong>AÑO LECTIVO {{$data['periodo']}}</strong></p>
+                        <p style="margin-top:0; margin-bottom:0;"><span style="font-size:14px; color:#827F7F"><strong>{{$sede['nombre']}}</strong></p>
+                        <p style="margin-top:0; margin-bottom:0;"><span style="font-size:14px; color:#827F7F"><strong>CERTIFICADO DE PROMOCIÓN</strong></p> 
+                        <p style="margin-top:0; margin-bottom:0;"><span style="font-size:14px; color:#827F7F"><strong>AÑO LECTIVO {{$data['periodo']}}</strong></p>
                     </td>
                 </tr>
             </table>
@@ -40,7 +62,7 @@
                         <td width="5%">
                         </td>
                         <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
-                            <p style="margin-top:0 line-height: 200%" class="text-justify"><br>
+                            <p style="margin-top:0 line-height: 200%" class="contenido"><br>
                             De conformidad con lo prescrito en el Art. 187 del Reglamento General a la Ley Orgánica 
                             de Educación Intercultural y en concordancia con el articulo 33 del ACUERDO Nro. MINEDUC 2023-00063-A, certifica que el (la) estudiante
                             <strong>{{$data['nombres']}}</strong>, del <strong>{{$data['curso']}} </strong> obtuvo las
@@ -109,7 +131,7 @@
                 <tr style="font-size:13px">
                     <td width="5%">
                     </td>
-                    <td width="90%"><span style="horizontal-align: top; padding-top: 20px">
+                    <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
                         <p style="margin-top:0; line-height: 200%" class="text-justify"><br>
                         @if(!($data['graduado'] ?? false))
                             Por lo tanto es promovido/a al <strong>{{$data['curso_promovido']}}.</strong><br>
@@ -118,7 +140,7 @@
                         @endif
 
                         Para certificar suscribe la <strong>{{$data['rector']}}</strong> como <strong>RECTORA</strong> de la institución quien certifica.<br><br>
-                        Dado y firmado en:<br><br><br>
+                        Dado y firmado en:<br><br>
                         Guayaquil, {{date('d',strtotime($data['emision']))}} de 
                         {{$mes[date('m',strtotime($data['emision']))]}} de {{date('Y',strtotime($data['emision']))}}
                         </p>
@@ -129,49 +151,62 @@
             </tbody>
         </table>
     </section>
+    <section style="position: absolute;
+      display: inline-block;
+      bottom: 0;
+      width: 100%;
+      height: 200px;">
+            <table cellpadding="0" cellspacing="0" class="" width="100%">
+                <tr style="font-size:12px">
+                    <td width="50%" class="text-center">
+                        <div class="firma">
+                            <div class="linea-firma">______________________________</div>
+                            <div>{{$data['rector']}}</div>
+                            <div><strong>RECTOR</strong></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
     <div style="position: absolute;
       display: inline-block;
       bottom: 0;
       width: 100%;
-      height: 100px;">
-        <section>
-
+      height: 60px;">
+        <!--<section>
             <table cellpadding="0" cellspacing="0" class="" width="100%">
                 <tr style="font-size:12px">
                     <td width="50%" class="text-center">
                         <span><strong>________________________________</strong></span>
                     </td>
-                    <!--<td width="50%" class="text-center">
-                        <span><strong>________________________________</strong></span>
-                    </td>-->
                 </tr>
                 <tr style="font-size:13px">
                     <td width="50%" class="text-center">
                         <span>{{$data['rector']}}</span>
                     </td>
-                    <!--<td width="50%" class="text-center">
-                        <span>{{$data['secretaria']}}</span>
-                    </td>-->
                 </tr>
                 <tr style="font-size:13px">
                     <td width="50%" class="text-center">
                         <span><strong>RECTOR</strong></span>
                     </td>
-                    <!--<td width="50%" class="text-center">
-                        <span><strong>SECRETARIA</strong></span>
-                    </td>-->
                 </tr>
             </table>
-        </section>
+        </section>-->
         <footer>
-            <table cellpadding="0" cellspacing="0" class="table table-nowrap align-middle" width="100%">
-                <tr style="font-size:10px">
-                    <td width="35%">
-                        <span>SAMS | School and Administrative Management System</span>
+            <table cellpadding="0" cellspacing="0" width="100%" style="font-size:12px; color:#B0ACAC" >
+                <tr>
+                    <td style="width: 60%; text-align: left;">
+                        <p style="margin-top:0;" class="text-justify"><br>
+                            <strong>Dirección:</strong> Av. Amazonas n34-451 y Av. Atahualpa <br>
+                            <strong>Codigo postal:</strong> 170507 / Quito Ecuador<br>
+                            <strong>Teléfono:</strong> +593-2-396-1300
+                        </p>
+                    </td>   
+                    <td style="width: 30%; text-align: right;">
+                        <img src="../public/assets/images/Gob_Ecuador.png" height="50px">
                     </td>
-                    <td width="40%" class="text-left">
-                        Usuario:<span> {{auth()->user()->name}} </span>
-                    </td>
+                    <td width="5%">
+                    </td>     
                 </tr>
             </table>
         </footer>
