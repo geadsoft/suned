@@ -113,6 +113,7 @@
                                         <th class="sort" data-sort="lead_score" scope="col">Nacionalidad</th>
                                         <th class="sort" data-sort="tags" scope="col">Teléfono</th>
                                         <th class="sort" data-sort="tags" scope="col">Curso</th>
+                                        <th class="sort" data-sort="tags" scope="col">Registrado Por</th>
                                         <th scope="col">Acción</th>
                                     </tr>
                                 </thead>
@@ -131,6 +132,7 @@
                                         <td>{{$record->nacionalidad->descripcion}}</td>
                                         <td>{{$record->telefono}}</td>
                                         <td>{{$record->descripcion}}-{{$record->paralelo}}</td>
+                                        <td>{{$record->usuario}}</td>
                                         <td>
                                             @php
                                                 $existe = collect($users)->contains(fn($user) => $user['personaId'] == $record->id);

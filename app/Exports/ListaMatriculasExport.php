@@ -82,7 +82,7 @@ class ListaMatriculasExport implements FromView, ShouldAutoSize
         ,m.created_at as creado, weekday(m.fecha) as diapersona, weekday(m.fecha) as diamatricula, 
         g2.descripcion as nacionalidad, m.fecha as fechamatricula, month(m.fecha) as mes, 
         r.nombres as nomrepre, r.apellidos as aperepre, r.identificacion as idenrepre, r.parentesco as parenrepre,
-        m.registro as tipomatricula, s.nivel_id")
+        m.registro as tipomatricula, s.nivel_id, m.usuario")
         ->where('tm_personas.tipopersona','=','E')
         /*->where('tm_personas.estado',$this->filters['srv_estado'])*/
         ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id, apellidos asc')
