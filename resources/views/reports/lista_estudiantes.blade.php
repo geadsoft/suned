@@ -52,7 +52,6 @@
                     <th style="color:#FFFFFF">Estudiante</th>
                     <th style="color:#FFFFFF">Identificación</th>
                     <th style="color:#FFFFFF">Usuario</th>
-                    <th style="color:#FFFFFF">Matriculado Por</th>
                     <th style="color:#FFFFFF">Fecha de registro</th>
                 </tr>
             <thead>
@@ -81,7 +80,6 @@
                                         Retirado     
                                     @endif
                                 </td>
-                                <td class="text-left">{{$recno['usuario']}}</td>
                                 <td class="text-left">{{$dias[$recno['diapersona']]}}, {{date('d-M-Y h:m:s',strtotime($recno['created_at']))}}</td>
                             </tr>
                             @endforeach

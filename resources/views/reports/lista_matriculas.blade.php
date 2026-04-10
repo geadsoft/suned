@@ -56,6 +56,7 @@
                     <th style="color:#FFFFFF">Masculino</th>
                     <th style="color:#FFFFFF">Femenino</th>
                     <th style="color:#FFFFFF">Fecha de registro</th>
+                    <th style="color:#FFFFFF">Matriculado Por</th>
                 </tr>
             <thead>
             <tbody class="list"> 
@@ -93,6 +94,7 @@
                                     <td class="text-center">X</td>
                                 @endif
                                 <td class="text-left">{{$dias[$recno['diamatricula']]}},{{date('d-M-Y',strtotime($recno['creado']))}}</td>
+                                <td class="text-left">{{$recno['usuario']}}</td>
                             </tr>
                             @endforeach
                             <!--<tr>
