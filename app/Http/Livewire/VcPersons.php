@@ -446,7 +446,7 @@ class VcPersons extends Component
             $this->consulta['curso'] = $objcurso->servicio['descripcion']." ".$objcurso['paralelo'];
         }
         
-        $dias = [0=>'Domingo',1=>'Lunes',2=>'Martes',3=>'Miercoles',4=>'Jueves',5=>'Viernes',6=>'Sabado'];
+        $dias = [0=>'dom.',1=>'lun.',2=>'mar.',3=>'mié.',4=>'jue.',5=>'vie.',6=>'sáb.'];
 
         //Vista
         if ($report=="LE"){
