@@ -48,7 +48,7 @@
         <table cellpadding="0" cellspacing="0" class="table table-borderless table-sm align-middle mb-0" style="font-size:9.5px">
                 <thead class="table-light" style="background-color:#222454">
                 <tr>
-                    <th style="color:#FFFFFF">Nro. Matrícula</th>
+                    <th style="color:#FFFFFF">Nro.</th>
                     <th style="color:#FFFFFF">Estudiante</th>
                     <th style="color:#FFFFFF">Identificación</th>
                     <th style="color:#FFFFFF">Nuevo</th>
