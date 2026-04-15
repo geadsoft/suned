@@ -584,7 +584,7 @@ class VcPromocion extends Component
         $data['letra']=$notaletra;
         array_push($objnotas, $data);
 
-        $promedio = round($total/count($objnotas)-1 2);
+        $promedio = round($total/count($objnotas)-1,2);
         $data['area']='';
         $data['materia'] = 'PROMEDIO GENERAL';
         $data['nota'] = $promedio;
