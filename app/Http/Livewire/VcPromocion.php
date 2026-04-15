@@ -565,6 +565,7 @@ class VcPromocion extends Component
                 
         $objnotas = [];
         $total=0;
+        $materias=0;
         foreach($notas as $record){
             $data['area']    = $record['area'];
             $data['materia'] = $record['materia']; 
@@ -575,6 +576,7 @@ class VcPromocion extends Component
             $data['letra'] = $notaletra;
             
             array_push($objnotas, $data);
+            $materias = $materias+1;
         }
         $data['area']='';
         $data['materia'] = 'SUMA TOTAL';
@@ -584,9 +586,7 @@ class VcPromocion extends Component
         $data['letra']=$notaletra;
         array_push($objnotas, $data);
 
-        dd($total,$objnotas);
-
-        $promedio = round($total/count($objnotas)-1,2);
+        $promedio = round($total/$materias,2);
         $data['area']='';
         $data['materia'] = 'PROMEDIO GENERAL';
         $data['nota'] = $promedio;
