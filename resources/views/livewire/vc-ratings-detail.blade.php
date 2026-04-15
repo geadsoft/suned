@@ -46,8 +46,8 @@
             <div class="card" id="orderList">
                 <div class="card-body">
                     <div class="hstack gap-2 justify-content-end mb-3">
-                        <a href="/preview-pdf/ratings/{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-printer-fill align-bottom fs-22"></i></a>
-                        <a href="/download-pdf/ratings/{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-download-2-line align-bottom fs-22"></i></a>
+                        <!--<a href="/preview-pdf/ratings/{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-printer-fill align-bottom fs-22"></i></a>
+                        <a href="/download-pdf/ratings/{{$datos}}" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-download-2-line align-bottom fs-22"></i></a>-->
                         <a href="" wire:click.prevent="exportExcel()" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"><i class="ri-file-excel-2-line align-bottom fs-22"></i></a>
                     </div>
                     <div>

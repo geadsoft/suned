@@ -15,10 +15,15 @@ use App\Models\TdConductas;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Exports\RatingsDetailExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\Exportable;
 use PDF;
 
 class VcRatingsDetail extends Component
 {
+    use Exportable;
+
     public $tblservicios=[],$tblcursos=[],$detalles=[], $alumnos, $asignaturas, $datos, $consulta=[];
     public $materias;
     public $selectId,$grupoId,$servicioId,$periodoId,$cursoId,$mostrar=false;
@@ -370,11 +375,11 @@ class VcRatingsDetail extends Component
 
     }
 
-    public function downloadPDF($objdata)
+    public function exportExcel()
     {
-
+        $data = json_encode($this->filters);
+        return Excel::download(new RatingsDetailExport($data), 'Cuadro de Calificaciones.xlsx');
     }
-
 
 
 }
