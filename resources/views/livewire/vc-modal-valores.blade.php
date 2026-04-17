@@ -20,7 +20,7 @@
                             <input type="number" step="0.01"  style="" class="form-control product-price" value="{{$data[2]}}" disabled/>
                             </td> 
                             <td>
-                            <input type="number" step="0.01"  style="" class="form-control product-price" wire:model="tblrecords.{{$fil}}.{{3}}" {{$eControl}}/>
+                            <input type="number" step="0.01"  style="" class="form-control product-price" wire:model="tblrecords.{{$fil}}.{{5}}" {{$eControl}}/>
                             </td>
                         </tr>
                     @endforeach

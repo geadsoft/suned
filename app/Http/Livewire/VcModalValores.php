@@ -44,7 +44,7 @@ class VcModalValores extends Component
                           When left(referencia,3) = 'PLI' Then 'Plataforma Ingles' 
                           When left(referencia,3) = 'PLE' Then 'Plataforma Español'
                           When left(referencia,3) = 'PEN' Then 'Pensión'
-                          Else 'Derecho de Grado' End as concepto, neto, debito, credito, id as deudaid, month(fecha) as mes, left(referencia,3) as tipo")
+                          Else 'Derecho de Grado' End as concepto, neto, debito, credito, saldo, id as deudaid, month(fecha) as mes, left(referencia,3) as tipo")
         ->where('matricula_id',$matriculaId)
         ->havingRaw('(debito - credito) > 0')
         ->get();
@@ -60,6 +60,7 @@ class VcModalValores extends Component
             $this->tblrecords[$key][2] = floatval($record['neto']);
             $this->tblrecords[$key][3] = floatval($record['debito']);
             $this->tblrecords[$key][4] = floatval($record['credito']);
+            $this->tblrecords[$key][5] = floatval($record['saldo']);
         }
         
     }
@@ -74,16 +75,20 @@ class VcModalValores extends Component
 
             $iddeuda = $data[0];
             $record = TrDeudasCabs::find($iddeuda);
+            $neto  = $data[2]-($data[2]-floatval($data[5]))+$record['credito'];
+            $db    = $data[3]-($data[3]-floatval($data[5]))+$record['credito'];
+            $saldo = floatval($data[5]);
+
             $record->update([
-                'neto'   => $data[3],
-                'debito' => $data[3],
-                'saldo'  => ($record->saldo)-$data[3],
+                'neto'   => $neto,
+                'debito' => $db,
+                'saldo'  => $saldo
             ]);
 
             $deudadets = TrDeudasDets::where('deudacab_id',$iddeuda)
             ->where('tipovalor','DB')
             ->update([
-                'valor' => $data[3],
+                'valor' => $db,
             ]);
 
         }
