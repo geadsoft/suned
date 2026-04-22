@@ -238,8 +238,9 @@ class VcPersons extends Component
         ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
         ->join("tm_personas as r","r.id","=","m.representante_id")
         ->join("tm_cursos as c","c.id","=","m.curso_id")
-        ->join("tm_servicios as s","s.id","=","c.servicio_id")
-        ->join("tm_generalidades as g","g.id","=","m.modalidad_id")
+        /*->join("tm_servicios as s","s.id","=","c.servicio_id")
+        ->join("tm_generalidades as g","g.id","=","m.modalidad_id")*/
+        ->join("view_servicios_educativos as s","s.id","=","c.servicio_id")
         ->join("tm_generalidades as g2","g2.id","=","tm_personas.nacionalidad_id")
         ->when($this->filters['srv_nombre'],function($query){
             return $query->whereRaw("concat(tm_personas.apellidos,' ',tm_personas.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
@@ -253,7 +254,7 @@ class VcPersons extends Component
         ->when($this->filters['srv_curso'],function($query){
             return $query->where('m.curso_id',"{$this->filters['srv_curso']}");
         })
-        ->selectRaw("tm_personas.*, g.descripcion as grupo, s.descripcion as curso, c.paralelo, m.documento as nromatricula 
+        ->selectRaw("tm_personas.*, s.modalidad as grupo, s.descripcion as curso, c.paralelo, m.documento as nromatricula 
         ,m.created_at as creado, weekday(tm_personas.created_at) as diapersona, weekday(m.created_at) as diamatricula, 
         g2.descripcion as nacionalidad, m.fecha as fechamatricula, month(m.fecha) as mes, 
         r.nombres as nomrepre, r.apellidos as aperepre, r.identificacion as idenrepre, r.parentesco as parenrepre,
