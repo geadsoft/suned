@@ -111,7 +111,7 @@ class VcSistemaEducativo extends Component
         ->where('modalidad_id',$this->modalidadId)
         ->first();
 
-        $this->metodo      = empty($this->sistema) ? 'T' : $this->sistema->evaluacion;
+        $this->metodo      = empty($this->sistema) ? ' ' : $this->sistema->evaluacion;
         $this->esumativa   = empty($this->sistema) ? 0 : $this->sistema->evaluacion_sumativa;
         $this->eformativa  = empty($this->sistema) ? 0 : $this->sistema->evaluacion_formativa;
       
@@ -790,6 +790,10 @@ class VcSistemaEducativo extends Component
                 }
             }
         
+        } else {
+
+            $this->metodo="";
+
         }
 
         if ($this->replica['parcial']) { 

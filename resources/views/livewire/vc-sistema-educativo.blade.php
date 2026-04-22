@@ -70,7 +70,8 @@
                             <div class="d-flex align-items-center gap-2">
                                 <select class="form-select" id="choices-publish-status-input"
                                         data-choices data-choices-search-false wire:model="metodo">
-                                    <option value="T" selected>TRIMESTRE</option>
+                                    <option value=""> -- Seleccione Método -- </option>
+                                    <option value="T">TRIMESTRE</option>
                                     <option value="Q">QUIMESTRE</option>
                                 </select>
                                 <!--<button class="btn btn-soft-success btn-sm" wire:click.prevent='grabaTermino'>
