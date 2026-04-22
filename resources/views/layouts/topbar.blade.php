@@ -154,7 +154,18 @@
                         </form>
                     </div>
                 </div>
-
+                <div class="ms-1 header-item d-none d-sm-flex">
+                    <span style="
+                        background: #0b395b;
+                        padding: 4px 10px;
+                        border-radius: 8px;
+                        font-size: 12px;
+                        color: #fff;
+                        margin-left: 10px;">
+                        Periodo Lectivo:
+                        {{ $periodoActivo->descripcion ?? '---' }}
+                    </span>
+                </div>
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
                         data-toggle="fullscreen">

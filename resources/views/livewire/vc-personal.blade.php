@@ -49,13 +49,30 @@
                             <table class="table align-middle table-nowrap mb-0" id="customerTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
-                                        <th class="sort" data-sort="name" scope="col">Identificación</th>
-                                        <th class="sort" data-sort="company_name" scope="col">Nombres</th>
-                                        <th class="sort" data-sort="lead_score" scope="col">Nacionalidad</th>
-                                        <th class="sort" data-sort="tags" scope="col">Teléfono</th>
-                                        <th class="sort" data-sort="tags" scope="col">Email</th>
-                                        <th class="sort" data-sort="tags" scope="col">Tipo</th>
-                                        <th class="sort" data-sort="tags" scope="col">Estado</th>
+                                        <th data-sort="name" scope="col">Identificación</th>
+                                        <th data-sort="company_name" scope="col">Nombres</th>
+                                        <th data-sort="lead_score" scope="col">Nacionalidad</th>
+                                        <th data-sort="tags" scope="col">Teléfono</th>
+                                        <th data-sort="tags" scope="col">Email</th>
+                                        <th data-sort="tags" scope="col">Tipo</th>
+                                        <th scope="col" class="align-middle">
+                                            <div class="d-flex align-items-center gap-1">
+                                                <span>Estado</span>
+
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-light p-1" data-bs-toggle="dropdown">
+                                                        <i class="ri-filter-3-line"></i>
+                                                    </button>
+
+                                                    <ul class="dropdown-menu">
+                                                        <li><a wire:click="$set('estado', '')" class="dropdown-item">Todos</a></li>
+                                                        <li><a wire:click="$set('estado', 'A')" class="dropdown-item">Activo</a></li>
+                                                        <li><a wire:click="$set('estado', 'I')" class="dropdown-item">Inactivo</a></li>
+                                                        <li><a wire:click="$set('estado', 'R')" class="dropdown-item">Retirado</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </th>
                                         <th scope="col">Acción</th>
                                     </tr>
                                 </thead>

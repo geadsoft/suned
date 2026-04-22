@@ -10,7 +10,7 @@ class VcPersonal extends Component
 {   
     use WithPagination;
 
-    public $buscarDato;
+    public $buscarDato, $estado='';
     public $arrtipo=[
         'A' => 'Administrativo',
         'D' => 'Docente',
@@ -26,6 +26,9 @@ class VcPersonal extends Component
         $tblrecords = TmPersonas::whereRaw("tipopersona in ('A','D','P','M')")
         ->when($this->buscarDato,function($query){
             return $query->whereRaw("concat(tm_personas.apellidos,' ',tm_personas.nombres) LIKE '%".$this->buscarDato."%'");
+        })
+        ->when($this->estado,function($query){
+            return $query->where("estado",$this->estado);
         })
         ->orderBy('apellidos','asc')->paginate(12);
         

@@ -194,6 +194,7 @@
                                                 <select class="form-select data-choices data-choices-search-false" id="cmbestado" wire:model.defer="record.estado" {{$eControl}}>
                                                     <option value="A">Activo</option>
                                                     <option value="I">Inactivo</option>
+                                                    <option value="R">Retirado</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -225,11 +226,15 @@
                                 <div class="card-body p-4">
                                     <div class="hstack gap-2 justify-content-end d-print-none mt-4">    
                                         @if ($formDisabled==false)
-                                        @if($editar==true)
-                                            <button type="submit" class="btn btn-success"><i class="ri-save-line align-bottom me-1"></i> Actualizar </button>
+                                            @if($editar==true)
+                                                <button type="submit" class="btn btn-success"><i class="ri-save-line align-bottom me-1"></i> Actualizar </button>
+                                            @else
+                                                <button type="submit" class="btn btn-success"><i class="ri-save-line align-bottom me-1"></i> Grabar </button>
+                                            @endif
                                         @else
-                                            <button type="submit" class="btn btn-success"><i class="ri-save-line align-bottom me-1"></i> Grabar </button>
-                                        @endif
+                                            @if($record['estado']!='A')
+                                            <a class="btn btn-warning w-sm" href="" wire:click="activarPerson"><i class="me-1 align-bottom"></i>Activar</a>
+                                            @endif
                                         @endif
                                         <a class="btn btn-secondary w-sm" href="/headquarters/staff"><i class="me-1 align-bottom"></i>Cancelar</a>
                                     </div>

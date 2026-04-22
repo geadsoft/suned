@@ -257,5 +257,17 @@ class VcPersonaladd extends Component
 
     }
 
+    public function activarPerson(){ 
+
+        $record = TmPersonas::find($this->personaId);
+        $record->update([
+            'estado' => "A",
+        ]);    
+        
+        $this->dispatchBrowserEvent('msg-updated');
+        return redirect()->to('/headquarters/staff');
+
+    }
+
 
 }
