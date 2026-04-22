@@ -258,10 +258,10 @@ class VcPersons extends Component
         ,m.created_at as creado, weekday(tm_personas.created_at) as diapersona, weekday(m.created_at) as diamatricula, 
         g2.descripcion as nacionalidad, m.fecha as fechamatricula, month(m.fecha) as mes, 
         r.nombres as nomrepre, r.apellidos as aperepre, r.identificacion as idenrepre, r.parentesco as parenrepre,
-        m.registro as tipomatricula, s.nivel_id, m.estado as status, m.usuario")
+        m.registro as tipomatricula, m.estado as status, m.usuario")
         ->where('tm_personas.tipopersona','=','E')
         ->where('m.estado',$this->filters['srv_estado'])
-        ->orderByRaw('s.modalidad_id, s.nivel_id, s.grado_id,c.paralelo,apellidos asc')
+        ->orderByRaw('s.root,c.paralelo,apellidos asc')
         ->get();
 
         return $tblrecords;
