@@ -114,7 +114,7 @@
                                 </tr>
                                 <tr>
                                     <td>Saldo</td>
-                                    <td class="text-right">{{number_format($tblrecords->sum('saldo'),2)}}</td>
+                                    <td class="text-right">{{number_format($tblrecords->where('tipovalor','DB')->sum('valor')-($tblrecords->where('tipovalor','CR')->sum('haber')+$tblrecords->where('tipovalor','CR')->sum('descuento')),2)}}</td>
                                 </tr>
                         </tbody>
                     </table>
