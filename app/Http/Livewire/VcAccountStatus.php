@@ -79,7 +79,7 @@ class VcAccountStatus extends Component
 
     public function genConsulta(){
 
-        $records = TrDeudasCabs::from('tr_deudas_cabs as c')
+        $tblrecords = TrDeudasCabs::from('tr_deudas_cabs as c')
         ->join(DB::raw("
             (
                 SELECT 
