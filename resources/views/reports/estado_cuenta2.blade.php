@@ -71,7 +71,7 @@
                     @else
                         <td> </td>
                         <td> </td>
-                        <td class="text-right"> {{number_format($record['valor'],2)}} </td>
+                        <td class="text-right"> {{number_format($record['haber'],2)}} </td>
                         <td class="text-right"> {{number_format($record['descuento'],2)}} </td>
                         <td> {{$dias[date('N', strtotime($record->fecha))];}}, {{date('d-M-Y',strtotime($record->fecha))}}</td>
                         <td> {{$record['referencia']}} 

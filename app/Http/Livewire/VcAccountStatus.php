@@ -79,9 +79,74 @@ class VcAccountStatus extends Component
 
     public function genConsulta(){
 
-        $records = TrDeudasCabs::query()
+        $records = TrDeudasCabs::from('tr_deudas_cabs as c')
+        ->join(DB::raw("
+            (
+                SELECT 
+                    d.deudacab_id,
+                    d.tipo,
+                    d.fecha,
+                    d.detalle,
+                    d.referencia,
+                    d.tipovalor,
+
+                    -- Solo muestra valor cuando es DB
+                    SUM(CASE WHEN d.tipovalor = 'DB' THEN d.valor ELSE 0 END) AS valor,
+
+                    -- Acumulados
+                    SUM(CASE WHEN d.tipovalor <> 'DB' AND d.tipo = 'PAG' THEN d.valor ELSE 0 END) AS haber,
+                    SUM(CASE WHEN d.tipovalor <> 'DB' AND d.tipo = 'DES' THEN d.valor ELSE 0 END) AS descuento,
+
+                    -- Para relación con cobros
+                    MAX(d.cobro_id) as cobro_id
+
+                FROM tr_deudas_dets d
+                GROUP BY 
+                    d.deudacab_id,
+                    d.tipo,
+                    d.fecha,
+                    d.detalle,
+                    d.referencia,
+                    d.tipovalor
+            ) as d
+        "), 'd.deudacab_id', '=', 'c.id')
+
+        ->leftJoin(DB::raw("
+            (
+                SELECT 
+                    cobrocab_id,
+                    GROUP_CONCAT(DISTINCT tipopago) as tipopago 
+                FROM tr_cobros_dets  
+                GROUP BY cobrocab_id
+            ) as p
+        "), 'p.cobrocab_id', '=', 'd.cobro_id')
+
+        ->selectRaw("
+            d.*,
+            c.saldo,
+            p.tipopago,
+            c.referencia as documento
+        ")
+
+        ->where('c.matricula_id', $this->consulta['idactual'])
+        ->where('d.tipo', '<>', 'DES')
+
+        ->orderByRaw("
+            d.tipo, 
+            d.fecha, 
+            d.detalle,
+            CASE 
+                WHEN LEFT(c.referencia,3) = 'MAT' THEN 1
+                WHEN LEFT(c.referencia,3) IN ('PLA','PLI') THEN 2
+                WHEN LEFT(c.referencia,3) = 'PEN' THEN 3
+                WHEN LEFT(c.referencia,3) = 'PLE' THEN 4
+                ELSE 5 
+            END
+        ")
+        ->get();
+
+        /*$records = TrDeudasCabs::query()
         ->join("tr_deudas_dets as d","tr_deudas_cabs.id","=","d.deudacab_id")
-        /*->leftJoin("tr_cobros_dets as p","p.cobrocab_id","=","d.cobro_id")*/
         ->leftJoin(DB::raw('(select cobrocab_id,group_concat(distinct tipopago) as tipopago 
         from tr_cobros_dets  
         group by 1) as p'), 
@@ -89,7 +154,6 @@ class VcAccountStatus extends Component
         {
            $join->on('p.cobrocab_id', '=', 'd.cobro_id');
         })
-        /*->leftJoin("tm_generalidades as g","g.id","=","p.entidad_id")*/
         ->selectraw("d.*,tr_deudas_cabs.saldo, tr_deudas_cabs.descuento, p.tipopago, tr_deudas_cabs.referencia as documento")
         ->where("tr_deudas_cabs.matricula_id",$this->consulta['idactual'])
         ->where("tipo","<>","'DES'")
@@ -101,8 +165,8 @@ class VcAccountStatus extends Component
         else 5 end")
         ->get();
 
-        $tblrecords = $records->where('tipo','<>','DES');
-        return $tblrecords;                
+        $tblrecords = $records->where('tipo','<>','DES');*/
+        return $tblrecords;
     }
 
     public function detConsulta(){
