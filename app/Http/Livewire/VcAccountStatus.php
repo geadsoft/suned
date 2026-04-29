@@ -84,7 +84,6 @@ class VcAccountStatus extends Component
             (
                 SELECT 
                     d.deudacab_id,
-                    d.tipo,
                     d.fecha,
                     d.detalle,
                     d.referencia,
@@ -103,7 +102,6 @@ class VcAccountStatus extends Component
                 FROM tr_deudas_dets d
                 GROUP BY 
                     d.deudacab_id,
-                    d.tipo,
                     d.fecha,
                     d.detalle,
                     d.referencia,
@@ -130,7 +128,7 @@ class VcAccountStatus extends Component
 
         ->where('c.matricula_id', $this->consulta['idactual'])
         ->orderByRaw("
-            d.tipo, 
+            d.tipovalor, 
             d.fecha, 
             d.detalle,
             CASE 
