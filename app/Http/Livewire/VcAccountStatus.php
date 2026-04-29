@@ -95,7 +95,7 @@ class VcAccountStatus extends Component
 
                     -- Acumulados
                     SUM(CASE WHEN d.tipovalor = 'CR' AND d.tipo = 'PAG' THEN d.valor ELSE 0 END) AS haber,
-                    SUM(CASE WHEN d.tipo = 'DES' THEN d.valor ELSE 0 END) AS descuento,
+                    SUM(CASE WHEN d.tipovalor = 'CR' AND d.tipo = 'DES' THEN d.valor ELSE 0 END) AS descuento,
 
                     -- Para relación con cobros
                     MAX(d.cobro_id) as cobro_id
@@ -129,8 +129,6 @@ class VcAccountStatus extends Component
         ")
 
         ->where('c.matricula_id', $this->consulta['idactual'])
-        ->where('d.tipo', '<>', 'DES')
-
         ->orderByRaw("
             d.tipo, 
             d.fecha, 
