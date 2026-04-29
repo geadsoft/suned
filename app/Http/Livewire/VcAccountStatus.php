@@ -128,7 +128,7 @@ class VcAccountStatus extends Component
 
         ->where('c.matricula_id', $this->consulta['idactual'])
         ->orderByRaw("
-            d.tipovalor, 
+            d.referencia, 
             d.fecha, 
             d.detalle,
             CASE 
@@ -162,7 +162,7 @@ class VcAccountStatus extends Component
         ->get();
 
         $tblrecords = $records->where('tipo','<>','DES');*/
-        dd($tblrecords);
+        
         return $tblrecords;
     }
 
