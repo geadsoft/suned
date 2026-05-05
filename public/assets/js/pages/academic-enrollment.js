@@ -49,7 +49,12 @@ function selecTab(SelectTab) {
             var identific = document.getElementById("txtnui").value
             var txtemail  = document.getElementById("txtemail").value
 
-            expr = /^(?!.*[ñÑ])[a-zA-Z0-9_\.\-]+@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (/[ñÑ]/.test(txtemail)) {
+                swal("Error!", "El correo no debe contener la letra ñ.", "warning");
+                return true;
+            }
+
+            expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
             if (!expr.test(txtemail)) {
                 swal("Error!", "La dirección de correo " + txtemail + " es incorrecta o contiene caracteres no permitidos.", "warning");
                 return true;
