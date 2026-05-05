@@ -54,9 +54,9 @@ function selecTab(SelectTab) {
                 return true;
             }
 
-            expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            let expr = /^[a-zA-Z0-9._-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
             if (!expr.test(txtemail)) {
-                swal("Error!", "La dirección de correo " + txtemail + " es incorrecta o contiene caracteres no permitidos.", "warning");
+                swal("Error!", "La dirección de correo " + txtemail + " es incorrecta.", "warning");
                 return true;
             }
 
