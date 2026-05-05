@@ -39,14 +39,6 @@ function selecTab(SelectTab) {
     
     switch (SelectTab) {
         case 'pills-bill-students':  
-
-            var txtemail     = document.getElementById("txtemail").value
-            expr = /^(?!.*[ñÑ])[a-zA-Z0-9_\.\-]+@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            if (!expr.test(txtemail)) {
-                swal("Error!", "La dirección de correo " + txtemail + " es incorrecta o contiene caracteres no permitidos.", "warning");
-                return true;
-            }
-
 	        document.getElementById('pills-bill-student-tab').click()
             break
         case 'pills-bill-responsible':
@@ -55,6 +47,13 @@ function selecTab(SelectTab) {
             var apellidos = document.getElementById("txtapellidos").value
             var fechanace = document.getElementById("txtfechanace").value
             var identific = document.getElementById("txtnui").value
+            var txtemail  = document.getElementById("txtemail").value
+
+            expr = /^(?!.*[ñÑ])[a-zA-Z0-9_\.\-]+@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (!expr.test(txtemail)) {
+                swal("Error!", "La dirección de correo " + txtemail + " es incorrecta o contiene caracteres no permitidos.", "warning");
+                return true;
+            }
 
             if (!this.validate_fecha(fechanace)){
                 swal("Error!", "Fecha de nacimiemto incorrecta", "warning");
@@ -65,8 +64,6 @@ function selecTab(SelectTab) {
                 swal("Error!", "Datos del estudiante no deben estar vacios..", "warning");
                 return true;
             }
-
-
 
             document.getElementById('pills-bill-responsible-tab').click()
             break
