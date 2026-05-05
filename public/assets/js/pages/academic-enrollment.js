@@ -38,7 +38,15 @@ function backTab(SelectTab) {
 function selecTab(SelectTab) {
     
     switch (SelectTab) {
-        case 'pills-bill-students':    
+        case 'pills-bill-students':  
+
+            var txtemail     = document.getElementById("txtemail").value
+            expr = /^(?!.*[ñÑ])[a-zA-Z0-9_\.\-]+@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (!expr.test(txtemail)) {
+                swal("Error!", "La dirección de correo " + txtemail + " es incorrecta o contiene caracteres no permitidos.", "warning");
+                return true;
+            }
+
 	        document.getElementById('pills-bill-student-tab').click()
             break
         case 'pills-bill-responsible':
