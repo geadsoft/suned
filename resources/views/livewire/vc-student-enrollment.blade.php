@@ -262,7 +262,7 @@
                                             <div class="mb-3">
                                                 <label for="txtemail" class="form-label">Email
                                                     Address</label>
-                                                <input type="email" class="form-control" id="txtemail"
+                                                <input type="text" class="form-control" id="txtemail"
                                                     placeholder="Enter your email" wire:model.defer="email" {{$eControl}}>
                                             </div>
                                         </div>
