@@ -51,23 +51,23 @@ function selecTab(SelectTab) {
 
             if (/[ñÑ]/.test(txtemail)) {
                 swal("Error!", "El correo no debe contener la letra ñ.", "warning");
-                return true;
+                return false;
             }
 
             let expr = /^[a-zA-Z0-9._-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
             if (!expr.test(txtemail)) {
                 swal("Error!", "La dirección de correo " + txtemail + " es incorrecta.", "warning");
-                return true;
+                return false;
             }
 
             if (!this.validate_fecha(fechanace)){
                 swal("Error!", "Fecha de nacimiemto incorrecta", "warning");
-                return true;
+                return false;
             }
 
             if ((nombres == "") || (apellidos == "") || (identific == "")) {  //COMPRUEBA CAMPOS VACIOS
                 swal("Error!", "Datos del estudiante no deben estar vacios..", "warning");
-                return true;
+                return false;
             }
 
             document.getElementById('pills-bill-responsible-tab').click()
