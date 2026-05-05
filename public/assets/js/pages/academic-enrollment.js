@@ -49,8 +49,8 @@ function selecTab(SelectTab) {
             var identific = document.getElementById("txtnui").value
             var txtemail  = document.getElementById("txtemail").value
 
-            if (/[ñÑ]/.test(txtemail)) {
-                swal("Error!", "El correo no debe contener la letra ñ.", "warning");
+            if (!/^[\x00-\x7F]+$/.test(txtemail)) {
+                swal("Error!", "El correo contiene caracteres no permitidos (como la ñ o tildes).", "warning");
                 return false;
             }
 
