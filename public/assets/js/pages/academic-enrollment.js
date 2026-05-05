@@ -47,7 +47,7 @@ function selecTab(SelectTab) {
             var apellidos = document.getElementById("txtapellidos").value
             var fechanace = document.getElementById("txtfechanace").value
             var identific = document.getElementById("txtnui").value
-            var txtemail  = document.getElementById("txtemail").value
+            var txtemail  = document.getElementById("txtemail").value.normalize("NFC")
 
             if (!/^[\x00-\x7F]+$/.test(txtemail)) {
                 swal("Error!", "El correo contiene caracteres no permitidos (como la ñ o tildes).", "warning");
