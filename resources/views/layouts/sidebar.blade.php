@@ -649,7 +649,7 @@
                                 </a>
                                 <div class="collapse menu-dropdown" id="reportfinanciero">
                                     <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
+                                        <!--<li class="nav-item">
                                             <a class="nav-link menu-link" href="">
                                                 <span>Documentación</span>
                                             </a>
@@ -657,6 +657,11 @@
                                         <li class="nav-item">
                                             <a class="nav-link menu-link" href="">
                                                 <span>Calificaciones</span>
+                                            </a>
+                                        </li>-->
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/report/student-insurance">
+                                                <span>Seguro Estudiantil</span>
                                             </a>
                                         </li>
                                     </ul>

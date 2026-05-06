@@ -16,6 +16,10 @@ class VcSubjects extends Component
     public $tblareas=null;
     public $record=[];
 
+    public $filters=[
+        'buscar' => "",
+    ];
+
     public function mount(){
 
         $this->tblareas = TmGeneralidades::where('superior',10)->get();
@@ -25,7 +29,11 @@ class VcSubjects extends Component
     public function render()
     {
        
-        $tblrecords = TmAsignaturas::paginate(10);
+        $tblrecords = TmAsignaturas::query()
+        ->when($this->filters['buscar'],function($query){
+            return $query->where('descripcion', 'LIKE' , "%{$this->filters['buscar']}%");
+        })
+        ->paginate(10);
 
         return view('livewire.vc-subjects',[
             'tblrecords' => $tblrecords,

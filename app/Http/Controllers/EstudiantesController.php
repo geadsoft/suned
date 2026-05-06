@@ -98,4 +98,9 @@ class EstudiantesController extends Controller
         return view('academic/registration_online');
     }
 
+    public function seguro_estudiantil()
+    {
+        return view('student/seguro_estudiantil');
+    }
+
 }

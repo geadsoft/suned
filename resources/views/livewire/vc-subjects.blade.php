@@ -18,7 +18,7 @@
                             <div class="col-xxl-5 col-sm-6">
                                 <div class="search-box">
                                     <input type="text" class="form-control search"
-                                        placeholder="Busque por área o asignatura">
+                                        placeholder="Busque por área o asignatura" wire:model="filters.buscar">
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
                             </div>
