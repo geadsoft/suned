@@ -84,8 +84,7 @@ function selecTab(SelectTab) {
                 return true;
             }
             
-            //expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            expr = /^(?!.*[ñÑ])[a-zA-Z0-9_\.\-]+@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
             if (!expr.test(peremail)) {
                 swal("Error!", "La dirección de correo " + peremail + " es incorrecta o contiene caracteres no permitidos.", "warning");
                 return true;
