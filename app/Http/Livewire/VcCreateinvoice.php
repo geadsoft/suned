@@ -7,6 +7,8 @@ use App\Models\TrFacturasCabs;
 use App\Models\TrFacturasDets;
 use App\Models\TrDeudasCabs;
 use App\Models\TmPeriodosLectivos;
+use App\Models\TmMatricula;
+use App\Models\TmServicios;
 use Illuminate\Support\Facades\Http;
 
 use Illuminate\Support\Facades\DB;
@@ -30,7 +32,7 @@ class VcCreateinvoice extends Component
     public $plazo='Dias';
     public $formapago=20;
     public $montopago=0;
-    public $facturaId=0, $periodoId=0, $estudianteId, $estado='';
+    public $facturaId=0, $periodoId=0, $matriculaId, $estudianteId, $curso, $estado='';
     public $frmcontrol = 'enabled';
 
     public $totales = [
@@ -47,7 +49,7 @@ class VcCreateinvoice extends Component
     public $producto_id, $cantidadDig, $precioventa, $descuento, $itemtotal, $subtotal=0; 
     public $detalleVtas = [], $tblsedes, $facturar='R', $econtrol="readonly";
     public $tblperiodos;
-    public $tblstudent=[];
+    public $tblstudent=[], $tblservicios=[];
 
     protected $listeners = ['setPersona','setTotales'];
 
@@ -123,7 +125,7 @@ class VcCreateinvoice extends Component
         $this->montopago = $this->record['neto'];
         $this->estado = $this->record['estado'];
                
-        $this->setPersona($this->record['persona_id'],$this->record['estudiante_id']);
+        $this->setPersona($this->record['persona_id'],$this->record['estudiante_id'],$this->record['matricula_id']);
         
     }
 
@@ -163,7 +165,7 @@ class VcCreateinvoice extends Component
         
     }
 
-    public function setPersona($personaId,$estudianteId){
+    public function setPersona($personaId,$estudianteId,$matriculaId){
 
         $record = TmPersonas::find($personaId);
         $this->personaId = $record['id'];
@@ -173,11 +175,8 @@ class VcCreateinvoice extends Component
         $this->telefono =  $record['telefono'];
         $this->email =  $record['email'];
 
-        /*$this->tblstudent = TmPersonas::query()
-        ->join("tm_familiar_estudiantes as f","f.estudiante_id","=","tm_personas.id")
-        ->where("f.persona_id",$personaId)
-        ->select("tm_personas.*")
-        ->get();*/
+        $this->estudianteId = $estudianteId;
+        $this->matriculaId = $matriculaId;
 
         $this->tblstudent = TmPersonas::query()
         ->join(DB::raw("(select estudiante_id,persona_id from tm_familiar_estudiantes
@@ -190,18 +189,26 @@ class VcCreateinvoice extends Component
         ->select("tm_personas.*")
         ->get();
 
-        $this->estudianteId = $estudianteId;
+        $matricula = TmMatricula::query()
+        ->join("tm_servicios as s","s.id","=","tm_matriculas.grado_id")
+        ->join("tm_generalidades as g","g.id","=","tm_matriculas.modalidad_id")
+        ->select("g.descripcion as modalidad","s.descripcion as curso","tm_matriculas.periodo_id")
+        ->where("tm_matriculas.id",$matriculaId)
+        ->first();   
+
+        $this->curso = $matricula->modalidad.' - '.$matricula->curso;
+        $this->periodoId = $matricula->periodo_id;
        
         if ($this->facturaId==0){
-            $this->updatedestudianteId($this->estudianteId);
+            $this->updatedestudianteId($this->estudianteId, $matriculaId);
         }
 
     }
 
     /* Detalle Factura*/ 
-    public function updatedestudianteId($id){
+    public function updatedestudianteId($id,$matriculaId){
 
-        $this->emitTo('vc-detailinvoice','setCobros',$id,$this->periodoId);
+        $this->emitTo('vc-detailinvoice','setCobros',$id,$this->periodoId,$matriculaId);
 
     }
 
@@ -295,6 +302,7 @@ class VcCreateinvoice extends Component
             'documento' => $this -> documento,
             'persona_id' => $this -> personaId,
             'periodo_id' => $this -> periodoId,
+            'matricula_id' => $this -> matriculaId,
             'estudiante_id' => $this -> estudianteId,
             'formapago' => $this -> formapago,
             'dias' => $this -> dias,
@@ -471,7 +479,24 @@ class VcCreateinvoice extends Component
                 "detalle"=> $persona ['apellidos'].' '.$persona ['nombres'],
             ];
             array_push($informacion, $datos);
-        }  
+        } 
+        
+        if ($facCab['matricula_id']>0){
+            
+            $matricula = TmMatricula::query()
+            ->join("tm_servicios as s","s.id","=","tm_matriculas.grado_id")
+            ->join("tm_generalidades as g","g.id","=","tm_matriculas.modalidad_id")
+            ->select("g.descripcion as modalidad","s.descripcion as curso")
+            ->where("tm_matriculas.id",$matriculaId)
+            ->first();   
+    
+            $datos=[
+                "nombre"=> 'Curso',
+                "detalle"=> $matricula->modalidad.' - '.$matricula->curso,
+            ];
+            array_push($informacion, $datos);
+        } 
+        
         
         $array['emisor'] = $emisor;
         $array['comprador'] = $comprador;

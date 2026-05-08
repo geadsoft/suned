@@ -20,6 +20,7 @@ class TrFacturasCabs extends Model
         'autorizacion',
         'persona_id',
         'periodo_id',
+        'matricula_id',
         'estudiante_id',
         'formapago',
         'dias',

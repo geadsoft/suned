@@ -177,12 +177,26 @@
                                             </div>
                                             <div class="col-sm-8">
                                                 <div class="mb-3">
-                                                    <select type="select" class="form-select bg-light border-0" id="estudianteInput" wire:model="periodoId">
+                                                    <select type="select" class="form-select bg-light border-0" id="estudianteInput" wire:model="periodoId" disabled>
                                                         <option value="">Seleccione Periodo</option>
                                                         @foreach ($tblperiodos as $periodo) 
                                                             <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
                                                         @endforeach 
                                                     </select>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-1">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="mb-3">
+                                                <label for="periodoinput" class="form-label">Curso</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div class="mb-3">
+                                                    <input type="text" class="form-control bg-light border-0" id="curso" wire:model="curso" readonly/>
                                                 </div>
                                             </div> 
                                         </div> 
@@ -324,7 +338,7 @@
         <!--end col-->
     </div>
     <div wire.ignore.self class="modal fade" id="showCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" >
+            <div class="modal-dialog modal-dialog-centered modal-xl" >
                 <div class="modal-content modal-content border-0">
                     
                     <div class="modal-header p-3 bg-light">
@@ -336,7 +350,7 @@
                     
                     <form autocomplete="off" wire:submit.prevent="">
                         <div class="modal-body">                                        
-                                @livewire('vc-modal-personas',[
+                                @livewire('vc-modal-persona-factura',[
                                     'vista' => 'createinvoice',
                                     'tipo' => 'R'
                                 ])                                       

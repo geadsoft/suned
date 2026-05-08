@@ -43,7 +43,7 @@ class VcDetailinvoice extends Component
 
     }
 
-    public function setCobros($estudianteId,$periodoId)
+    public function setCobros($estudianteId,$periodoId,$matriculaId)
     {
       
         $this->filters['srv_estudianteid'] = $estudianteId;
@@ -60,6 +60,7 @@ class VcDetailinvoice extends Component
             return $query->where('tm_matriculas.periodo_id',"{$this->filters['srv_periodoid']}");
         })        
         ->select('d.*','c.referencia')
+        ->where('tm_matriculas.id',$matriculaId)
         ->where('d.tipo','PAG')
         ->where('d.estado','P')
         ->whereRaw('d.facturado = 0')
