@@ -127,7 +127,7 @@ class VcFinalBulletin extends Component
 
         $periodo = TmPeriodosLectivos::find($this->filters['periodoId']);
         if($periodo->aperturado==0){
-            loadBoletin();
+            $this->loadBoletin();
             return;
         }
 
