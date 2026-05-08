@@ -148,7 +148,7 @@ class VcCreateinvoice extends Component
             $this->facturar = 'E';
             $this->econtrol = "";
 
-            $this->setPersona($this->estudianteId,$this->estudianteId);
+            $this->setPersona($this->estudianteId,$this->estudianteId,$this->matriculaId);
 
             $this->tblstudent = TmPersonas::query()
             ->join("tm_familiar_estudiantes as f","f.estudiante_id","=","tm_personas.id")
@@ -160,7 +160,7 @@ class VcCreateinvoice extends Component
 
             $this->facturar = 'R';
             $this->econtrol = "readonly";
-            $this->setPersona($this->personaId,$this->estudianteId);
+            $this->setPersona($this->personaId,$this->estudianteId,$this->matriculaId);
         }
         
     }
