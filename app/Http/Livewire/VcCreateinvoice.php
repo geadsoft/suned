@@ -32,7 +32,7 @@ class VcCreateinvoice extends Component
     public $plazo='Dias';
     public $formapago=20;
     public $montopago=0;
-    public $facturaId=0, $periodoId=0, $matriculaId, $estudianteId, $curso, $estado='';
+    public $facturaId=0, $periodoId=0, $matriculaId, $estudianteId, $curso='', $estado='';
     public $frmcontrol = 'enabled';
 
     public $totales = [
@@ -196,7 +196,10 @@ class VcCreateinvoice extends Component
         ->where("tm_matriculas.id",$matriculaId)
         ->first();   
 
-        $this->curso = $matricula->modalidad.' - '.$matricula->curso;
+        if($matricula){
+            $this->curso = $matricula->modalidad.' - '.$matricula->curso;
+        }
+        
         $this->periodoId = $matricula->periodo_id;
        
         if ($this->facturaId==0){
