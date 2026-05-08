@@ -198,10 +198,9 @@ class VcCreateinvoice extends Component
 
         if($matricula){
             $this->curso = $matricula->modalidad.' - '.$matricula->curso;
+            $this->periodoId = $matricula->periodo_id;
         }
         
-        $this->periodoId = $matricula->periodo_id;
-       
         if ($this->facturaId==0){
             $this->updatedestudianteId($this->estudianteId, $matriculaId);
         }
