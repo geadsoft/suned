@@ -101,10 +101,33 @@ class VcFinalBulletin extends Component
         ]);
     }
 
+    public function loadBoletin(){
+        
+        $this->loadPersonas();
+
+        //Observaciones
+        $observaciones = TdObservacionActa::query()
+        ->where("termino",$this->filters['termino'])
+        ->where("bloque",$this->filters['bloque'])
+        ->where("curso_id",$this->filters['paralelo'])
+        ->get();
+
+        foreach ($observaciones as $obsr) {
+            $this->arrComentario[$obsr->persona_id]['comentario'] = $obsr->comentario;
+        }
+
+    }
+
     public function generarBoletin(){
 
         if (empty($this->filters['paralelo']) || empty($this->filters['modalidadId'])) {
             session()->flash('error', 'Debe seleccionar Modalidad y Paralelo.');
+            return;
+        }
+
+        $periodo = TmPeriodosLectivos::find($this->periodoId);
+        if($periodo->aperturado==0){
+            loadBoletin();
             return;
         }
 

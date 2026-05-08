@@ -1,26 +1,39 @@
 <div>
     <form id="createactivity-form" autocomplete="off" wire:submit.prevent="{{ 'createData' }}" class="needs-validation" >
         <div class="row">
-            <div class="col-lg-8 d-flex gap-3 align-items-stretch">
+            <div class="col-lg-12 d-flex gap-3 align-items-stretch">
                 <div class="card flex-fill">
                     <div class="card-body">
-                        <div class="mb-3">
-                            <label for="choices-publish-status-input" class="form-label fw-semibold">Modalidad</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
-                                <option value="">Seleccione Modalidad</option>
-                                @foreach ($tblmodalidad as $modalidad) 
-                                <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
-                                @endforeach 
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.paralelo">
-                                <option value="">Seleccione Paralelo</option>
-                                @foreach ($tblparalelo as $paralelo) 
-                                <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
-                                @endforeach 
-                            </select>
+                        <div class="row">
+                            <div class="col-sm-2 mb-3">
+                                <label for="choices-publish-status-input" class="form-label fw-semibold">Periodo Lectivo</label>
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.periodo_id">
+                                    @foreach ($periodos as $periodo) 
+                                    <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="col-sm-2 mb-3">
+                                <label for="choices-publish-status-input" class="form-label fw-semibold">Modalidad</label>
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
+                                    <option value="">Seleccione Modalidad</option>
+                                    @foreach ($tblmodalidad as $modalidad) 
+                                    <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.paralelo">
+                                    <option value="">Seleccione Paralelo</option>
+                                    @foreach ($tblparalelo as $paralelo) 
+                                    <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
+                                    @endforeach 
+                                </select>
+                            </div>
+                            <div class="col-sm-2 mb-3 d-flex align-items-end">
+                                <button type="button" wire:click.prevent="generarBoletin()" class="btn btn-soft-danger w-100">Generar Boletín</button>
+                            </div>
                         </div>
                         @if (session()->has('error'))
                             <!-- Warning Alert -->
@@ -32,7 +45,7 @@
                 </div>
             </div>
             <!-- end col -->
-            <div class="col-lg-4 d-flex gap-3 align-items-stretch">
+            <!--<div class="col-lg-4 d-flex gap-3 align-items-stretch">
                 <div class="card flex-fill">
                     <div class="card-body">
                         <div class="mb-3">
@@ -50,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
         <!-- end row -->
 
