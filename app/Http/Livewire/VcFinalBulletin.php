@@ -81,7 +81,7 @@ class VcFinalBulletin extends Component
         ->get();
         
         $this->tblbloque = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
+        ->where('periodo_id',$this->filters['periodoId'])
         ->where('tipo','PA')
         ->where('evaluacion',$this->termino)
         ->get();
@@ -89,12 +89,12 @@ class VcFinalBulletin extends Component
        $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->where('tm_horarios.grupo_id',$this->modalidadId)
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
+        ->where('tm_horarios.grupo_id',$this->filters['modalidadId'])
         ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion,s.calificacion')
         ->get();
 
-        $this->filters['modalidadId'] = $this->modalidadId;
+        //$this->filters['modalidadId'] = $this->modalidadId;
 
         return view('livewire.vc-final-bulletin',[
             'periodos' => $periodos,
@@ -125,7 +125,7 @@ class VcFinalBulletin extends Component
             return;
         }
 
-        $periodo = TmPeriodosLectivos::find($this->periodoId);
+        $periodo = TmPeriodosLectivos::find($this->filters['periodoId']);
         if($periodo->aperturado==0){
             loadBoletin();
             return;
@@ -303,8 +303,8 @@ class VcFinalBulletin extends Component
         // Consulta de matrículas SIN pase
         $matriculasQuery = DB::table('tm_matriculas as m')
         ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
-        ->where('m.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.modalidad_id', $this->filters['modalidadId'])
+        ->where('m.periodo_id', $this->filters['periodoId'])
         ->where('m.estado','A')
         ->whereNotIn('m.id', $matriculasConPase);
 
@@ -312,8 +312,8 @@ class VcFinalBulletin extends Component
         $pasesQuery = DB::table('tm_pase_cursos as p')
         ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
         ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
-        ->where('p.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('p.modalidad_id', $this->filters['modalidadId'])
+        ->where('m.periodo_id', $this->filters['periodoId'])
         ->where('m.estado','A')
         ->where('p.estado', 'A');
         

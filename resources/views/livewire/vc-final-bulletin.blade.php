@@ -7,7 +7,7 @@
                         <div class="row">
                             <div class="col-sm-2 mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Periodo Lectivo</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.periodo_id">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.periodoId">
                                     @foreach ($periodos as $periodo) 
                                     <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
                                     @endforeach 
@@ -15,7 +15,7 @@
                             </div>
                             <div class="col-sm-2 mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Modalidad</label>
-                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.modalidadId">
                                     <option value="">Seleccione Modalidad</option>
                                     @foreach ($tblmodalidad as $modalidad) 
                                     <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
