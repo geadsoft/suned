@@ -28,7 +28,7 @@ class VcPersons extends Component
     use WithPagination;
     use Exportable;
 
-     protected $listeners = ['guardarNuevaPassword'];
+    protected $listeners = ['guardarNuevaPassword'];
 
     public $datos, $estudiante, $selectId, $estado=false, $periodoOld, $matriculaId, $registros;
     public $resumenMatricula = [], $resumenNivel = [], $nivelestudio=[], $personaId;
@@ -43,6 +43,7 @@ class VcPersons extends Component
         'srv_reporte' => '',
         'srv_estado' => 'A',
     ];
+
 
     public $consulta = [
         'curso'   => '',

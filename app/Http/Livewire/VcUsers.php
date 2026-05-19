@@ -5,22 +5,34 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Roles;
 use App\Models\User;
+use App\Models\TmPersonas;
 
 
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Hash;
 
 class VcUsers extends Component
 {
 
     use WithPagination;
+    protected $listeners = ['guardarNuevaPassword'];
 
-    public $showEditModal = false;
+    public $showEditModal = false, $personaId, $userId;
     public $selectId;
     public $record=[];
+    
+    public $filters = [
+        'srv_nombre' => '',
+    ];
+
+    
 
     public function render()
     {
         $tblusers = User::orderBy('id','desc')
+        ->when($this->filters['srv_nombre'],function($query){
+            return $query->whereRaw("name like '%".$this->filters['srv_nombre']."%'");
+        })
         ->paginate(10);   
                 
         return view('livewire.vc-users',[
@@ -123,6 +135,32 @@ class VcUsers extends Component
         return redirect()->to('/config/users');
         
         
+    }
+
+    public function resetPassword($userId){
+        
+        $user = User::find($userId);
+        $this->personaId = $user->personaId;
+        $this->userId    = $userId;
+        $person = TmPersonas::find($this->personaId);
+
+        if($person){
+            $this->dispatchBrowserEvent('resetPasswordSwal', ['newName' => $person->identificacion]);
+        }else{
+            $this->dispatchBrowserEvent('resetPasswordSwal', ['newName' => '123456789']);
+        }
+
+    }
+
+    public function guardarNuevaPassword($password)
+    {
+        $password = str_replace(' ', '', $password);
+        User::where('id',$this->userId)->update(['password' => Hash::make($password)]);
+
+        $this->dispatchBrowserEvent('msg-grabar', [
+            'newName' => 'La contraseña ha sido actualizada correctamente.'
+        ]);
+
     }
 
 }

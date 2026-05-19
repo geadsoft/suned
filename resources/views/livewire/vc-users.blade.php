@@ -45,7 +45,7 @@
                                         <td>
                                             <div class="d-flex gap-2 align-items-center">
                                                 <div class="flex-shrink-0">
-                                                    <img src="assets/images/users/avatar-3.jpg" alt="" class="avatar-xs rounded-circle" />
+                                                    <img src="{{ URL::asset('assets/images/users/sin-foto.jpg') }}" alt="" class="avatar-xs rounded-circle" />
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     {{$users->name}}
@@ -70,6 +70,11 @@
                                         </td>                                   
                                         <td>
                                             <ul class="text-center list-inline mb-0">
+                                                <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Resetear">
+                                                    <a class="edit-item-btn" href="" wire:click.prevent="resetPassword({{$users->id}})"><i
+                                                            class="las la-key text-info fs-18"></i></a>
+                                                </li>
                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Editar Roles">
                                                     <a class="text-success btn btn-icon btn-ghost-secondary rounded-circle" href="" wire:click.prevent="editRol({{ $users }})">

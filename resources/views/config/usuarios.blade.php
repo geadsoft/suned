@@ -33,6 +33,52 @@
     
 
     <script>
+
+        window.addEventListener('resetPasswordSwal', event => {
+            Swal.fire({
+                title: 'Restablecer Contraseña',
+                input: 'password',
+                inputLabel: 'Nueva contraseña',
+                inputValue: event.detail.newName, // ← valor por defecto
+                inputPlaceholder: '********',
+                showCancelButton: true,
+                confirmButtonText: 'Restablecer',
+                cancelButtonText: 'Cancelar',
+                focusConfirm: false,
+                customClass: {
+                    confirmButton: 'btn btn-primary mx-1',
+                    cancelButton: 'btn btn-light mx-1'
+                },
+                buttonsStyling: false, // ← para usar clases personalizadas de Bootstrap
+                inputAttributes: {
+                    autocapitalize: 'off',
+                    autocorrect: 'off'
+                },
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Debe ingresar una contraseña';
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    Livewire.emit('guardarNuevaPassword', result.value);
+                }
+            });
+        });
+
+        window.addEventListener('msg-grabar', event => {
+            Swal.fire({
+                title: 'Buen Trabajo!',
+                html: event.detail.newName,
+                icon: 'success',
+                confirmButtonClass: 'btn btn-primary w-xs mt-2',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
+                }
+            });
+        });
        
         window.addEventListener('show-form', event => {
             $('#showModal').modal('show');
