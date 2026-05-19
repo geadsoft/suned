@@ -260,8 +260,8 @@ class VcViewCalendar extends Component
 
         $this->lstevent = TmCalendarioEventos::query()
         ->whereDate('start_date','>=',$fechafin)
-        ->whereDate('start_date','<=',$ultimoDia)
-        /*->where('periodo',$this->periodo)
+        /*->whereDate('start_date','<=',$ultimoDia)
+        ->where('periodo',$this->periodo)
         ->where('mes',$messig)*/
         ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
         ->orderby('end_date')
