@@ -94,8 +94,6 @@ class VcFinalBulletin extends Component
         ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion,s.calificacion')
         ->get();
 
-        //$this->filters['modalidadId'] = $this->modalidadId;
-
         return view('livewire.vc-final-bulletin',[
             'periodos' => $periodos,
         ]);
@@ -111,6 +109,8 @@ class VcFinalBulletin extends Component
         ->where("bloque",$this->filters['bloque'])
         ->where("curso_id",$this->filters['paralelo'])
         ->get();
+
+        dd($this->filters['paralelo']);
 
         foreach ($observaciones as $obsr) {
             $this->arrComentario[$obsr->persona_id]['comentario'] = $obsr->comentario;

@@ -97,7 +97,9 @@ class VcViewCalendar extends Component
 
             // Eventos Todos
             $evenTodos = TmCalendarioEventos::query()
-            ->where('periodo',$this->periodo)
+            //->where('periodo',$this->periodo)
+            ->whereDate('start_date', '>=', $this->fechaEmpieza)
+            ->whereDate('end_date', '<=', $this->fechaTermina)
             //->where('mes',$this->mes)
             ->where('todos',1)
             ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
