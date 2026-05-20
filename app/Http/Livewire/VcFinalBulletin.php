@@ -110,7 +110,7 @@ class VcFinalBulletin extends Component
         ->where("curso_id",$this->filters['paralelo'])
         ->get();
 
-        dd($this->filters['paralelo']);
+       
 
         foreach ($observaciones as $obsr) {
             $this->arrComentario[$obsr->persona_id]['comentario'] = $obsr->comentario;
