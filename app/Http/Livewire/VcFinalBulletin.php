@@ -102,6 +102,7 @@ class VcFinalBulletin extends Component
     public function loadBoletin(){
         
         $this->loadPersonas();
+        $this->datos = json_encode($this->filters);
 
         //Observaciones
         $observaciones = TdObservacionActa::query()
@@ -109,8 +110,6 @@ class VcFinalBulletin extends Component
         ->where("bloque",$this->filters['bloque'])
         ->where("curso_id",$this->filters['paralelo'])
         ->get();
-
-       
 
         foreach ($observaciones as $obsr) {
             $this->arrComentario[$obsr->persona_id]['comentario'] = $obsr->comentario;
