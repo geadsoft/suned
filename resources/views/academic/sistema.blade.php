@@ -30,6 +30,15 @@
             swal("Buen Trabajo!", event.detail.newName, "success");
         });
 
+        window.addEventListener('msg-delete-hora', event => {
+            swal({
+                title: "No se puede eliminar",
+                text: "La hora no puede eliminarse porque está asignada en un horario de clase.",
+                icon: "warning",
+                button: "Aceptar",
+            });
+        });
+
         window.addEventListener('abrir-modal-replica', event => {
             var modal = new bootstrap.Modal(document.getElementById('replicaModal'));
             modal.show();
@@ -40,6 +49,36 @@
             var modal = bootstrap.Modal.getInstance(modalEl);
             if(modal) modal.hide();
         });
+
+        window.addEventListener('show-form', event => {
+            $('#horaModal').modal('show');
+        })
+
+        window.addEventListener('hide-form', event => {
+            $('#horaModal').modal('hide');
+        })
+
+        window.addEventListener('alert-delete', event => {
+            swal({
+                title: "¿Eliminar registro?",
+                text: "Esta acción no se puede deshacer.",
+                icon: "warning",
+                buttons: {
+                    cancel: "Cancelar",
+                    confirm: {
+                        text: "Sí, eliminar",
+                        value: true,
+                    }
+                },
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    Livewire.emit('deleteHora');
+                }
+            });
+        });
+        
 
     </script>
     

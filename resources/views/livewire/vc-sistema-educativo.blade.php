@@ -122,12 +122,6 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        
-                        <!--<select class="form-select mb-3" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
-                            @foreach ($tblmodalidad as $modalidad) 
-                            <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
-                            @endforeach
-                        </select>-->
                         <ul class="list-unstyled vstack gap-3 mb-0">
                             @foreach ($arrhora as $hora) 
                             <div class="d-flex">
@@ -137,14 +131,33 @@
                                     <span class="text-muted"><i class="align-bottom"></i> {{$hora->hora_fin}}</span>
                                 </div>                                
                                 <div class="flex-shrink-0">
+                                    <fieldset {{ $fieldsetDisabled ? 'disabled' : '' }}>
                                     <ul class="link-inline mb-0">
+                                        
                                         <li class="list-inline-item">
-                                            <a href="javascript:void(0)" class="text-muted"><i class="ri-eye-line align-bottom"></i></a>
+                                            <button 
+                                                type="button"
+                                                class="btn text-muted p-0"
+                                                wire:click="edithora({{ $hora->id }})"
+                                                {{ $fieldsetDisabled ? 'disabled' : '' }}>
+                                                
+                                                <i class="ri-eye-line align-bottom"></i>
+                                            </button>
                                         </li>
+
                                         <li class="list-inline-item">
-                                            <a href="javascript:void(0)" class="text-muted"><i class="ri-delete-bin-5-line align-bottom"></i></a>
+                                            <button 
+                                                type="button"
+                                                class="btn text-muted p-0"
+                                                wire:click="confirmDelete({{ $hora->id }})"
+                                                {{ $fieldsetDisabled ? 'disabled' : '' }}>
+                                                
+                                                <i class="ri-delete-bin-5-line align-bottom"></i>
+                                            </button>
                                         </li>
+
                                     </ul>
+                                </fieldset>
                                 </div>
                             </div>
                              @endforeach
@@ -399,12 +412,16 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0">
                     <div class="modal-header p-3 ps-4 bg-soft-success">
+                        @if($horaId==0)
                         <h5 class="modal-title" id="horaModalLabel">Agregar Hora</h5>
+                        @else
+                        <h5 class="modal-title" id="horaModalLabel">Editar Hora</h5>
+                        @endif
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-4">
                         <div class="mb-3">
-                            <select class="form-select mb-3" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="modalidadId">
+                            <select class="form-select mb-3" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="modalidadId" disabled>
                                 @foreach ($tblmodalidad as $modalidad) 
                                 <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
                                 @endforeach
@@ -422,7 +439,11 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light w-xs" data-bs-dismiss="modal">Cancel</button>
+                        @if($horaId==0)
                         <button type="button" class="btn btn-success w-xs" wire:click='grabaHora'>Grabar</button>
+                        @else
+                        <button type="button" class="btn btn-success w-xs" wire:click='actualizaHora'>Actualizar</button>
+                        @endif
                     </div>
                 </div>
                 

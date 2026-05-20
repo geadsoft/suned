@@ -5,13 +5,17 @@ use App\Models\TmPeriodosLectivos;
 use App\Models\TmSistemaEducativos;
 use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmGeneralidades;
+use App\Models\TmHorariosAsignaturas;
 
 
 use Livewire\Component;
+use Carbon\Carbon;
 
 class VcSistemaEducativo extends Component
 {
-    public $periodoId, $plectivo, $metodo, $aperturado, $eformativa, $esumativa, $detalle=[], $modalidadId, $hora_ini, $hora_fin, $editRecno=false, $fieldsetDisabled;
+    protected $listeners = ['deleteHora'];
+
+    public $periodoId, $plectivo, $metodo, $aperturado, $eformativa, $esumativa, $detalle=[], $modalidadId, $horaId, $hora_ini, $hora_fin, $editRecno=false, $fieldsetDisabled;
     public $sistema;
     public $arrmetodo=[];
     public $arrparcial=[];
@@ -85,6 +89,7 @@ class VcSistemaEducativo extends Component
         $this->arractividad=[];
         $this->arrexamen=[];
         $this->arrescala=[];
+        $this->horaId=0;
 
         $this->addarr('T');
         $this->dispatchBrowserEvent('abrir-modal-replica');
@@ -95,6 +100,11 @@ class VcSistemaEducativo extends Component
     {
         $this->fieldsetDisabled=false;
         $this->editRecno = true;
+    }
+
+    public function cancel()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function loadData()
@@ -133,10 +143,6 @@ class VcSistemaEducativo extends Component
         ->where('modalidad_id',$this->modalidadId)
         ->get();
 
-        /*if ($this->metodo==''){
-            $this->metodo = 'T';
-            $this->addarr($this->metodo);
-        }*/
         $linea=0;
         foreach ($detalle as $key => $value) {
             if ($value['tipo']=='EA'){
@@ -388,9 +394,41 @@ class VcSistemaEducativo extends Component
 
     public function addhora(){
 
+        $this->horaId=0;
         $this->dispatchBrowserEvent('show-form');
 
     }
+
+    public function edithora($idHora){
+
+        $hora = TdPeriodoSistemaEducativos::find($idHora);
+        $this->hora_ini = Carbon::parse($hora->hora_ini)->format('H:i'); 
+        $this->hora_fin = Carbon::parse($hora->hora_fin)->format('H:i'); 
+        $this->horaId = $hora->id;
+
+        $this->dispatchBrowserEvent('show-form');
+
+    }
+
+    public function confirmDelete($idHora){
+
+        $this->horaId = $idHora;
+
+        $horaAsignatura = TmHorariosAsignaturas::where('hora_id',$this->horaId);
+        if($horaAsignatura){
+            $this->dispatchBrowserEvent('msg-delete-hora');
+        }else{
+            $this->dispatchBrowserEvent('alert-delete');
+        }
+
+                 
+
+    }
+
+    public function deleteHora(){
+        TdPeriodoSistemaEducativos::find($this->horaId)->delete();
+    }
+    
 
     public function grabaHora(){
 
@@ -409,6 +447,24 @@ class VcSistemaEducativo extends Component
 
         $this->dispatchBrowserEvent('hide-form');
         return redirect(request()->header('Referer'));
+    }
+
+    public function actualizaHora(){
+        
+        $record = TdPeriodoSistemaEducativos::find($this->horaId);
+        $record->update([
+            'hora_ini' =>$this->hora_ini,
+            'hora_fin' =>$this->hora_fin,
+        ]);
+        
+        $this->arrhora = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('tipo','HC')
+        ->where('modalidad_id',$this->modalidadId)
+        ->get();
+
+        $this->dispatchBrowserEvent('hide-form');
+                
     }
 
     /*public function createData(){
