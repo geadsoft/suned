@@ -19,6 +19,8 @@ class VcPersonaladd extends Component
     use WithFileUploads;
     use WithPagination;
 
+    protected $listeners = ['editData'];
+
     public $record=[];
     public $personaId, $tipo, $eControl='', $fControl='', $fileimg='', $foto;
     public $editar;
@@ -214,8 +216,13 @@ class VcPersonaladd extends Component
        
         $records = TmPersonas::where("identificacion",$this -> record['identificacion'])->first();
         
-        if ($records != null){
+        if ($records != null && $records->tipopersona=='D'){
             $this->dispatchBrowserEvent('msg-validanui');
+        }
+
+        if ($records != null && $records->tipopersona=='E'){
+            $this->personaId = $records->id;
+            $this->dispatchBrowserEvent('view-alert');
         }
     }
 
