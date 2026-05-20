@@ -29,6 +29,7 @@
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
+                                        <option value="0">Todos</option>
                                         @foreach ($tblgenerals as $general)
                                             @if ($general->superior == 1)
                                             <option value="{{$general->id}}">{{$general->descripcion}}</option>

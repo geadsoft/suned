@@ -25,7 +25,7 @@ class VcHorarios extends Component
 
     public $filters=[
         'srv_periodo' => 0,
-        'srv_grupo' => 2,
+        'srv_grupo' => 0,
         'srv_nivel' => 0,
     ];
 
@@ -54,6 +54,7 @@ class VcHorarios extends Component
             return $query->where('s.nivel_id',"{$this->filters['srv_nivel']}");
         })
         ->select('tm_horarios.*')
+        ->orderByRaw('tm_horarios.grupo_id,s.nivel_id')
         ->paginate(10);
 
         $this->datos = TmHorariosDocentes::selectRaw('horario_id, count(asignatura_id) as materias, count(docente_id) as docentes')
