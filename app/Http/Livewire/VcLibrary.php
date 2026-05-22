@@ -55,7 +55,7 @@ class VcLibrary extends Component
         $this->periodoId = $tblperiodos['id'];
 
         $this->tblmodalidad = TmGeneralidades::where('superior',1)->get();
-        $this->tblasignaturas = TmAsignaturas::all();
+        $this->tblasignaturas = TmAsignaturas::all()->orderBy('descripcion');
         $this->filters['periodoId'] = $this->periodoId;
     }
 
