@@ -127,7 +127,7 @@ class VcActividadAdd extends Component
         $this->modalidadId  = $record['grupo_id'];
         $this->asignaturaId = $record['asignatura_id'];
 
-        $this->updatedasignaturaId($this->modalidadId);
+        $this->updatedmodalidadId($this->modalidadId);
         $this->updatedasignaturaId($this->asignaturaId);
 
         $this->actividadId = $id;
