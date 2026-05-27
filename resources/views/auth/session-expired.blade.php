@@ -16,9 +16,8 @@
         body{
             margin:0;
             height:100vh;
-            overflow:hidden;
-            background: linear-gradient(135deg,#f5f7fb,#eef2f7);
-            font-family: 'Segoe UI', sans-serif;
+            background:#f5f7fb;
+            font-family:'Segoe UI', sans-serif;
         }
 
         .session-container{
@@ -31,285 +30,105 @@
 
         .session-card{
             width:100%;
-            max-width:850px;
+            max-width:700px;
             background:#fff;
-            border-radius:25px;
-            padding:40px;
+            border-radius:20px;
+            padding:40px 30px;
             text-align:center;
-            box-shadow:0 10px 40px rgba(0,0,0,.08);
-            position:relative;
-            overflow:hidden;
+            box-shadow:0 10px 30px rgba(0,0,0,.08);
         }
 
-        /* LOGO */
         .logo{
             width:420px;
             max-width:100%;
-            margin-bottom:20px;
-        }
-
-        /* ANIMACION */
-        .animation-wrapper{
-            position:relative;
-            height:320px;
-            margin-top:10px;
-        }
-
-        .hourglass{
-            width:180px;
-            height:180px;
-            border:10px solid #0B3A6E;
-            border-radius:50%;
-            position:absolute;
-            left:50%;
-            top:50%;
-            transform:translate(-50%,-50%);
-            animation: rotateGlass 6s infinite linear;
-            box-shadow:0 0 30px rgba(0,0,0,.08);
-            background:white;
-        }
-
-        .hourglass::before{
-            content:'';
-            position:absolute;
-            top:20px;
-            left:50%;
-            transform:translateX(-50%);
-            width:70px;
-            height:70px;
-            background:#dc3545;
-            clip-path: polygon(0 0,100% 0,50% 100%);
-            animation: sandTop 3s infinite;
-        }
-
-        .hourglass::after{
-            content:'';
-            position:absolute;
-            bottom:20px;
-            left:50%;
-            transform:translateX(-50%);
-            width:70px;
-            height:70px;
-            background:#dc3545;
-            clip-path: polygon(50% 0,0 100%,100% 100%);
-            animation: sandBottom 3s infinite;
-        }
-
-        @keyframes rotateGlass{
-            0%{
-                transform:translate(-50%,-50%) rotate(0deg);
-            }
-
-            100%{
-                transform:translate(-50%,-50%) rotate(360deg);
-            }
-        }
-
-        @keyframes sandTop{
-            0%{
-                transform:translateX(-50%) scaleY(1);
-            }
-
-            50%{
-                transform:translateX(-50%) scaleY(.3);
-            }
-
-            100%{
-                transform:translateX(-50%) scaleY(1);
-            }
-        }
-
-        @keyframes sandBottom{
-            0%{
-                transform:translateX(-50%) scaleY(.3);
-            }
-
-            50%{
-                transform:translateX(-50%) scaleY(1);
-            }
-
-            100%{
-                transform:translateX(-50%) scaleY(.3);
-            }
-        }
-
-        /* LOCK */
-        .lock-icon{
-            position:absolute;
-            right:120px;
-            top:90px;
-            font-size:90px;
-            color:#dc3545;
-            animation:pulse 2s infinite;
-        }
-
-        @keyframes pulse{
-
-            0%{
-                transform:scale(1);
-            }
-
-            50%{
-                transform:scale(1.15);
-            }
-
-            100%{
-                transform:scale(1);
-            }
-
-        }
-
-        .title{
-            font-size:52px;
-            font-weight:700;
-            color:#0B3A6E;
-        }
-
-        .title span{
-            color:#dc3545;
-        }
-
-        .subtitle{
-            font-size:20px;
-            color:#6c757d;
-            margin-top:15px;
+            margin-bottom:25px;
         }
 
         .btn-login{
-            margin-top:30px;
             background:#0B3A6E;
             border:none;
             padding:14px 35px;
             font-size:18px;
             border-radius:12px;
             transition:.3s;
+            margin-top:10px;
         }
 
         .btn-login:hover{
-            transform:translateY(-3px);
             background:#082c54;
         }
 
-        .info-box{
-            margin-top:35px;
-            background:#f8f9fa;
-            border-radius:15px;
-            padding:15px;
-            color:#6c757d;
+        .session-alert{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            max-width:500px;
+            margin:30px auto 0;
+            padding:14px 18px;
+            border:1px solid #dfe5f1;
+            border-radius:12px;
+            background:#fff;
+            color:#5b6780;
+            text-align:left;
         }
 
-        /* PARTICULAS */
-        .circle{
-            position:absolute;
+        .session-alert .icon{
+            width:34px;
+            height:34px;
+            min-width:34px;
             border-radius:50%;
-            opacity:.15;
-            animation:float 6s infinite ease-in-out;
+            background:#6f8fd9;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#fff;
+            font-size:18px;
         }
 
-        .circle1{
-            width:120px;
-            height:120px;
-            background:#0B3A6E;
-            top:-40px;
-            left:-40px;
-        }
-
-        .circle2{
-            width:80px;
-            height:80px;
-            background:#dc3545;
-            bottom:-20px;
-            right:20px;
-        }
-
-        @keyframes float{
-
-            0%{
-                transform:translateY(0px);
-            }
-
-            50%{
-                transform:translateY(-20px);
-            }
-
-            100%{
-                transform:translateY(0px);
-            }
-
+        .session-alert .message{
+            font-size:14px;
+            line-height:1.4;
         }
 
     </style>
 
 </head>
+
 <body>
 
 <div class="session-container">
 
     <div class="session-card">
 
-        <div class="circle circle1"></div>
-        <div class="circle circle2"></div>
-
-        <!-- LOGO -->
-        <img src="{{ URL::asset('assets/images/sesion-expirada.png')}}"
+        <!-- IMAGEN -->
+        <img src="{{ URL::asset('assets/images/sesion-expirada.png') }}"
              class="logo"
-             alt="American School">
+             alt="Sesión Expirada">
 
-        <!-- BOTON -->
-        <a href="{{ route('login') }}"
-           class="btn btn-primary btn-login">
+        <!-- BOTÓN -->
+        <div>
+            <a href="{{ route('login') }}"
+               class="btn btn-primary btn-login">
 
-            <i class="ri-login-circle-line"></i>
-            Iniciar sesión nuevamente
+                <i class="ri-login-circle-line"></i>
+                Iniciar sesión nuevamente
 
-        </a>
+            </a>
+        </div>
 
+        <!-- ALERTA -->
         <div class="session-alert">
+
             <div class="icon">
                 <i class="ri-information-line"></i>
             </div>
+
             <div class="message">
                 Por tu seguridad, cerramos tu sesión automáticamente
                 después de un período de inactividad.
             </div>
+
         </div>
-
-    <!-- Remix Icon -->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
-
-    <style>
-    .session-alert {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        max-width: 420px;
-        padding: 14px 18px;
-        border: 1px solid #dfe5f1;
-        border-radius: 10px;
-        background: #ffffff;
-        font-family: Arial, sans-serif;
-        color: #5b6780;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-    }
-
-    .session-alert .icon {
-        width: 34px;
-        height: 34px;
-        min-width: 34px;
-        border-radius: 50%;
-        background: #6f8fd9;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 18px;
-    }
-
-    .session-alert .message {
-        font-size: 14px;
-        line-height: 1.4;
-    }
-    </style>
 
     </div>
 
