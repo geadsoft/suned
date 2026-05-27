@@ -116,7 +116,8 @@ class VcLibrary extends Component
         })
         ->selectRaw('s.descripcion as curso,s.id')
         ->groupByRaw('s.descripcion,s.id')
-        ->get();
+        ->orderBy('s.descripcion')
+        ->get()
 
         return view('livewire.vc-library',[
             'tblrecords' => $tblrecords,
