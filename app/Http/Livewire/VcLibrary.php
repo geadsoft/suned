@@ -102,16 +102,19 @@ class VcLibrary extends Component
         ->GroupByRaw('tm_libros.id, tm_libros.nombre, tm_libros.asignatura_id, tm_libros.drive_id, tm_libros.autor, tm_libros.portada')
         ->get();  
 
-        $cursos = TmHorarios::query()
-        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
+        $cursos = TdLibrosCursos::query()
+        ->join("tm_servicios as s","s.id","=","td_libros_cursos.curso_id")
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
-        ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
-        ->join("tm_generalidades as g2","g2.id","=","s.nivel_id")
         ->where("tm_horarios.periodo_id",$this->periodoId)
-        ->where("s.modalidad_id",$this->filters['modalidadId'])   
-        ->selectRaw('g.descripcion as modalidad,g2.descripcion as nivel,s.descripcion as curso,s.id')
-        ->groupByRaw('g.descripcion,g2.descripcion,s.descripcion,s.id')
+         ->when($this->filters['modalidadId'],function($query){
+            return $query->where('s.modalidad_id',"{$this->filters['modalidadId']}");
+        })
+        ->when($this->filters['asignaturaId'],function($query){
+            return $query->where('m.id',"{$this->filters['asignaturaId']}");
+        })
+        ->selectRaw('s.descripcion as curso,s.id')
+        ->groupByRaw('s.descripcion,s.id')
         ->get();
 
         return view('livewire.vc-library',[
