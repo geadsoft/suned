@@ -204,7 +204,9 @@ class VcPersonaladd extends Component
             'foto' => $this -> record['foto'],
             ]);
 
-        $this->crearUsuario();     
+        if (!$user) {
+            $this->crearUsuario();
+        }    
         
         $this->dispatchBrowserEvent('msg-updated');
         return redirect()->to('/headquarters/staff');
