@@ -53,6 +53,7 @@ class VcStudentActivities extends Component
 
         $this->tbltermino = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
+        ->where('modalidad_id',$this->modalidadId)
         ->where('tipo','EA')
         ->orderByRaw("cerrar,codigo")
         ->get();
