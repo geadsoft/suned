@@ -39,7 +39,7 @@
         }
 
         .logo{
-            width:420px;
+            width:550px;
             max-width:100%;
             margin-bottom:25px;
         }
@@ -103,7 +103,7 @@
         <!-- IMAGEN -->
         <img src="{{ URL::asset('assets/images/sesion-expirada.png') }}"
              class="logo"
-             alt="Sesión Expirada" height="150">
+             alt="Sesión Expirada">
 
         <!-- BOTÓN -->
         <div>
