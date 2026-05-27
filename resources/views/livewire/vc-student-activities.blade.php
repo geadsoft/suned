@@ -4,7 +4,7 @@
         
         <div class="chat-leftsidebar">
             <div class="chat-room-list" data-simplebar>
-                <div class="p-3 d-flex flex-column h-100">
+                <div class="p-3 d-flex flex-column h-200">
                     <div class="mb-3">
                         <h5 class="mb-0 fw-semibold">Asignaturas</h5>
                     </div>
