@@ -251,30 +251,9 @@
         <div class="circle circle2"></div>
 
         <!-- LOGO -->
-        <img src="{{ asset('images/logo-american.png') }}"
+        <img src="{{ URL::asset('assets/images/sesion-expirada.png')}}"
              class="logo"
              alt="American School">
-
-        <!-- ANIMACION -->
-        <div class="animation-wrapper">
-
-            <div class="hourglass"></div>
-
-            <div class="lock-icon">
-                <i class="ri-lock-2-fill"></i>
-            </div>
-
-        </div>
-
-        <!-- TEXTO -->
-        <div class="title">
-            Sesión <span>Expirada</span>
-        </div>
-
-        <div class="subtitle">
-            Tu sesión finalizó por inactividad.<br>
-            Por seguridad debes iniciar sesión nuevamente.
-        </div>
 
         <!-- BOTON -->
         <a href="{{ route('login') }}"
@@ -285,15 +264,52 @@
 
         </a>
 
-        <!-- INFO -->
-        <div class="info-box">
-
-            <i class="ri-information-line"></i>
-
-            Por seguridad el sistema cerró automáticamente la sesión
-            después de un período de inactividad.
-
+        <div class="session-alert">
+            <div class="icon">
+                <i class="ri-information-line"></i>
+            </div>
+            <div class="message">
+                Por tu seguridad, cerramos tu sesión automáticamente
+                después de un período de inactividad.
+            </div>
         </div>
+
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+    .session-alert {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        max-width: 420px;
+        padding: 14px 18px;
+        border: 1px solid #dfe5f1;
+        border-radius: 10px;
+        background: #ffffff;
+        font-family: Arial, sans-serif;
+        color: #5b6780;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+
+    .session-alert .icon {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        border-radius: 50%;
+        background: #6f8fd9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 18px;
+    }
+
+    .session-alert .message {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    </style>
 
     </div>
 
