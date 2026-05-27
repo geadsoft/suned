@@ -21,9 +21,9 @@
                                         <div class="hstack gap-3 flex-wrap">
                                            
                                             <div class="vr"></div>
-                                            <div class="text-muted">Fecha Registro: <span class="fw-medium " id="create-date">{{date('d/m/Y',strtotime($record->created_at))}}</span></div>
+                                            <div>Fecha Registro: <span class="fw-medium" id="create-date">{{date('d/m/Y',strtotime($record->created_at))}}</span></div>
                                             <div class="vr"></div>
-                                            <div class="text-muted">Fecha Maxima Entrega: <span class="fw-medium" id="due-date">{{date('d/m/Y H:i:s',strtotime($record->fecha))}}</span></div>
+                                            <div>Fecha Maxima Entrega: <span class="fw-medium" id="due-date">{{date('d/m/Y H:i:s',strtotime($record->fecha))}}</span></div>
                                             <div class="vr"></div>
                                         
                                         </div>
@@ -43,7 +43,7 @@
             <div class="card">
                 <div class="card-body p-4">
                     <h6 class="card fw-semibold text-uppercase mb-3">Descripción</h6>
-                    <body onload="addElement({{$descripcion}})">
+                    <body onload="addElement({{$descripcion}})" class="fs-16">
                         <div id="elemnt" wire:ignore>
                         </div>
                     </body>
