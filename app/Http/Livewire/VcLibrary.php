@@ -29,6 +29,7 @@ class VcLibrary extends Component
         'buscar' => '',
         'modalidadId' => '',
         'asignaturaId' => '',
+        'cursoId' => '',
     ];
 
     private function token(){
@@ -92,16 +93,31 @@ class VcLibrary extends Component
         ->when($this->filters['asignaturaId'],function($query){
             return $query->where('asignatura_id',"{$this->filters['asignaturaId']}");
         })
+        ->when($this->filters['cursoId'],function($query){
+            return $query->where('curso_id',"{$this->filters['cursoId']}");
+        })
         ->where('periodo_id',$this->periodoId)
         ->where('docente_id',$this->docenteId)
         ->selectRaw('tm_libros.id, tm_libros.nombre, tm_libros.asignatura_id, tm_libros.drive_id, tm_libros.autor, tm_libros.portada')
         ->GroupByRaw('tm_libros.id, tm_libros.nombre, tm_libros.asignatura_id, tm_libros.drive_id, tm_libros.autor, tm_libros.portada')
         ->get();  
- 
+
+        $cursos = TmHorarios::query()
+        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->join("tm_generalidades as g","g.id","=","tm_horarios.grupo_id")
+        ->join("tm_generalidades as g2","g2.id","=","s.nivel_id")
+        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("s.modalidad_id",$this->filters['modalidadId'])   
+        ->selectRaw('g.descripcion as modalidad,g2.descripcion as nivel,s.descripcion as curso,s.id')
+        ->groupByRaw('g.descripcion,g2.descripcion,s.descripcion,s.id')
+        ->get();
 
         return view('livewire.vc-library',[
             'tblrecords' => $tblrecords,
             'tblparalelo' => $tblparalelo,
+            'cursos' => $cursos,
         ]);
     }
    

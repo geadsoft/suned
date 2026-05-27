@@ -33,6 +33,15 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="col-sm-2">
+                                <h6 class="text-uppercase fs-12 mb-2">Cursos</h6>
+                                <select class="form-control" data-choices name="file-type" data-choices-search-false id="file-type" wire:model="filters.cursoId">
+                                    <option value=""> --- Seleccione --- </option>
+                                    @foreach($cursos as $data)
+                                        <option value="{{$data->id}}">{{$data->curso}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
