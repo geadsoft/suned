@@ -176,7 +176,7 @@ class VcPersonaladd extends Component
         ->where('personaId','<>',$this->personaId)
         ->first();
         
-        if ($user && $this->record['tipopersona']=='E',) {
+        if ($user && $this->record['tipopersona']=='E') {
 
             $message = "El colaborador con el email " . $this->record['email'] . " existe.";
             $this->dispatchBrowserEvent('msg-error', ['newName' => $message]);
