@@ -2,33 +2,80 @@
     
     <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
         
-        <div class="chat-leftsidebar">
-            <div class="chat-room-list" data-simplebar>
-                <div class="p-3 d-flex flex-column h-200">
-                    <div class="mb-3">
-                        <h5 class="mb-0 fw-semibold">Asignaturas</h5>
-                    </div>
-                    <select class="form-select form-select-sm" id="termino" data-choices data-choices-search-false wire:model="termino">
-                        @foreach ($tbltermino as $terminos) 
-                        <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
-                        @endforeach 
-                    </select>
-                    <div class="mt-3 mx-n4 px-4 file-menu-sidebar-scroll simplebar-scrollable-y" data-simplebar="init"><div class="simplebar-wrapper" style="margin: 0px -24px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px 24px;">
-                        <ul class="list-unstyled file-manager-menu">
-                            <li>
-                                <a href="#" wire:click.prevent ="asignatura('')"><i class=" ri-arrow-right-s-fill align-bottom me-2"></i> <span class="file-list-link">TODAS</span></a>
-                            </li>
-                            @foreach($materias as $materia)
-                            <li>
-                                <a href="#" wire:click.prevent="asignatura({{$materia->asignatura_id}})"><i class=" ri-arrow-right-s-fill align-bottom me-2"></i> <span class="file-list-link">{{$materia->asignatura}}</span></a>
-                            </li>
-                            @endforeach
-                        </ul>
-                    </div></div></div></div><div class="simplebar-placeholder" style="width: 316px; height: 333px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 170px; display: block; transform: translate3d(0px, 0px, 0px);"></div></div></div>
-                </div>
+        <div class="chat-leftsidebar vh-100">
+
+    <div class="chat-room-list h-100">
+        
+        <div class="p-3 d-flex flex-column h-100">
+
+            <!-- TITULO -->
+            <div class="mb-3">
+                <h5 class="mb-0 fw-semibold">Asignaturas</h5>
+            </div>
+
+            <!-- SELECT -->
+            <div class="mb-3">
+                <select class="form-select form-select-sm"
+                        id="termino"
+                        data-choices
+                        data-choices-search-false
+                        wire:model="termino">
+
+                    @foreach ($tbltermino as $terminos)
+                        <option value="{{ $terminos->codigo }}">
+                            {{ $terminos->descripcion }}
+                        </option>
+                    @endforeach
+
+                </select>
+            </div>
+
+            <!-- LISTA -->
+            <div class="flex-grow-1 overflow-auto" data-simplebar>
+
+                <ul class="list-unstyled file-manager-menu mb-0">
+
+                    <li>
+                        <a href="#"
+                           class="d-flex align-items-start"
+                           wire:click.prevent="asignatura('')">
+
+                            <i class="ri-arrow-right-s-fill me-2 mt-1"></i>
+
+                            <span class="file-list-link">
+                                TODAS
+                            </span>
+
+                        </a>
+                    </li>
+
+                    @foreach($materias as $materia)
+
+                    <li>
+                        <a href="#"
+                           class="d-flex align-items-start"
+                           wire:click.prevent="asignatura({{ $materia->asignatura_id }})">
+
+                            <i class="ri-arrow-right-s-fill me-2 mt-1"></i>
+
+                            <span class="file-list-link">
+                                {{ $materia->asignatura }}
+                            </span>
+
+                        </a>
+                    </li>
+
+                    @endforeach
+
+                </ul>
+
             </div>
 
         </div>
+
+    </div>
+
+</div>
         <!-- end chat leftsidebar -->
         <!-- Start User chat -->
         <div class="file-manager-content w-100 pb-0">
