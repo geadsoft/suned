@@ -103,7 +103,7 @@
         <!-- IMAGEN -->
         <img src="{{ URL::asset('assets/images/sesion-expirada.png') }}"
              class="logo"
-             alt="Sesión Expirada">
+             alt="Sesión Expirada" height="150">
 
         <!-- BOTÓN -->
         <div>
