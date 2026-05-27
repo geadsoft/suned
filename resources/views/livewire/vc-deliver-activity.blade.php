@@ -42,8 +42,8 @@
         <div class="col-xxl-12">
             <div class="card">
                 <div class="card-body p-4">
-                    <h6 class="card fw-semibold text-uppercase mb-3">Descripción</h6>
-                    <body onload="addElement({{$descripcion}})" class="fs-14">
+                    <h6 class="card fw-semibold text-uppercase mb-3 fs-15">Descripción</h6>
+                    <body onload="addElement({{$descripcion}})" class="fs-15">
                         <div id="elemnt" wire:ignore>
                         </div>
                     </body>
