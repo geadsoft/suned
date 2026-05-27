@@ -39,7 +39,7 @@
         }
 
         .logo{
-            width:550px;
+            width:650px;
             max-width:100%;
             margin-bottom:25px;
         }
