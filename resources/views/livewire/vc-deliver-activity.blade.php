@@ -16,8 +16,8 @@
                                         </div>
                                     </div><!--end col-->
                                     <div class="col-md">
-                                        <h5 class="fw-semibold" id="ticket-title" >{{$record->asignatura}}</h4>
-                                        <h3 class="fw-semibold" id="ticket-title" >{{$record->nombre}}</h5>
+                                        <h5 class="fw-semibold" id="ticket-title" >{{$record->asignatura}}</h5>
+                                        <h5 class="fw-semibold" id="ticket-title" >{{$record->nombre}}</h5>
                                         <div class="hstack gap-3 flex-wrap">
                                            
                                             <div class="vr"></div>
