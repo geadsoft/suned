@@ -263,6 +263,23 @@ Route::get('/teachers/login', [App\Http\Controllers\DocentesController::class, '
 Route::post('/teachers/login', 'App\Http\Controllers\LoginController@login');
 Auth::Routes();
 
+Route::get('/auto-logout', function () {
+
+    Auth::logout();
+
+    request()->session()->invalidate();
+
+    request()->session()->regenerateToken();
+
+    return redirect()->route('session.expired');
+
+})->name('auto.logout');
+
+Route::get('/sesion-expirada', function () {
+
+    return view('auth.session-expired');
+
+})->name('session.expired');
 
 
 //Language Translation

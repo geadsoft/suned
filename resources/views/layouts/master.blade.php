@@ -14,7 +14,7 @@
     @livewireStyles
     
 </head>
-<script>
+<!--<script>
     const logoutAfterMs = 30 * 60 * 1000; // 15 minutos
     let logoutTimer;
 
@@ -32,6 +32,34 @@
 
     // Inicializa el temporizador
     resetLogoutTimer();
+</script>-->
+<script>
+
+    const logoutAfterMs = 30 * 60 * 1000;
+    let logoutTimer;
+
+    function resetLogoutTimer() {
+
+        clearTimeout(logoutTimer);
+
+        logoutTimer = setTimeout(() => {
+
+            window.location.href = "{{ route('auto.logout') }}";
+
+        }, logoutAfterMs);
+
+    }
+
+    // Eventos actividad usuario
+    ['click', 'mousemove', 'keydown', 'scroll', 'touchstart']
+    .forEach(evt => {
+
+        window.addEventListener(evt, resetLogoutTimer);
+
+    });
+
+    resetLogoutTimer();
+
 </script>
 @section('body')
     @include('layouts.body')
