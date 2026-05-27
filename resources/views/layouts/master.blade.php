@@ -35,7 +35,7 @@
 </script>-->
 <script>
 
-    const logoutAfterMs = 10 * 1000;
+    const logoutAfterMs = 30 * 60 * 1000; // 15 minutos
     let logoutTimer;
 
     function resetLogoutTimer() {
