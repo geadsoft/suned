@@ -103,4 +103,9 @@ class EstudiantesController extends Controller
         return view('student/seguro_estudiantil');
     }
 
+    public function preinscripcion()
+    {      
+        return view('student/preinscripcion');
+    }
+
 }
