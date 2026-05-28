@@ -117,7 +117,7 @@
                 <div class="col-lg-4">
                     <div class="rounded-4 shadow-lg">
 
-                            <img src="{{ URL::asset('assets/images/preinscripcion.png') }}"
+                            <img src="{{ URL::asset('assets/images/preinscripcion.png')}}"
                                  alt="American School"
                                  style="max-height:250px;">
 
