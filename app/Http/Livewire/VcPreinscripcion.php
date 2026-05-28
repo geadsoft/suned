@@ -8,6 +8,10 @@ class VcPreinscripcion extends Component
 {
     public function render()
     {
-        return view('livewire.vc-preinscripcion');
+        return view('livewire.vc-preinscripcion')
+        ->layout('layouts.public');
     }
+
+
 }
+
