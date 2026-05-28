@@ -22,6 +22,7 @@ use App\Http\Livewire\VcReportExamsQualify;
 use App\Http\Livewire\VcReportDetailQualify;
 use App\Http\Livewire\VcReportPartialTeacher;
 use App\Http\Livewire\VcStudents;
+use App\Http\Livewire\VcPreinscripcion;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ArchivoController;
 use App\Http\Livewire\VcReportCard;
@@ -46,6 +47,8 @@ use App\Http\Controllers\DocumentDownloadController;
 Route::get('/phpinfo', function () {
     phpinfo();
 });
+
+Route::get('/preinscripcion',VcPreinscripcion::class);
 Route::get('/cambia/modalidad',[App\Http\Controllers\HomeController::class, 'cambiaModalida'])->name('cambiaModalida');
 
 Route::get('/headquarters/campus',[App\Http\Controllers\TmEmpresasController::class, 'index'])->name('index');
