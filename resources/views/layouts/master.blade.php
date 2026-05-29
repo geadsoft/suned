@@ -14,34 +14,6 @@
     @livewireStyles
     
 </head>
-<!--<script>
-
-    const logoutAfterMs = 1 * 60 * 1000; // 15 minutos
-    let logoutTimer;
-
-    function resetLogoutTimer() {
-
-        clearTimeout(logoutTimer);
-
-        logoutTimer = setTimeout(() => {
-
-            window.location.href = "{{ route('auto.logout') }}";
-
-        }, logoutAfterMs);
-
-    }
-
-    // Eventos actividad usuario
-    ['click', 'mousemove', 'keydown', 'scroll', 'touchstart']
-    .forEach(evt => {
-
-        window.addEventListener(evt, resetLogoutTimer);
-
-    });
-
-    resetLogoutTimer();
-
-</script>-->
 <!-- Modal Sesión -->
 <div class="modal fade"
      id="sessionWarningModal"
@@ -131,7 +103,7 @@
         // =========================
 
         // Tiempo total de inactividad
-        const logoutAfterMs = 3 * 60 * 1000; // 3 minutos
+        const logoutAfterMs = 30 * 60 * 1000; // 30 minutos
 
         // Mostrar alerta 1 minuto antes
         const warningBeforeMs = 1 * 60 * 1000;
