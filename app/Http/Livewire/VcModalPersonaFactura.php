@@ -50,8 +50,14 @@ class VcModalPersonaFactura extends Component
         ->when($this->filters['srv_nui'],function($query){
             return $query->where('identificacion',"{$this->filters['srv_nui']}");
         })        
-        ->when($this->filters['srv_nombre'],function($query){
-            return $query->whereRaw("concat(apellidos,'',nombres) LIKE '%".$this->filters['srv_nombre']."%'");
+        ->when($this->filters['srv_nombre'], function ($query) {
+
+            $buscar = trim($this->filters['srv_nombre']);
+
+            return $query->whereRaw(
+                "UPPER(CONCAT(apellidos, ' ', nombres)) LIKE ?",
+                ['%' . strtoupper($buscar) . '%']
+            );
         })
         ->selectRaw("id,apellidos,nombres,identificacion, 0 as estudiante_id")
         ->where('estado','A')
@@ -79,8 +85,14 @@ class VcModalPersonaFactura extends Component
         ->when($this->filters['srv_nui'],function($query){
             return $query->where('tm_personas.identificacion',"{$this->filters['srv_nui']}");
         })        
-        ->when($this->filters['srv_nombre'],function($query){
-            return $query->whereRaw("concat(tm_personas.apellidos,'',tm_personas.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
+        ->when($this->filters['srv_nombre'], function ($query) {
+
+            $buscar = trim($this->filters['srv_nombre']);
+
+            return $query->whereRaw(
+                "UPPER(CONCAT(tm_personas.apellidos, ' ', tm_personas.nombres)) LIKE ?",
+                ['%' . strtoupper($buscar) . '%']
+            );
         })
         ->selectRaw("
             p.id,
