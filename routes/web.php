@@ -284,6 +284,13 @@ Route::get('/sesion-expirada', function () {
 
 })->name('session.expired');
 
+Route::get('/keep-alive', function () {
+
+    return response()->json([
+        'status' => 'ok'
+    ]);
+
+})->middleware('auth');
 
 //Language Translation
 Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);

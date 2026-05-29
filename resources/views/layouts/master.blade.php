@@ -15,27 +15,8 @@
     
 </head>
 <!--<script>
-    const logoutAfterMs = 30 * 60 * 1000; // 15 minutos
-    let logoutTimer;
 
-    function resetLogoutTimer() {
-        clearTimeout(logoutTimer);
-        logoutTimer = setTimeout(() => {
-            document.getElementById('logout-form').submit();
-        }, logoutAfterMs);
-    }
-
-    // Escucha eventos de actividad del usuario
-    ['click', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(evt => {
-        window.addEventListener(evt, resetLogoutTimer);
-    });
-
-    // Inicializa el temporizador
-    resetLogoutTimer();
-</script>-->
-<script>
-
-    const logoutAfterMs = 30 * 60 * 1000; // 15 minutos
+    const logoutAfterMs = 1 * 60 * 1000; // 15 minutos
     let logoutTimer;
 
     function resetLogoutTimer() {
@@ -60,7 +41,59 @@
 
     resetLogoutTimer();
 
-</script>
+</script>-->
+<!-- Modal Sesión -->
+<div class="modal fade"
+     id="sessionWarningModal"
+     tabindex="-1"
+     data-bs-backdrop="static"
+     data-bs-keyboard="false">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header" style="background-color: #222454;">
+                <h5 class="modal-title text-white">
+                    Sesión por expirar
+                </h5>
+            </div>
+
+            <div class="modal-body text-center">
+
+                <div class="mb-3">
+                    <i class="ri-time-line text-warning"
+                       style="font-size:60px;"></i>
+                </div>
+
+                <p class="mb-1">
+                    Tu sesión se cerrará por inactividad en:
+                </p>
+
+                <h1 id="countdown"
+                    class="text-danger fw-bold">
+                    60
+                </h1>
+
+            </div>
+
+            <div class="modal-footer justify-content-center">
+
+                <button type="button"
+                        class="btn btn-success"
+                        id="continueSessionBtn">
+
+                    Continuar Sesión
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 @section('body')
     @include('layouts.body')
 @show
@@ -90,6 +123,114 @@
     <!-- JAVASCRIPT -->
     @include('layouts.vendor-scripts')
     @livewireScripts
+
+    <script>
+
+        // =========================
+        // CONFIGURACIÓN
+        // =========================
+
+        // Tiempo total de inactividad
+        const logoutAfterMs = 3 * 60 * 1000; // 3 minutos
+
+        // Mostrar alerta 1 minuto antes
+        const warningBeforeMs = 1 * 60 * 1000;
+
+        let logoutTimer;
+        let warningTimer;
+        let countdownInterval;
+
+        const sessionModal = new bootstrap.Modal(
+            document.getElementById('sessionWarningModal')
+        );
+
+        // =========================
+        // REINICIAR TEMPORIZADORES
+        // =========================
+
+        function resetLogoutTimer() {
+
+            clearTimeout(logoutTimer);
+            clearTimeout(warningTimer);
+            clearInterval(countdownInterval);
+
+            sessionModal.hide();
+
+            // Mostrar advertencia
+            warningTimer = setTimeout(() => {
+
+                showSessionWarning();
+
+            }, logoutAfterMs - warningBeforeMs);
+
+            // Cerrar sesión
+            logoutTimer = setTimeout(() => {
+
+                window.location.href = "{{ route('auto.logout') }}";
+
+            }, logoutAfterMs);
+
+        }
+
+        // =========================
+        // MOSTRAR MODAL
+        // =========================
+
+        function showSessionWarning() {
+
+            let seconds = warningBeforeMs / 1000;
+
+            document.getElementById('countdown').innerText = seconds;
+
+            sessionModal.show();
+
+            countdownInterval = setInterval(() => {
+
+                seconds--;
+
+                document.getElementById('countdown').innerText = seconds;
+
+                if(seconds <= 0){
+
+                    clearInterval(countdownInterval);
+
+                }
+
+            }, 1000);
+
+        }
+
+        // =========================
+        // CONTINUAR SESIÓN
+        // =========================
+
+        document.getElementById('continueSessionBtn')
+        .addEventListener('click', function () {
+
+            fetch("{{ url('/keep-alive') }}");
+
+            resetLogoutTimer();
+
+        });
+
+        // =========================
+        // EVENTOS ACTIVIDAD USUARIO
+        // =========================
+
+        ['click', 'mousemove', 'keydown', 'scroll', 'touchstart']
+        .forEach(evt => {
+
+            window.addEventListener(evt, resetLogoutTimer);
+
+        });
+
+        // =========================
+        // INICIAR
+        // =========================
+
+        resetLogoutTimer();
+
+    </script>
     
 </body>
 
