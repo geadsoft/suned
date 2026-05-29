@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 use App\Models\TmPersonas;
 use App\Models\TdFacturaEstudiantes;
+use App\Models\TmFamiliarEstudiantes;
 use App\Models\TmGeneralidades;
 
 use Livewire\Component;
@@ -273,7 +274,12 @@ class VcPersonsBilling extends Component
         if ($familiarId>0){
 
             TdFacturaEstudiantes::where('persona_id',$familiarId)->delete();
-            TmPersonas::find($familiarId)->delete();
+            $familiarExiste = TmFamiliarEstudiantes::where('persona_id', $familiarId)
+            ->exists();
+
+            if (!$familiarExiste) {
+                TmPersonas::find($familiarId)?->delete();
+            }
 
             $this->loadFamiliar();
 
