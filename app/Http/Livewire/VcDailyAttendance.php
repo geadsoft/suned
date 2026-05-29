@@ -30,7 +30,7 @@ class VcDailyAttendance extends Component
         'fecha' => '',
         'mes' => 1,
         'periodo' => 0,
-        'termino' => '1T'
+        'termino' => ''
     ];
 
     protected $listeners = ['setData'];
@@ -69,13 +69,6 @@ class VcDailyAttendance extends Component
         $this->periodoId = $tblperiodos['id'];
         $this->filters['periodo'] = intval(date('Y',strtotime($ldate)));
 
-        $this->tbltermino = TdPeriodoSistemaEducativos::query()
-        ->where('periodo_id',$this->periodoId)
-        ->where('tipo','EA')
-        ->orderByRaw("cerrar,codigo")
-        ->get();
-        
-        $this->filters['termino'] = $this->tbltermino[0]['codigo'];
     }
 
     public function render()
@@ -89,6 +82,13 @@ class VcDailyAttendance extends Component
         ->select("tm_cursos.id","s.descripcion","tm_cursos.paralelo")
         ->orderBy('tm_cursos.nivel_id')
         ->orderBy('tm_cursos.grado_id')
+        ->get();
+
+        $this->tbltermino = TdPeriodoSistemaEducativos::query()
+        ->where('periodo_id',$this->periodoId)
+        ->where('modalidad_id', $this->modalidadId)
+        ->where('tipo','EA')
+        ->orderByRaw("cerrar,codigo")
         ->get();
 
         $this->personas = TmHorarios::query()
@@ -179,6 +179,10 @@ class VcDailyAttendance extends Component
     }
 
     public function createData(){
+
+        $this ->validate([
+            'filters.termino' => 'required',
+        ]);
 
         if (count($this->tblrecords)>0){
 

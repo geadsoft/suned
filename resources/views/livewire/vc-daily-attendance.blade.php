@@ -7,7 +7,7 @@
                         <div class="mb-3">
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Modalidad</label>
                             <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
-                                <option value="">Seleccione Modalidad</option>
+                                <option value="">-- Seleccione Modalidad --</option>
                                 @foreach ($tblmodalidad as $modalidad) 
                                 <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
                                 @endforeach 
@@ -16,7 +16,7 @@
                         <div class="mb-3">
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
                             <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="filters.cursoId"  wire:change="consulta()">
-                                <option value="">Seleccione Paralelo</option>
+                                <option value="">-- Seleccione Paralelo --</option>
                                 @foreach ($tblparalelo as $paralelo) 
                                 <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}-{{$paralelo->paralelo}}</option>
                                 @endforeach 
@@ -32,7 +32,8 @@
                         
                         <div class="mb-3">
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino" wire:change="consulta()">
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino" wire:change="consulta()" required>
+                                <option value="">-- Seleccione Término --</option>
                                 @foreach ($tbltermino as $terminos) 
                                 <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
                                 @endforeach 
