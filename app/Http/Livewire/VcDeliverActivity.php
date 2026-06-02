@@ -20,7 +20,7 @@ class VcDeliverActivity extends Component
     use WithFileUploads;
     
     public $selectId, $record, $display_estado="", $display_text="display:none", $fieldset="enabled";
-    public $data, $personaId, $tiempo, $estado="No Entregado", $texteditor="", $descripcion, $periodoId;
+    public $data, $personaId, $tiempo, $estado="No Entregado", $texteditor="", $descripcion, $periodoId, $modalidadId;
     public $array_attach=[], $files=[], $entregas=[], $datos=[];
     public $showEditor = false;
     public bool $showModal=false;
@@ -84,6 +84,12 @@ class VcDeliverActivity extends Component
         $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $tblperiodos['id'];
 
+        $matricula = TmCambiaModalidad::query()
+        ->where('persona_id',$this->personaId)
+        ->first();
+
+        $this->modalidadId = $matricula->modalidad_id;
+
         $this->attach_add();
         $this->load();
         
@@ -125,6 +131,7 @@ class VcDeliverActivity extends Component
         $sistema = TdPeriodoSistemaEducativos::query()
         ->where("codigo",$this->record->termino)
         ->where("periodo_id",$this->periodoId)
+        ->where("modalidad_id",$this->modalidadId)
         ->first();
 
         if ($sistema->cerrar==1){
