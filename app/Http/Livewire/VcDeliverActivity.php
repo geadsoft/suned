@@ -37,6 +37,7 @@ class VcDeliverActivity extends Component
         'html' => 'ri-file-code-line',
         'jpg' => 'ri-picture-in-picture-fill',
         'png' => 'ri-picture-in-picture-fill',
+        'jpeg' => 'ri-picture-in-picture-fill',
         'bin' => 'ri-database-2-line',
         'mp4' => 'ri-movie-line',
         'avi' => 'ri-movie-line',
@@ -47,6 +48,7 @@ class VcDeliverActivity extends Component
         'docx' => 'text-primary',
         'jpg' => 'text-warning',
         'png' => 'text-warning',
+        'jpeg' => 'ri-picture-in-picture-fill',
         'xls' => 'text-success',
         'xlsx' => 'text-success',
         'ppt' => ' text-danger',
@@ -122,6 +124,8 @@ class VcDeliverActivity extends Component
 
     public function load(){
 
+        $this->array_attach=[];
+
         $this->record = TmActividades::query()
         ->join("tm_horarios_docentes as h","h.id","=","tm_actividades.paralelo")
         ->join("tm_asignaturas as a","a.id","=","h.asignatura_id")
@@ -164,7 +168,6 @@ class VcDeliverActivity extends Component
         ->where('actividad',1)
         ->get();
         
-
         //Entregas Realizadas
         $this->files = TmFiles::query()
         ->where('actividad_id',$this->selectId)
