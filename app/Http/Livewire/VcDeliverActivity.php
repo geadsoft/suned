@@ -322,7 +322,7 @@ class VcDeliverActivity extends Component
         $fileId  ="";
         $msgfile ="";
 
-        sleep(3); // Simula espera
+        dd($this->array_attach);
         
         foreach ($this->array_attach as $attach){
 
