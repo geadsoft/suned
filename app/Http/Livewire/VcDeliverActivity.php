@@ -335,7 +335,7 @@ class VcDeliverActivity extends Component
                 continue;
             }
             
-            $file = $attach['adjunto'];
+            /*$file = $attach['adjunto'];
 
             $name = $file->getClientOriginalName();
             $name = pathinfo($name, PATHINFO_FILENAME);
@@ -378,8 +378,54 @@ class VcDeliverActivity extends Component
             $body .= "Content-Type: $mime\r\n";
             $body .= "Content-Transfer-Encoding: base64\r\n\r\n";
             $body .= base64_encode($fileContent) . "\r\n";  // El contenido del archivo
+            $body .= "--$boundary--\r\n";*/
+
+            $file = $attach['adjunto'];
+
+            $name    = $file->getClientOriginalName();
+            $name    = pathinfo($name, PATHINFO_FILENAME);
+            $archivo = str_replace(".", "_", $name);
+            $name = preg_replace('/[^A-Za-z0-9_\-]/', '_', $name); // sanitizar nombre
+
+            
+            // Agregar timestamp para hacerlo único
+            $uniqueSuffix = now()->format('Ymd_His'); // o usar uniqid() si prefieres algo más corto
+            $name = $name . '_' . $uniqueSuffix;
+
+            $ext =  $file->getClientOriginalExtension();
+            $mime = $file->getClientMimeType();
+
+            $filesave = $name.'.'.$ext;
+
+            $contents = Storage::disk('public')->exists('archivos/'.$filesave);
+            if ($contents){
+                Storage::disk('public')->delete('archivos/'.$filesave);
+            }
+
+            // Guarda el archivo localmente
+            $pathfile = $file->storeAs('archivos', $filesave,'public');
+            $fileContent = file_get_contents($file->getRealPath());
+
+            // Configuración de los metadatos
+            $metadata = [
+                'name' => $name . '.' . $ext,  // Nombre del archivo
+                'mimeType' => $mime,  // Tipo MIME del archivo
+            ];
+
+            // Preparar el cuerpo multipart
+            $boundary = '----WebKitFormBoundary' . md5(time());  // Crear un boundary único
+
+            // Cuerpo multipart con los metadatos y el contenido del archivo
+            $body = "--$boundary\r\n";
+            $body .= "Content-Type: application/json; charset=UTF-8\r\n\r\n";
+            $body .= json_encode($metadata) . "\r\n";  // Metadatos del archivo
+            $body .= "--$boundary\r\n";
+            $body .= "Content-Type: $mime\r\n";
+            $body .= "Content-Transfer-Encoding: base64\r\n\r\n";
+            $body .= base64_encode($fileContent) . "\r\n";  // El contenido del archivo
             $body .= "--$boundary--\r\n";
 
+            
             // Realizar la solicitud POST a la API de Google Drive
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $accessToken,
