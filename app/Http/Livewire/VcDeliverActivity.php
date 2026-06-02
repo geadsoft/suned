@@ -322,8 +322,6 @@ class VcDeliverActivity extends Component
         $fileId  ="";
         $msgfile ="";
 
-        dd($this->array_attach);
-        
         foreach ($this->array_attach as $attach){
 
             if (isset($attach['user_id']) && $attach['user_id'] != auth()->id()) {
