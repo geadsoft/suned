@@ -123,9 +123,7 @@ class VcDeliverActivity extends Component
     }
 
     public function load(){
-
-        $this->array_attach=[];
-
+        
         $this->record = TmActividades::query()
         ->join("tm_horarios_docentes as h","h.id","=","tm_actividades.paralelo")
         ->join("tm_asignaturas as a","a.id","=","h.asignatura_id")
@@ -168,6 +166,7 @@ class VcDeliverActivity extends Component
         ->where('actividad',1)
         ->get();
         
+
         //Entregas Realizadas
         $this->files = TmFiles::query()
         ->where('actividad_id',$this->selectId)
@@ -322,6 +321,8 @@ class VcDeliverActivity extends Component
         $accessToken = $this->token();
         $fileId  ="";
         $msgfile ="";
+
+        dd($this->array_attach);
 
         
         foreach ($this->array_attach as $attach){
