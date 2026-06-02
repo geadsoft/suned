@@ -241,7 +241,7 @@
                                     @else
                                     <td>
                                         <div wire:key="attach-{{$key}}">
-                                        <input type="file" id="file-{{$recno['linea']}}" wire:model="array_attach.{{$key}}.adjunto"  accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf,.html,.jpg,.png" class="form-control">
+                                        <input type="file" id="file-{{$recno['linea']}}" wire:model="array_attach.{{$key}}.adjunto"  accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf,.html,.jpg,.png,.jpeg" class="form-control">
                                         <div wire:loading wire:target="array_attach.{{$key}}.adjunto" class="text-danger">
                                             Cargando archivo...
                                         </div>
