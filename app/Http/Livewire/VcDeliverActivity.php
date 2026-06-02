@@ -6,6 +6,7 @@ use App\Models\TdActividadesEntregas;
 use App\Models\TmFiles;
 use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmPeriodosLectivos;
+use App\Models\TmCambiaModalidad;
 
 use Illuminate\Support\Facades\Http;
 
