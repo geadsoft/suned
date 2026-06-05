@@ -123,7 +123,7 @@ class VcModalPersonaFactura extends Component
         )
         ->orderBy('tm_personas.apellidos')
         ->orderBy('tm_personas.nombres')
-        >orderBy('p.periodo','desc')
+        ->orderBy('p.periodo','desc')
         ->orderBy('g.descripcion')
         ->orderBy('s.descripcion')
         ->get();
