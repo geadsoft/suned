@@ -125,7 +125,7 @@ class VcModalPersonaFactura extends Component
         ->orderBy('m.modalidad_id')
         ->orderBy('pe.periodo','desc')
         ->orderBy('tm_personas.apellidos')
-        ->orderBy('tm_personas.nombre')
+        ->orderBy('tm_personas.nombres')
         ->get();
 
         return $tbldata;
