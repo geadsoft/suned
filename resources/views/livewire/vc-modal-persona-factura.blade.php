@@ -38,7 +38,7 @@
                                 {{$data['identificacion']}}
                             </td>
                             <td>
-                                {{$data['modalidad']}} - {{$data['grado']}}
+                                 {{$data['periodo']}} - {{$data['modalidad']}} - {{$data['grado']}}
                             </td>
                             <td style="width: 80px;">
                                 <ul class="list-inline hstack gap-2 mb-0">

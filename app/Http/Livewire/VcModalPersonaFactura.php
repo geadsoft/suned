@@ -72,6 +72,7 @@ class VcModalPersonaFactura extends Component
 
         $tbldata = TmPersonas::query()
         ->join("tm_matriculas as m","m.estudiante_id","=","tm_personas.id")
+        ->join("tm_periodos_lectivos as p","p.id","=","p.periodo_id")
         ->join("tm_servicios as s","s.id","=","m.grado_id")
         ->join("tm_generalidades as g","g.id","=","m.modalidad_id")
         ->join(DB::raw("(select estudiante_id,persona_id from tm_familiar_estudiantes
@@ -104,7 +105,8 @@ class VcModalPersonaFactura extends Component
             tm_personas.apellidos as apeestudent,
             g.descripcion as modalidad,
             s.descripcion as grado,
-            m.id as matriculaId
+            m.id as matriculaId,
+            p.periodo
         ")
         ->where('p.estado','A')
         ->groupBy(
@@ -121,6 +123,7 @@ class VcModalPersonaFactura extends Component
         )
         ->orderBy('tm_personas.apellidos')
         ->orderBy('tm_personas.nombres')
+        >orderBy('p.periodo','desc')
         ->orderBy('g.descripcion')
         ->orderBy('s.descripcion')
         ->get();
