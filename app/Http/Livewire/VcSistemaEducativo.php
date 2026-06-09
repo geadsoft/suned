@@ -6,7 +6,7 @@ use App\Models\TmSistemaEducativos;
 use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmGeneralidades;
 use App\Models\TmHorariosAsignaturas;
-
+use Illuminate\Support\Facades\DB;
 
 use Livewire\Component;
 use Carbon\Carbon;
@@ -16,6 +16,7 @@ class VcSistemaEducativo extends Component
     protected $listeners = ['deleteHora'];
 
     public $periodoId, $plectivo, $metodo, $aperturado, $eformativa, $esumativa, $detalle=[], $modalidadId, $horaId, $hora_ini, $hora_fin, $editRecno=false, $fieldsetDisabled;
+    public $periodos, $periodoActual, $periodoAperturar;
     public $sistema;
     public $arrmetodo=[];
     public $arrparcial=[];
@@ -49,11 +50,17 @@ class VcSistemaEducativo extends Component
 
     public function mount()
     {
+        $this->periodos = TmPeriodosLectivos::where('aperturado',0)->where('estado','C')->orderBy('periodo','desc')->get();
+
         $this->plectivo = TmPeriodosLectivos::query()
         ->where('estado','<>','C')
         ->orWhere('aperturado',1)
         ->get();
+
         $this->periodoId = $this->plectivo[0]['id'];
+        $this->periodoActual = $this->plectivo[0]['descripcion'];
+        $this->periodoAperturar = '';
+
         
         $modalidad = TmGeneralidades::query()
         ->where('superior',1)
@@ -980,6 +987,60 @@ class VcSistemaEducativo extends Component
         $this->addarr('T');
         $this->fieldsetDisabled=false;
         
+    }
+
+    public function aperturarPeriodo()
+    {
+        if (!$this->periodoAperturar) {
+            $this->addError(
+                'periodoAperturar',
+                'Debe seleccionar el período lectivo a aperturar.'
+            );
+            return;
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            // Cerrar período actual aperturado
+            TmPeriodosLectivos::where('estado', 'A')->where('aperturado',1)
+                ->update([
+                    'estado' => 'C',
+                    'aperturado' => 0
+                ]);
+
+            // Aperturar período seleccionado
+            TmPeriodosLectivos::where('id', $this->periodoAperturar)
+                ->update([
+                    'estado' => 'A',
+                    'aperturado' => 1
+                ]);
+
+            DB::commit();
+
+            $this->dispatchBrowserEvent('cerrarModalApertura');
+            $this->dispatchBrowserEvent('alert', [
+                'type'    => 'success',
+                'title'   => 'Período Lectivo',
+                'message' => 'Período lectivo aperturado correctamente.'
+            ]);
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            $this->dispatchBrowserEvent('alert', [
+                'type'    => 'error',
+                'title'   => 'Período Lectivo',
+                'message' => 'Error al aperturar el período lectivo.'
+            ]);
+        }
+    }
+
+    public function updatedPeriodoAperturar()
+    {
+        $this->resetErrorBag('periodoAperturar');
     }
 
 }

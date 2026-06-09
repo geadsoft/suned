@@ -21,6 +21,7 @@
 @endsection
 @section('script')
     
+    <script src="{{ URL::asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
 
@@ -77,6 +78,28 @@
                     Livewire.emit('deleteHora');
                 }
             });
+        });
+
+        window.addEventListener('cerrarModalApertura', function () {
+            let modal = bootstrap.Modal.getInstance(document.getElementById('modalAperturarPeriodo'));
+            modal.hide();
+        });
+
+        window.addEventListener('alert', function(event){
+
+            Swal.fire({
+                icon: event.detail.type,
+                title: event.detail.title,
+                text: event.detail.message,
+                confirmButtonColor: '#222454'
+            }).then((result) => {
+
+                if (result.isConfirmed && event.detail.type === 'success') {
+                    location.reload();
+                }
+
+            });
+
         });
         
 

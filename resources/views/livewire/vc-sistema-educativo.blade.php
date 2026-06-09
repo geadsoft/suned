@@ -13,11 +13,25 @@
                                 </div>
                             </div>
                         </div>
-                        <select class="form-select mb-3" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="periodoId" required>
-                            @foreach ($plectivo as $lectivo) 
-                            <option value="{{$lectivo->id}}">{{$lectivo->descripcion}}</option>
-                            @endforeach
-                        </select>  
+                        <div class="d-flex align-items-center gap-2 mb-2">
+
+                            <button type="button"
+                                class="btn btn-warning btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalAperturarPeriodo">
+                            <i class="ri-lock-unlock-line me-1 fs-18"></i>
+                            </button>
+
+                            <select class="form-select"
+                                    wire:model="periodoId">
+                                @foreach ($plectivo as $lectivo)
+                                    <option value="{{ $lectivo->id }}">
+                                        {{ $lectivo->descripcion }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                        </div>  
                         <div class="d-flex align-items-center gap-2 mb-3">
                             <select class="form-select flex-grow-1" id="choices-publish-status-input" wire:model="modalidadId">
                                 @foreach ($tblmodalidad as $modalidad) 
@@ -561,6 +575,104 @@
                         <i class="ri-check-line me-1"></i> Aceptar
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAperturarPeriodo" tabindex="-1" wire:ignore.self>
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content border-0 shadow-lg">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-primary">
+                        Cambio de Período Lectivo
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center">
+
+                    <!-- Ilustración -->
+                    <div class="mb-4">
+                        <div class="avatar-xl mx-auto">
+                            <div class="avatar-title bg-warning-subtle rounded-circle">
+                                <i class="ri-calendar-event-fill text-warning display-4"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="fw-semibold">
+                        Aperturar Nuevo Período Lectivo
+                    </h4>
+
+                    <p class="text-muted mb-4">
+                        Seleccione el período lectivo que desea habilitar.
+                    </p>
+
+                    <div class="mb-4">
+                        <select class="form-select form-select-lg"  wire:model="periodoAperturar">
+                            <option value=""></option>
+                            @foreach ($periodos as $periodo)
+                                <option value="{{ $periodo->id }}">
+                                    {{ $periodo->descripcion }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @error('periodoAperturar')
+                        <small class="text-danger">
+                            {{ $message }}
+                        </small>
+                    @enderror
+
+                    <div class="card border-warning bg-warning-subtle">
+                        <div class="card-body">
+
+                            <div class="d-flex align-items-start">
+
+                                <div class="flex-shrink-0">
+                                    <i class="ri-alert-line text-warning fs-2"></i>
+                                </div>
+
+                                <div class="flex-grow-1 ms-3 text-start">
+                                    <h6 class="fw-bold text-warning mb-2">
+                                        Acción Importante
+                                    </h6>
+
+                                    <p class="mb-0">
+                                        Al aperturar el nuevo período lectivo,
+                                        el período actualmente activo:
+                                        <span class="fw-bold text-danger">
+                                            {{ $periodoActual }}
+                                        </span>
+                                        será cerrado automáticamente.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer border-0 justify-content-center">
+
+                    <button type="button"
+                            class="btn btn-light"
+                            data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-success"
+                            wire:click="aperturarPeriodo">
+                        <i class="ri-lock-unlock-line me-1"></i>
+                        Aperturar Período
+                    </button>
+
+                </div>
+
             </div>
         </div>
     </div>
