@@ -25,6 +25,8 @@ class VcActividades extends Component
         '1T' => 'Primer Trimestre',
         '2T' => 'Segundo Trimestre',
         '3T' => 'Tercer Trimestre',
+        '1Q' => 'Primer Quimestre',
+        '2Q' => 'Segundo Quimestre',
     ];
 
     public $arrbloque=[
