@@ -11,6 +11,7 @@ class VcMailboxOpinions extends Component
     public $display = "display: none";
     public $column  = "col-lg-12";
     public $mensaje = [];
+    public $eliminarId = 0;
 
     public function render()
     {
@@ -32,6 +33,7 @@ class VcMailboxOpinions extends Component
        
         $this->display="";
         $this->column="col-lg-8";
+        $this->eliminarId = $id;
        
     }
 

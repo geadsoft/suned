@@ -1,119 +1,5 @@
 <div>
     <div class="email-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
-        <!--<div class="email-menu-sidebar">
-            <div class="p-4 d-flex flex-column h-100">
-                <div class="pb-4 border-bottom border-bottom-dashed">
-                    <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal"
-                        data-bs-target="#composemodal"><i data-feather="plus-circle"
-                            class="icon-xs me-1 icon-dual-light"></i> Compose</button>
-                </div>
-
-                <div class="mx-n4 px-4 email-menu-sidebar-scroll" data-simplebar>
-                    <div class="mail-list mt-3">
-                        <a href="#" class="active"><i class="ri-mail-fill me-3 align-middle fw-medium"></i> <span
-                                class="mail-list-link">All</span> <span
-                                class="badge badge-soft-success ms-auto  ">5</span></a>
-                        <a href="#"><i class="ri-inbox-archive-fill me-3 align-middle fw-medium"></i> <span
-                                class="mail-list-link">Inbox</span> <span
-                                class="badge badge-soft-success ms-auto  ">5</span></a>
-                        <a href="#"><i class="ri-send-plane-2-fill me-3 align-middle fw-medium"></i><span
-                                class="mail-list-link">Sent</span></a>
-                        <a href="#"><i class="ri-edit-2-fill me-3 align-middle fw-medium"></i><span
-                                class="mail-list-link">Draft</span></a>
-                        <a href="#"><i class="ri-error-warning-fill me-3 align-middle fw-medium"></i><span
-                                class="mail-list-link">Spam</span></a>
-                        <a href="#"><i class="ri-delete-bin-5-fill me-3 align-middle fw-medium"></i><span
-                                class="mail-list-link">Trash</span></a>
-                        <a href="#"><i class="ri-star-fill me-3 align-middle fw-medium"></i><span
-                                class="mail-list-link">Starred</span></a>
-                        <a href="#"><i class="ri-price-tag-3-fill me-3 align-middle fw-medium"></i><span
-                                class="mail-list-link">Important</span></a>
-                    </div>
-
-
-                    <div>
-                        <h5 class="fs-12 text-uppercase text-muted mt-4">Labels</h5>
-
-                        <div class="mail-list mt-1">
-                            <a href="#"><span class="ri-checkbox-blank-circle-line me-2 text-info"></span><span
-                                    class="mail-list-link" data-type="label">Support</span> <span
-                                    class="badge badge-soft-success ms-auto">3</span></a>
-                            <a href="#"><span class="ri-checkbox-blank-circle-line me-2 text-warning"></span><span
-                                    class="mail-list-link" data-type="label">Freelance</span></a>
-                            <a href="#"><span class="ri-checkbox-blank-circle-line me-2 text-primary"></span><span
-                                    class="mail-list-link" data-type="label">Social</span></a>
-                            <a href="#"><span class="ri-checkbox-blank-circle-line me-2 text-danger"></span><span
-                                    class="mail-list-link" data-type="label">Friends</span><span
-                                    class="badge badge-soft-success ms-auto">2</span></a>
-                            <a href="#"><span class="ri-checkbox-blank-circle-line me-2 text-success"></span><span
-                                    class="mail-list-link" data-type="label">Family</span></a>
-                        </div>
-                    </div>
-
-                    <div class="border-top border-top-dashed pt-3 mt-3">
-                        <a href="#" class="btn btn-icon btn-sm btn-soft-info btn-rounded float-end"><i
-                                class="bx bx-plus fs-16"></i></a>
-                        <h5 class="fs-12 text-uppercase text-muted mb-3">Chat</h5>
-
-                        <div class="mt-2 vstack gap-3 email-chat-list">
-                            <a href="javascript: void(0);" class="d-flex align-items-center">
-                                <div class="flex-shrink-0 me-2 avatar-xs chatlist-user-image">
-                                    <img class="img-fluid rounded-circle" src="{{ URL::asset('assets/images/users/avatar-2.jpg') }}" alt="">
-                                </div>
-
-                                <div class="flex-grow-1 chat-user-box overflow-hidden">
-                                    <h5 class="fs-13 text-truncate mb-0 chatlist-user-name">Scott Median</h5>
-                                    <small class="text-muted text-truncate mb-0">Hello ! are you there?</small>
-                                </div>
-                            </a>
-
-                            <a href="javascript: void(0);" class="d-flex align-items-center">
-                                <div class="flex-shrink-0 me-2 avatar-xs chatlist-user-image">
-                                    <img class="img-fluid rounded-circle" src="{{ URL::asset('assets/images/users/avatar-4.jpg') }}" alt="">
-                                </div>
-
-                                <div class="flex-grow-1 chat-user-box overflow-hidden">
-                                    <h5 class="fs-13 text-truncate mb-0 chatlist-user-name">Julian Rosa</h5>
-                                    <small class="text-muted text-truncate mb-0">What about our next..</small>
-                                </div>
-                            </a>
-
-                            <a href="javascript: void(0);" class="d-flex align-items-center">
-                                <div class="flex-shrink-0 me-2 avatar-xs chatlist-user-image">
-                                    <img class="img-fluid rounded-circle" src="{{ URL::asset('assets/images/users/avatar-3.jpg') }}" alt="">
-                                </div>
-
-                                <div class="flex-grow-1 chat-user-box overflow-hidden">
-                                    <h5 class="fs-13 text-truncate mb-0 chatlist-user-name">David Medina</h5>
-                                    <small class="text-muted text-truncate mb-0">Yeah everything is fine</small>
-                                </div>
-                            </a>
-
-                            <a href="javascript: void(0);" class="d-flex align-items-center">
-                                <div class="flex-shrink-0 me-2 avatar-xs chatlist-user-image">
-                                    <img class="img-fluid rounded-circle" src="{{ URL::asset('assets/images/users/avatar-5.jpg') }}" alt="">
-                                </div>
-
-                                <div class="flex-grow-1 chat-user-box overflow-hidden">
-                                    <h5 class="fs-13 text-truncate mb-0 chatlist-user-name">Jay Baker</h5>
-                                    <small class="text-muted text-truncate mb-0">Wow that's great</small>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-auto">
-                    <h5 class="fs-13">1.75 GB of 10 GB used</h5>
-                    <div class="progress progress-sm">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25"
-                            aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-            </div>
-        </div>-->
-        <!-- end email-menu-sidebar -->
-
         <div class="email-content">
             <div class="p-4 pb-0">
                 <div class="border-bottom border-bottom-dashed">
@@ -142,12 +28,6 @@
                     <div class="tab-pane fade show active" id="pills-primary" role="tabpanel"
                         aria-labelledby="pills-primary-tab">
                         <div class="message-list-content mx-n4 px-4 message-list-scroll" data-simplebar>
-                            <!--<div id="mailLoader">
-                                <div class="spinner-border text-primary avatar-sm" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                            </div>-->
-                            <!--<ul class="message-list" id="mail-list"></ul>-->
                             <div class="row">
                             <div class="{{$column}}">
                                 <div class="table-responsive table-card mb-1 mt-2 ">
@@ -200,7 +80,7 @@
                                                 </div>
                                                 <div class="col-auto">
                                                     <div class="hstack gap-sm-1 align-items-center flex-wrap email-topbar-link">
-                                                        <button class="btn btn-ghost-secondary btn-icon btn-sm fs-16" wire:click="Eliminar({{ $record->id }})">
+                                                        <button class="btn btn-ghost-secondary btn-icon btn-sm fs-16" wire:click="Eliminar({{ $eliminarId }})">
                                                             <i class="ri-delete-bin-5-fill align-bottom"></i>
                                                         </button>
                                                     </div>
