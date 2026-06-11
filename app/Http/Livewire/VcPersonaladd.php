@@ -132,6 +132,7 @@ class VcPersonaladd extends Component
         //Valida si existe mail registrado
         $user = User::query()
         ->where('email',$this->record['email'])
+        ->where('acceso',1)
         ->first();
 
         if ($user) {
@@ -173,6 +174,7 @@ class VcPersonaladd extends Component
 
         $user = User::query()
         ->where('email',$this->record['email'])
+        ->where('email',1)
         ->where('personaId','<>',$this->personaId)
         ->first();
         
@@ -182,6 +184,13 @@ class VcPersonaladd extends Component
             $this->dispatchBrowserEvent('msg-error', ['newName' => $message]);
             return;
         } 
+
+        if ($user) {
+
+            $message = "El colaborador con el email " . $this->record['email'] . " existe.";
+            $this->dispatchBrowserEvent('msg-error', ['newName' => $message]);
+            return;
+        }
 
         $record = TmPersonas::find($this->personaId);
         $record->update([
@@ -206,7 +215,13 @@ class VcPersonaladd extends Component
 
         if (!$user) {
             $this->crearUsuario();
-        }    
+        } 
+        
+        User::query()
+        ->where('personaId', $this->personaId)
+        ->update([
+            'email' => $this -> record['email']
+        ]);
         
         $this->dispatchBrowserEvent('msg-updated');
         return redirect()->to('/headquarters/staff');

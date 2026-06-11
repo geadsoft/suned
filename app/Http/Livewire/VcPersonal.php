@@ -17,8 +17,6 @@ class VcPersonal extends Component
         'P' => 'Apoyo Profesional',
         'M' => 'Mantenimiento y Operaciones'
     ];
-
-    
   
     public function render()
     {

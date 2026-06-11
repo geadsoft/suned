@@ -163,4 +163,18 @@ class VcUsers extends Component
 
     }
 
+    public function delete($id)
+    {
+        
+        User::where('id', $id)
+        ->update([
+            'acceso' => 0
+        ]);
+        
+        $this->dispatchBrowserEvent('msg-grabar', [
+            'newName' => 'Se ha deshabilitado el acceso del usuario.'
+        ]);
+
+    }
+
 }
