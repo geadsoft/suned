@@ -202,6 +202,45 @@
                     </div>
 
                     <!--end modal -->
+                    <div wire:ignore.self class="modal fade" id="modalInhabilitarAcceso" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow-lg rounded-4">
+
+                                <div class="modal-body text-center p-4">
+
+                                    <div class="mb-3">
+                                        <img src="{{ asset('assets/images/inhabilitar acceso.png') }}"
+                                            alt="Inhabilitar Usuario"
+                                            class="img-fluid"
+                                            style="max-height:400px;">
+                                    </div>
+
+                                    <p class="text-muted mb-4">
+                                        ¿Está seguro que desea inhabilitar el acceso de este usuario?
+                                        <br>
+                                        El usuario no podrá ingresar al sistema hasta que se habilite nuevamente.
+                                    </p>
+
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">
+                                            Cancelar
+                                        </button>
+
+                                        <button type="button"
+                                                class="btn px-4 text-white"
+                                                style="background-color:#123A73;border-color:#123A73;"
+                                                wire:click="inhabilitarAcceso">
+                                            <i class="ri-lock-line me-1"></i>
+                                            Sí, inhabilitar
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

@@ -108,6 +108,17 @@
             swal("No se puede Eliminar!",event.detail.newName, "error");
         })
 
+        window.addEventListener('show-modal-inhabilitar', () => {
+            let modal = new bootstrap.Modal(document.getElementById('modalInhabilitarAcceso'));
+            modal.show();
+        });
+
+        window.addEventListener('hide-modal-inhabilitar', () => {
+            let modalElement = document.getElementById('modalInhabilitarAcceso');
+            let modal = bootstrap.Modal.getInstance(modalElement);
+            modal.hide();
+        });
+
     </script>
     
 @endsection

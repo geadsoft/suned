@@ -230,10 +230,9 @@ class VcPersonaladd extends Component
 
     public function validaNui(){
 
-       
         $records = TmPersonas::where("identificacion",$this -> record['identificacion'])->first();
         
-        if ($records != null && $records->tipopersona=='D'){
+        if ($records != null){
             $this->dispatchBrowserEvent('msg-validanui');
         }
 

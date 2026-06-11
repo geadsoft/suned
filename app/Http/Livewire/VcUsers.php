@@ -33,6 +33,7 @@ class VcUsers extends Component
         ->when($this->filters['srv_nombre'],function($query){
             return $query->whereRaw("name like '%".$this->filters['srv_nombre']."%'");
         })
+        ->where('acceso',1)
         ->paginate(10);   
                 
         return view('livewire.vc-users',[
@@ -165,16 +166,21 @@ class VcUsers extends Component
 
     public function delete($id)
     {
-        
-        User::where('id', $id)
-        ->update([
-            'acceso' => 0
-        ]);
-        
-        $this->dispatchBrowserEvent('msg-grabar', [
-            'newName' => 'Se ha deshabilitado el acceso del usuario.'
-        ]);
+        $this->userId = $id;
+        $this->dispatchBrowserEvent('show-modal-inhabilitar');
 
+    }
+
+    public function inhabilitarAcceso()
+    {
+        User::where('id', $this->userId)
+            ->update([
+                'acceso' => 0
+            ]);
+
+        $this->dispatchBrowserEvent('hide-modal-inhabilitar');
+
+        session()->flash('success', 'El acceso del usuario fue inhabilitado correctamente.');
     }
 
 }
