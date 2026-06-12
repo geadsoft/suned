@@ -73,6 +73,7 @@ class VcResources extends Component
         ->join("tm_files as f","f.actividad_id","=","tm_recursos.id")
         ->where("tm_recursos.periodo_id",$this->periodoId)
         ->where("tm_recursos.docente_id",$this->docenteId)
+        ->where("f.recurso",1)
         ->get();
 
         $this->loadCursos($tblrecords);
