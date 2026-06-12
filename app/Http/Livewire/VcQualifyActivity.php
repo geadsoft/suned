@@ -87,7 +87,7 @@ class VcQualifyActivity extends Component
         ->where('tm_horarios.grupo_id', $this->modalidadId)
         ->select('p.id', 'p.apellidos', 'p.nombres')
         ->groupBy('p.id', 'p.apellidos', 'p.nombres')
-        ->orderby('p.apellidos','p.nombres');
+        ->orderby('p.apellidos','p.nombres')
         ->get();
 
         $this->loadPersonas();
