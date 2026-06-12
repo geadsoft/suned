@@ -17,10 +17,10 @@
                             @can('Actualiza Notas')
                             <div class="col-lg-6 mb-3">
                                 <label for="choices-publish-status-input" class="form-label fw-semibold">Docente</label>
-                                <select class="form-select text-uppercase" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="docenteId">
+                                <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="docenteId">
                                    <option value="">Seleccione Docente</option>
                                    @foreach ($tbldocentes as $docente) 
-                                    <option value="{{$docente->id}}">{{$docente->apellidos}} {{$docente->nombres}}</option>
+                                    <option value="{{$docente->id}}">{{ mb_strtoupper($docente->apellidos . ' ' . $docente->nombres, 'UTF-8') }}</option>
                                     @endforeach 
                                 </select>
                             </div>
