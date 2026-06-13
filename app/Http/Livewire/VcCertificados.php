@@ -28,7 +28,22 @@ class VcCertificados extends Component
     public $tipoDoc="MF", $periodoId, $cursoId, $nombres, $nui="", $documento, $fecha, $folio=0, $matricula=0, $nomcurso="";
     public $periodo, $foto="", $rector, $secretaria, $coordinador, $bachilleren="", $nota=0, $escala=''; 
     public $dttitulo="", $dtnombre="", $dtinstitucion="", $dtcargo="", $dtfecha, $refrendacion=0, $pagina=0, $fprorroga, $documentos="";
-    public $especializacion="",$paseCursoId,$matriculaId=0,$registrar, $orden, $notaletra;
+    public $especializacion="",$paseCursoId,$matriculaId=0,$registrar, $orden, $notaletra, $modalidadId, $nivelId;
+
+    public $solicitudes=[
+        'MF' => 'Matricula con Folio',
+        'MA' => 'Matricula',
+        'PA' => 'Pasantias',
+        'CO' => 'Conducta',
+        'AP' => 'Aprovechamiento',
+        'PR' => 'Pase Reglamentario',
+        'AR' => 'Aceptacion Pase Reglamentario',
+        'ER' => 'Emisión Pase Reglamentario',
+        'RR' => 'Rezago con Refrendación',
+        'SD' => 'Constancia Subsecretaria y Distrito',
+        'ND' => 'No Constancia Subsecretaria y Distrito',
+    ];
+
     public $refescala=[
         'EX' => 'Demuestra destacado desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un excente aporte a su formación integral.',
         'MB' => 'Demuestra muy buen desempeño en cada fase de desarrollo del proyecto escolar lo que constituye un aporte a su formación integral.',
@@ -41,7 +56,12 @@ class VcCertificados extends Component
         'EX' => 'EXCELENTE',
         'MB' => 'MUY BUENO',
         'B'  => 'BUENO',
-        'R'  => 'REGULAR'
+        'R'  => 'REGULAR',
+        'A'  => 'Muy Satisfactorio',
+        'B' =>  'Satisfactorio',
+        'C' =>  'Poco Satisfactorio',
+        'D' =>  'Mejorable',
+        'E' =>  'Insatisfactorio',
     ];
 
     public $mes = [
@@ -204,13 +224,18 @@ class VcCertificados extends Component
 
         if ($this->tipoDoc=='CO' || $this->tipoDoc=='AP' || $this->tipoDoc=='PR' || $this->tipoDoc=='AR' ){
             $grado = $servicio->grado->descripcion;
-            $array = [
-                'Primero' => 'PRIMER AÑO DE ',
-                'Segundo' => 'SEGUNDO AÑO DE ',
-                'Tercero' => 'TERCER AÑO DE ',
-            ];
+            
+            if ($servicio->nivel_id==11){
+                $array = [
+                    'Primero' => 'PRIMER AÑO DE ',
+                    'Segundo' => 'SEGUNDO AÑO DE ',
+                    'Tercero' => 'TERCER AÑO DE ',
+                ];
+                $this->bachilleren = $array[$grado].strtoupper($this->bachilleren);
+            }else{
+                $this->bachilleren = strtoupper($this->bachilleren);
+            }
 
-            $this->bachilleren = $array[$grado].strtoupper($this->bachilleren);
         }
 
         if ($this->tipoDoc=='RR'){
@@ -226,6 +251,22 @@ class VcCertificados extends Component
         }else{
             $this->control="disabled";
         }
+
+        $this->nombres='';
+        $this->matriculaId = '';
+        $this->documento =  '';
+        $this->fecha     =  '';
+        $this->modalidadId = '';
+        $this->nivelId   =  '';
+        $this->cursoId   =  '';
+        $this->nombres = '';
+        $this->nui     = '';
+        $this->foto    = '';
+        $this->nomcurso = '';
+        $this->bachilleren = '';
+        $this->folio     = ''; 
+        $this->documento = '';
+        $this->matricula = '';
         
     }
 
