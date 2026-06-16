@@ -43,7 +43,7 @@
                             <div class="row mb-3">
                                 <div class="col-sm-6">
                                     <label for="bloque-select" class="form-label fw-semibold">Bloque</label>
-                                    <select class="form-select" id="bloque-select" data-choices data-choices-search-false wire:model.defer="bloque">
+                                    <select class="form-select" id="bloque-select" data-choices data-choices-search-false wire:model.defer="bloque" required>
                                         @foreach ($tblbloque as $bloques) 
                                         <option value="{{$bloques->codigoEx}}">{{$bloques->descripcion}}</option>
                                         @endforeach 

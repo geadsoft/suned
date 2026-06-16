@@ -252,25 +252,9 @@ class VcActividadAdd extends Component
             'termino' => 'required',
             'nombre' => 'required',
             'fecha' => 'required',
-            'puntaje' => 'required'
-        ]);
-
-        /*if ($this->archivo=='SI'){
-
-            foreach ($this->array_attach as $attach){
-                $file = $attach['adjunto'];
-                $ext =  $file->getClientOriginalExtension();
-
-                if (in_array(strtolower($ext), ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf', 'html', 'jpg', 'png', 'mp4', 'avi'])) {
-                    // Extensión válida
-                } else {
-                    $this->dispatchBrowserEvent('msg-alert', ['newName' => "Archivos adjuntos tienen extension no valida!"]);
-                    return;
-                }
-            }
-
-        }*/
-        
+            'puntaje' => 'required',
+            'bloque'  => 'required'
+        ]);      
 
         $msgfile="";
 
