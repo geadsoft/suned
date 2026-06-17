@@ -247,6 +247,8 @@ class VcActividadAdd extends Component
 
     public function createData(){
 
+        dd($this->bloque);
+
         $this ->validate([
             'paralelo' => 'required',
             'termino' => 'required',
