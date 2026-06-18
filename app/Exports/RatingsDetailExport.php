@@ -7,6 +7,7 @@ use App\Models\TdConductas;
 use App\Models\TmSedes;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TdPeriodoSistemaEducativos;
+use App\Models\TmCursos;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -20,7 +21,10 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
-
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use Illuminate\Support\Facades\DB;
 
 class RatingsDetailExport implements FromView, WithColumnWidths, WithStyles
 {
@@ -46,6 +50,11 @@ class RatingsDetailExport implements FromView, WithColumnWidths, WithStyles
         $tblperiodo = TmPeriodosLectivos::find($this->periodoId);
         $detalles = $this->notas();
         $tblcia = TmSedes::all()->first();
+        $curso  = TmCursos::query()
+        ->join('tm_servicios as s','s.id','=','tm_cursos.servicio_id')
+        ->select('s.descripcion','tm_cursos.paralelo')
+        ->where('tm_cursos.id',$this->cursoId)  
+        ->first();   
 
         $this->consulta['referencia'] = $tblperiodo['descripcion'];
         $this->consulta['nombre'] = $tblcia['nombre'];
@@ -56,6 +65,7 @@ class RatingsDetailExport implements FromView, WithColumnWidths, WithStyles
         $this->consulta['codigo'] = $tblcia['codigo'];
         $this->consulta['rector'] = '';
         $this->consulta['secretaria'] = '';
+        $this->consulta['curso'] = $curso->descripcion.' - '.$curso->paralelo;
 
         $materias = count($this->asignaturas);
 
@@ -138,7 +148,7 @@ class RatingsDetailExport implements FromView, WithColumnWidths, WithStyles
         ->where("td_conductas.modalidad_id", $this->grupoId)
         ->where("td_conductas.curso_id", $this->cursoId)
         ->whereIn("td_conductas.persona_id", $this->alumnos->pluck('persona_id'))
-        ->select('termino', 'td_conductas.evaluacion', 'persona_id','s.nota')
+        ->select('termino', 'td_conductas.evaluacion', 'persona_id','s.nota', DB::raw('LEFT(s.evaluacion, 1) as letra'))
         ->get()
         ->groupBy('persona_id')
         ->map(function ($items) {
@@ -146,7 +156,7 @@ class RatingsDetailExport implements FromView, WithColumnWidths, WithStyles
             $promedio = round($items->avg('nota'),2);
 
             return [
-                'conducta' => $items->pluck('evaluacion', 'termino')->toArray(),
+                'conducta' => $items->pluck('letra', 'termino')->toArray(),
                 'promedio' => $promedio
             ];
         })
@@ -159,7 +169,7 @@ class RatingsDetailExport implements FromView, WithColumnWidths, WithStyles
 
             foreach ($escalas as $eq) {
                 if ($promedio >= $eq['nota'] && $promedio <= $eq['nota2']) {
-                    $letra = $eq['codigo'];
+                    $letra = substr($eq['evaluacion'], 0, 1); 
                     break;
                 }
             }
@@ -173,8 +183,7 @@ class RatingsDetailExport implements FromView, WithColumnWidths, WithStyles
             $idpersona = $persona['persona_id'];
             $detalles[$idpersona]['linea'] = $linea;
             $detalles[$idpersona]['nombres'] = $persona['apellidos'].' '.$persona['nombres'];
-            $detalles[$idpersona]['comportamiento'] = $arrconducta[$idpersona]['promedio_letra'] ?? '';
-
+            
             foreach($this->asignaturas as $asignatura){
                 $idasignatura = $asignatura['asignatura_id'];
 
@@ -189,10 +198,42 @@ class RatingsDetailExport implements FromView, WithColumnWidths, WithStyles
                 $detalles[$idpersona][$idasignatura]['PR'] = $nota->promedio_anual ?? 0;
                 $detalles[$idpersona][$idasignatura]['PF'] = $nota->promedio_final ?? 0;
             }
+            $detalles[$idpersona]['suma_total'] = 0;
+            $detalles[$idpersona]['promedio_final'] = 0;
+            $detalles[$idpersona]['conducta']['1T'] = $arrconducta[$idpersona]['conducta']['1T'] ?? '';
+            $detalles[$idpersona]['conducta']['2T'] = $arrconducta[$idpersona]['conducta']['2T'] ?? '';
+            $detalles[$idpersona]['conducta']['3T'] = $arrconducta[$idpersona]['conducta']['3T'] ?? '';
+            $detalles[$idpersona]['comportamiento'] = $arrconducta[$idpersona]['promedio_letra'] ?? '';
+            $detalles[$idpersona]['promocion'] = '';
 
             $linea = $linea+1;
         }
 
+        $numAsignaturas=count($this->asignaturas);
+        foreach ($detalles as $idpersona => $asignaturas) {
+
+            $suma = collect($asignaturas)->sum('PR');
+
+            $promedio = count($this->asignaturas) > 0
+                ? round($suma / $numAsignaturas, 2)
+                : 0;
+
+            $detalles[$idpersona]['suma_total'] = $suma;
+            $detalles[$idpersona]['promedio_final'] = $promedio;
+
+            if ($promedio >= 0 && $promedio <= 3.99) {
+                $promocion = "PIERDE AÑO";
+            } elseif ($promedio <= 6.99) {
+                $promocion = "SUPLETORIO";
+            } elseif ($promedio <= 10) {
+                $promocion = "APROBADO";
+            }
+            
+            $detalles[$idpersona]['promocion'] = $promocion;
+
+        }
+
+        
         return $detalles;
 
     }
@@ -204,69 +245,98 @@ class RatingsDetailExport implements FromView, WithColumnWidths, WithStyles
         // Columnas fijas
         $columnWidths['A'] = 8;   // N°
         $columnWidths['B'] = 40;  // Nómina
-        $columnWidths['C'] = 17;  // Comportamiento
 
         // Columnas dinámicas (asignaturas)
-        $colIndex = 4; // D
+        $colIndex = 3; // D
 
         foreach ($this->asignaturas as $asignatura) {
 
-            for ($i = 0; $i < 6; $i++) { // 6 columnas por materia
+            for ($i = 0; $i < 4; $i++) { // 6 columnas por materia
                 $letra = Coordinate::stringFromColumnIndex($colIndex);
-
-                if ($i==5){
-                    $columnWidths[$letra] = 1;
-                }else{
-                    $columnWidths[$letra] = 7;
-                }
+                $columnWidths[$letra] = 8;
                 $colIndex++;
             }
             
         }
+
+        $letra = Coordinate::stringFromColumnIndex($colIndex);
+        $columnWidths[$letra] = 13;
+        $colIndex++;
+
+        $letra = Coordinate::stringFromColumnIndex($colIndex);
+        $columnWidths[$letra] = 13;
+        $colIndex++;
+
+        for ($i = 0; $i < 4; $i++) { // 6 columnas por materia
+            $letra = Coordinate::stringFromColumnIndex($colIndex);
+            $columnWidths[$letra] = 8;
+            $colIndex++;
+        }
+
+        $letra = Coordinate::stringFromColumnIndex($colIndex);
+        $columnWidths[$letra] = 20;
         
         return $columnWidths;
     }
 
     public function styles(Worksheet $sheet)
     {
-        // Total columnas = 3 fijas + (asignaturas * 6)
-        $totalColumnas = 3 + (count($this->asignaturas) * 6);
+        //Encabezado
+        $ultimaColumna = $sheet->getHighestColumn();
 
-        $ultimaColumna = Coordinate::stringFromColumnIndex($totalColumnas);
+        for ($fila = 1; $fila <= 6; $fila++) {
 
-        // ENCABEZADO
-        $range = 'A1:' . $ultimaColumna . '6';
+            $rango = 'A' . $fila . ':' . $ultimaColumna . $fila;
 
-        $sheet->getStyle($range)->applyFromArray([
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-                'wrapText' => true,
-            ],
-            'font' => [
-                'bold' => true,
-            ]
-        ]);
+            // Combinar fila completa
+            $sheet->mergeCells($rango);
+
+            // Centrar horizontal y verticalmente
+            $sheet->getStyle($rango)->applyFromArray([
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical'   => Alignment::VERTICAL_CENTER,
+                    'wrapText'   => true,
+                ],
+            ]);
+        }
+
+        //Centrar Datos
+        $ultimaFila    = $sheet->getHighestRow();
+
+        $sheet->getStyle('C7:' . $ultimaColumna . $ultimaFila)
+            ->getAlignment()
+            ->setHorizontal(Alignment::HORIZONTAL_CENTER)
+            ->setVertical(Alignment::VERTICAL_CENTER);
 
         // OPCIONAL: Bordes a toda la tabla
         $lastRow = $sheet->getHighestRow();
 
         $sheet->getStyle('A1:' . $ultimaColumna . $lastRow)
-            ->applyFromArray([
-                'borders' => [
-                    'allBorders' => [
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    ],
+        ->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                 ],
-            ]);
+            ],
+        ]);
+
+        //Negrita Subtitulo
+        $colmaterias = 2+count($this->asignaturas) * 4;
+        $colfinal =  Coordinate::stringFromColumnIndex($colmaterias);
+        $subtitulo = 'C8:' . $colfinal.'8';
+        $sheet->getStyle($subtitulo)
+        ->getFont()
+        ->setBold(true);
+
 
         //Color por Materia
-        $colIndex = 4; // desde D
+        $colIndex = 3; // desde D
 
         foreach ($this->asignaturas as $asignatura) {
 
             $inicio = Coordinate::stringFromColumnIndex($colIndex);
-            $fin = Coordinate::stringFromColumnIndex($colIndex + 4); // 5 columnas visibles
+            $fin = Coordinate::stringFromColumnIndex($colIndex + 3); // 5 columnas visibles
 
             $sheet->getStyle($inicio . '8:' . $fin . $sheet->getHighestRow())
                 ->applyFromArray([
@@ -278,18 +348,18 @@ class RatingsDetailExport implements FromView, WithColumnWidths, WithStyles
                     ],
                 ]);
 
-            $colIndex += 6; // saltar bloque completo
+            $colIndex += 4; // saltar bloque completo
         }
 
         // Reprobados
         $lastRow = $sheet->getHighestRow();
 
-        $colIndex = 4; // empieza en D
+        $colIndex = 3; // empieza en D
 
         foreach ($this->asignaturas as $asignatura) {
 
             // Columna FINAL (PF) → posición 5 del bloque
-            $finalCol = Coordinate::stringFromColumnIndex($colIndex + 4);
+            $finalCol = Coordinate::stringFromColumnIndex($colIndex + 3);
 
             $conditional = new Conditional();
             $conditional->setConditionType(Conditional::CONDITION_CELLIS);
@@ -303,47 +373,242 @@ class RatingsDetailExport implements FromView, WithColumnWidths, WithStyles
             $sheet->getStyle($finalCol . '7:' . $finalCol . $lastRow)
                 ->setConditionalStyles([$conditional]);
 
-            $colIndex += 6; // siguiente asignatura
+            $colIndex += 4; // siguiente asignatura
         }
 
+        
         //Promedio Negrita
-        $colIndex = 4;
+        $colIndex = 3;
 
         foreach ($this->asignaturas as $asignatura) {
 
-            // Promedio (col + 3)
-            //$promCol = Coordinate::stringFromColumnIndex($colIndex + 3);
+            $finalCol = Coordinate::stringFromColumnIndex($colIndex + 3);
 
-            // Final (col + 4)
-            $finalCol = Coordinate::stringFromColumnIndex($colIndex + 4);
+            $sheet->getStyle($finalCol . '9:' . $finalCol . $sheet->getHighestRow())
+                ->applyFromArray([
+                    'font' => [
+                        'bold' => true,
+                    ],
+                    'fill' => [
+                        'fillType' => Fill::FILL_SOLID,
+                        'startColor' => [
+                            'argb' => 'B8CCE4',
+                        ],
+                    ],
+                ]);
 
-            //$sheet->getStyle($promCol . '7:' . $promCol . $sheet->getHighestRow())
-            //    ->getFont()->setBold(true);
-
-            $sheet->getStyle($finalCol . '7:' . $finalCol . $sheet->getHighestRow())
-                ->getFont()->setBold(true);
-
-            $colIndex += 6;
+            $colIndex += 4;
         }
 
-        $sheet->getDefaultRowDimension()->setRowHeight(16);
+        $ultimaFila = $sheet->getHighestRow();
+        // Columna A
+        $sheet->getStyle('A7:A' . $ultimaFila)->applyFromArray([
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_MEDIUM,
+                    'color' => ['argb' => '000000'],
+                ],
+                'inside' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+        ]);
 
-        $sheet->getStyle('A1:' . $ultimaColumna . $sheet->getHighestRow())
-        ->getAlignment()
-        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        // Columna B
+        $sheet->getStyle('B7:B' . $ultimaFila)->applyFromArray([
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_MEDIUM,
+                    'color' => ['argb' => '000000'],
+                ],
+                'inside' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+        ]);
 
-        $lastRow = $sheet->getHighestRow();
+        $colIndex = 3; // C
 
-        // Auto height
-        for ($row = 7; $row <= $lastRow; $row++) {
-            $sheet->getRowDimension($row)->setRowHeight(-1);
+        foreach ($this->asignaturas as $asignatura) {
+
+            $inicioCol = Coordinate::stringFromColumnIndex($colIndex);
+            $finCol    = Coordinate::stringFromColumnIndex($colIndex + 3);
+
+            // Desde la fila del encabezado hasta la última fila de datos
+            $rango = $inicioCol . '7:' . $finCol . $sheet->getHighestRow();
+
+            $sheet->getStyle($rango)->applyFromArray([
+                'borders' => [
+                    'outline' => [
+                        'borderStyle' => Border::BORDER_MEDIUM,
+                        'color' => ['argb' => '000000'],
+                    ],
+                ],
+            ]);
+
+            $colIndex += 4;
         }
 
-        // Wrap text global
-        $sheet->getStyle('A1:' . $ultimaColumna . $lastRow)
-            ->getAlignment()
-            ->setWrapText(true);
+        $sheet->getStyle('A7:' . $ultimaColumna . '8')
+        ->applyFromArray([
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_MEDIUM,
+                    'color' => ['argb' => '000000'],
+                ]
+            ],
+        ]);
 
+        //Totales
+        $indexColIni = $colIndex;
+        $indexColFin = $colIndex;
 
+        $iniCol = Coordinate::stringFromColumnIndex($indexColIni);
+        $finCol = Coordinate::stringFromColumnIndex($indexColFin);
+        $rango = $iniCol . '7:' . $finCol . $sheet->getHighestRow();
+
+        $sheet->getStyle($rango)->applyFromArray([
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_MEDIUM,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+        ]);
+
+        $indexColIni = $indexColIni+1;
+        $indexColFin = $indexColFin+1;
+
+        $iniCol = Coordinate::stringFromColumnIndex($indexColIni);
+        $finCol = Coordinate::stringFromColumnIndex($indexColFin);
+        $rango = $iniCol . '7:' . $finCol . $sheet->getHighestRow();
+
+        $sheet->getStyle($rango)->applyFromArray([
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_MEDIUM,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+        ]);
+
+        $indexColIni = $indexColIni+1;
+        $indexColFin = $indexColIni+3;
+
+        $iniCol = Coordinate::stringFromColumnIndex($indexColIni);
+        $finCol = Coordinate::stringFromColumnIndex($indexColFin);
+        $rango = $iniCol . '7:' . $finCol . $sheet->getHighestRow();
+
+        $sheet->getStyle($rango)->applyFromArray([
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_MEDIUM,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+        ]);
+
+        $indexColIni = $indexColIni+1;
+        $indexColFin = $indexColFin+1;
+
+        $iniCol = Coordinate::stringFromColumnIndex($indexColIni);
+        $finCol = Coordinate::stringFromColumnIndex($indexColFin);
+        $rango = $iniCol . '7:' . $finCol . $sheet->getHighestRow();
+
+        $sheet->getStyle($rango)->applyFromArray([
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_MEDIUM,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+        ]);
+
+        //Formula Suma
+        // C = 3
+        // Cada asignatura ocupa 4 columnas
+        $colInicioMaterias = 3;
+        $totalMaterias = count($this->asignaturas);
+
+        // Columna SUMA TOTAL
+        $colSumaTotal = Coordinate::stringFromColumnIndex(
+            $colInicioMaterias + ($totalMaterias * 4)
+        );
+
+        // Columna PROMEDIO FINAL
+        $colPromedioFinal = Coordinate::stringFromColumnIndex(
+            3 + ($totalMaterias * 4) + 1
+        );
+
+        $filaInicio = 9;
+        $filaFin = $sheet->getHighestRow();
+
+        for ($fila = $filaInicio; $fila <= $filaFin; $fila++) {
+
+            $formula = [];
+            $colIndex = 3; // C
+
+            foreach ($this->asignaturas as $asignatura) {
+
+                // 4ta columna del bloque = Promedio
+                $colPromedio = Coordinate::stringFromColumnIndex($colIndex + 3);
+
+                $formula[] = $colPromedio . $fila;
+
+                $colIndex += 4;
+            }
+
+            $sheet->setCellValue(
+                $colSumaTotal . $fila,
+                '=SUM(' . implode(',', $formula) . ')'
+            );
+        }
+
+        $filaInicio = 9;
+        $filaFin = $sheet->getHighestRow();
+
+        for ($fila = $filaInicio; $fila <= $filaFin; $fila++) {
+
+            $sheet->setCellValue(
+                $colPromedioFinal . $fila,
+                '=ROUND(' . $colSumaTotal . $fila . '/' . $totalMaterias . ',2)'
+            );
+
+        }
+
+        $sheet->getStyle(
+            $colSumaTotal . '9:' . $colPromedioFinal . $ultimaFila
+        )->applyFromArray([
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => 'B8CCE4',
+                ],
+            ],
+            'font' => [
+                'bold' => true,
+            ],
+        ]);
+
+        $colPromConducta = Coordinate::stringFromColumnIndex(
+            3 + ($totalMaterias * 4) + 5
+        );
+
+        $sheet->getStyle(
+            $colPromConducta . '9:' . $colPromConducta . $sheet->getHighestRow()
+        )->applyFromArray([
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => 'B8CCE4',
+                ],
+            ],
+            'font' => [
+                'bold' => true,
+            ],
+        ]);
+        
     }
 }

@@ -15,50 +15,47 @@ $positiveChanges = 0;
 <table class="table-text-center">
     <thead>
         <tr>
-            <th colspan="{{$column}}">
-                <p class="text-center" style="margin: 0px;">{{$data['nombre']}}</p>
+            <th>{{$data['nombre']}}</th> 
+        </tr>
+        <tr>
+            <th></th> 
+        </tr>
+        <tr>
+            <th>INFORME FINAL DE CALIFICACIONES</th> 
+        </tr>
+        <tr>
+            <th>
+                <p class="text-center" style="margin: 0px;">{{$data['curso']}}</p>
             </th> 
         </tr>
         <tr>
-            <th colspan="{{$column}}">
-                <p class="text-center" style="margin: 0px;"><strong>Dirección:</strong>{{$data['direccion']}}</p>
-            </th> 
-        </tr>
-        <tr>
-            <th colspan="{{$column}}">
-                <p class="text-center" style="margin: 0px;"><strong>Teléfono:</strong>{{$data['telefono']}}</p>
-            </th> 
-        </tr>
-        <tr>
-            <th colspan="{{$column}}">
+            <th>
                 <p class="text-center" style="margin: 0px;">{{$data['periodo']}}</p>
             </th> 
         </tr>
-        <tr>
-            <th colspan="{{$column}}">
-                <p class="text-center" style="margin: 0px;">CUADRO DE CALIFICACIONES</p>
-            </th> 
-        </tr>
-        <tr><th colspan="{{$column}}"></th></tr>
+        <tr><th></th></tr>
         <tr class="text-uppercase text-center">
-            <th>N°</th>
-            <th>Nómina</th>
-            <th rowspan="2" style="height:120px; width:30px; padding:0;">Comportamiento</th>
+            <th rowspan="2">N°</th>
+            <th rowspan="2">Nómina</th>
             @foreach ($asignaturas as $data)
-            <th colspan="5" style="background-color:#222454; color:white; ">{{$data['descripcion']}}</th>
-            <th style="background-color:white; color:white;"></th>
+            <th colspan="4" style="background-color:#222454; color:white; ">{{$data['descripcion']}}</th>
             @endforeach
+            <th rowspan="2" style="background-color:#222454; color:white; ">SUMA TOTAL</th>
+            <th rowspan="2" style="background-color:#222454; color:white; ">PROMEDIO FINAL</th>
+            <th colspan="4" style="background-color:#222454; color:white; ">COMPORTAMIENTO</th>
+            <th rowspan="2" style="background-color:#222454; color:white; ">OBSERVACIONES</th>
         </tr>
         <tr style="height:100px;">
-            <th colspan="3"></th>
             @foreach ($asignaturas as $data)
             <th>I Tr.</th>
             <th>II Tr.</th>
             <th>III Tr.</th>
             <th>Prom.</th>
-            <th>Final</th>
-            <th></th>
             @endforeach
+            <th>I Tr.</th>
+            <th>II Tr.</th>
+            <th>III Tr.</th>
+            <th>Prom.</th>
         </tr>
     </thead>
     <tbody>
@@ -69,7 +66,6 @@ $positiveChanges = 0;
         <tr>
             <td>{{ $detalles[$idPersona]['linea'] ?? '' }}</td>
             <td>{{ $detalles[$idPersona]['nombres'] ?? '' }}</td>
-            <td class="text-center">{{ $detalles[$idPersona]['comportamiento'] ?? '' }}</td>
             @foreach ($asignaturas as $asignatura)
                 @php
                     $idasignatura = $asignatura['asignatura_id'];
@@ -79,9 +75,14 @@ $positiveChanges = 0;
                 <td class="text-center">{{ number_format($nota['2T'],2) ?? '' }}</td>
                 <td class="text-center">{{ number_format($nota['3T'],2) ?? '' }}</td>
                 <td class="text-center">{{ number_format($nota['PR'],2) ?? '' }}</td>
-                <td class="text-center">{{ number_format($nota['PF'],2) ?? '' }}</td>
-                <td></td>
             @endforeach
+            <td>0</td>
+            <td>0</td>
+            <td>{{$detalles[$idPersona]['conducta']['1T'] ?? '' }}</td>
+            <td>{{$detalles[$idPersona]['conducta']['2T'] ?? '' }}</td>
+            <td>{{$detalles[$idPersona]['conducta']['3T'] ?? '' }}</td>
+            <td class="text-center">{{ $detalles[$idPersona]['comportamiento'] ?? '' }}</td>
+            <td class="text-center">{{ $detalles[$idPersona]['promocion'] ?? '' }}</td>
         </tr>
         @endforeach
     </tbody>
