@@ -5,7 +5,7 @@ use App\Models\TmPersonas;
 use App\Models\TdFacturaEstudiantes;
 use App\Models\TmFamiliarEstudiantes;
 use App\Models\TmGeneralidades;
-
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class VcPersonsBilling extends Component
@@ -62,7 +62,10 @@ class VcPersonsBilling extends Component
     public function loadNui(){
 
         $this->error=0;
-        $records = TmPersonas::where("identificacion",$this->search_nui)->first();
+        $records = TmPersonas::where(
+            DB::raw('TRIM(identificacion)'),
+            trim($this->search_nui)
+        )->first();
         if (!empty($records)){
 
             $this->familiarId = $records['id'];
