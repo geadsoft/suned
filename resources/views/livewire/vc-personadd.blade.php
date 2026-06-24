@@ -117,19 +117,23 @@
                                     <div class="col-lg-4">
                                         <div class="row">
                                             <div class="card-body text-center mb-3">
-                                                
-                                                <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-                                                    <!--<img src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('assets/images/users/avatar-1.jpg') }} @endif"
-                                                        class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">-->   
+                                                <div class="profile-user position-relative d-inline-block mx-auto mb-4">
                                                     @if ($fileimg)
                                                         <img src="{{ $fileimg->temporaryURL() }}"
-                                                            class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
+                                                            class="rounded-circle avatar-xl img-thumbnail user-profile-image"
+                                                            alt="user-profile-image">
                                                     @else
                                                         <img src="@if ($foto != '') {{ URL::asset('storage/fotos/'.$foto) }}@else{{ URL::asset('assets/images/users/sin-foto.jpg') }} @endif"
-                                                            class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
+                                                            class="rounded-circle avatar-xl img-thumbnail user-profile-image"
+                                                            alt="user-profile-image">
                                                     @endif
+
                                                     <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                                                        <input id="profile-img-file-input" type="file" class="profile-img-file-input" wire:model="fileimg">
+                                                        <input id="profile-img-file-input"
+                                                            type="file"
+                                                            class="profile-img-file-input"
+                                                            wire:model="fileimg"
+                                                            accept=".jpg,.jpeg,.png">
                                                         <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
                                                             <span class="avatar-title rounded-circle bg-light text-body">
                                                                 <i class="ri-camera-fill"></i>
@@ -137,6 +141,18 @@
                                                         </label>
                                                     </div>
                                                 </div>
+                                                <!-- Mensaje informativo -->
+                                                <div class="text-muted small">
+                                                    <i class="ri-information-line me-1"></i>
+                                                    Formatos permitidos: <strong>JPG, JPEG y PNG</strong>.
+                                                    Tamaño máximo: <strong>1024 KB (1 MB)</strong>.
+                                                </div>
+
+                                                @error('fileimg')
+                                                    <div class="text-danger small mt-1">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -177,7 +193,7 @@
                                         <div class="mb-3">
                                             <label for="txttelefono" class="form-label">Teléfono</label>
                                             <input type="text" class="form-control" id="txttelefono"
-                                                placeholder="Enter your phone number" wire:model.defer="telefono" required {{$eControl}}>
+                                                placeholder="Enter your phone number" wire:model.defer="telefono" {{$eControl}}>
                                         </div>
                                     </div>
 

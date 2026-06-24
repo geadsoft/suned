@@ -47,17 +47,22 @@ function selecTab(SelectTab) {
             var apellidos = document.getElementById("txtapellidos").value
             var fechanace = document.getElementById("txtfechanace").value
             var identific = document.getElementById("txtnui").value
-            var txtemail  = document.getElementById("txtemail").value.normalize("NFC")
+            var txtemail = document.getElementById("txtemail").value
+                .normalize("NFC")
+                .trim();
 
-            if (!/^[\x00-\x7F]+$/.test(txtemail)) {
-                swal("Error!", "El correo contiene caracteres no permitidos (como la ñ o tildes).", "warning");
-                return false;
-            }
+            if (txtemail !== '') {
 
-            let expr = /^[a-zA-Z0-9._-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
-            if (!expr.test(txtemail)) {
-                swal("Error!", "La dirección de correo " + txtemail + " es incorrecta.", "warning");
-                return false;
+                let expr = /^[a-zA-Z0-9._-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
+
+                if (!expr.test(txtemail)) {
+                    swal(
+                        "Error!",
+                        "La dirección de correo " + txtemail + " es incorrecta.",
+                        "warning"
+                    );
+                    return false;
+                }
             }
 
             if (!this.validate_fecha(fechanace)){
@@ -78,16 +83,26 @@ function selecTab(SelectTab) {
             var perapellidos = document.getElementById("perapellidos").value
             var perdirecion  = document.getElementById("perdireccion").value
             var peremail     = document.getElementById("peremail").value
+            .normalize("NFC")
+            .trim();
 
             if ((pernombres == "") || (perapellidos == "") || (perdirecion == "")) {  //COMPRUEBA CAMPOS VACIOS
                 swal("Error!", "Datos del representante no deben estar vacios..", "warning");
                 return true;
             }
             
-            expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
-            if (!expr.test(peremail)) {
-                swal("Error!", "La dirección de correo " + peremail + " es incorrecta o contiene caracteres no permitidos.", "warning");
-                return true;
+            if (peremail !== '') {
+
+                let expr = /^[a-zA-Z0-9._-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
+
+                if (!expr.test(peremail)) {
+                    swal(
+                        "Error!",
+                        "La dirección de correo " + peremail + " es incorrecta.",
+                        "warning"
+                    );
+                    return false;
+                }
             }
                 
             document.getElementById('pills-bill-family-tab').click()
