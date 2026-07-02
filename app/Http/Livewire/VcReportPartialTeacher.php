@@ -327,7 +327,7 @@ class VcReportPartialTeacher extends Component
                     ->select("n.*")
                     ->first();
                                         
-                    $nota =  $notas['nota'];
+                    $nota =  $notas['nota'] ?? 0;
                     $col = $key2.$key3;
                     $this->tblrecords[$key][$col] = floatval($nota);
                     $suma = $suma + floatval($nota);
