@@ -55,7 +55,7 @@ class VcModalPersonaFactura extends Component
             $buscar = trim($this->filters['srv_nombre']);
 
             return $query->whereRaw(
-                "UPPER(CONCAT(tm_personas.apellidos, ' ', tm_personas.nombres)) LIKE ?",
+                "UPPER(CONCAT(trim(tm_personas.apellidos),' ',trim(tm_personas.nombres))) LIKE ?",
                 ['%' . strtoupper($buscar) . '%']
             );
         })
