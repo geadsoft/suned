@@ -13,7 +13,7 @@ class VcShowAssistance extends Component
 {
     use WithPagination;
 
-    public $periodoId, $personaId, $cursoId, $faltas=10, $faltasJus=0, $atraso=0, $atrasoJus=0, $tabactive='';
+    public $periodoId, $personaId, $cursoId, $faltas=10, $faltasJus=0, $atraso=0, $atrasoJus=0, $tabactive='', $modalidadId;
     public $tbltermino=[];
     
 
@@ -26,14 +26,16 @@ class VcShowAssistance extends Component
         $this->periodoId = $tblperiodos['id'];
         $this->personaId = auth()->user()->personaId;
 
-         $matricula = TmCambiaModalidad::query()
+        $matricula = TmCambiaModalidad::query()
         ->where('persona_id',$this->personaId)
         ->first();
 
         $this->cursoId = $matricula->curso_id;
+        $this->modalidadId = $matricula->modalidad_id;
 
         $this->tbltermino = TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId )
+        ->where('modalidad_id',$this->modalidadId)
         ->where('tipo','EA')
         ->orderByRaw("cerrar,codigo")
         ->get();
