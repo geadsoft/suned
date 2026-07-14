@@ -52,17 +52,6 @@ class VcViewCalendar extends Component
 
         if ($persona->tipopersona=='E'){
 
-            /*$matricula = TmCambiaModalidad::query()
-            ->where('persona_id',$this->personaId)
-            ->first();
-
-            if(empty($matricula)){
-                $this->modalidadId = 0;
-                $this->gradoId = 0;
-            }else{
-                $this->modalidadId = $matricula['modalidadId'];
-                $this->gradoId = $matricula['gradoId'];
-            }*/
             $matricula = TmCambiaModalidad::query()
             ->where('persona_id',$this->personaId)
             ->first();
@@ -96,16 +85,19 @@ class VcViewCalendar extends Component
 
 
             // Eventos Todos
-            $evenTodos = TmCalendarioEventos::query()
-            //->where('periodo',$this->periodo)
-            ->whereDate('start_date', '>=', $this->fechaEmpieza)
-            ->whereDate('end_date', '<=', $this->fechaTermina)
-            //->where('mes',$this->mes)
-            ->where('todos',1)
-            ->selectRaw('tm_calendario_eventos.*, DATE(DATE_ADD(end_date, INTERVAL 1 DAY)) as fecha2')
+            $eventosTodos = TmCalendarioEventos::query()
+            ->whereDate('start_date', '<=', $this->fechaTermina)
+            ->whereDate('end_date', '>=', $this->fechaEmpieza)
+            ->where('todos', 1)
+            ->where(function ($query) {
+                $query->where('actividad', '<>', 'ND')
+                    ->orWhereNull('actividad');
+            })
+            ->select('tm_calendario_eventos.*')
+            ->selectRaw('DATE_ADD(DATE(end_date), INTERVAL 1 DAY) AS fecha2')
             ->get();
            
-            $this->arrayObject($evenTodos);            
+            $this->arrayObject($eventosTodos);            
 
             // Eventos Modalidad
             $eventModalidad = TmCalendarioEventos::query()
