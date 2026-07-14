@@ -19,6 +19,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles, WithColumnFormatting
 {
@@ -29,6 +30,7 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles, W
     public function __construct($filters)
     {
         $this->filters = json_decode($filters, true);
+        
     }
 
     public function view(): View 
@@ -113,6 +115,7 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles, W
 
         return view('export.listadoIngresos',[
             'tblrecords' => $tblrecords,
+            'filters' => $this->filters,
         ]);
     }
 
