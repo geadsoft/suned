@@ -16,9 +16,11 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Illuminate\Support\Facades\DB;
 
-class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
+class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles, WithColumnFormatting
 {
     use Exportable;
 
@@ -37,6 +39,7 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
         ->join("tr_deudas_cabs as dc","dc.id","=","dd.deudacab_id")
         ->join("tm_matriculas as m","m.id","=","dc.matricula_id")
         ->join("tm_personas as p","p.id","=","m.estudiante_id")
+        ->join("tm_personas as pe","pe.id","=","m.representante_id")
         ->join("tm_cursos as c","c.id","=","m.curso_id")
         ->join("tm_servicios as s","s.id","=","c.servicio_id")
         ->join("tm_generalidades as bc","bc.id","=","cd.entidad_id")
@@ -78,7 +81,9 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
             'bc.descripcion as entidad',
             DB::raw('SUM(dd.valor) as pago'),
             'cd.valor',
-            'tr_cobros_cabs.usuario'
+            'tr_cobros_cabs.usuario',
+            DB::raw("CONCAT(pe.nombres,' ',pe.apellidos) as representante"),
+            'pe.identificacion as nuirepresentante' 
         )
 
         ->where('dd.tipo','<>','DES')
@@ -98,7 +103,9 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
             'cd.referencia',
             'bc.descripcion',
             'cd.valor',
-            'tr_cobros_cabs.usuario'
+            'tr_cobros_cabs.usuario',
+            'representante',
+            'pe.identificacion'
         )
 
         ->orderBy('tr_cobros_cabs.fecha')
@@ -117,28 +124,21 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
             'D' => 15,
             'E' => 37,
             'F' => 37,
-            'G' => 15,
-            'H' => 20,
-            'I' => 21,
-            'J' => 15,
-            'K' => 40,
-            'L' => 25,
+            'G' => 37,
+            'H' => 15,
+            'I' => 11,
+            'J' => 20,
+            'K' => 21,
+            'L' => 15,
+            'M' => 40,
+            'N' => 25,
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        /*return [
-            // Style the first row as bold text.
-            1    => ['font' => ['bold' => true]],
 
-            // Styling a specific cell by coordinate.
-            'B6' => ['font' => ['italic' => true]],
-
-            // Styling an entire column.
-            'C'  => ['font' => ['size' => 16]],
-        ];*/
-        $range = 'A1:M3';
+        $range = 'A1:N3';
         $style = [
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
@@ -152,5 +152,14 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles
         $sheet->getStyle($range)->applyFromArray($style);
         
     }
+
+
+        public function columnFormats(): array
+        {
+            return [
+                'H' => NumberFormat::FORMAT_TEXT,
+            ];
+        }
+    
 
 }

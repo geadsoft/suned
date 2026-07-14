@@ -31,6 +31,8 @@ $positiveChanges = 0;
             <th>Nº MONTO</th>
             <th>ESTUDIANTE</th>
             <th>CURSO</th>
+            <th>REPRESENTANTE</th>
+            <th>CÉDULA</th>
             <th>FORMA DE PAGO</th>
             <th>REFERENCIA</th>
             <th>ENTIDAD</th>
@@ -48,6 +50,8 @@ $positiveChanges = 0;
             <td>{{number_format($record["monto"],2)}}</td>
             <td>{{$record["apellidos"]}} {{$record["nombres"]}}</td>
             <td>{{$record["descripcion"]}} {{$record["paralelo"]}}</td>
+            <td>{{$record["representante"]}}</td>
+            <td>{{$record["nuirepresentante"]}}</td>
             <td>{{$record["tipopago"]}}</td>
             <td>{{$record["referencia"]}}</td>
             <td>{{$record["entidad"]}}</td>
