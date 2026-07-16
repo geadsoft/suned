@@ -43,7 +43,7 @@
 
     <section style ="margin-top: -110px;">
         
-        <table cellpadding="0" cellspacing="0" class="table table-bordered table-sm align-middle mb-0" style="font-size:10px">
+        <table cellpadding="0" cellspacing="0" class="table table-bordered table-sm align-middle mb-0" style="font-size:9px">
             <thead class="table-light">
                 <tr class="text-uppercase text-muted">
                     <th class="align-middle text-center">NOMBRES</th>
