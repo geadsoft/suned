@@ -435,6 +435,7 @@ class VcReportDetailQualify extends Component
     {   
 
         $data = json_decode($objdata);
+        $this->filters['periodoId'] = $data->periodoId;
         $this->filters['modalidadId'] = $data->modaliadId;
         $this->filters['docenteId'] = $data->docenteId;
         $this->filters['paralelo'] = $data->paralelo;
