@@ -472,7 +472,6 @@ class VcReportDetailQualify extends Component
         $tblgrupo = $tblactividad->groupBy('actividad')->toBase();
 
         $tblrecords = $this->reporte();
-        dd($tblrecords);
 
         $pdf = PDF::loadView('pdf/reporte_calificacion_detallada',[
             'tblrecords' => $tblrecords,
