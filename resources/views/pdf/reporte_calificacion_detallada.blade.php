@@ -65,7 +65,7 @@
                     @foreach ($tblgrupo as $key => $grupo)
                         @foreach ($grupo as $data)
                             <th class="align-middle text-center tr-text" style="margin: 0px; width: 70px;">
-                            <span>{{$data->nombre}}</span>
+                            <span style="font-size:7px">{{$data->nombre}}</span>
                             </th>
                         @endforeach
                         <th class="align-middle text-center tr-text" style="margin: 0px; width: 70px;">
