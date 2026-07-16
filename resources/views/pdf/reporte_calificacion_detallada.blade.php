@@ -27,7 +27,7 @@
             <tr style="font-size:12px">
                 <td width="100%">
                    <p class="text-center" style="margin: 0px;">UNIDAD EDUCATIVA AMERICAN SCHOOL - {{$datos['nivel']}}</p>
-                   <p class="text-center" style="margin: 0px;">ACTA DE CALIFICACIONES</p>
+                   <p class="text-center" style="margin: 0px;"><strong>ACTA DE CALIFICACIONES</strong></p>
                    <p class="text-center" style="margin: 0px;">{{$datos['subtitulo']}}</p>
                    <p class="text-center" style="margin: 0px;">{{$datos['docente']}} / {{$datos['materia']}}</p>
                    <p class="text-center" style="margin: 0px;">{{$datos['curso']}}</p>
