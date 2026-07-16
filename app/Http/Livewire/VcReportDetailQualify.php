@@ -35,6 +35,7 @@ class VcReportDetailQualify extends Component
     public $tblgrupo=[];
 
     public $filters=[
+        'periodoId' => 0,
         'modalidad' => 0, 
         'docenteId' => 0,
         'paralelo' => 0, 
@@ -54,6 +55,7 @@ class VcReportDetailQualify extends Component
 
         $periodo = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->periodoId = $periodo->id;
+        $this->filters['periodoId'] =  $this->periodoId;
 
         $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion'].'/ - ';
 
