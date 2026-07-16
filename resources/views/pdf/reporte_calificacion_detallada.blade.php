@@ -38,9 +38,6 @@
         <br>
     </section>
 
-    <section class="header" style ="top: -287px;">
-    </section>
-
     <section style ="margin-top: -110px;">
         
         <table cellpadding="0" cellspacing="0" class="table table-bordered table-sm align-middle mb-0" style="font-size:9px">
