@@ -352,8 +352,6 @@ class VcReportDetailQualify extends Component
 
         $this->loadPersonas();
 
-        dd($this->personas);
-
         foreach ($this->personas as $key => $data)
         {   
             $index = $data->id;
