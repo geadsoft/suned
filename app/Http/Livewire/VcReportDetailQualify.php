@@ -35,8 +35,10 @@ class VcReportDetailQualify extends Component
     public $tblgrupo=[];
 
     public $filters=[
+        'modalidad' => 0, 
         'docenteId' => 0,
         'paralelo' => 0, 
+        'cursoId' => 0,
         'termino' => '1T',
         'bloque' => '1P',
         'actividad' => 'AI',
@@ -140,6 +142,7 @@ class VcReportDetailQualify extends Component
 
         $bloque = optional($this->tblbloque->first())->codigo;
         $this->filters['bloque'] = $bloque;
+        $this->filters['modalidadId'] = $id;
 
     }
 
@@ -209,6 +212,7 @@ class VcReportDetailQualify extends Component
         ->first();
 
         $this->cursoId = $curso->curso_id ?? 0;
+        $this->filters['cursoId'] = $this->cursoId;
         
         // Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
         $matriculasConPase = DB::table('tm_pase_cursos')
@@ -218,8 +222,8 @@ class VcReportDetailQualify extends Component
         // Consulta de matrículas SIN pase
         $matriculasQuery = DB::table('tm_matriculas as m')
         ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
-        ->where('m.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.modalidad_id',$this->filters['modalidadId'])
+        ->where('m.periodo_id', $this->filters['periodoId'])
         ->where('m.estado','A')
         ->whereNotIn('m.id', $matriculasConPase);
 
@@ -227,8 +231,8 @@ class VcReportDetailQualify extends Component
         $pasesQuery = DB::table('tm_pase_cursos as p')
         ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
         ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
-        ->where('p.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('p.modalidad_id', $this->filters['modalidadId'])
+        ->where('m.periodo_id',$this->filters['periodoId'])
         ->where('m.estado','A')
         ->where('p.estado', 'A');
 
@@ -240,7 +244,7 @@ class VcReportDetailQualify extends Component
             ->joinSub($unionQuery, 'm', function ($join) {
             $join->on('tm_personas.id', '=', 'm.estudiante_id');
         })
-        ->where('m.curso_id', $this->cursoId)
+        ->where('m.curso_id', $this->filters['cursoId'])
         ->select('tm_personas.*', 'm.documento')
         ->orderBy('tm_personas.apellidos')
         ->get();
@@ -305,7 +309,7 @@ class VcReportDetailQualify extends Component
                         return $query->where('bloque',"{$this->filters['bloque']}");
                     })
                     ->where("tipo","AC")
-                    ->where("docente_id",$this->docenteId)
+                    ->where("docente_id",$this->filters['docenteId'])
                     ->where("actividad_id",$actividadId)
                     ->where("persona_id",$personaId)
                     ->select("n.*")
@@ -429,11 +433,13 @@ class VcReportDetailQualify extends Component
     {   
 
         $data = json_decode($objdata);
+        $this->filters['modalidadId'] = $data->modaliadId;
         $this->filters['docenteId'] = $data->docenteId;
         $this->filters['paralelo'] = $data->paralelo;
         $this->filters['termino'] = $data->termino;
         $this->filters['bloque'] = $data->bloque;
         $this->filters['actividad'] = $data->actividad;
+        $this->filters['cursoId'] = $data->cursoId;
         
 
         $docente = TmPersonas::find($this->filters['docenteId']);
