@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="col-sm-7">
                                 <div class="row mb-3">
-                                    <div class="col-sm-2">
+                                    <!--<div class="col-sm-2">
                                         <label for="record.descripcion" class="form-label">Periodo Lectivo</label>
                                         <select class="form-control" data-choices data-choices-search-false
                                             name="choices-single-default" id="idStatus">
@@ -20,32 +20,35 @@
                                             <option value="all" selected>All</option>
                                             <option value="Pending">Pending</option>
                                         </select>
-                                    </div>
+                                    </div>-->
                                     <div class="col-sm-3">
                                         <label for="record.descripcion" class="form-label">Modalidad</label>
                                         <select class="form-control" data-choices data-choices-search-false
                                             name="choices-single-default" id="idStatus">
-                                            <option value="">Status</option>
-                                            <option value="all" selected>All</option>
-                                            <option value="Pending">Pending</option>
+                                            <option value="">Seleccione</option>
+                                            @foreach($modalidades as $data)
+                                                <option value="{{$data->id}}">{{$data->descripcion}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="col-sm-5">
                                         <label for="record.descripcion" class="form-label">Curso</label>
                                         <select class="form-control" data-choices data-choices-search-false
                                             name="choices-single-default" id="idStatus">
-                                            <option value="">Status</option>
-                                            <option value="all" selected>All</option>
-                                            <option value="Pending">Pending</option>
+                                            <option value="">Seleccione</option>
+                                            @foreach($cursos as $curso)
+                                                <option value="{{$curso->id}}">{{$curso->descripcion}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="col-sm-1">
                                         <label for="record.descripcion" class="form-label">Paralelo</label>
                                         <select class="form-control" data-choices data-choices-search-false
                                             name="choices-single-default" id="idStatus">
-                                            <option value="">Status</option>
-                                            <option value="all" selected>All</option>
-                                            <option value="Pending">Pending</option>
+                                            <option value="">Seleccione</option>
+                                            @foreach($paralelos as $paralelo)
+                                                <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
