@@ -481,18 +481,7 @@ class VcReportDetailQualify extends Component
             'horaActual' => $horaActual,
         ]);
 
-        //return $pdf->setPaper('a4','landscape')->stream('Calificación Detallada.pdf');
-        $pdf->setPaper('A4', 'landscape');
-
-        $pdf->setOptions([
-            'isRemoteEnabled' => true,
-            'isHtml5ParserEnabled' => true,
-            'isPhpEnabled' => true,
-            'defaultFont' => 'DejaVu Sans',
-        ]);
-
-        return $pdf->stream('acta-calificaciones.pdf');
-
+        return $pdf->setPaper('a4','landscape')->stream('Calificación Detallada.pdf');
     }
 
     public function exportExcel(){
