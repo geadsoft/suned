@@ -344,9 +344,11 @@ class VcReportDetailQualify extends Component
         /* Estudiantes */
         $tblrecords=[];
 
-        $personas = $this->loadPersonas();
+        $this->loadPersonas();
 
-        foreach ($personas as $key => $data)
+        dd($this->personas);
+
+        foreach ($this->personas as $key => $data)
         {   
             $index = $data->id;
             $tblrecords[$key]['id'] = 0;
@@ -369,7 +371,7 @@ class VcReportDetailQualify extends Component
         }
 
         // Asigna Notas //
-        foreach ($personas as $key => $data)
+        foreach ($this->personas as $key => $data)
         {
             $personaId =  $data->id;
             $promedio  = 0; 
