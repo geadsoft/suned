@@ -23,7 +23,22 @@ class SecretariaController extends Controller
 
     public function documentos()
     {
-        return view('secretary/documentos');
+        return view('secretary/documentacion');
+    }
+
+    public function registrar_documentos()
+    {
+        return view('secretary/registrar_documentacion');
+    }
+
+    public function recepcion_documentos()
+    {
+        return view('secretary/recepcion_documentacion');
+    }
+
+    public function retirar_documentos()
+    {
+        return view('secretary/retirar_documentacion');
     }
 
     public function ratings()

@@ -435,8 +435,28 @@
                                 <div class="collapse menu-dropdown" id="documentacion">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/secretary/documentation">
+                                            <a class="nav-link menu-link" href="/secretary/config-documentation">
+                                                <span>Configuración</span>
+                                            </a>    
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/secretary/register-documentation">
                                                 <span>Registro</span>
+                                            </a>    
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/secretary/documentation">
+                                                <span>Recepción</span>
+                                            </a>    
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/secretary/documentation">
+                                                <span>Estado</span>
+                                            </a>    
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link" href="/secretary/documentation">
+                                                <span>Retiro</span>
                                             </a>    
                                         </li>
                                         <li class="nav-item">

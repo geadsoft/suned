@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('periodo_id')->unsigned();
             $table->bigInteger('modalidad_id')->unsigned();
-            $table->string('evaluacion',3)->default('T');;
+            $table->string('evaluacion',3)->default('T');
             $table->double('evaluacion_formativa',14,2)->default(0);
             $table->double('evaluacion_sumativa',14,2)->default(0);            
             $table->string('usuario');

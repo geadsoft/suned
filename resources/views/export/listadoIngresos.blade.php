@@ -22,22 +22,10 @@ $positiveChanges = 0;
         <tr>
             <th colspan="12">
                 <p class="text-center" style="margin: 0px;">CONCILIACIÓN DE INGRESOS / COBROS 
-                @if(filled($filters['srv_fechaini'] ?? null) && filled($filters['srv_fechafin'] ?? null))
-        DEL
-        {{ mb_strtoupper(
-            \Carbon\Carbon::parse($filters['srv_fechaini'])
-                ->locale('es')
-                ->translatedFormat('d \d\e F \d\e Y'),
-            'UTF-8'
-        ) }}
-        AL
-        {{ mb_strtoupper(
-            \Carbon\Carbon::parse($filters['srv_fechafin'])
-                ->locale('es')
-                ->translatedFormat('d \d\e F \d\e Y'),
-            'UTF-8'
-        ) }}
-    @endif
+                @if(!empty($filters['srv_fechaini']) && !empty($filters['srv_fechafin']))
+                    DEL {{ mb_strtoupper(\Carbon\Carbon::parse($filters['srv_fechaini'])->translatedFormat('d \d\e F \d\e Y'), 'UTF-8') }}
+                    AL {{ mb_strtoupper(\Carbon\Carbon::parse($filters['srv_fechafin'])->translatedFormat('d \d\e F \d\e Y'), 'UTF-8') }}
+                @endif
                 </p>
             </th> 
         </tr> 

@@ -128,7 +128,10 @@ Route::get('/report/debt-analysis',[App\Http\Controllers\TmMatriculaController::
 Route::get('/financial/list-income',[App\Http\Controllers\TrCobrosCabsController::class, 'listingresos'])->name('listingresos');
 Route::get('/report/generic-reports',[App\Http\Controllers\TmMatriculaController::class, 'reportegenerico'])->name('reportegenerico');
 Route::get('/secretary/certificate',[App\Http\Controllers\SecretariaController::class, 'certificados'])->name('certificados');
-Route::get('/secretary/documentation',[App\Http\Controllers\SecretariaController::class, 'documentos'])->name('documentos');
+Route::get('/secretary/config-documentation',[App\Http\Controllers\SecretariaController::class, 'documentos'])->name('documentos');
+Route::get('/secretary/register-documentation',[App\Http\Controllers\SecretariaController::class, 'registrar_documentos'])->name('registrar_documentos');
+Route::get('/secretary/reception-documentation',[App\Http\Controllers\SecretariaController::class, 'recepcion_documentos'])->name('recepcion_documentos');
+Route::get('/secretary/gather-documentation',[App\Http\Controllers\SecretariaController::class, 'retirar_documentos'])->name('retirar_documentos');
 
 Route::get('/academic/ratings',[App\Http\Controllers\TmCalificaciones::class, 'index'])->name('index');
 Route::get('/academic/ratings-add',[App\Http\Controllers\TmCalificaciones::class, 'addCalificacion'])->name('addCalificacion');

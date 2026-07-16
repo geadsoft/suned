@@ -12,21 +12,23 @@
             Secretaría
         @endslot
         @slot('title')
-            Documentación
+            Expedientes
         @endslot
     @endcomponent
 
-    @livewire('vc-documentos')
+    @livewire('vc-configurar-documentos')
 
 @endsection
 @section('script')
     <script src="{{ URL::asset('/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script>
 
         window.addEventListener('show-form', event => {
             $('#showModal').modal('show');
+            swal("Buen trabajo!",event.detail.newName, "success");
         })
 
         window.addEventListener('hide-form', event => {
