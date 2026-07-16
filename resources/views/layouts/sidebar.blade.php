@@ -773,12 +773,12 @@
                                         <li class="nav-item">
                                             <a href="/report/quarterly-student" class="nav-link" data-key="t-settings">Estudiante Trimestral</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <!--<li class="nav-item">
                                             <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Estudiante Total</a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings">Conducta</a>
-                                        </li>
+                                        </li>-->
                                     </ul>
                                 </div>
                             </li>
