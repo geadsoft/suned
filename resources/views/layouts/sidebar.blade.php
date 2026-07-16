@@ -815,10 +815,10 @@
                                         <li class="nav-item">
                                             <a href="/student/report-card" class="nav-link" data-key="t-settings">Trimestral</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <!--<li class="nav-item">
                                             <a href="/student/final-bulletin" class="nav-link" data-key="t-settings">Anual</a>
                                         </li>
-                                        <!--<li class="nav-item">
+                                        <li class="nav-item">
                                             <a href="/student/final-bulletin-pase" class="nav-link" data-key="t-settings">Pase de Curso</a>
                                         </li>-->
                                     </ul>
