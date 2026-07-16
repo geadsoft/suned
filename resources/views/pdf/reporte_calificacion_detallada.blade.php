@@ -44,7 +44,7 @@
         
         <table cellpadding="0" cellspacing="0" class="table table-bordered table-sm align-middle mb-0" style="font-size:9px">
             <thead class="table-light">
-                <tr class="text-uppercase text-muted">
+                <tr class="text-uppercase">
                     <th class="align-middle text-center">NOMBRES</th>
                     @foreach ($tblgrupo as $key => $grupo)
                          @if ($key=='AI')
@@ -60,12 +60,12 @@
                     <span class="text-center" style="width: 50px; margin: 0px;">Cualitativa</span>
                     </th>
                 </tr>
-                <tr class="text-uppercase text-muted">
+                <tr class="text-uppercase">
                     <th class="align-middle text-center"></th>
                     @foreach ($tblgrupo as $key => $grupo)
                         @foreach ($grupo as $data)
                             <th class="align-middle text-center tr-text" style="margin: 0px; width: 70px;">
-                            <span style="font-size:7px">{{$data->nombre}}</span>
+                            <span style="font-size:7.5px">{{$data->nombre}}</span>
                             </th>
                         @endforeach
                         <th class="align-middle text-center tr-text" style="margin: 0px; width: 70px;">
@@ -81,7 +81,7 @@
                     @if ($fil=='ZZ')
                     <td class="text-end">{{$record["nombres"]}}</td>
                     @else
-                    <td><span style="font-size:7px">{{$record["nombres"]}}</span></td>
+                    <td><span style="font-size:7.5px">{{$record["nombres"]}}</span></td>
                     @endif
                     @foreach ($tblgrupo as $key1 => $grupo)
                         @foreach ($grupo as $key2 => $data)
