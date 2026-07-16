@@ -81,7 +81,7 @@
                     @if ($fil=='ZZ')
                     <td class="text-end">{{$record["nombres"]}}</td>
                     @else
-                    <td>{{$record["nombres"]}}</td>
+                    <td><span style="font-size:7px">{{$record["nombres"]}}</span></td>
                     @endif
                     @foreach ($tblgrupo as $key1 => $grupo)
                         @foreach ($grupo as $key2 => $data)
