@@ -26,7 +26,7 @@
         <table cellpadding="0" cellspancing="0" width="100%">
             <tr style="font-size:12px">
                 <td width="100%">
-                   <div class="col-4"><img class="img-fluid" style="position: absolute;top: 30%; left: 2%; width: 15%;height:60pt;" src="{{ URL::asset('assets/images/LogoReport.png')}}" alt=""></div>
+                   <div><img class="img-fluid" style="position: absolute;top: 30%; left: 2%; width: 15%;height:60pt;" src="{{ URL::asset('assets/images/LogoReport.png')}}" alt=""></div>
                    <p class="text-center" style="margin: 0px;">UNIDAD EDUCATIVA AMERICAN SCHOOL - {{$datos['nivel']}}</p>
                    <p class="text-center" style="margin: 0px;">ACTA DE CALIFICACIONES</p>
                    <p class="text-center" style="margin: 0px;">{{$datos['subtitulo']}}</p>
@@ -62,7 +62,7 @@
                     </th>
                 </tr>
                 <tr class="text-uppercase text-muted">
-                    <th class="align-middle text-center" style="width: 200px;"></th>
+                    <th class="align-middle text-center"></th>
                     @foreach ($tblgrupo as $key => $grupo)
                         @foreach ($grupo as $data)
                             <th class="align-middle text-center tr-text" style="margin: 0px; width: 70px;">
