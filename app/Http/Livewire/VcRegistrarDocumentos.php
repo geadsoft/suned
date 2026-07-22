@@ -168,7 +168,7 @@ class VcRegistrarDocumentos extends Component
             ->where('matricula_id', $this->matriculaId)
             ->first();
 
-        $this->selectId = $cabecera->id;
+        $this->selectId = $cabecera?->id ?? 0;
 
         $this->documentacionCompleta =
             (bool) ($cabecera?->documentacion_completa ?? false);
