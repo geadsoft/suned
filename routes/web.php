@@ -33,6 +33,8 @@ use App\Http\Livewire\VcFinalBulletin;
 use App\Http\Livewire\VcBoletinPase;
 use App\Http\Livewire\VcStudentInsurance;
 use App\Http\Controllers\DocumentDownloadController;
+use App\Http\Livewire\VcRegistrarDocumentos;
+use App\Http\Livewire\VcRetirarDocumentos;
 
 /*
 |--------------------------------------------------------------------------
@@ -130,8 +132,10 @@ Route::get('/report/generic-reports',[App\Http\Controllers\TmMatriculaController
 Route::get('/secretary/certificate',[App\Http\Controllers\SecretariaController::class, 'certificados'])->name('certificados');
 Route::get('/secretary/config-documentation',[App\Http\Controllers\SecretariaController::class, 'documentos'])->name('documentos');
 Route::get('/secretary/register-documentation',[App\Http\Controllers\SecretariaController::class, 'registrar_documentos'])->name('registrar_documentos');
-Route::get('/secretary/reception-documentation',[App\Http\Controllers\SecretariaController::class, 'recepcion_documentos'])->name('recepcion_documentos');
-Route::get('/secretary/gather-documentation',[App\Http\Controllers\SecretariaController::class, 'retirar_documentos'])->name('retirar_documentos');
+Route::get('/secretary/documentation-deliver/',[App\Http\Controllers\SecretariaController::class, 'retirar_documentos'])->name('retirar_documentos');
+Route::get('/secretary/documentation-deliver/{id}',[App\Http\Controllers\SecretariaController::class, 'retirar_recepcion'])->name('retirar_recepcion');
+Route::get('/secretary/documentation-status',[App\Http\Controllers\SecretariaController::class, 'estado_documentos'])->name('estado_documentos');
+Route::get('/secretary/documentation-receipt',[App\Http\Controllers\SecretariaController::class, 'recepcion_documentos'])->name('recepcion_documentos');
 
 Route::get('/academic/ratings',[App\Http\Controllers\TmCalificaciones::class, 'index'])->name('index');
 Route::get('/academic/ratings-add',[App\Http\Controllers\TmCalificaciones::class, 'addCalificacion'])->name('addCalificacion');
@@ -252,6 +256,10 @@ Route::get('/preview-pdf/final-bulletin-pase/{data}',[VcBoletinPase::class, 'pri
 Route::get('/preview-pdf/debt-certificate/{id}',[VcAccountStatus::class, 'printCertificadoPDF']);
 Route::get('/download-pdf/student-insurance/{data}',[VcStudentInsurance::class, 'downloadPDF']);
 Route::get('/preview-pdf/student-insurance/{data}',[VcStudentInsurance::class, 'printPDF']);
+Route::get('/register-documentation/{matriculaId}/print',[VcRegistrarDocumentos::class, 'imprimirRecepcion'])->name('expedientes.imprimir');
+Route::get('/retire-documentation/{matriculaId}/print',[VcRetirarDocumentos::class, 'imprimirRetiro'])->name('expedientes-retiro.imprimir');
+Route::get('/download-pdf/register-documentation/{matriculaId}',[VcRegistrarDocumentos::class, 'downloadPDF']);
+Route::get('/download-pdf/retire-documentation/{matriculaId}',[VcRetirarDocumentos::class, 'downloadPDF']);
 
 Route::get('/invoice/genera/{id}',[VcGeneraXML::class, 'setGeneraXML']);
 Route::get('/invoice/ride-pdf/{id}',[VcGeneraXML::class, 'imprimeRide']);

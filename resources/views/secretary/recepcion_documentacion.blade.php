@@ -16,7 +16,7 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-registrar-documentos')
+    @livewire('vc-recepcion-documentos')
 
 @endsection
 @section('script')
@@ -26,8 +26,13 @@
 
     <script>
 
-        window.addEventListener('msg-save', event => {
-            swal("Buen trabajo!", "¡Registro guardado exitosamente!", "success");
+        window.addEventListener('show-form', event => {
+            $('#showModal').modal('show');
+            swal("Buen trabajo!",event.detail.newName, "success");
+        })
+
+        window.addEventListener('hide-form', event => {
+            $('#showModal').modal('hide');
         })
 
     </script>

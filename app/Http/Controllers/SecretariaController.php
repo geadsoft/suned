@@ -38,7 +38,21 @@ class SecretariaController extends Controller
 
     public function retirar_documentos()
     {
-        return view('secretary/retirar_documentacion');
+        return view('secretary/retirar_documentacion',[
+            'id' => 0
+        ]);
+    }
+
+    public function retirar_recepcion($id)
+    {
+        return view('secretary/retirar_documentacion',[
+            'id' => $id
+        ]);
+    }
+
+    public function estado_documentos()
+    {
+        return view('secretary/estado_documentacion');
     }
 
     public function ratings()

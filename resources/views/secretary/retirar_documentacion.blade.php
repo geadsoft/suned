@@ -16,7 +16,9 @@
         @endslot
     @endcomponent
 
-    @livewire('vc-registrar-documentos')
+    @livewire('vc-retirar-documentos',[
+        'id' => $id
+    ])
 
 @endsection
 @section('script')

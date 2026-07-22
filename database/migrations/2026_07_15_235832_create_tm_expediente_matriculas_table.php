@@ -15,7 +15,23 @@ return new class extends Migration
     {
         Schema::create('tm_expediente_matriculas', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('matricula_id')
+                ->constrained('tm_matriculas');
+
+            $table->boolean('documentacion_completa')->default(false);
+
+            $table->string('comentario_impresion', 200)->nullable();
+            $table->string('comentario_secretaria', 200)->nullable();
+            $table->boolean('documentacion_retirada')->default(false);
+            $table->string('comentario_retiro', 200)->nullable();
+
+            $table->string('estado', 1)->default('A');
+            $table->string('usuario')->nullable();
+
             $table->timestamps();
+
+            $table->unique('matricula_id');
         });
     }
 

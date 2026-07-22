@@ -20,17 +20,19 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
 
-class VcRegistrarDocumentos extends Component
+class VcRetirarDocumentos extends Component
 {
     use WithFileUploads;
 
     public $accessToken, $tblrecords, $fileimg, $foto, $record=[], $personas=[];
     public array $documentos = [];
-    public $matriculaId, $selectId;
+    public $matriculaId;
 
     public bool $documentacionCompleta = false;
+    public bool $documentacionRetirada = false;
     public string $comentarioImpresion = '';
     public string $comentarioSecretaria = '';
+    public string $comentarioRetiro = '';
 
     public $filters=[
         'modalidadId' => 0,
@@ -56,11 +58,15 @@ class VcRegistrarDocumentos extends Component
         return $accessToken;
     }
     
-    public function mount()
+    public function mount($id)
     {
-
+    
         $periodo = TmPeriodosLectivos::where("aperturado",1)->first();
         $this->filters['periodoId'] = $periodo->id;
+
+        if($id>0){
+            $this->loadExpediente($id);
+        }
 
     }
 
@@ -88,30 +94,48 @@ class VcRegistrarDocumentos extends Component
 
         $this->personas = $this->loadPersonas();
 
-        $this->record = TmMatricula::query()
-        ->join('tm_personas as p', 'p.id', '=', 'tm_matriculas.estudiante_id')
-        ->join('tm_personas as p2', 'p2.id', '=', 'tm_matriculas.representante_id')
-        ->join('tm_cursos as curso', 'curso.id', '=', 'tm_matriculas.curso_id')
-        ->join('tm_servicios as servicio', 'servicio.id', '=', 'curso.servicio_id')
-        ->where('tm_matriculas.id', $this->matriculaId)
-        ->selectRaw("
-            CONCAT(p.nombres, ' ', p.apellidos) AS estudiante,
-            CONCAT(p2.nombres, ' ', p2.apellidos) AS representante,
-            CONCAT(servicio.descripcion, ' ', curso.paralelo) AS curso,
-            tm_matriculas.fecha,
-            p.foto
-        ")
-        ->first();
-
-        return view('livewire.vc-registrar-documentos',[
+        return view('livewire.vc-retirar-documentos',[
             'modalidades' => $modalidades,
             'cursos' => $cursos,
             'paralelos' => $paralelos,
             'personas' => $this->personas,
         ]);
-        
+       
 
     }
+
+    public function loadExpediente($id)
+    {
+
+        $expediente = TmExpedienteMatricula::query()
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $matricula = TmMatricula::query()
+        ->join('tm_personas as estudiante', 'estudiante.id', '=', 'tm_matriculas.estudiante_id')
+        ->join('tm_personas as representante', 'representante.id', '=', 'tm_matriculas.representante_id')
+        ->join('tm_cursos as curso', 'curso.id', '=', 'tm_matriculas.curso_id')
+        ->join('tm_servicios as servicio', 'servicio.id', '=', 'curso.servicio_id')
+        ->where('tm_matriculas.id', $expediente->matricula_id)
+        ->selectRaw("
+            tm_matriculas.periodo_id as periodoId,
+            tm_matriculas.modalidad_id as modalidadId,
+            servicio.id as cursoId,
+            curso.id  as paraleloId,
+            tm_matriculas.estudiante_id as estudianteId
+        ")
+        ->firstOrFail();
+
+        $this->filters['periodoId']=$matricula->periodoId;
+        $this->filters['modalidadId']=$matricula->modalidadId;
+        $this->filters['cursoId']    = (string) $matricula->cursoId;
+        $this->filters['paraleloId'] =$matricula->paraleloId;
+        $this->filters['personaId'] =$matricula->estudianteId;     
+
+        $this->updatedFiltersPersonaId($matricula->estudianteId);
+
+  
+    } 
 
     public function updatedmodalidadId($id)
     {
@@ -143,13 +167,10 @@ class VcRegistrarDocumentos extends Component
             $this->record = TmMatricula::query()
             ->join('tm_personas as p', 'p.id', '=', 'tm_matriculas.estudiante_id')
             ->join('tm_personas as p2', 'p2.id', '=', 'tm_matriculas.representante_id')
-            ->join('tm_cursos as curso', 'curso.id', '=', 'tm_matriculas.curso_id')
-            ->join('tm_servicios as servicio', 'servicio.id', '=', 'curso.servicio_id')
             ->where('tm_matriculas.id', $this->matriculaId)
             ->selectRaw("
                 CONCAT(p.nombres, ' ', p.apellidos) AS estudiante,
                 CONCAT(p2.nombres, ' ', p2.apellidos) AS representante,
-                CONCAT(servicio.descripcion, ' ', curso.paralelo) AS curso,
                 tm_matriculas.fecha,
                 p.foto
             ")
@@ -168,8 +189,6 @@ class VcRegistrarDocumentos extends Component
             ->where('matricula_id', $this->matriculaId)
             ->first();
 
-        $this->selectId = $cabecera->id;
-
         $this->documentacionCompleta =
             (bool) ($cabecera?->documentacion_completa ?? false);
 
@@ -178,6 +197,12 @@ class VcRegistrarDocumentos extends Component
 
         $this->comentarioSecretaria =
             $cabecera?->comentario_secretaria ?? '';
+
+        $this->documentacionRetirada =
+            (bool) ($cabecera?->documentacion_retirada ?? false);
+        
+        $this->comentarioRetiro =
+            $cabecera?->comentario_retiro ?? '';
 
         $expedienteMatriculaId = $cabecera?->id ?? 0;
         $cursoId = $this->filters['cursoId'];
@@ -224,6 +249,7 @@ class VcRegistrarDocumentos extends Component
                 'det.extension',
                 'det.observacion',
                 'det.drive_id',
+                'det.documentacion_retirada'
             ])
             ->orderBy('tm_expedientes.descripcion')
             ->get();
@@ -241,10 +267,11 @@ class VcRegistrarDocumentos extends Component
                         'desde' => $item->primer_servicio,
                         'hasta' => $item->ultimo_servicio,
 
-                        'entregado' => $entregado,
+                        'entregado' => $entregado ? 'Si' : 'No',
+                        'retirado' => (bool) ($item->documentacion_retirada ?? false),
                         'faltante' => !$entregado,
 
-                        'observacion' => $item->observacion ?? '',
+                        'observacion' => $item->observacion ?? '-',
                         'archivo_actual' => $item->nombre,
                         'extension' => $item->extension,
                         'drive_id' => $item->drive_id,
@@ -253,6 +280,8 @@ class VcRegistrarDocumentos extends Component
                 ];
             })
             ->toArray();
+
+        
     }
 
     public function loadPersonas(){
@@ -311,9 +340,9 @@ class VcRegistrarDocumentos extends Component
 
     }
 
-    public function marcarEntregado($expedienteId)
+    public function marcarRetirado($expedienteId)
     {
-        if ($this->documentos[$expedienteId]['entregado']) {
+        if ($this->documentos[$expedienteId]['retirado']) {
             $this->documentos[$expedienteId]['faltante'] = false;
         }
     }
@@ -343,23 +372,27 @@ class VcRegistrarDocumentos extends Component
                 'comentario_secretaria' => filled($this->comentarioSecretaria)
                     ? trim($this->comentarioSecretaria)
                     : null,
+                'documentacion_retirada' => $this->documentacionRetirada,
+                'comentario_retiro' => filled($this->comentarioRetiro)
+                    ? trim($this->comentarioRetiro)
+                    : null,
                 'estado' => 'A',
                 'usuario' => auth()->user()->name,
             ]
         );
 
+
         foreach ($this->documentos as $expedienteId => $documento) {
 
-            if ($documento['archivo_actual']!="") { 
-                continue;
-            }
-
-            if ($documento['archivo_nuevo']=="") { 
-                continue;
-            }
-
-            $this->accessToken = $this->token();
-            $this->apiDrive($cabecera->id, $expedienteId, $documento);           
+            TdExpedienteMatricula::updateOrCreate(
+                [
+                    'expediente_matricula_id' => $cabecera->id,
+                    'expediente_id' => $expedienteId,
+                ],
+                [
+                    'documentacion_retirada' =>  $documento['retirado'],
+                ]
+            );           
             
         }
 
@@ -367,141 +400,9 @@ class VcRegistrarDocumentos extends Component
         $this->consulta();
 
     }
+   
 
-
-    public function apiDrive($cabeceraId, $expedienteId, $attach){
- 
-        //$accessToken = $this->token();
-        $fileId  ="";
-        $msgfile ="";
-
-        sleep(3); // Simula espera
-            
-        $file = $attach['archivo_nuevo'];
-
-        $name    = $file->getClientOriginalName();
-        $name    = pathinfo($name, PATHINFO_FILENAME);
-        $archivo = str_replace(".", "_", $name);
-        $name = preg_replace('/[^A-Za-z0-9_\-]/', '_', $name); // sanitizar nombre
-
-        
-        // Agregar timestamp para hacerlo único
-        $uniqueSuffix = now()->format('Ymd_His');
-        $name = $name . '_' . $uniqueSuffix;
-
-        $ext =  $file->getClientOriginalExtension();
-        $mime = $file->getClientMimeType();
-
-        $filesave = $name.'.'.$ext;
-
-        $contents = Storage::disk('public')->exists('archivos/'.$filesave);
-        if ($contents){
-            Storage::disk('public')->delete('archivos/'.$filesave);
-        }
-
-        // Guarda el archivo localmente
-        $pathfile = $file->storeAs('archivos', $filesave,'public');
-        $fileContent = file_get_contents($file->getRealPath());
-
-        // Configuración de los metadatos
-        $metadata = [
-            'name' => $name . '.' . $ext,  // Nombre del archivo
-            'mimeType' => $mime,  // Tipo MIME del archivo
-            'parents' => ['134KruGoDFkvG20vA0VlxR2NHjJ9u-Yuw'],
-        ];
-
-        // Preparar el cuerpo multipart
-        $boundary = '----WebKitFormBoundary' . md5(time());  // Crear un boundary único
-
-        // Cuerpo multipart con los metadatos y el contenido del archivo
-        $body = "--$boundary\r\n";
-        $body .= "Content-Type: application/json; charset=UTF-8\r\n\r\n";
-        $body .= json_encode($metadata) . "\r\n";  // Metadatos del archivo
-        $body .= "--$boundary\r\n";
-        $body .= "Content-Type: $mime\r\n";
-        $body .= "Content-Transfer-Encoding: base64\r\n\r\n";
-        $body .= base64_encode($fileContent) . "\r\n";  // El contenido del archivo
-        $body .= "--$boundary--\r\n";
-
-        // Realizar la solicitud POST a la API de Google Drive
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $this->accessToken,
-            'Content-Type' => 'multipart/related; boundary=' . $boundary,  // Definir el tipo multipart
-        ])->withBody($body, 'multipart/related')  // Usar el cuerpo con los metadatos y el archivo
-        ->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
-
-        if ($response->successful()){
-            $fileId = json_decode($response->body())->id;
-            $msgfile = " Archivo cargado a Google Drive";
-        }else {
-            $msgfile = "Error al subir a Google Drive: " . $response->body();
-            logger()->error('Google Drive Upload Error', [
-                'status' => $response->status(),
-                'body' => $response->body(),
-                'name' => $name . '.' . $ext
-            ]);
-        }
-
-        $contents = Storage::disk('public')->exists('archivos/'.$filesave);
-        if ($contents){
-            Storage::disk('public')->delete('archivos/'.$filesave);
-        }
-        
-        TdExpedienteMatricula::updateOrCreate(
-            [
-                'expediente_matricula_id' => $cabeceraId,
-                'expediente_id' => $expedienteId,
-            ],
-            [
-                'nombre' =>  $archivo.'.'.$ext,
-                'extension' => $ext,
-                'observacion' => filled($documento['observacion'] ?? null)
-                    ? trim($documento['observacion'])
-                    : null,
-                'drive_id' => $fileId,
-                'usuario' => auth()->user()->name,
-            ]
-        );
-
-    }
-
-    public function eliminarArchivo($expedienteId)
-    {
-        $registro = TdExpedienteMatricula::query()
-            ->where('expediente_matricula_id', $this->selectId)
-            ->where('expediente_id', $expedienteId)
-            ->first();
-
-        if (!$registro || !$registro->drive_id) {
-            return;
-        }
-
-        //Storage::disk('public')->delete($registro->archivo);
-
-        $registro->update([
-            'nombre' => null,
-            'extension' => null,
-            'drive_id' => null,
-            'usuario' => auth()->user()->name,
-        ]);
-
-        $this->documentos[$expedienteId]['archivo_actual'] = null;
-        $this->documentos[$expedienteId]['entregado'] = false;
-        $this->deleteFromDrive($registro->drive_id);
-
-
-    }
-
-    private function deleteFromDrive($fileId)
-    {
-        $accessToken = $this->token(); // Tu función que obtiene el access_token
-
-        $response = Http::withToken($accessToken)
-        ->delete("https://www.googleapis.com/drive/v3/files/{$fileId}");
-
-    }
-
-    public function imprimirRecepcion($matriculaId)
+    public function imprimirRetiro($matriculaId)
     {
         $cabecera = TmExpedienteMatricula::query()
             ->where('matricula_id', $matriculaId)
@@ -545,19 +446,20 @@ class VcRegistrarDocumentos extends Component
                 'tm_expedientes.descripcion',
                 'detalle.id as detalle_id',
                 'detalle.drive_id',
+                'detalle.documentacion_retirada'
             ])
             ->orderBy('tm_expedientes.descripcion')
             ->get();
 
         $documentosCompletos = $documentos
-            ->filter(fn ($item) => !empty($item->detalle_id) && !empty($item->drive_id))
+            ->filter(fn ($item) => $item->documentacion_retirada)
             ->values();
 
         $documentosFaltantes = $documentos
-            ->filter(fn ($item) => empty($item->detalle_id) || empty($item->drive_id))
+            ->filter(fn ($item) => !$item->documentacion_retirada)
             ->values();
 
-        $pdf = Pdf::loadView('pdf.recepcion-documentos', [
+        $pdf = Pdf::loadView('pdf.retiro-documentos', [
             'matricula' => $matricula,
             'cabecera' => $cabecera,
             'documentosCompletos' => $documentosCompletos,
@@ -566,7 +468,7 @@ class VcRegistrarDocumentos extends Component
         ])->setPaper('a4', 'portrait');
 
         return $pdf->stream(
-            'recepcion-documentos-' . $matriculaId . '.pdf'
+            'retiro-documentos-' . $matriculaId . '.pdf'
         );
     }
 
@@ -616,19 +518,20 @@ class VcRegistrarDocumentos extends Component
                 'tm_expedientes.descripcion',
                 'detalle.id as detalle_id',
                 'detalle.drive_id',
+                'detalle.documentacion_retirada'
             ])
             ->orderBy('tm_expedientes.descripcion')
             ->get();
 
         $documentosCompletos = $documentos
-            ->filter(fn ($item) => !empty($item->detalle_id) && !empty($item->drive_id))
+            ->filter(fn ($item) => $item->documentacion_retirada)
             ->values();
 
         $documentosFaltantes = $documentos
-            ->filter(fn ($item) => empty($item->detalle_id) || empty($item->drive_id))
+            ->filter(fn ($item) => !$item->documentacion_retirada)
             ->values();
 
-        $pdf = Pdf::loadView('pdf.recepcion-documentos', [
+        $pdf = Pdf::loadView('pdf.retiro-documentos', [
             'matricula' => $matricula,
             'cabecera' => $cabecera,
             'documentosCompletos' => $documentosCompletos,
@@ -636,7 +539,6 @@ class VcRegistrarDocumentos extends Component
             'fechaConsulta' => now(),
         ])->setPaper('a4', 'portrait');
 
-        return $pdf->download('recepcion-documentos-'.$matriculaId.'.pdf');
+        return $pdf->download('retiro-documentos-'.$matriculaId.'.pdf');
     }
-
 }

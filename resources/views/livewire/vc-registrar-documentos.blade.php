@@ -60,7 +60,7 @@
                                     </div>-->
                                     <div class="col-sm-3">
                                         <label for="record.descripcion" class="form-label">Modalidad</label>
-                                        <select class="form-select" name="select-modalidad" id="modalidad" wire:model="filters.modalidadId">
+                                        <select class="form-select" name="select-modalidad" id="modalidad" wire:model="filters.modalidadId" required>
                                             <option value="">Seleccione</option>
                                             @foreach($modalidades as $data)
                                                 <option value="{{$data->id}}">{{$data->descripcion}}</option>
@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="col-sm-5">
                                         <label for="record.descripcion" class="form-label">Curso</label>
-                                        <select class="form-select" name="select-cursos" id="cursos" wire:model="filters.cursoId">
+                                        <select class="form-select" name="select-cursos" id="cursos" wire:model="filters.cursoId" required>
                                             <option value="">Seleccione</option>
                                             @foreach($cursos as $curso)
                                                 <option value="{{$curso->id}}">{{$curso->descripcion}}</option>
@@ -78,7 +78,7 @@
                                     </div>
                                     <div class="col-sm-2">
                                         <label for="record.descripcion" class="form-label">Paralelo</label>
-                                        <select class="form-select" name="select-paralelo" id="paralelo" wire:model="filters.paraleloId" wire:change="loadPersonas()">
+                                        <select class="form-select" name="select-paralelo" id="paralelo" wire:model="filters.paraleloId" wire:change="loadPersonas()" required>
                                             <option value="">Seleccione</option>
                                             @foreach($paralelos as $paralelo)
                                                 <option value="{{$paralelo->id}}">{{$paralelo->paralelo}}</option>
@@ -94,7 +94,7 @@
                                             placeholder="Search for order ID, customer, order status or something...">
                                         <i class="ri-search-line search-icon"></i>
                                     </div>-->
-                                    <select class="form-select" name="select-estudiante" id="estudiante" wire:model="filters.personaId" wire:change="consulta()">
+                                    <select class="form-select" name="select-estudiante" id="estudiante" wire:model="filters.personaId" required>
                                         <option value="">Seleccione</option>
                                         @foreach($personas as $persona)
                                             <option value="{{$persona->id}}">{{$persona->apellidos}} {{$persona->nombres}}</option>
@@ -155,7 +155,7 @@
                                                         <p class="text-muted mb-1 fs-12">Curso</p>
 
                                                         <h6 class="mb-0 fw-medium">
-                                                            {{ $estudiante->curso ?? '-' }}
+                                                            {{ $record->curso ?? '-' }}
                                                         </h6>
                                                     </div>
 
@@ -256,42 +256,6 @@
                                                     >
                                                 </td>
 
-                                                <!--<td>
-                                                    @if($documento['archivo_actual'])
-                                                        <div class="d-flex align-items-center gap-2">
-                                                            <a
-                                                                href="{{ Storage::url($documento['archivo_actual']) }}"
-                                                                target="_blank"
-                                                                class="btn btn-sm btn-outline-primary"
-                                                            >
-                                                                <i class="ri-download-cloud-2-line"></i>
-                                                            </a>
-
-                                                            <a
-                                                                href="{{ Storage::url($documento['archivo_actual']) }}"
-                                                                target="_blank"
-                                                            >
-                                                                {{ basename($documento['archivo_actual']) }}
-                                                            </a>
-                                                        </div>
-                                                    @else
-                                                        <input
-                                                            type="file"
-                                                            class="form-control form-control-sm"
-                                                            wire:model="documentos.{{ $expedienteId }}.archivo_nuevo"
-                                                        >
-
-                                                        <div wire:loading wire:target="documentos.{{ $expedienteId }}.archivo_nuevo">
-                                                            Cargando archivo...
-                                                        </div>
-                                                    @endif
-
-                                                    @error("documentos.$expedienteId.archivo_nuevo")
-                                                        <small class="text-danger">
-                                                            {{ $message }}
-                                                        </small>
-                                                    @enderror
-                                                </td>-->
                                                 <td>
                                                     <div class="d-flex align-items-center gap-2">
 
@@ -310,8 +274,7 @@
                                                             id="archivo-{{ $expedienteId }}"
                                                             class="d-none"
                                                             wire:model="documentos.{{ $expedienteId }}.archivo_nuevo"
-                                                            accept=".pdf,.jpg,.jpeg,.png"
-                                                        >
+                                                            accept=".pdf,.jpg,.jpeg,.png" @disabled($documentacionCompleta)>
 
                                                         {{-- Nombre del archivo nuevo --}}
                                                         @if (!empty($documento['archivo_nuevo']))
@@ -366,14 +329,17 @@
                                                                 <i class="ri-checkbox-circle-line fs-18"></i>
                                                             </a>
                                                         </li>
+                                                        
                                                         @endif
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                            data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a class="text-danger d-inline-block remove-item-btn"
-                                                                data-bs-toggle="modal" href="" wire:click.prevent="eliminarArchivo({{ $expedienteId }})">
-                                                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
+                                                        @if($documento['archivo_actual'])
+                                                            <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                                data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                <a class="text-danger d-inline-block remove-item-btn"
+                                                                    data-bs-toggle="modal" href="" wire:click.prevent="eliminarArchivo({{ $expedienteId }})">
+                                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                </a>
+                                                            </li>
+                                                        @endif
                                                     </ul>
                                                     <!--<button
                                                         type="button"
@@ -408,7 +374,7 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                                <button type="button" wire:click.prevent="" class="btn btn-soft-secondary w-sm">Agregar documentos Extras</button>
+                            <button type="button" wire:click.prevent="" class="btn btn-soft-secondary w-sm" @disabled($documentacionCompleta)>Agregar documentos Extras</button>
                         </div>
                         <div class="row mt-3">
 
@@ -419,7 +385,7 @@
                                     <input class="form-check-input"
                                         type="checkbox"
                                         id="documentacionCompleta"
-                                        wire:model="record.documentacion_completa">
+                                        wire:model="documentacionCompleta">
 
                                     <label class="form-check-label fw-semibold" for="documentacionCompleta">
                                         Documentación completa
@@ -451,11 +417,11 @@
                                         class="form-control"
                                         rows="4"
                                         maxlength="200"
-                                        wire:model.live="record.comentario_impresion"
+                                        wire:model.live="comentarioImpresion"
                                         placeholder="Ingrese un comentario..."></textarea>
 
                                     <small class="position-absolute bottom-0 end-0 me-2 mb-1 text-muted">
-                                        {{ strlen($record['comentario_impresion'] ?? '') }}/200
+                                        {{ strlen($comentarioImpresion ?? '') }}/200
                                     </small>
 
                                 </div>
@@ -476,11 +442,11 @@
                                         class="form-control"
                                         rows="4"
                                         maxlength="200"
-                                        wire:model.live="record.comentario_interno"
+                                        wire:model.live="comentarioSecretaria"
                                         placeholder="Ingrese un comentario interno..."></textarea>
 
                                     <small class="position-absolute bottom-0 end-0 me-2 mb-1 text-muted">
-                                        {{ strlen($record['comentario_interno'] ?? '') }}/200
+                                        {{ strlen($comentarioSecretaria ?? '') }}/200
                                     </small>
                                 </div>
                             </div>
@@ -489,22 +455,33 @@
                             <div class="col-12">
                                 <div class="d-flex justify-content-center flex-wrap gap-3">
 
-                                    <button class="btn btn-success btn-label" style="min-width:180px;">
+                                    <button type="submit" class="btn btn-success btn-label" style="min-width:180px;">
                                         <i class="ri-save-line label-icon"></i>
                                         Guardar
                                     </button>
 
-                                    <button class="btn btn-primary btn-label" style="min-width:220px;">
+                                    <button
+                                        type="button"
+                                        class="btn btn-primary btn-label" style="min-width:220px;"
+                                        onclick="window.open('{{ route('expedientes.imprimir', $matriculaId ?? 0) }}', '_blank')"
+                                        @disabled(empty($matriculaId))>
                                         <i class="ri-printer-line label-icon"></i>
                                         Imprimir recepción
                                     </button>
 
-                                    <button class="btn btn-light border btn-label" style="min-width:190px;">
+                                    <a
+                                        href="/download-pdf/register-documentation/{{$matriculaId}}"
+                                        class="btn btn-light border btn-label {{ !$matriculaId ? 'disabled' : '' }}"
+                                        style="min-width:190px;"
+                                    >
                                         <i class="ri-download-2-line label-icon"></i>
                                         Descargar PDF
-                                    </button>
-
-                                    <button class="btn btn-outline-danger btn-label" style="min-width:180px;">
+                                    </a>
+                                    
+                                    <button type="button"
+                                        class="btn btn-outline-danger btn-label"
+                                        style="min-width:180px;"
+                                        onclick="location.reload();">
                                         <i class="ri-delete-bin-line label-icon"></i>
                                         Limpiar
                                     </button>

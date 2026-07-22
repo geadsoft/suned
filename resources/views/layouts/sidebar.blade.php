@@ -445,17 +445,17 @@
                                             </a>    
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/secretary/documentation">
+                                            <a class="nav-link menu-link" href="/secretary/documentation-receipt">
                                                 <span>Recepción</span>
                                             </a>    
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/secretary/documentation">
+                                            <a class="nav-link menu-link" href="/secretary/documentation-status">
                                                 <span>Estado</span>
                                             </a>    
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/secretary/documentation">
+                                            <a class="nav-link menu-link" href="/secretary/documentation-deliver">
                                                 <span>Retiro</span>
                                             </a>    
                                         </li>
