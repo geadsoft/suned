@@ -479,12 +479,7 @@
                                     <div class="avatar-lg flex-shrink-0 me-3">
                                         @if(!empty($estudianteSeleccionado?->foto))
                                             <img
-                                                src="{{ asset(
-                                                    'storage/' .
-                                                    $estudianteSeleccionado->foto
-                                                ) }}"
-                                                alt="{{ $estudianteSeleccionado->nombres }}"
-                                                class="rounded-circle avatar-lg object-fit-cover"
+                                                src="@if ($estudiante->foto != '') {{ URL::asset('storage/fotos/'.$estudiante->foto) }}@else{{ URL::asset('assets/images/users/sin-foto.jpg') }} @endif"
                                             >
                                         @else
                                             <div
