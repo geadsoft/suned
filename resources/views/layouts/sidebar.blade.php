@@ -464,9 +464,18 @@
                                                 <span>Ingreso de CAS</span>
                                             </a>    
                                         </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="#titulos" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsede">
+                                    <i class="las la-graduation-cap fs-20"></i> <span>Acádemico</span>
+                                </a>
+                                <div class="collapse menu-dropdown" id="titulos">
+                                    <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link" href="/secretary/titles-file">
-                                                <span>Títulos y Actas</span>
+                                            <a class="nav-link menu-link" href="/secretary/titles-documentation">
+                                                <span>Titulación</span>
                                             </a>    
                                         </li>
                                     </ul>

@@ -10,12 +10,18 @@ class TdTitulosActas extends Model
     protected $table = 'td_titulos_actas';
     protected $primaryKey = "id";
     protected $fillable = [
-        'fecha',
-        'periodo_id',
-        'estudiante_id',
-        'titulo',
-        'acta',
+        'matricula_id',
+        'acta_retirada',
+        'titulo_retirado',
+        'fecha_acta',
+        'entregado_acta_por',
+        'recibido_acta_por',
+        'fecha_titulo',
+        'entregado_titulo_por',
+        'recibido_titulo_por',
         'comentario',
+        'archivo',
+        'drive_id',
         'usuario'
     ];
 

@@ -22,16 +22,20 @@
 @section('script')
     <script src="{{ URL::asset('/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script>
 
-        window.addEventListener('show-form', event => {
-            $('#showModal').modal('show');
-        })
+        window.addEventListener('show-message', function (event) {
 
-        window.addEventListener('hide-form', event => {
-            $('#showModal').modal('hide');
-        })
+            swal({
+                title: "Buen trabajo!",
+                text: event.detail.message,
+                icon: event.detail.type,
+                button: "Aceptar"
+            });
+
+        });
 
     </script>
 
