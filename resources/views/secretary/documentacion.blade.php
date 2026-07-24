@@ -35,6 +35,21 @@
             $('#showModal').modal('hide');
         })
 
+        window.addEventListener('show-delete', event => {
+            $('#deleteOrder').modal('show');
+        })
+
+        window.addEventListener('show-message', function (event) {
+
+            swal({
+                title: "Advertencia!",
+                text: event.detail.message,
+                icon: event.detail.type,
+                button: "Aceptar"
+            });
+
+        });
+
     </script>
 
 @endsection

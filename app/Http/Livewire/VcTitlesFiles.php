@@ -8,6 +8,7 @@ use App\Models\TmMatricula;
 use App\Models\TmServicios;
 use App\Models\TmCursos;
 use App\Models\TdTitulosActas;
+use App\Models\TmHorarios;
 use App\Models\User;
 
 use Livewire\Component;
@@ -55,11 +56,14 @@ class VcTitlesFiles extends Component
     public $previus='', $current='', $nomnivel, $nomcurso, $documento;
     public $estudianteId,$periodoId,$grupoId,$nivelId,$gradoId,$cursoId,$numreg,$matriculaId;
     public $alumno,$titulo=false,$acta=false,$comentario,$fecha;
+
     public $filters = [
-        'srv_periodo' => '',
-        'srv_grupo' => '',
-        'srv_nombre' => '',
-        'srv_estado' => 'A',
+        'periodo' => '',
+        'modalidad' => '',
+        'curso' => '',
+        'paralelo' => '',
+        'nombre' => '',
+        'estado' => '',
     ];
 
     private function token(){
@@ -84,11 +88,35 @@ class VcTitlesFiles extends Component
         $ldate = date('Y-m-d H:i:s');
         $this->fecha = date('Y-m-d',strtotime($ldate));
         $tblperiodos = TmPeriodosLectivos::where("periodo",$año)->first();
-        $this->filters['srv_periodo'] = $tblperiodos['id'];
+        $this->filters['periodo'] = $tblperiodos['id'];
     }
 
     public function render()
     {   
+
+        $modalidades = TmGeneralidades::where('superior',1)->get();
+
+        $cursos = TmHorarios::query()
+        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
+        ->where("tm_horarios.periodo_id",$this->filters['periodo'] )
+        ->where('tm_horarios.grupo_id',$this->filters['modalidad'])
+        ->selectRaw('s.id, s.descripcion')
+        ->where('s.nivel_id',11)
+        ->where('s.grado_id',17)
+        ->get();
+
+        $paralelos = TmHorarios::query()
+        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
+        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
+        ->where("tm_horarios.periodo_id",$this->filters['periodo'] )
+        ->where('tm_horarios.grupo_id',$this->filters['modalidad'])
+        ->where('s.id',$this->filters['curso'])
+        ->where('s.nivel_id',11)
+        ->where('s.grado_id',17)
+        ->selectRaw('c.id, c.paralelo')
+        ->groupByRaw('c.id, c.paralelo')
+        ->get();
+
         $tblrecords = TmPersonas::query()
         ->join("tm_matriculas as m","tm_personas.id","=","m.estudiante_id")
         ->join("tm_cursos as c","c.id","=","m.curso_id")
@@ -99,16 +127,56 @@ class VcTitlesFiles extends Component
         {
             $join->on('t.matricula_id', '=', 'm.id');
         })
-        ->when($this->filters['srv_nombre'],function($query){
-            return $query->where(DB::raw('concat(ltrim(rtrim(apellidos))," ",ltrim(rtrim(nombres)))'), 'LIKE' , "%{$this->filters['srv_nombre']}%");
+        ->when($this->filters['nombre'],function($query){
+            return $query->where(DB::raw('concat(ltrim(rtrim(apellidos))," ",ltrim(rtrim(nombres)))'), 'LIKE' , "%{$this->filters['nombre']}%");
         })
-        ->when($this->filters['srv_periodo'],function($query){
-            return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
+        ->when($this->filters['periodo'],function($query){
+            return $query->where('m.periodo_id',"{$this->filters['periodo']}");
         })
-        ->when($this->filters['srv_grupo'],function($query){
-            return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
+        ->when($this->filters['modalidad'],function($query){
+            return $query->where('m.modalidad_id',"{$this->filters['modalidad']}");
         })
-        ->where('tm_personas.estado',$this->filters['srv_estado'])
+        ->when($this->filters['curso'],function($query){
+            return $query->where('s.id',"{$this->filters['curso']}");
+        })
+        ->when($this->filters['paralelo'],function($query){
+            return $query->where('c.id',"{$this->filters['paralelo']}");
+        })
+        
+        ->when($this->filters['estado'] ?? null, function ($query, $estado) {
+
+            switch ($estado) {
+                case 'CO':
+                    $query->where('t.acta_entreg', 1)
+                        ->where('t.titulo_retirado', 1);
+                    break;
+
+                case 'AE':
+                    $query->where('t.acta_retirada', 1)
+                        ->where('t.titulo_retirado', 0);
+                    break;
+
+                case 'TE':
+                    $query->where('t.acta_retirada', 0)
+                        ->where('t.titulo_retirado', 1);
+                    break;
+
+                case 'PE':
+                    $query->where(function ($q) {
+                        $q->where('t.acta_retirada', 0)
+                        ->orWhereNull('t.acta_retirada');
+                    })
+                    ->where(function ($q) {
+                        $q->where('t.titulo_retirado', 0)
+                        ->orWhereNull('t.titulo_retirado');
+                    });
+                    break;
+            }
+
+            return $query;
+        })
+
+
         ->where('s.nivel_id',11)
         ->where('s.grado_id',17)
         ->select('m.id','identificacion','nombres','apellidos', 'documento', 'm.fecha', 'g.descripcion as nomgrupo','p.descripcion as nomperiodo',
@@ -145,10 +213,13 @@ class VcTitlesFiles extends Component
         ->get(['id', 'name']);
         
         return view('livewire.vc-titles-files',[
+            'modalidades' => $modalidades,
+            'cursos' => $cursos,
+            'paralelos' => $paralelos,
             'estudiantes' => $tblrecords,
             'tblgenerals' => $tblgenerals,
             'tblperiodos' => $tblperiodos,
-             'responsables' => $responsables,
+            'responsables' => $responsables,
         ]);
 
     }

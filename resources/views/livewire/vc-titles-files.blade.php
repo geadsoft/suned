@@ -84,7 +84,7 @@
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <label class="form-label fw-semibold">Periodo Lectivo</label>
-                                    <select class="form-select" name="cmbnivel" wire:model="filters.srv_periodo">
+                                    <select class="form-select" name="cmbnivel" wire:model="filters.periodo">
                                         <option value="">Seleccionar Periodo</option>
                                         @foreach ($tblperiodos as $periodo)
                                             <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
@@ -94,30 +94,34 @@
                             </div>
                             <div class="col-xxl-3 col-sm-4">
                                 <label class="form-label fw-semibold">Modalidad</label>
-                                <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
+                                <select class="form-select" name="cmbgrupo" wire:model="filters.modalidad">
                                     <option value="">Todas</option>
-                                    @foreach ($tblgenerals as $general)
-                                        @if ($general->superior == 1)
-                                        <option value="{{$general->id}}">{{$general->descripcion}}</option>
-                                        @endif
+                                    @foreach ($modalidades as $modalidad)
+                                        <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-xxl-3 col-sm-4">
                                 <label class="form-label fw-semibold">Curso</label>
-                                <select class="form-select" name="cmbgrupo" wire:model="filters.srv_curso">
+                                <select class="form-select" name="cmbgrupo" wire:model="filters.curso">
                                     <option value="">Todos</option>
+                                    @foreach ($cursos as $curso)
+                                        <option value="{{$curso->id}}">{{$curso->descripcion}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-xxl-2 col-sm-4">
                                 <label class="form-label fw-semibold">Paralelo</label>
-                                <select class="form-select" name="cmbgrupo" wire:model="filters.srv_curso">
+                                <select class="form-select" name="cmbgrupo" wire:model="filters.paralelo">
                                     <option value="">Todos</option>
+                                    @foreach ($paralelos as $paralelo)
+                                        <option value="{{$paralelo->id}}">{{$paralelo->paralelo}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-xxl-2 col-sm-4">
                                 <label class="form-label fw-semibold">Estado</label>
-                                <select class="form-select" name="cmbgrupo" wire:model="filters.srv_curso">
+                                <select class="form-select" name="cmbgrupo" wire:model="filters.estado">
                                     <option value="">Todos</option>
                                     <option value="CO">Completo</option>
                                     <option value="AE">Acta Entregada</option>
@@ -130,7 +134,7 @@
                             <div class="col-xxl-8 col-sm-6">
                                 <div class="search-box">
                                     <input type="text" class="form-control search"
-                                        placeholder="Buscar por nombre o apellidos" wire:model="filters.srv_nombre">
+                                        placeholder="Buscar por nombre o apellidos" wire:model="filters.nombre">
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
                             </div>

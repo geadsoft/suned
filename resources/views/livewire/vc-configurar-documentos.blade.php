@@ -39,7 +39,7 @@
                                             <td>
                                                 <ul class="list-inline d-flex justify-content-center gap-2 mb-0">
                                                     <li class="list-inline-item">
-                                                        <a href="" wire:click.prevent="edit({{ $record->id }})">
+                                                        <a href="" wire:click.prevent="edit({{ $record }})">
                                                             <i class="ri-pencil-fill fs-16"></i>
                                                         </a>
                                                     </li>
@@ -79,7 +79,7 @@
                                 <form autocomplete="off" wire:submit.prevent="{{ $showEditModal ? 'updateData' : 'createData' }}">
                                     
                                     <div class="modal-body">
-                                        <div class="id" id="modal-id">
+                                        <div class="mb-3" id="modal-id">
                                             @if($showEditModal)
                                                 <label for="record.id" class="form-label">ID</label>
                                                 <input type="text" wire:model.defer="record.id" class="form-control" placeholder="ID" readonly />
@@ -275,16 +275,14 @@
                                         colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px">
                                     </lord-icon>
                                     <div class="mt-4 text-center">
-                                        <h4>You are about to delete the record ? {{ $selectId }}</h4>
-                                        <p class="text-muted fs-15 mb-4">DDeleting the record will remove
-                                            all of
-                                            your information from our database.</p>
+                                        <h4>¿Está a punto de eliminar el registro? {{ $selectId }}</h4>
+                                        <p class="text-muted fs-15 mb-4">Eliminar el registro borrará toda su información de nuestra base de datos.</p>
                                         <div class="hstack gap-2 justify-content-center remove">
                                             <button class="btn btn-link link-success fw-medium text-decoration-none"
                                                 data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i>
-                                                Close</button>
-                                            <button class="btn btn-danger" id="delete-record"  wire:click="deleteData()"> Yes,
-                                                Delete It</button>
+                                                Cerrar</button>
+                                            <button class="btn btn-danger" id="delete-record"  wire:click="deleteData()"> Si,
+                                                Eliminarlo</button>
                                         </div>
                                     </div>
                                 </div>

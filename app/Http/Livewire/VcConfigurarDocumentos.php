@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 use App\Models\TmServicios;
 use App\Models\TmGeneralidades;
 use App\Models\TmExpedientes;
+use App\Models\TdExpedienteMatricula;
 use App\Models\ViewServiciosEducativos;
 
 
@@ -98,6 +99,42 @@ class VcConfigurarDocumentos extends Component
 
     }
 
+    public function edit(TmExpedientes $tblrecords ){
+        
+        $this->showEditModal = true;
+        $this->record  = $tblrecords->toArray();
+
+        $this->serviciosSeleccionados = $this->record['servicios'];
+       
+        $this->selectId = $this -> record['id'];
+
+
+        $this->dispatchBrowserEvent('show-form');
+
+    }
+
+    public function delete($id)
+    {
+        $this->selectId = $id;
+
+        $existe = TdExpedienteMatricula::where('expediente_id', $id)->exists();
+
+        if ($existe) {
+            $this->dispatchBrowserEvent('show-message', [
+                'type'    => 'warning',
+                'message' => 'No se puede eliminar el expediente porque tiene registros asociados.',
+            ]);
+            return;
+        }
+
+        $this->dispatchBrowserEvent('show-delete');
+    }
+
+    public function deleteData(){
+        TmExpedientes::find($this->selectId)->delete();
+        $this->dispatchBrowserEvent('hide-delete');
+    }
+
     public function createData()
     {
         $this->validate([
@@ -125,6 +162,38 @@ class VcConfigurarDocumentos extends Component
 
         $this->dispatchBrowserEvent('hide-form', [
             'message' => 'Registro grabado con éxito!',
+        ]);
+    }
+
+    public function updateData()
+    {
+        $this->validate([
+            'record.descripcion' => 'required'
+        ]);
+
+        $servicios = $this->serviciosSeleccionados;
+
+        // Seguridad adicional
+        if (is_string($servicios)) {
+            $servicios = json_decode($servicios, true);
+        }
+
+        if ($this->selectId){
+            $record = TmExpedientes::find($this->selectId);
+            $record->update([
+                'descripcion' => $this -> record['descripcion'],
+                'servicios' => $servicios,
+            ]);
+            
+        }
+
+        $this->reset([
+            'record',
+            'serviciosSeleccionados',
+        ]);
+
+        $this->dispatchBrowserEvent('hide-form', [
+            'message' => 'Registro actualizado con éxito!',
         ]);
     }
     
