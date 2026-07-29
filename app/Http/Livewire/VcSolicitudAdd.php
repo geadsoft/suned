@@ -68,7 +68,7 @@ class VcSolicitudAdd extends Component
 
     public function add(){
 
-        $this->record['documento']=str_pad($this->periodoLectivo->num_solicitud, 7, '0', STR_PAD_LEFT);
+        $this->record['documento']=str_pad($this->periodoLectivo->num_solicitud+1, 7, '0', STR_PAD_LEFT);
         $this->record['solicitante']='';
         $this->record['cedula']='';
         $this->record['estudiante_id']='';
