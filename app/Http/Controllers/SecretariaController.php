@@ -75,6 +75,11 @@ class SecretariaController extends Controller
         return view('secretary/solicitudes');
     }
 
+    public function requests_add()
+    {
+        return view('secretary/nueva_solicitud');
+    }
+
     public function promotion()
     {
         return view('secretary/promocion');

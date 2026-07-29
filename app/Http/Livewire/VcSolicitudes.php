@@ -4,160 +4,240 @@ namespace App\Http\Livewire;
 
 use App\Models\TmReportes;
 use App\Models\TmSedes;
+use App\Models\TmSubcategoriasSolicitud;
+use App\Models\TcSolicitudes;
+
+
 
 use Livewire\Component;
+use Livewire\WithPagination;
 use PDF;
 
 class VcSolicitudes extends Component
 {
-    public $fecha,$documento,$nombres,$nui;
-    public $solicitud=[];
+    use WithPagination;
 
-    public function mount(){
-        $this->loadData();
+    public $resumen, $mostrarPanel=false, $categorias=[];
+    public $solicitud=[];
+    public $record;
+    public $solicitudId;
+    public $estadoSolicitud;
+    public $observacionEstado;
+
+    public $estado=[
+        'P' => ['valor'=>'Pendiente','color' => 'badge-soft-warning'],
+        'L' => ['valor'=>'Listo','color' => 'badge-soft-success'],
+        'R' => ['valor'=>'Realizado y Entregado','color' => 'badge-soft-info'],
+        'A' => ['valor'=>'Anulado','color' => 'badge-soft-danger'],
+    ];
+
+    public $filters=[
+        'buscar' => '',
+    ];
+
+    public $servidores=[
+        1 => 'Servidor 1',
+        2 => 'Servidor 2'
+    ];
+
+    public function mount()
+    {
+        $this->add();
     }
 
     public function render()
     {
-        return view('livewire.vc-solicitudes');
-    }
-
-    public function loadData(){
-        $objData['categoria'] = 'C';
-        $objData['subcategoria'] = 'Matricula';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '2 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'C';
-        $objData['subcategoria'] = 'Conducta';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $tobjData['tiempo'] = '2 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'C';
-        $objData['subcategoria'] = 'Asistencia';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '2 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'C';
-        $objData['subcategoria'] = 'Aprovechamiento';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '2 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'C';
-        $objData['subcategoria'] = 'Libreta Escolar';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '2 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'C';
-        $objData['subcategoria'] = 'Promoción';
-        $tobjData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '8 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'C';
-        $objData['subcategoria'] = 'Pase Reglamentario';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '2 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'C';
-        $objData['subcategoria'] = 'Retiro de Expediente';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '15 dias laborales';
-        array_push($this->solicitud, $objData);
-
-        $objData['categoria'] = 'E';
-        $objData['subcategoria'] = 'Participacion Estudiantil'."\n".'120 Horas';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '8 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'E';
-        $objData['subcategoria'] = 'Participacion Estudiantil'."\n".'100 Horas';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '8 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'E';
-        $objData['subcategoria'] = 'Participacion Estudiantil'."\n".'80 Horas';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '8 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'E';
-        $objData['subcategoria'] = 'Pasantias';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '2 dias laborales';
-        array_push($this->solicitud, $objData);
         
-        $objData['categoria'] = 'G';
-        $objData['subcategoria'] = 'Acta Original'."\n".'2000-2021';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '8 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'G';
-        $objData['subcategoria'] = 'Duplicado Acta'."\n".'2000-2021';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '8 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'G';
-        $objData['subcategoria'] = 'Acta Original'."\n".'1984-1999';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '8 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'G';
-        $objData['subcategoria'] = 'Duplicado Acta'."\n".'1984-1999';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '8 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'G';
-        $objData['subcategoria'] = 'Título de Bachiller'."\n".'2000-2021';
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '8 dias laborales';
-        array_push($this->solicitud, $objData);
-        $objData['categoria'] = 'G';
-        $objData['subcategoria'] = 'Título de Bachiller'."\n".'1984-1999';;
-        $objData['periodo'] = '';
-        $objData['curso'] = '';
-        $objData['tiempo'] = '15 dias laborales';
-        array_push($this->solicitud, $objData);
+        $solicitudes = TcSolicitudes::query()
+        ->with([
+            'persona',
+            'detalles.subcategoria',
+        ])
 
-        return $this->solicitud;
+        ->when(
+            !empty($this->filters['buscar']),
+            function ($query) {
 
-    }
+                $buscar = trim($this->filters['buscar']);
 
-    public function print(){
+                $query->where(function ($subQuery) use ($buscar) {
 
-        return redirect()->to('/preview-pdf/requests');
+                    // Buscar por solicitante
+                    $subQuery->where(
+                        'solicitante',
+                        'like',
+                        "%{$buscar}%"
+                    )
 
-    }
+                    // Buscar por nombres o apellidos de la persona
+                    ->orWhereHas('persona', function ($personaQuery) use ($buscar) {
 
-    public function printPDF()
-    {   
-        $data    = TmReportes::find(7);
-        $formato = $this->loadData(); 
-        $sede = TmSedes::orderBy('id','desc')->first();
+                        $personaQuery->where(function ($q) use ($buscar) {
+                            $q->where('nombres', 'like', "%{$buscar}%")
+                                ->orWhere('apellidos', 'like', "%{$buscar}%")
+                                ->orWhereRaw(
+                                    "CONCAT(apellidos, ' ', nombres) LIKE ?",
+                                    ["%{$buscar}%"]
+                                )
+                                ->orWhereRaw(
+                                    "CONCAT(nombres, ' ', apellidos) LIKE ?",
+                                    ["%{$buscar}%"]
+                                );
+                        });
 
-        $pdf = PDF::loadView('reports/solicitudes',[
-            'sede'  => $sede,
-            'data'  => $data,
-            'solicitud' => $formato,
+                    });
+
+                });
+            }
+        )
+        ->orderby('documento','desc')
+        ->paginate(10);
+
+        $valores = TcSolicitudes::query()
+        ->selectRaw("
+            COUNT(*) AS total,
+            SUM(CASE WHEN estado = 'P' THEN 1 ELSE 0 END) AS pendientes,
+            SUM(CASE WHEN estado = 'L' THEN 1 ELSE 0 END) AS listos,
+            SUM(CASE WHEN estado = 'R' THEN 1 ELSE 0 END) AS entregados
+        ")
+        ->first();
+
+        $this->resumen['pendientes'] = $valores->pendientes;
+        $this->resumen['listo'] = $valores->listos;
+        $this->resumen['entregados'] = $valores->entregados;
+        $this->resumen['total'] = $valores->total;
+        
+        return view('livewire.vc-solicitudes',[
+            'estudiantes' => [],
+            'subcategorias' => $this->categorias,
+            'solicitudes' => $solicitudes 
         ]);
 
-        return $pdf->setPaper('a4')->stream('Solicitud.pdf');
+    }
+    
+    public function paginationView(){
+        return 'vendor.livewire.bootstrap'; 
     }
 
+    public function updatedFiltersBuscar()
+    {
+        $this->resetPage();
+    }
+
+    public function add(){
+        
+        $this->reset(['record']);
+        $this->record['id']=null;
+        $this->record['categoria']= '';
+        $this->record['subcategoria']= '';
+        $this->record['tiempo_entrega']= '';     
+
+    }
+    
+    public function edit(TmSubcategoriasSolicitud $tblSubcategorias ){
+        
+        $this->record  = $tblrecords->toArray();
+
+    }
+
+    public function createData(){
+
+        $this ->validate([
+            'record.categoria' => 'required',
+            'record.subcategoria' => 'required',
+            'record.tiempo_entrega' => 'required',
+        ]);    
+
+        $registro = TmSubcategoriasSolicitud::query()->firstOrNew([
+            'id' => $this->record['id'],
+        ]);
+
+        $registro->categoria =
+        $this->record['categoria']
+            ? $this->record['categoria']
+            : null;
+
+        $registro->subcategoria =
+        $this->record['subcategoria']
+            ? $this->record['subcategoria']
+            : null;
+
+        $registro->tiempo_entrega =
+        $this->record['tiempo_entrega']
+            ? $this->record['tiempo_entrega']
+            : null;
+        
+        $registro->usuario =
+            auth()->user()?->name;
+
+        $registro->save();
+
+        $this->categorias = TmSubcategoriasSolicitud::query()
+            ->where('categoria', $this->record['categoria'])
+            ->get();
+
+        $categoria = $this->record['categoria'];
+        $this->add();
+        $this->record['categoria']=$categoria;
+        
+    }
+
+    public function abrirPanel(string $categoria): void
+    {
+        $this->add();
+
+        $this->record['categoria'] = $categoria;
+
+        $this->categorias = TmSubcategoriasSolicitud::query()
+            ->where('categoria', $this->record['categoria'])
+            ->get();
+
+        $this->mostrarPanel = true;
+        
+    }
+    
+    public function cerrarPanel(): void
+    {
+        $this->mostrarPanel = false;
+        $this->add();
+    }
+
+    public function abrirCambioEstado($id)
+    {
+        $solicitud = TcSolicitudes::findOrFail($id);
+
+        $this->solicitudId       = $solicitud->id;
+        $this->estadoSolicitud   = $solicitud->estado;
+        $this->observacionEstado = $solicitud->observacion;
+
+        $this->dispatchBrowserEvent('mostrar-modal-estado');
+    }
+
+    public function cambiarEstado()
+    {
+        
+        $this->validate([
+            'solicitudId' => 'required',
+            'estadoSolicitud' => 'required|in:P,L,R',
+        ]);
+
+        $solicitud = TcSolicitudes::findOrFail($this->solicitudId);
+
+        $solicitud->update([
+            'estado' => $this->estadoSolicitud,
+            'observacion' => $this->observacionEstado,
+            'usuario' => auth()->user()->name,
+        ]);
+
+        $this->dispatchBrowserEvent('ocultar-modal-estado');
+        $this->dispatchBrowserEvent('msg-save');
+
+        $this->reset([
+            'solicitudId',
+            'estadoSolicitud',
+            'observacionEstado',
+        ]);
+
+    }
 
 }

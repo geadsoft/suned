@@ -12,34 +12,47 @@
             Secretaría
         @endslot
         @slot('title')
-            Solicitudes
+            Registro de Solicitud
         @endslot
     @endcomponent
 
-    @livewire('vc-solicitudes')
+    @livewire('vc-solicitud-add')
 
 @endsection
 @section('script')
     <script src="{{ URL::asset('/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
     <script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script>
 
-        window.addEventListener('mostrar-modal-estado', event => {
-            $('#modalCambioEstado').modal('show');
-        });
+        window.addEventListener('show-form', event => {
+            $('#showModal').modal('show');
+        })
 
-        window.addEventListener('ocultar-modal-estado', event => {
-            $('#modalCambioEstado').modal('hide');
-        });
+        window.addEventListener('hide-form', event => {
+            $('#showModal').modal('hide');
+        })
 
         window.addEventListener('msg-save', event => {
             swal(
                 "Buen trabajo!",
-                "Estado actualizado correctamente.",
+                "Solicitud registrada correctamente.",
                 "success"
             );
+        });
+
+        window.addEventListener('refresh-page', () => {
+            location.reload();
+        });
+
+        window.addEventListener('msg-show', event => {
+
+            swal(
+                event.detail.type === 'error' ? "Error" : "Buen trabajo",
+                event.detail.text,
+                event.detail.type
+            );
+
         });
 
     </script>

@@ -46,7 +46,7 @@
                         </td>
                         <td width="90%"><span style="horizontal-align: top; padding-top: 10px">
                             <p style="line-height: 200%" class="text-justify"><br><br>
-                            Yo, Gladys Quiroz con C.I 090036728-5, Rectoror (a) de la Unidad Educativa American Shool, certifico que el Sr. (Srta.) 
+                            Yo, Gladys Quiroz con C.I 090036728-5, Rector (a) de la Unidad Educativa American Shool, certifico que el Sr. (Srta.) 
                             <strong>{{$data['nombres']}}</strong> con C.I. {{$data['identificacion']}}, constan en los archivos de la institución,
                             en el periodo lectivo {{$data['periodo']}}, como Bachiller en CIENCIAS, con especialización en {{$data['especializacion']}},
                             con calificación <strong>{{$data['nota']}}</strong>, graduado el {{date('d',strtotime($data['fecha']))}} de 

@@ -75,24 +75,15 @@
                     <td width="50%" class="text-center">
                         <span><strong>________________________________</strong></span>
                     </td>
-                    <td width="50%" class="text-center">
-                        <span><strong>________________________________</strong></span>
-                    </td>
                 </tr>
                 <tr style="font-size:13px">
                     <td width="50%" class="text-center">
                         <span>{{$data['rector']}}</span>
                     </td>
-                    <td width="50%" class="text-center">
-                        <span>{{$data['secretaria']}}</span>
-                    </td>
                 </tr>
                 <tr style="font-size:13px">
                     <td width="50%" class="text-center">
                         <span><strong>RECTOR</strong></span>
-                    </td>
-                    <td width="50%" class="text-center">
-                        <span><strong>SECRETARIA</strong></span>
                     </td>
                 </tr>
             </table>

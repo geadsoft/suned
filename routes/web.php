@@ -35,6 +35,7 @@ use App\Http\Livewire\VcStudentInsurance;
 use App\Http\Controllers\DocumentDownloadController;
 use App\Http\Livewire\VcRegistrarDocumentos;
 use App\Http\Livewire\VcRetirarDocumentos;
+use App\Http\Livewire\VcSolicitudAdd;
 
 /*
 |--------------------------------------------------------------------------
@@ -143,6 +144,7 @@ Route::get('/secretary/ratings',[App\Http\Controllers\SecretariaController::clas
 Route::get('/secretary/report-cas',[App\Http\Controllers\SecretariaController::class, 'reportCas'])->name('reportCas');
 Route::get('/secretary/titles-documentation',[App\Http\Controllers\SecretariaController::class, 'titlesFile'])->name('titlesFile');
 Route::get('/secretary/requests',[App\Http\Controllers\SecretariaController::class, 'requests'])->name('requests');
+Route::get('/secretary/requests-add',[App\Http\Controllers\SecretariaController::class, 'requests_add'])->name('requests_add');
 Route::get('/secretary/promotion',[App\Http\Controllers\SecretariaController::class, 'promotion'])->name('promotion');
 Route::get('/sri/create-invoice',[App\Http\Controllers\TrFacturasCabsController::class, 'index'])->name('index');
 Route::get('/sri/invoices/{tipo}',[App\Http\Controllers\TrFacturasCabsController::class, 'documents'])->name('documents');
@@ -260,6 +262,8 @@ Route::get('/register-documentation/{matriculaId}/print',[VcRegistrarDocumentos:
 Route::get('/retire-documentation/{matriculaId}/print',[VcRetirarDocumentos::class, 'imprimirRetiro'])->name('expedientes-retiro.imprimir');
 Route::get('/download-pdf/register-documentation/{matriculaId}',[VcRegistrarDocumentos::class, 'downloadPDF']);
 Route::get('/download-pdf/retire-documentation/{matriculaId}',[VcRetirarDocumentos::class, 'downloadPDF']);
+Route::get('/secretary/{id}/requests-print',[VcSolicitudAdd::class, 'imprimirSolicitud'])->name('solicitudes.imprimir');
+
 
 Route::get('/invoice/genera/{id}',[VcGeneraXML::class, 'setGeneraXML']);
 Route::get('/invoice/ride-pdf/{id}',[VcGeneraXML::class, 'imprimeRide']);
