@@ -9,7 +9,7 @@ use Livewire\WithPagination;
 class VcAgents extends Component
 {   
     use WithPagination;
-    
+
     public $filters=[
         'srv_nombre'=>'',
     ];
@@ -21,7 +21,7 @@ class VcAgents extends Component
         ->when($this->filters['srv_nombre'],function($query){
             return $query->whereRaw("concat(tm_personas.apellidos,' ',tm_personas.nombres) LIKE '%".$this->filters['srv_nombre']."%'");
         })
-        where('tipopersona','R')
+        ->where('tipopersona','R')
         ->orderBy('apellidos','asc')
         ->paginate(10);
 
