@@ -9,7 +9,8 @@ use Livewire\WithPagination;
 class VcAgents extends Component
 {   
     use WithPagination;
-    public $filters[
+    
+    public $filters=[
         'srv_nombre'=>'',
     ];
   
