@@ -10,7 +10,7 @@ class VcAgents extends Component
 {   
     use WithPagination;
     public $filters[
-        'srv_nombre'=>'';
+        'srv_nombre'=>'',
     ];
   
     public function render()
