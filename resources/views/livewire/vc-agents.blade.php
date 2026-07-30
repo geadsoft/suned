@@ -48,10 +48,10 @@
                     <div class="row g-3">
                         <div class="col-md-4">
                             <div class="search-box">
-                                <input type="text" class="form-control search"
-                                    placeholder="Search for contact..." wire.model="filters.srv_nombre">
-                                <i class="ri-search-line search-icon"></i>
-                            </div>
+                                    <input type="text" class="form-control search"
+                                        placeholder="Buscar por Apellidos, Nombre" wire:model="filters.srv_nombre">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
                         </div>
                         <div class="col-md-auto ms-auto">
                             <div class="hstack text-nowrap gap-2">
