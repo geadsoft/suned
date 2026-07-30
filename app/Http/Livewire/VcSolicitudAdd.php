@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Livewire;
-use App\Models\TmSubcategoriaSolicitud;
+use App\Models\TmSubcategoriasSolicitud;
 use App\Models\TcSolicitudes;
 use App\Models\TdSolicitudes;
 use App\Models\TmPeriodosLectivos;
@@ -25,7 +25,7 @@ class VcSolicitudAdd extends Component
         ->orWhere('aperturado',1)
         ->first();
         
-        $primeraCategoria = TmSubcategoriaSolicitud::query()
+        $primeraCategoria = TmSubcategoriasSolicitud::query()
         ->select('categoria')
         ->distinct()
         ->first();
@@ -90,7 +90,7 @@ class VcSolicitudAdd extends Component
 
     public function consulta(){
 
-       $this->detalle = TmSubcategoriaSolicitud::query()
+       $this->detalle = TmSubcategoriasSolicitud::query()
         ->orderBy('categoria')
         ->orderBy('subcategoria')
         ->get()
@@ -228,7 +228,7 @@ class VcSolicitudAdd extends Component
      * Consultamos todas las subcategorías, aunque no hayan
      * sido seleccionadas en la solicitud.
      */
-    $subcategorias = TmSubcategoriaSolicitud::query()
+    $subcategorias = TmSubcategoriasSolicitud::query()
         ->orderByRaw("
             CASE categoria
                 WHEN 'Certificados' THEN 1

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-use App\Models\TmSubcategoriaSolicitud;
+use App\Models\TmSubcategoriasSolicitud;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmServicios;
 
@@ -25,7 +25,7 @@ class TdSolicitudes extends Model
     public function subcategoria()
     {
         return $this->belongsTo(
-            TmSubcategoriaSolicitud::class,
+            TmSubcategoriasSolicitud::class,
             'subcategoria_id'
         );
     }
