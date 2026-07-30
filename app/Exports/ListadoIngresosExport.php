@@ -46,26 +46,21 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles, W
         ->join("tm_servicios as s","s.id","=","c.servicio_id")
         ->join("tm_generalidades as bc","bc.id","=","cd.entidad_id")
 
-        ->when($this->filters['srv_nombre'], function ($query) {
-            return $query->where('tr_cobros_cabs.documento', $this->filters['srv_nombre']);
+        ->when($this->filters['srv_nombre'],function($query){
+            return $query->whereRaw("concat(p.apellidos,' ',p.nombres,' ',tr_cobros_cabs.documento) LIKE '%".$this->filters['srv_nombre']."%'");
         })
-        ->when($this->filters['srv_periodo'], function ($query) {
-            return $query->where('m.periodo_id', $this->filters['srv_periodo']);
+        ->when($this->filters['srv_periodo'],function($query){
+            return $query->where('m.periodo_id',"{$this->filters['srv_periodo']}");
         })
-        ->when($this->filters['srv_grupo'], function ($query) {
-            return $query->where('m.modalidad_id', $this->filters['srv_grupo']);
+        ->when($this->filters['srv_grupo'],function($query){
+            return $query->where('m.modalidad_id',"{$this->filters['srv_grupo']}");
         })
-        ->when($this->filters['srv_curso'], function ($query) {
-            return $query->where('m.id', $this->filters['srv_curso']);
+        ->when($this->filters['srv_curso'],function($query){
+            return $query->where('m.id',"{$this->filters['srv_curso']}");
         })
-        ->when($this->filters['srv_fechaini'], function ($query) {
-            return $query->whereBetween(
-                'tr_cobros_cabs.fecha',
-                [
-                    date('Ymd', strtotime($this->filters['srv_fechaini'])),
-                    date('Ymd', strtotime($this->filters['srv_fechafin']))
-                ]
-            );
+        ->when($this->filters['srv_fechaini'],function($query){
+            return $query->where('tr_cobros_cabs.fecha','>=',date('Ymd',strtotime($this->filters['srv_fechaini'])))
+            ->where('tr_cobros_cabs.fecha','<=',date('Ymd',strtotime($this->filters['srv_fechafin'])));
         })
 
         ->select(
