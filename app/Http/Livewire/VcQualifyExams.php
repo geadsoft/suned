@@ -234,9 +234,9 @@ class VcQualifyExams extends Component
         ->when($this->filters['bloque'],function($query){
             return $query->where('bloque',"{$this->filters['bloque']}");
         })
-        ->when($this->filters['actividad'],function($query){
+        /*->when($this->filters['actividad'],function($query){
             return $query->where('actividad',"{$this->filters['actividad']}");
-        })
+        })*/
         ->where("tipo","ET")
         ->where("docente_id",$this->docenteId)
         ->get()
@@ -294,9 +294,9 @@ class VcQualifyExams extends Component
         ->when($this->filters['bloque'],function($query){
             return $query->where('bloque',"{$this->filters['bloque']}");
         })
-        ->when($this->filters['actividad'],function($query){
+        /*->when($this->filters['actividad'],function($query){
             return $query->where('actividad',"{$this->filters['actividad']}");
-        })
+        })*/
         ->where("tipo","ET")
         ->where("docente_id",$this->docenteId)
         ->select("n.*")
