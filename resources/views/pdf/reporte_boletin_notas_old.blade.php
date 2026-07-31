@@ -6,15 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acta de Calificaciones</title>
     <style>
-        @page {
-            size: A4 landscape;
-            margin: 5mm;
-        }
-
         body{
             margin: 0;
             padding: 0;
-            font-size: 9.5px;
+            font-size: 10px;
         }
 
         table {
@@ -25,7 +20,7 @@
         }
 
         table th, table td {
-            padding: 3px 5px;
+            padding: 4px 6px;
         }
 
         tr {
@@ -45,7 +40,7 @@
 </head>
 <body>
     
-    <section class="header" style ="top: -187px;">
+    <section class="header" style ="top: -287px;">
         <table cellpadding="0" cellspancing="0" width="100%">
         </table>
         <br>
@@ -55,11 +50,11 @@
     
     @foreach ($tblpersons as $index => $record)
 
-        <section style ="margin-top: -90px;">
+        <section style ="margin-top: -110px;">
             <table cellpadding="0" cellspancing="0" class="table table-sm table-bordered">
                 
                 <tr>
-                    <td colspan="12">
+                    <td colspan="10">
                     <div class="col-4"><img class="img-fluid" style="position: absolute;top: 1%; left: 2%; width: 45%;height:60pt;" 
                     src="../public/assets/images/LogoReport.png" alt=""></div>
                     <p class="text-center" style="margin: 0px; font-size: 12px;"><strong>UNIDAD EDUCATIVA AMERICAN SCHOOL</strong></p>
@@ -71,13 +66,13 @@
                 </tr>
                 <tr>
                     <td class="align-middle"><strong>NOMBRES DE ESTUDIANTE</strong></td>
-                    <td class="align-middle" colspan="9">{{$record['apellidos']}} {{$record['nombres']}}</td>
+                    <td class="align-middle" colspan="7">{{$record['apellidos']}} {{$record['nombres']}}</td>
                     <td class="align-middle"><strong>MATRICULA</strong></td>
                     <td class="align-middle text-right">{{$record['documento']}}</td>
                 </tr>
                 <tr>
                     <td class="align-middle"><strong>GRADO/CURSO</strong></td>
-                    <td class="align-middler" colspan="9">{{$datos['curso']}}</td>
+                    <td class="align-middler" colspan="7">{{$datos['curso']}}</td>
                     <td class="align-middler" colspan="2"></td>
                 </tr>
                 <tr>
@@ -85,12 +80,10 @@
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" colspan="3">PARCIAL</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">PROMEDIO PARCIALES</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">{{$notaParcial}}%</th>
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">EXAMEN</th>
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">{{$notaExamen/2}}%</th>
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">PROYECTO</th>
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">{{$notaExamen/2}}%</th>
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:100px;" rowspan="2">PROMEDIO CUANTITATIVO</th>
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:100px;" rowspan="2">PROMEDIO CUALITATIVO</th>
+                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">EVALUACIÓN</th>
+                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">{{$notaExamen}}%</th>
+                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:180px;" rowspan="2">PROMEDIO CUANTITATIVO</th>
+                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:180px;" rowspan="2">PROMEDIO CUALITATIVO</th>
                 </tr>
                 <tr>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;">Actividad Individual</th>
@@ -115,9 +108,7 @@
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['promedio'],2)}}</td>
                         <td class="text-center align-middle" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['nota70'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['examen'],2)}}</td>
-                        <td class="text-center align-middle" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['enota15'],2)}}</td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['proyecto'],2)}}</td>
-                        <td class="text-center align-middle" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['pnota15'],2)}}</td>
+                        <td class="text-center align-middle" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id][$col->id]['nota30'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{number_format($tblrecords[$record->id][$col->id]['cuantitativo'],2)}}</strong></td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$tblrecords[$record->id][$col->id]['cualitativo']}}</strong></td>
                     </tr>
@@ -138,9 +129,7 @@
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id]['ZZ']['promedio'],2)}}</td>
                         <td class="text-center align-middle" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id]['ZZ']['nota70'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id]['ZZ']['examen'],2)}}</td>
-                        <td class="text-center align-middle" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id]['ZZ']['enota15'],2)}}</td>
-                        <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id]['ZZ']['proyecto'],2)}}</td>
-                        <td class="text-center align-middle" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id]['ZZ']['pnota15'],2)}}</td>
+                        <td class="text-center align-middle" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id]['ZZ']['nota30'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{number_format($tblrecords[$record->id]['ZZ']['cuantitativo'],2)}}</strong></td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$tblrecords[$record->id]['ZZ']['cualitativo']}}</strong></td>
                     </tr>
@@ -207,7 +196,7 @@
                                 </tr>
                             </table>
                         </td>
-                        <td colspan="7" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">
+                        <td colspan="5" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">
                             <table cellpadding="0" cellspancing="0" class="table table-sm table-bordered">
                                 <tr>
                                     <td colspan="6" class="text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;"> <strong>ESCALA DE CALIFICACIONES</strong></td>

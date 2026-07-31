@@ -59,10 +59,10 @@ class VcReportCard extends Component
         ->where("superior",1)
         ->get();
         
-       $this->tblparalelo = TmHorarios::query()
+        $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
-        ->where("tm_horarios.periodo_id",$this->periodoId)
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->where('tm_horarios.grupo_id',$this->modalidadId)
         ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion,s.calificacion')
         ->get();
@@ -76,7 +76,7 @@ class VcReportCard extends Component
         $matriculasQuery = DB::table('tm_matriculas as m')
         ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
         ->where('m.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.periodo_id', $this->filters['periodoId'])
         ->where('m.estado','A')
         ->whereNotIn('m.id', $matriculasConPase);
 
@@ -85,7 +85,7 @@ class VcReportCard extends Component
         ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
         ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
         ->where('p.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.periodo_id', $this->filters['periodoId'])
         ->where('p.estado', 'A');
 
         // UNION de ambas consultas
@@ -118,7 +118,7 @@ class VcReportCard extends Component
         $matriculasQuery = DB::table('tm_matriculas as m')
         ->select('m.estudiante_id', 'm.documento', 'm.modalidad_id', 'm.periodo_id', 'm.curso_id')
         ->where('m.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.periodo_id', $this->filters['periodoId'])
         ->where('m.estado','A')
         ->whereNotIn('m.id', $matriculasConPase);
 
@@ -127,7 +127,7 @@ class VcReportCard extends Component
         ->join('tm_matriculas as m', 'm.id', '=', 'p.matricula_id')
         ->select('m.estudiante_id', 'm.documento', 'p.modalidad_id', 'm.periodo_id', 'p.curso_id')
         ->where('p.modalidad_id', $this->modalidadId)
-        ->where('m.periodo_id', $this->periodoId)
+        ->where('m.periodo_id', $this->filters['periodoId'])
         ->where('m.estado','A')
         ->where('p.estado', 'A');
         
@@ -153,7 +153,7 @@ class VcReportCard extends Component
     public function updatedmodalidadId($id)
     {
         $sqlresult = TmSistemaEducativos::query()
-        ->where('periodo_id', $this->periodoId)
+        ->where('periodo_id', $this->filters['periodoId'])
         ->where('modalidad_id', $this->modalidadId)
         ->first();
 
@@ -161,7 +161,7 @@ class VcReportCard extends Component
         $this->filters['notasumativa'] = ($sqlresult->evaluacion_sumativa ?? 30)/100;
         
         // Base query reutilizable
-        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->periodoId)
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->filters['periodoId'])
             ->where('modalidad_id', $this->modalidadId);
 
         // ========================
@@ -234,6 +234,7 @@ class VcReportCard extends Component
             return $query->where('bloque',"{$this->filters['bloque']}");
         })
         ->selectRaw("tm_actividades.id,tm_actividades.nombre,tm_actividades.actividad,tm_actividades.puntaje")
+        ->where("h.periodo_id",$this->filters['periodoId'])
         ->where("tipo","AC")
         ->where("d.asignatura_id",$id)
         ->orderByRaw("actividad desc")
@@ -247,11 +248,21 @@ class VcReportCard extends Component
 
         $this->tblrecords=[];
         
+        /*$this->asignaturas = TmHorarios::query()
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
+        ->select("a.*")
+        ->where("tm_horarios.curso_id",$this->filters['paralelo'])
+        ->orderBy("a.descripcion")
+        ->get();*/
+
         $this->asignaturas = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
         ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
         ->select("a.*")
         ->where("tm_horarios.curso_id",$this->filters['paralelo'])
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
+        ->where("tm_horarios.grupo_id",$this->filters['modalidadId'])
         ->orderBy("a.descripcion")
         ->get();
 
@@ -261,7 +272,6 @@ class VcReportCard extends Component
         ->where('p.estado',"A")
         ->select('m.curso_id', 'p.modalidad_id', 'p.estudiante_id')
         ->get();
-
     
         foreach ($this->tblpersonas as $key => $person)
         { 
@@ -280,6 +290,7 @@ class VcReportCard extends Component
                 })
                 ->join('tm_horarios as h', 'h.id', '=', 'd.horario_id')
                 ->where('td_calificacion_actividades.persona_id', $idPerson)
+                ->where('h.periodo_id',$this->filters['periodoId'])
                 ->where('h.curso_id',$this->filters['paralelo_pase'])
                 ->where('a.termino', $this->filters['termino'])
                 ->where('a.tipo', 'ET')
@@ -344,7 +355,9 @@ class VcReportCard extends Component
                 $this->tblrecords[$idPerson][$index]['promedio'] = 0.00;
                 $this->tblrecords[$idPerson][$index]['nota70'] = 0.00;
                 $this->tblrecords[$idPerson][$index]['examen'] = 0.00;
-                $this->tblrecords[$idPerson][$index]['nota30'] = 0.00;
+                $this->tblrecords[$idPerson][$index]['enota15'] = 0.00;
+                $this->tblrecords[$idPerson][$index]['proyecto'] = 0.00;
+                $this->tblrecords[$idPerson][$index]['pnota15'] = 0.00;
                 $this->tblrecords[$idPerson][$index]['cuantitativo'] = 0.00;
                 $this->tblrecords[$idPerson][$index]['cualitativo'] = "";
             }
@@ -372,7 +385,9 @@ class VcReportCard extends Component
             $this->tblrecords[$idPerson]['ZZ']['promedio'] = 0.00;
             $this->tblrecords[$idPerson]['ZZ']['nota70'] = 0.00;
             $this->tblrecords[$idPerson]['ZZ']['examen'] = 0.00;
-            $this->tblrecords[$idPerson]['ZZ']['nota30'] = 0.00;
+            $this->tblrecords[$idPerson]['ZZ']['enota15'] = 0.00;
+            $this->tblrecords[$idPerson]['ZZ']['proyecto'] = 0.00;
+            $this->tblrecords[$idPerson]['ZZ']['pnota15'] = 0.00;
             $this->tblrecords[$idPerson]['ZZ']['cuantitativo'] = 0.00;
             $this->tblrecords[$idPerson]['ZZ']['cualitativo'] = "";
         
@@ -393,7 +408,7 @@ class VcReportCard extends Component
     }
 
 
-    public function asignarNotas(){
+    public function asignarnotas(){
 
         $notaformativa = $this->filters['notaformativa'];
         $notasumativa  = $this->filters['notasumativa'];
@@ -428,6 +443,7 @@ class VcReportCard extends Component
                 ->join('tm_horarios as h', 'h.id', '=', 'd.horario_id')
                 ->where('td_calificacion_actividades.persona_id', $idPerson)
                 ->where('h.curso_id',$this->filters['paralelo_pase'])
+                ->where('h.periodo_id',$this->filters['periodoId'])
                 ->where('a.termino', $this->filters['termino'])
                 ->where('a.tipo', 'ET')
                 ->count('a.id');
@@ -463,6 +479,7 @@ class VcReportCard extends Component
                 return $query->where('bloque',"{$this->filters['bloque']}");
             })
             ->selectRaw("tm_actividades.actividad")
+            ->where("h.periodo_id",$this->filters['periodoId'])
             ->where("tipo","AC")
             ->groupBy("tm_actividades.actividad")
             ->get();
@@ -473,12 +490,14 @@ class VcReportCard extends Component
                 $join->on('d.id', '=', 'tm_actividades.paralelo')
                     ->on('d.docente_id', 'tm_actividades.docente_id');
             })
+            ->join("tm_horarios as h","h.id","=","d.horario_id")
             ->when(!empty($this->filters['termino']), function($query) {
                 return $query->where('tm_actividades.termino', $this->filters['termino']);
             })
             ->when(!empty($this->filters['bloque']), function($query) {
                 return $query->where('tm_actividades.bloque', $this->filters['bloque']);
             })
+            ->where('h.periodo_id',$this->filters['periodoId'])
             ->where('tm_actividades.tipo', 'AC')
             ->where('n.persona_id', $idPerson)
             ->select([
@@ -501,12 +520,12 @@ class VcReportCard extends Component
                 }
             }
 
-            //Asginar Nota Examen
+            //Asginar nota Examen
            
             $bloque = $this->filters['bloque'] ?? null;
             $bloqueEx = $bloque ? str_replace('P', 'E', $bloque) : null;
 
-            $examen = TmActividades::query()
+            /*$examen = TmActividades::query()
             ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
             ->join('tm_horarios_docentes as d', function($join) {
                 $join->on('d.id', '=', 'tm_actividades.paralelo')
@@ -531,18 +550,113 @@ class VcReportCard extends Component
             ->when(!empty($bloque), function($query) use ($bloqueEx) {
                 return $query->where('tm_actividades.bloque', $bloqueEx);
             })
+            ->where('h.periodo_id', $this->filters['periodoId'])
             ->where('tm_actividades.tipo', 'ET')
             ->where('n.persona_id', $idPerson)
-            ->groupBy('d.asignatura_id')
-            ->selectRaw('d.asignatura_id, ROUND(AVG(n.nota), 2) as promedio')
+            ->groupBy('d.asignatura_id','tm_actividades.actividad')
+            ->selectRaw('d.asignatura_id, tm_actividades.actividad, ROUND(AVG(n.nota), 2) as promedio')
             ->pluck('promedio', 'asignatura_id');
 
             foreach ($examen as $key => $objnota){
                 
                 $fil = $key;
                 
-                if (isset($this->tblrecords[$idPerson][$fil]['examen'])) {
+                if ($objnota->actividad=='EX' &&  isset($this->tblrecords[$idPerson][$fil]['examen'])) {
                     $this->tblrecords[$idPerson][$fil]['examen'] = $objnota;
+                }
+
+                if ($objnota->actividad=='PR' &&  isset($this->tblrecords[$idPerson][$fil]['examen'])) {
+                    $this->tblrecords[$idPerson][$fil]['proyecto'] = $objnota;
+                }
+            }*/
+
+            $examen = TmActividades::query()
+            ->join(
+                'td_calificacion_actividades as n',
+                'n.actividad_id',
+                '=',
+                'tm_actividades.id'
+            )
+            ->join('tm_horarios_docentes as d', function ($join) {
+                $join->on('d.id', '=', 'tm_actividades.paralelo')
+                    ->on('d.docente_id', '=', 'tm_actividades.docente_id');
+            })
+            ->join('tm_horarios as h', 'h.id', '=', 'd.horario_id')
+
+            ->when(
+                !empty($this->filters['paralelo'])
+                && empty($this->filters['paralelo_pase']),
+                function ($query) {
+                    $query->where(
+                        'h.curso_id',
+                        $this->filters['paralelo']
+                    );
+                }
+            )
+
+            ->when(
+                !empty($this->filters['paralelo_pase']),
+                function ($query) {
+                    $query->where(
+                        'h.curso_id',
+                        $this->filters['paralelo_pase']
+                    );
+                }
+            )
+
+            ->when(
+                !empty($this->filters['termino']),
+                function ($query) {
+                    $query->where(
+                        'tm_actividades.termino',
+                        $this->filters['termino']
+                    );
+                }
+            )
+
+            ->when(
+                !empty($bloqueEx),
+                function ($query) use ($bloqueEx) {
+                    $query->where(
+                        'tm_actividades.bloque',
+                        $bloqueEx
+                    );
+                }
+            )
+
+            ->where('h.periodo_id', $this->filters['periodoId'])
+            ->where('tm_actividades.tipo', 'ET')
+            ->where('n.persona_id', $idPerson)
+
+            ->selectRaw('
+                d.asignatura_id,
+                tm_actividades.actividad,
+                ROUND(AVG(n.nota), 2) AS promedio
+            ')
+
+            ->groupBy(
+                'd.asignatura_id',
+                'tm_actividades.actividad'
+            )
+
+            ->get()
+            ->groupBy('asignatura_id');
+
+            foreach ($examen as $key => $objnota){
+                
+                $fil = $key;
+
+                $actividades = $examen->get($key, collect());
+
+                foreach ($actividades as $objnota){
+
+                    if ($objnota->actividad=='EX' &&  isset($this->tblrecords[$idPerson][$fil]['examen'])) {
+                        $this->tblrecords[$idPerson][$fil]['examen'] = $objnota->promedio;
+                    }
+
+                    if ($objnota->actividad=='PR' &&  isset($this->tblrecords[$idPerson][$fil]['proyecto'])) {
+                        $this->tblrecords[$idPerson][$fil]['proyecto'] = $objnota->promedio;
+                    }
                 }
             }
         
@@ -557,7 +671,8 @@ class VcReportCard extends Component
 
                     $promedio = 0;
                     $countprm = 0;
-                    $nota30 = 0;
+                    $enota15 = 0;
+                    $pnota15 = 0;
                     $nota70=0;
 
                     foreach ($this->tblgrupo as $grupo){
@@ -600,13 +715,20 @@ class VcReportCard extends Component
                     }
 
                     if ($this->tblrecords[$key1][$key2]['examen'] > 0){
-                        $nota30 = round($this->tblrecords[$key1][$key2]['examen']*$notasumativa,2);
-                        $this->tblrecords[$key1][$key2]['nota30'] = round($nota30, 2);
+                        $enota15 = round($this->tblrecords[$key1][$key2]['examen']*$notasumativa/2,2);
+                        $this->tblrecords[$key1][$key2]['enota15'] = round($enota15, 2);
                     }else{
-                        $this->tblrecords[$key1][$key2]['nota30'] = 0.00;
+                        $this->tblrecords[$key1][$key2]['enota15'] = 0.00;
                     }
 
-                    $this->tblrecords[$key1][$key2]['cuantitativo'] = $nota70+$nota30; 
+                    if ($this->tblrecords[$key1][$key2]['proyecto'] > 0){
+                        $pnota15 = round($this->tblrecords[$key1][$key2]['proyecto']*$notasumativa/2,2);
+                        $this->tblrecords[$key1][$key2]['pnota15'] = round($pnota15, 2);
+                    }else{
+                        $this->tblrecords[$key1][$key2]['pnota15'] = 0.00;
+                    }
+
+                    $this->tblrecords[$key1][$key2]['cuantitativo'] = $nota70+$enota15+$pnota15; 
 
                 }
             }
@@ -619,7 +741,8 @@ class VcReportCard extends Component
             $promedio = 0;
             $nota70 = 0;
             $notaex = 0;
-            $nota30 = 0;
+            $enota15 = 0;
+            $pnota15 = 0;
             $promfinal = 0;
             $count = count($records)-1;
 
@@ -637,7 +760,8 @@ class VcReportCard extends Component
                 
                 $promedio += $recno['promedio'];
                 $nota70 += $recno['nota70'];
-                $nota30 += $recno['nota30'];
+                $enota15 += $recno['enota15'];
+                $pnota15 += $recno['pnota15'];
                 $promfinal += $recno['cuantitativo'];
             }
 
@@ -646,7 +770,9 @@ class VcReportCard extends Component
             $this->tblrecords[$key]['ZZ']['promedio'] = round($promedio/$count,2);
             $this->tblrecords[$key]['ZZ']['nota70'] = round($nota70/$count,2);
             $this->tblrecords[$key]['ZZ']['examen'] = round($notaex/$count,2);
-            $this->tblrecords[$key]['ZZ']['nota30'] = round($nota30/$count,2);
+            $this->tblrecords[$key]['ZZ']['enota15'] = round($enota15/$count,2);
+            $this->tblrecords[$key]['ZZ']['proyecto'] = round($notaex/$count,2);
+            $this->tblrecords[$key]['ZZ']['pnota15'] = round($pnota15/$count,2);
             $this->tblrecords[$key]['ZZ']['cuantitativo'] = round($promfinal/$count,2);
 
         }
@@ -769,6 +895,7 @@ class VcReportCard extends Component
 
                 $promedio = $this->tblrecords[$person]['ZZ']["promedio"];
                 $examen   = $this->tblrecords[$person]['ZZ']["examen"];
+                $proyecto   = $this->tblrecords[$person]['ZZ']["proyecto"];
                 $cuantitativo = $this->tblrecords[$person]['ZZ']["cuantitativo"];
                 
                 if ($promedio>0){
@@ -783,6 +910,13 @@ class VcReportCard extends Component
                         return $examen >= $notas['nota'] && $examen <= $notas['nota2'];
                     });
                     $this->tblrecords[$person]['ZZ']["examen"] = reset($resultado)['codigo'] ?? 0;
+                }
+
+                if ($proyecto>0){
+                        $resultado = array_filter($notas, function($notas) use ($proyecto) {
+                        return $proyecto >= $notas['nota'] && $proyecto <= $notas['nota2'];
+                    });
+                    $this->tblrecords[$person]['ZZ']["proyecto"] = reset($resultado)['codigo'] ?? 0;
                 }
 
                 if ($cuantitativo>0){
@@ -877,9 +1011,11 @@ class VcReportCard extends Component
         ->join("tm_asignaturas as a","a.id","=","d.asignatura_id")
         ->select("a.*")
         ->where("tm_horarios.curso_id",$this->filters['paralelo'])
+        ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
+        ->where("tm_horarios.grupo_id",$this->filters['modalidadId'])
         ->orderBy("a.descripcion")
         ->get();
-
+        
         $this->loadPersonas();
 
         $escalas = TdPeriodoSistemaEducativos::query()
@@ -942,7 +1078,7 @@ class VcReportCard extends Component
         $arrescala[3]["desc2"] = "Regular";
 
         $this->add(); 
-        $this->asignarNotas();
+        $this->asignarnotas();
         $this->filters['paralelo_pase'] = 0;
 
         $periodo = TmPeriodosLectivos::find($this->filters['periodoId']);
@@ -1031,7 +1167,14 @@ class VcReportCard extends Component
 
         }else{
 
-            $pdf = PDF::loadView('pdf/reporte_boletin_notas',[
+            $periodo = TmPeriodosLectivos::find($this->filters['periodoId']);
+            $report = 'reporte_boletin_notas_old';
+
+            if($periodo->periodo>=2026){
+                $report = 'reporte_boletin_notas';
+            }
+
+            $pdf = PDF::loadView('pdf.' . $report,[
                 'tblrecords' => $this->tblrecords,
                 'asignaturas' => $asignaturas,
                 'tblpersons' => $this->tblpersonas,
