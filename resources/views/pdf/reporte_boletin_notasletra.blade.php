@@ -108,7 +108,7 @@
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$tblrecords[$record->id]['ZZ']['promedio']}}</td>
                         <td class="text-center align-middle" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id]['ZZ']['nota70'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$tblrecords[$record->id]['ZZ']['examen']}}</td>
-                        <td class="text-center align-middle" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id]['ZZ']['eota15'],2)}}</td>
+                        <td class="text-center align-middle" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{number_format($tblrecords[$record->id]['ZZ']['enota15'],2)}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$tblrecords[$record->id]['ZZ']['cuantitativo']}}</strong></td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$tblrecords[$record->id]['ZZ']['cualitativo']}}</strong></td>
                     </tr>
