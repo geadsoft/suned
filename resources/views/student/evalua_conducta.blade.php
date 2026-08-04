@@ -31,7 +31,7 @@
         window.addEventListener('msg-confirm', event => {
             
             Swal.fire({
-                title: '¿Está seguro que quiere guardar conducta de este curso para el día de hoy?',
+                title: '¿Está seguro que quiere guardar conducta de este curso para el trimestre',
                 text: "",
                 icon: 'warning',
                 showCancelButton: true,

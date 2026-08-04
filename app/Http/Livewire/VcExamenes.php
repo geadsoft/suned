@@ -34,6 +34,8 @@ class VcExamenes extends Component
     public $arractividad=[
         'AI' => 'Actividad Individual',
         'AG' => 'Actividad Grupal',
+        'EX' => 'Exámen',
+        'PR' => 'Proyecto',
     ];
     
     public $filters=[

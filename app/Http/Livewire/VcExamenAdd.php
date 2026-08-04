@@ -20,7 +20,7 @@ class VcExamenAdd extends Component
     use WithFileUploads;
 
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1E", $tipo="EX", $nombre, $fecha, $hora;
-    public $archivo='SI', $puntaje=10, $enlace="", $control="enabled";
+    public $archivo='NO', $puntaje=10, $enlace="", $control="enabled";
     public $periodoId, $modalidadId, $tbltermino=[], $tblactividad=[], $texteditor="";
     public $tblparalelo=[], $tblasignatura=[];
     public $tblbloque=[];
@@ -131,7 +131,7 @@ class VcExamenAdd extends Component
         $this->modalidadId  = $record['grupo_id'];
         $this->asignaturaId = $record['asignatura_id'];
 
-
+        $this->updatedmodalidadId($this->modalidadId);
         $this->updatedasignaturaId($this->asignaturaId);
 
         $this->actividadId = $id;
@@ -144,6 +144,7 @@ class VcExamenAdd extends Component
         $this->enlace = $record['enlace'];
         $this->texteditor = $record['descripcion'];
         $this->estado = $record['estado'];
+        $this->archivo = $record['subir_archivo'];
 
 
         $this->control="disabled";

@@ -86,11 +86,13 @@
                             <table class="table table-nowrap align-middle" id="orderTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
+                                        <th>Asignatura</th>
                                         <th>Curso</th>
                                         <th>Paralelo</th>
-                                        <th>Asignatura</th>
                                         <th>Termino</th>
+                                        <th>Tipo</th>
                                         <th>Exámen</th>
+                                        <th>Estado</th>
                                         <th>Fecha Creación</th>
                                         <th>Fecha Límite</th>
                                         <th>Acción</th>
@@ -99,11 +101,17 @@
                                 <tbody class="list form-check-all">
                                 @foreach ($tblrecords as $record)
                                     <tr>
+                                        <td>{{$record['asignatura']}}</td>
                                         <td>{{$record['curso']}}</td>
                                         <td>{{$record['aula']}}</td>
-                                        <td>{{$record['asignatura']}}</td>
                                         <td> {{$arrtermino[$record['termino']]}}</td>
+                                        <td>{{$arractividad[$record['actividad']]}}</td>
                                         <td>{{$record['nombre']}}</td>
+                                        @if ($record->estado=='A')
+                                            <td><span class="badge badge-soft-success text-uppercase">@lang('status.'.($record->estado))</span></td>
+                                        @else
+                                            <td><span class="badge badge-soft-danger text-uppercase">@lang('status.'.($record->estado))</span></td>
+                                        @endif
                                         <td>{{date('d/m/Y',strtotime($record['created_at']))}} </td>
                                         <td> {{date('d/m/Y',strtotime($record['fecha']))}} {{date('H:i',strtotime($record['fecha']))}}</td>
                                         <td>

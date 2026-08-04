@@ -20,7 +20,7 @@ class VcActividadAdd extends Component
     use WithFileUploads;
 
     public $asignaturaId=0, $actividadId=0, $paralelo, $termino="1T", $bloque="1P", $tipo="AI", $nombre, $fecha, $hora;
-    public $archivo='SI', $puntaje=10, $enlace="", $control="enabled", $fieldset="enabled";
+    public $archivo='NO', $puntaje=10, $enlace="", $control="enabled", $fieldset="enabled";
     public $periodoId, $modalidadId, $tbltermino=[], $tblbloque=[], $tblactividad=[], $texteditor="";
     public $tblparalelo=[], $tblasignatura=[];
     public $array_attach=[];
@@ -140,6 +140,7 @@ class VcActividadAdd extends Component
         $this->enlace = $record['enlace'];
         $this->texteditor = $record['descripcion'];
         $this->estado = $record['estado'];
+        $this->archivo = $record['subir_archivo'];
 
         $this->control="disabled";
 
