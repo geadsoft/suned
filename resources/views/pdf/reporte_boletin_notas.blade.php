@@ -178,7 +178,7 @@
                     </tr>
                     <tr id="{{$record->id}}-conduta">
                         <td style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;" class="align-middle"><strong>COMPORTAMIENTO</strong></td>
-                        <td colspan="8"><td>
+                        <td colspan="7"><td>
                         @if(isset($arrconducta[$record->id]['evaluacion']))                      
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$arrconducta[$record->id]['evaluacion']}}</strong></td>
                         @else
