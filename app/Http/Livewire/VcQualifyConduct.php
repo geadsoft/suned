@@ -71,7 +71,7 @@ class VcQualifyConduct extends Component
         // ========================
         $this->tbltermino = (clone $baseQuery)
             ->where('tipo', 'EA')
-            ->where('cerrar', 0);
+            ->where('cerrar', 0)
             ->orderBy('cerrar')
             ->orderBy('codigo')
             ->get();
