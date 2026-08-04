@@ -31,7 +31,7 @@
         window.addEventListener('msg-confirm', event => {
             
             Swal.fire({
-                title: '¿Está seguro que quiere guardar la asistencia de este curso para el día de hoy?',
+                title: '¿Está seguro que quiere guardar conducta de este curso para el día de hoy?',
                 text: "",
                 icon: 'warning',
                 showCancelButton: true,
@@ -59,7 +59,7 @@
                 ) {
                     Swal.fire({
                     title: 'Cancelado',
-                    text: 'Asistencia sin registrar...',
+                    text: 'Conducta sin registrar...',
                     icon: 'error',
                     confirmButtonClass: 'btn btn-primary mt-2',
                     buttonsStyling: false
