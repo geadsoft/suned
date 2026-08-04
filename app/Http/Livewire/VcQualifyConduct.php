@@ -74,7 +74,7 @@ class VcQualifyConduct extends Component
             ->orderBy('codigo')
             ->get();
 
-        $termino = optional($this->tbltermino->first())->codigo;
+        $this->termino = optional($this->tbltermino->first())->codigo;
 
     }
     
@@ -142,6 +142,7 @@ class VcQualifyConduct extends Component
         ->where("termino", $this->termino)
         ->where("curso_id", $this->cursoId)
         ->get();
+
 
         foreach ($conducta as $key => $data)
         {
