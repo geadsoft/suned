@@ -34,12 +34,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <!--    <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <b>A</b> -> MUY SASTIFACTORIO, <b>B</b> -> SATISFACTORIO, <b>C</b> -> POCO SATISFACTORIO, <b>D</b> -> MEJORABLE, <b>E</b> -> INSACTIFACTORIO
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-            </div>
+            </div>-->
         </div>
         <!-- end row -->
 

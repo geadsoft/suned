@@ -29,6 +29,7 @@ class VcCertificados extends Component
     public $periodo, $foto="", $rector, $secretaria, $coordinador, $bachilleren="", $nota=0, $escala=''; 
     public $dttitulo="", $dtnombre="", $dtinstitucion="", $dtcargo="", $dtfecha, $refrendacion=0, $pagina=0, $fprorroga, $documentos="";
     public $especializacion="",$paseCursoId,$matriculaId=0,$registrar, $orden, $notaletra, $modalidadId, $nivelId;
+    public $tbltermino=[];
 
     public $solicitudes=[
         'MF' => 'Matricula con Folio',
@@ -138,6 +139,15 @@ class VcCertificados extends Component
         $this->modalidadId = $tblmatricula->modalidad_id;
         $this->nivelId   =  $tblmatricula->nivel_id;
         $this->cursoId   =  $tblmatricula->curso_id;
+        $periodoId = $tblmatricula->periodo_id;
+
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $periodoId)
+        ->where('modalidad_id', $this->modalidadId);
+
+        $this->tbltermino = (clone $baseQuery)
+        ->where('tipo', 'EA')
+        ->orderBy('codigo')
+        ->get();
     
         $objData = DB::Select("select truncate(rownr/100,0) + folio as folio, rownr, documento 
         from (
@@ -801,7 +811,7 @@ class VcCertificados extends Component
         }
         
     }
-
+    
     public function downloadPDF($idReporte)
     {
 

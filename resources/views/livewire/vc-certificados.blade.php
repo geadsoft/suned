@@ -405,6 +405,8 @@
                         <input type="text" class="form-control" id="institucion-input" placeholder="Institucion" wire:model="dtinstitucion" required>
                     </div>
                 </div>
+                
+
                 @endif
                 @if ($tipoDoc == 'RR' || $tipoDoc == 'SD')
                 <div class="card-header">
@@ -440,15 +442,24 @@
                     @endif
                 </div>
                 @endif
-                
-
-
-
-
                 <!-- end card body -->
             </div>
             <!-- end card -->
-
+            @if ($tipoDoc == 'ER')
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Materias Promedio</h5>
+                    </div>
+                    <div class="card-body">
+                        <select class="form-select" name="cmbTermino" wire:model="termino">
+                            <option value="NF">Notas Final</option>
+                            @foreach ($tbltermino as $data)
+                                <option value="{{$data->id}}">{{$data->descripcion}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            @endif
 
         </div>
         <!-- end col -->
