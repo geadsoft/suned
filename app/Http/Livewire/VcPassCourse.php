@@ -10,9 +10,12 @@ use App\Models\TmPaseCursos;
 
 
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class VcPassCourse extends Component
 {   
+    use WithPagination;
+
     public $matriculaId, $personaId, $persona;
     public $selectedCourse=null;
     public $periodoId, $periodo;
@@ -44,13 +47,17 @@ class VcPassCourse extends Component
     public function render()
     {   
         $tblgenerals = TmGeneralidades::all();
+        $tblperiodos = TmPeriodosLectivos::orderBy("periodo","desc")->get();
+
         $q1 = TmPaseCursos::query()
         ->join('tm_matriculas as m','m.id','=','tm_pase_cursos.matricula_id')
         ->join('tm_servicios as s','s.id','=','m.grado_id')
         ->join('tm_generalidades as g','g.id','=','m.modalidad_id') 
-        ->join('tm_cursos as c','c.id','=','m.curso_id')        
-        ->selectRaw("m.documento,s.descripcion, g.descripcion as nomModalidad, c.paralelo, tm_pase_cursos.*")
+        ->join('tm_cursos as c','c.id','=','m.curso_id')
+        ->join('tm_periodos_lectivos as pl','pl.id','=','m.periodo_id')         
+        ->selectRaw("pl.periodo, m.documento,s.descripcion, g.descripcion as nomModalidad, c.paralelo, tm_pase_cursos.*")
         ->whereNull('curso_anterior');  // equivalente a curso_anterior is null
+        //->where('m.periodo_id',$this->periodoId);
 
         $q2 = TmPaseCursos::query()
         ->join('tm_pase_cursos as pa','pa.id','=','tm_pase_cursos.curso_anterior')
@@ -58,19 +65,27 @@ class VcPassCourse extends Component
         ->join('tm_servicios as s','s.id','=','pa.grado_id')
         ->join('tm_generalidades as g','g.id','=','pa.modalidad_id') 
         ->join('tm_cursos as c','c.id','=','pa.curso_id')
-        ->selectRaw("m.documento,s.descripcion, g.descripcion as nomModalidad, c.paralelo, tm_pase_cursos.*") 
+        ->join('tm_periodos_lectivos as pl','pl.id','=','m.periodo_id') 
+        ->selectRaw("pl.periodo, m.documento,s.descripcion, g.descripcion as nomModalidad, c.paralelo, tm_pase_cursos.*") 
         ->where('tm_pase_cursos.curso_anterior','>',0);
+        //->where('m.periodo_id',$this->periodoId);
 
         // unir con unionAll
         $tblrecords = $q1->unionAll($q2)
+            ->orderBy('periodo','desc')
             ->orderBy('estudiante_id')
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate(10);
 
             return view('livewire.vc-pass-course',[
+            'tblperiodos' => $tblperiodos,
             'tblgenerals' => $tblgenerals,
             'tblrecords' => $tblrecords
         ]);
+    }
+
+    public function paginationView(){
+        return 'vendor.livewire.bootstrap'; 
     }
 
     public function updatedgrupoId($id){

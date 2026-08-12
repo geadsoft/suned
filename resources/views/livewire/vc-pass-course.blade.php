@@ -8,6 +8,7 @@
                             <h5 class="card-title flex-grow-1 mb-0 text-primary"><i
                             class="ri-shopping-bag-line me-1 text-success"></i>
                             Cambiar Modalidad de Estudio</h5>
+                            
                             <div class="flex-shrink-0">
                                 <div class="text-end">
                                     <button type="submit" class="btn btn-success w-sm">Grabar</button>
@@ -19,6 +20,16 @@
                         <div class="row">
                             <div class="col-xl-3">
                             </div> 
+                            <!--<div class="col-xl-2">
+                                <div class="input-group mb-3">
+                                    <label for="" class="form-label fs-15 mt-2  me-5">Periodo</label>
+                                    <select class="form-select" id="select_periodo" data-choices data-choices-search-false  wire:model="datos.periodoId">
+                                        @foreach ($tblperiodos as $periodos) 
+                                        <option value="{{$periodos->id}}">{{$periodos->periodo}}</option>
+                                        @endforeach 
+                                    </select>
+                                </div>
+                            </div>-->
                             <div class="col-xl-6">
                                 <div class="input-group mb-3">
                                     <label for="" class="form-label fs-15 mt-2  me-5">Estudiante</label>
@@ -147,9 +158,10 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive mb-1">
-                            <table class="table table-nowrap align-middle" id="orderTable">
+                            <table class="table table-sm table-nowrap align-middle" id="orderTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
+                                        <th class="sort">Periodo</th>
                                         <th class="sort" data-sort="fecha">Matricula</th>
                                         <th class="sort" data-sort="documento">Estudiante</th>
                                         <th class="sort" data-sort="referencia">Cursos Anterior</th>
@@ -159,6 +171,7 @@
                                 <tbody class="list form-check-all">
                                 @foreach ($tblrecords as $record)
                                     <tr>
+                                        <td>{{$record->periodo}}</td>
                                         <td>{{$record->documento}}</td>
                                         <td>{{$record->estudiante->apellidos}} {{$record->estudiante->nombres}}</td>
                                         <td>
@@ -182,6 +195,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        {{$tblrecords->links('')}}
                     </div>
                 </div>
             </div>  
