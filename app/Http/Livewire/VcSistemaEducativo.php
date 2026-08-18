@@ -379,6 +379,7 @@ class VcSistemaEducativo extends Component
             'valor' => '',
             'nota' => '',
             'descripcion' => '',
+            'glosa' => '',
             'equivale' => '',
             'linea' => $linea,
             'id' => 0
