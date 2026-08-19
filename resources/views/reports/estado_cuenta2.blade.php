@@ -71,8 +71,13 @@
                     @else
                         <td> </td>
                         <td> </td>
+                        @if($record->estado=='A') 
+                        <td class="text-right">0.00</td>
+                        <td class="text-right">0.00</td>
+                        @else
                         <td class="text-right"> {{number_format($record['haber'],2)}} </td>
                         <td class="text-right"> {{number_format($record['descuento'],2)}} </td>
+                        @endif
                         <td> {{$dias[date('N', strtotime($record->fecha))];}}, {{date('d-M-Y',strtotime($record->fecha))}}</td>
                         <td> {{$record['referencia']}} 
                             @if($record->estado=='A') 
