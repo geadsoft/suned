@@ -88,6 +88,7 @@ class VcAccountStatus extends Component
                     d.detalle,
                     d.referencia,
                     d.tipovalor,
+                    d.estado,
 
                     -- Solo muestra valor cuando es DB
                     SUM(CASE WHEN d.tipovalor = 'DB' THEN d.valor ELSE 0 END) AS valor,
@@ -105,7 +106,8 @@ class VcAccountStatus extends Component
                     d.fecha,
                     d.detalle,
                     d.referencia,
-                    d.tipovalor
+                    d.tipovalor,
+                    d.estado
             ) as d
         "), 'd.deudacab_id', '=', 'c.id')
 
@@ -162,6 +164,7 @@ class VcAccountStatus extends Component
         $this->consulta['idactual'] = $matriculaId;
     
         $tblrecords = $this->genConsulta();
+
 
         $tbldetalle = TrCobrosDets::query()
         ->join("tr_cobros_cabs","tr_cobros_cabs.id","=","tr_cobros_dets.cobrocab_id")
