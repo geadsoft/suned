@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire;
 use App\Models\TrCobrosCabs;
+use App\Models\TrCobrosDets;
+use App\Models\TrDeudasCabs;
 use App\Models\TmGeneralidades;
 use App\Models\TmPeriodosLectivos;
 use App\Models\User;
@@ -139,6 +141,7 @@ class VcReportDailyCharges extends Component
         ->orderBy('tr_cobros_cabs.fecha')
         ->get();
 
+
         for ($x=0; $x<count($this->tblgenerals);$x++){
             if ($this->tblgenerals[$x]->id == $this->filters['srv_grupo']){
                 $this->data['grupo'] = $this->tblgenerals[$x]->descripcion;
@@ -195,6 +198,114 @@ class VcReportDailyCharges extends Component
         ]);
 
         return $pdf->setPaper('a4')->stream('Cobros diarios.pdf');
+    }
+
+
+
+    public function recibosPDF($objdata)
+    {   
+        ini_set('max_execution_time', 60);
+        
+        $data = json_decode($objdata);
+        
+        $tblrecords = TrCobrosCabs::query()
+        ->join("tm_personas", "tm_personas.id", "=", "tr_cobros_cabs.estudiante_id")
+        ->join("tm_matriculas", "tm_matriculas.id", "=", "tr_cobros_cabs.matricula_id")
+
+        ->when($data->srv_periodo, function ($query) use ($data) {
+            return $query->where(
+                'tm_matriculas.periodo_id',
+                $data->srv_periodo
+            );
+        })
+
+        ->when($data->srv_nombre, function ($query) use ($data) {
+            return $query->whereRaw(
+                "concat(tm_personas.apellidos, ' ', tm_personas.nombres) LIKE ?",
+                ['%' . $data->srv_nombre . '%']
+            );
+        })
+
+        ->when($data->srv_usuario, function ($query) use ($data) {
+            return $query->where(
+                'tr_cobros_cabs.usuario',
+                $data->srv_usuario
+            );
+        })
+
+        ->where(
+            'tr_cobros_cabs.fecha',
+            '>=',
+            date('Ymd', strtotime($data->srv_fechaini))
+        )
+
+        ->where(
+            'tr_cobros_cabs.fecha',
+            '<=',
+            date('Ymd', strtotime($data->srv_fechafin))
+        )
+
+        ->where('tr_cobros_cabs.tipo', '=', 'CP')
+        ->select('tr_cobros_cabs.id')
+        ->orderBy('tr_cobros_cabs.id')
+        ->get();
+
+        $fpago = [
+            'EFE' => 'Efectivo',
+            'CHQ' => 'Cheque',
+            'TAR' => 'Tarjeta',
+            'DEP' => 'Depósito',
+            'TRA' => 'Transferencia',
+            'APP' => 'App Movil',
+            'RET' => 'Retención',
+            'OTR' => 'Otros',
+            'CON' => 'Convenio',
+            'NCR' => 'Nota de Crédito'
+        ];
+
+        $recibo=[];
+        $cobros=[];
+        $deudas=[];
+
+        foreach($tblrecords as $recno)
+        {
+            $selectId = $recno->id;
+            $record = TrCobrosCabs::find($selectId);
+            $tblcobrodet  = TrCobrosDets::where('cobrocab_id',$selectId)->get();
+            $tbldeudas    = TrDeudasCabs::query()
+            ->join(DB::raw("(select sum(case when tipo = 'PAG' then valor else 0 end) as valor,
+            sum(case when tipo = 'DES' then valor else 0 end) as descuento,
+            deudacab_id, fecha, detalle
+            from tr_deudas_dets d 
+            where  cobro_id = ".$selectId." 
+            group by deudacab_id,fecha, detalle) as d"),function($join){
+                $join->on('d.deudacab_id', '=', 'tr_deudas_cabs.id');
+            })
+            ->leftJoin(DB::raw("(select sum(valor) as credito, deudacab_id
+            from tr_deudas_dets d
+            inner join tr_deudas_cabs c on c.id = d.deudacab_id
+            where d.fecha <= ".date('Ymd',strtotime($record['fecha']))." and cobro_id<> ".$selectId." and tipovalor = 'CR' and d.estado = '".$record['estado']."' and matricula_id = ".$record['matricula_id']."
+            group by deudacab_id) as p"),function($join){
+                $join->on('p.deudacab_id', '=', 'tr_deudas_cabs.id');
+            })
+            ->selectRaw("tr_deudas_cabs.referencia,d.fecha,d.detalle,ifnull(tr_deudas_cabs.debito-p.credito,tr_deudas_cabs.debito) as saldo,d.descuento,d.valor, tr_deudas_cabs.debito, tr_deudas_cabs.estado")
+            ->get();  
+
+            $recibos[$selectId]=$record;
+            $cobros[$selectId]=$tblcobrodet;
+            $deudas[$selectId]=$tbldeudas;
+            
+        }
+        
+        $pdf = PDF::loadView('financial/recibos_cobros',[
+            'recibos'    => $tblrecords,
+            'tblrecords' => $recibos,
+            'tblcobros'  => $cobros,
+            'tbldeudas'  => $deudas,
+            'fpago' => $fpago,
+        ]);
+
+        return $pdf->setPaper('a4')->stream('Recibos de Cobros.pdf');
     }
 
 
