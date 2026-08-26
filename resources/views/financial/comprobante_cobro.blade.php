@@ -159,7 +159,7 @@
                             @foreach ($tblcobros as $record)    
                             <tr>
                                 <td>{{$fpago[$record->tipopago]}}</td>
-                                @if ($record->tipopago="EFE"){
+                                @if ($record->tipopago=="EFE"){
                                     <td></td>
                                 }@else{
                                 <td>{{$record->entidad->descripcion}}</td>
