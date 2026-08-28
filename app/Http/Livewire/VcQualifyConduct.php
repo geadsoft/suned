@@ -43,7 +43,7 @@ class VcQualifyConduct extends Component
         $this->tblescala =  TdPeriodoSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
         ->where('modalidad_id', $this->modalidadId)
-        ->where('tipo','EC')
+        ->where('tipo','CC')
         ->orderByRaw("cerrar,codigo")
         ->get();
 

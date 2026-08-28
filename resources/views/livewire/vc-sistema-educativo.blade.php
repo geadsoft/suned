@@ -416,6 +416,78 @@
                     </fieldset>
                 </div>
                 <!--end card-->
+
+                <div class="card">
+                    <fieldset {{ $fieldsetDisabled ? 'disabled' : '' }}>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="home-2" role="tabpanel">
+                                <div class="d-flex mb-3">
+                                    <h6 class="mb-0 flex-grow-1 mb-3 fw-semibold text-uppercase">Escala de Conducta Cualitativa</h6>
+                                    <div class="flex-shrink-0">
+                                        <button type="button" wire:click.prevent="addconducta()" class="btn btn-soft-secondary btn-sm" data-bs-toggle="modal" id="create-btn"
+                                            data-bs-target=""><i class="ri-add-line align-bottom me-1"></i> Agregar
+                                        </button>
+                                    </div>
+                                </div>
+                                <div data-simplebar style="height: 200px;" class="px-3 mx-n3 mb-2">
+                                    
+                                    <table class="table table-nowrap align-middle table-sm" id="orderConducta">
+                                        <thead class="text-muted table-light text-center">
+                                            <tr class="text-uppercase">
+                                                <th style="width: 100px;">Valor</th>
+                                                <th style="width: 100px;">Nota</th>
+                                                <th>Descripción</th>
+                                                <th style="width: 150px;">Equivalencia</th>
+                                                <th style="width: 30px;">...</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach ($arrconducta as $key => $escala) 
+                                        <tr>
+                                            <td>
+                                                <input type="text" id="valor-conducta-{{$key}}" wire:model.prevent="arrconducta.{{$key}}.valor" class="form-control form-control-sm">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="nota-conducta-{{$key}}" wire:model.prevent="arrconducta.{{$key}}.nota" class="form-control form-control-sm">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="detalle-conducta-{{$key}}" wire:model.prevent="arrconducta.{{$key}}.descripcion" class="form-control form-control-sm">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="equivale-conducta-{{$key}}" wire:model.prevent="arrconducta.{{$key}}.equivale" class="form-control form-control-sm">
+                                            </td>
+                                            <td>
+                                            <ul class="list-inline hstack gap-2 mb-0">
+                                                <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                    <a class="text-danger d-inline-block remove-item-btn"
+                                                        data-bs-toggle="modal" href="" wire:click.prevent="deleteConducta({{$escala['linea']}})">
+                                                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                    
+                                </div>
+                                
+                            </div>
+                            <!--end tab-pane-->
+                            
+                        </div>
+                        <!--end tab-content-->
+                        <!--<div class="text-end mb-3">
+                            <button type="submit" class="btn btn-success w-sm">Grabar</button>
+                        </div>-->
+                    </div>
+                    </fieldset>
+                </div>
+                <!--end card-->
+
             </div>
             <!--end col-->
         </div>

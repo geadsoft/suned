@@ -96,6 +96,7 @@ class VcSistemaEducativo extends Component
         $this->arractividad=[];
         $this->arrexamen=[];
         $this->arrescala=[];
+        $this->arrconducta=[];
         $this->horaId=0;
 
         $this->addarr('T');
@@ -122,6 +123,7 @@ class VcSistemaEducativo extends Component
         $this->arractividad=[];
         $this->arrexamen=[];
         $this->arrescala=[];
+        $this->arrconducta=[];
 
         $this->sistema = TmSistemaEducativos::query()
         ->where('periodo_id',$this->periodoId)
@@ -238,6 +240,24 @@ class VcSistemaEducativo extends Component
                 ];
         
                 array_push($this->arrescala,$recno);
+                $linea = $linea+1;
+            }
+        }
+
+        $linea=1;
+        foreach ($detalle as $key => $value) {
+            if ($value['tipo']=='CC'){
+                $recno=[
+                    'valor' => $value['codigo'],
+                    'nota' => $value['nota'],
+                    'descripcion' => $value['descripcion'],
+                    'equivale' => $value['evaluacion'],
+                    'glosa' => $value['glosa'],
+                    'linea' => $linea,
+                    'id' => $value['id']
+                ];
+        
+                array_push($this->arrconducta,$recno);
                 $linea = $linea+1;
             }
         }
@@ -397,6 +417,38 @@ class VcSistemaEducativo extends Component
 
         // Reindexar el array (importante para Livewire)
         $this->arrescala = array_values($this->arrescala);
+
+    }
+
+
+    public function addconducta(){
+
+        $recno = [];
+        $linea = count($this->arrconducta);
+        $linea = $linea+1;
+
+        $recno=[
+            'valor' => '',
+            'nota' => '',
+            'descripcion' => '',
+            'glosa' => '',
+            'equivale' => '',
+            'linea' => $linea,
+            'id' => 0
+        ];
+
+        array_push($this->arrconducta,$recno);
+        
+    }
+    
+    public function deleteConducta($linea){
+
+        $this->arrconducta = array_filter($this->arrconducta, function ($item) use ($linea) {
+            return $item['linea'] != $linea;
+        });
+
+        // Reindexar el array (importante para Livewire)
+        $this->arrconducta = array_values($this->arrconducta);
 
     }
 
@@ -668,6 +720,7 @@ class VcSistemaEducativo extends Component
         $this->buildActividad();
         $this->buildExamen();
         $this->buildEscala();
+        $this->buildConducta();
 
         // guardar todo
         $this->guardarDetalle();
@@ -761,6 +814,18 @@ class VcSistemaEducativo extends Component
     {
         foreach ($this->arrescala as $data) {
             $this->detalle[] = $this->makeRow($data, 'EC', [
+                'codigo' => $data['valor'],
+                'evaluacion' => $data['equivale'],
+                'nota' => $data['nota'],
+                'glosa' => $data['glosa'],
+            ]);
+        }
+    }
+
+    private function buildConducta()
+    {
+        foreach ($this->arrconducta as $data) {
+            $this->detalle[] = $this->makeRow($data, 'CC', [
                 'codigo' => $data['valor'],
                 'evaluacion' => $data['equivale'],
                 'nota' => $data['nota'],
