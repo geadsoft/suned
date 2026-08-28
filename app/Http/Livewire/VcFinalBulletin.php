@@ -1363,7 +1363,7 @@ class VcFinalBulletin extends Component
         ->join("td_periodo_sistema_educativos as s", function($join){
             $join->on("s.periodo_id","=","td_conductas.periodo_id")
                 ->on("s.codigo","=","td_conductas.evaluacion")
-                ->where("s.tipo","EC");
+                ->where("s.tipo","CC");
         })
         ->where("td_conductas.periodo_id", $this->filters['periodoId'])
         ->where("td_conductas.modalidad_id", $this->filters['modalidadId'])
