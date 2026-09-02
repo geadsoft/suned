@@ -96,7 +96,7 @@ class VcEncashmentadd extends Component
         
         $this->reset(['record']);
         $this->record['fecha']= $this->fecha;
-        $this->record['estudiante_id']= $this->estudiante_id;;
+        $this->record['estudiante_id']= $this->estudiante_id;
         $this->record['documento']= "";
         $this->record['concepto']= "";
         $this->record['monto']= 0;  

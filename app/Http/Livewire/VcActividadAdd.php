@@ -261,8 +261,16 @@ class VcActividadAdd extends Component
 
         if ($this->actividadId>0){
 
-            $this->updateData();
-            $msgfile = $this->apiDrive($this->actividadId);            
+            $mensaje = $this->updateData();
+            $msgfile = $this->apiDrive($this->actividadId);  
+            
+            if ($mensaje!=''){
+                $message = nl2br($mensaje.$msgfile);
+                $this->dispatchBrowserEvent('msg-alert', ['newName' => $message]);
+            }else{
+                $message = nl2br("Registro actualizado con éxito!\n".$msgfile);
+                $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
+            }          
 
         }else {
             
@@ -284,11 +292,12 @@ class VcActividadAdd extends Component
             ]);
 
             $msgfile = $this->apiDrive($tblData->id);
+
+            $message = nl2br("Registro grabado con éxito!\n".$msgfile);
+            $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
             
         }
 
-        $message = nl2br("Registro grabado con éxito!\n".$msgfile);
-        $this->dispatchBrowserEvent('msg-grabar', ['newName' => $message]);
         
     }
 
@@ -402,8 +411,19 @@ class VcActividadAdd extends Component
 
         $record = TmActividades::find($this->actividadId);
 
+        $this->array_entregas = TmFiles::query()
+        ->where('actividad_id',$this->actividadId)
+        ->where('entrega',1)
+        ->get();
+
+        if(count($this->array_entregas)>0 && $record->paralelo<>$this->paralelo){
+            $message = "Actividad tiene entregas realizadas.";
+            return $message;
+        }
+
         $record->update([
             'actividad' => $this->tipo,
+            'paralelo' => $this->paralelo,
             'nombre' => $this->nombre,
             'descripcion' => $this->texteditor,
             'fecha' => $this->fecha.' '.$this->hora,
@@ -414,7 +434,7 @@ class VcActividadAdd extends Component
             'usuario' => auth()->user()->name,
         ]);
 
-
+        return '';
     }
         
     public function attach_add()
