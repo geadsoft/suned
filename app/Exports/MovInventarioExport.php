@@ -80,6 +80,7 @@ class MovInventarioExport implements FromView, ShouldAutoSize
             $detalle=[];
             foreach($tipopago as $tpago){ 
                 $detpago['fecha'] = $tpago->fecha;
+                $detpago['periodo'] = $tpago->periodo;
                 $detpago['documento'] = $tpago->documento;
                 $detpago['valor'] = $tpago->valor;                
                 array_push($detalle,$detpago);

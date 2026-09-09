@@ -125,6 +125,7 @@
                                 <tr class="text-uppercase">
                                     <th style="width: 150px;">Fecha</th>
                                     <th>Mov.</th>
+                                    <th>Documento</th>
                                     <th>Referencia</th>
                                     <th style="width: 400px;">Producto</th>
                                     <th class="text-end" style="width: 150px;">Talla</th>
@@ -139,6 +140,7 @@
                                 <tr>
                                     <td>{{date('d/m/Y',strtotime($record['fecha']))}}</td>
                                     <td>{{$record['movimiento']}}</td>
+                                    <td>UNI-{{$record['periodo']}}-{{$record['documento']}}</td>
                                     <td>{{$record['referencia']}}</td>
                                     <td>{{$record['nombre']}}</td>
                                     <td class="text-end">{{$record['talla']}}</td>

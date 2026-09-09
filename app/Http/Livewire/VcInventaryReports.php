@@ -322,7 +322,7 @@ class VcInventaryReports extends Component
                 $detalle=[];
                 foreach($tipopago as $tpago){ 
                     $detpago['fecha'] = $tpago->fecha;
-                    $detpago['documento'] = $tpago->documento;
+                    $detpago['documento'] = 'UNI-'.$tpago->periodo.'-'.$tpago->documento;
                     $detpago['valor'] = $tpago->valor;                
                     array_push($detalle,$detpago);
                 }
@@ -462,7 +462,7 @@ class VcInventaryReports extends Component
                 $detalle=[];
                 foreach($tipopago as $tpago){ 
                     $detpago['fecha'] = $tpago->fecha;
-                    $detpago['documento'] = $tpago->documento;
+                    $detpago['documento'] = 'UNI-'.$tpago->periodo.'-'.$tpago->documento;
                     $detpago['valor'] = $tpago->valor;                
                     array_push($detalle,$detpago);
                 }

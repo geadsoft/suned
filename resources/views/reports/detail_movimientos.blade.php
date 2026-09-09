@@ -45,7 +45,7 @@
             <thead class="table-light" style="background-color:#222454">
                 <tr>
                     <th style="color:#FFFFFF">Fecha</th>
-                    <th style="color:#FFFFFF">Mov.</th>
+                    <th style="color:#FFFFFF">Documento</th>
                     <th style="color:#FFFFFF">Referencia</th>
                     <th style="color:#FFFFFF">Producto</th>
                     <th style="color:#FFFFFF">Talla</th>
@@ -60,7 +60,7 @@
             @foreach ($invtra as $record)    
                 <tr>
                     <td>{{date('d/m/Y',strtotime($record->fecha))}}</td>
-                    <td>{{$record->movimiento}}</td>
+                    <td>UNI-{{$record->periodo}}-{{$record->documento}}</td>
                     <td>{{$record->referencia}}</td> 
                     <td>{{$record->nombre}}</td> 
                     <td>{{$record->talla}}</td>

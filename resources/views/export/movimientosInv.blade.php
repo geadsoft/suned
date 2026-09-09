@@ -30,6 +30,7 @@
         <tr>
             <th><strong>FECHA</strong></th>
             <th><strong>MOVIMIENTO</strong></th>
+            <th><strong>DOCUMENTO</strong></th>
             <th><strong>REFERENCIA</strong></th>
             <th><strong>PRODUCTO</strong></th>
             <th><strong>TALLA</strong></th>
@@ -44,6 +45,7 @@
         <tr>
             <td>{{date('d/m/Y',strtotime($record->fecha))}}</td>
             <td>{{$record->movimiento}}</td>
+            <td>UNI-{{$record->periodo}}-{{$record->documento}}</td>
             <td>{{$record->referencia}}</td> 
             <td>{{$record->nombre}}</td> 
             <td>{{$record->talla}}</td>
@@ -85,7 +87,7 @@
         @foreach ($data as $data) 
             <tr>
                 <td>{{date('d/m/Y',strtotime($data['fecha']))}}</td>
-                <td>{{$data['documento']}}</td>
+                <td>UNI-{{$data['periodo']}}-{{$data['documento']}}</td>
                 <td>{{number_format($data['valor'],2)}}</td>
             </tr>
             {{ $totalres = $totalres + $data['valor'] }}
