@@ -125,7 +125,8 @@ class VcAccountStatus extends Component
             d.*,
             c.saldo,
             p.tipopago,
-            c.referencia as documento
+            c.referencia as documento,
+            c.usuario
         ")
 
         ->where('c.matricula_id', $this->consulta['idactual'])

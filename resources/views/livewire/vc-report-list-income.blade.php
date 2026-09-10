@@ -133,7 +133,7 @@
                                                 </li>
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="Print">
-                                                    <a class="edit-item-btn" href="/preview-pdf/comprobante/{{$record->id}}"><i
+                                                    <a class="edit-item-btn" href="/preview-pdf/comprobante/{{$record->id}}" target="_blank"><i
                                                             class="ri-printer-fill align-bottom text-muted"></i></a>
                                                 </li>
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
