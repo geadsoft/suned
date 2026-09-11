@@ -172,6 +172,7 @@
                                                                 @endforeach
                                                                 </select>
                                                                 <select type="select" class="form-select" name="cmbtarjeta" id="cmbtarjeta" value = "58" style="display:none" wire:model.defer="entidadtar">
+                                                                    <option value="0">Seleccione Tarjeta</option>
                                                                 @foreach ($tbltarjetas as $tarjeta) 
                                                                     <option value="{{$tarjeta->id}}">{{$tarjeta->descripcion}}</option>
                                                                 @endforeach

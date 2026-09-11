@@ -71,13 +71,8 @@
                     @else
                         <td> </td>
                         <td> </td>
-                        @if($record->estado=='A') 
-                        <td class="text-right">0.00</td>
-                        <td class="text-right">0.00</td>
-                        @else
                         <td class="text-right"> {{number_format($record['haber'],2)}} </td>
                         <td class="text-right"> {{number_format($record['descuento'],2)}} </td>
-                        @endif
                         <td> {{$dias[date('N', strtotime($record->fecha))];}}, {{date('d-M-Y',strtotime($record->fecha))}}</td>
                         <td> {{$record['referencia']}} 
                             @if($record->estado=='A') 
@@ -127,138 +122,43 @@
             </tr>
         </table>
     </section>
-    <section>
-        <table cellpadding="0" cellspancing="0" width="100%">
-            <tr>
-                <td width="40%" style="vertical-align: top; padding-top: 10px; position: relative">
-                    <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
-                        <thead class="table-light">
-                            <tr>
-                                <th colspan="4">Resumen de Depósitos</th>
-                            </tr>
-                            <tr style="background-color:#222454">
-                                <th style="color:#FFFFFF">Recibo</th>
-                                <th style="color:#FFFFFF">Referencia</th>
-                                <th style="color:#FFFFFF">Entidad</th>
-                                <th style="color:#FFFFFF">Valor</th>
-                            </tr>
-                        <thead>
-                        <tbody class="list"> 
-                        @foreach ($tbldetalle as $resumen) 
-                            @if($resumen['tipopago']=='DEP')
+    @foreach ($tbldetalle as $pago => $detalle) 
+        <section>
+            <table cellpadding="0" cellspancing="0" width="100%">
+                <tr>
+                    <td width="40%" style="vertical-align: top; padding-top: 10px; position: relative">
+                        <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
+                            <thead class="table-light">
                                 <tr>
-                                    <td class="">{{$resumen['documento']}}</td>
-                                    <td class="">{{$resumen['referencia']}}</td>
-                                    <td class="">{{$resumen['descripcion']}}</td>
-                                    <td>{{number_format($resumen['valor'],2)}}</td>
+                                    <th colspan="4">Resumen de {{$tipopago[$pago]}}</th>
                                 </tr>
-                            @endif
-                         @endforeach
-                        </tbody>
-                    </table>
-                </td>           
-            </tr>
-        </table>
-    </section>
-    <section>
-        <table cellpadding="0" cellspancing="0" width="100%">
-            <tr>
-                <td width="40%" style="vertical-align: top; padding-top: 10px; position: relative">
-                    <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
-                        <thead class="table-light">
-                            <tr>
-                                <th colspan="4">Resumen de Transferencia</th>
-                            </tr>
-                            <tr style="background-color:#222454">
-                                <th style="color:#FFFFFF">Recibo</th>
-                                <th style="color:#FFFFFF">Referencia</th>
-                                <th style="color:#FFFFFF">Entidad</th>
-                                <th style="color:#FFFFFF">Valor</th>
-                            </tr>
-                        <thead>
-                        <tbody class="list"> 
-                        @foreach ($tbldetalle as $resumen) 
-                            @if($resumen['tipopago']=='TRA')
-                                <tr>
-                                    <td class="">{{$resumen['documento']}}</td>
-                                    <td class="">{{$resumen['referencia']}}</td>
-                                    <td class="">{{$resumen['descripcion']}}</td>
-                                    <td>{{number_format($resumen['valor'],2)}}</td>
+                                <tr style="background-color:#222454">
+                                    <th style="color:#FFFFFF">Recibo</th>
+                                    <th style="color:#FFFFFF">Referencia</th>
+                                    <th style="color:#FFFFFF">Entidad</th>
+                                    <th style="color:#FFFFFF">Valor</th>
                                 </tr>
-                            @endif
-                         @endforeach
-                        </tbody>
-                    </table>
-                </td>           
-            </tr>
-        </table>
-    </section>
-    <section>
-        <table cellpadding="0" cellspancing="0" width="100%">
-            <tr>
-                <td width="40%" style="vertical-align: top; padding-top: 10px; position: relative">
-                    <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
-                        <thead class="table-light">
-                            <tr>
-                                <th colspan="4">Resumen de Cheques</th>
-                            </tr>
-                            <tr style="background-color:#222454">
-                                <th style="color:#FFFFFF">Recibo</th>
-                                <th style="color:#FFFFFF">Referencia</th>
-                                <th style="color:#FFFFFF">Entidad</th>
-                                <th style="color:#FFFFFF">Valor</th>
-                            </tr>
-                        <thead>
-                        <tbody class="list"> 
-                        @foreach ($tbldetalle as $resumen) 
-                            @if($resumen['tipopago']=='CHQ')
-                                <tr>
-                                    <td class="">{{$resumen['documento']}}</td>
-                                    <td class="">{{$resumen['referencia']}}</td>
-                                    <td class="">{{$resumen['descripcion']}}</td>
-                                    <td>{{number_format($resumen['valor'],2)}}</td>
-                                </tr>
-                            @endif
-                         @endforeach
-                        </tbody>
-                    </table>
-                </td>           
-            </tr>
-        </table>
-    </section>
-    <section>
-        <table cellpadding="0" cellspancing="0" width="100%">
-            <tr>
-                <td width="40%" style="vertical-align: top; padding-top: 10px; position: relative">
-                    <table cellpadding="0" cellspacing="0" class="table table-sm align-middle" style="font-size:10px">
-                        <thead class="table-light">
-                            <tr>
-                                <th colspan="4">Resumen de Tarjeta de Crédito</th>
-                            </tr>
-                            <tr style="background-color:#222454">
-                                <th style="color:#FFFFFF">Recibo</th>
-                                <th style="color:#FFFFFF">Referencia</th>
-                                <th style="color:#FFFFFF">Entidad</th>
-                                <th style="color:#FFFFFF">Valor</th>
-                            </tr>
-                        <thead>
-                        <tbody class="list"> 
-                        @foreach ($tbldetalle as $resumen) 
-                            @if($resumen['tipopago']=='TAR')
-                                <tr>
-                                    <td class="">{{$resumen['documento']}}</td>
-                                    <td class="">{{$resumen['referencia']}}</td>
-                                    <td class="">{{$resumen['descripcion']}}</td>
-                                    <td>{{number_format($resumen['valor'],2)}}</td>
-                                </tr>
-                            @endif
-                         @endforeach
-                        </tbody>
-                    </table>
-                </td>           
-            </tr>
-        </table>
-    </section>
+                            <thead>
+                            <tbody class="list"> 
+                            @foreach ($detalle as $resumen) 
+                                
+                                    <tr>
+                                        <td class="">{{$resumen['documento']}}</td>
+                                        <td class="">{{$resumen['referencia']}}</td>
+                                        <td class="">{{$resumen['descripcion']}}</td>
+                                        <td>{{number_format($resumen['valor'],2)}}</td>
+                                    </tr>
+                                
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </td>           
+                </tr>
+            </table>
+        </section>
+    @endforeach
+
+    
 
     <div style="position: absolute;
       display: inline-block;

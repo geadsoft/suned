@@ -36,8 +36,6 @@ class VcAccountStatus extends Component
         'idactual' => 0,
     ];
 
-    
-
     public function render()
     {
        
@@ -162,17 +160,29 @@ class VcAccountStatus extends Component
     //General 
     public function liveWireGenPDF($matriculaId)
     { 
+        $tipoPago = [
+            'EFE' => 'Efectivo',
+            'CHQ' => 'Cheque',
+            'TAR' => 'Tarjeta',
+            'DEP' => 'Depósito',
+            'TRA' => 'Transferencia',
+            'APP' => 'App Movil',
+            'RET' => 'Retención',
+            'OTR' => 'Otros',
+            'CON' => 'Convenio',
+        ];
+    
         $this->consulta['idactual'] = $matriculaId;
     
         $tblrecords = $this->genConsulta();
-
 
         $tbldetalle = TrCobrosDets::query()
         ->join("tr_cobros_cabs","tr_cobros_cabs.id","=","tr_cobros_dets.cobrocab_id")
         ->Join("tm_generalidades as g","g.id","=","tr_cobros_dets.entidad_id")
         ->selectRaw("tr_cobros_cabs.documento,tr_cobros_dets.*, g.descripcion")
         ->where('tr_cobros_cabs.matricula_id',$matriculaId)
-        ->get(); 
+        ->get()
+        ->groupBy('tipopago');
 
         $matricula = TmMatricula::find($matriculaId);
         $this->consulta['nombre'] = $matricula->estudiante->apellidos.' '.$matricula->estudiante->nombres;
@@ -198,14 +208,13 @@ class VcAccountStatus extends Component
         
         $dias = [0=>'Domingo',1=>'Lunes',2=>'Martes',3=>'Miercoles',4=>'Jueves',5=>'Viernes',6=>'Sabado'];
 
-    
-
         //Vista
         $pdf = PDF::loadView('reports/estado_cuenta2',[
             'tblrecords' => $tblrecords,
             'tbldetalle' => $tbldetalle,
             'data' => $this->consulta,
             'dias' => $dias,
+            'tipopago' => $tipoPago,
         ]);
 
         return $pdf->setPaper('a4')->stream('Estado de Cuenta.pdf');
@@ -214,6 +223,17 @@ class VcAccountStatus extends Component
 
     public function downloadGenPDF($matriculaId)
     {
+        $tipoPago = [
+            'EFE' => 'Efectivo',
+            'CHQ' => 'Cheque',
+            'TAR' => 'Tarjeta',
+            'DEP' => 'Depósito',
+            'TRA' => 'Transferencia',
+            'APP' => 'App Movil',
+            'RET' => 'Retención',
+            'OTR' => 'Otros',
+            'CON' => 'Convenio',
+        ];
 
         $this->consulta['idactual'] = $matriculaId;
     
@@ -223,8 +243,10 @@ class VcAccountStatus extends Component
         ->join("tr_cobros_cabs","tr_cobros_cabs.id","=","tr_cobros_dets.cobrocab_id")
         ->selectRaw("tr_cobros_cabs.documento,tr_cobros_dets.*")
         ->where('tr_cobros_cabs.matricula_id',$matriculaId)
-        ->get();
+        ->get()
+        ->groupBy('tipopago');
 
+        
         $matricula = TmMatricula::find($matriculaId);
         $this->consulta['nombre'] = $matricula->estudiante->apellidos.' '.$matricula->estudiante->nombres;
         $this->consulta['estado'] = $matricula->estudiante->estado;
@@ -255,6 +277,7 @@ class VcAccountStatus extends Component
             'tbldetalle' => $tbldetalle,
             'data' => $this->consulta,
             'dias' => $dias,
+            'tipopago' => $tipoPago
         ]);
 
         return $pdf->download('Estado de Cuenta.pdf');

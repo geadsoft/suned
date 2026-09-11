@@ -51,6 +51,11 @@
                         <tr>
                             <td class="text-left text-muted"><span style="font-size: 12px"><strong>Recaudador: {{$tblrecords->usuario}} </strong></span></td>
                         </tr> 
+                        @if($tblrecords->estado=='A')
+                        <tr>
+                            <td class="text-left"><span style="font-size: 12px"><strong>Observación: </strong>{{$tblrecords->comentario}} </span></td>
+                        </tr>
+                        @endif
                     </table>
                 </td>           
             <tr>
