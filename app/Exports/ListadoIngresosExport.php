@@ -44,6 +44,7 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles, W
         ->join("tm_personas as pe","pe.id","=","m.representante_id")
         ->join("tm_cursos as c","c.id","=","m.curso_id")
         ->join("tm_servicios as s","s.id","=","c.servicio_id")
+        ->join("tm_generalidades as mo","mo.id","=","s.modalidad_id")
         ->join("tm_generalidades as bc","bc.id","=","cd.entidad_id")
 
         ->when($this->filters['srv_nombre'],function($query){
@@ -70,6 +71,7 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles, W
             'tr_cobros_cabs.monto',
             'p.nombres',
             'p.apellidos',
+            'mo.descripcion as modalidad',
             's.descripcion',
             'c.paralelo',
             'cd.tipopago',
@@ -94,6 +96,7 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles, W
             'tr_cobros_cabs.monto',
             'p.nombres',
             'p.apellidos',
+            'mo.descripcion',
             's.descripcion',
             'c.paralelo',
             'cd.tipopago',
@@ -121,22 +124,23 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles, W
             'C' => 10,
             'D' => 15,
             'E' => 37,
-            'F' => 37,
+            'F' => 15,
             'G' => 37,
-            'H' => 15,
-            'I' => 11,
-            'J' => 20,
-            'K' => 21,
-            'L' => 15,
-            'M' => 40,
-            'N' => 25,
+            'H' => 37,
+            'I' => 15,
+            'J' => 11,
+            'K' => 20,
+            'L' => 21,
+            'M' => 15,
+            'N' => 40,
+            'O' => 25,
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
 
-        $range = 'A1:N3';
+        $range = 'A1:O3';
         $style = [
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
@@ -155,7 +159,7 @@ class ListadoIngresosExport implements FromView, WithColumnWidths, WithStyles, W
         public function columnFormats(): array
         {
             return [
-                'H' => NumberFormat::FORMAT_TEXT,
+                'I' => NumberFormat::FORMAT_TEXT,
             ];
         }
     

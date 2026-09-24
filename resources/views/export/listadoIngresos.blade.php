@@ -35,6 +35,7 @@ $positiveChanges = 0;
             <th>Nº RECIBO</th>
             <th>Nº MONTO</th>
             <th>ESTUDIANTE</th>
+            <th>MODALIDAD</th>
             <th>CURSO</th>
             <th>REPRESENTANTE</th>
             <th>CÉDULA</th>
@@ -54,6 +55,7 @@ $positiveChanges = 0;
             <td>{{$record["documento"]}}</td>
             <td>{{number_format($record["monto"],2)}}</td>
             <td>{{$record["apellidos"]}} {{$record["nombres"]}}</td>
+            <td>{{$record["modalidad"]}}</td>
             <td>{{$record["descripcion"]}} {{$record["paralelo"]}}</td>
             <td>{{$record["representante"]}}</td>
             <td>{{$record["nuirepresentante"]}}</td>
