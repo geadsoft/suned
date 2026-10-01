@@ -54,13 +54,13 @@
                     </a>
                 </li>
                 @endcan
-                
+                @can('Buzon')
                 <li class="nav-item">
                     <a class="nav-link" href="/academic/mailbox-opinions">
                         <i class="ri-inbox-archive-line fs-20"></i> <span>Buzón de Opiniones</span>
                     </a>
                 </li>
-
+                @endcan
                 @can('Asignaturas')
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="/student/subject">
@@ -879,9 +879,24 @@
                 @endcan
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/academic/suggestion-box">
-                        <i class="ri-mail-send-line fs-20"></i>Buzón Sugerencias</span>
+                    <!--<a class="nav-link menu-link" href="/academic/suggestion-box">-->
+                    <a class="nav-link menu-link" href="#buzon" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sede">
+                        <i class="ri-mail-send-line fs-20"></i>Buzón</span>
                     </a>
+                    <div class="collapse menu-dropdown" id="buzon">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/suggestion-box">
+                                    <span>Enviar Sugerencias</span>
+                                </a>
+                            </li>
+                            <!--<li class="nav-item">
+                                <a class="nav-link menu-link" href="/academic/mailbox-opinions">
+                                    </i><span>Respuestas</span>
+                                </a>
+                            </li>-->                                      
+                        </ul>
+                    </div>
                 </li>
 
 

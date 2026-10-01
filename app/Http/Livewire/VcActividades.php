@@ -94,6 +94,20 @@ class VcActividades extends Component
         ->where("tm_horarios.periodo_id",$this->filters['periodoId'])
         ->get();
 
+        $terminos = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->filters['periodoId'])
+        ->where("modalidad_id",$this->filters['modalidadId'])
+        ->where("tipo",'EA')
+        ->get();
+
+        $parciales = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->filters['periodoId'])
+        ->where("modalidad_id",$this->filters['modalidadId'])
+        ->where("evaluacion",$this->filters['termino'])
+        ->where("tipo",'PA')
+        ->where("evaluacion","<>",'')
+        ->get();
+        
         $this->tblparalelo = TmHorarios::query()
         ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
         ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
@@ -149,6 +163,8 @@ class VcActividades extends Component
             'tblmodalidad' => $tblmodalidad,
             'tblparalelo' => $this->paralelos,
             'tblperiodos' => $tblperiodos,
+            'terminos' => $terminos,
+            'parciales' => $parciales,
         ]);
 
     }

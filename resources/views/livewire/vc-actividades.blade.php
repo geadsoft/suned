@@ -48,9 +48,9 @@
                                 <div>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino">
                                         <option value="">Seleccione Termino</option>
-                                        <option value="1T">Primer Trimestre</option>
-                                        <option value="2T">Segundo Trimestre</option>
-                                        <option value="3T">Tercer Trimestre</option>
+                                        @foreach ($terminos as $termino) 
+                                        <option value="{{$termino->codigo}}">{{$arrtermino[$termino->codigo]}}</option>
+                                        @endforeach 
                                     </select>
                                 </div>
                             </div>
@@ -59,7 +59,9 @@
                                 <div>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque">
                                         <option value="">Seleccione Bloque</option>
-                                        <option value="1P" selected>Primer Parcial</option>
+                                        @foreach ($parciales as $parcial) 
+                                        <option value="{{$parcial->codigo}}">{{$arrbloque[$parcial->codigo]}}</option>
+                                        @endforeach 
                                     </select>
                                 </div>
                             </div>
