@@ -179,8 +179,8 @@ class VcActividadView extends Component
                 ->on('e.persona_id', '=', 'tm_files.persona_id');
         })
         ->select('tm_files.*', 'e.comentario')
-        ->where('actividad_id',$this->actividadId)
-        ->where('entrega',1)
+        ->where('tm_files.actividad_id',$this->actividadId)
+        ->where('tm_files.entrega',1)
         ->get();
 
 
