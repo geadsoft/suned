@@ -169,10 +169,16 @@ class VcActividadView extends Component
             $this->tblrecords[$data->id]['fecha'] = "";
             $this->tblrecords[$data->id]['entregaId'] = 0;
             $this->tblrecords[$data->id]['nota'] = 0;
+            $this->tblrecords[$data->id]['comentario'] = "";
 
         }
 
         $this->array_entregas = TmFiles::query()
+        ->join('td_actividades_entregas as e', function ($join) {
+            $join->on('e.actividad', '=', 'tm_files.actividad_id')
+                ->on('e.persona_id', '=', 'tm_files.persona_id');
+        })
+        ->select('tm_files.*', 'e.comentario')
         ->where('actividad_id',$this->actividadId)
         ->where('entrega',1)
         ->get();
@@ -183,14 +189,16 @@ class VcActividadView extends Component
             $personaId = $entrega->persona_id;
             
             if (!isset($this->tblrecords[$personaId]['archivo'])) {
-        $this->tblrecords[$personaId]['archivo'] = [];
-    }
+                $this->tblrecords[$personaId]['archivo'] = [];
+            }
 
-    $this->tblrecords[$personaId]['archivo'][] = [
-        'nombre'     => $entrega->nombre,
-        'fecha'      => $entrega->created_at,
-        'entregaId' => $entrega->id,
-    ];
+            $this->tblrecords[$personaId]['archivo'][] = [
+                'nombre'     => $entrega->nombre,
+                'fecha'      => $entrega->created_at,
+                'entregaId' => $entrega->id,
+            ];
+
+            $this->tblrecords[$personaId]['comentario'] = $entrega->comentario;
 
             /*$this->tblrecords[$personaId]['archivo'] =  $entrega->nombre;
             $this->tblrecords[$personaId]['fecha'] =  $entrega->create_at;

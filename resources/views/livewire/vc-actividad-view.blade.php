@@ -159,6 +159,9 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div>
+                                            <a class="active"><i class=" ri-message-3-line align-bottom me-2"> {{$tblrecords[$recno->id]['comentario']}} </i>
+                                        </div>
                                         @endforeach
                                         @endif
                                     </td>
