@@ -163,11 +163,14 @@
                                         @endif
                                         {{-- Comentario --}}
                                         @if (!empty($tblrecords[$recno->id]['comentario']))
-                                            <div class="mt-2 text-muted">
-                                                <i class="ri-message-3-line align-bottom me-2"></i>
-                                                <span>
+                                            <div class="d-flex align-items-start mt-2">
+                                                <div class="flex-shrink-0">
+                                                    <i class="ri-message-3-line align-bottom me-2 text-muted"></i>
+                                                </div>
+
+                                                <div class="flex-grow-1 text-muted">
                                                     {!! $tblrecords[$recno->id]['comentario'] !!}
-                                                </span>
+                                                </div>
                                             </div>
                                         @endif
                                     </td>
