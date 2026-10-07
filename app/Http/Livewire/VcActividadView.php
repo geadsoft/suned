@@ -175,7 +175,7 @@ class VcActividadView extends Component
 
         $this->array_entregas = TmFiles::query()
         ->join('td_actividades_entregas as e', function ($join) {
-            $join->on('e.actividad', '=', 'tm_files.actividad_id')
+            $join->on('e.actividad_id', '=', 'tm_files.actividad_id')
                 ->on('e.persona_id', '=', 'tm_files.persona_id');
         })
         ->select('tm_files.*', 'e.comentario')
