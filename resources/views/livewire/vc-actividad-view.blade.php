@@ -159,10 +159,16 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <a class="active"><i class=" ri-message-3-line align-bottom me-2"> {{$tblrecords[$recno->id]['comentario']}} </i>
-                                        </div>
                                         @endforeach
+                                        @endif
+                                        {{-- Comentario --}}
+                                        @if (!empty($tblrecords[$recno->id]['comentario']))
+                                            <div class="mt-2 text-muted">
+                                                <i class="ri-message-3-line align-bottom me-2"></i>
+                                                <span>
+                                                    {!! $tblrecords[$recno->id]['comentario'] !!}
+                                                </span>
+                                            </div>
                                         @endif
                                     </td>
                                     <td>
