@@ -9,10 +9,10 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-            Academic
+            Académico
         @endslot
         @slot('title')
-            Representatives
+            Representantes
         @endslot
     @endcomponent
 

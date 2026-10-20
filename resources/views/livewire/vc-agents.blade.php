@@ -6,38 +6,11 @@
 
                         <div class="d-flex align-items-center">
                             <h5 class="card-title mb-0 flex-grow-1">Listado de Representantes</h5>
-                            <div class="flex-shrink-0">
+                            <!--<div class="flex-shrink-0">
                                 <a class="btn btn-success add-btn" href="/academic/student-enrollment"><i
                                 class="ri-add-line me-1 align-bottom"></i> Nuevo</a>
-                            </div>
+                            </div>-->
                         </div>
-
-                    <!--<div class="d-flex align-items-center flex-wrap gap-2">
-                        <div class="flex-grow-1">
-                            <a class="btn btn-primary add-btn" href="/academic/person-add"><i
-                                    class="ri-add-fill me-1 align-bottom"></i> Add Students</a> 
-                        </div>
-                        <div class="flex-shrink-0">
-                            <div class="hstack text-nowrap gap-2">
-                                <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                                <button class="btn btn-danger" data-bs-toggle="modal"
-                                    data-bs-target="#addmembers"><i
-                                        class="ri-filter-2-line me-1 align-bottom"></i> Filters</button>
-                                <button class="btn btn-soft-success">PDF</button>
-                                <button class="btn btn-soft-success">Excel</button>
-                                <button class="btn btn-soft-success">Print</button>
-                                <button type="button" id="dropdownMenuLink1" data-bs-toggle="dropdown"
-                                    aria-expanded="false" class="btn btn-soft-info"><i
-                                        class="ri-more-2-fill"></i></button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                    <li><a class="dropdown-item" href="#">All</a></li>
-                                    <li><a class="dropdown-item" href="#">Last Week</a></li>
-                                    <li><a class="dropdown-item" href="#">Last Month</a></li>
-                                    <li><a class="dropdown-item" href="#">Last Year</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>-->
                 </div>
             </div>
         </div>
@@ -53,16 +26,45 @@
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
                         </div>
+                        <div class="col-xxl-2 col-sm-4">
+                            <div>
+                                <select class="form-select" name="cmbnivel" wire:model="filters.srv_periodo">
+                                    <option value="">Seleccione Periodo</option>
+                                    @foreach ($tblperiodos as $periodo)
+                                        <option value="{{$periodo->id}}">{{$periodo->descripcion}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xxl-2 col-sm-4">
+                            <div>
+                                <select class="form-select" name="cmbgrupo" wire:model="filters.srv_grupo">
+                                    <option value="">Todos Grupos</option>
+                                    @foreach ($tblgenerals as $general)
+                                        @if ($general->superior == 1)
+                                        <option value="{{$general->id}}">{{$general->descripcion}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xxl-2 col-sm-4">
+                            <div>
+                                <select class="form-select" name="cmbgrupo" wire:model="filters.srv_curso">
+                                    <option value="">Todos Cursos</option>
+                                    @foreach ($tblcursos as $curso)
+                                        <option value="{{$curso->id}}">{{$curso->servicio->descripcion}} {{$curso->paralelo}} {{$curso->grupo->descripcion}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-auto ms-auto">
                             <div class="hstack text-nowrap gap-2">
-                                <!--<button class="btn btn-soft-danger" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                                <button class="btn btn-danger" data-bs-toggle="modal"
-                                    data-bs-target="#addmembers"><i
-                                        class="ri-filter-2-line me-1 align-bottom"></i> Filters</button>-->
-                                <button class="btn btn-soft-secondary">PDF</button>
-                                <button class="btn btn-soft-secondary">Excel</button>
-                                <button class="btn btn-soft-secondary">Print</button>
-                                <button type="button" id="dropdownMenuLink1" data-bs-toggle="dropdown"
+                                
+                                <!--<button class="btn btn-soft-secondary">PDF</button>-->
+                                <button class="btn btn-soft-secondary" wire:click.prevent="exportExcel()">Excel</button>
+                                <button class="btn btn-soft-secondary">Imprimir</button>
+                                <!--<button type="button" id="dropdownMenuLink1" data-bs-toggle="dropdown"
                                     aria-expanded="false" class="btn btn-soft-info"><i
                                         class="ri-more-2-fill"></i></button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
@@ -70,7 +72,7 @@
                                     <li><a class="dropdown-item" href="#">Last Week</a></li>
                                     <li><a class="dropdown-item" href="#">Last Month</a></li>
                                     <li><a class="dropdown-item" href="#">Last Year</a></li>
-                                </ul>
+                                </ul>-->
                             </div>
                         </div>
                         <!--<div class="col-md-auto ms-auto">
@@ -89,15 +91,18 @@
                 <div class="card-body">
                     <div>
                         <div class="table-responsive table-card mb-3">
-                            <table class="table align-middle table-nowrap mb-0" id="customerTable">
+                            <table class="table align-middle table-nowrap mb-0 fs-12" id="customerTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
-                                        <th class="sort" data-sort="name" scope="col">Identificación</th>
-                                        <th class="sort" data-sort="company_name" scope="col">Nombres</th>
-                                        <th class="sort" data-sort="lead_score" scope="col">Nacionalidad</th>
-                                        <th class="sort" data-sort="tags" scope="col">Teléfono</th>
-                                        <th class="sort" data-sort="tags" scope="col">Email</th>
-                                        <th scope="col">Acción</th>
+                                        <th>Identificación</th>
+                                        <th>Nombres</th>
+                                        <th>Nacionalidad</th>
+                                        <th>Teléfono</th>
+                                        <th>Email</th>
+                                        <th>Estudiante</th>
+                                        <th>Curso</th>
+                                        <th>Periodo</th>
+                                        <th>Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all">
@@ -108,48 +113,21 @@
                                         <td class="lead_score">{{$record->nacionalidad->descripcion}}</td>
                                         <td class="tags">{{$record->telefono}}</td>
                                         <td class="tags">{{$record->email}}</td>
+                                        <td >{{$record->apeestudiante}} {{$record->nomestudiante}}</td>
+                                        <td class="tags">{{$record->descripcion}}</td>
+                                        <td class="tags">{{$record->periodo}}</td>
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
-                                                <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                <!--<li class="list-inline-item" data-bs-toggle="tooltip"
                                                     data-bs-trigger="hover" data-bs-placement="top" title="View">
                                                     <a href="" wire:click.prevent="view({{ $record->id }})" class="view-item-btn"><i
                                                             class="ri-eye-fill align-bottom text-muted"></i></a>
-                                                </li>
+                                                </li>-->
                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                    data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                    <a class="edit-item-btn" href="/academic/agent-edit/{{$record->identificacion}}"><i
+                                                    data-bs-trigger="hover" data-bs-placement="top" title="Editar">
+                                                    <a class="edit-item-btn" target="_blank" href="/academic/person-edit/{{$record->matriculaId}}"><i
                                                             class="ri-pencil-fill align-bottom text-muted"></i></a>
                                                 </li>
-                                                <!--<li class="list-inline-item">
-                                                    <div class="dropdown">
-                                                        <button
-                                                            class="btn btn-soft-secondary btn-sm dropdown"
-                                                            type="button" data-bs-toggle="dropdown"
-                                                            aria-expanded="false">
-                                                            <i class="ri-more-fill align-middle"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li><a class="dropdown-item view-item-btn"
-                                                                    href="javascript:void(0);"><i
-                                                                        class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                                    View</a></li>
-                                                            <li><a class="dropdown-item edit-item-btn"
-                                                                    href="#showModal"
-                                                                    data-bs-toggle="modal"><i
-                                                                        class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                                    Edit</a></li>
-                                                            <li>
-                                                                <a class="dropdown-item remove-item-btn"
-                                                                    data-bs-toggle="modal"
-                                                                    href="#deleteRecordModal">
-                                                                    <i
-                                                                        class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                                    Delete
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </li>-->
                                             </ul>
                                         </td>
                                     </tr>
@@ -170,17 +148,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!--<div class="d-flex justify-content-end mt-3">
-                            <div class="pagination-wrap hstack gap-2">
-                                <a class="page-item pagination-prev disabled" href="#">
-                                    Previous
-                                </a>
-                                <ul class="pagination listjs-pagination mb-0"></ul>
-                                <a class="page-item pagination-next" href="#">
-                                    Next
-                                </a>
-                            </div>
-                        </div>-->
                         {{$tblrecords->links('')}}
                     </div>
                     
