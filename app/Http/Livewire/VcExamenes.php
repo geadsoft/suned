@@ -174,11 +174,17 @@ class VcExamenes extends Component
 
     public function edit($Id)
     {
-        $record = TmActividades::find($Id);
+        $record = TmActividades::query()
+        ->join('tm_horarios_docentes as d','d.id','=','tm_actividades.paralelo')
+        ->join('tm_horarios as h','h.id','=','d.horario')
+        ->where('tm_actividades.id',$Id)
+        ->select('tm_actividades.id','tm_actividades.termino','h.grupo_id')
+        ->first();
 
         $sistema = TdPeriodoSistemaEducativos::query()
         ->where("codigo",$record->termino)
         ->where("periodo_id",$this->filters['periodoId'])
+        ->where("modalidad_id",$record->grupo_id)
         ->first();
 
         if ($sistema->cerrar==1){
