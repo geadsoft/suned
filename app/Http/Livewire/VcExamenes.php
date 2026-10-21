@@ -176,7 +176,7 @@ class VcExamenes extends Component
     {
         $record = TmActividades::query()
         ->join('tm_horarios_docentes as d','d.id','=','tm_actividades.paralelo')
-        ->join('tm_horarios as h','h.id','=','d.horario')
+        ->join('tm_horarios as h','h.id','=','d.horario_id')
         ->where('tm_actividades.id',$Id)
         ->select('tm_actividades.id','tm_actividades.termino','h.grupo_id')
         ->first();
