@@ -532,7 +532,7 @@ class VcReportPartialTeacher extends Component
 
         $datos = [
             'nivel' => $titulo['nivel'],
-            'subtitulo' => "Periodo Lectivo ".$periodo['descripcion']."/".$this->arrtermino[$this->filters['termino']]." - Primer Parcial";
+            'subtitulo' => "Periodo Lectivo ".$periodo['descripcion']."/".$this->arrtermino[$this->filters['termino']]." - Primer Parcial",
             'docente' => $docente['apellidos'].' '.$docente['nombres'],
             'materia' => $titulo['asignatura'],
             'curso' => $titulo['servicio'].' '.$titulo['paralelo'],
