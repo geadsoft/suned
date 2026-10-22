@@ -586,6 +586,8 @@ class VcReportQuarterlyTeacher extends Component
 
         $tblrecords = $this->reporte();
 
+        dd($tblrecords);
+
         $pdf = PDF::loadView('pdf/reporte_informe_trimestral',[
             'tblrecords' => $tblrecords,
             'tblgrupo' => $tblgrupo,
