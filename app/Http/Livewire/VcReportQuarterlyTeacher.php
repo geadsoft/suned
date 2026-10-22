@@ -186,7 +186,7 @@ class VcReportQuarterlyTeacher extends Component
             }
         }
 
-        $record = TmActividades::query()
+        $notas = TmActividades::query()
         ->join('td_calificacion_actividades as n', 'n.actividad_id', '=', 'tm_actividades.id')
         ->join('tm_horarios_docentes as d', function($join) {
             $join->on('d.id', '=', 'tm_actividades.paralelo')
@@ -204,7 +204,7 @@ class VcReportQuarterlyTeacher extends Component
         ->selectRaw('n.persona_id, ROUND(AVG(n.nota), 2) as promedio')
         ->pluck('promedio', 'persona_id');
 
-        return  $record;
+        return  $notas;
 
     }
 
@@ -530,7 +530,7 @@ class VcReportQuarterlyTeacher extends Component
 
         //Examenes
         $examen = $this->examenes(); 
-       
+        dd($examen, $this->asignaturaId)
   
         foreach ($examen as $personaId => $objnota){
 
