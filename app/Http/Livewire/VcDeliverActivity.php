@@ -89,10 +89,19 @@ class VcDeliverActivity extends Component
 
         $matricula = TmCambiaModalidad::query()
         ->where('persona_id',$this->personaId)
-        ->where('periodo_id',$this->periodoId)
         ->first();
 
         $this->modalidadId = $matricula->modalidad_id;
+
+        //Si tiene pase de curso en otra modalidad
+        $pasecurso = TmPaseCursos::query()
+        ->where('matricula_id',$matricula->matricula_id)
+        ->where('estado','A')
+        ->first();
+
+        if (!empty($pasecurso)){  
+            $this->modalidadId = $pasecurso->modalidad_id;
+        }
 
         $this->attach_add();
         $this->load();
