@@ -599,7 +599,7 @@ class VcReportQuarterlyTeacher extends Component
         $valor = (array_sum(array_column($tblrecords,'prom30')));
         $tblrecords['ZZ']['prom30'] = round($valor/count($this->personas),2);
 
-        $valor = (array_sum(array_column($this->tblrecords,'cuanti')));
+        $valor = (array_sum(array_column($tblrecords,'cuanti')));
         $tblrecords['ZZ']['cuanti'] = round($valor/count($this->personas),2);
         $tblrecords['ZZ']['cuali'] = "";
 
