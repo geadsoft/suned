@@ -552,7 +552,7 @@ class VcReportQuarterlyTeacher extends Component
                 $suma = 0;
                 foreach ($grupo as $key3 => $actividad){
                     $col = $key2.$actividad['id'];
-                    $nota = $this->tblrecords[$personaId][$col];
+                    $nota = $tblrecords[$personaId][$col];
                     $suma = $suma + floatval($nota);
                 }
                 $col = $key2."-prom";
