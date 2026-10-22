@@ -7,6 +7,7 @@ use App\Models\TmFiles;
 use App\Models\TdPeriodoSistemaEducativos;
 use App\Models\TmPeriodosLectivos;
 use App\Models\TmCambiaModalidad;
+use App\Models\TmPaseCursos;
 
 use Illuminate\Support\Facades\Http;
 
