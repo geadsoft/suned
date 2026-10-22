@@ -49,6 +49,7 @@ class VcReportPartialTeacher extends Component
         'bloque' => '1P',
         'actividad' => 'AI',
         'periodoId' => 0,
+        'modalidadId' => 0
     ];
 
     public function mount()
@@ -141,6 +142,7 @@ class VcReportPartialTeacher extends Component
 
         $bloque = optional($this->tblbloque->first())->codigo;
         $this->filters['bloque'] = $bloque;
+        $this->filters['modalidadId'] = $this->modalidadId;
 
     }
 
@@ -514,6 +516,8 @@ class VcReportPartialTeacher extends Component
         $this->filters['termino'] = $data->termino;
         $this->filters['bloque'] = $data->bloque;
         $this->filters['actividad'] = $data->actividad;
+        $this->filters['modalidadId'] = $data->modalidadId;
+        $this->modalidadId = $data->modalidadId;
         
         $docente = TmPersonas::find($this->filters['docenteId']);
         $fechaActual = date("d/m/Y");
