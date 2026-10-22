@@ -212,11 +212,11 @@ class VcQualifyActivity extends Component
         $this->control = "enabled";
 
         $sistema = TdPeriodoSistemaEducativos::query()
-        ->where("codigo",$this->filters['termino'])
+        ->where("modalidad_id",$this->modalidadId)
         ->where("periodo_id",$this->periodoId)
+        ->where("codigo",$this->filters['termino'])
         ->first();
-
-
+        
         if ($sistema->cerrar==1){
             $this->control = "disabled";
 
