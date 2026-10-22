@@ -468,7 +468,7 @@ class VcReportQuarterlyTeacher extends Component
 
         /*Actividades*/
         $record = $this->actividad();
-        $this->tblgrupo = $record->groupBy('actividad')->toBase();
+        $tblgrupo = $record->groupBy('actividad')->toBase();
 
         /*Examenes*/
         $tblexamen = $this->examenes();
