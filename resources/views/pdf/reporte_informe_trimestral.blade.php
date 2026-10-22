@@ -44,13 +44,13 @@
             <thead class="table-light">
                 <tr>
                     <td class="align-middle fw-semibold" style="font-weight: normal; padding: 0px 10px;">Profesor</td>
-                    <td class="align-middle" colspan="3" style="font-weight: normal; padding: 0px 10px;">{{$docente}}</td>
+                    <td class="align-middle" colspan="3" style="font-weight: normal; padding: 0px 10px;">{{$datos['docente']}}</td>
                     <td class="align-middle fw-semibold" style="font-weight: normal; padding: 0px 10px;">Asignatura</td>
-                    <td class="align-middle" colspan="3" style="font-weight: normal; padding: 0px 10px;">{{$materia}}</td>
+                    <td class="align-middle" colspan="3" style="font-weight: normal; padding: 0px 10px;">{{$datos['materia']}}</td>
                 </tr>
                 <tr>
                     <td class="align-middle fw-semibold" style="font-weight: normal; padding: 0px 10px;">Grado/Curso</td>
-                    <td class="align-middle" colspan="3" style="font-weight: normal; padding: 0px 10px;">{{$curso}}</td>
+                    <td class="align-middle" colspan="3" style="font-weight: normal; padding: 0px 10px;">{{$datos['curso']}}</td>
                     <td class="align-middle fw-semibold" style="font-weight: normal; padding: 0px 10px;">Quimestre</td>
                     <td class="align-middle" colspan="3" style="font-weight: normal; padding: 0px 10px;">Primer Trimestre</td>
                 </tr>
