@@ -554,8 +554,6 @@ class VcReportQuarterlyTeacher extends Component
         $this->filters['modalidadId'] = $data->modalidadId;
         $this->filters['periodoId'] = $data->periodoId;
         $this->modalidadId = $data->modalidadId;
-
-        dd($data );
         
         $docente = TmPersonas::find($this->filters['docenteId']);
         $fechaActual = date("d/m/Y");
