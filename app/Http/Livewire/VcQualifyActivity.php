@@ -220,6 +220,7 @@ class VcQualifyActivity extends Component
         if ($sistema->cerrar==1){
             $this->control = "disabled";
 
+            $this->add();
             $this->dispatchBrowserEvent('trimestre-cerrado');
             return;
         }
