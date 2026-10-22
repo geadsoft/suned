@@ -27,6 +27,14 @@ class VcReportExamsQualify extends Component
     public $tblrecords=[];
     public $personas=[];
 
+    public $arrtermino=[
+        '1T' => 'Primer Trimestre',
+        '2T' => 'Segundo Trimestre',
+        '3T' => 'Tercer Trimestre',
+        '1Q' => 'Primer Quimestre',
+        '2Q' => 'Segundo Quimestre',
+    ];
+
     public $filters=[
         'docenteId' => 0,
         'paralelo' => 0, 

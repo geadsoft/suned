@@ -34,6 +34,14 @@ class VcReportDetailQualify extends Component
     public $personas=[];
     public $tblgrupo=[];
 
+    public $arrtermino=[
+        '1T' => 'Primer Trimestre',
+        '2T' => 'Segundo Trimestre',
+        '3T' => 'Tercer Trimestre',
+        '1Q' => 'Primer Quimestre',
+        '2Q' => 'Segundo Quimestre',
+    ];
+
     public $filters=[
         'periodoId' => 0,
         'modalidad' => 0, 

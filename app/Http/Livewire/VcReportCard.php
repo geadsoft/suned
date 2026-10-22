@@ -28,7 +28,15 @@ class VcReportCard extends Component
     public $tblparalelo=[];
     public $tblescala=[];
     public $tbltermino=[];
-    
+
+    public $arrtermino=[
+        '1T' => 'Primer Trimestre',
+        '2T' => 'Segundo Trimestre',
+        '3T' => 'Tercer Trimestre',
+        '1Q' => 'Primer Quimestre',
+        '2Q' => 'Segundo Quimestre',
+    ];
+        
     public $filters=[
         'periodoId' => 0,
         'modalidadId' => 0,

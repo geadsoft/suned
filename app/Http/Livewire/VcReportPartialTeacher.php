@@ -34,6 +34,14 @@ class VcReportPartialTeacher extends Component
     public $personas=[];
     public $tblgrupo=[];
 
+    public $arrtermino=[
+        '1T' => 'Primer Trimestre',
+        '2T' => 'Segundo Trimestre',
+        '3T' => 'Tercer Trimestre',
+        '1Q' => 'Primer Quimestre',
+        '2Q' => 'Segundo Quimestre',
+    ];
+
     public $filters=[
         'docenteId' => 0,
         'paralelo' => 0, 
@@ -179,7 +187,7 @@ class VcReportPartialTeacher extends Component
         $periodo = TmPeriodosLectivos::find($titulo['periodo_id']);
 
         $this->nivel = $titulo['nivel'];
-        $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion'].'/Tercer Trimestre - Primer Parcial';
+        $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion']."/".$this->arrtermino[$this->filters['termino']]." - Primer Parcial";
         $this->docente=$docente['apellidos'].' '.$docente['nombres'];
         $this->materia = $titulo['asignatura'];
         $this->curso = $titulo['servicio'].' '.$titulo['paralelo'];
