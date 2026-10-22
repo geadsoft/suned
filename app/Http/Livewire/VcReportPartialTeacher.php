@@ -513,7 +513,6 @@ class VcReportPartialTeacher extends Component
         $this->filters['bloque'] = $data->bloque;
         $this->filters['actividad'] = $data->actividad;
         
-
         $docente = TmPersonas::find($this->filters['docenteId']);
         $fechaActual = date("d/m/Y");
         $horaActual  = date("H:i:s");
@@ -533,7 +532,7 @@ class VcReportPartialTeacher extends Component
 
         $datos = [
             'nivel' => $titulo['nivel'],
-            'subtitulo' => "Periodo Lectivo ".$periodo['descripcion'].' / Tercer Trimestre - Primer Parcial',
+            'subtitulo' => "Periodo Lectivo ".$periodo['descripcion']."/".$this->arrtermino[$this->filters['termino']]." - Primer Parcial";
             'docente' => $docente['apellidos'].' '.$docente['nombres'],
             'materia' => $titulo['asignatura'],
             'curso' => $titulo['servicio'].' '.$titulo['paralelo'],
