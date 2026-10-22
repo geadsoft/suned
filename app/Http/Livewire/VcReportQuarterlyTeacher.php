@@ -530,7 +530,7 @@ class VcReportQuarterlyTeacher extends Component
 
         //Examenes
         $examen = $this->examenes(); 
-        dd($examen);
+       
   
         foreach ($examen as $personaId => $objnota){
 
@@ -638,7 +638,7 @@ class VcReportQuarterlyTeacher extends Component
         $this->filters['docenteId'] = $data->docenteId;
         $this->filters['paralelo'] = $data->paralelo;
         $this->filters['termino'] = $data->termino;
-        $this->filters['bloque'] = $data->bloque;
+        
         $this->filters['actividad'] = $data->actividad;
         $this->filters['modalidadId'] = $data->modalidadId;
         $this->filters['periodoId'] = $data->periodoId;
