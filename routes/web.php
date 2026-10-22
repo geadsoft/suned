@@ -250,7 +250,7 @@ Route::get('/preview-pdf/calificacion_examen/{data}',[VcReportExamsQualify::clas
 Route::get('/preview-pdf/detailed-rating/{data}',[VcReportDetailQualify::class, 'printPDF']);
 Route::get('/preview-pdf/total-rating/{data}',[VcReportTQualify::class, 'printPDF']);
 Route::get('/preview-pdf/partial-teacher/{data}',[VcReportPartialTeacher::class, 'printPDF']);
-//Route::get('/preview-pdf/quarterly-teacher/{data}',[VcReportQuarterlyTeacher::class, 'printPDF']);
+Route::get('/preview-pdf/quarterly-teacher/{data}',[VcReportQuarterlyTeacher::class, 'printPDF']);
 Route::get('/preview-pdf/informacion-student/{id}',[VcStudents::class, 'printFichaPDF']);
 Route::get('/preview-pdf/report-card/{data}',[VcReportCard::class, 'printPDF']);
 Route::get('/preview-pdf/partial-bulletin/{data}',[VcPartialBulletin::class, 'printPDF']);
