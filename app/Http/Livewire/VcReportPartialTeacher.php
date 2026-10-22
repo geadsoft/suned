@@ -490,14 +490,14 @@ class VcReportPartialTeacher extends Component
             
         }
 
-        foreach ($tblgrupo as $key2 => $grupo){
+        /*foreach ($tblgrupo as $key2 => $grupo){
             $col = $key2."-prom";
             $valor = (array_sum(array_column($tblrecords,$col)));
             $tblrecords['ZZ'][$col] = $valor/count($this->personas);
         }
 
         $valor = (array_sum(array_column($tblrecords,'promedio')));
-        $tblrecords['ZZ']['promedio'] = $valor/count($this->personas);
+        $tblrecords['ZZ']['promedio'] = $valor/count($this->personas);*/
 
         return $tblrecords;
 
