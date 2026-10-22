@@ -25,6 +25,14 @@ class CalificacionesDetalladas implements FromView, WithColumnWidths, WithStyles
 
     public $filters, $colspan, $col="", $colprom="";
 
+    public $arrtermino=[
+        '1T' => 'Primer Trimestre',
+        '2T' => 'Segundo Trimestre',
+        '3T' => 'Tercer Trimestre',
+        '1Q' => 'Primer Quimestre',
+        '2Q' => 'Segundo Quimestre',
+    ];
+
     public function __construct($filters)
     {
         $this->filters = json_decode($filters, true);
@@ -52,7 +60,7 @@ class CalificacionesDetalladas implements FromView, WithColumnWidths, WithStyles
 
         $datos = [
             'nivel' => $titulo['nivel'],
-            'subtitulo' => "Periodo Lectivo ".$periodo['descripcion'].' / Tercer Trimestre - Primer Parcial',
+            'subtitulo' => "Periodo Lectivo ".$periodo['descripcion']."/".$this->arrtermino[$this->filters['termino']]." - Primer Parcial",
             'docente' => $docente['apellidos'].' '.$docente['nombres'],
             'materia' => $titulo['asignatura'],
             'curso' => $titulo['servicio'].' '.$titulo['paralelo'],

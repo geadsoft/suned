@@ -24,6 +24,14 @@ class VcQuarterlyStudent extends Component
     public $tbltermino=[];
     public $tblbloque=[];
 
+    public $arrtermino=[
+        '1T' => 'Primer Trimestre',
+        '2T' => 'Segundo Trimestre',
+        '3T' => 'Tercer Trimestre',
+        '1Q' => 'Primer Quimestre',
+        '2Q' => 'Segundo Quimestre',
+    ];
+
     public $filters=[
         'docenteId' => 0,
         'paralelo' => 0, 
@@ -94,7 +102,7 @@ class VcQuarterlyStudent extends Component
         $periodo = TmPeriodosLectivos::find($this->periodoId);
 
         $this->nivel = $titulo['nivel'];
-        $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion'].'/Tercer Trimestre - Primer Parcial';
+        $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion']."/".$this->arrtermino[$this->filters['termino']]." - Primer Parcial",
         $this->alumno =  $persona['apellidos'].' '.$persona['nombres'];
         $this->materia = ''; // $titulo['asignatura'];
         $this->curso = $titulo['servicio'].' '.$titulo['paralelo'];

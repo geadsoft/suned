@@ -27,6 +27,14 @@ class VcStudentGrades extends Component
     public $arrtipo=[];
     public $tblgrupo=[];
 
+    public $arrtermino=[
+        '1T' => 'Primer Trimestre',
+        '2T' => 'Segundo Trimestre',
+        '3T' => 'Tercer Trimestre',
+        '1Q' => 'Primer Quimestre',
+        '2Q' => 'Segundo Quimestre',
+    ];
+
     public $filters=[
         'docenteId' => 0,
         'paralelo' => 0, 
@@ -174,7 +182,7 @@ class VcStudentGrades extends Component
         $periodo = TmPeriodosLectivos::find($this->periodoId);
 
         $this->nivel = $titulo['nivel'];
-        $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion'].'/Tercer Trimestre - Primer Parcial';
+        $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion']."/".$this->arrtermino[$this->filters['termino']]." - Primer Parcial";
         $this->docente= ''; //$docente['apellidos'].' '.$docente['nombres'];
         $this->materia = ''; // $titulo['asignatura'];
         $this->curso = $titulo['servicio'].' '.$titulo['paralelo'];
