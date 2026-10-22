@@ -544,19 +544,68 @@ class VcReportQuarterlyTeacher extends Component
 
     public function printPDF($objdata)
     {   
-        
-        dd($this->tblrecords);
 
-        $data=[
+        $data = json_decode($objdata);
+        $this->filters['docenteId'] = $data->docenteId;
+        $this->filters['paralelo'] = $data->paralelo;
+        $this->filters['termino'] = $data->termino;
+        $this->filters['bloque'] = $data->bloque;
+        $this->filters['actividad'] = $data->actividad;
+        $this->filters['modalidadId'] = $data->modalidadId;
+        $this->filters['periodoId'] = $data->periodoId;
+        $this->modalidadId = $data->modalidadId;
+        
+        $docente = TmPersonas::find($this->filters['docenteId']);
+        $fechaActual = date("d/m/Y");
+        $horaActual  = date("H:i:s");
+
+        $titulo = TmHorarios::query()
+        ->join("tm_servicios as s","s.id","=","tm_horarios.servicio_id")
+        ->join("tm_generalidades as n","n.id","=","s.nivel_id")
+        ->join("tm_cursos as c","c.id","=","tm_horarios.curso_id")
+        ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
+        ->join("tm_asignaturas as m","m.id","=","d.asignatura_id")
+        ->where("d.docente_id",$this->filters['docenteId'])
+        ->where("d.id",$this->filters['paralelo'])
+        ->selectRaw('d.id, m.descripcion as asignatura,s.descripcion as servicio,c.paralelo, n.descripcion as nivel, tm_horarios.periodo_id')
+        ->first();
+
+        $periodo = TmPeriodosLectivos::find($titulo['periodo_id']);
+
+        $datos = [
+            'nivel' => $titulo['nivel'],
+            'subtitulo' => "Periodo Lectivo ".$periodo['descripcion']."/".$this->arrtermino[$this->filters['termino']]." - Primer Parcial",
+            'docente' => $docente['apellidos'].' '.$docente['nombres'],
+            'materia' => $titulo['asignatura'],
+            'curso' => $titulo['servicio'].' '.$titulo['paralelo'],
+            'periodolectivo' => $periodo['descripcion'],
+        ];
+       
+        $tblactividad = $this->actividad();
+        $tblgrupo = $tblactividad->groupBy('actividad')->toBase();
+
+        $tblrecords = $this->reporte();
+
+        $pdf = PDF::loadView('pdf/reporte_informe_trimestral',[
+            'tblrecords' => $tblrecords,
+            'tblgrupo' => $tblgrupo,
+            'datos' => $datos,
+            'fechaActual' => $fechaActual,
+            'horaActual' => $horaActual,
+        ]);
+
+        return $pdf->setPaper('a4')->stream('Informe Docente Trimestral.pdf');
+
+        /*$data=[
             'tblrecords' => $this->tblrecords,
         ];
 
         $pdf = PDF::loadView('pdf/reporte_informe_trimestral',$data);
 
-        /*return $pdf->setPaper('a4')->stream('Informe Docente Trimestral.pdf');*/
+        /*return $pdf->setPaper('a4')->stream('Informe Docente Trimestral.pdf');
         return response()->streamDownLoad(function() use($pdf){
             echo $pdf->setPaper('a4')->stream();
-        },'pdf/reporte_informe_trimestral');
+        },'pdf/reporte_informe_trimestral');*/
         
     }
 
