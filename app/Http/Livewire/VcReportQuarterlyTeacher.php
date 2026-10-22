@@ -530,7 +530,7 @@ class VcReportQuarterlyTeacher extends Component
 
         //Examenes
         $examen = $this->examenes(); 
-        dd($examen, $this->asignaturaId, $this->bloqueEx);
+        dd($examen, $this->asignaturaId, $this->bloqueEx, $this->tbltermino);
   
         foreach ($examen as $personaId => $objnota){
 
