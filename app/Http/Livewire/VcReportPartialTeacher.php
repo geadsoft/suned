@@ -422,6 +422,8 @@ class VcReportPartialTeacher extends Component
             $tblrecords[$key]['planmejora'] = "";
         }
 
+        dd($this->personas,$tblactividad,$tblgrupo);
+
         $tblrecords['ZZ']['id'] = 0;
         $tblrecords['ZZ']['personaId'] = 0;
         $tblrecords['ZZ']['nui'] = '';
