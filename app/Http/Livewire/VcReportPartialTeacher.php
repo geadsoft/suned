@@ -517,6 +517,7 @@ class VcReportPartialTeacher extends Component
         $this->filters['bloque'] = $data->bloque;
         $this->filters['actividad'] = $data->actividad;
         $this->filters['modalidadId'] = $data->modalidadId;
+        $this->filters['periodoId'] = $data->periodoId;
         $this->modalidadId = $data->modalidadId;
         
         $docente = TmPersonas::find($this->filters['docenteId']);
