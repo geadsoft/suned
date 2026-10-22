@@ -273,7 +273,7 @@ Route::get('/preview-pdf/detail-movements/{report},{data}',[VcInventaryReports::
 Route::get('/download-pdf/detail-movements/{report},{data}',[VcInventaryReports::class, 'downloadPDF']);
 
 Route::get('pdf/{report},{data}', [PdfController::class, 'index']);
-Route::get('/preview-pdf/quarterly-teacher/{data}', [PdfController::class, 'informe_docente_trimestral'])->name('pdf.informe_docente_trimestral');
+//Route::get('/preview-pdf/quarterly-teacher/{data}', [PdfController::class, 'informe_docente_trimestral'])->name('pdf.informe_docente_trimestral');
 
 /*Route::middleware(['auth'],['roles:D'])->group(function(){
     Route::get('/teachers/login', [App\Http\Controllers\DocentesController::class, 'index'])->name('login');
