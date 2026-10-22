@@ -544,6 +544,9 @@ class VcReportQuarterlyTeacher extends Component
 
     public function printPDF($objdata)
     {   
+        
+        dd($this->tblrecords);
+
         $data=[
             'tblrecords' => $this->tblrecords,
         ];
