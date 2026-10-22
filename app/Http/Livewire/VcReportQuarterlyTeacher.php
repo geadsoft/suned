@@ -500,17 +500,18 @@ class VcReportQuarterlyTeacher extends Component
 
         }
 
-        /* Asignar Notas*/
+        //Actividades
         $notas = TmActividades::query()
         ->join('td_calificacion_actividades as n','n.actividad_id','=','tm_actividades.id')
-        ->when($this->filters['paralelo'],function($query){
-            return $query->where('paralelo',"{$this->filters['paralelo']}");
-        })
-        ->when($this->filters['termino'],function($query){
-            return $query->where('termino',"{$this->filters['termino']}");
-        })
-        ->where("docente_id",$this->filters['docenteId'])
-        ->selectRaw("n.*,tm_actividades.actividad")
+        ->join('tm_horarios_docentes as d', function($join) {
+                $join->on('d.id', '=', 'tm_actividades.paralelo')
+                    ->on('d.docente_id', '=', 'tm_actividades.docente_id');
+            })
+        ->where('paralelo',$this->filters['paralelo'])
+        ->where('termino',$this->filters['termino'])
+        ->where("tipo","AC")
+        ->where("d.docente_id",$this->filters['docenteId'])
+        ->select("n.*","tm_actividades.actividad")
         ->get();
 
         if ($notas!=null){
@@ -533,8 +534,95 @@ class VcReportQuarterlyTeacher extends Component
   
         foreach ($examen as $personaId => $objnota){
 
-            if (isset($this->tblrecords[$personaId]['promExamen'])) {
-                $this->tblrecords[$personaId]['promExamen'] = $objnota;
+            if (isset($tblrecords[$personaId]['promExamen'])) {
+                $tblrecords[$personaId]['promExamen'] = $objnota;
+            }
+
+        }
+
+        /* Totales */
+        foreach ($this->personas as $key => $data)
+        { 
+            $personaId = $data['id'];
+            $promedio  = 0; 
+            $notafinal = 0;
+
+            foreach ($tblgrupo as $key2 => $grupo){
+
+                $suma = 0;
+                foreach ($grupo as $key3 => $actividad){
+                    $col = $key2.$actividad['id'];
+                    $nota = $this->tblrecords[$personaId][$col];
+                    $suma = $suma + floatval($nota);
+                }
+                $col = $key2."-prom";
+                $tblrecords[$personaId][$col] = $suma/($key3+1);
+                $promedio = $promedio+$suma/($key3+1);
+                
+            }
+            if ($promedio>0){
+                $tblrecords[$personaId]['promedio'] = $promedio/count($tblgrupo);
+                $tblrecords[$personaId]['prom70'] = round(($promedio/count($tblgrupo))*0.70,2);
+                $notafinal = $notafinal+$tblrecords[$personaId]['prom70'];
+            }
+
+            $tblrecords[$personaId]['prom30'] = round(floatval($tblrecords[$personaId]['promExamen'])*0.30,2);
+            $notafinal = $notafinal+$tblrecords[$personaId]['prom30'];
+
+            $tblrecords[$personaId]['cuanti'] = $notafinal;
+            $tblrecords[$personaId]['cuali'] = "";
+        }
+        
+
+        array_multisort(array_column($tblrecords, 'nombres'), SORT_ASC, $tblrecords);
+ 
+        $tblrecords['ZZ']['id'] = 0;
+        $tblrecords['ZZ']['personaId'] = 0;
+        $tblrecords['ZZ']['nui'] = '';
+        $tblrecords['ZZ']['nombres'] = 'PROMEDIO DEL CURSO';
+
+        foreach ($tblgrupo as $key2 => $grupo){
+            $col = $key2."-prom";
+            $valor = (array_sum(array_column($tblrecords,$col)));
+            $tblrecords['ZZ'][$col] = $valor/count($this->personas);
+        }
+
+        $valor = (array_sum(array_column($tblrecords,'promedio')));
+        $tblrecords['ZZ']['promedio'] = $valor/count($this->personas);
+
+        $valor = (array_sum(array_column($tblrecords,'prom70')));
+        $tblrecords['ZZ']['prom70'] = round($valor/count($this->personas),2);
+
+        $valor = (array_sum(array_column($tblrecords,'promExamen')));
+        $tblrecords['ZZ']['promExamen'] = round($valor/count($this->personas),2);
+
+        $valor = (array_sum(array_column($tblrecords,'prom30')));
+        $tblrecords['ZZ']['prom30'] = round($valor/count($this->personas),2);
+
+        $valor = (array_sum(array_column($this->tblrecords,'cuanti')));
+        $tblrecords['ZZ']['cuanti'] = round($valor/count($this->personas),2);
+        $tblrecords['ZZ']['cuali'] = "";
+
+        // Escala Cualitativa
+        $escalas = TdPeriodoSistemaEducativos::query()
+        ->where("periodo_id",$this->filters['periodoId'])
+        ->where("modalidad_id",$this->filters['modalidadId'])
+        ->where("tipo","EC")
+        ->get()->toArray();
+       
+        foreach ($tblrecords as $key1 => $records){
+
+            $promedio = $records['cuanti']; 
+                
+            foreach ($escalas as $escala) {
+                
+                $nota  = $escala['nota'];                  
+                $letra = $escala['evaluacion'];
+
+                if ($promedio >= ($nota-1)+0.01 && $promedio <= $nota) {
+                    $tblrecords[$key1]['cuali'] = $letra;
+                }
+                
             }
 
         }
