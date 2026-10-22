@@ -674,6 +674,13 @@ class VcReportQuarterlyTeacher extends Component
         $tblactividad = $this->actividad();
         $tblgrupo = $tblactividad->groupBy('actividad')->toBase();
 
+        $baseQuery = TdPeriodoSistemaEducativos::where('periodo_id', $this->filters['periodoId'])
+        ->where('modalidad_id', $this->modalidadId);
+
+        $this->tbltermino = (clone $baseQuery)
+        ->where('tipo', 'EA')
+        ->get();
+
         $tblrecords = $this->reporte();
 
         $pdf = PDF::loadView('pdf/reporte_informe_trimestral',[
