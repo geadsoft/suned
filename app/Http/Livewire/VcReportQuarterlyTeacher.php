@@ -48,7 +48,8 @@ class VcReportQuarterlyTeacher extends Component
         'bloque' => '1P',
         'actividad' => 'AI',
         'periodoId' => 0,
-        'modalidadId' => 0
+        'modalidadId' => 0,
+        'asignaturaId' => 0,
     ];
 
     public function mount()
@@ -105,6 +106,7 @@ class VcReportQuarterlyTeacher extends Component
     public function updatedasignaturaId($id){
 
         $this->asignaturaId = $id;
+        $this->filters['asignaturaId'] = $this->asignaturaId;
 
     }
 
@@ -641,6 +643,7 @@ class VcReportQuarterlyTeacher extends Component
         $this->filters['modalidadId'] = $data->modalidadId;
         $this->filters['periodoId'] = $data->periodoId;
         $this->modalidadId = $data->modalidadId;
+        $this->asignaturaId = $data->asignaturaId;
         
         $docente = TmPersonas::find($this->filters['docenteId']);
         $fechaActual = date("d/m/Y");
