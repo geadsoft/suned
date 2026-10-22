@@ -463,16 +463,13 @@ class VcReportQuarterlyTeacher extends Component
     public function reporte(){
 
         $tblrecords=[];
-
-        $this->loadPersonas();
-
+        
         /*Actividades*/
         $record = $this->actividad();
         $tblgrupo = $record->groupBy('actividad')->toBase();
 
-        /*Examenes*/
-        $tblexamen = $this->examenes();
-
+        $this->loadPersonas();
+        
         foreach ($this->personas as $key => $data)
         {   
             $personaId = $data['id'];
@@ -531,6 +528,7 @@ class VcReportQuarterlyTeacher extends Component
 
         //Examenes
         $examen = $this->examenes(); 
+        dd($examen);
   
         foreach ($examen as $personaId => $objnota){
 
