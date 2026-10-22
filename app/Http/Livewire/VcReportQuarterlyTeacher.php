@@ -466,8 +466,6 @@ class VcReportQuarterlyTeacher extends Component
 
         $this->loadPersonas();
 
-        dd($this->personas);
-
         /*Actividades*/
         $record = $this->actividad();
         $tblgrupo = $record->groupBy('actividad')->toBase();
@@ -541,6 +539,7 @@ class VcReportQuarterlyTeacher extends Component
 
         }
 
+        return $tblrecords;
 
     }
 
