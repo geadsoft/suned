@@ -223,6 +223,7 @@ class VcQualifyExams extends Component
 
         if ($sistema->cerrar==1){
             $this->control = "disabled";
+            $this->dispatchBrowserEvent('trimestre-cerrado');
         }
 
         $this->tblexamen = TmActividades::query()
