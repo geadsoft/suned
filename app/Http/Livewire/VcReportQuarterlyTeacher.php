@@ -224,7 +224,7 @@ class VcReportQuarterlyTeacher extends Component
         $periodo = TmPeriodosLectivos::find($titulo['periodo_id']);
 
         $this->nivel = $titulo['nivel'];
-        $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion'].'/Tercer Trimestre - Primer Parcial';
+        $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion']."/".$this->arrtermino[$this->filters['termino']]." - Primer Parcial";
         $this->docente=$docente['apellidos'].' '.$docente['nombres'];
         $this->materia = $titulo['asignatura'];
         $this->curso = $titulo['servicio'].' '.$titulo['paralelo'];
