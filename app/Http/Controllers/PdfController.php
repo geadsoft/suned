@@ -16,8 +16,7 @@ class PdfController extends Controller
     {   
 
         $data = json_decode($data);
-        dd($data);
-
+        
     }
 
 
