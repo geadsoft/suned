@@ -89,6 +89,7 @@ class VcDeliverActivity extends Component
 
         $matricula = TmCambiaModalidad::query()
         ->where('persona_id',$this->personaId)
+        ->where('periodo_id',$this->periodoId)
         ->first();
 
         $this->modalidadId = $matricula->modalidad_id;
