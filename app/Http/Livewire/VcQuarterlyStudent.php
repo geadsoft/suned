@@ -102,7 +102,7 @@ class VcQuarterlyStudent extends Component
         $periodo = TmPeriodosLectivos::find($this->periodoId);
 
         $this->nivel = $titulo['nivel'];
-        $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion']."/".$this->arrtermino[$this->filters['termino']]." - Primer Parcial",
+        $this->subtitulo = "Periodo Lectivo ".$periodo['descripcion']."/".$this->arrtermino[$this->filters['termino']]." - Primer Parcial";
         $this->alumno =  $persona['apellidos'].' '.$persona['nombres'];
         $this->materia = ''; // $titulo['asignatura'];
         $this->curso = $titulo['servicio'].' '.$titulo['paralelo'];
