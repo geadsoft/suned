@@ -137,6 +137,8 @@ class VcDeliverActivity extends Component
         ->where("modalidad_id",$this->modalidadId)
         ->first();
 
+        dd($sistema, $this->record->termino,$this->periodoId,$this->modalidadId);
+
         if ($sistema->cerrar==1){
             $this->fieldset= "disabled";
         }

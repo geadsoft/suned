@@ -264,11 +264,11 @@
                     @if($record->subir_archivo=='SI')     
                     <div class="text-center" style="{{$display_estado}}">
                         @if ($fieldset=="enabled")
-                        @if (empty($entrega))
-                        <button type="button" class="btn btn-primary" id="btnentrega" wire:click='entrega' ><i class="ri-upload-2-line align-bottom me-1"></i>Agregar Entrega</button>
-                        @else
-                        <button type="button" class="btn btn-primary" id="btnentrega" wire:click='entrega' ><i class="ri-edit-2-fill align-bottom me-1"></i>Editar Entrega</button>
-                        @endif
+                            @if (empty($entrega))
+                            <button type="button" class="btn btn-primary" id="btnentrega" wire:click='entrega' ><i class="ri-upload-2-line align-bottom me-1"></i>Agregar Entrega</button>
+                            @else
+                            <button type="button" class="btn btn-primary" id="btnentrega" wire:click='entrega' ><i class="ri-edit-2-fill align-bottom me-1"></i>Editar Entrega</button>
+                            @endif
                         @endif
                         <button type="button" class="btn btn-soft-primary" wire:click="retornar()"><i class="align-bottom me-1"></i>Cancelar</button>
                     </div>
