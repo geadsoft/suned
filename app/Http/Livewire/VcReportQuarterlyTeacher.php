@@ -48,6 +48,7 @@ class VcReportQuarterlyTeacher extends Component
         'bloque' => '1P',
         'actividad' => 'AI',
         'periodoId' => 0,
+        'modalidadId' => 0
     ];
 
     public function mount()
@@ -133,6 +134,7 @@ class VcReportQuarterlyTeacher extends Component
 
         $bloque = optional($this->tblbloque->first())->codigo;
         $this->filters['bloque'] = $bloque;
+        $this->filters['modalidadId'] = $this->modalidadId;
 
     }
 
