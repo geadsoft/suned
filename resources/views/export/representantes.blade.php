@@ -35,7 +35,7 @@
         <tr>                                       
             <td>{{$record->identificacion}}</td>
             <td>{{$record->apellidos}} {{$record->nombres}}</td>
-            <td>{{$record->nacionalidad->descripcion}}</td>
+            <td>{{$record->nacionalidad}}</td>
             <td>{{$record->telefono}}</td>
             <td>{{$record->email}}</td>
             <td>{{$record->apeestudiante}} {{$record->nomestudiante}}</td>

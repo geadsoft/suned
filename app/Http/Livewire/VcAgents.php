@@ -23,6 +23,12 @@ class VcAgents extends Component
         'srv_grupo' => '',
         'srv_curso' => ''
     ];
+
+    public function mount()
+    {
+        $tblperiodos = TmPeriodosLectivos::where("aperturado",1)->first();
+        $this->filters['srv_periodo'] = $tblperiodos['id'];
+    }
   
     public function render()
     {
