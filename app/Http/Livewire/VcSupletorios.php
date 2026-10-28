@@ -20,9 +20,9 @@ class VcSupletorios extends Component
     public $actividadId, $paralelos=[];
 
     public $arrtermino=[
-        'ES' => 'Exámen Supletorio',
-        'ER' => 'Exámen Remedial',
-        'EG' => 'Exàmen Gracia',
+        'ES' => 'Examen Supletorio',
+        'ER' => 'Examen Remedial',
+        'EG' => 'Examen Gracia',
     ];
 
     public $arrbloque=[

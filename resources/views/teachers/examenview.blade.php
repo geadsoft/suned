@@ -12,7 +12,7 @@
             Exámenes
         @endslot
         @slot('title')
-            Exámen
+            Examen
         @endslot
     @endcomponent
 

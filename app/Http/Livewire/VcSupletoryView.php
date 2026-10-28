@@ -24,9 +24,9 @@ class VcSupletoryView extends Component
     public $tblrecords=[];
     
     public $arrtipo=[
-        'ES' => 'Exámen Supletorio',
-        'ER' => 'Exámen Remedial',
-        'EG' => 'Exámen Gracia',
+        'ES' => 'Examen Supletorio',
+        'ER' => 'Examen Remedial',
+        'EG' => 'Examen Gracia',
     ];
 
     public $arrestado=[

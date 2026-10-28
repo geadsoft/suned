@@ -6,7 +6,7 @@
                         <div class="card-header  border-0">
                             <div class="d-flex align-items-center">
                                 <h6 class="card-title mb-0 flex-grow-1 text-primary fw-semibold"><i
-                                            class="ri-calendar-check-fill align-middle me-1 text-primary fs-20"></i>Ver Exámen Supletorio</h5>
+                                            class="ri-calendar-check-fill align-middle me-1 text-primary fs-20"></i>Ver Examen Supletorio</h5>
                             </div>
                         </div>
                         <div class="card-body border border-dashed border-end-0 border-start-0">  

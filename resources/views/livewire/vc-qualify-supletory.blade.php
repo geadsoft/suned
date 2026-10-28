@@ -38,7 +38,7 @@
                 <div class="card flex-fill">
                     <div class="card-body">
                         <div class="mb-3">
-                            <label for="choices-publish-status-input" class="form-label fw-semibold">Exámen</label>
+                            <label for="choices-publish-status-input" class="form-label fw-semibold">Examen</label>
                             <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="filters.termino" required {{$control}}>
                                 <option value="ES" selected>Examén Supletorio</option>
                                 <option value="ER">Examén Remedial</option>

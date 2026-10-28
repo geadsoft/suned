@@ -53,7 +53,7 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-sm-2">
-                                <label for="tipo-select" class="form-label fw-semibold">Tipo Exámen</label>
+                                <label for="tipo-select" class="form-label fw-semibold">Tipo Examen</label>
                                 <select class="form-select" id="tipo-select" data-choices data-choices-search-false wire:model.defer="tipo">
                                     @foreach ($tblactividad as $actividades) 
                                     <option value="{{$actividades->codigo}}">{{$actividades->descripcion}}</option>
@@ -61,7 +61,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-10">
-                                <label class="form-label fw-semibold" for="product-title-input">Nombre de Exámen</label>
+                                <label class="form-label fw-semibold" for="product-title-input">Nombre de Examen</label>
                                 <input type="text" class="form-control" id="product-title-input" value="" placeholder="Ingrese nombre de actividad" wire:model.defer="nombre" required>
                                 <div class="invalid-feedback">Por favor ingrese un nombre de actividad.</div>
                             </div>

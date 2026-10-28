@@ -59,7 +59,7 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="choices-publish-status-input" class="form-label fw-semibold">Exámen</label>
+                            <label for="choices-publish-status-input" class="form-label fw-semibold">Examen</label>
                             <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque"  wire:change="consulta()">
                                 @foreach ($tblbloque as $bloques) 
                                     <option value="{{ str_replace('P','E',$bloques['codigo']) }}">{{$bloques['descripcion']}}</option>

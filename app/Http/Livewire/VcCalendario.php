@@ -41,7 +41,7 @@ class VcCalendario extends Component
 
         $this ->validate([
             'actividad' => 'required',
-            'evento' => 'required',
+            'evento' => 'required|string|max:50',
             'startdate' => 'required',
             'enddate' => 'required',
             'comentario' => 'required',

@@ -7,7 +7,7 @@
                         <h5 class="card-title mb-0 flex-grow-1">Registro de Examenes</h5>
                         <div class="flex-shrink-0">
                             <a class="btn btn-success add-btn" href="/activities/suppletory-add"><i
-                            class="ri-add-line align-bottom me-1"></i>Crear Exámen Supletorio</a>
+                            class="ri-add-line align-bottom me-1"></i>Crear Examen Supletorio</a>
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino">
-                                        <option value="">Seleccione Tipo de Exámen</option>
+                                        <option value="">Seleccione Tipo de Examen</option>
                                         <option value="ES">Examén Supletorio</option>
                                         <option value="ER">Examén Remedial</option>
                                         <option value="EG">Examèn de Gracia</option>
@@ -79,7 +79,7 @@
                                         <th>Paralelo</th>
                                         <th>Asignatura</th>
                                         <th>Tipo</th>
-                                        <th>Exámen</th>
+                                        <th>Examen</th>
                                         <th>Fecha Creación</th>
                                         <th>Fecha Límite</th>
                                         <th>Acción</th>

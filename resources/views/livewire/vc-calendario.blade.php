@@ -167,7 +167,7 @@
                                             <div class="col-12">
                                                 <div class="mb-3">
                                                     <label class="text">Nombre</label>
-                                                    <input class="form-control" placeholder="Enter event name" type="text" name="title" id="event-title" wire:model.defer="evento"  required/>
+                                                    <input class="form-control" placeholder="Ingrese nombre del evento" type="text" name="title" id="event-title" wire:model.defer="evento"  maxlength="50" required/>
                                                     <div class="invalid-feedback">Por favor proporcione un nombre de evento válido</div>
                                                 </div>
                                             </div><!--end col-->

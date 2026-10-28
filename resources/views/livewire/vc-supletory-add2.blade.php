@@ -24,7 +24,7 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-6">
-                                     <label for="choices-publish-status-input" class="form-label fw-semibold">Tipo de Exámen</label>
+                                     <label for="choices-publish-status-input" class="form-label fw-semibold">Tipo de Examen</label>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="termino" required {{$control}}>
                                         <option value="ES" selected>Examén Supletorio</option>
                                         <option value="ER">Examén Remedial</option>
@@ -32,7 +32,7 @@
                                     </select>
                                 </div>
                                 <!--<div class="col-sm-6">
-                                    <label for="choices-publish-status-input" class="form-label fw-semibold">Exámen</label>
+                                    <label for="choices-publish-status-input" class="form-label fw-semibold">Examen</label>
                                     <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model.defer="bloque" {{$control}}>
                                         <option value="">Seleccione Termino</option>
                                         <option value="ES">Examén Supletorio</option>
@@ -43,7 +43,7 @@
                             </div>
                             <div class="mb-3">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold" for="product-title-input">Nombre de Exámen</label>
+                                    <label class="form-label fw-semibold" for="product-title-input">Nombre de Examen</label>
                                     <input type="text" class="form-control" id="product-title-input" value="" placeholder="Ingrese nombre de actividad" wire:model.defer="nombre" required>
                                     <div class="invalid-feedback">Por favor ingrese un nombre de actividad.</div>
                                 </div>

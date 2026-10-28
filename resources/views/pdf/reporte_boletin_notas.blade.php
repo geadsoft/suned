@@ -119,7 +119,7 @@
                     <th class="align-middle text-center border-blue-right" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">{{$notaParcial}}%</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">PROYECTO</th>
                     <th class="align-middle text-center border-blue-right" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">{{$notaExamen/2}}%</th>
-                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">EXÁMEN</th>
+                    <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">EXAMEN</th>
                     <th class="align-middle text-center border-blue-right" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff;" rowspan="2">{{$notaExamen/2}}%</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:100px;" rowspan="2">PROMEDIO CUANTITATIVO</th>
                     <th class="align-middle text-center" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2; background-color: #cedff8ff; width:100px;" rowspan="2">PROMEDIO CUALITATIVO</th>

@@ -4,10 +4,10 @@
             <div class="card" id="orderList">
                 <div class="card-header  border-0">
                     <div class="d-flex align-items-center">
-                        <h5 class="card-title mb-0 flex-grow-1">Registro de Examenes</h5>
+                        <h5 class="card-title mb-0 flex-grow-1">Registro de Exámenes</h5>
                         <div class="flex-shrink-0">
                             <a class="btn btn-success add-btn" href="/activities/exam-add"><i
-                            class="ri-add-line align-bottom me-1"></i>Crear Exámen</a>
+                            class="ri-add-line align-bottom me-1"></i>Crear Examen</a>
                         </div>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                                         <th>Paralelo</th>
                                         <th>Termino</th>
                                         <th>Tipo</th>
-                                        <th>Exámen</th>
+                                        <th>Examen</th>
                                         <th>Estado</th>
                                         <th>Fecha Creación</th>
                                         <th>Fecha Límite</th>
