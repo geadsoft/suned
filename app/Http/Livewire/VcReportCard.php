@@ -414,9 +414,6 @@ class VcReportCard extends Component
         
         $this->datos = json_encode($this->filters);
 
-        if ($this->filters['termino'] != '1T') {
-            dd($this->datos );
-        }
     }
 
 
