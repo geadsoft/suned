@@ -75,7 +75,7 @@ class VcReportCard extends Component
         ->selectRaw('c.id, concat(s.descripcion," ",c.paralelo) as descripcion,s.calificacion')
         ->get();
 
-        // Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
+        /*// Subconsulta para obtener los IDs de matrículas que ya tienen pase activo
         $matriculasConPase = DB::table('tm_pase_cursos')
         ->where('estado', 'A')
         ->pluck('matricula_id');
@@ -109,7 +109,7 @@ class VcReportCard extends Component
         ->orderBy('tm_personas.apellidos')
         ->get();
 
-        //$this->filters['modalidadId'] = $this->modalidadId;
+        //$this->filters['modalidadId'] = $this->modalidadId;*/
      
         return view('livewire.vc-report-card');
     }
@@ -257,6 +257,7 @@ class VcReportCard extends Component
     public function add(){
 
         $this->tblrecords=[];
+        $this->loadPersonas();
         
         /*$this->asignaturas = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
