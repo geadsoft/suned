@@ -1002,6 +1002,8 @@ class VcReportCard extends Component
     public function printPDF($objdata)
     {   
         set_time_limit(300);
+
+        dd($objdata);
         
         $data = json_decode($objdata);
         $this->filters['periodoId']   = $data->periodoId;
