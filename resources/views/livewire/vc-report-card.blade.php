@@ -5,8 +5,8 @@
                 <div class="card flex-fill">
                     <div class="card-body">
                         <div class="mb-3">
-                            <label for="choices-publish-status-input" class="form-label fw-semibold">Modalidad</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="modalidadId">
+                            <label for="select-modalidad" class="form-label fw-semibold">Modalidad</label>
+                            <select class="form-select" id="select-modalidad" data-choices data-choices-search-false wire:model="modalidadId">
                                 <option value="">Seleccione Modalidad</option>
                                 @foreach ($tblmodalidad as $modalidad) 
                                 <option value="{{$modalidad->id}}">{{$modalidad->descripcion}}</option>
@@ -14,8 +14,8 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="choices-publish-status-input" class="form-label fw-semibold">Paralelos Asignados</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.paralelo" wire:change="add()">
+                            <label for="select-paralelo" class="form-label fw-semibold">Paralelos Asignados</label>
+                            <select class="form-select" id="select-paralelo" data-choices data-choices-search-false wire:model="filters.paralelo" wire:change="add()">
                                 <option value="">Seleccione Paralelo</option>
                                 @foreach ($tblparalelo as $paralelo) 
                                 <option value="{{$paralelo->id}}">{{$paralelo->descripcion}}</option>
@@ -31,16 +31,16 @@
                 <div class="card flex-fill">
                     <div class="card-body">
                         <div class="mb-3">
-                            <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino" wire:change="add()">
+                            <label for="select-termino" class="form-label fw-semibold">Término</label>
+                            <select class="form-select" id="select-termino" data-choices data-choices-search-false wire:model="filters.termino" wire:change="add()">
                                 @foreach ($tbltermino as $terminos) 
                                 <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
                                 @endforeach 
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="choices-publish-status-input" class="form-label fw-semibold">Bloque</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.bloque">
+                            <label for="select-bloque" class="form-label fw-semibold">Bloque</label>
+                            <select class="form-select" id="select-bloque" data-choices data-choices-search-false wire:model="filters.bloque">
                                 @foreach ($tblbloque as $bloques) 
                                 <option value="{{$bloques->codigo}}">{{$bloques->descripcion}}</option>
                                 @endforeach 
