@@ -32,7 +32,7 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="choices-publish-status-input" class="form-label fw-semibold">Término</label>
-                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino">
+                            <select class="form-select" id="choices-publish-status-input" data-choices data-choices-search-false wire:model="filters.termino" wire:change="add()">
                                 @foreach ($tbltermino as $terminos) 
                                 <option value="{{$terminos->codigo}}">{{$terminos->descripcion}}</option>
                                 @endforeach 
