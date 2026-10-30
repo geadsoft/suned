@@ -255,10 +255,6 @@ class VcReportCard extends Component
     public function add(){
 
         $this->tblrecords=[];
-
-        if ($this->filters['termino'] != '1T') {
-            dd($this->filters['termino']);
-        }
         
         /*$this->asignaturas = TmHorarios::query()
         ->join("tm_horarios_docentes as d","d.horario_id","=","tm_horarios.id")
@@ -417,6 +413,10 @@ class VcReportCard extends Component
         }
         
         $this->datos = json_encode($this->filters);
+
+        if ($this->filters['termino'] != '1T') {
+            dd($this->datos );
+        }
     }
 
 
