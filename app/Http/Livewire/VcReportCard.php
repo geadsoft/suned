@@ -109,7 +109,7 @@ class VcReportCard extends Component
         ->orderBy('tm_personas.apellidos')
         ->get();
 
-        $this->filters['modalidadId'] = $this->modalidadId;
+        //$this->filters['modalidadId'] = $this->modalidadId;
      
         return view('livewire.vc-report-card');
     }
@@ -212,6 +212,8 @@ class VcReportCard extends Component
         ->where("tipo","EC")
         ->selectRaw("*,nota + case when nota=10 then 0 else 0.99 end as nota2")
         ->get();
+
+        $this->filters['modalidadId'] = $this->modalidadId;
 
     }
 
