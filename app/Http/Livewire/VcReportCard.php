@@ -21,7 +21,7 @@ use PDF;
 
 class VcReportCard extends Component
 {
-    public $periodoId, $modalidadId=0, $tblpersonas, $datos, $bloqueEx, $estudianteId, $mensaje="", $calificacion="N";
+    public $periodoId, $modalidadId=0, $tblpersonas=[], $datos, $bloqueEx, $estudianteId, $mensaje="", $calificacion="N";
     public $arrComentario=[];
     public $arrtipo=[];
     public $tblbloque=[];
