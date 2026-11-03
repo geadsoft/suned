@@ -876,7 +876,7 @@ class VcReportCard extends Component
 
                     if ($proyecto>0){
                          $resultado = array_filter($notas, function($notas) use ($proyecto) {
-                            return $proyecto >= $notas['nota'] && $examen <= $notas['nota2'];
+                            return $proyecto >= $notas['nota'] && $proyecto <= $notas['nota2'];
                         });
                         $this->tblrecords[$person][$index]["proyecto"] = reset($resultado)['codigo'] ?? 0;
                     }
