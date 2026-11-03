@@ -1164,7 +1164,14 @@ class VcReportCard extends Component
 
         if ($this->calificacion=="L"){
 
-            $pdf = PDF::loadView('pdf/reporte_boletin_notasletra',[
+            $periodo = TmPeriodosLectivos::find($this->filters['periodoId']);
+            $report = 'reporte_boletin_notasletra_old';
+
+            if($periodo->periodo>=2026){
+                $report = 'reporte_boletin_notasletra';
+            }
+
+            $pdf = PDF::loadView('pdf.' . $report,[
                 'tblrecords' => $this->tblrecords,
                 'asignaturas' => $asignaturas,
                 'tblpersons' => $this->tblpersonas,
