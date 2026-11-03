@@ -857,6 +857,7 @@ class VcReportCard extends Component
 
                     $promedio = $this->tblrecords[$person][$index]["promedio"];
                     $examen   = $this->tblrecords[$person][$index]["examen"];
+                    $proyecto = $this->tblrecords[$person][$index]["proyecto"];
                     $cuantitativo = $this->tblrecords[$person][$index]["cuantitativo"];
                    
                     if ($promedio>0){
@@ -871,6 +872,13 @@ class VcReportCard extends Component
                             return $examen >= $notas['nota'] && $examen <= $notas['nota2'];
                         });
                         $this->tblrecords[$person][$index]["examen"] = reset($resultado)['codigo'] ?? 0;
+                    }
+
+                    if ($proyecto>0){
+                         $resultado = array_filter($notas, function($notas) use ($proyecto) {
+                            return $proyecto >= $notas['nota'] && $examen <= $notas['nota2'];
+                        });
+                        $this->tblrecords[$person][$index]["proyecto"] = reset($resultado)['codigo'] ?? 0;
                     }
 
                     if ($cuantitativo>0){
