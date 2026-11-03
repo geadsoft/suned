@@ -143,7 +143,7 @@
                         @else
                             <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">0.00</td>
                         @endif
-                        <!--<td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$tblrecords[$record->id][$col->id]['promedio'],2)}}</strong></td>-->
+                        <!--<td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;"><strong>{{$tblrecords[$record->id][$col->id]['promedio']}}</strong></td>-->
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$tblrecords[$record->id][$col->id]['promedio']}}</td>
                         <td class="text-center align-middle border-blue-right" style="width:50px; border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$tblrecords[$record->id][$col->id]['nota70']}}</td>
                         <td class="text-center align-middle" style="border: 1px solid #ccc; padding: 2px 5px; line-height: 1.2;">{{$tblrecords[$record->id][$col->id]['proyecto']}}</td>
